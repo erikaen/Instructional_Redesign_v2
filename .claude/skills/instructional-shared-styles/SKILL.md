@@ -22,8 +22,8 @@ Keep every HTML page visually consistent by routing shared presentation through 
 * Any new classes must inherit the shared design tokens from shared.css, such as var(--primary), var(--accent), var(--primary-faint), the established font family, and existing font size patterns.
 * Any new classes must also include appropriate dark mode rules in shared.css.
 * Before creating new JavaScript, check shared.js to see whether reusable behavior or helper functions already exist.
-* Do not use emojis in HTML copy, button labels, feedback messages, or JavaScript strings unless the user explicitly asks for them.
-* For icons, use Lucide (this repo’s static HTML setup — not Lucide React). Do not use emojis, Unicode symbols, or other icon libraries as substitutes.
+* Do not use emoji characters (e.g. ✅ ⚠️ 🎉) in HTML copy, button labels, feedback messages, or JavaScript strings unless the user explicitly asks for them. Plain text plus Lucide icons in copy and feedback is allowed and preferred over emojis.
+* For icons, use Lucide (this repo’s static HTML setup — not Lucide React). Do not use emoji characters, decorative Unicode symbols, or other icon libraries as substitutes.
 
 ## Icons (Lucide)
 
@@ -46,9 +46,18 @@ Rules:
 
 * Pick icon names from [Lucide icons](https://lucide.dev/icons/) (`book-open`, `chevron-right`, `rotate-ccw`, etc.).
 * Use `<i data-lucide="icon-name">` (optional `.licon` class to match existing pages).
-* Always call `lucide.createIcons()` after adding or changing icons, including after dynamic DOM updates.
+* Always call `lucide.createIcons()` after adding or changing icons, including after dynamic DOM updates (e.g. feedback set via `innerHTML`).
 * Style icons with shared classes (e.g. `.icon-btn`, `.licon`) — do not inline icon sizing or colors.
 * Do **not** install `lucide-react` or add React — this codebase does not use React.
+
+**Feedback with icons (allowed):**
+
+```javascript
+msg.innerHTML = '<i data-lucide="alert-triangle" class="licon"></i> “Your commuter bike” is in the tab, but it’s yours — not part of the repair work. Take it back out.';
+// then: if (window.lucide) lucide.createIcons();
+```
+
+Use `alert-triangle` for warnings, `check` for success, `info` for hints — not emoji equivalents.
 
 ## Very important shared-file editing rules
 
@@ -144,7 +153,7 @@ Do not duplicate data or logic that already lives in `shared.js`.
 | Modifying existing shared.js functions | Add new helper; explain issue first |
 | Raw hex in HTML | Token-based classes in `shared.css` |
 | Light-mode-only new component | Light rules + dark `@media` rules appended to `shared.css` |
-| Emojis or random Unicode icons | Lucide `<i data-lucide="...">` + `lucide.createIcons()` |
+| Emoji characters (✅ ⚠️ 🎉) in text | Lucide `<i data-lucide="...">` in markup or feedback HTML |
 | `lucide-react` or other icon libraries | Lucide via unpkg + `data-lucide` |
 
 ## Verification checklist
@@ -156,8 +165,7 @@ Do not duplicate data or logic that already lives in `shared.js`.
 - [ ] New classes use design tokens and include dark mode
 - [ ] New JS checked against `shared.js` first
 - [ ] Visual style matches sibling pages in both light and dark mode
-- [ ] No emojis in copy or feedback
-- [ ] Icons use Lucide `data-lucide` and `lucide.createIcons()` is called
+- [ ] No emoji characters in copy or feedback; Lucide icons via `data-lucide` are OK (call `lucide.createIcons()` after dynamic updates)
 
 ## Reference files
 
