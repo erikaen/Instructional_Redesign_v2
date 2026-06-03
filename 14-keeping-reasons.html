@@ -1,1155 +1,599 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutorial 1.4: Keeping the Reasons</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        @keyframes systemPulse {
-            0%, 100% { opacity: 0.85; transform: scale(1); }
-            50%      { opacity: 1;    transform: scale(1.02); }
-        }
-        .system-sorting { animation: systemPulse 1.2s ease-in-out infinite; }
-        @keyframes rowFade {
-            from { opacity: 0; transform: translateY(-4px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-        .row-fade { animation: rowFade 0.5s ease-out; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1.4: Keeping the Reasons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
-    <div id="root"></div>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script type="text/babel">
-        const { useState } = React;
-
-        /**
-         * Tutorial 1.4: Keeping the Reasons
-         * CMU METALS / Yale SOM Accounting Prework — Module 1, Activity 4
-         *
-         * @version 1.0 (v2 site)
-         * @date 2026-06-02
-         * @description Your Assets and Liabilities lists keep changing. The amounts
-         *   say WHAT moved, never WHY — so you start a Reasons tab in Bike-Repair.xlsx,
-         *   one row per change. Walking the month, you notice every change comes with a
-         *   partner (two-sided — double-entry, FELT not named). You cross out the matched
-         *   pairs: those just shuffle, your net (have minus owe) doesn't budge. What's
-         *   left — the net-movers — sort into two plain kinds: what you CONTRIBUTED (put
-         *   in yourself) and what the work GENERATED (from doing the work). No formal name for
-         *   the mechanism; no identity; "Equities" / double-entry / the identity all land in 1.5.
-         *   Numbers tie to the manifest: Assets $3,410 / Liabilities $1,450; contributed
-         *   $1,790 (cash 960 + laptop 610 + gear 220) / generated $170 (1,120 − 300 − 650).
-         *   (Internal state key for the second pile stays 'earned'; user-facing label is "Generated".)
-         */
-
-        const colors = {
-            primary: '#00356b', sand: '#f5f1e8', earth: '#8b7355', earthLight: '#d4c4a8',
-            earthDark: '#5c4d3d', accent: '#c9a227', clay: '#c4a574', clayLight: '#e8dcc8',
-            clayDark: '#a08050', success: '#22c55e', successBg: '#f0fdf4',
-            warning: '#f59e0b', warningBg: '#fffbeb', error: '#dc2626', errorBg: '#fef2f2',
-        };
-
-        const glossaryTerms = [
-            { term: 'Asset', definition: "Something you have — a present right to something useful. The gear, the parts, the prepaid month, cash." },
-            { term: 'Liability', definition: "Something you owe — a present obligation to pay or do something later. The card balance, Smith's frame." },
-            { term: 'Reason', definition: 'The why behind a change to one of your lists. You jot it next to the change — it lives on its own tab, one row per side.' },
-            { term: 'Net', definition: 'What you have minus what you owe. The bottom-line number a reason either moves or leaves alone.' },
-            { term: 'Contributed', definition: 'A net-mover where you put something in from outside the repair work — your own cash, gear you already owned.' },
-            { term: 'Generated', definition: 'A net-mover that came from doing the repair work — what customers paid, less what the work used up.' },
-            { term: 'Right of Use', definition: "A month of space you've paid for but haven't used yet — a future benefit you still hold, so it counts as an asset." },
-        ];
-
-        const createAudioContext = () =>
-            new (window.AudioContext || window.webkitAudioContext)();
-
-        const playSuccessTone = () => {
-            try {
-                const ctx = createAudioContext();
-                [523.25, 659.25, 783.99].forEach((freq, i) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain); gain.connect(ctx.destination);
-                    osc.frequency.value = freq; osc.type = 'sine';
-                    const t = ctx.currentTime + i * 0.1;
-                    gain.gain.setValueAtTime(0, t);
-                    gain.gain.linearRampToValueAtTime(0.3, t + 0.02);
-                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
-                    osc.start(t); osc.stop(t + 0.25);
-                });
-                setTimeout(() => ctx.close(), 600);
-            } catch(e) {}
-        };
-
-        const playSoftNope = () => {
-            try {
-                const ctx = createAudioContext();
-                [400, 300].forEach((freq, i) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain); gain.connect(ctx.destination);
-                    osc.frequency.value = freq; osc.type = 'sine';
-                    const t = ctx.currentTime + i * 0.12;
-                    gain.gain.setValueAtTime(0, t);
-                    gain.gain.linearRampToValueAtTime(0.2, t + 0.02);
-                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
-                    osc.start(t); osc.stop(t + 0.17);
-                });
-                setTimeout(() => ctx.close(), 400);
-            } catch(e) {}
-        };
-
-        const playContinueClick = () => {
-            try {
-                const ctx = createAudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.frequency.value = 600; osc.type = 'sine';
-                const t = ctx.currentTime;
-                gain.gain.setValueAtTime(0, t);
-                gain.gain.linearRampToValueAtTime(0.15, t + 0.01);
-                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
-                osc.start(t); osc.stop(t + 0.1);
-                setTimeout(() => ctx.close(), 150);
-            } catch(e) {}
-        };
-
-        // ============================================================
-        // DATA — the lists, carried from 1.3 (tie to the manifest)
-        // ============================================================
-        // Assets $3,410 — exactly as 1.3 left it (Equipment 1,200 · Computer 610 ·
-        // Supplies 200 · Fixtures 750 · Right of Use 650 · Cash 0).
-        const ASSETS_SNAPSHOT = [
-            {
-                cat: 'EQUIPMENT',
-                items: [
-                    { name: 'Park Tool repair stand', amount: 200 },
-                    { name: 'Cone wrench set',        amount: 65  },
-                    { name: 'Torque wrench',          amount: 95  },
-                    { name: 'Hex / Allen key set',    amount: 45  },
-                    { name: 'Cable cutters',          amount: 40  },
-                    { name: 'Chain breaker',          amount: 35  },
-                    { name: 'Tire levers',            amount: 20  },
-                    { name: 'Air compressor',         amount: 180 },
-                    { name: 'Parts washer',           amount: 130 },
-                    { name: 'Wheel-truing stand',     amount: 170 },
-                    { name: 'Bench grinder',          amount: 90  },
-                    { name: 'Headset press',          amount: 70  },
-                    { name: 'Shop vacuum',            amount: 60  },
-                ],
-            },
-            {
-                cat: 'COMPUTER EQUIPMENT',
-                items: [ { name: 'Laptop', amount: 610 } ],
-            },
-            {
-                cat: 'SUPPLIES',
-                items: [
-                    { name: 'Box of chains (on shelf)',            amount: 50 },
-                    { name: 'Box of brake pads (on shelf)',        amount: 40 },
-                    { name: 'Box of derailleur cables (on shelf)', amount: 20 },
-                    { name: 'Cassettes (on shelf)',                amount: 40 },
-                    { name: 'Bottom brackets (on shelf)',          amount: 20 },
-                    { name: 'Spokes (on shelf)',                   amount: 20 },
-                    { name: 'Tubes (on shelf)',                    amount: 10 },
-                ],
-            },
-            {
-                cat: 'FIXTURES',
-                items: [
-                    { name: 'Desk',             amount: 250 },
-                    { name: 'Shelving units',   amount: 200 },
-                    { name: 'Display rack',     amount: 180 },
-                    { name: 'Pegboard + hooks', amount: 120 },
-                ],
-            },
-            {
-                cat: 'CASH',
-                items: [ { name: 'Repair cash on hand (May 31)', amount: 0 } ],
-            },
-            {
-                cat: 'RIGHT OF USE',
-                items: [ { name: 'Right to occupy the space — last month, prepaid', amount: 650 } ],
-            },
-        ].map(c => ({ ...c, subtotal: c.items.reduce((s, i) => s + i.amount, 0) }));
-        const ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce((s, c) => s + c.subtotal, 0); // 3410
-
-        // The owe-list — named Liabilities at the end of 1.3. Card $1,230 + Smith $220.
-        const LIABILITIES_SNAPSHOT = [
-            { label: "Smith's frame — paid $220 up front, not built yet", amount: 220 },
-            { label: 'What you owe on the bike-repair credit card',       amount: 1230 },
-        ];
-        const LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce((s, l) => s + l.amount, 0); // 1450
-
-        // The Cash tab — May's money in and out. Includes the $960 of your own money you
-        // put in; nets to $0 (the ending cash on the Assets tab).
-        const CASH_FLOWS = [
-            { date: 'May 1',  desc: 'Your own money, put in to get going', amount:  960 },
-            { date: 'May 1',  desc: 'Rent paid in advance (Westville Properties)', amount: -1300 },
-            { date: 'May 3',  desc: 'Park Tool stand — Cyclesport Supply', amount:  -200 },
-            { date: 'May 7',  desc: 'Repair finished — customer paid (Venmo)', amount:  340 },
-            { date: 'May 10', desc: 'Repair finished — customer paid (Venmo)', amount:  180 },
-            { date: 'May 12', desc: 'Repair finished — customer paid (Venmo)', amount:   80 },
-            { date: 'May 14', desc: 'Repair finished — customer paid (Venmo)', amount:  140 },
-            { date: 'May 16', desc: 'Card paydown — Harborline Visa', amount:  -400 },
-            { date: 'May 19', desc: 'Repair finished — customer paid (Venmo)', amount:  130 },
-            { date: 'May 22', desc: 'Smith deposit — frame build', amount:  220 },
-            { date: 'May 23', desc: 'Repair finished — customer paid (Venmo)', amount:  100 },
-            { date: 'May 27', desc: 'Repair finished — customer paid (Venmo)', amount:  150 },
-            { date: 'May 28', desc: 'Card paydown — Harborline Visa', amount:  -400 },
-        ];
-
-        // ============================================================
-        // REASONS — one row per side of each change. Ties to the manifest.
-        // Paired rows (same reason text on two accounts) just SHUFFLE: have and owe
-        // move together, the net doesn't budge. Solo rows MOVE the net — their other
-        // side lives somewhere not on this spreadsheet yet. Solos sort into:
-        //   contributed (put in from outside) | earned (from doing the work).
-        // ============================================================
-        const REASONS = [
-            // Contributions (solo → contributed)
-            { id: 'r_cashin', account: 'Cash',      delta:  960, reason: 'You put in $960 of your own money to get going.' },
-            { id: 'r_laptop', account: 'Laptop',    delta:  610, reason: 'You brought your laptop from home.' },
-            { id: 'r_gear',   account: 'Equipment', delta:  220, reason: 'You brought gear you already owned — bench grinder, headset press, shop vacuum.' },
-
-            // Park Tool stand — cash (pair)
-            { id: 'r_stand_a', account: 'Equipment', delta:  200, reason: 'Bought the Park Tool stand for $200 (cash).' },
-            { id: 'r_stand_b', account: 'Cash',      delta: -200, reason: 'Bought the Park Tool stand for $200 (cash).' },
-
-            // Hand tools on card (pair)
-            { id: 'r_tools_a', account: 'Equipment',   delta: 300, reason: 'Bought $300 of hand tools on the card.' },
-            { id: 'r_tools_b', account: 'Credit Card', delta: 300, reason: 'Bought $300 of hand tools on the card.' },
-
-            // Shop equipment on card (pair)
-            { id: 'r_equip_a', account: 'Equipment',   delta: 480, reason: 'Bought $480 of shop equipment on the card (compressor, parts washer, truing stand).' },
-            { id: 'r_equip_b', account: 'Credit Card', delta: 480, reason: 'Bought $480 of shop equipment on the card (compressor, parts washer, truing stand).' },
-
-            // Fixtures on card (pair)
-            { id: 'r_fix_a', account: 'Fixtures',    delta: 750, reason: 'Bought $750 of fixtures on the card.' },
-            { id: 'r_fix_b', account: 'Credit Card', delta: 750, reason: 'Bought $750 of fixtures on the card.' },
-
-            // Parts on card (pair)
-            { id: 'r_parts_a', account: 'Supplies',    delta: 500, reason: 'Bought $500 of parts on the card.' },
-            { id: 'r_parts_b', account: 'Credit Card', delta: 500, reason: 'Bought $500 of parts on the card.' },
-
-            // Parts used in jobs (solo → earned)
-            { id: 'r_partsused', account: 'Supplies', delta: -300, reason: 'Used $300 of parts finishing customer jobs.' },
-
-            // Rent paid in advance (pair)
-            { id: 'r_rent_a', account: 'Right of Use', delta:  1300, reason: 'Paid $1,300 of rent in advance (first + last month).' },
-            { id: 'r_rent_b', account: 'Cash',         delta: -1300, reason: 'Paid $1,300 of rent in advance (first + last month).' },
-
-            // May used up (solo → earned)
-            { id: 'r_rentused', account: 'Right of Use', delta: -650, reason: 'Used the space for May ($650 — the first month).' },
-
-            // Customer earnings (solo → earned) — seven repairs, $1,120
-            { id: 'r_v1', account: 'Cash', delta: 340, reason: 'Finished a repair — customer paid $340 (May 7).' },
-            { id: 'r_v2', account: 'Cash', delta: 180, reason: 'Finished a repair — customer paid $180 (May 10).' },
-            { id: 'r_v3', account: 'Cash', delta:  80, reason: 'Finished a repair — customer paid $80 (May 12).' },
-            { id: 'r_v4', account: 'Cash', delta: 140, reason: 'Finished a repair — customer paid $140 (May 14).' },
-            { id: 'r_v5', account: 'Cash', delta: 130, reason: 'Finished a repair — customer paid $130 (May 19).' },
-            { id: 'r_v6', account: 'Cash', delta: 100, reason: 'Finished a repair — customer paid $100 (May 23).' },
-            { id: 'r_v7', account: 'Cash', delta: 150, reason: 'Finished a repair — customer paid $150 (May 27).' },
-
-            // Smith deposit (pair)
-            { id: 'r_smith_a', account: 'Cash',      delta: 220, reason: "Smith paid $220 up front for a frame you haven't built yet." },
-            { id: 'r_smith_b', account: 'Owe Smith', delta: 220, reason: "Smith paid $220 up front for a frame you haven't built yet." },
-
-            // Card paydowns (pairs)
-            { id: 'r_pay1_a', account: 'Credit Card', delta: -400, reason: 'Paid $400 down on the card (May 16).' },
-            { id: 'r_pay1_b', account: 'Cash',        delta: -400, reason: 'Paid $400 down on the card (May 16).' },
-            { id: 'r_pay2_a', account: 'Credit Card', delta: -400, reason: 'Paid $400 down on the card (May 28).' },
-            { id: 'r_pay2_b', account: 'Cash',        delta: -400, reason: 'Paid $400 down on the card (May 28).' },
-        ];
-
-        // Which solo rows are contributed vs earned (the net-movers sort truth table).
-        const CORRECT_CATEGORY = {
-            r_cashin: 'contributed', r_laptop: 'contributed', r_gear: 'contributed',
-            r_partsused: 'earned', r_rentused: 'earned',
-            r_v1: 'earned', r_v2: 'earned', r_v3: 'earned', r_v4: 'earned',
-            r_v5: 'earned', r_v6: 'earned', r_v7: 'earned',
-        };
-
-        // Narration walk — each step reveals a set of REASONS into the Reasons tab.
-        const NARRATION_STEPS = [
-            {
-                anna: "Start before May even began. You put in $960 of your own money, you brought your laptop from home, and you brought some gear you already owned. Each one's a single row — the other side of that change isn't on this spreadsheet.",
-                reveal: ['r_cashin', 'r_laptop', 'r_gear'],
-            },
-            {
-                anna: "The Park Tool stand — bought for $200 in cash. Equipment went up; cash went down. Same reason on both rows.",
-                reveal: ['r_stand_a', 'r_stand_b'],
-            },
-            {
-                anna: "Hand tools, shop equipment, fixtures, parts — all on the card. Each one: the thing up, the card up. Two rows apiece.",
-                reveal: ['r_tools_a', 'r_tools_b', 'r_equip_a', 'r_equip_b', 'r_fix_a', 'r_fix_b', 'r_parts_a', 'r_parts_b'],
-            },
-            {
-                anna: "Then about $300 of those parts went into customer jobs — used up. One row; the other side isn't here.",
-                reveal: ['r_partsused'],
-            },
-            {
-                anna: "The lease — $1,300 from cash, first and last month paid in advance. Then May happened: you used the space, so one month's worth is gone. The paying is a pair; the using-up stands alone.",
-                reveal: ['r_rent_a', 'r_rent_b', 'r_rentused'],
-            },
-            {
-                anna: "Now the cash side for May. Click the Cash tab — every customer Venmo, Smith's deposit, the two card paydowns.",
-                reveal: ['r_v1', 'r_v2', 'r_v3', 'r_v4', 'r_v5', 'r_v6', 'r_v7', 'r_smith_a', 'r_smith_b', 'r_pay1_a', 'r_pay1_b', 'r_pay2_a', 'r_pay2_b'],
-                goto: 'cash',
-            },
-            {
-                anna: "That's the whole month. Click back to the Reasons tab and look at the full list.",
-                reveal: [],
-                goto: 'reasons',
-            },
-            {
-                anna: "Notice anything? Look closely — most reasons show up in two rows. Same event, two changes. A few stand alone. We'll come back to those.",
-                reveal: [],
-                finish: true,
-            },
-        ];
-
-        const xlDollars = (v) => (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US');
-        const signedDollars = (v) => (v >= 0 ? '+' : '−') + '$' + Math.abs(v).toLocaleString('en-US');
-
-        // ============================================================
-        // App
-        // ============================================================
-        const App = () => {
-            const [phase, setPhase] = useState('welcome');
-            const [step, setStep] = useState(0);
-            const [activeTab, setActiveTab] = useState('assets');
-            const [assetsExpanded, setAssetsExpanded] = useState({});
-            const [revealedReasonIds, setRevealedReasonIds] = useState(new Set());
-
-            // Pairs phase — cross out matched pairs
-            const [eliminatedIds, setEliminatedIds] = useState(new Set());
-            const [selectedReasonId, setSelectedReasonId] = useState(null);
-            const [eliminateAutoActive, setEliminateAutoActive] = useState(false);
-            const [eliminateAutoDone, setEliminateAutoDone] = useState(false);
-            const [eliminateNudge, setEliminateNudge] = useState(null);
-
-            // Net-movers phase — sort solos into contributed / earned
-            const [categoryAssignments, setCategoryAssignments] = useState({});
-            const [sortAutoActive, setSortAutoActive] = useState(false);
-            const [sortAutoDone, setSortAutoDone] = useState(false);
-            const [sortNudge, setSortNudge] = useState(null);
-            const [expandedSortCats, setExpandedSortCats] = useState({ contributed: true, earned: true });
-
-            const [showGlossary, setShowGlossary] = useState(false);
-            const [devMode, setDevMode] = useState(false);
-            const [headerClickCount, setHeaderClickCount] = useState(0);
-
-            const soloReasonIds = Object.keys(CORRECT_CATEGORY);
-
-            // ----- Derived -----
-            const phaseOrder = ['welcome', 'reasons-walk', 'pairs', 'net-movers', 'complete'];
-            const progress = Math.round((phaseOrder.indexOf(phase) / (phaseOrder.length - 1)) * 100);
-            const currentStep = NARRATION_STEPS[step];
-            const onFinishStep = currentStep && currentStep.finish;
-
-            const eliminatedPairsCount = eliminatedIds.size / 2;
-            const visibleReasonRows = REASONS.filter(r => revealedReasonIds.has(r.id) && !eliminatedIds.has(r.id));
-            const remainingPairsCount = (() => {
-                const counts = {};
-                visibleReasonRows.forEach(r => { counts[r.reason] = (counts[r.reason] || 0) + 1; });
-                return Object.values(counts).filter(c => c === 2).length;
-            })();
-            const eliminateTriggerMet =
-                eliminatedPairsCount >= 2 && remainingPairsCount > 0 &&
-                !eliminateAutoActive && !eliminateAutoDone;
-
-            const correctlyAssignedCount = Object.entries(categoryAssignments)
-                .filter(([id, cat]) => CORRECT_CATEGORY[id] === cat).length;
-            const allSorted = correctlyAssignedCount === soloReasonIds.length;
-            const sortTriggerMet =
-                correctlyAssignedCount >= 2 && !allSorted && !sortAutoActive && !sortAutoDone;
-
-            // ----- Handlers -----
-            const handleHeaderClick = () => {
-                const n = headerClickCount + 1;
-                setHeaderClickCount(n);
-                if (n >= 3) { setDevMode(!devMode); setHeaderClickCount(0); }
-            };
-
-            const handleRestart = () => {
-                playContinueClick();
-                setPhase('welcome'); setStep(0); setActiveTab('assets');
-                setAssetsExpanded({}); setRevealedReasonIds(new Set());
-                setEliminatedIds(new Set()); setSelectedReasonId(null);
-                setEliminateAutoActive(false); setEliminateAutoDone(false); setEliminateNudge(null);
-                setCategoryAssignments({}); setSortAutoActive(false); setSortAutoDone(false); setSortNudge(null);
-                setExpandedSortCats({ contributed: true, earned: true });
-            };
-
-            const advanceNarration = () => {
-                if (step >= NARRATION_STEPS.length - 1) return;
-                playContinueClick();
-                const s = NARRATION_STEPS[step];
-                if (s.reveal && s.reveal.length > 0) {
-                    setRevealedReasonIds(prev => new Set([...prev, ...s.reveal]));
-                }
-                if (s.goto) setActiveTab(s.goto);
-                setStep(step + 1);
-            };
-
-            const toggleAssetCat = (cat) =>
-                setAssetsExpanded(prev => ({ ...prev, [cat]: !prev[cat] }));
-
-            const handleReasonClick = (id) => {
-                if (phase !== 'pairs' || eliminatedIds.has(id)) return;
-                if (eliminateAutoActive || eliminateAutoDone) return;
-                if (selectedReasonId === id) { setSelectedReasonId(null); return; }
-                if (selectedReasonId === null) {
-                    playContinueClick(); setSelectedReasonId(id); setEliminateNudge(null); return;
-                }
-                const a = REASONS.find(r => r.id === selectedReasonId);
-                const b = REASONS.find(r => r.id === id);
-                if (a && b && a.reason === b.reason) {
-                    playSuccessTone();
-                    setEliminatedIds(prev => new Set([...prev, a.id, b.id]));
-                    setSelectedReasonId(null); setEliminateNudge(null);
-                } else {
-                    setEliminateNudge({ reason: 'no-match' }); setSelectedReasonId(null);
-                }
-            };
-
-            const handleEliminateAutocomplete = () => {
-                if (eliminateAutoActive || eliminateAutoDone) return;
-                playContinueClick(); setEliminateAutoActive(true); setSelectedReasonId(null);
-                const visible = REASONS.filter(r => revealedReasonIds.has(r.id) && !eliminatedIds.has(r.id));
-                const byReason = {};
-                visible.forEach(r => { if (!byReason[r.reason]) byReason[r.reason] = []; byReason[r.reason].push(r.id); });
-                const pairsToRemove = Object.values(byReason).filter(arr => arr.length === 2);
-                pairsToRemove.forEach((pair, i) => {
-                    setTimeout(() => {
-                        setEliminatedIds(prev => new Set([...prev, ...pair]));
-                        if (i === pairsToRemove.length - 1) {
-                            setTimeout(() => { setEliminateAutoActive(false); setEliminateAutoDone(true); playSuccessTone(); }, 300);
-                        }
-                    }, i * 200);
-                });
-            };
-
-            const handleCategoryAssign = (rowId, category) => {
-                if (phase !== 'net-movers' || sortAutoActive || sortAutoDone) return;
-                if (categoryAssignments[rowId]) return;
-                if (CORRECT_CATEGORY[rowId] === category) {
-                    playSuccessTone();
-                    setCategoryAssignments(prev => ({ ...prev, [rowId]: category }));
-                    setSortNudge(null);
-                } else {
-                    setSortNudge({ rowId, attempted: category });
-                }
-            };
-
-            const handleSortAutocomplete = () => {
-                if (sortAutoActive || sortAutoDone) return;
-                playContinueClick(); setSortAutoActive(true); setSortNudge(null);
-                const unassigned = soloReasonIds.filter(id => !categoryAssignments[id]);
-                unassigned.forEach((id, i) => {
-                    setTimeout(() => {
-                        setCategoryAssignments(prev => ({ ...prev, [id]: CORRECT_CATEGORY[id] }));
-                        if (i === unassigned.length - 1) {
-                            setTimeout(() => { setSortAutoActive(false); setSortAutoDone(true); playSuccessTone(); }, 300);
-                        }
-                    }, i * 160);
-                });
-            };
-
-            const toggleSortCat = (cat) =>
-                setExpandedSortCats(prev => ({ ...prev, [cat]: !prev[cat] }));
-
-            // ============================================================
-            // Shared components
-            // ============================================================
-            const Header = () => (
-                <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: colors.primary }}>
-                    <div className="flex justify-between items-start">
-                        <div onClick={handleHeaderClick} style={{ cursor: 'pointer' }}>
-                            <h1 className="text-lg font-bold text-white">Tutorial 1.4: Keeping the Reasons</h1>
-                            <p className="text-sm mt-1" style={{ color: colors.earthLight }}>
-                                Bicycle repair shop &middot; ~15 min
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <a href="index.html"
-                               className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer no-underline inline-flex items-center justify-center"
-                               title="Return to Main" aria-label="Return to Main">🏠</a>
-                            <button onClick={() => setShowGlossary(true)}
-                                    className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer"
-                                    title="Glossary" aria-label="Open glossary">📖</button>
-                            <button onClick={handleRestart}
-                                    className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer"
-                                    title="Restart tutorial" aria-label="Restart tutorial">↺</button>
-                        </div>
-                    </div>
-                    <div className="mt-4">
-                        <div className="flex justify-between text-xs mb-1" style={{ color: 'rgba(255,255,255,0.7)' }}>
-                            <span>Progress</span><span>{progress}%</span>
-                        </div>
-                        <div className="h-2 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
-                             role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
-                            <div className="h-full rounded-full transition-all duration-500"
-                                 style={{ width: `${progress}%`, backgroundColor: colors.accent }} />
-                        </div>
-                    </div>
-                    {devMode && (
-                        <div className="mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.2)' }}>
-                            <p className="text-xs mb-2" style={{ color: 'rgba(255,255,255,0.7)' }}>Dev: skip to phase</p>
-                            <div className="flex flex-wrap gap-1">
-                                {phaseOrder.map(p => (
-                                    <button key={p} onClick={() => { setStep(0); setPhase(p); }}
-                                            className="px-2 py-1 rounded text-xs border-0 cursor-pointer"
-                                            style={{
-                                                backgroundColor: phase === p ? 'white' : 'rgba(255,255,255,0.2)',
-                                                color: phase === p ? colors.primary : 'white'
-                                            }}>{p}</button>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
-
-            const NarrativeBlock = ({ children }) => (
-                <div className="p-4 rounded-lg mb-4 italic"
-                     style={{ backgroundColor: colors.sand, borderLeft: `4px solid ${colors.accent}`, color: '#374151' }}>
-                    {children}
-                </div>
-            );
-
-            const InsightPanel = ({ children }) => (
-                <div className="p-4 rounded-lg border-2 mb-4"
-                     style={{ backgroundColor: colors.successBg, borderColor: colors.success }}>
-                    <div className="flex items-start gap-2">
-                        <span className="text-lg mt-0.5 flex-shrink-0" style={{ color: colors.success }}>✓</span>
-                        <div style={{ color: '#166534' }}>{children}</div>
-                    </div>
-                </div>
-            );
-
-            const KeyInsightBox = ({ children }) => (
-                <div className="p-4 rounded-lg border-2 mb-4"
-                     style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
-                    <div className="flex items-start gap-3">
-                        <span className="text-lg flex-shrink-0 mt-0.5" style={{ color: colors.accent }}>💡</span>
-                        <div style={{ color: colors.earthDark }}>{children}</div>
-                    </div>
-                </div>
-            );
-
-            const AnnaBox = ({ children }) => (
-                <div className="rounded-lg p-4 mb-3 border-2"
-                     style={{ borderColor: colors.clayDark, backgroundColor: 'white' }}>
-                    <p className="text-xs font-bold mb-2 tracking-wide" style={{ color: colors.primary }}>ANNA</p>
-                    <div className="text-sm italic" style={{ color: colors.earthDark }}>{children}</div>
-                </div>
-            );
-
-            const ContinueButton = ({ onClick, children = 'Continue', disabled = false, asLink = null }) => {
-                if (asLink) {
-                    return (
-                        <a href={asLink}
-                           className="w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 border-0 cursor-pointer no-underline"
-                           style={{ backgroundColor: colors.primary, color: 'white' }}>
-                            {children} →
-                        </a>
-                    );
-                }
-                return (
-                    <button onClick={() => { if (!disabled) { playContinueClick(); onClick(); } }}
-                            disabled={disabled}
-                            className="w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 border-0 cursor-pointer disabled:cursor-not-allowed"
-                            style={{ backgroundColor: disabled ? colors.earth : colors.primary, color: 'white', opacity: disabled ? 0.5 : 1 }}>
-                        {children} →
-                    </button>
-                );
-            };
-
-            const GlossaryModal = () => showGlossary && (
-                <div className="fixed inset-0 flex items-center justify-center p-4 z-50"
-                     style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setShowGlossary(false)}>
-                    <div className="bg-white rounded-xl max-w-md w-full" style={{ maxHeight: '80vh', overflowY: 'auto' }}
-                         onClick={(e) => e.stopPropagation()}>
-                        <div className="p-4 border-b flex justify-between items-center sticky top-0 bg-white"
-                             style={{ borderColor: colors.earthLight }}>
-                            <h3 className="font-bold" style={{ color: colors.primary }}>📖 Glossary</h3>
-                            <button onClick={() => setShowGlossary(false)}
-                                    className="text-gray-500 hover:text-gray-700 text-2xl font-light border-0 bg-transparent cursor-pointer"
-                                    aria-label="Close glossary">✕</button>
-                        </div>
-                        <div className="p-4 space-y-3">
-                            {glossaryTerms.map((item, i) => (
-                                <div key={i}>
-                                    <p className="font-semibold text-sm" style={{ color: colors.primary }}>{item.term}</p>
-                                    <p className="text-xs mt-0.5" style={{ color: colors.earthDark }}>{item.definition}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            );
-
-            // ============================================================
-            // Excel workbook (Bike-Repair.xlsx) — carried from 1.3, + Reasons & Cash tabs
-            // ============================================================
-            const XLGRID = '22px 34px 1fr 110px'; // outline gutter · row# · label · value
-            const xlGutter = <div style={{ backgroundColor: '#e2e8f0', alignSelf: 'stretch', borderRight: '1px solid #cbd5e1' }}></div>;
-
-            const tabConfig = [
-                { id: 'assets',      label: 'Assets' },
-                { id: 'liabilities', label: 'Liabilities' },
-                { id: 'cash',        label: 'Cash' },
-                { id: 'reasons',     label: 'Reasons', isNew: true },
-            ];
-
-            const renderExcelWorkbook = (active, body) => {
-              const tabs = phase === 'welcome' ? tabConfig.filter(t => t.id !== 'reasons') : tabConfig;
-              return (
-                <div className="rounded-lg overflow-hidden mb-4" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 6px 18px rgba(0,0,0,0.12)' }}>
-                    <div className="px-4 py-2 flex items-center justify-between" style={{ background: 'linear-gradient(180deg, #138a4b 0%, #107C41 100%)', borderBottom: '1px solid #0e6b3a', color: 'white' }}>
-                        <span className="text-sm font-semibold tracking-tight flex items-center gap-2">
-                            <span style={{ fontSize: '15px' }}>▦</span>
-                            <span className="mono">Bike-Repair.xlsx</span>
-                            <span className="text-xs font-normal opacity-75">&mdash; Excel</span>
-                        </span>
-                        <span className="text-xs mono opacity-75">{tabs.find(t => t.id === active).label} sheet</span>
-                    </div>
-                    <div style={{ minHeight: '320px', backgroundColor: 'white' }}>{body}</div>
-                    <div className="flex" style={{ backgroundColor: '#e8e8e8', borderTop: '1px solid #c8c8c8' }}>
-                        {tabs.map(t => {
-                            const isActive = t.id === active;
-                            return (
-                                <button key={t.id} onClick={() => { playContinueClick(); setActiveTab(t.id); }}
-                                        className="px-4 py-1.5 text-sm font-medium border-0 cursor-pointer"
-                                        style={{ backgroundColor: isActive ? 'white' : 'transparent', color: isActive ? '#0e6b3a' : colors.earth, borderTop: isActive ? '2px solid #107C41' : '2px solid transparent', borderRight: '1px solid #c8c8c8', borderBottom: isActive ? '1px solid white' : 'none', marginBottom: isActive ? '-1px' : '0' }}>
-                                    {t.label}
-                                    {t.isNew && <span className="ml-1.5 text-xs font-normal italic" style={{ color: colors.accent }}>new</span>}
-                                </button>
-                            );
-                        })}
-                        <div className="px-3 py-1.5 text-sm" style={{ color: colors.earthLight }}>&#65291;</div>
-                    </div>
-                </div>
-              );
-            };
-
-            // ----- Assets sheet (collapsible outline, $3,410) -----
-            const renderAssetsSheet = () => {
-                // Cash stays its own tab, not a line on the Assets list, until the entity boundary
-                // (personal vs. business cash) is named in 1.5. Total is unaffected (cash is $0).
-                const cats = ASSETS_SNAPSHOT.filter(c => c.cat !== 'CASH');
-                const total = cats.reduce((s, c) => s + c.subtotal, 0);
-                let n = 0; const rows = [];
-                cats.forEach(cat => {
-                    const label = cat.cat === 'RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0) + cat.cat.slice(1).toLowerCase());
-                    n += 1; rows.push({ kind: 'cat', cat: cat.cat, label, num: n, amount: cat.subtotal });
-                    cat.items.forEach(it => { n += 1; rows.push({ kind: 'item', cat: cat.cat, num: n, label: it.name, amount: it.amount }); });
-                });
-                return (
-                    <>
-                        <div className="grid items-center text-xs font-semibold" style={{ gridTemplateColumns: XLGRID, backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: colors.earthDark }}>
-                            {xlGutter}
-                            <div className="text-center py-1" style={{ borderRight: '1px solid #cbd5e1' }}></div>
-                            <div className="py-1 px-2" style={{ borderRight: '1px solid #cbd5e1' }}>A&nbsp;&nbsp;Asset</div>
-                            <div className="py-1 px-2 text-right">B&nbsp;&nbsp;Value</div>
-                        </div>
-                        {rows.map(row => {
-                            if (row.kind === 'item' && !assetsExpanded[row.cat]) return null;
-                            const open = !!assetsExpanded[row.cat];
-                            if (row.kind === 'cat') {
-                                return (
-                                    <div key={row.cat} className="grid items-center" style={{ gridTemplateColumns: XLGRID, backgroundColor: '#eaf3ec', borderBottom: '1px solid #e2e8f0' }}>
-                                        <div className="flex items-center justify-center" style={{ backgroundColor: '#e2e8f0', alignSelf: 'stretch', borderRight: '1px solid #cbd5e1' }}>
-                                            <button onClick={() => { playContinueClick(); toggleAssetCat(row.cat); }} className="cursor-pointer flex items-center justify-center leading-none" style={{ width: '13px', height: '13px', border: '1px solid #6b7280', backgroundColor: 'white', color: '#374151', fontSize: '11px', fontWeight: 700, padding: 0, borderRadius: '1px' }} title={open ? 'Collapse' : 'Expand'} aria-expanded={open}>{open ? '−' : '+'}</button>
-                                        </div>
-                                        <div className="text-center text-xs py-1" style={{ backgroundColor: '#f8fafc', color: colors.earth, borderRight: '1px solid #e2e8f0' }}>{row.num}</div>
-                                        <div className="py-1 px-2 text-sm font-bold" style={{ color: '#0e6b3a', borderRight: '1px solid #e2e8f0' }}>{row.label}</div>
-                                        <div className="py-1 px-2 text-right text-sm mono font-bold" style={{ color: '#0e6b3a' }}>{xlDollars(row.amount)}</div>
-                                    </div>
-                                );
-                            }
-                            return (
-                                <div key={row.cat + row.num} className="grid items-center" style={{ gridTemplateColumns: XLGRID, borderBottom: '1px solid #eef2f7' }}>
-                                    {xlGutter}
-                                    <div className="text-center text-xs py-1" style={{ backgroundColor: '#f8fafc', color: colors.earth, borderRight: '1px solid #e2e8f0' }}>{row.num}</div>
-                                    <div className="py-1 px-2 pl-6 text-sm" style={{ color: colors.earthDark, borderRight: '1px solid #eef2f7' }}>{row.label}</div>
-                                    <div className="py-1 px-2 text-right text-sm mono" style={{ color: colors.earthDark }}>{xlDollars(row.amount)}</div>
-                                </div>
-                            );
-                        })}
-                        <div className="grid items-center" style={{ gridTemplateColumns: XLGRID, backgroundColor: colors.sand, borderTop: '2px solid #0e6b3a' }}>
-                            {xlGutter}
-                            <div className="text-center text-xs py-2" style={{ backgroundColor: '#f8fafc', borderRight: '1px solid #e2e8f0' }}></div>
-                            <div className="py-2 px-2 text-sm font-bold" style={{ color: colors.primary, borderRight: '1px solid #e2e8f0' }}>TOTAL &mdash; what I have</div>
-                            <div className="py-2 px-2 text-right text-sm mono font-bold" style={{ color: colors.primary }}>{xlDollars(total)}</div>
-                        </div>
-                    </>
-                );
-            };
-
-            // ----- Liabilities sheet (flat, $1,450) -----
-            const renderLiabilitiesSheet = () => (
-                <>
-                    <div className="grid items-center text-xs font-semibold" style={{ gridTemplateColumns: XLGRID, backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: colors.earthDark }}>
-                        {xlGutter}
-                        <div className="text-center py-1" style={{ borderRight: '1px solid #cbd5e1' }}></div>
-                        <div className="py-1 px-2" style={{ borderRight: '1px solid #cbd5e1' }}>A&nbsp;&nbsp;Liability (what I owe)</div>
-                        <div className="py-1 px-2 text-right">B&nbsp;&nbsp;Amount</div>
-                    </div>
-                    {LIABILITIES_SNAPSHOT.map((r, i) => (
-                        <div key={i} className="grid items-center" style={{ gridTemplateColumns: XLGRID, borderBottom: '1px solid #eef2f7' }}>
-                            {xlGutter}
-                            <div className="text-center text-xs py-1" style={{ backgroundColor: '#f8fafc', color: colors.earth, borderRight: '1px solid #e2e8f0' }}>{i + 1}</div>
-                            <div className="py-1 px-2 text-sm" style={{ color: colors.earthDark, borderRight: '1px solid #eef2f7' }}>{r.label}</div>
-                            <div className="py-1 px-2 text-right text-sm mono" style={{ color: colors.earthDark }}>{xlDollars(r.amount)}</div>
-                        </div>
-                    ))}
-                    <div className="grid items-center" style={{ gridTemplateColumns: XLGRID, backgroundColor: colors.sand, borderTop: '2px solid #0e6b3a' }}>
-                        {xlGutter}
-                        <div className="text-center text-xs py-2" style={{ backgroundColor: '#f8fafc', borderRight: '1px solid #e2e8f0' }}></div>
-                        <div className="py-2 px-2 text-sm font-bold" style={{ color: colors.primary, borderRight: '1px solid #e2e8f0' }}>TOTAL &mdash; what I owe</div>
-                        <div className="py-2 px-2 text-right text-sm mono font-bold" style={{ color: colors.primary }}>{xlDollars(LIABILITIES_TOTAL)}</div>
-                    </div>
-                </>
-            );
-
-            // ----- Cash sheet (May money in/out, nets to $0) -----
-            const renderCashSheet = () => {
-                const inflows  = CASH_FLOWS.filter(f => f.amount > 0);
-                const outflows = CASH_FLOWS.filter(f => f.amount < 0);
-                const totalIn  = inflows.reduce((s, f) => s + f.amount, 0);
-                const totalOut = outflows.reduce((s, f) => s + f.amount, 0);
-                const net = totalIn + totalOut;
-                return (
-                    <div>
-                        <div className="px-3 py-2 border-b" style={{ borderColor: colors.earthLight, backgroundColor: '#fafaf7' }}>
-                            <p className="text-xs uppercase tracking-wide font-bold" style={{ color: colors.earth }}>Repair cash — May</p>
-                        </div>
-                        <div className="px-3 pt-3">
-                            <p className="text-xs font-bold mb-1 tracking-wide" style={{ color: '#166534' }}>Cash in</p>
-                            {inflows.map((f, i) => (
-                                <div key={i} className="flex justify-between items-center py-1 px-1" style={{ borderBottom: `1px dashed ${colors.earthLight}` }}>
-                                    <span className="text-xs" style={{ color: colors.earthDark }}>
-                                        <span className="mono inline-block w-14" style={{ color: colors.earth }}>{f.date}</span>{f.desc}
-                                    </span>
-                                    <span className="mono text-xs font-semibold" style={{ color: '#166534' }}>+${f.amount.toLocaleString('en-US')}</span>
-                                </div>
-                            ))}
-                            <div className="flex justify-between items-center py-1 px-1" style={{ borderTop: `1px solid ${colors.earthDark}` }}>
-                                <span className="text-xs font-bold" style={{ color: colors.earthDark }}>Total in</span>
-                                <span className="mono text-xs font-bold" style={{ color: '#166534' }}>+${totalIn.toLocaleString('en-US')}</span>
-                            </div>
-                        </div>
-                        <div className="px-3 pt-4">
-                            <p className="text-xs font-bold mb-1 tracking-wide" style={{ color: colors.error }}>Cash out</p>
-                            {outflows.map((f, i) => (
-                                <div key={i} className="flex justify-between items-center py-1 px-1" style={{ borderBottom: `1px dashed ${colors.earthLight}` }}>
-                                    <span className="text-xs" style={{ color: colors.earthDark }}>
-                                        <span className="mono inline-block w-14" style={{ color: colors.earth }}>{f.date}</span>{f.desc}
-                                    </span>
-                                    <span className="mono text-xs font-semibold" style={{ color: colors.error }}>−${Math.abs(f.amount).toLocaleString('en-US')}</span>
-                                </div>
-                            ))}
-                            <div className="flex justify-between items-center py-1 px-1" style={{ borderTop: `1px solid ${colors.earthDark}` }}>
-                                <span className="text-xs font-bold" style={{ color: colors.earthDark }}>Total out</span>
-                                <span className="mono text-xs font-bold" style={{ color: colors.error }}>−${Math.abs(totalOut).toLocaleString('en-US')}</span>
-                            </div>
-                        </div>
-                        <div className="flex justify-between items-center mx-3 mt-3 mb-3 px-3 py-2"
-                             style={{ backgroundColor: colors.sand, borderTop: `2px solid ${colors.earthDark}` }}>
-                            <span className="text-sm font-bold" style={{ color: colors.primary }}>Cash on hand (May 31)</span>
-                            <span className="mono text-sm font-bold" style={{ color: colors.primary }}>${net.toLocaleString('en-US')}</span>
-                        </div>
-                    </div>
-                );
-            };
-
-            // ----- Reasons sheet (walk + pairs) -----
-            const renderReasonsSheet = () => {
-                const revealed = REASONS.filter(r => revealedReasonIds.has(r.id));
-                const visible  = revealed.filter(r => !eliminatedIds.has(r.id));
-                const isEliminating = phase === 'pairs' && !eliminateAutoActive && !eliminateAutoDone;
-                return (
-                    <div>
-                        <div className="px-3 py-2 border-b" style={{ borderColor: colors.earthLight, backgroundColor: '#fafaf7' }}>
-                            <p className="text-xs uppercase tracking-wide font-bold" style={{ color: colors.earth }}>Reasons — one row per change</p>
-                            <p className="text-xs italic" style={{ color: colors.earth }}>
-                                {revealed.length === 0
-                                    ? 'Empty for now. Walk through the month to fill it in.'
-                                    : phase === 'pairs'
-                                        ? `${visible.length} ${visible.length === 1 ? 'row' : 'rows'} left (${eliminatedPairsCount} ${eliminatedPairsCount === 1 ? 'pair' : 'pairs'} crossed out).`
-                                        : `${revealed.length} ${revealed.length === 1 ? 'row' : 'rows'} so far.`}
-                            </p>
-                        </div>
-                        {revealed.length === 0 ? (
-                            <div className="p-6 text-center"><p className="text-sm italic" style={{ color: colors.earth }}>No reasons recorded yet.</p></div>
-                        ) : visible.length === 0 ? (
-                            <div className="p-6 text-center"><p className="text-sm italic" style={{ color: colors.earth }}>All paired rows crossed out.</p></div>
-                        ) : (
-                            <>
-                                <div className="grid items-center text-xs uppercase tracking-wide font-semibold px-3 py-2 border-b"
-                                     style={{ color: colors.earth, borderColor: colors.earthLight, gridTemplateColumns: '1.4fr 80px 2.2fr', backgroundColor: '#fafaf7' }}>
-                                    <span>Account</span><span className="text-right pr-3">Δ</span><span className="pl-3">Reason</span>
-                                </div>
-                                {visible.map((r, i) => {
-                                    const isSelected = selectedReasonId === r.id;
-                                    return (
-                                        <div key={r.id} onClick={() => handleReasonClick(r.id)}
-                                             className="row-fade grid items-center text-xs px-3 py-1.5"
-                                             style={{
-                                                 borderBottom: `1px solid ${colors.earthLight}`,
-                                                 backgroundColor: isSelected ? '#fef9e7' : (i % 2 === 0 ? 'white' : '#fafaf7'),
-                                                 outline: isSelected ? `2px solid ${colors.accent}` : 'none', outlineOffset: '-2px',
-                                                 cursor: isEliminating ? 'pointer' : 'default',
-                                                 gridTemplateColumns: '1.4fr 80px 2.2fr',
-                                             }}>
-                                            <span style={{ color: colors.earthDark }}>{r.account}</span>
-                                            <span className="mono text-right pr-3" style={{ color: r.delta > 0 ? '#166534' : colors.error }}>{signedDollars(r.delta)}</span>
-                                            <span className="pl-3" style={{ color: colors.earthDark }}>{r.reason}</span>
-                                        </div>
-                                    );
-                                })}
-                            </>
-                        )}
-                    </div>
-                );
-            };
-
-            // ----- Net-movers sort body (rendered inside the Reasons tab) -----
-            const renderSortBody = () => {
-                const solos = REASONS.filter(r => soloReasonIds.includes(r.id));
-                const unassigned = solos.filter(r => !categoryAssignments[r.id]);
-                const contributed = solos.filter(r => categoryAssignments[r.id] === 'contributed');
-                const earned = solos.filter(r => categoryAssignments[r.id] === 'earned');
-                const contributedTotal = contributed.reduce((s, r) => s + r.delta, 0);
-                const earnedTotal = earned.reduce((s, r) => s + r.delta, 0);
-
-                const renderSortedSection = (title, rows, total, catKey, color) => {
-                    const expanded = expandedSortCats[catKey];
-                    return (
-                        <React.Fragment>
-                            <div onClick={() => { playContinueClick(); toggleSortCat(catKey); }}
-                                 className="flex justify-between items-center py-2 px-3 cursor-pointer"
-                                 style={{ borderBottom: `1px solid ${colors.earthLight}`, borderTop: `2px solid ${color}`, backgroundColor: expanded ? '#fafaf7' : 'white' }}
-                                 aria-expanded={expanded}>
-                                <span className="font-bold text-sm" style={{ color }}>
-                                    <span className="inline-block w-4 mr-2 text-center" style={{ color: colors.earth }}>{expanded ? '▼' : '▶'}</span>
-                                    {title} <span style={{ color: colors.earth, fontWeight: 400 }}>({rows.length})</span>
-                                </span>
-                                <span className="mono text-sm font-bold" style={{ color }}>{signedDollars(total)}</span>
-                            </div>
-                            {expanded && rows.length === 0 && (
-                                <div className="p-3 text-center"><p className="text-xs italic" style={{ color: colors.earth }}>(empty so far)</p></div>
-                            )}
-                            {expanded && rows.map((r, i) => (
-                                <div key={r.id} className="row-fade grid items-center text-xs px-3 py-1.5"
-                                     style={{ borderBottom: `1px solid ${colors.earthLight}`, backgroundColor: i % 2 === 0 ? 'white' : '#fafaf7', gridTemplateColumns: '1.4fr 80px 2.2fr' }}>
-                                    <span style={{ color: colors.earthDark, paddingLeft: '24px' }}>{r.account}</span>
-                                    <span className="mono text-right pr-3" style={{ color: r.delta > 0 ? '#166534' : colors.error }}>{signedDollars(r.delta)}</span>
-                                    <span className="pl-3" style={{ color: colors.earthDark }}>{r.reason}</span>
-                                </div>
-                            ))}
-                        </React.Fragment>
-                    );
-                };
-
-                return (
-                    <div>
-                        {unassigned.length > 0 && (
-                            <>
-                                <div className="px-3 py-2" style={{ backgroundColor: '#fafaf7', borderBottom: `1px solid ${colors.earthLight}` }}>
-                                    <p className="text-xs uppercase tracking-wide font-bold" style={{ color: colors.earth }}>
-                                        To sort ({unassigned.length} {unassigned.length === 1 ? 'row' : 'rows'})
-                                    </p>
-                                </div>
-                                {unassigned.map(r => (
-                                    <div key={r.id} className="row-fade px-3 py-2" style={{ borderBottom: `1px solid ${colors.earthLight}` }}>
-                                        <div className="grid items-center text-xs mb-1" style={{ gridTemplateColumns: '1.4fr 80px 2.2fr' }}>
-                                            <span style={{ color: colors.earthDark }}>{r.account}</span>
-                                            <span className="mono text-right pr-3" style={{ color: r.delta > 0 ? '#166534' : colors.error }}>{signedDollars(r.delta)}</span>
-                                            <span className="pl-3" style={{ color: colors.earthDark }}>{r.reason}</span>
-                                        </div>
-                                        <div className="flex gap-2 mt-1 ml-1">
-                                            <button onClick={() => handleCategoryAssign(r.id, 'contributed')}
-                                                    className="text-xs px-2 py-1 rounded border cursor-pointer"
-                                                    style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>→ Contributed</button>
-                                            <button onClick={() => handleCategoryAssign(r.id, 'earned')}
-                                                    className="text-xs px-2 py-1 rounded border cursor-pointer"
-                                                    style={{ backgroundColor: 'white', borderColor: colors.accent, color: colors.earthDark }}>→ Generated</button>
-                                        </div>
-                                    </div>
-                                ))}
-                            </>
-                        )}
-                        {renderSortedSection('CONTRIBUTED', contributed, contributedTotal, 'contributed', colors.primary)}
-                        {renderSortedSection('GENERATED', earned, earnedTotal, 'earned', colors.accent)}
-                    </div>
-                );
-            };
-
-            const workbookBody = () => {
-                if (activeTab === 'assets')      return renderAssetsSheet();
-                if (activeTab === 'liabilities') return renderLiabilitiesSheet();
-                if (activeTab === 'cash')        return renderCashSheet();
-                if (activeTab === 'reasons')     return phase === 'net-movers' ? renderSortBody() : renderReasonsSheet();
-                return null;
-            };
-
-            // ============================================================
-            // Phase renderers
-            // ============================================================
-            const renderWelcome = () => (
-                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
-                    <div className="p-4 max-w-3xl mx-auto">
-                        <Header />
-                        <NarrativeBlock>
-                            Anna's back, coffee in hand. By now your workbook has two lists that earned their names
-                            in your last sit-down: <strong>Assets</strong> (what you have) and <strong>Liabilities</strong>
-                            {' '}(what you owe). You pull them up.
-                            <br /><br />
-                            But something nags at you. These lists keep <em>changing</em> — parts bought, repairs finished,
-                            the card paid down. The numbers tell you <em>what</em> the total is now. They never tell you
-                            {' '}<em>why</em> it moved.
-                        </NarrativeBlock>
-
-                        {renderExcelWorkbook(activeTab, workbookBody())}
-
-                        <AnnaBox>
-                            "Right — a list of totals is a snapshot. It can't tell you how you got here." She taps the
-                            screen. "Try this: every time a number on one of these lists changes, jot down the
-                            {' '}<em>reason</em> next to it. Give it its own tab."
-                        </AnnaBox>
-
-                        <div className="rounded-lg p-4 border-2 mb-4" style={{ backgroundColor: 'white', borderColor: colors.earthLight }}>
-                            <h3 className="font-bold mb-3" style={{ color: colors.primary }}>What You'll Discover</h3>
-                            <ul className="space-y-2 text-sm" style={{ color: colors.earthDark }}>
-                                <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span><span>The amount tells you what moved; only the reason tells you what <em>happened</em>.</span></li>
-                                <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span><span>Once you write the reasons down, a pattern shows up on its own: changes come in <em>pairs</em>.</span></li>
-                                <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span><span>Some changes just shuffle; a few actually move your <em>net</em> — and those sort into two plain kinds.</span></li>
-                            </ul>
-                        </div>
-
-                        <ContinueButton onClick={() => { setStep(0); setActiveTab('reasons'); setPhase('reasons-walk'); }}>
-                            Add a Reasons tab
-                        </ContinueButton>
-                    </div>
-                    <GlossaryModal />
-                </div>
-            );
-
-            const renderReasonsWalk = () => (
-                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
-                    <div className="p-4 max-w-3xl mx-auto">
-                        <Header />
-                        <AnnaBox>{currentStep ? currentStep.anna : ''}</AnnaBox>
-                        {renderExcelWorkbook(activeTab, workbookBody())}
-                        {!onFinishStep && (
-                            <ContinueButton onClick={advanceNarration}>
-                                {step === 0 ? 'Start walking the month' : 'Next'}
-                            </ContinueButton>
-                        )}
-                        {onFinishStep && (
-                            <>
-                                <KeyInsightBox>
-                                    <p className="font-semibold mb-2">Most reasons show up in two rows.</p>
-                                    <p>Same event, two changes. Buy parts on the card: parts up <em>and</em> the card up.
-                                       Pay the card down: cash down <em>and</em> the card down. Smith's deposit: cash up
-                                       {' '}<em>and</em> what you owe him up. You didn't plan that — it just appeared once you
-                                       wrote the reasons next to the changes.</p>
-                                    <p className="mt-2"><strong>What if you crossed those matched pairs out?</strong></p>
-                                </KeyInsightBox>
-                                <ContinueButton onClick={() => { setActiveTab('reasons'); setPhase('pairs'); }}>
-                                    Cross out the matched pairs
-                                </ContinueButton>
-                            </>
-                        )}
-                    </div>
-                    <GlossaryModal />
-                </div>
-            );
-
-            const renderPairs = () => (
-                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
-                    <div className="p-4 max-w-3xl mx-auto">
-                        <Header />
-                        {!eliminateAutoDone && (
-                            <AnnaBox>
-                                "Many rows have a twin — same reason, two different accounts. Click one row, then click
-                                its twin. If the reasons match, both cross out. Those two changes move <em>together</em> —
-                                what you have and what you owe shift by the same amount, so your <strong>net</strong>
-                                {' '}(have minus owe) doesn't budge."
-                            </AnnaBox>
-                        )}
-                        {eliminateNudge && eliminateNudge.reason === 'no-match' && !eliminateAutoDone && (
-                            <div className="rounded-lg p-3 mb-3" style={{ backgroundColor: colors.warningBg, border: `1px solid ${colors.warning}` }}>
-                                <p className="text-sm italic" style={{ color: '#92400e' }}>
-                                    "Those two reasons aren't the same. Look for rows whose reason text matches exactly."
-                                </p>
-                            </div>
-                        )}
-                        {renderExcelWorkbook(activeTab, workbookBody())}
-                        {eliminateTriggerMet && (
-                            <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
-                                <p className="text-sm mb-2" style={{ color: colors.earthDark }}><strong>You've got the rule.</strong> Cross out the rest of the matched pairs?</p>
-                                <button onClick={handleEliminateAutocomplete} className="w-full py-3 rounded-lg font-bold text-white border-0 cursor-pointer" style={{ backgroundColor: colors.primary }}>Cross out the rest →</button>
-                            </div>
-                        )}
-                        {eliminateAutoActive && (
-                            <div className="rounded-lg p-4 mb-3 system-sorting" style={{ backgroundColor: colors.primary, color: 'white', textAlign: 'center' }}>
-                                <p className="text-base font-bold">⚙ Crossing out matched pairs&hellip;</p>
-                            </div>
-                        )}
-                        {eliminateAutoDone && (
-                            <>
-                                <AnnaBox>
-                                    "Look what's left. Just the rows with no twin on this spreadsheet — your own money put
-                                    in, the gear you brought, the customer payments, the parts and the month you used up.
-                                    Each of these <em>moved your net</em>. Their other side lives somewhere you haven't
-                                    built yet."
-                                </AnnaBox>
-                                <KeyInsightBox>
-                                    <p className="font-semibold mb-2">The crossed-out ones just shuffled.</p>
-                                    <p>Buying parts on the card, paying the card down, Smith's deposit — what you
-                                       <em> have</em> and what you <em>owe</em> moved by the same amount, so your net didn't
-                                       change. The reasons that are <strong>left over are the ones that moved your net</strong>
-                                       {' '}— the ones worth writing down to know how you're doing.</p>
-                                </KeyInsightBox>
-                                <ContinueButton onClick={() => { setActiveTab('reasons'); setPhase('net-movers'); }}>
-                                    Sort the net-movers
-                                </ContinueButton>
-                            </>
-                        )}
-                    </div>
-                    <GlossaryModal />
-                </div>
-            );
-
-            const renderNetMovers = () => {
-                const earned = REASONS.filter(r => categoryAssignments[r.id] === 'earned');
-                const contributed = REASONS.filter(r => categoryAssignments[r.id] === 'contributed');
-                const earnedTotal = earned.reduce((s, r) => s + r.delta, 0);
-                const contributedTotal = contributed.reduce((s, r) => s + r.delta, 0);
-                const nudgeRow = sortNudge ? REASONS.find(r => r.id === sortNudge.rowId) : null;
-                const done = sortAutoDone || allSorted;
-                return (
-                    <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
-                        <div className="p-4 max-w-3xl mx-auto">
-                            <Header />
-                            {!done && (
-                                <AnnaBox>
-                                    "These net-movers split into just two kinds. Some you <strong>put in</strong> yourself,
-                                    from outside the repair work — your own cash, gear you already had. The rest came from
-                                    {' '}<strong>doing the work</strong> — what customers paid, less the parts and the month
-                                    the work used up. Drop each row into the right bin."
-                                </AnnaBox>
-                            )}
-                            {sortNudge && nudgeRow && !done && (
-                                <div className="rounded-lg p-3 mb-3" style={{ backgroundColor: colors.warningBg, border: `1px solid ${colors.warning}` }}>
-                                    <p className="text-sm italic" style={{ color: '#92400e' }}>
-                                        {sortNudge.attempted === 'contributed'
-                                            ? "That one didn't come from you bringing something in — it came from doing the repair work. Try the other bin."
-                                            : "That one didn't come from doing repair work — you brought it in from outside. Try the other bin."}
-                                    </p>
-                                </div>
-                            )}
-                            {renderExcelWorkbook(activeTab, workbookBody())}
-                            {sortTriggerMet && (
-                                <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
-                                    <p className="text-sm mb-2" style={{ color: colors.earthDark }}><strong>You've got the rule.</strong> Sort the rest?</p>
-                                    <button onClick={handleSortAutocomplete} className="w-full py-3 rounded-lg font-bold text-white border-0 cursor-pointer" style={{ backgroundColor: colors.primary }}>Sort the rest →</button>
-                                </div>
-                            )}
-                            {sortAutoActive && (
-                                <div className="rounded-lg p-4 mb-3 system-sorting" style={{ backgroundColor: colors.primary, color: 'white', textAlign: 'center' }}>
-                                    <p className="text-base font-bold">⚙ Sorting the rest&hellip;</p>
-                                </div>
-                            )}
-                            {done && (
-                                <>
-                                    <AnnaBox>
-                                        "There it is — two kinds of net-mover. What you <strong>contributed</strong>:
-                                        {' '}{signedDollars(contributedTotal)}, the cash and gear you put in yourself.
-                                        And what the work <strong>generated</strong>: {signedDollars(earnedTotal)} — the customer
-                                        work, after the parts and the month it took to do it. That figure is what
-                                        the repair work produced on its own in May."
-                                    </AnnaBox>
-                                    <KeyInsightBox>
-                                        <p className="font-semibold mb-2">Two ways your stake grew.</p>
-                                        <p><strong>Contributed ({signedDollars(contributedTotal)}):</strong> you funded it —
-                                           cash from the day job, gear from home. From outside the repair work.</p>
-                                        <p className="mt-2"><strong>Generated ({signedDollars(earnedTotal)}):</strong> the work
-                                           generated it — what customers paid, less the parts used and the month of space
-                                           used up.</p>
-                                        <p className="mt-2">You haven't named the thing these add up to yet, or seen where
-                                           their other sides live. That's next.</p>
-                                    </KeyInsightBox>
-                                    <ContinueButton onClick={() => setPhase('complete')}>Finish up</ContinueButton>
-                                </>
-                            )}
-                        </div>
-                        <GlossaryModal />
-                    </div>
-                );
-            };
-
-            const renderComplete = () => (
-                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
-                    <div className="p-4 max-w-3xl mx-auto">
-                        <Header />
-                        <div className="text-center mb-6">
-                            <p className="text-5xl mb-2">🏆</p>
-                            <p className="text-xl font-bold" style={{ color: colors.primary }}>Tutorial 1.4 complete</p>
-                        </div>
-                        <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: 'white', border: `1px solid ${colors.earthLight}` }}>
-                            <h3 className="font-bold mb-3" style={{ color: colors.primary }}>What You Discovered</h3>
-                            <ul className="space-y-2 text-sm" style={{ color: colors.earthDark }}>
-                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>You kept a <strong>Reasons</strong> tab — one row for the why behind each change to a list.</span></li>
-                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>Most reasons came in <strong>pairs</strong> — same event, two changes. You didn't arrange that; it showed up on its own.</span></li>
-                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>The matched pairs just <strong>shuffle</strong> — have and owe move together, so your <strong>net</strong> doesn't budge.</span></li>
-                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>The reasons that <strong>move your net</strong> are two plain kinds: what you <strong>contributed</strong> and what the work <strong>generated</strong>.</span></li>
-                            </ul>
-                        </div>
-                        <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: colors.clayLight }}>
-                            <h3 className="font-bold mb-2" style={{ color: colors.primary }}>Coming Next</h3>
-                            <p className="text-sm mb-2" style={{ color: colors.earthDark }}>
-                                You have three things now: what you have, what you owe, and the reasons your net moved.
-                                In 1.5 you'll lay them out on one page, watch how they fit together — and the names you've
-                                been circling finally arrive.
-                            </p>
-                            <p className="font-bold" style={{ color: colors.primary }}>Next: Tutorial 1.5 &mdash; Naming What You Built</p>
-                        </div>
-                        <div className="mb-3"><ContinueButton asLink="15-naming-what-you-built.html">Continue to Tutorial 1.5</ContinueButton></div>
-                        <button onClick={handleRestart}
-                                className="block w-full py-3 rounded-lg font-bold border-2 cursor-pointer mb-3"
-                                style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>
-                            ↺ Restart tutorial
-                        </button>
-                    </div>
-                    <GlossaryModal />
-                </div>
-            );
-
-            // ============================================================
-            // Router
-            // ============================================================
-            if (phase === 'welcome')      return renderWelcome();
-            if (phase === 'reasons-walk') return renderReasonsWalk();
-            if (phase === 'pairs')        return renderPairs();
-            if (phase === 'net-movers')   return renderNetMovers();
-            if (phase === 'complete')     return renderComplete();
-            return null;
-        };
-
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
-    </script>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main" id="headerTitle">
+        <h1>Tutorial 1.4: Keeping the Reasons</h1>
+        <p class="tut-header-sub">Bicycle repair shop &middot; ~15 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart" aria-label="Restart tutorial" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="progress-meta"><span>Progress</span><span id="progPct">0%</span></div>
+    <div class="progress-track"><div class="progress-bar-fill" id="progFill"></div></div>
+    <div class="dev-bar" id="devBar" hidden>
+      <div class="dev-bar-label">Dev: skip to phase</div>
+      <div class="dev-bar-btns" id="devBtns"></div>
+    </div>
+
+    <!-- ===== welcome ===== -->
+    <div class="phase active" id="phase-welcome">
+      <div class="narrative-block">
+        <p>Anna&rsquo;s back, coffee in hand. By now your workbook has two lists that earned their names in your last sit-down: <strong>Assets</strong> (what you have) and <strong>Liabilities</strong> (what you owe). You pull them up.</p>
+        <p>But something nags at you. These lists keep <em>changing</em> &mdash; parts bought, repairs finished, the card paid down. The numbers tell you <em>what</em> the total is now. They never tell you <em>why</em> it moved.</p>
+      </div>
+      <div id="wbWelcome"></div>
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;Right &mdash; a list of totals is a snapshot. It can&rsquo;t tell you how you got here.&rdquo; She taps the screen. &ldquo;Try this: every time a number on one of these lists changes, jot down the <em>reason</em> next to it. Give it its own tab.&rdquo;</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You&rsquo;ll Discover</div>
+        <ul class="bullet-list">
+          <li>The amount tells you what moved; only the reason tells you what <em>happened</em>.</li>
+          <li>Once you write the reasons down, a pattern shows up on its own: changes come in <em>pairs</em>.</li>
+          <li>Some changes just shuffle; a few actually move your <em>net</em> &mdash; and those sort into two plain kinds.</li>
+        </ul>
+      </div>
+      <button class="btn-continue btn-block" onclick="goto('reasons-walk')">Add a Reasons tab &rarr;</button>
+    </div>
+
+    <!-- ===== reasons-walk ===== -->
+    <div class="phase" id="phase-reasons-walk">
+      <div id="walkAnna"></div>
+      <div id="wbWalk"></div>
+      <div id="walkControls"></div>
+    </div>
+
+    <!-- ===== pairs ===== -->
+    <div class="phase" id="phase-pairs">
+      <div id="pairsTop"></div>
+      <div id="wbPairs"></div>
+      <div id="pairsControls"></div>
+    </div>
+
+    <!-- ===== net-movers ===== -->
+    <div class="phase" id="phase-net-movers">
+      <div id="nmTop"></div>
+      <div id="wbNM"></div>
+      <div id="nmControls"></div>
+    </div>
+
+    <!-- ===== complete ===== -->
+    <div class="phase" id="phase-complete">
+      <div class="complete-head">
+        <div class="trophy-badge"><i data-lucide="trophy"></i></div>
+        <div class="complete-title">Tutorial 1.4 complete</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You Discovered</div>
+        <ul class="bullet-list check">
+          <li>You kept a <strong>Reasons</strong> tab &mdash; one row for the why behind each change to a list.</li>
+          <li>Most reasons came in <strong>pairs</strong> &mdash; same event, two changes. You didn&rsquo;t arrange that; it showed up on its own.</li>
+          <li>The matched pairs just <strong>shuffle</strong> &mdash; have and owe move together, so your <strong>net</strong> doesn&rsquo;t budge.</li>
+          <li>The reasons that <strong>move your net</strong> are two plain kinds: what you <strong>contributed</strong> and what the work <strong>generated</strong>.</li>
+        </ul>
+      </div>
+      <div class="next-card">
+        <div class="next-card-label">Coming Next</div>
+        <p>You have three things now: what you have, what you owe, and the reasons your net moved. In 1.5 you&rsquo;ll lay them out on one page, watch how they fit together &mdash; and the names you&rsquo;ve been circling finally arrive.</p>
+        <p><strong>Next: Tutorial 1.5 &mdash; Naming What You Built</strong></p>
+      </div>
+      <a class="btn-continue btn-block" href="15-naming-what-you-built.html">Continue to Tutorial 1.5 &rarr;</a>
+      <div class="btn-row">
+        <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Restart</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data — carried from 1.3 (tie to the manifest) ===== */
+var ASSETS_SNAPSHOT = [
+  { cat:'EQUIPMENT', items:[
+    { name:'Park Tool repair stand', amount:200 },{ name:'Cone wrench set', amount:65 },{ name:'Torque wrench', amount:95 },
+    { name:'Hex / Allen key set', amount:45 },{ name:'Cable cutters', amount:40 },{ name:'Chain breaker', amount:35 },
+    { name:'Tire levers', amount:20 },{ name:'Air compressor', amount:180 },{ name:'Parts washer', amount:130 },
+    { name:'Wheel-truing stand', amount:170 },{ name:'Bench grinder', amount:90 },{ name:'Headset press', amount:70 },{ name:'Shop vacuum', amount:60 } ] },
+  { cat:'COMPUTER EQUIPMENT', items:[ { name:'Laptop', amount:610 } ] },
+  { cat:'SUPPLIES', items:[
+    { name:'Box of chains (on shelf)', amount:50 },{ name:'Box of brake pads (on shelf)', amount:40 },{ name:'Box of derailleur cables (on shelf)', amount:20 },
+    { name:'Cassettes (on shelf)', amount:40 },{ name:'Bottom brackets (on shelf)', amount:20 },{ name:'Spokes (on shelf)', amount:20 },{ name:'Tubes (on shelf)', amount:10 } ] },
+  { cat:'FIXTURES', items:[
+    { name:'Desk', amount:250 },{ name:'Shelving units', amount:200 },{ name:'Display rack', amount:180 },{ name:'Pegboard + hooks', amount:120 } ] },
+  { cat:'CASH', items:[ { name:'Repair cash on hand (May 31)', amount:0 } ] },
+  { cat:'RIGHT OF USE', items:[ { name:'Right to occupy the space — last month, prepaid', amount:650 } ] }
+].map(function(c){ c.subtotal = c.items.reduce(function(s,i){return s+i.amount;},0); return c; });
+var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.subtotal;},0); // 3410
+
+var LIABILITIES_SNAPSHOT = [
+  { label:"Smith's frame — paid $220 up front, not built yet", amount:220 },
+  { label:'What you owe on the bike-repair credit card', amount:1230 }
+];
+var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amount;},0); // 1450
+
+var CASH_FLOWS = [
+  { date:'May 1',  desc:'Your own money, put in to get going', amount:960 },
+  { date:'May 1',  desc:'Rent paid in advance (Westville Properties)', amount:-1300 },
+  { date:'May 3',  desc:'Park Tool stand — Cyclesport Supply', amount:-200 },
+  { date:'May 7',  desc:'Repair finished — customer paid (Venmo)', amount:340 },
+  { date:'May 10', desc:'Repair finished — customer paid (Venmo)', amount:180 },
+  { date:'May 12', desc:'Repair finished — customer paid (Venmo)', amount:80 },
+  { date:'May 14', desc:'Repair finished — customer paid (Venmo)', amount:140 },
+  { date:'May 16', desc:'Card paydown — Harborline Visa', amount:-400 },
+  { date:'May 19', desc:'Repair finished — customer paid (Venmo)', amount:130 },
+  { date:'May 22', desc:'Smith deposit — frame build', amount:220 },
+  { date:'May 23', desc:'Repair finished — customer paid (Venmo)', amount:100 },
+  { date:'May 27', desc:'Repair finished — customer paid (Venmo)', amount:150 },
+  { date:'May 28', desc:'Card paydown — Harborline Visa', amount:-400 }
+];
+
+var REASONS = [
+  { id:'r_cashin', account:'Cash',      delta:960, reason:'You put in $960 of your own money to get going.' },
+  { id:'r_laptop', account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
+  { id:'r_gear',   account:'Equipment', delta:220, reason:'You brought gear you already owned — bench grinder, headset press, shop vacuum.' },
+
+  { id:'r_stand_a', account:'Equipment', delta:200, reason:'Bought the Park Tool stand for $200 (cash).' },
+  { id:'r_stand_b', account:'Cash',      delta:-200, reason:'Bought the Park Tool stand for $200 (cash).' },
+
+  { id:'r_tools_a', account:'Equipment',   delta:300, reason:'Bought $300 of hand tools on the card.' },
+  { id:'r_tools_b', account:'Credit Card', delta:300, reason:'Bought $300 of hand tools on the card.' },
+
+  { id:'r_equip_a', account:'Equipment',   delta:480, reason:'Bought $480 of shop equipment on the card (compressor, parts washer, truing stand).' },
+  { id:'r_equip_b', account:'Credit Card', delta:480, reason:'Bought $480 of shop equipment on the card (compressor, parts washer, truing stand).' },
+
+  { id:'r_fix_a', account:'Fixtures',    delta:750, reason:'Bought $750 of fixtures on the card.' },
+  { id:'r_fix_b', account:'Credit Card', delta:750, reason:'Bought $750 of fixtures on the card.' },
+
+  { id:'r_parts_a', account:'Supplies',    delta:500, reason:'Bought $500 of parts on the card.' },
+  { id:'r_parts_b', account:'Credit Card', delta:500, reason:'Bought $500 of parts on the card.' },
+
+  { id:'r_partsused', account:'Supplies', delta:-300, reason:'Used $300 of parts finishing customer jobs.' },
+
+  { id:'r_rent_a', account:'Right of Use', delta:1300, reason:'Paid $1,300 of rent in advance (first + last month).' },
+  { id:'r_rent_b', account:'Cash',         delta:-1300, reason:'Paid $1,300 of rent in advance (first + last month).' },
+
+  { id:'r_rentused', account:'Right of Use', delta:-650, reason:'Used the space for May ($650 — the first month).' },
+
+  { id:'r_v1', account:'Cash', delta:340, reason:'Finished a repair — customer paid $340 (May 7).' },
+  { id:'r_v2', account:'Cash', delta:180, reason:'Finished a repair — customer paid $180 (May 10).' },
+  { id:'r_v3', account:'Cash', delta:80,  reason:'Finished a repair — customer paid $80 (May 12).' },
+  { id:'r_v4', account:'Cash', delta:140, reason:'Finished a repair — customer paid $140 (May 14).' },
+  { id:'r_v5', account:'Cash', delta:130, reason:'Finished a repair — customer paid $130 (May 19).' },
+  { id:'r_v6', account:'Cash', delta:100, reason:'Finished a repair — customer paid $100 (May 23).' },
+  { id:'r_v7', account:'Cash', delta:150, reason:'Finished a repair — customer paid $150 (May 27).' },
+
+  { id:'r_smith_a', account:'Cash',      delta:220, reason:"Smith paid $220 up front for a frame you haven't built yet." },
+  { id:'r_smith_b', account:'Owe Smith', delta:220, reason:"Smith paid $220 up front for a frame you haven't built yet." },
+
+  { id:'r_pay1_a', account:'Credit Card', delta:-400, reason:'Paid $400 down on the card (May 16).' },
+  { id:'r_pay1_b', account:'Cash',        delta:-400, reason:'Paid $400 down on the card (May 16).' },
+  { id:'r_pay2_a', account:'Credit Card', delta:-400, reason:'Paid $400 down on the card (May 28).' },
+  { id:'r_pay2_b', account:'Cash',        delta:-400, reason:'Paid $400 down on the card (May 28).' }
+];
+
+var CORRECT_CATEGORY = {
+  r_cashin:'contributed', r_laptop:'contributed', r_gear:'contributed',
+  r_partsused:'earned', r_rentused:'earned',
+  r_v1:'earned', r_v2:'earned', r_v3:'earned', r_v4:'earned',
+  r_v5:'earned', r_v6:'earned', r_v7:'earned'
+};
+var soloReasonIds = Object.keys(CORRECT_CATEGORY);
+
+var NARRATION_STEPS = [
+  { anna:"Start before May even began. You put in $960 of your own money, you brought your laptop from home, and you brought some gear you already owned. Each one's a single row — the other side of that change isn't on this spreadsheet.",
+    reveal:['r_cashin','r_laptop','r_gear'] },
+  { anna:"The Park Tool stand — bought for $200 in cash. Equipment went up; cash went down. Same reason on both rows.",
+    reveal:['r_stand_a','r_stand_b'] },
+  { anna:"Hand tools, shop equipment, fixtures, parts — all on the card. Each one: the thing up, the card up. Two rows apiece.",
+    reveal:['r_tools_a','r_tools_b','r_equip_a','r_equip_b','r_fix_a','r_fix_b','r_parts_a','r_parts_b'] },
+  { anna:"Then about $300 of those parts went into customer jobs — used up. One row; the other side isn't here.",
+    reveal:['r_partsused'] },
+  { anna:"The lease — $1,300 from cash, first and last month paid in advance. Then May happened: you used the space, so one month's worth is gone. The paying is a pair; the using-up stands alone.",
+    reveal:['r_rent_a','r_rent_b','r_rentused'] },
+  { anna:"Now the cash side for May. Click the Cash tab — every customer Venmo, Smith's deposit, the two card paydowns.",
+    reveal:['r_v1','r_v2','r_v3','r_v4','r_v5','r_v6','r_v7','r_smith_a','r_smith_b','r_pay1_a','r_pay1_b','r_pay2_a','r_pay2_b'], goto:'cash' },
+  { anna:"That's the whole month. Click back to the Reasons tab and look at the full list.",
+    reveal:[], goto:'reasons' },
+  { anna:"Notice anything? Look closely — most reasons show up in two rows. Same event, two changes. A few stand alone. We'll come back to those.",
+    reveal:[], finish:true }
+];
+
+var glossaryTerms = [
+  { term:'Asset', def:'Something you have — a present right to something useful. The gear, the parts, the prepaid month, cash.' },
+  { term:'Liability', def:"Something you owe — a present obligation to pay or do something later. The card balance, Smith's frame." },
+  { term:'Reason', def:'The why behind a change to one of your lists. You jot it next to the change — it lives on its own tab, one row per side.' },
+  { term:'Net', def:'What you have minus what you owe. The bottom-line number a reason either moves or leaves alone.' },
+  { term:'Contributed', def:'A net-mover where you put something in from outside the repair work — your own cash, gear you already owned.' },
+  { term:'Generated', def:'A net-mover that came from doing the repair work — what customers paid, less what the work used up.' },
+  { term:'Right of Use', def:"A month of space you've paid for but haven't used yet — a future benefit you still hold, so it counts as an asset." }
+];
+
+/* ===== formatters ===== */
+function xlDollars(v){ return (v<0?'−$':'$') + Math.abs(v).toLocaleString('en-US'); }
+function signedDollars(v){ return (v>=0?'+':'−') + '$' + Math.abs(v).toLocaleString('en-US'); }
+
+/* ===== state ===== */
+var phaseOrder = ['welcome','reasons-walk','pairs','net-movers','complete'];
+var phase = 'welcome';
+var step = 0;
+var activeTab = 'assets';
+var assetsExpanded = {};
+var revealed = {};
+var eliminated = {};
+var selectedReasonId = null;
+var eliminateAutoActive = false, eliminateAutoDone = false, eliminateNudge = null;
+var assignments = {};
+var sortAutoActive = false, sortAutoDone = false, sortNudge = null;
+var expandedSortCats = { contributed:true, earned:true };
+var curWbContainer = null;
+
+/* ===== phase nav + progress ===== */
+function goto(p){
+  playClick();
+  phase = p;
+  if(p==='pairs'){ REASONS.forEach(function(r){ revealed[r.id]=true; }); selectedReasonId=null; }
+  if(p==='net-movers'){ REASONS.forEach(function(r){ revealed[r.id]=true; }); eliminateAllPairs(); eliminateAutoDone=true; }
+  phaseOrder.forEach(function(ph){ document.getElementById('phase-'+ph).classList.toggle('active', ph===p); });
+  var pct = Math.round((phaseOrder.indexOf(p)/(phaseOrder.length-1))*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  window.scrollTo(0,0);
+  if(p==='welcome'){ activeTab='assets'; renderWorkbook('wbWelcome'); }
+  if(p==='reasons-walk'){ activeTab='reasons'; renderWalk(); }
+  if(p==='pairs'){ activeTab='reasons'; renderPairs(); }
+  if(p==='net-movers'){ activeTab='reasons'; renderNetMovers(); }
+  if(window.lucide) lucide.createIcons();
+}
+function restart(){
+  step=0; activeTab='assets'; assetsExpanded={}; revealed={}; eliminated={};
+  selectedReasonId=null; eliminateAutoActive=false; eliminateAutoDone=false; eliminateNudge=null;
+  assignments={}; sortAutoActive=false; sortAutoDone=false; sortNudge=null;
+  expandedSortCats={ contributed:true, earned:true };
+  goto('welcome');
+}
+
+/* ===== shared builders ===== */
+function annaBox(inner, quoted){
+  var text = quoted ? '&ldquo;'+inner+'&rdquo;' : inner;
+  return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+text+'</div></div>';
+}
+function insightBox(label, inner){
+  return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>';
+}
+function contBtn(label, onclick){ return '<button class="btn-continue btn-block" onclick="'+onclick+'">'+label+' &rarr;</button>'; }
+function warnMsg(text){ return '<div class="sort-msg warn">'+text+'</div>'; }
+
+/* ===== Excel workbook ===== */
+function assetsSheet(){
+  var cats = ASSETS_SNAPSHOT.filter(function(c){ return c.cat!=='CASH'; });
+  var total = cats.reduce(function(s,c){ return s+c.subtotal; },0);
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Asset</div><div class="xl-v">B&nbsp;&nbsp;Value</div></div>';
+  var n=0;
+  cats.forEach(function(cat){
+    var label = cat.cat==='RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0)+cat.cat.slice(1).toLowerCase());
+    var open = !!assetsExpanded[cat.cat]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleAssetCat(\''+cat.cat+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+label+'</div><div class="xl-v">'+xlDollars(cat.subtotal)+'</div></div>';
+    if(open){ cat.items.forEach(function(it){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+xlDollars(it.amount)+'</div></div>'; }); }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL — what I have</div><div class="xl-v">'+xlDollars(total)+'</div></div>';
+  return html;
+}
+function liabilitiesSheet(){
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Liability (what I owe)</div><div class="xl-v">B&nbsp;&nbsp;Amount</div></div>';
+  LIABILITIES_SNAPSHOT.forEach(function(l,i){
+    html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+l.label+'</div><div class="xl-v">'+xlDollars(l.amount)+'</div></div>';
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL — what I owe</div><div class="xl-v">'+xlDollars(LIABILITIES_TOTAL)+'</div></div>';
+  return html;
+}
+function cashSheet(){
+  var inflows = CASH_FLOWS.filter(function(f){ return f.amount>0; });
+  var outflows = CASH_FLOWS.filter(function(f){ return f.amount<0; });
+  var totalIn = inflows.reduce(function(s,f){ return s+f.amount; },0);
+  var totalOut = outflows.reduce(function(s,f){ return s+f.amount; },0);
+  var net = totalIn + totalOut;
+  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Repair cash — May</div></div>';
+  html += '<div class="cash-group in"><div class="cash-group-label">Cash in</div>';
+  inflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">+'+xlDollars(f.amount)+'</span></div>'; });
+  html += '<div class="cash-subtotal"><span>Total in</span><span class="cash-line-amt">+'+xlDollars(totalIn)+'</span></div></div>';
+  html += '<div class="cash-group out"><div class="cash-group-label">Cash out</div>';
+  outflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">'+xlDollars(f.amount)+'</span></div>'; });
+  html += '<div class="cash-subtotal"><span>Total out</span><span class="cash-line-amt">'+xlDollars(totalOut)+'</span></div></div>';
+  html += '<div class="cash-net"><span class="cash-net-label">Cash on hand (May 31)</span><span class="cash-net-val">'+xlDollars(net)+'</span></div>';
+  return html;
+}
+function reasonsSheetWalkPairs(){
+  var revealedRows = REASONS.filter(function(r){ return revealed[r.id]; });
+  var visible = revealedRows.filter(function(r){ return !eliminated[r.id]; });
+  var sub;
+  if(revealedRows.length===0) sub = 'Empty for now. Walk through the month to fill it in.';
+  else if(phase==='pairs'){ var ep = Object.keys(eliminated).length/2; sub = visible.length+' '+(visible.length===1?'row':'rows')+' left ('+ep+' '+(ep===1?'pair':'pairs')+' crossed out).'; }
+  else sub = revealedRows.length+' '+(revealedRows.length===1?'row':'rows')+' so far.';
+  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons — one row per change</div><div class="cash-sheet-sub">'+sub+'</div></div>';
+  if(revealedRows.length===0){ html += '<div class="bs-empty-msg">No reasons recorded yet.</div>'; return html; }
+  if(visible.length===0){ html += '<div class="bs-empty-msg">All paired rows crossed out.</div>'; return html; }
+  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Account &amp; reason</div><div class="xl-v">B&nbsp;&nbsp;Δ</div></div>';
+  var clickable = (phase==='pairs' && !eliminateAutoActive && !eliminateAutoDone);
+  visible.forEach(function(r){
+    var sel = (selectedReasonId===r.id) ? ' selected' : '';
+    var onclick = clickable ? ' onclick="handleReasonClick(\''+r.id+'\')"' : '';
+    html += '<div class="xl-row xl-item'+sel+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r.account+' &mdash; '+r.reason+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div></div>';
+  });
+  return html;
+}
+function sortBody(){
+  var solos = REASONS.filter(function(r){ return soloReasonIds.indexOf(r.id)>=0; });
+  var unassigned = solos.filter(function(r){ return !assignments[r.id]; });
+  var contributed = solos.filter(function(r){ return assignments[r.id]==='contributed'; });
+  var earned = solos.filter(function(r){ return assignments[r.id]==='earned'; });
+  var cTotal = contributed.reduce(function(s,r){ return s+r.delta; },0);
+  var eTotal = earned.reduce(function(s,r){ return s+r.delta; },0);
+  var html = '';
+  if(unassigned.length>0){
+    html += '<div class="cash-sheet-head"><div class="cash-sheet-title">To sort ('+unassigned.length+' '+(unassigned.length===1?'row':'rows')+')</div></div>';
+    html += '<div class="cash-group">';
+    unassigned.forEach(function(r){
+      html += '<div class="dep-card">'+
+        '<div class="dep-card-head"><div><div class="dep-card-meta">'+r.account+' &middot; '+signedDollars(r.delta)+'</div><div class="dep-card-title">'+r.reason+'</div></div></div>'+
+        '<div class="classify-row"><span class="classify-label">Sort:</span>'+
+          '<button class="classify-btn" onclick="assignRow(\''+r.id+'\',\'contributed\')">&rarr; Contributed</button>'+
+          '<button class="classify-btn" onclick="assignRow(\''+r.id+'\',\'earned\')">&rarr; Generated</button>'+
+        '</div></div>';
+    });
+    html += '</div>';
+  }
+  html += sortSection('CONTRIBUTED','contributed',contributed,cTotal);
+  html += sortSection('GENERATED','earned',earned,eTotal);
+  return html;
+}
+function sortSection(title, key, rows, total){
+  var open = expandedSortCats[key];
+  var html = '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleSortCat(\''+key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum"></div><div class="xl-c">'+title+' ('+rows.length+')</div><div class="xl-v">'+signedDollars(total)+'</div></div>';
+  if(open){
+    if(rows.length===0) html += '<div class="bs-empty-msg">(empty so far)</div>';
+    else rows.forEach(function(r){ html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r.account+' &mdash; '+r.reason+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div></div>'; });
+  }
+  return html;
+}
+function renderWorkbook(containerId){
+  curWbContainer = containerId;
+  var allTabs = [{id:'assets',label:'Assets'},{id:'liabilities',label:'Liabilities'},{id:'cash',label:'Cash'},{id:'reasons',label:'Reasons',isNew:true}];
+  var tabs = (phase==='welcome') ? allTabs.filter(function(t){ return t.id!=='reasons'; }) : allTabs;
+  if(!tabs.some(function(t){ return t.id===activeTab; })) activeTab = tabs[0].id;
+  var body;
+  if(activeTab==='assets') body = assetsSheet();
+  else if(activeTab==='liabilities') body = liabilitiesSheet();
+  else if(activeTab==='cash') body = cashSheet();
+  else body = (phase==='net-movers') ? sortBody() : reasonsSheetWalkPairs();
+  var activeLabel = tabs.find(function(t){ return t.id===activeTab; }).label;
+  var tabsHtml = tabs.map(function(t){ return '<button class="xlwb-tab'+(t.id===activeTab?' active':'')+'" onclick="setTab(\''+t.id+'\')">'+t.label+(t.isNew?' <span class="xl-new-tag">new</span>':'')+'</button>'; }).join('');
+  var html = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' sheet</span></div>'+
+    '<div>'+body+'</div>'+
+    '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
+  document.getElementById(containerId).innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function setTab(id){ playClick(); activeTab = id; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleAssetCat(cat){ playClick(); assetsExpanded[cat] = !assetsExpanded[cat]; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleSortCat(key){ playClick(); expandedSortCats[key] = !expandedSortCats[key]; if(curWbContainer) renderWorkbook(curWbContainer); }
+
+/* ===== reasons-walk ===== */
+function advanceNarration(){
+  if(step >= NARRATION_STEPS.length-1) return;
+  playClick();
+  var s = NARRATION_STEPS[step];
+  if(s.reveal && s.reveal.length) s.reveal.forEach(function(id){ revealed[id]=true; });
+  if(s.goto) activeTab = s.goto;
+  step++;
+  window.scrollTo(0,0);
+  renderWalk();
+}
+function renderWalk(){
+  var s = NARRATION_STEPS[step];
+  document.getElementById('walkAnna').innerHTML = annaBox(s.anna, false);
+  renderWorkbook('wbWalk');
+  var ctrl = document.getElementById('walkControls');
+  if(!s.finish){
+    ctrl.innerHTML = contBtn(step===0 ? 'Start walking the month' : 'Next', 'advanceNarration()');
+  } else {
+    ctrl.innerHTML =
+      insightBox('Most reasons show up in two rows',
+        '<p>Same event, two changes. Buy parts on the card: parts up <em>and</em> the card up. Pay the card down: cash down <em>and</em> the card down. Smith&rsquo;s deposit: cash up <em>and</em> what you owe him up. You didn&rsquo;t plan that &mdash; it just appeared once you wrote the reasons next to the changes.</p>'+
+        '<p><strong>What if you crossed those matched pairs out?</strong></p>') +
+      contBtn('Cross out the matched pairs', "goto('pairs')");
+  }
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== pairs ===== */
+function handleReasonClick(id){
+  if(phase!=='pairs' || eliminated[id]) return;
+  if(eliminateAutoActive || eliminateAutoDone) return;
+  if(selectedReasonId===id){ selectedReasonId=null; renderPairs(); return; }
+  if(selectedReasonId===null){ playClick(); selectedReasonId=id; eliminateNudge=null; renderPairs(); return; }
+  var a = REASONS.find(function(r){ return r.id===selectedReasonId; });
+  var b = REASONS.find(function(r){ return r.id===id; });
+  if(a && b && a.reason===b.reason){
+    playSuccess(); eliminated[a.id]=true; eliminated[b.id]=true; selectedReasonId=null; eliminateNudge=null;
+  } else {
+    playNope(); eliminateNudge='no-match'; selectedReasonId=null;
+  }
+  renderPairs();
+}
+function eliminateAllPairs(){
+  var byReason = {};
+  REASONS.filter(function(r){ return revealed[r.id] && !eliminated[r.id]; }).forEach(function(r){ (byReason[r.reason] = byReason[r.reason] || []).push(r.id); });
+  Object.keys(byReason).forEach(function(k){ if(byReason[k].length===2) byReason[k].forEach(function(id){ eliminated[id]=true; }); });
+}
+function eliminateAutocomplete(){
+  if(eliminateAutoActive || eliminateAutoDone) return;
+  playClick(); eliminateAutoActive=true; selectedReasonId=null; eliminateNudge=null;
+  renderPairs();
+  setTimeout(function(){
+    eliminateAllPairs();
+    eliminateAutoActive=false; eliminateAutoDone=true; playSuccess(); renderPairs();
+  }, 700);
+}
+function renderPairs(){
+  var top = '';
+  if(!eliminateAutoDone){
+    top += annaBox('Many rows have a twin &mdash; same reason, two different accounts. Click one row, then click its twin. If the reasons match, both cross out. Those two changes move <em>together</em> &mdash; what you have and what you owe shift by the same amount, so your <strong>net</strong> (have minus owe) doesn&rsquo;t budge.', true);
+    if(eliminateNudge==='no-match') top += warnMsg('&ldquo;Those two reasons aren&rsquo;t the same. Look for rows whose reason text matches exactly.&rdquo;');
+  }
+  document.getElementById('pairsTop').innerHTML = top;
+
+  renderWorkbook('wbPairs');
+
+  var eliminatedPairsCount = Object.keys(eliminated).length/2;
+  var visible = REASONS.filter(function(r){ return revealed[r.id] && !eliminated[r.id]; });
+  var counts = {};
+  visible.forEach(function(r){ counts[r.reason] = (counts[r.reason]||0)+1; });
+  var remainingPairsCount = Object.keys(counts).filter(function(k){ return counts[k]===2; }).length;
+  var triggerMet = eliminatedPairsCount>=2 && remainingPairsCount>0 && !eliminateAutoActive && !eliminateAutoDone;
+
+  var ctrl = '';
+  if(triggerMet){
+    ctrl = '<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Cross out the rest of the matched pairs?</p><button class="btn-continue btn-block" onclick="eliminateAutocomplete()">Cross out the rest &rarr;</button></div>';
+  } else if(eliminateAutoActive){
+    ctrl = '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Crossing out matched pairs&hellip;</div></div>';
+  } else if(eliminateAutoDone){
+    ctrl = annaBox('Look what&rsquo;s left. Just the rows with no twin on this spreadsheet &mdash; your own money put in, the gear you brought, the customer payments, the parts and the month you used up. Each of these <em>moved your net</em>. Their other side lives somewhere you haven&rsquo;t built yet.', true) +
+      insightBox('The crossed-out ones just shuffled',
+        '<p>Buying parts on the card, paying the card down, Smith&rsquo;s deposit &mdash; what you <em>have</em> and what you <em>owe</em> moved by the same amount, so your net didn&rsquo;t change. The reasons that are <strong>left over are the ones that moved your net</strong> &mdash; the ones worth writing down to know how you&rsquo;re doing.</p>') +
+      contBtn('Sort the net-movers', "goto('net-movers')");
+  }
+  document.getElementById('pairsControls').innerHTML = ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== net-movers ===== */
+function assignRow(id, category){
+  if(phase!=='net-movers' || sortAutoActive || sortAutoDone) return;
+  if(assignments[id]) return;
+  if(CORRECT_CATEGORY[id]===category){
+    playSuccess(); assignments[id]=category; sortNudge=null;
+  } else {
+    playNope(); sortNudge = { rowId:id, attempted:category };
+  }
+  renderNetMovers();
+}
+function sortAutocomplete(){
+  if(sortAutoActive || sortAutoDone) return;
+  playClick(); sortAutoActive=true; sortNudge=null;
+  renderNetMovers();
+  setTimeout(function(){
+    soloReasonIds.forEach(function(id){ if(!assignments[id]) assignments[id]=CORRECT_CATEGORY[id]; });
+    sortAutoActive=false; sortAutoDone=true; playSuccess(); renderNetMovers();
+  }, 700);
+}
+function renderNetMovers(){
+  var correctlyAssigned = Object.keys(assignments).filter(function(id){ return CORRECT_CATEGORY[id]===assignments[id]; }).length;
+  var allSorted = correctlyAssigned===soloReasonIds.length;
+  var done = sortAutoDone || allSorted;
+  var triggerMet = correctlyAssigned>=2 && !allSorted && !sortAutoActive && !sortAutoDone;
+
+  var top = '';
+  if(!done){
+    top += annaBox('These net-movers split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work &mdash; your own cash, gear you already had. The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month the work used up. Drop each row into the right bin.', true);
+    if(sortNudge){
+      var msg = (sortNudge.attempted==='contributed')
+        ? 'That one didn&rsquo;t come from you bringing something in &mdash; it came from doing the repair work. Try the other bin.'
+        : 'That one didn&rsquo;t come from doing repair work &mdash; you brought it in from outside. Try the other bin.';
+      top += warnMsg('&ldquo;'+msg+'&rdquo;');
+    }
+  }
+  document.getElementById('nmTop').innerHTML = top;
+
+  renderWorkbook('wbNM');
+
+  var ctrl = '';
+  if(triggerMet){
+    ctrl = '<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Sort the rest?</p><button class="btn-continue btn-block" onclick="sortAutocomplete()">Sort the rest &rarr;</button></div>';
+  } else if(sortAutoActive){
+    ctrl = '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Sorting the rest&hellip;</div></div>';
+  } else if(done){
+    var contributedTotal = REASONS.filter(function(r){ return assignments[r.id]==='contributed'; }).reduce(function(s,r){ return s+r.delta; },0);
+    var earnedTotal = REASONS.filter(function(r){ return assignments[r.id]==='earned'; }).reduce(function(s,r){ return s+r.delta; },0);
+    ctrl = annaBox('There it is &mdash; two kinds of net-mover. What you <strong>contributed</strong>: '+signedDollars(contributedTotal)+', the cash and gear you put in yourself. And what the work <strong>generated</strong>: '+signedDollars(earnedTotal)+' &mdash; the customer work, after the parts and the month it took to do it. That figure is what the repair work produced on its own in May.', true) +
+      insightBox('Two ways your stake grew',
+        '<p><strong>Contributed ('+signedDollars(contributedTotal)+'):</strong> you funded it &mdash; cash from the day job, gear from home. From outside the repair work.</p>'+
+        '<p><strong>Generated ('+signedDollars(earnedTotal)+'):</strong> the work generated it &mdash; what customers paid, less the parts used and the month of space used up.</p>'+
+        '<p>You haven&rsquo;t named the thing these add up to yet, or seen where their other sides live. That&rsquo;s next.</p>') +
+      contBtn('Finish up', "goto('complete')");
+  }
+  document.getElementById('nmControls').innerHTML = ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== dev mode (triple-click title) ===== */
+(function(){
+  var clicks = 0;
+  document.getElementById('headerTitle').addEventListener('click', function(){
+    clicks++;
+    if(clicks>=3){
+      clicks = 0;
+      var bar = document.getElementById('devBar');
+      bar.hidden = !bar.hidden;
+      if(!bar.hidden && !document.getElementById('devBtns').children.length){
+        document.getElementById('devBtns').innerHTML = phaseOrder.map(function(p){
+          return '<button class="dev-bar-btn" onclick="goto(\''+p+'\')">'+p+'</button>';
+        }).join('');
+      }
+    }
+  });
+})();
+
+/* ===== init ===== */
+renderWorkbook('wbWelcome');
+</script>
 </body>
 </html>

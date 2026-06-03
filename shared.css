@@ -2686,3 +2686,29 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .lease-table th { color: #8a8898; border-bottom-color: var(--border); }
   .lease-table td { color: #c8ccd8; }
 }
+
+/* ===== CALC INPUT — numeric/dollar entry field (e.g. compute-the-net) ===== */
+.calc-input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 2px solid var(--border-strong);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  color: #374151;
+  background: white;
+  box-sizing: border-box;
+}
+.calc-input:focus { outline: none; border-color: var(--primary); }
+.calc-input:disabled { opacity: 0.6; cursor: default; }
+@media (prefers-color-scheme: dark) {
+  .calc-input { background: #28262e; border-color: var(--border-strong); color: #eeebf5; }
+  .calc-input:focus { border-color: var(--primary); }
+}
+
+/* ===== XL-ITEM SELECTED — clickable spreadsheet-row highlight (1.4 pairs) ===== */
+.xl-item.selected { background: var(--primary-faint); outline: 2px solid var(--accent); outline-offset: -2px; }
+@media (prefers-color-scheme: dark) {
+  .xl-item.selected { background: var(--primary-faint); outline-color: var(--accent); }
+}
