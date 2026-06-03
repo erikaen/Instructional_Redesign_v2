@@ -96,11 +96,11 @@ Before `</body>`:
 </script>
 ```
 
-Use relative `href="shared.css"` and `src="shared.js"` from the repo root (same folder as `index.html`).
+Use relative `href="shared.css"` and `src="shared.js"` from the repo root.
 
 ## Layout and component conventions
 
-Prefer existing patterns from sibling pages (`index.html`, `11-getting-organized.html`, etc.):
+Prefer existing patterns from the activity/tutorial pages (`11-getting-organized.html`, `12-insurance-and-maria.html`, `13-anna-and-the-bank-statement.html`):
 
 | Need | Start here in shared.css |
 |------|--------------------------|
@@ -120,9 +120,10 @@ Prefer existing patterns from sibling pages (`index.html`, `11-getting-organized
 Before creating or changing any `.html` file:
 
 1. List or scan all HTML files in the repo (root and subfolders).
-2. Open at least **two reference pages** for the same page type:
-   - Welcome/landing → `index.html`
-   - Activity/tutorial → `11-getting-organized.html` first; use `12-insurance-and-maria.html` or `13-anna-and-the-bank-statement.html` for heavier patterns
+2. Open at least **two reference pages** from the canonical activity/tutorial files:
+   - Start with `11-getting-organized.html` (simplest activity shell)
+   - Then `12-insurance-and-maria.html` or `13-anna-and-the-bank-statement.html` for heavier patterns
+   - Do **not** use `index.html` as a layout or styling reference — it is not part of the activity design system
 3. Match the same **document skeleton**, wrapper classes (`.page`, `.prework-wrap`), header chrome, script load order, feedback markup, and Lucide usage — do not invent a new layout shell.
 4. Before adding UI, search `shared.css` and grep other HTML files for an existing class or markup pattern.
 5. After edits, compare against references: header, cards, buttons, feedback, dark-mode surfaces, icon calls.
@@ -173,7 +174,7 @@ Do not duplicate data or logic that already lives in `shared.js`.
 
 ## Verification checklist
 
-- [ ] Read 1–2 sibling HTML reference pages before editing
+- [ ] Read 1–2 activity reference pages (`11-`, `12-`, or `13-` HTML) before editing — not `index.html`
 - [ ] No local CSS component styles in HTML
 - [ ] Existing shared classes used wherever possible
 - [ ] `shared.css` and `shared.js` linked once each
@@ -187,5 +188,5 @@ Do not duplicate data or logic that already lives in `shared.js`.
 
 - `shared.css` — all shared styling (append-only)
 - `shared.js` — all shared behavior (append-only)
-- `index.html` — welcome page pattern
-- `11-getting-organized.html`, `12-insurance-and-maria.html`, `13-anna-and-the-bank-statement.html` — activity patterns
+- `11-getting-organized.html` — primary activity reference (simplest)
+- `12-insurance-and-maria.html`, `13-anna-and-the-bank-statement.html` — heavier activity patterns
