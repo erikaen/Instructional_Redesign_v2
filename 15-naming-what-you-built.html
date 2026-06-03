@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial 1.5: Naming What You Built</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        @keyframes rowFade { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+        .row-fade { animation: rowFade 0.5s ease-out; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const { useState } = React;
+
+        /**
+         * Tutorial 1.5: Naming What You Built
+         * CMU METALS / Yale SOM Accounting Prework — Module 1, Activity 5 (finale)
+         *
+         * @version 1.0 (v2 site)
+         * @date 2026-06-02
+         * @description You lay Assets, Liabilities, and the Reasons on one page. Compute
+         *   have − owe = $3,410 − $1,450 = $1,960. Total the Reasons that moved your net —
+         *   contributed $1,790 + generated $170 = $1,960. They MATCH, by construction. The
+         *   names you've been circling arrive: the net is EQUITIES (a definitional residual);
+         *   A − L = Equities is the ACCOUNTING IDENTITY; the page is the BALANCE SHEET, built
+         *   around the identity. Callback to 1.1: the line you drew was the ENTITY — a
+         *   perspective you made, not found. A light bridge: an entity with no owners calls
+         *   the residual NET ASSETS. Coda: the pairing has a long history — and a name,
+         *   DOUBLE-ENTRY. House rules: A − L = E (never A = L + E); Equities plural, a
+         *   definitional residual; no "measurement"; entity = constructed perspective.
+         */
+
+        const colors = {
+            primary: '#00356b', sand: '#f5f1e8', earth: '#8b7355', earthLight: '#d4c4a8',
+            earthDark: '#5c4d3d', accent: '#c9a227', clay: '#c4a574', clayLight: '#e8dcc8',
+            clayDark: '#a08050', success: '#22c55e', successBg: '#f0fdf4',
+            warning: '#f59e0b', warningBg: '#fffbeb', error: '#dc2626', errorBg: '#fef2f2',
+            royal: '#7c3aed', royalBg: '#f5f3ff',
+        };
+
+        const glossaryTerms = [
+            { term: 'Asset', definition: "Something you have — a present right to an economic benefit. The gear, the parts, the prepaid month, cash." },
+            { term: 'Liability', definition: "Something you owe — a present obligation to transfer an economic benefit later. The card balance, Smith's frame." },
+            { term: 'Equities', definition: "The definitional residual: recorded Assets minus recorded Liabilities. Plural, to keep it from sounding like one thing the owner has. It's a difference, not a pile of cash." },
+            { term: 'Accounting identity', definition: "A − L = Equities. Not an equation to solve — it holds by construction, for every entity, every time." },
+            { term: 'Balance sheet', definition: "The one page that lays out Assets, Liabilities, and the residual between them — built around the identity, not assembled to satisfy one." },
+            { term: 'Entity', definition: "The subject of a set of books — a perspective you draw a boundary around and adopt for a purpose. You make it; you don't find it." },
+            { term: 'Net Assets', definition: "What an entity with no owners calls its residual (A − L). Same definition as Equities; the label differs because accountability runs to mission and donors, not owners." },
+            { term: 'Double-entry', definition: "The centuries-old method in which every change has two sides. Still how every number on every financial statement gets there." },
+            { term: 'Contributed', definition: "The part of the residual you put in from outside the work — your own cash, gear you already owned." },
+            { term: 'Generated', definition: "The part of the residual the work itself produced and you kept — customer work, less what it used up." },
+        ];
+
+        const createAudioContext = () => new (window.AudioContext || window.webkitAudioContext)();
+        const playSuccessTone = () => {
+            try {
+                const ctx = createAudioContext();
+                [523.25, 659.25, 783.99].forEach((freq, i) => {
+                    const osc = ctx.createOscillator(); const gain = ctx.createGain();
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.frequency.value = freq; osc.type = 'sine';
+                    const t = ctx.currentTime + i * 0.1;
+                    gain.gain.setValueAtTime(0, t);
+                    gain.gain.linearRampToValueAtTime(0.3, t + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
+                    osc.start(t); osc.stop(t + 0.25);
+                });
+                setTimeout(() => ctx.close(), 600);
+            } catch(e) {}
+        };
+        const playSoftNope = () => {
+            try {
+                const ctx = createAudioContext();
+                [400, 300].forEach((freq, i) => {
+                    const osc = ctx.createOscillator(); const gain = ctx.createGain();
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.frequency.value = freq; osc.type = 'sine';
+                    const t = ctx.currentTime + i * 0.12;
+                    gain.gain.setValueAtTime(0, t);
+                    gain.gain.linearRampToValueAtTime(0.2, t + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
+                    osc.start(t); osc.stop(t + 0.17);
+                });
+                setTimeout(() => ctx.close(), 400);
+            } catch(e) {}
+        };
+        const playContinueClick = () => {
+            try {
+                const ctx = createAudioContext();
+                const osc = ctx.createOscillator(); const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.frequency.value = 600; osc.type = 'sine';
+                const t = ctx.currentTime;
+                gain.gain.setValueAtTime(0, t);
+                gain.gain.linearRampToValueAtTime(0.15, t + 0.01);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
+                osc.start(t); osc.stop(t + 0.1);
+                setTimeout(() => ctx.close(), 150);
+            } catch(e) {}
+        };
+
+        // ============================================================
+        // DATA — carried from 1.4 (tie to the manifest)
+        // ============================================================
+        // Assets $3,410 — and in 1.5 the list finally includes Cash ($0): once you've drawn
+        // the entity boundary (the personal vs. repair-work split), the repair work's cash
+        // is an asset of the entity.
+        const ASSETS_SNAPSHOT = [
+            { cat: 'EQUIPMENT', amount: 1200, note: 'Tools, stand, compressor, the contributed gear' },
+            { cat: 'COMPUTER EQUIPMENT', amount: 610, note: 'Laptop' },
+            { cat: 'SUPPLIES', amount: 200, note: 'Parts on the shelf' },
+            { cat: 'FIXTURES', amount: 750, note: 'Desk, shelving, display, pegboard' },
+            { cat: 'CASH', amount: 0, note: 'Repair cash on hand (May 31)' },
+            { cat: 'RIGHT OF USE', amount: 650, note: 'The prepaid last month — a right to occupy the space' },
+        ];
+        const ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce((s, c) => s + c.amount, 0); // 3410
+
+        const LIABILITIES_SNAPSHOT = [
+            { label: "Smith's frame — paid $220 up front, not built yet", amount: 220 },
+            { label: 'What you owe on the bike-repair credit card',       amount: 1230 },
+        ];
+        const LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce((s, l) => s + l.amount, 0); // 1450
+
+        const NET = ASSETS_TOTAL - LIABILITIES_TOTAL; // 1960
+
+        // The Reasons that moved your net — the two piles you sorted in 1.4.
+        const CONTRIBUTED_ROWS = [
+            { account: 'Cash',      delta: 960, reason: 'You put in $960 of your own money to get going.' },
+            { account: 'Laptop',    delta: 610, reason: 'You brought your laptop from home.' },
+            { account: 'Equipment', delta: 220, reason: 'You brought gear you already owned.' },
+        ];
+        const GENERATED_ROWS = [
+            { account: 'Cash', delta: 340, reason: 'Finished a repair — customer paid $340.' },
+            { account: 'Cash', delta: 180, reason: 'Finished a repair — customer paid $180.' },
+            { account: 'Cash', delta:  80, reason: 'Finished a repair — customer paid $80.' },
+            { account: 'Cash', delta: 140, reason: 'Finished a repair — customer paid $140.' },
+            { account: 'Cash', delta: 130, reason: 'Finished a repair — customer paid $130.' },
+            { account: 'Cash', delta: 100, reason: 'Finished a repair — customer paid $100.' },
+            { account: 'Cash', delta: 150, reason: 'Finished a repair — customer paid $150.' },
+            { account: 'Supplies',     delta: -300, reason: 'Used $300 of parts finishing jobs.' },
+            { account: 'Right of Use', delta: -650, reason: 'Used the space for May ($650).' },
+        ];
+        const CONTRIBUTED_TOTAL = CONTRIBUTED_ROWS.reduce((s, r) => s + r.delta, 0); // 1790
+        const GENERATED_TOTAL = GENERATED_ROWS.reduce((s, r) => s + r.delta, 0);     // 170
+        const REASONS_TOTAL = CONTRIBUTED_TOTAL + GENERATED_TOTAL;                   // 1960
+
+        // May cash flows — nets to $0 on hand (incl. the $960 you put in). Carried from 1.4.
+        const CASH_FLOWS = [
+            { date: 'May 1',  desc: 'Your own money, put in to get going', amount:  960 },
+            { date: 'May 1',  desc: 'Rent paid in advance', amount: -1300 },
+            { date: 'May 3',  desc: 'Park Tool stand', amount:  -200 },
+            { date: 'May 7',  desc: 'Repair finished — customer paid', amount:  340 },
+            { date: 'May 10', desc: 'Repair finished — customer paid', amount:  180 },
+            { date: 'May 12', desc: 'Repair finished — customer paid', amount:   80 },
+            { date: 'May 14', desc: 'Repair finished — customer paid', amount:  140 },
+            { date: 'May 16', desc: 'Card paydown', amount:  -400 },
+            { date: 'May 19', desc: 'Repair finished — customer paid', amount:  130 },
+            { date: 'May 22', desc: 'Smith deposit', amount:  220 },
+            { date: 'May 23', desc: 'Repair finished — customer paid', amount:  100 },
+            { date: 'May 27', desc: 'Repair finished — customer paid', amount:  150 },
+            { date: 'May 28', desc: 'Card paydown', amount:  -400 },
+        ];
+
+        const d = (v) => (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US');
+        const sd = (v) => (v >= 0 ? '+$' : '−$') + Math.abs(v).toLocaleString('en-US');
+
+        // ============================================================
+        const App = () => {
+            const [phase, setPhase] = useState('welcome');
+            const [activeTab, setActiveTab] = useState('assets');
+            const [reasonsExpanded, setReasonsExpanded] = useState({ contributed: false, generated: false });
+
+            // assemble — compute the net
+            const [netInput, setNetInput] = useState('');
+            const [netAttempts, setNetAttempts] = useState(0);
+            const [netDone, setNetDone] = useState(false);
+
+            // identity — staged reveal
+            const [idStage, setIdStage] = useState(0); // 0 prompt · 1 totalled+match · 2 Equities · 3 identity+balance sheet
+
+            const [showGlossary, setShowGlossary] = useState(false);
+            const [devMode, setDevMode] = useState(false);
+            const [headerClickCount, setHeaderClickCount] = useState(0);
+
+            const phaseOrder = ['welcome', 'assemble', 'identity', 'entity', 'net-assets', 'double-entry', 'complete'];
+            const progress = Math.round((phaseOrder.indexOf(phase) / (phaseOrder.length - 1)) * 100);
+
+            const handleHeaderClick = () => {
+                const n = headerClickCount + 1; setHeaderClickCount(n);
+                if (n >= 3) { setDevMode(!devMode); setHeaderClickCount(0); }
+            };
+            const handleRestart = () => {
+                playContinueClick();
+                setPhase('welcome'); setActiveTab('assets'); setReasonsExpanded({ contributed: false, generated: false });
+                setNetInput(''); setNetAttempts(0); setNetDone(false); setIdStage(0);
+            };
+
+            const handleNetSubmit = () => {
+                const val = parseInt(String(netInput).replace(/[^0-9-]/g, ''), 10);
+                if (val === NET) { playSuccessTone(); setNetDone(true); }
+                else { const n = netAttempts + 1; setNetAttempts(n); if (n >= 3) { playSoftNope(); setNetDone(true); } else playSoftNope(); }
+            };
+
+            // ============================================================
+            // Components
+            // ============================================================
+            const Header = () => (
+                <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: colors.primary }}>
+                    <div className="flex justify-between items-start">
+                        <div onClick={handleHeaderClick} style={{ cursor: 'pointer' }}>
+                            <h1 className="text-lg font-bold text-white">Tutorial 1.5: Naming What You Built</h1>
+                            <p className="text-sm mt-1" style={{ color: colors.earthLight }}>Bicycle repair shop &middot; ~15 min</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <a href="index.html" className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer no-underline inline-flex items-center justify-center" title="Return to Main" aria-label="Return to Main">🏠</a>
+                            <button onClick={() => setShowGlossary(true)} className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer" title="Glossary" aria-label="Open glossary">📖</button>
+                            <button onClick={handleRestart} className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer" title="Restart tutorial" aria-label="Restart tutorial">↺</button>
+                        </div>
+                    </div>
+                    <div className="mt-4">
+                        <div className="flex justify-between text-xs mb-1" style={{ color: 'rgba(255,255,255,0.7)' }}><span>Progress</span><span>{progress}%</span></div>
+                        <div className="h-2 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }} role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
+                            <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress}%`, backgroundColor: colors.accent }} />
+                        </div>
+                    </div>
+                    {devMode && (
+                        <div className="mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.2)' }}>
+                            <p className="text-xs mb-2" style={{ color: 'rgba(255,255,255,0.7)' }}>Dev: skip to phase</p>
+                            <div className="flex flex-wrap gap-1">
+                                {phaseOrder.map(p => (
+                                    <button key={p} onClick={() => { setPhase(p); }} className="px-2 py-1 rounded text-xs border-0 cursor-pointer"
+                                            style={{ backgroundColor: phase === p ? 'white' : 'rgba(255,255,255,0.2)', color: phase === p ? colors.primary : 'white' }}>{p}</button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+
+            const NarrativeBlock = ({ children }) => (
+                <div className="p-4 rounded-lg mb-4 italic" style={{ backgroundColor: colors.sand, borderLeft: `4px solid ${colors.accent}`, color: '#374151' }}>{children}</div>
+            );
+            const InsightPanel = ({ children }) => (
+                <div className="p-4 rounded-lg border-2 mb-4" style={{ backgroundColor: colors.successBg, borderColor: colors.success }}>
+                    <div className="flex items-start gap-2"><span className="text-lg mt-0.5 flex-shrink-0" style={{ color: colors.success }}>✓</span><div style={{ color: '#166534' }}>{children}</div></div>
+                </div>
+            );
+            const KeyInsightBox = ({ children }) => (
+                <div className="p-4 rounded-lg border-2 mb-4" style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
+                    <div className="flex items-start gap-3"><span className="text-lg flex-shrink-0 mt-0.5" style={{ color: colors.accent }}>💡</span><div style={{ color: colors.earthDark }}>{children}</div></div>
+                </div>
+            );
+            const AnnaBox = ({ children }) => (
+                <div className="rounded-lg p-4 mb-3 border-2" style={{ borderColor: colors.clayDark, backgroundColor: 'white' }}>
+                    <p className="text-xs font-bold mb-2 tracking-wide" style={{ color: colors.primary }}>ANNA</p>
+                    <div className="text-sm italic" style={{ color: colors.earthDark }}>{children}</div>
+                </div>
+            );
+            const ContinueButton = ({ onClick, children = 'Continue', disabled = false, asLink = null }) => {
+                if (asLink) return (
+                    <a href={asLink} className="w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 border-0 cursor-pointer no-underline" style={{ backgroundColor: colors.primary, color: 'white' }}>{children} →</a>
+                );
+                return (
+                    <button onClick={() => { if (!disabled) { playContinueClick(); onClick(); } }} disabled={disabled}
+                            className="w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 border-0 cursor-pointer disabled:cursor-not-allowed"
+                            style={{ backgroundColor: disabled ? colors.earth : colors.primary, color: 'white', opacity: disabled ? 0.5 : 1 }}>{children} →</button>
+                );
+            };
+            const GlossaryModal = () => showGlossary && (
+                <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setShowGlossary(false)}>
+                    <div className="bg-white rounded-xl max-w-md w-full" style={{ maxHeight: '80vh', overflowY: 'auto' }} onClick={(e) => e.stopPropagation()}>
+                        <div className="p-4 border-b flex justify-between items-center sticky top-0 bg-white" style={{ borderColor: colors.earthLight }}>
+                            <h3 className="font-bold" style={{ color: colors.primary }}>📖 Glossary</h3>
+                            <button onClick={() => setShowGlossary(false)} className="text-gray-500 hover:text-gray-700 text-2xl font-light border-0 bg-transparent cursor-pointer" aria-label="Close glossary">✕</button>
+                        </div>
+                        <div className="p-4 space-y-3">
+                            {glossaryTerms.map((item, i) => (
+                                <div key={i}><p className="font-semibold text-sm" style={{ color: colors.primary }}>{item.term}</p><p className="text-xs mt-0.5" style={{ color: colors.earthDark }}>{item.definition}</p></div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+
+            // ============================================================
+            // Excel workbook (Bike-Repair.xlsx) — Assets · Liabilities · Cash · Reasons
+            // ============================================================
+            const tabConfig = [
+                { id: 'assets', label: 'Assets' }, { id: 'liabilities', label: 'Liabilities' },
+                { id: 'cash', label: 'Cash' }, { id: 'reasons', label: 'Reasons' },
+            ];
+            const ROW = (label, val, opts = {}) => (
+                <div className="flex justify-between items-center px-3 py-1.5" style={{ borderBottom: `1px solid ${colors.earthLight}`, backgroundColor: opts.bg || 'white' }}>
+                    <span className="text-sm" style={{ color: opts.color || colors.earthDark, fontWeight: opts.bold ? 700 : 400, paddingLeft: opts.indent ? '18px' : 0 }}>{label}</span>
+                    <span className="mono text-sm" style={{ color: opts.color || colors.earthDark, fontWeight: opts.bold ? 700 : 400 }}>{opts.signed ? sd(val) : d(val)}</span>
+                </div>
+            );
+
+            const renderAssetsSheet = () => (
+                <div>
+                    <div className="px-3 py-2 border-b text-xs uppercase tracking-wide font-bold" style={{ borderColor: colors.earthLight, backgroundColor: '#fafaf7', color: colors.earth }}>Assets — what I have</div>
+                    {ASSETS_SNAPSHOT.map((c, i) => {
+                        const label = c.cat === 'RIGHT OF USE' ? 'Right of Use' : (c.cat.charAt(0) + c.cat.slice(1).toLowerCase());
+                        return ROW(<span>{label}<span className="text-xs ml-2 italic" style={{ color: colors.earth }}>{c.note}</span></span>, c.amount, { bg: i % 2 ? '#fafaf7' : 'white', key: c.cat });
+                    })}
+                    {ROW('Total Assets — what the records show', ASSETS_TOTAL, { bold: true, color: colors.primary, bg: colors.sand })}
+                </div>
+            );
+            const renderLiabilitiesSheet = () => (
+                <div>
+                    <div className="px-3 py-2 border-b text-xs uppercase tracking-wide font-bold" style={{ borderColor: colors.earthLight, backgroundColor: '#fafaf7', color: colors.earth }}>Liabilities — what I owe</div>
+                    {LIABILITIES_SNAPSHOT.map((l, i) => ROW(l.label, l.amount, { bg: i % 2 ? '#fafaf7' : 'white' }))}
+                    {ROW('Total Liabilities — what the records show', LIABILITIES_TOTAL, { bold: true, color: colors.primary, bg: colors.sand })}
+                </div>
+            );
+            const renderCashSheet = () => {
+                const inflows = CASH_FLOWS.filter(f => f.amount > 0), outflows = CASH_FLOWS.filter(f => f.amount < 0);
+                const tin = inflows.reduce((s, f) => s + f.amount, 0), tout = outflows.reduce((s, f) => s + f.amount, 0);
+                return (
+                    <div>
+                        <div className="px-3 py-2 border-b text-xs uppercase tracking-wide font-bold" style={{ borderColor: colors.earthLight, backgroundColor: '#fafaf7', color: colors.earth }}>Repair cash — May</div>
+                        <div className="px-3 pt-2"><p className="text-xs font-bold tracking-wide" style={{ color: '#166534' }}>Cash in</p></div>
+                        {inflows.map((f, i) => (
+                            <div key={i} className="flex justify-between px-3 py-0.5"><span className="text-xs" style={{ color: colors.earthDark }}><span className="mono inline-block w-14" style={{ color: colors.earth }}>{f.date}</span>{f.desc}</span><span className="mono text-xs" style={{ color: '#166534' }}>+${f.amount.toLocaleString('en-US')}</span></div>
+                        ))}
+                        <div className="px-3 pt-3"><p className="text-xs font-bold tracking-wide" style={{ color: colors.error }}>Cash out</p></div>
+                        {outflows.map((f, i) => (
+                            <div key={i} className="flex justify-between px-3 py-0.5"><span className="text-xs" style={{ color: colors.earthDark }}><span className="mono inline-block w-14" style={{ color: colors.earth }}>{f.date}</span>{f.desc}</span><span className="mono text-xs" style={{ color: colors.error }}>−${Math.abs(f.amount).toLocaleString('en-US')}</span></div>
+                        ))}
+                        <div className="flex justify-between items-center mx-3 mt-3 mb-3 px-3 py-2" style={{ backgroundColor: colors.sand, borderTop: `2px solid ${colors.earthDark}` }}>
+                            <span className="text-sm font-bold" style={{ color: colors.primary }}>Cash on hand (May 31)</span>
+                            <span className="mono text-sm font-bold" style={{ color: colors.primary }}>${(tin + tout).toLocaleString('en-US')}</span>
+                        </div>
+                    </div>
+                );
+            };
+            const renderReasonsSheet = () => {
+                const Group = ({ k, title, rows, total }) => {
+                    const open = reasonsExpanded[k];
+                    return (
+                        <>
+                            <div onClick={() => { playContinueClick(); setReasonsExpanded(p => ({ ...p, [k]: !p[k] })); }}
+                                 className="flex justify-between items-center px-3 py-2 cursor-pointer" style={{ borderBottom: `1px solid ${colors.earthLight}`, borderTop: `2px solid ${colors.accent}`, backgroundColor: open ? '#fafaf7' : 'white' }}>
+                                <span className="text-sm font-bold" style={{ color: colors.primary }}><span className="inline-block w-4 mr-1 text-center" style={{ color: colors.earth }}>{open ? '▼' : '▶'}</span>{title} <span className="font-normal" style={{ color: colors.earth }}>({rows.length})</span></span>
+                                <span className="mono text-sm font-bold" style={{ color: colors.primary }}>{sd(total)}</span>
+                            </div>
+                            {open && rows.map((r, i) => (
+                                <div key={i} className="row-fade grid items-center text-xs px-3 py-1" style={{ borderBottom: `1px solid ${colors.earthLight}`, backgroundColor: i % 2 ? '#fafaf7' : 'white', gridTemplateColumns: '1.2fr 70px 2.4fr' }}>
+                                    <span style={{ color: colors.earthDark, paddingLeft: '18px' }}>{r.account}</span>
+                                    <span className="mono text-right pr-3" style={{ color: r.delta > 0 ? '#166534' : colors.error }}>{sd(r.delta)}</span>
+                                    <span className="pl-3" style={{ color: colors.earthDark }}>{r.reason}</span>
+                                </div>
+                            ))}
+                        </>
+                    );
+                };
+                return (
+                    <div>
+                        <div className="px-3 py-2 border-b text-xs uppercase tracking-wide font-bold" style={{ borderColor: colors.earthLight, backgroundColor: '#fafaf7', color: colors.earth }}>Reasons — why your net moved (two kinds)</div>
+                        <Group k="contributed" title="CONTRIBUTED" rows={CONTRIBUTED_ROWS} total={CONTRIBUTED_TOTAL} />
+                        <Group k="generated" title="GENERATED" rows={GENERATED_ROWS} total={GENERATED_TOTAL} />
+                        {ROW('TOTAL — the reasons', REASONS_TOTAL, { bold: true, color: colors.primary, bg: colors.sand, signed: true })}
+                    </div>
+                );
+            };
+
+            const renderWorkbook = () => (
+                <div className="rounded-lg overflow-hidden mb-4" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 6px 18px rgba(0,0,0,0.12)' }}>
+                    <div className="px-4 py-2 flex items-center justify-between" style={{ background: 'linear-gradient(180deg, #138a4b 0%, #107C41 100%)', borderBottom: '1px solid #0e6b3a', color: 'white' }}>
+                        <span className="text-sm font-semibold tracking-tight flex items-center gap-2"><span style={{ fontSize: '15px' }}>▦</span><span className="mono">Bike-Repair.xlsx</span><span className="text-xs font-normal opacity-75">&mdash; Excel</span></span>
+                        <span className="text-xs mono opacity-75">{tabConfig.find(t => t.id === activeTab).label} sheet</span>
+                    </div>
+                    <div style={{ minHeight: '300px', backgroundColor: 'white' }}>
+                        {activeTab === 'assets' && renderAssetsSheet()}
+                        {activeTab === 'liabilities' && renderLiabilitiesSheet()}
+                        {activeTab === 'cash' && renderCashSheet()}
+                        {activeTab === 'reasons' && renderReasonsSheet()}
+                    </div>
+                    <div className="flex" style={{ backgroundColor: '#e8e8e8', borderTop: '1px solid #c8c8c8' }}>
+                        {tabConfig.map(t => {
+                            const a = t.id === activeTab;
+                            return (
+                                <button key={t.id} onClick={() => { playContinueClick(); setActiveTab(t.id); }} className="px-4 py-1.5 text-sm font-medium border-0 cursor-pointer"
+                                        style={{ backgroundColor: a ? 'white' : 'transparent', color: a ? '#0e6b3a' : colors.earth, borderTop: a ? '2px solid #107C41' : '2px solid transparent', borderRight: '1px solid #c8c8c8', borderBottom: a ? '1px solid white' : 'none', marginBottom: a ? '-1px' : '0' }}>{t.label}</button>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+
+            // The balance sheet artifact — A − L = Equities (residual layout, never A = L + E)
+            const renderBalanceSheet = () => (
+                <div className="rounded-lg overflow-hidden mb-4" style={{ border: `2px solid ${colors.primary}`, backgroundColor: 'white' }}>
+                    <div className="px-4 py-2 text-center" style={{ backgroundColor: colors.primary }}>
+                        <p className="text-sm font-bold text-white tracking-wide">THE BALANCE SHEET</p>
+                        <p className="text-xs" style={{ color: colors.earthLight }}>Your repair work · May 31</p>
+                    </div>
+                    <div className="p-4">
+                        <div className="flex justify-between items-center py-2"><span className="font-bold text-sm" style={{ color: colors.earthDark }}>Assets</span><span className="mono font-bold" style={{ color: colors.primary }}>{d(ASSETS_TOTAL)}</span></div>
+                        <div className="flex justify-between items-center py-2" style={{ borderTop: `1px solid ${colors.earthLight}` }}><span className="font-bold text-sm" style={{ color: colors.earthDark }}>− Liabilities</span><span className="mono font-bold" style={{ color: colors.error }}>{d(LIABILITIES_TOTAL)}</span></div>
+                        <div className="flex justify-between items-center py-2 px-2 rounded" style={{ borderTop: `2px solid ${colors.earthDark}`, backgroundColor: '#fef9e7' }}><span className="font-bold text-sm" style={{ color: colors.primary }}>= Equities</span><span className="mono font-bold text-lg" style={{ color: colors.primary }}>{d(NET)}</span></div>
+                        <div className="mt-2 pt-2" style={{ borderTop: `1px dashed ${colors.earthLight}` }}>
+                            <div className="flex justify-between items-center py-1"><span className="text-xs italic" style={{ color: colors.earth, paddingLeft: '12px' }}>Contributed — what you put in</span><span className="mono text-xs" style={{ color: colors.earthDark }}>{d(CONTRIBUTED_TOTAL)}</span></div>
+                            <div className="flex justify-between items-center py-1"><span className="text-xs italic" style={{ color: colors.earth, paddingLeft: '12px' }}>Generated — what the work made</span><span className="mono text-xs" style={{ color: colors.earthDark }}>{d(GENERATED_TOTAL)}</span></div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            // ============================================================
+            // Phases
+            // ============================================================
+            const renderWelcome = () => (
+                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-3xl mx-auto">
+                        <Header />
+                        <NarrativeBlock>
+                            Five sessions in, your workbook holds everything you figured out at the workbench:
+                            an <strong>Assets</strong> list (what you have), a <strong>Liabilities</strong> list
+                            (what you owe), and the <strong>Reasons</strong> your net moved — sorted into the two
+                            kinds you found, what you <em>put in</em> and what the <em>work made</em>.
+                            <br /><br />
+                            You've been calling them by your own words. Today you put them on one page, watch how
+                            they fit together — and the names you've been circling finally arrive.
+                        </NarrativeBlock>
+                        <AnnaBox>
+                            "You built the whole thing from scratch — no textbook, just the workbench and a
+                            spreadsheet. Turns out it has names. Old ones. Let's lay it out and earn them."
+                        </AnnaBox>
+                        <div className="rounded-lg p-4 border-2 mb-4" style={{ backgroundColor: 'white', borderColor: colors.earthLight }}>
+                            <h3 className="font-bold mb-3" style={{ color: colors.primary }}>What You'll Discover</h3>
+                            <ul className="space-y-2 text-sm" style={{ color: colors.earthDark }}>
+                                <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span><span>Your net (have − owe) and your Reasons total to the <em>same number</em> — and always will, by construction.</span></li>
+                                <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span><span>That gives you the formal names: the identity, the balance sheet, the residual.</span></li>
+                                <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span><span>And the boundary you drew back in session one had a name all along.</span></li>
+                            </ul>
+                        </div>
+                        <ContinueButton onClick={() => { setActiveTab('assets'); setPhase('assemble'); }}>Lay it all out</ContinueButton>
+                    </div>
+                    <GlossaryModal />
+                </div>
+            );
+
+            const renderAssemble = () => (
+                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-3xl mx-auto">
+                        <Header />
+                        <NarrativeBlock>
+                            Everything in one workbook for the first time. Notice <strong>Cash</strong> sits on the
+                            Assets list now — back in session three it was just a flow you couldn't pin down. Now
+                            that you've split the repair work's money from your personal money, the repair work's
+                            cash ({d(0)} on hand) is one of its assets.
+                        </NarrativeBlock>
+                        {renderWorkbook()}
+                        <AnnaBox>
+                            "Two totals matter now. The records show <strong>Assets of {d(ASSETS_TOTAL)}</strong> and
+                            <strong> Liabilities of {d(LIABILITIES_TOTAL)}</strong>. The gap between them is your
+                            <strong> net</strong>. What is it?"
+                        </AnnaBox>
+                        {!netDone ? (
+                            <div className="rounded-lg p-4 mb-3 border-2" style={{ borderColor: colors.earthLight, backgroundColor: 'white' }}>
+                                <label htmlFor="net" className="text-sm font-bold block mb-2" style={{ color: colors.earthDark }}>Your net = Assets − Liabilities = {d(ASSETS_TOTAL)} − {d(LIABILITIES_TOTAL)} =</label>
+                                <div className="flex gap-2">
+                                    <input id="net" type="text" inputMode="numeric" value={netInput}
+                                           onChange={e => setNetInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') handleNetSubmit(); }}
+                                           placeholder="$ amount" className="flex-1 px-3 py-2 rounded-lg border-2" style={{ borderColor: colors.earthLight, fontSize: '16px' }} />
+                                    <button onClick={handleNetSubmit} className="px-5 py-2 rounded-lg font-bold text-white border-0 cursor-pointer" style={{ backgroundColor: colors.primary }}>Check</button>
+                                </div>
+                                {netAttempts > 0 && netAttempts < 3 && (
+                                    <p className="text-sm mt-2 italic" style={{ color: '#92400e' }}>Not quite — subtract what you owe from what you have. {d(ASSETS_TOTAL)} − {d(LIABILITIES_TOTAL)}.</p>
+                                )}
+                            </div>
+                        ) : (
+                            <>
+                                <InsightPanel><p><strong>Your net is {d(NET)}.</strong> What's left when Liabilities come out of Assets. Hold onto that number.</p></InsightPanel>
+                                <ContinueButton onClick={() => { setActiveTab('reasons'); setReasonsExpanded({ contributed: true, generated: true }); setPhase('identity'); }}>Where did {d(NET)} come from?</ContinueButton>
+                            </>
+                        )}
+                    </div>
+                    <GlossaryModal />
+                </div>
+            );
+
+            const renderIdentity = () => (
+                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-3xl mx-auto">
+                        <Header />
+                        {idStage === 0 && (
+                            <>
+                                <AnnaBox>"You found your net two ways waiting to happen. One: Assets minus Liabilities, {d(NET)}. Now the other: total the <strong>Reasons</strong> that moved your net — the contributed pile and the generated pile. Add them up."</AnnaBox>
+                                {renderWorkbook()}
+                                <ContinueButton onClick={() => { playContinueClick(); setIdStage(1); }}>Total the Reasons</ContinueButton>
+                            </>
+                        )}
+                        {idStage >= 1 && (
+                            <>
+                                <div className="rounded-lg p-5 mb-4 text-center" style={{ backgroundColor: 'white', border: `2px solid ${colors.accent}` }}>
+                                    <div className="flex justify-center items-center gap-4 flex-wrap">
+                                        <div><p className="text-xs uppercase tracking-wide" style={{ color: colors.earth }}>Have − Owe</p><p className="text-2xl font-bold mono" style={{ color: colors.primary }}>{d(NET)}</p></div>
+                                        <span className="text-2xl font-bold" style={{ color: colors.earth }}>=</span>
+                                        <div><p className="text-xs uppercase tracking-wide" style={{ color: colors.earth }}>Contributed + Generated</p><p className="text-2xl font-bold mono" style={{ color: colors.primary }}>{d(CONTRIBUTED_TOTAL)} + {d(GENERATED_TOTAL)}</p></div>
+                                        <span className="text-2xl font-bold" style={{ color: colors.success }}>= {d(REASONS_TOTAL)} ✓</span>
+                                    </div>
+                                </div>
+                                {idStage === 1 && (
+                                    <>
+                                        <KeyInsightBox>
+                                            <p className="font-semibold mb-2">They match — and they always will.</p>
+                                            <p>Not a coincidence you arranged. Your net just <em>is</em> what's left after taking what you owe out of what you have. The reasons that moved it have to add up to it. It holds <strong>by construction</strong>, every time, for any set of books.</p>
+                                        </KeyInsightBox>
+                                        <ContinueButton onClick={() => { playContinueClick(); setIdStage(2); }}>Name what you just matched</ContinueButton>
+                                    </>
+                                )}
+                                {idStage === 2 && (
+                                    <>
+                                        <AnnaBox>
+                                            "That residual — have minus owe — has a name: <strong>Equities</strong>. Plural,
+                                            on purpose. It's a <em>difference</em>, not a thing the owner could pocket — not the
+                                            cash you'd walk away with, just recorded Assets minus recorded Liabilities, gaps and
+                                            all. The plural keeps it honest."
+                                        </AnnaBox>
+                                        <ContinueButton onClick={() => { playContinueClick(); setIdStage(3); }}>Write it down</ContinueButton>
+                                    </>
+                                )}
+                                {idStage === 3 && (
+                                    <>
+                                        <div className="rounded-lg p-6 mb-4 text-center" style={{ backgroundColor: 'white', border: `2px solid ${colors.primary}` }}>
+                                            <p className="text-xs uppercase tracking-widest mb-2" style={{ color: colors.earth }}>The accounting identity</p>
+                                            <p className="text-2xl font-bold mono" style={{ color: colors.primary }}>Assets − Liabilities = Equities</p>
+                                            <p className="text-xs mt-3" style={{ color: colors.earthDark }}>An <strong>identity</strong>, not an equation. You don't solve it — it holds by definition, for every entity, every time.</p>
+                                        </div>
+                                        {renderBalanceSheet()}
+                                        <KeyInsightBox>
+                                            <p className="font-semibold mb-2">This page is the balance sheet.</p>
+                                            <p>It's built <em>around</em> the identity, not assembled to satisfy one. You list Assets, take out Liabilities, and Equities falls out as the difference — split into where it came from: <strong>contributed</strong> and <strong>generated</strong>. The fact that it lines up isn't a result. It's the construction.</p>
+                                        </KeyInsightBox>
+                                        <ContinueButton onClick={() => { playContinueClick(); setIdStage(4); }}>Now read it honestly</ContinueButton>
+                                    </>
+                                )}
+                                {idStage === 4 && (
+                                    <>
+                                        {renderBalanceSheet()}
+                                        <AnnaBox>
+                                            "Before you trust this page, one honest thing. Everything on it earned its place
+                                            with <strong>evidence</strong> — a receipt, a statement, a price you could point
+                                            to. That's what makes it a <strong>record</strong>. And a record only holds what
+                                            clears that bar."
+                                        </AnnaBox>
+                                        <KeyInsightBox>
+                                            <p className="font-semibold mb-2">The records show less than you have.</p>
+                                            <p>Look at what's <em>not</em> on the page: your skill at the bench, the regulars
+                                               who keep coming back, the name you're building on Whalley Ave. All real, all
+                                               worth something to the work — none of it with a receipt, so none of it on the
+                                               list.</p>
+                                            <p className="mt-2">So read &ldquo;Assets, {d(ASSETS_TOTAL)}&rdquo; as <strong>what the
+                                               records show</strong> — not everything the work is worth. The list shows what it
+                                               can; you <strong>have</strong> more than it shows. That isn't a hole to plug.
+                                               It's what a record <em>is</em>.</p>
+                                            <p className="mt-2">It's also why <strong>Equities</strong> isn't your net worth:
+                                               it's the gap between two <em>recorded</em> lists, everything they leave out baked in.</p>
+                                        </KeyInsightBox>
+                                        <ContinueButton onClick={() => setPhase('entity')}>One thing you named without noticing</ContinueButton>
+                                    </>
+                                )}
+                            </>
+                        )}
+                    </div>
+                    <GlossaryModal />
+                </div>
+            );
+
+            const renderEntity = () => (
+                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-3xl mx-auto">
+                        <Header />
+                        <NarrativeBlock>
+                            Go back to the very first session. Before any of this, you did one quiet thing: you drew
+                            a line. <em>This</em> stand, <em>this</em> card, <em>this</em> slice of the bank account —
+                            part of the repair work. Your groceries, your gas, your paycheck — not. You kept asking
+                            the same question of every item: <em>is this the repair work, or is this me?</em>
+                        </NarrativeBlock>
+                        <AnnaBox>
+                            "That line you drew has a name. The subject of a set of books — the thing the Assets and
+                            Liabilities belong to — is the <strong>entity</strong>. And here's the part people miss:
+                            you didn't <em>find</em> it. You <strong>made</strong> it, by deciding what's in and what's
+                            out. The entity is a perspective you adopt for a purpose, not an object sitting in the world."
+                        </AnnaBox>
+                        <KeyInsightBox>
+                            <p className="font-semibold mb-2">The boundary is the work; the name follows.</p>
+                            <p>An entity is anything you can draw a clear edge around for a reason — this repair work,
+                               a person, a school, a food bank. It isn't the bicycle <em>industry</em> (too many
+                               entities at once), or Smith's deposit (that's something that happens <em>to</em> an
+                               entity), or "last May" (a slice of time). Draw the line in the wrong place and every
+                               number after it is answering the wrong question.</p>
+                        </KeyInsightBox>
+                        <ContinueButton onClick={() => setPhase('net-assets')}>What if no one owns it?</ContinueButton>
+                    </div>
+                    <GlossaryModal />
+                </div>
+            );
+
+            const renderNetAssets = () => (
+                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-3xl mx-auto">
+                        <Header />
+                        <NarrativeBlock>
+                            One quick widening before you stop. Your repair work has an owner — you. What about an
+                            entity with <em>no</em> owner?
+                        </NarrativeBlock>
+                        <AnnaBox>
+                            "Plenty of real entities have nobody to call an owner — a food bank, a museum, a public
+                            university, a church. Real books, real Assets and Liabilities, same identity:
+                            A − L = the residual. But the for-profit label <strong>Equities</strong> grew up where
+                            owners exist. With no owner, the convention writes <strong>Net Assets</strong> instead.
+                            Same arithmetic — the residual is still just recorded Assets minus recorded Liabilities.
+                            The name changes because the <em>accountability</em> does: your shop answers to you; a
+                            food bank answers to its mission and its donors."
+                        </AnnaBox>
+                        <div className="grid grid-cols-2 gap-3 mb-4">
+                            <div className="rounded-lg p-3" style={{ backgroundColor: 'white', border: `1px solid ${colors.earthLight}` }}>
+                                <p className="text-xs uppercase tracking-wide mb-2 font-bold" style={{ color: colors.earth }}>Owned entity</p>
+                                <p className="mono font-bold text-sm mb-1" style={{ color: colors.primary }}>A − L = Equities</p>
+                                <p className="text-xs" style={{ color: colors.earthDark }}>Accountable to owners.</p>
+                            </div>
+                            <div className="rounded-lg p-3" style={{ backgroundColor: '#f5f3ff', border: `1px solid ${colors.royal}` }}>
+                                <p className="text-xs uppercase tracking-wide mb-2 font-bold" style={{ color: colors.royal }}>No-owner entity</p>
+                                <p className="mono font-bold text-sm mb-1" style={{ color: colors.royal }}>A − L = Net Assets</p>
+                                <p className="text-xs" style={{ color: colors.earthDark }}>Accountable to mission &amp; donors.</p>
+                            </div>
+                        </div>
+                        <KeyInsightBox>
+                            <p>Net Assets is the same kind of definitional residual as Equities — not a pool of cash, and
+                               not anyone's ownership stake. A no-owner entity further splits its Net Assets by whether
+                               donors attached strings (<em>with</em> vs. <em>without donor restrictions</em>) — but that
+                               machinery, and how to read it, is a Module 3 story. For now: <strong>same identity,
+                               different label, because the accountability differs.</strong></p>
+                        </KeyInsightBox>
+                        <ContinueButton onClick={() => setPhase('double-entry')}>Where all this came from</ContinueButton>
+                    </div>
+                    <GlossaryModal />
+                </div>
+            );
+
+            const renderDoubleEntry = () => (
+                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-3xl mx-auto">
+                        <Header />
+                        <NarrativeBlock>
+                            Step back from the workbench for a second. None of what you built is new.
+                        </NarrativeBlock>
+                        <div className="rounded-lg p-4 mb-3" style={{ backgroundColor: 'white', border: `1px solid ${colors.earthLight}` }}>
+                            <p className="text-sm mb-3" style={{ color: colors.earthDark }}>
+                                <strong style={{ color: colors.primary }}>~3000 BCE.</strong> Scribes in Mesopotamia
+                                pressed wedge marks into clay: so much grain in the storehouse, so many sheep, who owes
+                                what at harvest. A list of things and a list of promises — your Assets and Liabilities
+                                tabs, five thousand years early. That half is ancient.
+                            </p>
+                            <p className="text-sm" style={{ color: colors.earthDark }}>
+                                <strong style={{ color: colors.primary }}>1494.</strong> A Franciscan friar, Luca
+                                Pacioli, writes down a method Italian merchants had used for two centuries: every change
+                                gets recorded on <em>two</em> sides. The pairing you stumbled into in your Reasons tab —
+                                where each change had a partner — is exactly it.
+                            </p>
+                        </div>
+                        <AnnaBox>
+                            "That pairing has a name: <strong>double-entry</strong>. Two sides to every change. It's
+                            how the pairs canceled and the net-movers stood out when you pruned your Reasons. And it's
+                            not a relic — <em>every</em> number on <em>every</em> financial statement filed today still
+                            gets there by double-entry. The identity and the balance sheet you built by hand are the
+                            same structures the largest companies in the world file."
+                        </AnnaBox>
+                        <ContinueButton onClick={() => setPhase('complete')}>Finish up</ContinueButton>
+                    </div>
+                    <GlossaryModal />
+                </div>
+            );
+
+            const renderComplete = () => (
+                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-3xl mx-auto">
+                        <Header />
+                        <div className="text-center mb-6"><p className="text-5xl mb-2">🏆</p><p className="text-xl font-bold" style={{ color: colors.primary }}>Tutorial 1.5 complete — and Module 1 with it</p></div>
+                        <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: 'white', border: `1px solid ${colors.earthLight}` }}>
+                            <h3 className="font-bold mb-3" style={{ color: colors.primary }}>The names you earned</h3>
+                            <ul className="space-y-2 text-sm" style={{ color: colors.earthDark }}>
+                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>You drew a boundary for a purpose — that's the <strong>entity</strong>. You made it; you didn't find it.</span></li>
+                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>Recorded Assets minus recorded Liabilities is <strong>Equities</strong> — a definitional residual, not a pile of cash, and not your net worth: the records leave real things out.</span></li>
+                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span><strong>A − L = Equities</strong> is the <strong>accounting identity</strong> — it holds by construction, and the page that lays it out is the <strong>balance sheet</strong>.</span></li>
+                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>The residual grows two ways — <strong>contributed</strong> and <strong>generated</strong> — and a no-owner entity calls it <strong>Net Assets</strong>.</span></li>
+                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>Every change has two sides: <strong>double-entry</strong>, how every number on every statement gets there.</span></li>
+                            </ul>
+                        </div>
+                        <KeyInsightBox>
+                            <p className="font-semibold mb-2">You invented the system. Now you have its names.</p>
+                            <p>Identify the entity. List its Assets and Liabilities. The residual is Equities (owned) or Net Assets (no owner). A − L = E, by construction — the accounting identity, on a balance sheet, maintained by double-entry. Pacioli wrote it down in 1494. You worked it out at the workbench in May.</p>
+                        </KeyInsightBox>
+                        <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: colors.clayLight }}>
+                            <h3 className="font-bold mb-2" style={{ color: colors.primary }}>Coming Next</h3>
+                            <p className="text-sm" style={{ color: colors.earthDark }}>Module 1 closes here. In Module 2 you'll put these tools to work reading what other people prepared — and face the decisions that come with choosing a form for the work.</p>
+                        </div>
+                        <div className="mb-3"><ContinueButton asLink="index.html">Return to Main</ContinueButton></div>
+                        <button onClick={handleRestart} className="block w-full py-3 rounded-lg font-bold border-2 cursor-pointer mb-3" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>↺ Restart tutorial</button>
+                    </div>
+                    <GlossaryModal />
+                </div>
+            );
+
+            if (phase === 'welcome') return renderWelcome();
+            if (phase === 'assemble') return renderAssemble();
+            if (phase === 'identity') return renderIdentity();
+            if (phase === 'entity') return renderEntity();
+            if (phase === 'net-assets') return renderNetAssets();
+            if (phase === 'double-entry') return renderDoubleEntry();
+            if (phase === 'complete') return renderComplete();
+            return null;
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

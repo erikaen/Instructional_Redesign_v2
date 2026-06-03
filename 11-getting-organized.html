@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.1 — Getting Organized</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style> body { font-family: 'Inter', sans-serif; } </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        /**
+         * Tutorial 1.1: Getting Organized  (discovery-first rebuild)
+         * Accounting Pre-work — bike-repair arc (revision)
+         * @version 2.0
+         * @date 2026-06-01
+         * @description Friction-first. Student reveals frustrations, then DRAG-SORTS
+         *   stuff from two locations into one "Things related to your repair work" box
+         *   (= the Excel Things tab). Undragged = personal. The location≠category
+         *   intruders (laptop/desk at home; guitar at the shop) make the boundary
+         *   surface from the student's own sorting — THEN Q1 names it. Entity unspoken;
+         *   no dollars; no Promises list (that is 1.3).
+         */
+
+        const colors = {
+          primary: '#00356b',
+          sand: '#f5f1e8', earth: '#8b7355', earthLight: '#d4c4a8', earthDark: '#5c4d3d',
+          accent: '#c9a227',
+          clay: '#c4a574', clayLight: '#e8dcc8', clayDark: '#a08050',
+          success: '#22c55e', successBg: '#f0fdf4',
+          warning: '#f59e0b', warningBg: '#fffbeb',
+          error: '#dc2626', errorBg: '#fef2f2',
+          excelGreen: '#217346'
+        };
+
+        // ---- sound ----
+        let audioCtx = null;
+        const ac = () => { if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} } return audioCtx; };
+        const tone = (f, d, t='sine', v=0.05) => { const c=ac(); if(!c)return; const o=c.createOscillator(),g=c.createGain(); o.type=t;o.frequency.value=f;o.connect(g);g.connect(c.destination); g.gain.setValueAtTime(v,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start();o.stop(c.currentTime+d); };
+        const playContinueClick = () => tone(330,0.08,'sine',0.04);
+        const playSuccessTone = () => { tone(523,0.12); setTimeout(()=>tone(784,0.16),110); };
+        const playSoftNope = () => tone(180,0.16,'sine',0.05);
+        const playBuzzer = () => tone(120,0.3,'square',0.05);
+        const playPlace = () => tone(440,0.06,'sine',0.04);
+
+        // ---- data ----
+        const scenarios = [
+          { label: 'A customer asks', content: 'A customer rolls in with a broken derailleur. “Got a 24mm cone wrench? I left mine at home.” You think you do — somewhere in that toolbox under the bench, or maybe the drawer. You start digging.' },
+          { label: 'It’s not all in your head anymore', content: 'Tonight you unwrapped a chain whip you bought last week — and found another one already in the drawer, still in its package. Third time this month you’ve reordered something you already had. The “keep it all in your head” system isn’t working.' },
+          { label: 'What if something happened?', content: 'A fire two blocks over last night gets you thinking: you should have insurance, and you don’t really know what’s at risk. The repair stand, the parts, all the tools, the laptop — it’s a lot, and you couldn’t list it from memory if you tried.' },
+        ];
+
+        // items live at two LOCATIONS — deliberately misleading, because location ≠ category.
+        // zone 'shop' = related to the repair work; 'personal' = not. isIntruder = location
+        // doesn't match zone (the load-bearing items).
+        const rentedSpaceItems = [
+          // big equipment
+          { id:'stand', text:'Park Tool repair stand', zone:'shop', isIntruder:false, info:'Anchored to the workbench. Every repair starts here.' },
+          { id:'compressor', text:'Air compressor', zone:'shop', isIntruder:false, info:'In the back corner. Runs the impact tools and seats tires.' },
+          { id:'washer', text:'Parts washer', zone:'shop', isIntruder:false, info:'By the back door. A solvent bath for greasy parts.' },
+          { id:'truing', text:'Wheel-truing stand', zone:'shop', isIntruder:false, info:'On a side bench. Holds a wheel so you can tweak the spokes true.' },
+          { id:'grinder', text:'Bench grinder', zone:'shop', isIntruder:false, info:'On a side bench. For sharpening and small metal work.' },
+          { id:'headset', text:'Headset press', zone:'shop', isIntruder:false, info:'On the workbench. For pressing in bearing cups.' },
+          { id:'vacuum', text:'Shop vacuum', zone:'shop', isIntruder:false, info:'Under the bench. For metal shavings and shop dust.' },
+          // hand tools (one receipt)
+          { id:'conewr', text:'Cone wrench set', zone:'shop', isIntruder:false, info:'On the pegboard. For hub cones.' },
+          { id:'torque', text:'Torque wrench', zone:'shop', isIntruder:false, info:'In the tool drawer. For careful bolt tightening.' },
+          { id:'hexset', text:'Hex / Allen key set', zone:'shop', isIntruder:false, info:'In the tool drawer. For pretty much every bike bolt.' },
+          { id:'cutters', text:'Cable cutters', zone:'shop', isIntruder:false, info:'On the pegboard. For trimming brake and shift cables.' },
+          { id:'breaker', text:'Chain breaker', zone:'shop', isIntruder:false, info:'In the tool drawer. For installing and removing chains.' },
+          { id:'levers', text:'Tire levers', zone:'shop', isIntruder:false, info:'In the tool drawer. For prying tires off rims.' },
+          // fixtures
+          { id:'shelves', text:'Shelving units', zone:'shop', isIntruder:false, info:'Along the back wall. Holds the parts stock.' },
+          { id:'display', text:'Display rack', zone:'shop', isIntruder:false, info:'By the front door. Tubes and small items.' },
+          { id:'pegboard', text:'Pegboard + hooks', zone:'shop', isIntruder:false, info:'Over the workbench. Keeps the hand tools in reach.' },
+          // parts stock
+          { id:'chains', text:'Box of chains', zone:'shop', isIntruder:false, info:'On the supply shelf. Various speeds.' },
+          { id:'pads', text:'Box of brake pads', zone:'shop', isIntruder:false, info:'On the supply shelf. Rim and disc.' },
+          { id:'cassettes', text:'Cassettes', zone:'shop', isIntruder:false, info:'On the supply shelf. A few common ratios.' },
+          { id:'bbs', text:'Bottom brackets', zone:'shop', isIntruder:false, info:'On the supply shelf. Assorted sizes.' },
+          { id:'spokes', text:'Spokes', zone:'shop', isIntruder:false, info:'In a bin by the truing stand.' },
+          { id:'tubes', text:'Tubes', zone:'shop', isIntruder:false, info:'On the supply shelf. The thing everyone needs.' },
+          // operational
+          { id:'drawer', text:'Cash drawer', zone:'shop', isIntruder:false, info:'A wooden box on the bench — where you keep cash to make change for customers. You don’t repair anything with it.' },
+          // personal intruders at the space
+          { id:'guitar', text:'Acoustic guitar', zone:'personal', isIntruder:true, info:'In the corner by the door. You play when things are slow.' },
+          { id:'photos', text:'Family photos', zone:'personal', isIntruder:true, info:'Taped over the workbench. From the kid’s birthday.' },
+          { id:'commuter', text:'Your commuter bike', zone:'personal', isIntruder:true, info:'Up on the stand — your own daily ride, in to fix its rear wheel.' },
+        ];
+        const homeItems = [
+          { id:'couch', text:'Couch', zone:'personal', isIntruder:false, info:'In the living room. Where you collapse at night.' },
+          { id:'coffee', text:'Coffee maker', zone:'personal', isIntruder:false, info:'On the kitchen counter.' },
+          { id:'tv', text:'TV', zone:'personal', isIntruder:false, info:'In the living room. For unwinding.' },
+          { id:'books', text:'Books on the shelf', zone:'personal', isIntruder:false, info:'Novels, mostly, plus a few bike manuals.' },
+          // shop intruders at home (the load-bearing ones)
+          { id:'desk', text:'Desk', zone:'shop', isIntruder:true, info:'In the corner of the living room — where you sit with the laptop to order parts and total up the month.' },
+          { id:'laptop', text:'Laptop', zone:'shop', isIntruder:true, info:'On the desk. You order parts, look up manuals, and schedule repairs on it.' },
+          { id:'receipts', text:'Box of customer receipts', zone:'shop', isIntruder:true, info:'On the desk. Paperwork from last month’s repairs.' },
+          { id:'cables', text:'Box of derailleur cables', zone:'shop', isIntruder:true, info:'In the entryway. UPS dropped them here instead of at the space.' },
+        ];
+        const allItems = [
+          ...rentedSpaceItems.map(i => ({...i, loc:'space'})),
+          ...homeItems.map(i => ({...i, loc:'home'})),
+        ];
+        const shopIds = allItems.filter(i => i.zone === 'shop').map(i => i.id);
+        const homeIntruderIds = homeItems.filter(i => i.isIntruder).map(i => i.id); // laptop, desk, receipts, cables
+
+        const q1Options = [
+          { id:'a', text:'Things related to your repair work' },
+          { id:'b', text:'Things you use for repairing bicycles' },
+          { id:'c', text:'Things in the rented space' },
+          { id:'d', text:'Things the business owns' },
+        ];
+        const Q1_CORRECT = 'a';
+        const q1Hints = [
+          'Take the cash drawer. You don’t repair anything with it — yet it went in the box. And the laptop was sitting at home, not in the space. What do the things in the box actually have in common?',
+          'It isn’t where they sit, and it isn’t one specific task. It’s what they’re for — your repair work.',
+        ];
+        const q1Answer = 'Things related to your repair work. The stand, the parts, the cash drawer, the laptop on your desk at home — all of it relates to the repair work, wherever it sits and whatever its job. The guitar, the couch, your own commuter bike — they don’t. That line is the most important thing you drew today.';
+        const q1OptionFeedback = {
+          b: 'Not quite. You don’t repair anything with the cash drawer — it just holds change for customers — yet it went in. It isn’t about what you use to fix bikes. Look again at what the things in the box have in common.',
+          c: 'Not quite. The laptop and the desk were sitting at home, not in the space — and your own commuter bike was right there in the space but stayed out. So it isn’t about where things are.',
+          d: 'Careful — there’s no separate “business” here yet. You own all of it: the stand, the laptop, the cash drawer, and the couch and your commuter bike too. “You own it” is just as true of the things you left out, so ownership can’t be the line. What the things in the box share is that they’re for your repair work.',
+        };
+
+        // ---- components ----
+        const ContinueButton = ({ onClick, children='Continue →', disabled=false }) => (
+          <button onClick={() => { if(!disabled){ playContinueClick(); onClick(); } }} disabled={disabled}
+            className="px-6 py-3 rounded-lg font-semibold text-white border-0 transition-all"
+            style={{ backgroundColor: disabled ? colors.earthLight : colors.primary, cursor: disabled ? 'not-allowed' : 'pointer' }}>{children}</button>
+        );
+        const NarrativeBlock = ({ children }) => (
+          <div className="p-5 rounded-lg mb-4" style={{ backgroundColor: colors.sand, borderLeft: '4px solid '+colors.accent }}>
+            <div className="text-base leading-relaxed" style={{ color: colors.earthDark }}>{children}</div>
+          </div>
+        );
+        const InsightPanel = ({ children }) => (
+          <div className="p-4 rounded-lg mb-4" style={{ backgroundColor: colors.warningBg, border: '1px solid '+colors.warning }}>
+            <div className="text-sm leading-relaxed" style={{ color: '#92400e' }}>{children}</div>
+          </div>
+        );
+        const KeyInsightBox = ({ title='💡 The line you drew', children }) => (
+          <div className="p-5 rounded-lg mb-4" style={{ backgroundColor: colors.clayLight, border: '1px solid '+colors.clayDark }}>
+            <p className="font-semibold mb-1" style={{ color: colors.earthDark }}>{title}</p>
+            <div className="text-base leading-relaxed" style={{ color: colors.earthDark }}>{children}</div>
+          </div>
+        );
+
+        const GLOSSARY = [
+          { term:'The repair work', def:'The bike-repair activity you do, separate from the rest of your life. We don’t give it a formal name yet — you’ll feel it become its own thing before anyone names it.' },
+          { term:'Things', def:'Plain word for the stuff you have for the repair work. No dollar values yet — those come in 1.2.' },
+          { term:'A tab', def:'A sheet in your spreadsheet. You build your books one tab at a time, starting with the Things tab here.' },
+        ];
+
+        function TutorialApp() {
+          const [phase, setPhase] = useState('welcome');
+          const [showGlossary, setShowGlossary] = useState(false);
+          const [devMode, setDevMode] = useState(false);
+          const [headerClicks, setHeaderClicks] = useState(0);
+
+          const [revealed, setRevealed] = useState(1); // scenarios revealed
+          const [placed, setPlaced] = useState({});     // id -> true (in the work box)
+          const [draggedId, setDraggedId] = useState(null);
+          const [expandedId, setExpandedId] = useState(null);
+          const [sortAttempts, setSortAttempts] = useState(0);
+          const [sortMsg, setSortMsg] = useState('');
+          const [sortDone, setSortDone] = useState(false);
+
+          const [q1Sel, setQ1Sel] = useState(null);
+          const [q1Attempts, setQ1Attempts] = useState(0);
+          const [q1Submitted, setQ1Submitted] = useState(false);
+          const [q1LastWrong, setQ1LastWrong] = useState(null);
+
+          const phaseOrder = ['welcome','scenarios','sort','reflect','complete'];
+          const progress = Math.round((phaseOrder.indexOf(phase) / (phaseOrder.length-1)) * 100);
+
+          const handleHeaderClick = () => { const n=headerClicks+1; setHeaderClicks(n); if(n>=3){ setDevMode(!devMode); setHeaderClicks(0); } };
+          const handleRestart = () => { playContinueClick(); setPhase('welcome'); setRevealed(1); setPlaced({}); setDraggedId(null); setExpandedId(null); setSortAttempts(0); setSortMsg(''); setSortDone(false); setQ1Sel(null); setQ1Attempts(0); setQ1Submitted(false); setQ1LastWrong(null); };
+          const goto = (p) => setPhase(p);
+
+          // ---- sort logic ----
+          const placeItem = (id) => { if(sortDone) return; playPlace(); setSortMsg(''); setPlaced(prev => ({...prev, [id]: true})); };
+          const removeItem = (id) => { if(sortDone) return; playPlace(); setSortMsg(''); setPlaced(prev => { const n={...prev}; delete n[id]; return n; }); };
+          const onDropBox = () => { if(draggedId){ placeItem(draggedId); setDraggedId(null); } };
+
+          const placedIds = Object.keys(placed);
+          const personalInBox = placedIds.filter(id => allItems.find(i=>i.id===id).zone === 'personal');
+          const missingShop = shopIds.filter(id => !placed[id]);
+          const intrudersFound = homeIntruderIds.filter(id => placed[id]).length;
+
+          const placedShopCount = shopIds.filter(id => placed[id]).length;
+          // "Do the rest" earns activation once the student has demonstrated the boundary:
+          // no personal items in the tab, at least 2 of the home-intruders found, and real work done.
+          const sortReady = personalInBox.length === 0 && intrudersFound >= 2 && placedShopCount >= 5;
+          const doTheRest = () => {
+            if (!sortReady || sortDone) return;
+            const add = {}; shopIds.forEach(id => add[id]=true);
+            setPlaced(prev => ({...prev, ...add}));
+            playSuccessTone(); setSortDone(true);
+          };
+          let sortHelper;
+          if (personalInBox.length) sortHelper = { tone:'warn', text:`“${allItems.find(i=>i.id===personalInBox[0]).text}” is in the tab, but it’s yours — not part of the repair work. Take it back out.` };
+          else if (placedShopCount < 5) sortHelper = { tone:'info', text:'Keep going — pull the repair things into the tab.' };
+          else if (intrudersFound < 2) sortHelper = { tone:'info', text:'Some of the repair work is hiding at home, not in the space. (What about the laptop?)' };
+          else sortHelper = { tone:'ok', text:'You’ve got the idea — you found the work-stuff at home and left your own things out. “Do the rest” will file the remaining repair things for you.' };
+
+          const submitQ1 = () => {
+            if (q1Sel === Q1_CORRECT) { playSuccessTone(); setQ1Submitted(true); }
+            else { const n=q1Attempts+1; setQ1Attempts(n); setQ1LastWrong(q1Sel); if(n>=3){ playBuzzer(); setQ1Sel(Q1_CORRECT); setQ1Submitted(true); } else playSoftNope(); }
+          };
+
+          // ---- header ----
+          const Header = () => (
+            <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: colors.primary }}>
+              <div className="flex justify-between items-start">
+                <div onClick={handleHeaderClick} style={{ cursor:'pointer' }}>
+                  <h1 className="text-lg font-bold text-white">Tutorial 1.1: Getting Organized</h1>
+                  <p className="text-sm mt-1" style={{ color: colors.earthLight }}>A side activity becomes a thing • ~10 min</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <button onClick={()=>setShowGlossary(true)} className="p-2 rounded-lg text-white text-xl border-0 bg-transparent cursor-pointer" title="Glossary" aria-label="Open glossary">📖</button>
+                  <button onClick={handleRestart} className="p-2 rounded-lg text-white text-xl border-0 bg-transparent cursor-pointer" title="Restart" aria-label="Restart tutorial">↺</button>
+                </div>
+              </div>
+              <div className="mt-4">
+                <div className="flex justify-between text-xs mb-1" style={{ color:'rgba(255,255,255,0.7)' }}><span>Progress</span><span>{progress}%</span></div>
+                <div className="h-2 rounded-full" style={{ backgroundColor:'rgba(255,255,255,0.2)' }} role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
+                  <div className="h-full rounded-full transition-all duration-500" style={{ width:`${progress}%`, backgroundColor: colors.accent }} />
+                </div>
+              </div>
+              {devMode && (
+                <div className="mt-3 pt-3" style={{ borderTop:'1px solid rgba(255,255,255,0.2)' }}>
+                  <p className="text-xs mb-2" style={{ color:'rgba(255,255,255,0.7)' }}>Dev: skip to phase</p>
+                  <div className="flex flex-wrap gap-1">
+                    {phaseOrder.map(p => (
+                      <button key={p} onClick={()=>goto(p)} className="px-2 py-1 rounded text-xs border-0 cursor-pointer"
+                        style={{ backgroundColor: phase===p ? 'white':'rgba(255,255,255,0.2)', color: phase===p ? colors.primary:'white' }}>{p}</button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+
+          const GlossaryModal = () => (
+            <div className="fixed inset-0 flex items-center justify-center p-4" style={{ backgroundColor:'rgba(0,0,0,0.5)', zIndex:50 }} onClick={()=>setShowGlossary(false)}>
+              <div className="bg-white rounded-lg p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto" onClick={e=>e.stopPropagation()}>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-bold" style={{ color: colors.primary }}>📖 Glossary</h2>
+                  <button onClick={()=>setShowGlossary(false)} className="text-2xl border-0 bg-transparent cursor-pointer" style={{ color: colors.earth }} aria-label="Close">✕</button>
+                </div>
+                {GLOSSARY.map((g,i)=>(
+                  <div key={i} className="mb-3 pb-3" style={{ borderBottom: i<GLOSSARY.length-1 ? '1px solid '+colors.earthLight : 'none' }}>
+                    <p className="font-semibold" style={{ color: colors.earthDark }}>{g.term}</p>
+                    <p className="text-sm mt-1" style={{ color: colors.earth }}>{g.def}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+
+          // ---- item chip (source) ----
+          const ItemChip = ({ item }) => {
+            const expanded = expandedId === item.id;
+            return (
+              <div className="mb-1">
+                <div draggable={!sortDone} onDragStart={()=>setDraggedId(item.id)}
+                  className="flex items-center justify-between gap-2 px-2 py-1.5 rounded select-none"
+                  style={{ border:'1px solid '+colors.primary, backgroundColor: draggedId===item.id ? colors.sand : 'white', color: colors.primary, cursor: sortDone ? 'default':'grab' }}>
+                  <button onClick={()=>placeItem(item.id)} className="text-xs font-medium text-left border-0 bg-transparent cursor-pointer flex-1" style={{ color: colors.primary }} title="Add to the repair-work box">{item.text}</button>
+                  <button onClick={(e)=>{ e.stopPropagation(); setExpandedId(expanded?null:item.id); }} onDragStart={e=>e.stopPropagation()}
+                    className="text-xs leading-none border-0 bg-transparent cursor-pointer px-1" style={{ color: expanded ? colors.accent : colors.earth }} title="What is this?" aria-label="More info">ⓘ</button>
+                </div>
+                {expanded && (
+                  <div className="px-2 py-1 text-xs italic" style={{ color: colors.earthDark, backgroundColor:'#fffbe6', borderLeft:'2px solid '+colors.accent }}>{item.info}</div>
+                )}
+              </div>
+            );
+          };
+
+          const LocationPanel = ({ label, items }) => {
+            const remaining = items.filter(i => !placed[i.id]);
+            return (
+              <div className="rounded-lg p-3" style={{ backgroundColor:'white', border:'1px solid '+colors.earthLight }}>
+                <p className="text-xs font-semibold mb-2 uppercase tracking-wide" style={{ color: colors.earth }}>{label}</p>
+                {remaining.length ? remaining.map(it => <ItemChip key={it.id} item={it} />)
+                  : <p className="text-xs italic" style={{ color: colors.earth }}>(nothing left here)</p>}
+              </div>
+            );
+          };
+
+          // ---- phases ----
+          const renderWelcome = () => (
+            <div>
+              <Header />
+              <NarrativeBlock>
+                <p className="mb-3">You have a <strong>day job</strong>. In your free time you fix bikes — for friends, then friends of friends. You’re good at it, and word gets around.</p>
+                <p>It grew. Enough that when the gear took over your apartment, you <strong>rented a small space</strong> nearby to work out of. But the repair work is still tangled up with the rest of your life — and this week, that started to cause problems.</p>
+              </NarrativeBlock>
+              <div className="p-5 rounded-lg mb-4" style={{ backgroundColor:'white', border:'2px solid '+colors.earthLight }}>
+                <p className="font-semibold mb-2" style={{ color: colors.primary }}>What you’ll discover</p>
+                <ul className="space-y-1 text-sm" style={{ color: colors.earthDark }}>
+                  <li>• Why a little success forces you to get organized</li>
+                  <li>• The first line you draw — and what it’s really about</li>
+                  <li>• How your repair work starts to become its own thing</li>
+                </ul>
+              </div>
+              <ContinueButton onClick={()=>goto('scenarios')}>Begin →</ContinueButton>
+            </div>
+          );
+
+          const renderScenarios = () => (
+            <div>
+              <Header />
+              <NarrativeBlock>Three things happened this week. None of them went smoothly.</NarrativeBlock>
+              <div className="space-y-3 mb-4">
+                {scenarios.map((s,i) => (
+                  <div key={i}>
+                    {i < revealed ? (
+                      <div className="p-3 rounded-lg border-2 text-sm" style={{ backgroundColor:'white', borderColor: colors.earthLight }}>
+                        <p className="font-bold mb-1" style={{ color: colors.primary }}>{s.label}</p>
+                        <p style={{ color: colors.earthDark }}>{s.content}</p>
+                      </div>
+                    ) : i === revealed ? (
+                      <button onClick={()=>{ playContinueClick(); setRevealed(revealed+1); }} className="w-full p-3 rounded-lg border-2 text-sm font-medium text-left cursor-pointer" style={{ borderColor: colors.primary, color: colors.primary, backgroundColor:'white' }}>
+                        Then what happened next →
+                      </button>
+                    ) : (
+                      <div className="p-3 rounded-lg border-2 text-sm" style={{ borderColor: colors.earthLight, backgroundColor: colors.sand, color: colors.earth }}>· · ·</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {revealed >= scenarios.length && (
+                <>
+                  <InsightPanel>Three different moments, one realization: it’s too much to keep in your head. If you’re going to get a grip on this, the first step is to write down <strong>what you’ve got</strong>.</InsightPanel>
+                  <ContinueButton onClick={()=>goto('sort')}>Start the list →</ContinueButton>
+                </>
+              )}
+            </div>
+          );
+
+          const renderSort = () => (
+            <div>
+              <Header />
+              <NarrativeBlock>
+                <p className="mb-2">Your stuff is in two places: the <strong>rented space</strong> you work out of, and your <strong>home</strong>. You open a spreadsheet to start a tab — <strong>Things</strong> — and go to fill it.</p>
+                <p className="text-sm" style={{ color: colors.earth }}>Drag (or tap) into the <strong>Things</strong> tab only what belongs to <em>the repair work</em>. Leave everything else where it is. Use <span style={{color:colors.accent}}>ⓘ</span> if you’re not sure what something is.</p>
+              </NarrativeBlock>
+
+              <div className="grid md:grid-cols-2 gap-3 mb-3">
+                <LocationPanel label="At the rented space" items={rentedSpaceItems} />
+                <LocationPanel label="At home" items={homeItems} />
+              </div>
+
+              {/* destination = excel Things tab */}
+              <div className="rounded-lg overflow-hidden shadow-sm mb-3" onDragOver={e=>e.preventDefault()} onDrop={onDropBox}
+                style={{ border:'2px solid '+(draggedId ? colors.excelGreen : colors.earthLight) }}>
+                <div className="px-3 py-2 text-xs font-semibold flex justify-between" style={{ backgroundColor:'#f1f5f9', color: colors.earthDark, borderBottom:'1px solid '+colors.earthLight }}>
+                  <span>📊 Bike-Repair.xlsx</span><span style={{ color: colors.earth }}>drop here →</span>
+                </div>
+                <div style={{ backgroundColor:'white' }}>
+                  <div className="grid" style={{ gridTemplateColumns:'28px 1fr' }}>
+                    <div style={{ backgroundColor:'#f8fafc', borderBottom:'1px solid #e2e8f0', borderRight:'1px solid #e2e8f0' }}></div>
+                    <div className="text-xs py-1 px-2 font-semibold" style={{ backgroundColor:'#f8fafc', color: colors.earthDark, borderBottom:'1px solid #e2e8f0' }}>A&nbsp;&nbsp;Things related to your repair work</div>
+                  </div>
+                  {Array.from({ length: Math.max(6, placedIds.length+1) }).map((_,r) => {
+                    const id = placedIds[r]; const item = id ? allItems.find(i=>i.id===id) : null;
+                    return (
+                      <div key={r} className="grid" style={{ gridTemplateColumns:'28px 1fr' }}>
+                        <div className="text-xs text-center py-1.5" style={{ backgroundColor:'#f8fafc', color: colors.earth, borderBottom:'1px solid #e2e8f0', borderRight:'1px solid #e2e8f0' }}>{r+1}</div>
+                        <div className="text-sm py-1.5 px-2 flex justify-between items-center" style={{ borderBottom:'1px solid #e2e8f0', color: colors.earthDark, minHeight:'30px' }}>
+                          {item ? (<><span>{item.text}</span>{!sortDone && <button onClick={()=>removeItem(item.id)} className="text-xs border-0 bg-transparent cursor-pointer" style={{ color: colors.error }} aria-label={'Remove '+item.text}>✕</button>}</>) : <span>&nbsp;</span>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="flex items-end px-2 pt-1" style={{ backgroundColor:'#f1f5f9', borderTop:'1px solid '+colors.earthLight }}>
+                  <div className="px-3 py-1 text-xs font-semibold rounded-t" style={{ backgroundColor:'white', color: colors.excelGreen, borderTop:'2px solid '+colors.excelGreen }}>Things</div>
+                  <div className="px-3 py-1 text-xs" style={{ color: colors.earthLight }}>＋</div>
+                </div>
+              </div>
+
+              {sortDone ? (
+                <>
+                  <KeyInsightBox title="💡 Look at what you just did">
+                    You pulled things into that box from <em>both</em> places — the laptop and the desk came from <strong>home</strong>, the cash drawer doesn’t repair anything, and your own commuter bike stayed out even though it was in the space. So the box isn’t “stuff in the space,” and it isn’t “tools.” It’s something else. Next question names it.
+                  </KeyInsightBox>
+                  <ContinueButton onClick={()=>goto('reflect')}>Continue →</ContinueButton>
+                </>
+              ) : (
+                <>
+                  <div className="p-3 rounded-lg mb-3 text-sm" style={{
+                    backgroundColor: sortHelper.tone==='warn' ? colors.errorBg : sortHelper.tone==='ok' ? colors.successBg : 'white',
+                    border: '1px solid '+(sortHelper.tone==='warn' ? colors.error : sortHelper.tone==='ok' ? colors.success : colors.earthLight),
+                    color: colors.earthDark }}>
+                    {sortHelper.tone==='ok' ? '✓ ' : sortHelper.tone==='warn' ? '⚠ ' : ''}{sortHelper.text}
+                  </div>
+                  <button onClick={()=>{ if(sortReady){ playContinueClick(); doTheRest(); } }} disabled={!sortReady}
+                    className="px-6 py-3 rounded-lg font-semibold text-white border-0 transition-all"
+                    style={{ backgroundColor: sortReady ? colors.primary : colors.earthLight, cursor: sortReady ? 'pointer' : 'not-allowed', opacity: sortReady ? 1 : 0.65 }}
+                    title={sortReady ? 'File the remaining repair things' : 'Finish finding the repair things first'}>
+                    {missingShop.length ? 'Do the rest →' : 'Done →'}
+                  </button>
+                </>
+              )}
+            </div>
+          );
+
+          const renderReflect = () => (
+            <div>
+              <Header />
+              <NarrativeBlock>You filled the <strong>Things</strong> tab from both places, and left a lot behind. You drew a line. What is the line actually about?</NarrativeBlock>
+              <div className="bg-white rounded-lg p-4 mb-4 shadow-sm" style={{ border:'1px solid '+colors.earthLight }}>
+                <p className="text-sm mb-3 font-medium" style={{ color: colors.earthDark }}>Which best describes what ended up on the Things tab?</p>
+                <div className="space-y-2">
+                  {q1Options.map(o => {
+                    const correct = o.id===Q1_CORRECT, sel = q1Sel===o.id;
+                    let bc=colors.earthLight, bg='white';
+                    if (q1Submitted && correct){ bc=colors.success; bg=colors.successBg; }
+                    else if (q1Submitted && sel){ bc=colors.error; bg=colors.errorBg; }
+                    else if (sel){ bc=colors.primary; bg=colors.sand; }
+                    return (
+                      <button key={o.id} onClick={()=>{ if(!q1Submitted){ setQ1Sel(o.id); setQ1LastWrong(null); } }} disabled={q1Submitted}
+                        className="w-full p-3 rounded-lg border-2 text-left text-sm" style={{ borderColor: bc, backgroundColor: bg, color: colors.earthDark, cursor: q1Submitted?'default':'pointer' }}>
+                        <span className="font-bold mr-2" style={{ color: colors.primary }}>{o.id.toUpperCase()}.</span>{o.text}
+                      </button>
+                    );
+                  })}
+                </div>
+                {q1LastWrong && !q1Submitted && (
+                  <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: colors.warningBg }}>
+                    <p className="text-sm" style={{ color:'#92400e' }}>{q1OptionFeedback[q1LastWrong]}</p>
+                  </div>
+                )}
+                {q1Submitted && q1Attempts>=3 && (
+                  <div className="mt-3 p-3 rounded-lg" style={{ backgroundColor: colors.warningBg }}>
+                    <p className="text-sm font-medium" style={{ color:'#92400e' }}>Here’s what we were looking for:</p>
+                    <p className="text-sm mt-1" style={{ color:'#92400e' }}>{q1Answer}</p>
+                  </div>
+                )}
+              </div>
+              {q1Submitted ? (
+                <>
+                  <KeyInsightBox>
+                    <p>You drew a line: things related to the repair work go in — wherever they sit, whatever their job — and everything else stays out. Not where it is, not what it’s used for, not who “owns” it. Just: <strong>is this part of the repair work, or not?</strong> Nobody taught you to draw it. You did it because the work had become its own thing, and you needed to see it clearly.</p>
+                  </KeyInsightBox>
+                  <ContinueButton onClick={()=>goto('complete')}>Continue →</ContinueButton>
+                </>
+              ) : (
+                <ContinueButton onClick={submitQ1} disabled={q1Sel===null}>Submit</ContinueButton>
+              )}
+            </div>
+          );
+
+          const renderComplete = () => (
+            <div>
+              <Header />
+              <div className="text-center mb-4"><div className="text-5xl mb-2">🏆</div><h2 className="text-2xl font-bold" style={{ color: colors.primary }}>Tutorial 1.1 complete</h2></div>
+              <div className="p-5 rounded-lg mb-4" style={{ backgroundColor:'white', border:'2px solid '+colors.earthLight }}>
+                <p className="font-semibold mb-2" style={{ color: colors.primary }}>What you discovered</p>
+                <ul className="space-y-1 text-sm" style={{ color: colors.earthDark }}>
+                  <li>✓ A little success made it impossible to keep the repair work in your head.</li>
+                  <li>✓ Sorting your stuff, you drew a line — <strong>related to the repair work, or not</strong>.</li>
+                  <li>✓ That line isn’t about <em>where</em> things are or <em>what</em> they’re used for. It’s about what belongs to the work.</li>
+                </ul>
+              </div>
+              <KeyInsightBox title="💡 The deeper point">
+                The very first thing <em>anyone who runs anything</em> does — from a one-person bike shop to the largest company on earth — is decide what’s inside it and what’s outside. You just did it by hand, sorting a pile of stuff, without being taught. Hold onto that line; everything else builds on it.
+              </KeyInsightBox>
+              <div className="p-5 rounded-lg mb-4" style={{ backgroundColor: colors.clayLight, border:'1px solid '+colors.clayDark }}>
+                <p className="font-semibold mb-1" style={{ color: colors.earthDark }}>Coming next — 1.2: Insurance and Maria</p>
+                <p className="text-sm" style={{ color: colors.earthDark }}>That fire two blocks over wasn’t nothing. You call an insurance agent — and her form wants a <strong>dollar value</strong> next to every item on your Things tab.</p>
+              </div>
+              <div className="flex gap-3">
+                <a href="12-insurance-and-maria.html" className="px-6 py-3 rounded-lg font-semibold text-white no-underline inline-block" style={{ backgroundColor: colors.primary }}>Next: 1.2 →</a>
+                <button onClick={handleRestart} className="px-6 py-3 rounded-lg font-semibold border-2 cursor-pointer bg-transparent" style={{ borderColor: colors.primary, color: colors.primary }}>↺ Restart</button>
+              </div>
+            </div>
+          );
+
+          const renderPhase = () => {
+            if (phase==='welcome') return renderWelcome();
+            if (phase==='scenarios') return renderScenarios();
+            if (phase==='sort') return renderSort();
+            if (phase==='reflect') return renderReflect();
+            if (phase==='complete') return renderComplete();
+            return null;
+          };
+
+          return (
+            <div className="min-h-screen py-6 px-4" style={{ backgroundColor: colors.sand }}>
+              <div className="max-w-2xl mx-auto">{renderPhase()}</div>
+              {showGlossary && <GlossaryModal />}
+            </div>
+          );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<TutorialApp />);
+    </script>
+</body>
+</html>
