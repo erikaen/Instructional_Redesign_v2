@@ -2706,3 +2706,9 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .calc-input { background: #28262e; border-color: var(--border-strong); color: #eeebf5; }
   .calc-input:focus { border-color: var(--primary); }
 }
+
+/* ===== XL-ITEM SELECTED — clickable spreadsheet-row highlight (1.4 pairs) ===== */
+.xl-item.selected { background: var(--primary-faint); outline: 2px solid var(--accent); outline-offset: -2px; }
+@media (prefers-color-scheme: dark) {
+  .xl-item.selected { background: var(--primary-faint); outline-color: var(--accent); }
+}
