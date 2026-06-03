@@ -6,7 +6,7 @@ description: >-
   and dark mode. Treats shared.css and shared.js as append-only unless the user
   explicitly approves deletions or refactors. Use when creating or editing HTML,
   shared.css, shared.js, fixing inconsistent UI, or when the user mentions
-  shared styles, dark mode, or design consistency.
+  shared styles, dark mode, design consistency, or cross-page HTML consistency.
 ---
 
 # Instructional Shared Styles
@@ -115,6 +115,20 @@ Prefer existing patterns from sibling pages (`index.html`, `11-getting-organized
 
 **Tokens:** `--primary`, `--primary-light`, `--primary-faint`, `--accent`, `--page-bg`, `--border`, `--border-strong`, `--success-*`, `--error-*`, `--warn-*`, `--font-xlg` through `--font-xs`.
 
+## Cross-page consistency (required before editing HTML)
+
+Before creating or changing any `.html` file:
+
+1. List or scan all HTML files in the repo (root and subfolders).
+2. Open at least **two reference pages** for the same page type:
+   - Welcome/landing → `index.html`
+   - Activity/tutorial → `11-getting-organized.html` first; use `12-insurance-and-maria.html` or `13-anna-and-the-bank-statement.html` for heavier patterns
+3. Match the same **document skeleton**, wrapper classes (`.page`, `.prework-wrap`), header chrome, script load order, feedback markup, and Lucide usage — do not invent a new layout shell.
+4. Before adding UI, search `shared.css` and grep other HTML files for an existing class or markup pattern.
+5. After edits, compare against references: header, cards, buttons, feedback, dark-mode surfaces, icon calls.
+
+When changing `shared.css` or `shared.js`, consider impact on **all** HTML pages that use those classes or helpers — do not optimize for one page only.
+
 ## Light and dark mode
 
 - Dark mode is system-driven via `@media (prefers-color-scheme: dark)` in `shared.css`.
@@ -127,13 +141,14 @@ Prefer existing patterns from sibling pages (`index.html`, `11-getting-organized
 
 ```
 Task progress:
+- [ ] List HTML files and read 1–2 sibling pages for the same page type
 - [ ] Search shared.css for existing classes before adding new ones
 - [ ] Search shared.js for existing helpers before writing new JS
 - [ ] Edit HTML structure only — no local component CSS
 - [ ] If new classes are required, append to shared.css (light + dark)
 - [ ] If new shared behavior is required, append small functions to shared.js
 - [ ] Stop and explain if an existing shared rule/function seems wrong
-- [ ] Verify light and dark mode visually
+- [ ] Verify markup matches reference pages and both light/dark mode visually
 ```
 
 ## Page-specific JS boundaries
@@ -158,6 +173,7 @@ Do not duplicate data or logic that already lives in `shared.js`.
 
 ## Verification checklist
 
+- [ ] Read 1–2 sibling HTML reference pages before editing
 - [ ] No local CSS component styles in HTML
 - [ ] Existing shared classes used wherever possible
 - [ ] `shared.css` and `shared.js` linked once each
