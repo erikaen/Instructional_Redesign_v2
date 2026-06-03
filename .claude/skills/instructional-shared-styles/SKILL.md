@@ -4,7 +4,8 @@ description: >-
   Enforces visual consistency across Instructional_Redesign_v2 HTML pages using
   only shared.css and shared.js. Preserves colors, typography, spacing, layout,
   and dark mode. Treats shared.css and shared.js as append-only unless the user
-  explicitly approves deletions or refactors. Use when creating or editing HTML,
+  explicitly approves deletions or refactors. Requires user approval in chat before
+  any new shared.css additions. Use when creating or editing HTML,
   shared.css, shared.js, fixing inconsistent UI, or when the user mentions
   shared styles, dark mode, design consistency, or cross-page HTML consistency.
 ---
@@ -63,11 +64,38 @@ Use `alert-triangle` for warnings, `check` for success, `info` for hints — not
 
 * When editing shared.css, treat it as append-only unless I explicitly approve a deletion.
 * Do not remove, rename, reorganize, overwrite, or simplify any existing CSS rules in shared.css.
-* It is okay to add new CSS rules to shared.css if they are genuinely needed for this page and cannot be handled using existing classes.
+* It is okay to add new CSS rules to shared.css if they are genuinely needed for this page and cannot be handled using existing classes — **but only after user approval** (see below).
 * If you think an existing CSS rule should be changed, removed, renamed, or reorganized, stop and explain why instead of making the change.
 * Apply the same caution to shared.js: do not delete, rename, reorganize, or overwrite existing shared JavaScript logic or configuration unless I explicitly approve it.
 * If new JavaScript is needed, prefer adding small, clearly named reusable functions rather than modifying existing shared behavior.
 * If an existing function or configuration seems incorrect or insufficient, explain the issue before changing it.
+
+## shared.css additions — user approval required
+
+**Do not edit `shared.css` until the user has agreed to the planned additions.**
+
+When existing classes are insufficient and new CSS is needed:
+
+1. **Stop** — do not append to `shared.css` yet.
+2. **Plan** every proposed addition: new class names, what each styles, which HTML page(s) need it, design tokens used, and **both light-mode and dark-mode rules** (including facsimile dark block if applicable). A new class is not complete until both modes are planned.
+3. **Post the plan in chat** as a numbered list the user can review. Each item must show **Light** and **Dark** separately. Example:
+
+   ```
+   Proposed shared.css additions (awaiting your approval):
+
+   1. `.my-widget` — container for … on 12-insurance-and-maria.html
+      Light: uses var(--primary), var(--border)
+      Dark: appended in main @media block
+
+   2. `.my-widget-title` — heading inside widget
+      …
+   ```
+
+4. **Wait for explicit approval.** The user may approve all items, approve specific items only, or request changes. Do not proceed on silence or implied consent.
+5. **Add only approved items** — append to `shared.css` with **both light and dark rules** for each approved class. Skip anything not approved. Do not add light-only CSS and dark mode later without a new approval step.
+6. If the user rejects the plan, use existing classes only or ask how they want to proceed.
+
+HTML-only work may continue while waiting, using existing shared classes — but do not add local CSS in HTML as a workaround for unapproved shared.css changes.
 
 ## Required page skeleton
 
@@ -144,9 +172,10 @@ When changing `shared.css` or `shared.js`, consider impact on **all** HTML pages
 Task progress:
 - [ ] List HTML files and read 1–2 sibling pages for the same page type
 - [ ] Search shared.css for existing classes before adding new ones
+- [ ] If new CSS is needed: post a numbered plan in chat and wait for user approval before editing shared.css
 - [ ] Search shared.js for existing helpers before writing new JS
 - [ ] Edit HTML structure only — no local component CSS
-- [ ] If new classes are required, append to shared.css (light + dark)
+- [ ] Append only user-approved rules to shared.css (light + dark)
 - [ ] If new shared behavior is required, append small functions to shared.js
 - [ ] Stop and explain if an existing shared rule/function seems wrong
 - [ ] Verify markup matches reference pages and both light/dark mode visually
@@ -166,6 +195,7 @@ Do not duplicate data or logic that already lives in `shared.js`.
 |--------|------------|
 | `<style>` or inline `style=""` for components | Existing or new classes in `shared.css` |
 | Editing/removing existing shared.css rules | Append new rules; ask before changing old ones |
+| Appending to shared.css without user approval | Post numbered plan in chat; wait; add only approved items |
 | Modifying existing shared.js functions | Add new helper; explain issue first |
 | Raw hex in HTML | Token-based classes in `shared.css` |
 | Light-mode-only new component | Light rules + dark `@media` rules appended to `shared.css` |
@@ -178,6 +208,7 @@ Do not duplicate data or logic that already lives in `shared.js`.
 - [ ] No local CSS component styles in HTML
 - [ ] Existing shared classes used wherever possible
 - [ ] `shared.css` and `shared.js` linked once each
+- [ ] New shared.css additions were planned in chat and approved before editing the file
 - [ ] New CSS/JS appended only — no deletions or refactors without approval
 - [ ] New classes use design tokens and include dark mode
 - [ ] New JS checked against `shared.js` first
