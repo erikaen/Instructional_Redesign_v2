@@ -63,8 +63,11 @@
         <div class="dialog-text">&ldquo;Two totals matter now. The records show <strong>Assets of $3,410</strong> and <strong>Liabilities of $1,450</strong>. The gap between them is your <strong>net</strong>. What is it?&rdquo;</div>
       </div>
       <div class="mc-card">
-        <div class="mc-q">Your net = Assets &minus; Liabilities = $3,410 &minus; $1,450 = ?</div>
-        <div class="mc-opts" id="netOpts"></div>
+        <div class="mc-q">Your net = Assets &minus; Liabilities = $3,410 &minus; $1,450 =</div>
+        <div class="btn-row">
+          <input id="netInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Your net" onkeydown="if(event.key==='Enter'){checkNet();}">
+          <button class="btn btn-primary" onclick="checkNet()">Check</button>
+        </div>
         <div class="feedback" id="netFb"></div>
       </div>
       <div id="netClose" hidden></div>
@@ -98,22 +101,22 @@
       </div>
       <div class="dialog-box anna">
         <div class="dialog-label">ANNA</div>
-        <div class="dialog-text">&ldquo;Plenty of real entities have nobody to call an owner &mdash; a food bank, a museum, a public university, a church. Real books, real Assets and Liabilities, same identity: A &minus; L = the residual. But the for-profit label <strong>Equities</strong> grew up where owners exist. With no owner, the convention writes <strong>Net Assets</strong> instead. Same arithmetic &mdash; the residual is still just recorded Assets minus recorded Liabilities. The name changes because the <em>accountability</em> does: your shop answers to you; a food bank answers to its mission and its donors.&rdquo;</div>
+        <div class="dialog-text">&ldquo;Plenty of real entities have nobody to call an owner &mdash; a food bank, a museum, a public university, a church. Real books, real Assets and Liabilities, same identity: Assets &minus; Liabilities = the residual. But the for-profit label <strong>Equities</strong> grew up where owners exist. With no owner, the convention writes <strong>Net Assets</strong> instead. Same arithmetic &mdash; the residual is still just recorded Assets minus recorded Liabilities. The name changes because the <em>accountability</em> does: your shop answers to you; a food bank answers to its mission and its donors.&rdquo;</div>
       </div>
       <div class="org-compare">
         <div class="org-card">
           <div class="org-type">Owned entity</div>
-          <div class="org-name">Your repair work</div>
           <div class="org-eq"><div class="org-eq-row">
             <span class="pill a">Assets</span><span class="pill-op">&minus;</span><span class="pill l">Liabilities</span><span class="pill-op">=</span><span class="pill e">Equities</span>
           </div></div>
+          <div class="eq-panel-caption">Accountable to owners.</div>
         </div>
         <div class="org-card">
           <div class="org-type">No-owner entity</div>
-          <div class="org-name">Food bank, museum, church</div>
           <div class="org-eq"><div class="org-eq-row">
             <span class="pill a">Assets</span><span class="pill-op">&minus;</span><span class="pill l">Liabilities</span><span class="pill-op">=</span><span class="pill na">Net Assets</span>
           </div></div>
+          <div class="eq-panel-caption">Accountable to mission &amp; donors.</div>
         </div>
       </div>
       <div class="insight-box">
@@ -131,7 +134,7 @@
       <div class="section-card">
         <div class="card-title">None of this is new</div>
         <ul class="bullet-list">
-          <li><strong>~3000 BCE.</strong> Scribes in Mesopotamia pressed wedge marks into clay: so much grain in the storehouse, so many sheep, who owes what at harvest. A list of things and a list of promises &mdash; your Assets and Liabilities tabs, five thousand years early.</li>
+          <li><strong>~3000 BCE.</strong> Scribes in Mesopotamia pressed wedge marks into clay: so much grain in the storehouse, so many sheep, who owes what at harvest. A list of things and a list of promises &mdash; your Assets and Liabilities tabs, five thousand years early. That half is ancient.</li>
           <li><strong>1494.</strong> A Franciscan friar, Luca Pacioli, writes down a method Italian merchants had used for two centuries: every change gets recorded on <em>two</em> sides. The pairing you stumbled into in your Reasons tab &mdash; where each change had a partner &mdash; is exactly it.</li>
         </ul>
       </div>
@@ -153,17 +156,17 @@
         <ul class="bullet-list check">
           <li>You drew a boundary for a purpose &mdash; that&rsquo;s the <strong>entity</strong>. You made it; you didn&rsquo;t find it.</li>
           <li>Recorded Assets minus recorded Liabilities is <strong>Equities</strong> &mdash; a definitional residual, not a pile of cash, and not your net worth: the records leave real things out.</li>
-          <li><strong>A &minus; L = Equities</strong> is the <strong>accounting identity</strong> &mdash; it holds by construction, and the page that lays it out is the <strong>balance sheet</strong>.</li>
+          <li><strong>Assets &minus; Liabilities = Equities</strong> is the <strong>accounting identity</strong> &mdash; it holds by construction, and the page that lays it out is the <strong>balance sheet</strong>.</li>
           <li>The residual grows two ways &mdash; <strong>contributed</strong> and <strong>generated</strong> &mdash; and a no-owner entity calls it <strong>Net Assets</strong>.</li>
           <li>Every change has two sides: <strong>double-entry</strong>, how every number on every statement gets there.</li>
         </ul>
       </div>
       <div class="insight-box">
         <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> You invented the system. Now you have its names</div>
-        <p>Identify the entity. List its Assets and Liabilities. The residual is Equities (owned) or Net Assets (no owner). A &minus; L = E, by construction &mdash; the accounting identity, on a balance sheet, maintained by double-entry. Pacioli wrote it down in 1494. You worked it out at the workbench in May.</p>
+        <p>Identify the entity. List its Assets and Liabilities. The residual is Equities (owned) or Net Assets (no owner). Assets &minus; Liabilities = Equities, by construction &mdash; the accounting identity, on a balance sheet, maintained by double-entry. Pacioli wrote it down in 1494. You worked it out at the workbench in May.</p>
       </div>
       <div class="next-card">
-        <div class="next-card-label">Coming Next &mdash; Module 2</div>
+        <div class="next-card-label">Coming Next</div>
         <p>Module 1 closes here. In Module 2 you&rsquo;ll put these tools to work reading what other people prepared &mdash; and face the decisions that come with choosing a form for the work.</p>
       </div>
       <div class="btn-row">
@@ -199,12 +202,12 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== data ===== */
 var ASSETS_SNAPSHOT = [
-  { cat:'EQUIPMENT', amount:1200 },
-  { cat:'COMPUTER EQUIPMENT', amount:610 },
-  { cat:'SUPPLIES', amount:200 },
-  { cat:'FIXTURES', amount:750 },
-  { cat:'CASH', amount:0 },
-  { cat:'RIGHT OF USE', amount:650 }
+  { cat:'EQUIPMENT', amount:1200, note:'Tools, stand, compressor, the contributed gear' },
+  { cat:'COMPUTER EQUIPMENT', amount:610, note:'Laptop' },
+  { cat:'SUPPLIES', amount:200, note:'Parts on the shelf' },
+  { cat:'FIXTURES', amount:750, note:'Desk, shelving, display, pegboard' },
+  { cat:'CASH', amount:0, note:'Repair cash on hand (May 31)' },
+  { cat:'RIGHT OF USE', amount:650, note:'The prepaid last month — a right to occupy the space' }
 ];
 var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.amount;},0); // 3410
 
@@ -255,10 +258,10 @@ var glossaryTerms = [
   { term:'Asset', def:'Something you have — a present right to an economic benefit. The gear, the parts, the prepaid month, cash.' },
   { term:'Liability', def:'Something you owe — a present obligation to transfer an economic benefit later. The card balance, Smith&rsquo;s frame.' },
   { term:'Equities', def:'The definitional residual: recorded Assets minus recorded Liabilities. Plural, to keep it from sounding like one thing the owner has. It&rsquo;s a difference, not a pile of cash.' },
-  { term:'Accounting identity', def:'A − L = Equities. Not an equation to solve — it holds by construction, for every entity, every time.' },
+  { term:'Accounting identity', def:'Assets − Liabilities = Equities. Not an equation to solve — it holds by construction, for every entity, every time.' },
   { term:'Balance sheet', def:'The one page that lays out Assets, Liabilities, and the residual between them — built around the identity, not assembled to satisfy one.' },
   { term:'Entity', def:'The subject of a set of books — a perspective you draw a boundary around and adopt for a purpose. You make it; you don&rsquo;t find it.' },
-  { term:'Net Assets', def:'What an entity with no owners calls its residual (A − L). Same definition as Equities; the label differs because accountability runs to mission and donors, not owners.' },
+  { term:'Net Assets', def:'What an entity with no owners calls its residual (Assets − Liabilities). Same definition as Equities; the label differs because accountability runs to mission and donors, not owners.' },
   { term:'Double-entry', def:'The centuries-old method in which every change has two sides. Still how every number on every financial statement gets there.' },
   { term:'Contributed', def:'The part of the residual you put in from outside the work — your own cash, gear you already owned.' },
   { term:'Generated', def:'The part of the residual the work itself produced and you kept — customer work, less what it used up.' }
@@ -276,6 +279,7 @@ var excelTab = 'assets';
 var reasonsExpanded = { contributed:false, generated:false };
 var curWbContainer = null;
 var netDone = false;
+var netAttempts = 0;
 var idStage = 0;
 
 /* ===== phase nav + progress ===== */
@@ -287,30 +291,31 @@ function goto(p){
   document.getElementById('progFill').style.width = pct+'%';
   document.getElementById('progPct').textContent = pct+'%';
   window.scrollTo(0,0);
-  if(p==='assemble'){ excelTab='assets'; renderWorkbook('assembleWb'); renderNetQuiz(); }
+  if(p==='assemble'){ excelTab='assets'; renderWorkbook('assembleWb'); }
   if(p==='identity'){ idStage=0; renderIdentity(); }
   if(window.lucide) lucide.createIcons();
 }
 function restart(){
   excelTab='assets'; reasonsExpanded={ contributed:false, generated:false };
-  netDone=false; idStage=0;
+  netDone=false; netAttempts=0; idStage=0;
   document.getElementById('netClose').hidden = true;
-  document.getElementById('netFb').className = 'feedback';
+  var netFb = document.getElementById('netFb'); netFb.className = 'feedback'; netFb.innerHTML = '';
+  var netInput = document.getElementById('netInput'); netInput.value = ''; netInput.disabled = false;
   goto('welcome');
 }
 
 /* ===== Excel workbook ===== */
 function assetsSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Asset</div><div class="xl-v">B&nbsp;&nbsp;Value</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Assets — what I have</div><div class="xl-v">B&nbsp;&nbsp;Value</div></div>';
   var n=0;
   ASSETS_SNAPSHOT.forEach(function(c){ n++;
-    html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+catLabel(c.cat)+'</div><div class="xl-v">'+d(c.amount)+'</div></div>';
+    html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+catLabel(c.cat)+' &mdash; '+c.note+'</div><div class="xl-v">'+d(c.amount)+'</div></div>';
   });
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Total Assets — what the records show</div><div class="xl-v">'+d(ASSETS_TOTAL)+'</div></div>';
   return html;
 }
 function liabilitiesSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Liability (what I owe)</div><div class="xl-v">B&nbsp;&nbsp;Amount</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Liabilities — what I owe</div><div class="xl-v">B&nbsp;&nbsp;Amount</div></div>';
   LIABILITIES_SNAPSHOT.forEach(function(l,i){
     html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+l.label+'</div><div class="xl-v">'+d(l.amount)+'</div></div>';
   });
@@ -323,7 +328,7 @@ function cashSheet(){
   var totalIn = inflows.reduce(function(s,f){return s+f.amount;},0);
   var totalOut = outflows.reduce(function(s,f){return s+f.amount;},0);
   var onHand = totalIn + totalOut;
-  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Repair cash — May</div><div class="cash-sheet-sub">Once the entity boundary is drawn, the repair work&rsquo;s cash is one of its assets.</div></div>';
+  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Repair cash — May</div></div>';
   html += '<div class="cash-group in"><div class="cash-group-label">Cash in</div>';
   inflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">+'+d(f.amount)+'</span></div>'; });
   html += '<div class="cash-subtotal"><span>Total in</span><span class="cash-line-amt">'+d(totalIn)+'</span></div></div>';
@@ -331,7 +336,6 @@ function cashSheet(){
   outflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">'+d(f.amount)+'</span></div>'; });
   html += '<div class="cash-subtotal"><span>Total out</span><span class="cash-line-amt">'+d(totalOut)+'</span></div></div>';
   html += '<div class="cash-net"><span class="cash-net-label">Cash on hand (May 31)</span><span class="cash-net-val">'+d(onHand)+'</span></div>';
-  html += '<div class="cash-foot">Includes the $960 you put in &mdash; it nets to nothing on hand by month-end.</div>';
   return html;
 }
 function reasonsGroup(key, title, rows, total){
@@ -345,7 +349,7 @@ function reasonsGroup(key, title, rows, total){
   return html;
 }
 function reasonsSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Reason — why your net moved</div><div class="xl-v">B&nbsp;&nbsp;Change</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Reasons — why your net moved (two kinds)</div><div class="xl-v">B&nbsp;&nbsp;Change</div></div>';
   html += reasonsGroup('contributed', 'CONTRIBUTED', CONTRIBUTED_ROWS, CONTRIBUTED_TOTAL);
   html += reasonsGroup('generated', 'GENERATED', GENERATED_ROWS, GENERATED_TOTAL);
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL — the reasons</div><div class="xl-v">'+sd(REASONS_TOTAL)+'</div></div>';
@@ -371,45 +375,33 @@ function renderWorkbook(containerId){
 function setTab(id){ playClick(); excelTab = id; if(curWbContainer) renderWorkbook(curWbContainer); }
 function toggleReasonsCat(k){ playClick(); reasonsExpanded[k] = !reasonsExpanded[k]; if(curWbContainer) renderWorkbook(curWbContainer); }
 
-/* ===== net MCQ (assemble) ===== */
-var NET_OPTIONS = [
-  { id:'a', text:'$1,960' },
-  { id:'b', text:'$4,860' },
-  { id:'c', text:'$1,450' },
-  { id:'d', text:'$1,860' }
-];
-var NET_CORRECT = 'a';
-var netWrongFb = {
-  b: 'That&rsquo;s Assets <em>plus</em> Liabilities. The net is what&rsquo;s left when you take what you owe <em>out of</em> what you have: $3,410 &minus; $1,450.',
-  c: 'That&rsquo;s just the Liabilities total. The net is what&rsquo;s left after you subtract them from Assets: $3,410 &minus; $1,450.',
-  d: 'Close &mdash; check the subtraction again. $3,410 &minus; $1,450.'
-};
-function renderNetQuiz(){
-  document.getElementById('netOpts').innerHTML = NET_OPTIONS.map(function(o){
-    return '<div class="mc-opt" data-id="'+o.id+'" onclick="answerNet(\''+o.id+'\')"><div class="mc-letter">'+o.id.toUpperCase()+'</div><div>'+o.text+'</div></div>';
-  }).join('');
-}
-function answerNet(id){
+/* ===== net check (assemble) ===== */
+function checkNet(){
   if(netDone) return;
+  var raw = document.getElementById('netInput').value;
+  var val = parseInt(String(raw).replace(/[^0-9-]/g,''), 10);
   var fb = document.getElementById('netFb');
-  var el = document.querySelector('#netOpts .mc-opt[data-id="'+id+'"]');
-  document.querySelectorAll('#netOpts .mc-opt').forEach(function(x){ x.classList.remove('selected'); });
-  if(id===NET_CORRECT){
-    playSuccess(); netDone = true;
-    el.classList.add('correct');
-    document.querySelectorAll('#netOpts .mc-opt').forEach(function(x){ x.classList.add('locked'); });
-    fb.className = 'feedback'; fb.classList.remove('show');
-    var close = document.getElementById('netClose');
-    close.hidden = false;
-    close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Your net is '+d(NET)+'</div><p>What&rsquo;s left when Liabilities come out of Assets. Hold onto that number.</p></div>'+
-      '<button class="btn-continue btn-block" onclick="goto(\'identity\')">Where did '+d(NET)+' come from? &rarr;</button>';
-    if(window.lucide) lucide.createIcons();
+  if(val === NET){
+    playSuccess(); revealNet();
   } else {
-    playNope();
-    el.classList.add('wrong');
-    fb.className = 'feedback err show';
-    fb.innerHTML = netWrongFb[id];
+    netAttempts++;
+    if(netAttempts >= 3){ playNope(); revealNet(); }
+    else {
+      playNope();
+      fb.className = 'feedback err show';
+      fb.innerHTML = 'Not quite &mdash; subtract what you owe from what you have. '+d(ASSETS_TOTAL)+' &minus; '+d(LIABILITIES_TOTAL)+'.';
+    }
   }
+}
+function revealNet(){
+  netDone = true;
+  document.getElementById('netInput').disabled = true;
+  var fb = document.getElementById('netFb'); fb.className = 'feedback'; fb.classList.remove('show');
+  var close = document.getElementById('netClose');
+  close.hidden = false;
+  close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Your net is '+d(NET)+'</div><p>What&rsquo;s left when Liabilities come out of Assets. Hold onto that number.</p></div>'+
+    '<button class="btn-continue btn-block" onclick="goto(\'identity\')">Where did '+d(NET)+' come from? &rarr;</button>';
+  if(window.lucide) lucide.createIcons();
 }
 
 /* ===== identity (staged reveal) ===== */
@@ -423,7 +415,7 @@ function matchDisplay(){
     '<span class="id-op">=</span>'+
     '<div class="id-group"><span class="id-label">Contributed + Generated</span><span class="id-num">'+d(CONTRIBUTED_TOTAL)+' + '+d(GENERATED_TOTAL)+'</span></div>'+
     '<span class="id-op">=</span>'+
-    '<div class="id-group"><span class="id-label">They match</span><span class="id-num">'+d(REASONS_TOTAL)+' <i data-lucide="check" class="licon"></i></span></div>'+
+    '<div class="id-group"><span class="id-num">'+d(REASONS_TOTAL)+' <i data-lucide="check" class="licon"></i></span></div>'+
     '</div>';
 }
 function identityFormula(){
@@ -435,7 +427,7 @@ function identityFormula(){
 }
 function balanceSheet(){
   return '<div class="acct-col">'+
-    '<div class="bs-header"><div class="bs-header-title">The Balance Sheet</div><div class="bs-header-date">Your repair work &middot; May 31</div></div>'+
+    '<div class="bs-header"><div class="bs-header-title">THE BALANCE SHEET</div><div class="bs-header-date">Your repair work &middot; May 31</div></div>'+
     '<div class="acct-line"><span>Assets</span><span class="acct-val">'+d(ASSETS_TOTAL)+'</span></div>'+
     '<div class="acct-line"><span>&minus; Liabilities</span><span class="acct-val">'+d(LIABILITIES_TOTAL)+'</span></div>'+
     '<div class="acct-total"><span>= Equities</span><span>'+d(NET)+'</span></div>'+
