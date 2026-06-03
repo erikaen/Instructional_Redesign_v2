@@ -1,1387 +1,582 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutorial 1.2: Insurance and Maria</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-        @keyframes systemPulse {
-            0%, 100% { opacity: 0.85; transform: scale(1); }
-            50%      { opacity: 1;    transform: scale(1.02); }
-        }
-        .system-sorting { animation: systemPulse 1.2s ease-in-out infinite; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1.2: Insurance and Maria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
 </head>
-<body class="min-h-screen" style="background-color: #f5f1e8;">
-    <div id="root"></div>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script type="text/babel">
-        const { useState } = React;
-
-        /**
-         * Tutorial 1.2 (redesign): Insurance and Anna — Mockup
-         * CMU METALS Accounting Prework — Module 1, Activity 2
-         *
-         * @version 2.0-mockup
-         * @date 2026-05-25
-         * @description Rebuilt to align with 1.1 v3's location-based redesign:
-         *   - Pre-entity language throughout. "Repair work," not "shop work."
-         *     Entity words ("shop", "the business") stay off the page until
-         *     they appear deliberately as wrong-answer trap material later.
-         *   - Welcome + Maria's arrival combined into one step.
-         *   - Two-sheet form structure:
-         *       Sheet 1 — categorize (Equipment / Supplies / Fixtures). No $.
-         *       Sheet 2 — value (receipts + credit card statement). $.
-         *   - Both sheets reuse v3's autocomplete pattern: student does a few,
-         *     system handles the volume. Same move, applied to a categorization
-         *     rule (sheet 1) and a documents-to-dollars rule (sheet 2).
-         *   - Sidebar shows the first ~8 of ~31 items + "+23 more" indicator.
-         *     The full list streams into the bins after autocomplete fires.
-         *   - Not-on-form items (rented space, cash) surface during sheet 1
-         *     through Maria's nudges. They stay on the broader list, picked
-         *     up by Anna in step 4 (cash) or left as a learning moment (space).
-         *   - Anna names Liabilities. The Things and Promises lists get
-         *     renamed to Assets and Liabilities. "Equities" and "Entity"
-         *     wait for 1.5.
-         */
-
-        // ============================================================
-        // Color palette
-        // ============================================================
-        const colors = {
-            primary: '#00356b',
-            sand: '#f5f1e8',
-            earth: '#8b7355',
-            earthLight: '#d4c4a8',
-            earthDark: '#5c4d3d',
-            accent: '#c9a227',
-            clay: '#c4a574',
-            clayLight: '#e8dcc8',
-            clayDark: '#a08050',
-            success: '#22c55e',
-            successBg: '#f0fdf4',
-            warning: '#f59e0b',
-            warningBg: '#fffbeb',
-            error: '#dc2626',
-            errorBg: '#fef2f2',
-        };
-
-        // ============================================================
-        // Glossary
-        // ============================================================
-        const glossaryTerms = [
-            { term: 'Insurable property', definition: 'The insurer’s name for what goes on a property policy: things you own and could lose. Not cash, and not what you don’t own.' },
-            { term: 'Property policy', definition: 'Insurance that pays the owner if covered things are damaged or destroyed. Doesn’t cover cash, and doesn’t cover what you don’t own.' },
-            { term: 'Replacement cost', definition: 'What it would cost today to buy a brand-new version of the thing.' },
-            { term: 'Receipt', definition: 'The document a seller gives you when you buy something — it shows what you paid.' },
-            { term: 'Supplier', definition: 'A company you buy from.' },
-        ];
-
-        // ============================================================
-        // Sound functions (Web Audio API)
-        // ============================================================
-        const createAudioContext = () =>
-            new (window.AudioContext || window.webkitAudioContext)();
-
-        const playSuccessTone = () => {
-            try {
-                const ctx = createAudioContext();
-                [523.25, 659.25, 783.99].forEach((freq, i) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain); gain.connect(ctx.destination);
-                    osc.frequency.value = freq; osc.type = 'sine';
-                    const t = ctx.currentTime + i * 0.1;
-                    gain.gain.setValueAtTime(0, t);
-                    gain.gain.linearRampToValueAtTime(0.3, t + 0.02);
-                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
-                    osc.start(t); osc.stop(t + 0.25);
-                });
-                setTimeout(() => ctx.close(), 600);
-            } catch(e) {}
-        };
-
-        const playSoftNope = () => {
-            try {
-                const ctx = createAudioContext();
-                [400, 300].forEach((freq, i) => {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain); gain.connect(ctx.destination);
-                    osc.frequency.value = freq; osc.type = 'sine';
-                    const t = ctx.currentTime + i * 0.12;
-                    gain.gain.setValueAtTime(0, t);
-                    gain.gain.linearRampToValueAtTime(0.2, t + 0.02);
-                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
-                    osc.start(t); osc.stop(t + 0.17);
-                });
-                setTimeout(() => ctx.close(), 400);
-            } catch(e) {}
-        };
-
-        const playBuzzer = () => {
-            try {
-                const ctx = createAudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.frequency.value = 150; osc.type = 'sawtooth';
-                const t = ctx.currentTime;
-                gain.gain.setValueAtTime(0.25, t);
-                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
-                osc.start(t); osc.stop(t + 0.35);
-                setTimeout(() => ctx.close(), 400);
-            } catch(e) {}
-        };
-
-        const playContinueClick = () => {
-            try {
-                const ctx = createAudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.connect(gain); gain.connect(ctx.destination);
-                osc.frequency.value = 600; osc.type = 'sine';
-                const t = ctx.currentTime;
-                gain.gain.setValueAtTime(0, t);
-                gain.gain.linearRampToValueAtTime(0.15, t + 0.01);
-                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
-                osc.start(t); osc.stop(t + 0.1);
-                setTimeout(() => ctx.close(), 150);
-            } catch(e) {}
-        };
-
-        // ============================================================
-        // Data
-        // ============================================================
-        // 31 items carried from 1.1 v3's repair-related Things list. Each is
-        // mapped to one of Maria's three insurable categories (Equipment /
-        // Supplies / Fixtures), to "not-on-form" with a rejectType, or
-        // distinguished from the form entirely. Costs are tuned so the
-        // category subtotals land on clean round numbers:
-        //   Equipment $2,200  |  Supplies $1,200  |  Fixtures $750
-        //   Total insurable     $4,150
-        //   + Cash extra        $50
-        //   Total assets        $4,200
-        // (Supplies dropped from $1,400 → $1,200 because Parts asset value is
-        // $300 on-shelf, not the $500 originally paid. The $200 difference
-        // went into customer jobs — picked up by Anna's bridge line at the
-        // end and analyzed in 1.3.)
-        //
-        // `sourced` controls how the value appears in sheet 2:
-        //   'receipt'      — student types the amount, validating against a visible receipt
-        //   'credit-card'  — student types the amount, validating against the CC statement
-        //   'estimate'     — not entered by hand; rolled up under "+X more (estimate)"
-        // Only items with `sourced` of 'receipt' or 'credit-card' appear by
-        // name in sheet 2's form; everything else is aggregated.
-        // ITEMS — the 1.1 repair Things that ARE insurable property. Matches the 1.1
-        // sort exactly, minus the two non-fit Things (cash drawer, customer receipts);
-        // there are NO not-on-form items in 1.2 anymore. Costs tie to the locked
-        // manifest: Equipment $1,810 (incl. laptop $610), Fixtures $750, Supplies $200
-        // on-shelf (bought $500, $300 used in jobs). `sourced`: 'receipt'/'credit-card'
-        // = bought (has a document); 'estimate' = pre-owned, valued by eBay comp
-        // (laptop + the three contributed machines: grinder, headset press, vacuum).
-        const items = [
-            // EQUIPMENT — durable tools & gear (subtotal $1,200)
-            { id: 'stand',     name: 'Park Tool repair stand',  category: 'equipment', cost: 200, sourced: 'receipt'      },
-            { id: 'conewr',    name: 'Cone wrench set',          category: 'equipment', cost: 65,  sourced: 'receipt'      },
-            { id: 'torque',    name: 'Torque wrench',            category: 'equipment', cost: 95,  sourced: 'receipt'      },
-            { id: 'hex',       name: 'Hex / Allen key set',      category: 'equipment', cost: 45,  sourced: 'receipt'      },
-            { id: 'cutters',   name: 'Cable cutters',            category: 'equipment', cost: 40,  sourced: 'receipt'      },
-            { id: 'breaker',   name: 'Chain breaker',            category: 'equipment', cost: 35,  sourced: 'receipt'      },
-            { id: 'levers',    name: 'Tire levers',              category: 'equipment', cost: 20,  sourced: 'receipt'      },
-            { id: 'compressor',name: 'Air compressor',           category: 'equipment', cost: 180, sourced: 'credit-card' },
-            { id: 'washer',    name: 'Parts washer',             category: 'equipment', cost: 130, sourced: 'credit-card' },
-            { id: 'truing',    name: 'Wheel-truing stand',       category: 'equipment', cost: 170, sourced: 'credit-card' },
-            { id: 'grinder',   name: 'Bench grinder',            category: 'equipment', cost: 90,  sourced: 'estimate'    },
-            { id: 'headset',   name: 'Headset press',            category: 'equipment', cost: 70,  sourced: 'estimate'    },
-            { id: 'vacuum',    name: 'Shop vacuum',              category: 'equipment', cost: 60,  sourced: 'estimate'    },
-
-            // COMPUTER EQUIPMENT — its own category (subtotal $610)
-            { id: 'laptop',    name: 'Laptop',                   category: 'computer',  cost: 610, sourced: 'estimate'    },
-
-            // FIXTURES — storage & built-ins (subtotal $750)
-            { id: 'desk',      name: 'Desk',                     category: 'fixtures',  cost: 250, sourced: 'receipt'      },
-            { id: 'shelves',   name: 'Shelving units',           category: 'fixtures',  cost: 200, sourced: 'receipt'      },
-            { id: 'display',   name: 'Display rack',             category: 'fixtures',  cost: 180, sourced: 'receipt'      },
-            { id: 'pegboard',  name: 'Pegboard + hooks',         category: 'fixtures',  cost: 120, sourced: 'receipt'      },
-
-            // SUPPLIES — parts on the shelf (subtotal $200; bought $500, $300 used in jobs).
-            // `paidAmount` = QBP receipt price; `cost` = what's on the shelf NOW.
-            { id: 'chains',    name: 'Box of chains',            category: 'supplies',  cost: 50, sourced: 'receipt', valueLabel: 'on shelf', paidAmount: 100, countLeft: '½ box left' },
-            { id: 'pads',      name: 'Box of brake pads',        category: 'supplies',  cost: 40, sourced: 'receipt', valueLabel: 'on shelf', paidAmount: 80,  countLeft: '½ box left' },
-            { id: 'cables',    name: 'Box of derailleur cables', category: 'supplies',  cost: 20, sourced: 'receipt', valueLabel: 'on shelf', paidAmount: 40,  countLeft: '½ box left' },
-            { id: 'cassettes', name: 'Cassettes',                category: 'supplies',  cost: 40, sourced: 'receipt', valueLabel: 'on shelf', paidAmount: 80,  countLeft: '½ left' },
-            { id: 'bbs',       name: 'Bottom brackets',          category: 'supplies',  cost: 20, sourced: 'receipt', valueLabel: 'on shelf', paidAmount: 80,  countLeft: '¼ left' },
-            { id: 'spokes',    name: 'Spokes',                   category: 'supplies',  cost: 20, sourced: 'receipt', valueLabel: 'on shelf', paidAmount: 80,  countLeft: '¼ left' },
-            { id: 'tubes',     name: 'Tubes',                    category: 'supplies',  cost: 10, sourced: 'receipt', valueLabel: 'on shelf', paidAmount: 40,  countLeft: '¼ left' },
-        ];
-
-        // Items the student sees in the sidebar during sheet 1 — all from the 1.1
-        // Things list. Every item fits the form now (no non-fit items in 1.2).
-        const visibleIds = ['stand', 'compressor', 'laptop', 'chains', 'pegboard', 'desk'];
-
-        // The Things the welcome screen displays — a representative subset; the rest
-        // are alluded to with a "+ more…" indicator so the volume is visible.
-        const welcomeVisibleIds = ['stand', 'conewr', 'chains', 'pegboard', 'compressor', 'desk'];
-
-        const categoryDefs = [
-            { id: 'equipment', label: 'EQUIPMENT',          sub: 'durable tools and gear',       targetSubtotal: 1200 },
-            { id: 'computer',  label: 'COMPUTER EQUIPMENT', sub: 'computers and devices',         targetSubtotal: 610  },
-            { id: 'supplies',  label: 'SUPPLIES',           sub: 'parts and consumables',         targetSubtotal: 200  },
-            { id: 'fixtures',  label: 'FIXTURES',           sub: 'drawers, storage, built-ins',   targetSubtotal: 750  },
-        ];
-
-        // Sheet 1 miscat nudges — keyed off the item's correct category (robust to the item set).
-        const miscatNudge = (item, attemptedCategory) => {
-            if (item.category === 'equipment') return `${item.name} is Equipment — a durable tool, not parts you use up and not a storage piece.`;
-            if (item.category === 'computer')  return `${item.name} is Computer Equipment — a computer or device, kept separate from your hand tools.`;
-            if (item.category === 'supplies')  return `${item.name} is Supplies — something you go through on jobs, not a tool you keep.`;
-            return `${item.name} is Fixtures — storage or built-ins, not a tool and not parts.`;
-        };
-
-        // Receipts — sourced from Source-Documents/source-documents.html (the canonical facsimiles).
-        // Each receipt is multi-line; `forItem` is the tutorial-form item this receipt is the document for.
-        const receipts = [
-            {
-                id: 'parktool',
-                forItem: 'stand',
-                vendor: 'Cyclesport Supply',
-                vendorSub: 'professional bike tools & equipment',
-                receiptNum: 'Sales Receipt  #SR-4471',
-                date: 'May 3, 2026',
-                paidWith: 'Personal debit card',
-                paidLast4: '•••• 6620',
-                paidNote: 'Not charged to the bike-repair credit card — paid from personal funds.',
-                lineItems: [
-                    { name: 'Park Tool PRS-25 Team Issue Repair Stand', amount: 200 },
-                ],
-                total: 200,
-            },
-            {
-                id: 'tools',
-                forItem: 'conewr',
-                vendor: 'Cyclesport Supply',
-                vendorSub: 'professional bike tools & equipment',
-                receiptNum: 'Sales Receipt  #SR-4488',
-                date: 'May 5, 2026',
-                paidWith: 'Bike-Repair Visa',
-                paidLast4: '•••• 3902',
-                lineItems: [
-                    { name: 'Cone wrench set', amount: 65 },
-                    { name: 'Torque wrench', amount: 95 },
-                    { name: 'Hex / Allen key set', amount: 45 },
-                    { name: 'Cable cutters', amount: 40 },
-                    { name: 'Chain breaker', amount: 35 },
-                    { name: 'Tire levers (set)', amount: 20 },
-                ],
-                total: 300,
-            },
-            {
-                id: 'fixtures',
-                forItem: 'pegboard',
-                vendor: 'Workspace Outfitters',
-                vendorSub: 'store fixtures & furnishings',
-                receiptNum: 'Invoice  #WO-20518',
-                date: 'May 5, 2026',
-                paidWith: 'Bike-Repair Visa',
-                paidLast4: '•••• 3902',
-                lineItems: [
-                    { name: 'Work desk', amount: 250 },
-                    { name: 'Shelving units (×2)', amount: 200 },
-                    { name: 'Display rack', amount: 180 },
-                    { name: 'Pegboard panel + hook set', amount: 120 },
-                ],
-                total: 750,
-            },
-            {
-                id: 'qbp',
-                forItem: ['chains', 'cables'],
-                vendor: 'QBP',
-                vendorSub: 'Quality Bicycle Products — wholesale parts distributor',
-                receiptNum: 'Invoice  #QBP-887341  ·  Ship: UPS Ground',
-                date: 'May 15, 2026',
-                paidWith: 'Bike-Repair Visa',
-                paidLast4: '•••• 3902',
-                lineItems: [
-                    { name: 'Chains (box)', amount: 100 },
-                    { name: 'Brake pads (box)', amount: 80 },
-                    { name: 'Derailleur cables (box)', amount: 40 },
-                    { name: 'Cassettes (×4)', amount: 80 },
-                    { name: 'Bottom brackets (assorted)', amount: 80 },
-                    { name: 'Spokes (bundle)', amount: 80 },
-                    { name: 'Tubes (box)', amount: 40 },
-                ],
-                total: 500,
-            },
-        ];
-
-        // Credit card statement — sourced from Source-Documents/source-documents.html (Doc 6).
-        const creditCard = {
-            issuer: 'Harborline Visa',
-            sub: 'Personal card · repair and personal charges co-mingled',
-            last4: '•••• 3902',
-            period: 'May 1 – May 31, 2026',
-            opened: 'Statement opened May 1, 2026',
-            previousBalance: 0,
-            chargesTotal: 2260,
-            paymentsTotal: 800,
-            newBalance: 1460,
-            transactions: [
-                { date: '05/03', desc: 'Stop & Shop — groceries', charge: 85, payment: null },
-                { date: '05/05', desc: 'Workspace Outfitters — fixtures', charge: 750, payment: null },
-                { date: '05/05', desc: 'Cyclesport Supply — hand tools', charge: 300, payment: null },
-                { date: '05/08', desc: 'Compressor Depot — air compressor', charge: 180, payment: null },
-                { date: '05/09', desc: 'Restaurant — dinner', charge: 55, payment: null },
-                { date: '05/10', desc: 'Industrial Supply — parts washer', charge: 130, payment: null },
-                { date: '05/12', desc: 'Cyclesport Supply — wheel-truing stand', charge: 170, payment: null },
-                { date: '05/14', desc: 'Gas station', charge: 48, payment: null },
-                { date: '05/15', desc: 'QBP — parts order', charge: 500, payment: null },
-                { date: '05/16', desc: 'ACH payment received — thank you', charge: null, payment: 400 },
-                { date: '05/18', desc: 'Streaming service', charge: 16, payment: null },
-                { date: '05/22', desc: 'Pharmacy', charge: 26, payment: null },
-                { date: '05/28', desc: 'ACH payment received — thank you', charge: null, payment: 400 },
-            ],
-        };
-
-        const fmt = (n) => '$' + Number(n).toLocaleString('en-US');
-
-        // ============================================================
-        // App
-        // ============================================================
-        const App = () => {
-            // Navigation
-            const [phase, setPhase] = useState('welcome');
-
-            // UI overlays
-            const [showGlossary, setShowGlossary] = useState(false);
-            const [devMode, setDevMode] = useState(false);
-            const [headerClickCount, setHeaderClickCount] = useState(0);
-
-            // Combined form state — drag OR click to categorize AND value on one form
-            const [s1DraggedId, setS1DraggedId] = useState(null);
-            const [s1SelectedId, setS1SelectedId] = useState(null);     // click-to-place: selected sidebar item (verifiable alt to drag)
-            const [s1Placements, setS1Placements] = useState({});       // { itemId: categoryId }
-            const [s1Nudge, setS1Nudge] = useState(null);               // { type: 'miscat', itemId, message } for a wrong drop
-            const [s1FlashFeedback, setS1FlashFeedback] = useState(null); // 'correct' | 'wrong' drop-zone border flash
-            const [formFilling, setFormFilling] = useState(false);      // "Do the rest" animation in progress
-            const [formDone, setFormDone] = useState(false);            // "Do the rest" completed
-
-            // Valuation — entered on the SAME form. No pre-fill: each number comes from evidence.
-            const [s2Values, setS2Values] = useState({});               // { itemId: '250' } insured / on-shelf value
-            const [paidValues, setPaidValues] = useState({});           // { itemId: '100' } supplies "paid (receipt)" value
-            const [openReceipt, setOpenReceipt] = useState(null);       // { type: 'receipt'|'creditCard', data } popup
-            const [openEbay, setOpenEbay] = useState(false);            // eBay-comp popup (the laptop is the one live look-up)
-            const ebayComps = [520, 610, 585, 640, 515];               // used-laptop sold listings (Doc 9)
-
-            // Locked category totals (target value displayed once the rest is autocompleted)
-            const CATEGORY_TARGETS = { equipment: 1200, computer: 610, supplies: 200, fixtures: 750 };
-
-            const openDocFor = (item) => {
-                if (item.sourced === 'receipt') {
-                    const r = receipts.find(rr =>
-                        Array.isArray(rr.forItem) ? rr.forItem.includes(item.id) : rr.forItem === item.id
-                    );
-                    if (r) setOpenReceipt({ type: 'receipt', data: r, item });
-                } else if (item.sourced === 'credit-card') {
-                    setOpenReceipt({ type: 'creditCard', data: creditCard, item });
-                }
-            };
-
-            // ============================================================
-            // Constants
-            // ============================================================
-            const phaseOrder = [
-                'welcome',
-                'form',
-                'maria-readback',
-                'complete',
-            ];
-
-            // ============================================================
-            // Derived state
-            // ============================================================
-            const progress = Math.round(
-                (phaseOrder.indexOf(phase) / (phaseOrder.length - 1)) * 100
-            );
-
-            // ---- Combined-form derived state ----
-            const placeable = items.filter(i => i.category !== null);
-            const s1Visible = visibleIds.map(id => items.find(i => i.id === id)).filter(Boolean);
-            const s1HiddenCount = items.length - s1Visible.length;
-            const s1SidebarRemaining = s1Visible.filter(i => !s1Placements[i.id]);
-
-            // Value correctness (entered against evidence; no pre-fill).
-            const isS2Correct = (id) => {
-                const item = items.find(i => i.id === id);
-                return item && item.cost != null && Number(s2Values[id]) === item.cost;
-            };
-            const isS2Wrong = (id) => {
-                const v = Number(s2Values[id]);
-                return v > 0 && !isS2Correct(id);
-            };
-            // Supplies "paid (receipt)" sub-value.
-            const isPaidCorrect = (id) => {
-                const item = items.find(i => i.id === id);
-                return item && item.paidAmount != null && Number(paidValues[id]) === item.paidAmount;
-            };
-            const isPaidWrong = (id) => {
-                const v = Number(paidValues[id]);
-                return v > 0 && !isPaidCorrect(id);
-            };
-
-            // A category is "proven" once one placed item there is hand-valued from its evidence.
-            // Supplies needs BOTH the paid (receipt) amount AND the on-shelf count.
-            const catHandValued = (catId) => {
-                const placed = placeable.filter(i => s1Placements[i.id] === catId);
-                if (catId === 'supplies') return placed.some(i => isS2Correct(i.id) && isPaidCorrect(i.id));
-                return placed.some(i => isS2Correct(i.id));
-            };
-            const formTriggerMet = categoryDefs.every(c => catHandValued(c.id));
-
-            // Subtotals/total read straight off the entered values (auto-filled rows included).
-            const subtotalForCat = (catId) =>
-                placeable.filter(i => s1Placements[i.id] === catId)
-                         .reduce((s, i) => s + (Number(s2Values[i.id]) || 0), 0);
-
-            const totalInsurable = categoryDefs.reduce((s, c) => s + subtotalForCat(c.id), 0);
-
-            // ============================================================
-            // Handlers
-            // ============================================================
-            const handleHeaderClick = () => {
-                const n = headerClickCount + 1;
-                setHeaderClickCount(n);
-                if (n >= 3) { setDevMode(!devMode); setHeaderClickCount(0); }
-            };
-
-            const handleRestart = () => {
-                playContinueClick();
-                setPhase('welcome');
-                setS1DraggedId(null); setS1SelectedId(null); setS1Placements({});
-                setS1Nudge(null); setS1FlashFeedback(null);
-                setFormFilling(false); setFormDone(false);
-                setS2Values({}); setPaidValues({}); setOpenReceipt(null); setOpenEbay(false);
-            };
-
-            const handleS1DragStart = (e, id) => {
-                setS1DraggedId(id);
-                e.dataTransfer.effectAllowed = 'move';
-                e.dataTransfer.setData('text/plain', id);
-            };
-            const handleS1DragEnd = () => setS1DraggedId(null);
-            const handleDragOver = (e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; };
-
-            // Shared placement logic — used by BOTH drag-drop and click-to-place.
-            const placeItem = (id, categoryId) => {
-                const item = items.find(i => i.id === id);
-                if (!item) return;
-                if (item.category !== categoryId) {
-                    setS1Nudge({ type: 'miscat', itemId: item.id, message: miscatNudge(item, categoryId) });
-                    setS1FlashFeedback('wrong');
-                    playSoftNope();
-                } else {
-                    setS1Placements(prev => ({ ...prev, [item.id]: categoryId }));
-                    setS1Nudge(null);
-                    setS1FlashFeedback('correct');
-                    playSuccessTone();
-                }
-                setTimeout(() => setS1FlashFeedback(null), 800);
-            };
-
-            const handleFormDrop = (e, categoryId) => {
-                e.preventDefault();
-                const id = e.dataTransfer.getData('text/plain') || s1DraggedId;
-                setS1DraggedId(null);
-                if (id) placeItem(id, categoryId);
-            };
-
-            // Click-to-place (verifiable alt to HTML5 drag): pick a sidebar item, then click a section.
-            const handleSidebarClick = (id) => {
-                if (formFilling || formDone) return;
-                setS1SelectedId(prev => (prev === id ? null : id));
-            };
-            const handleSectionClick = (categoryId) => {
-                if (formFilling || formDone || !s1SelectedId) return;
-                placeItem(s1SelectedId, categoryId);
-                setS1SelectedId(null);
-            };
-
-            const handleS2ValueChange = (id, v) =>
-                setS2Values(prev => ({ ...prev, [id]: v.replace(/[^0-9]/g, '') }));
-            const handlePaidChange = (id, v) =>
-                setPaidValues(prev => ({ ...prev, [id]: v.replace(/[^0-9]/g, '') }));
-
-            // "Do the rest" — after one item per category is hand-valued, place + auto-value the remainder.
-            const handleDoTheRest = () => {
-                if (formFilling || formDone) return;
-                playContinueClick();
-                setFormFilling(true);
-                const remaining = placeable.filter(i => !s1Placements[i.id] || !isS2Correct(i.id));
-                remaining.forEach((item, i) => {
-                    setTimeout(() => {
-                        setS1Placements(prev => ({ ...prev, [item.id]: item.category }));
-                        setS2Values(prev => ({ ...prev, [item.id]: String(item.cost) }));
-                        if (item.paidAmount != null) setPaidValues(prev => ({ ...prev, [item.id]: String(item.paidAmount) }));
-                        if (i === remaining.length - 1) {
-                            setTimeout(() => { setFormFilling(false); setFormDone(true); playSuccessTone(); }, 250);
-                        }
-                    }, i * 45);
-                });
-            };
-
-
-            // ============================================================
-            // Reusable components
-            // ============================================================
-            const Header = () => (
-                <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: colors.primary }}>
-                    <div className="flex justify-between items-start">
-                        <div onClick={handleHeaderClick} style={{ cursor: 'pointer' }}>
-                            <h1 className="text-lg font-bold text-white">Tutorial 1.2: Insurance and Maria</h1>
-                            <p className="text-sm mt-1" style={{ color: colors.earthLight }}>
-                                Bicycle repairs &middot; ~10 min
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <a href="index.html"
-                               className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer no-underline inline-flex items-center justify-center"
-                               title="Return to Main" aria-label="Return to Main">🏠</a>
-                            <button onClick={() => setShowGlossary(true)}
-                                    className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer"
-                                    title="Glossary" aria-label="Open glossary">📖</button>
-                            <button onClick={handleRestart}
-                                    className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer"
-                                    title="Restart tutorial" aria-label="Restart tutorial">↺</button>
-                        </div>
-                    </div>
-                    <div className="mt-4">
-                        <div className="flex justify-between text-xs mb-1" style={{ color: 'rgba(255,255,255,0.7)' }}>
-                            <span>Progress</span><span>{progress}%</span>
-                        </div>
-                        <div className="h-2 rounded-full"
-                             style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
-                             role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
-                            <div className="h-full rounded-full transition-all duration-500"
-                                 style={{ width: progress + '%', backgroundColor: colors.accent }} />
-                        </div>
-                    </div>
-                    {devMode && (
-                        <div className="mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.2)' }}>
-                            <p className="text-xs mb-2" style={{ color: 'rgba(255,255,255,0.7)' }}>Dev: skip to phase</p>
-                            <div className="flex flex-wrap gap-1">
-                                {phaseOrder.map(p => (
-                                    <button key={p} onClick={() => setPhase(p)}
-                                            className="px-2 py-1 rounded text-xs border-0 cursor-pointer"
-                                            style={{
-                                                backgroundColor: phase === p ? 'white' : 'rgba(255,255,255,0.2)',
-                                                color: phase === p ? colors.primary : 'white',
-                                            }}>{p}</button>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
-
-            const NarrativeBlock = ({ children }) => (
-                <div className="p-4 rounded-lg mb-4 italic"
-                     style={{ backgroundColor: colors.sand, borderLeft: `4px solid ${colors.accent}`, color: '#374151' }}>
-                    {children}
-                </div>
-            );
-
-            const MariaBox = ({ children, prefix }) => (
-                <div className="rounded-lg p-4 mb-3 border-2"
-                     style={{ borderColor: colors.primary, backgroundColor: 'white' }}>
-                    <p className="text-xs font-bold mb-2 tracking-wide" style={{ color: colors.primary }}>MARIA</p>
-                    <div className="text-sm italic" style={{ color: colors.earthDark }}>
-                        {prefix && <span style={{ fontStyle: 'normal', color: colors.earth }}>{prefix} </span>}
-                        {children}
-                    </div>
-                </div>
-            );
-
-            const AnnaBox = ({ children }) => (
-                <div className="rounded-lg p-4 mb-3 border-2"
-                     style={{ borderColor: colors.clayDark, backgroundColor: 'white' }}>
-                    <p className="text-xs font-bold mb-2 tracking-wide" style={{ color: colors.primary }}>ANNA</p>
-                    <div className="text-sm italic" style={{ color: colors.earthDark }}>{children}</div>
-                </div>
-            );
-
-            const YouBox = ({ children }) => (
-                <div className="rounded-lg p-3 mb-3"
-                     style={{ borderLeft: `4px solid ${colors.earth}`, backgroundColor: '#fafaf7' }}>
-                    <p className="text-xs font-bold mb-1 tracking-wide" style={{ color: colors.earth }}>YOU</p>
-                    <div className="text-sm italic" style={{ color: colors.earthDark }}>{children}</div>
-                </div>
-            );
-
-            const InsightPanel = ({ children }) => (
-                <div className="p-4 rounded-lg border-2 mb-4"
-                     style={{ backgroundColor: colors.successBg, borderColor: colors.success }}>
-                    <div className="flex items-start gap-2">
-                        <span className="text-lg mt-0.5 flex-shrink-0" style={{ color: colors.success }}>✓</span>
-                        <div style={{ color: '#166534' }}>{children}</div>
-                    </div>
-                </div>
-            );
-
-            const KeyInsightBox = ({ children }) => (
-                <div className="p-4 rounded-lg border-2 mb-4"
-                     style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
-                    <div className="flex items-start gap-3">
-                        <span className="text-lg flex-shrink-0 mt-0.5" style={{ color: colors.accent }}>💡</span>
-                        <div style={{ color: colors.earthDark }}>{children}</div>
-                    </div>
-                </div>
-            );
-
-            const ContinueButton = ({ onClick, children = 'Continue', disabled = false }) => (
-                <button onClick={() => { if (!disabled) { playContinueClick(); onClick(); } }}
-                        disabled={disabled}
-                        className="w-full py-3 rounded-lg font-bold text-white flex items-center justify-center gap-2 border-0 cursor-pointer disabled:cursor-not-allowed mb-4"
-                        style={{ backgroundColor: disabled ? colors.earth : colors.primary, opacity: disabled ? 0.5 : 1 }}>
-                    {children} →
-                </button>
-            );
-
-            const GlossaryModal = () => (
-                <div className="fixed inset-0 flex items-center justify-center p-4 z-50"
-                     style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-                    <div className="bg-white rounded-xl max-w-md w-full" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
-                        <div className="p-4 border-b flex justify-between items-center sticky top-0 bg-white"
-                             style={{ borderColor: colors.earthLight }}>
-                            <h3 className="font-bold" style={{ color: colors.primary }}>📖 Glossary</h3>
-                            <button onClick={() => setShowGlossary(false)}
-                                    className="text-gray-500 hover:text-gray-700 text-2xl font-light border-0 bg-transparent cursor-pointer"
-                                    aria-label="Close glossary">✕</button>
-                        </div>
-                        <div className="p-4 space-y-3">
-                            {glossaryTerms.map((t, i) => (
-                                <div key={i}>
-                                    <p className="font-semibold text-sm" style={{ color: colors.primary }}>{t.term}</p>
-                                    <p className="text-xs mt-0.5" style={{ color: colors.earthDark }}>{t.definition}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            );
-
-            // ============================================================
-            // Phase renderers
-            // ============================================================
-            const renderWelcome = () => (
-                <div className="p-4 max-w-2xl mx-auto">
-                    <Header />
-
-                    <NarrativeBlock>
-                        You called Citizens Mutual last week about insurance &mdash; you didn&rsquo;t want to be
-                        caught flat-footed if something happened. Maria, the agent, is coming by this
-                        afternoon to write a policy. She said she&rsquo;d need to know what&rsquo;s here.
-                        <br /><br />
-                        Good thing you started that <strong>Things</strong> tab.
-                    </NarrativeBlock>
-
-                    {/* The Things tab carried in from 1.1 — the student's own Excel workbook */}
-                    <div className="rounded-lg overflow-hidden shadow-sm mb-4" style={{ border: `1px solid ${colors.earthLight}` }}>
-                        <div className="px-3 py-2 text-xs font-semibold" style={{ backgroundColor: '#f1f5f9', color: colors.earthDark, borderBottom: `1px solid ${colors.earthLight}` }}>
-                            📊 Bike-Repair.xlsx
-                        </div>
-                        <div style={{ backgroundColor: 'white' }}>
-                            <div className="grid" style={{ gridTemplateColumns: '28px 1fr' }}>
-                                <div style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', borderRight: '1px solid #e2e8f0' }}></div>
-                                <div className="text-xs py-1 px-2 font-semibold" style={{ backgroundColor: '#f8fafc', color: colors.earthDark, borderBottom: '1px solid #e2e8f0' }}>A&nbsp;&nbsp;Things (what I have for the repair work)</div>
-                            </div>
-                            {welcomeVisibleIds.map((id, r) => {
-                                const item = items.find(i => i.id === id);
-                                return (
-                                    <div key={id} className="grid" style={{ gridTemplateColumns: '28px 1fr' }}>
-                                        <div className="text-xs text-center py-1.5" style={{ backgroundColor: '#f8fafc', color: colors.earth, borderBottom: '1px solid #e2e8f0', borderRight: '1px solid #e2e8f0' }}>{r + 1}</div>
-                                        <div className="text-sm py-1.5 px-2" style={{ borderBottom: '1px solid #e2e8f0', color: colors.earthDark }}>{item ? item.name : ''}</div>
-                                    </div>
-                                );
-                            })}
-                            <div className="grid" style={{ gridTemplateColumns: '28px 1fr' }}>
-                                <div className="text-xs text-center py-1.5" style={{ backgroundColor: '#f8fafc', color: colors.earth, borderBottom: '1px solid #e2e8f0', borderRight: '1px solid #e2e8f0' }}>{welcomeVisibleIds.length + 1}</div>
-                                <div className="text-sm py-1.5 px-2 italic" style={{ borderBottom: '1px solid #e2e8f0', color: colors.earth }}>+ {items.length - welcomeVisibleIds.length} more&hellip;</div>
-                            </div>
-                        </div>
-                        <div className="flex items-end px-2 pt-1" style={{ backgroundColor: '#f1f5f9', borderTop: `1px solid ${colors.earthLight}` }}>
-                            <div className="px-3 py-1 text-xs font-semibold rounded-t" style={{ backgroundColor: 'white', color: '#217346', borderTop: '2px solid #217346' }}>Things</div>
-                            <div className="px-3 py-1 text-xs" style={{ color: colors.earthLight }}>&#65291;</div>
-                        </div>
-                    </div>
-
-                    <div className="rounded-lg p-4 border-2 mb-4"
-                         style={{ backgroundColor: 'white', borderColor: colors.earthLight }}>
-                        <h3 className="font-bold mb-3" style={{ color: colors.primary }}>What You&rsquo;ll Discover</h3>
-                        <ul className="space-y-2 text-sm" style={{ color: colors.earthDark }}>
-                            <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span>
-                                Every Thing on your list needs a dollar value &mdash; and they don&rsquo;t all come from the same place.</li>
-                            <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span>
-                                Most values you&rsquo;ll read straight off a receipt; for gear you&rsquo;ve had a while, you&rsquo;ll work it out another way.</li>
-                            <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span>
-                                By the end, the insurer has her own name for the list.</li>
-                        </ul>
-                    </div>
-
-                    <NarrativeBlock>
-                        Thursday, 2pm. The doorbell jingles. Maria walks in with a clipboard.
-                    </NarrativeBlock>
-
-                    <MariaBox>
-                        &ldquo;Hi &mdash; Maria from Citizens Mutual. Good to meet you. I&rsquo;ll write you a property
-                        policy &mdash; I need an inventory of what you have first. Here&rsquo;s the form. Use your
-                        list: drop each thing into the right section, and put a dollar amount on it while
-                        you&rsquo;re there. Most amounts come straight off a receipt; one or two you&rsquo;ll have
-                        to look up.&rdquo;
-                    </MariaBox>
-
-                    <ContinueButton onClick={() => setPhase('form')}>
-                        Start the inventory
-                    </ContinueButton>
-                </div>
-            );
-
-            const renderForm = () => {
-                const interactionDisabled = formFilling || formDone;
-                const selectedItem = s1SelectedId ? items.find(i => i.id === s1SelectedId) : null;
-
-                // One row inside a category section (Equipment / Computer / Fixtures).
-                const renderItemRow = (item) => {
-                    const isLaptop = item.id === 'laptop';
-                    const isMachine = item.sourced === 'estimate' && !isLaptop;
-                    const evLabel = item.sourced === 'credit-card' ? 'card' : isMachine ? 'eBay comp' : 'receipt';
-                    return (
-                        <div key={item.id} className="flex items-center gap-3 px-2 py-1.5"
-                             style={{ backgroundColor: 'white', borderBottom: `1px solid ${colors.earthLight}` }}>
-                            <span className="flex-1 text-sm" style={{ color: colors.earthDark }}>{item.name}</span>
-                            {isLaptop
-                                ? <button onClick={(e) => { e.stopPropagation(); setOpenEbay(true); }}
-                                          className="w-24 text-right text-xs italic underline border-0 bg-transparent cursor-pointer"
-                                          style={{ color: colors.primary }} title="Look up comparable used prices">eBay comp</button>
-                                : isMachine
-                                    ? <span className="w-24 text-right text-xs italic" style={{ color: colors.earth }}>eBay comp</span>
-                                    : <button onClick={(e) => { e.stopPropagation(); openDocFor(item); }}
-                                              className="w-24 text-right text-xs italic underline border-0 bg-transparent cursor-pointer"
-                                              style={{ color: colors.primary }} title="Show the document">{evLabel}</button>}
-                            {(formDone || isMachine)
-                                ? <span className="w-24 text-right text-sm mono" style={{ color: colors.earthDark }}>{fmt(Number(s2Values[item.id]) || 0)}</span>
-                                : <span className="w-24 flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
-                                      <span className="text-sm mono" style={{ color: colors.earth }}>$</span>
-                                      <input type="text" inputMode="numeric" value={s2Values[item.id] || ''}
-                                          onChange={(e) => handleS2ValueChange(item.id, e.target.value)}
-                                          onKeyDown={(e) => { if (e.key === 'Enter') e.target.blur(); }}
-                                          placeholder="?" className="w-16 px-1 py-0.5 rounded mono text-sm text-right"
-                                          style={{ border: '2px solid ' + (isS2Correct(item.id) ? colors.success : isS2Wrong(item.id) ? colors.error : colors.accent), backgroundColor: 'white', color: colors.earthDark, fontSize: '16px' }} />
-                                  </span>}
-                        </div>
-                    );
-                };
-
-                // One row inside the Supplies section — TWO entries: paid (receipt) + on-shelf count.
-                const renderSupplyRow = (item) => (
-                    <div key={item.id} className="flex items-center gap-3 px-2 py-1.5"
-                         style={{ backgroundColor: 'white', borderBottom: `1px solid ${colors.earthLight}` }}>
-                        <span className="flex-1 text-sm" style={{ color: colors.earthDark }}>{item.name}</span>
-                        {formDone
-                            ? <span className="w-24 text-right text-sm mono" style={{ color: colors.earth }}>{fmt(Number(paidValues[item.id]) || 0)}</span>
-                            : <span className="w-24 flex items-center justify-end gap-1" onClick={(e) => e.stopPropagation()}>
-                                  <span className="text-sm mono" style={{ color: colors.earth }}>$</span>
-                                  <input type="text" inputMode="numeric" value={paidValues[item.id] || ''}
-                                      onChange={(e) => handlePaidChange(item.id, e.target.value)}
-                                      onKeyDown={(e) => { if (e.key === 'Enter') e.target.blur(); }}
-                                      placeholder="?" className="w-14 px-1 py-0.5 rounded mono text-sm text-right"
-                                      style={{ border: '2px solid ' + (isPaidCorrect(item.id) ? colors.success : isPaidWrong(item.id) ? colors.error : colors.accent), backgroundColor: 'white', color: colors.earthDark, fontSize: '16px' }} />
-                              </span>}
-                        {formDone
-                            ? <span className="w-24 text-right text-sm mono" style={{ color: colors.earthDark }}>{fmt(Number(s2Values[item.id]) || 0)}<span className="block text-xs italic" style={{ color: colors.earth }}>{item.countLeft}</span></span>
-                            : <span className="w-24 flex flex-col items-end" onClick={(e) => e.stopPropagation()}>
-                                  <span className="flex items-center gap-1">
-                                      <span className="text-sm mono" style={{ color: colors.earth }}>$</span>
-                                      <input type="text" inputMode="numeric" value={s2Values[item.id] || ''}
-                                          onChange={(e) => handleS2ValueChange(item.id, e.target.value)}
-                                          onKeyDown={(e) => { if (e.key === 'Enter') e.target.blur(); }}
-                                          placeholder="?" className="w-14 px-1 py-0.5 rounded mono text-sm text-right"
-                                          style={{ border: '2px solid ' + (isS2Correct(item.id) ? colors.success : isS2Wrong(item.id) ? colors.error : colors.accent), backgroundColor: 'white', color: colors.earthDark, fontSize: '16px' }} />
-                                  </span>
-                                  <span className="text-xs italic" style={{ color: colors.earth }}>{item.countLeft}</span>
-                              </span>}
-                    </div>
-                );
-
-                const renderSection = (cat) => {
-                    const placed = placeable.filter(i => s1Placements[i.id] === cat.id);
-                    const isSupplies = cat.id === 'supplies';
-                    const flashBorder = s1FlashFeedback === 'correct' ? colors.success
-                                      : s1FlashFeedback === 'wrong'   ? colors.error
-                                      : (selectedItem && !interactionDisabled) ? colors.accent : colors.earthLight;
-                    return (
-                        <div key={cat.id} className="mb-3">
-                            <p className="text-xs font-bold tracking-wide" style={{ color: colors.earth }}>{cat.label}</p>
-                            <p className="text-xs italic mb-1" style={{ color: colors.earth }}>{cat.sub}</p>
-                            <div className="border-2 border-dashed rounded"
-                                 onDragOver={handleDragOver}
-                                 onDrop={(e) => handleFormDrop(e, cat.id)}
-                                 onClick={() => handleSectionClick(cat.id)}
-                                 style={{
-                                     borderColor: flashBorder,
-                                     backgroundColor: placed.length === 0 ? colors.sand : 'white',
-                                     minHeight: '52px',
-                                     cursor: (selectedItem && !interactionDisabled) ? 'pointer' : 'default',
-                                 }}>
-                                {placed.length === 0 && (
-                                    <p className="text-xs italic text-center py-3" style={{ color: colors.earth }}>
-                                        {(selectedItem && !interactionDisabled) ? `click to place “${selectedItem.name}” here` : 'drop items here'}
-                                    </p>
-                                )}
-                                {placed.length > 0 && (
-                                    <>
-                                        {isSupplies && (
-                                            <div className="flex items-center gap-3 px-2 py-1 text-xs font-semibold"
-                                                 style={{ color: colors.earth, borderBottom: `1px solid ${colors.earthLight}`, backgroundColor: '#fafaf7' }}>
-                                                <span className="flex-1">Item</span>
-                                                <button onClick={(e) => { e.stopPropagation(); openDocFor(items.find(i => i.id === 'chains')); }}
-                                                        className="w-24 text-right italic underline border-0 bg-transparent cursor-pointer"
-                                                        style={{ color: colors.primary }} title="QBP receipt">paid (receipt)</button>
-                                                <span className="w-24 text-right">on shelf now</span>
-                                            </div>
-                                        )}
-                                        {placed.map(item => isSupplies ? renderSupplyRow(item) : renderItemRow(item))}
-                                    </>
-                                )}
-                            </div>
-                            {placed.length > 0 && (
-                                <div className="flex justify-end pt-1 px-1">
-                                    <span className="text-xs mono font-bold" style={{ color: colors.earthDark }}>
-                                        {cat.label} subtotal: {fmt(subtotalForCat(cat.id))}
-                                    </span>
-                                </div>
-                            )}
-                        </div>
-                    );
-                };
-
-                return (
-                    <div className="p-4 max-w-5xl mx-auto">
-                        <Header />
-
-                        <NarrativeBlock>
-                            Maria&rsquo;s form has four sections &mdash; Equipment, Computer Equipment, Supplies,
-                            Fixtures. Take one item into each section and put a dollar amount on it &mdash; open the
-                            <strong> receipt</strong> it came on, or look it up. Once the pattern is clear for all
-                            four, you can finish the rest in one go.
-                        </NarrativeBlock>
-
-                        {selectedItem && !interactionDisabled && (
-                            <div className="rounded-lg p-2 mb-3 text-xs"
-                                 style={{ backgroundColor: '#fef9e7', border: `1px solid ${colors.accent}`, color: colors.earthDark }}>
-                                Selected <strong>{selectedItem.name}</strong> &mdash; click the section it belongs in. (Or just drag it.)
-                            </div>
-                        )}
-
-                        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
-                            {/* Sidebar: the Things list — draggable AND click-to-select */}
-                            <div className="md:col-span-4">
-                                <div className="rounded-lg p-3"
-                                     style={{ border: `1px solid ${colors.earthLight}`, backgroundColor: 'white' }}>
-                                    <p className="text-xs font-bold mb-1 tracking-wide" style={{ color: colors.primary }}>
-                                        📌 YOUR THINGS LIST
-                                    </p>
-                                    <p className="text-xs italic mb-3" style={{ color: colors.earth }}>(repair-related, from 1.1)</p>
-
-                                    {formDone ? (
-                                        <p className="text-xs italic" style={{ color: colors.earth }}>All placed.</p>
-                                    ) : (
-                                        <>
-                                            <div className="space-y-1">
-                                                {s1SidebarRemaining.map(item => {
-                                                    const selected = s1SelectedId === item.id;
-                                                    return (
-                                                        <div key={item.id}
-                                                             draggable={!interactionDisabled}
-                                                             onDragStart={(e) => handleS1DragStart(e, item.id)}
-                                                             onDragEnd={handleS1DragEnd}
-                                                             onClick={() => handleSidebarClick(item.id)}
-                                                             className="px-2 py-1 rounded text-xs select-none"
-                                                             style={{
-                                                                 backgroundColor: selected ? colors.accent : (s1DraggedId === item.id ? colors.sand : 'white'),
-                                                                 border: `1px solid ${selected ? colors.accent : colors.primary}`,
-                                                                 color: selected ? 'white' : colors.primary,
-                                                                 cursor: interactionDisabled ? 'default' : 'grab',
-                                                             }}>
-                                                            <span className="font-medium">{item.name}</span>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                            {s1HiddenCount > 0 && (
-                                                <div className="mt-2 px-2 py-1 rounded text-xs italic"
-                                                     style={{ backgroundColor: colors.sand, color: colors.earth, border: `1px dashed ${colors.earthLight}` }}>
-                                                    + {s1HiddenCount} more on the full list
-                                                </div>
-                                            )}
-                                        </>
-                                    )}
-                                </div>
-                            </div>
-
-                            {/* The Insurable Property form — categorize AND value in one place */}
-                            <div className="md:col-span-8">
-                                <div className="rounded-lg overflow-hidden"
-                                     style={{ border: `2px solid ${colors.earthDark}`, backgroundColor: 'white' }}>
-                                    <div className="px-4 py-2 border-b-2"
-                                         style={{ borderColor: colors.earthDark, backgroundColor: '#fafaf7' }}>
-                                        <p className="text-sm font-bold tracking-tight" style={{ color: colors.earthDark }}>
-                                            INSURABLE PROPERTY
-                                        </p>
-                                        <p className="text-xs mt-0.5" style={{ color: colors.earth }}>
-                                            Citizens Mutual Insurance &middot; Coverage Estimate
-                                        </p>
-                                    </div>
-                                    <div className="p-3">
-                                        {categoryDefs.map(renderSection)}
-                                        <div className="flex justify-between pt-3 mt-3 border-t-2"
-                                             style={{ borderColor: colors.earthDark }}>
-                                            <span className="font-bold text-sm" style={{ color: colors.earthDark }}>TOTAL INSURABLE PROPERTY</span>
-                                            <span className="font-bold text-sm mono" style={{ color: colors.earthDark }}>{fmt(totalInsurable)}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Maria's nudge for a wrong drop */}
-                        {s1Nudge && !formDone && (
-                            <MariaBox prefix="(glancing over)">&ldquo;{s1Nudge.message}&rdquo;</MariaBox>
-                        )}
-
-                        {/* Laptop has no receipt — prompt the eBay look-up once it's placed but not yet valued */}
-                        {s1Placements['laptop'] === 'computer' && !isS2Correct('laptop') && !formDone && (
-                            <MariaBox prefix="(looking over)">
-                                &ldquo;That laptop&rsquo;s got no receipt &mdash; you&rsquo;ve had it for years. For
-                                something used, we put down what it would <strong>sell for now</strong>. Tap
-                                <em> eBay comp</em> next to it, look at a few comparable ones, and write down a fair number.&rdquo;
-                            </MariaBox>
-                        )}
-
-                        {/* "A few hours later" — the rest of the list gets worked the same way */}
-                        {formFilling && (
-                            <div className="rounded-lg p-4 mb-3 system-sorting"
-                                 style={{ backgroundColor: colors.primary, color: 'white', textAlign: 'center' }}>
-                                <p className="text-base font-bold">⚙ A few hours later&hellip;</p>
-                                <p className="text-xs mt-1" style={{ color: 'rgba(255,255,255,0.8)' }}>
-                                    You worked down the rest of the list the same way &mdash; receipts read across, the shelf counted.
-                                </p>
-                            </div>
-                        )}
-
-                        {/* Gating checklist + locked "Do the rest" */}
-                        {!formTriggerMet && !formFilling && !formDone && (
-                            <div className="rounded-lg p-3 mb-3 text-xs"
-                                 style={{ backgroundColor: 'white', border: `1px solid ${colors.earthLight}`, color: colors.earthDark }}>
-                                <p className="font-bold mb-1" style={{ color: colors.primary }}>
-                                    Value one item in each section &mdash; from its own evidence &mdash; to unlock the rest:
-                                </p>
-                                <ul className="space-y-0.5">
-                                    {categoryDefs.map(cat => (
-                                        <li key={cat.id} className="flex gap-2">
-                                            <span>{catHandValued(cat.id) ? '✓' : '·'}</span>
-                                            <span>{cat.label}{cat.id === 'supplies' ? ' — both paid (receipt) and on-shelf' : ''}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-                                <button disabled
-                                        className="w-full py-3 mt-3 rounded-lg font-bold text-white text-base border-0"
-                                        style={{ backgroundColor: colors.primary, opacity: 0.35, cursor: 'not-allowed' }}>
-                                    Do the rest →
-                                </button>
-                            </div>
-                        )}
-
-                        {/* Unlocked affordance */}
-                        {formTriggerMet && !formFilling && !formDone && (
-                            <div className="rounded-lg p-3 mb-3 border-2"
-                                 style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
-                                <p className="text-sm mb-2" style={{ color: colors.earthDark }}>
-                                    <strong>The pattern&rsquo;s clear.</strong> You&rsquo;ve valued one item in every
-                                    section, each from its own evidence. You can finish the rest of the list the same
-                                    way &mdash; should be a few hours of work.
-                                </p>
-                                <button onClick={handleDoTheRest}
-                                        className="w-full py-3 rounded-lg font-bold text-white border-0 cursor-pointer"
-                                        style={{ backgroundColor: colors.primary }}>
-                                    Do the rest →
-                                </button>
-                            </div>
-                        )}
-
-                        {/* Done — the supplies gap + the provenance insight, then continue */}
-                        {formDone && (
-                            <>
-                                <MariaBox prefix="(quietly)">
-                                    &ldquo;And notice the supplies &mdash; you <strong>bought $500</strong> of parts,
-                                    but only <strong>$200</strong> is still on the shelf to insure. The rest went into
-                                    jobs. That gap comes back soon.&rdquo;
-                                </MariaBox>
-                                <InsightPanel>
-                                    Every line has a number &mdash; and you can see <em>where each one came from</em>:
-                                    a <strong>receipt</strong> for what you bought, an <strong>eBay comp</strong> for the
-                                    gear you&rsquo;d owned a while, and a <strong>shelf count</strong> for the supplies.
-                                </InsightPanel>
-                                <ContinueButton onClick={() => setPhase('maria-readback')}>
-                                    Maria reads it back
-                                </ContinueButton>
-                            </>
-                        )}
-
-                        {/* eBay-comp popup — comparable used-laptop listings (Doc 9) */}
-                        {openEbay && (
-                            <div onClick={() => setOpenEbay(false)} style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.55)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50, padding: '1rem' }}>
-                                <div onClick={(e) => e.stopPropagation()} className="rounded-md w-full" style={{ backgroundColor: 'white', border: '1px solid #d8d8d8', boxShadow: '0 10px 30px rgba(0,0,0,0.25)', maxWidth: '30rem', padding: '1.5rem 1.75rem', position: 'relative', color: '#1a1a1a' }}>
-                                    <span style={{ position: 'absolute', top: '-11px', left: '18px', backgroundColor: colors.primary, color: 'white', fontSize: '11px', letterSpacing: '0.04em', textTransform: 'uppercase', padding: '3px 9px', borderRadius: '11px' }}>eBay — sold listings</span>
-                                    <button onClick={() => setOpenEbay(false)} className="border-0 bg-transparent cursor-pointer leading-none" style={{ position: 'absolute', top: '8px', right: '12px', fontSize: '18px', color: '#6b6b6b', padding: 0 }} aria-label="Close">✕</button>
-                                    <div style={{ fontSize: '16px', fontWeight: 700 }}>Used laptop &mdash; &ldquo;like yours&rdquo;, good condition</div>
-                                    <p style={{ fontSize: '12.5px', color: '#6b6b6b', marginTop: '2px', marginBottom: '12px' }}>Recent sold prices for comparable used laptops:</p>
-                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '12px' }}>
-                                        {ebayComps.map((p, i) => (
-                                            <span key={i} style={{ fontFamily: 'Consolas, Menlo, monospace', fontSize: '14px', padding: '4px 10px', borderRadius: '6px', backgroundColor: '#f7f7f4', border: '1px solid #e5e5e0' }}>{fmt(p)}</span>
-                                        ))}
-                                    </div>
-                                    <p style={{ fontSize: '13px' }}>They cluster around <strong>$610</strong>. Close this and put that on the form.</p>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Receipt / credit-card popup — facsimile drawn from Source-Documents */}
-                        {openReceipt && (
-                            <div
-                                onClick={() => setOpenReceipt(null)}
-                                style={{
-                                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-                                    backgroundColor: 'rgba(0,0,0,0.55)',
-                                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                    zIndex: 50, padding: '1rem', overflow: 'auto',
-                                }}>
-                                <div
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="rounded-md w-full"
-                                    style={{
-                                        backgroundColor: 'white',
-                                        border: '1px solid #d8d8d8',
-                                        boxShadow: '0 10px 30px rgba(0,0,0,0.25)',
-                                        maxWidth: '36rem',
-                                        padding: '2rem 2.25rem',
-                                        position: 'relative',
-                                        color: '#1a1a1a',
-                                    }}>
-                                    <span style={{
-                                        position: 'absolute', top: '-11px', left: '18px',
-                                        backgroundColor: colors.primary, color: 'white',
-                                        fontSize: '11px', letterSpacing: '0.04em', textTransform: 'uppercase',
-                                        padding: '3px 9px', borderRadius: '11px',
-                                    }}>
-                                        {openReceipt.type === 'creditCard' ? 'Credit card statement' : 'Receipt'}
-                                    </span>
-                                    <button
-                                        onClick={() => setOpenReceipt(null)}
-                                        className="border-0 bg-transparent cursor-pointer leading-none"
-                                        style={{
-                                            position: 'absolute', top: '8px', right: '12px',
-                                            fontSize: '18px', color: '#6b6b6b', padding: 0,
-                                        }}
-                                        aria-label="Close">
-                                        ✕
-                                    </button>
-
-                                    {openReceipt.type === 'receipt' && (() => {
-                                        const r = openReceipt.data;
-                                        return (
-                                            <>
-                                                <div style={{ fontSize: '20px', fontWeight: 700, letterSpacing: '0.01em' }}>
-                                                    {r.vendor}
-                                                    {r.vendorSub && (
-                                                        <span style={{ fontSize: '12px', fontWeight: 400, color: '#6b6b6b', marginLeft: '6px' }}>
-                                                            · {r.vendorSub}
-                                                        </span>
-                                                    )}
-                                                </div>
-                                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12.5px', color: '#6b6b6b', marginTop: '4px', marginBottom: '14px' }}>
-                                                    <span>{r.receiptNum}</span>
-                                                    <span>{r.date}</span>
-                                                </div>
-                                                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
-                                                    <thead>
-                                                        <tr style={{ borderBottom: '1px solid #d8d8d8' }}>
-                                                            <th style={{ textAlign: 'left', padding: '7px 8px', fontWeight: 600 }}>Item</th>
-                                                            <th style={{ textAlign: 'right', padding: '7px 8px', fontWeight: 600, fontFamily: 'Consolas, Menlo, monospace' }}>Amount</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {r.lineItems.map((li, i) => (
-                                                            <tr key={i} style={{ borderBottom: '1px solid #d8d8d8' }}>
-                                                                <td style={{ padding: '7px 8px' }}>{li.name}</td>
-                                                                <td style={{ padding: '7px 8px', textAlign: 'right', fontFamily: 'Consolas, Menlo, monospace' }}>{fmt(li.amount)}</td>
-                                                            </tr>
-                                                        ))}
-                                                        <tr style={{ borderTop: '2px solid #1a1a1a', fontWeight: 700 }}>
-                                                            <td style={{ padding: '7px 8px' }}>Total</td>
-                                                            <td style={{ padding: '7px 8px', textAlign: 'right', fontFamily: 'Consolas, Menlo, monospace' }}>{fmt(r.total)}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginTop: '14px', paddingTop: '10px', borderTop: '1px dashed #d8d8d8' }}>
-                                                    <span><strong>Paid:</strong> {r.paidWith}</span>
-                                                    <span style={{ color: '#6b6b6b' }}>{r.paidLast4}</span>
-                                                </div>
-                                                {r.paidNote && (
-                                                    <p style={{ fontSize: '12.5px', color: '#6b6b6b', marginTop: '8px', fontStyle: 'italic' }}>
-                                                        {r.paidNote}
-                                                    </p>
-                                                )}
-                                            </>
-                                        );
-                                    })()}
-
-                                    {openReceipt.type === 'creditCard' && (() => {
-                                        const c = openReceipt.data;
-                                        return (
-                                            <>
-                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px', marginBottom: '14px' }}>
-                                                    <div>
-                                                        <div style={{ fontSize: '18px', fontWeight: 700 }}>{c.issuer}</div>
-                                                        <div style={{ fontSize: '12.5px', color: '#6b6b6b' }}>{c.sub}</div>
-                                                    </div>
-                                                    <div style={{ fontSize: '12.5px', textAlign: 'right' }}>
-                                                        <div><strong>Statement period:</strong></div>
-                                                        <div>{c.period}</div>
-                                                        <div style={{ color: '#6b6b6b' }}>Account {c.last4}</div>
-                                                        <div style={{ color: '#6b6b6b' }}>{c.opened}</div>
-                                                    </div>
-                                                </div>
-                                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '14px' }}>
-                                                    {[
-                                                        { k: 'Previous balance', v: fmt(c.previousBalance) },
-                                                        { k: 'Charges', v: fmt(c.chargesTotal) },
-                                                        { k: 'Payments', v: fmt(c.paymentsTotal) },
-                                                        { k: 'New balance', v: fmt(c.newBalance), highlight: true },
-                                                    ].map((cell, i) => (
-                                                        <div key={i} style={{
-                                                            padding: '8px 10px',
-                                                            backgroundColor: cell.highlight ? '#fffbe6' : '#f7f7f4',
-                                                            border: cell.highlight ? `1px solid ${colors.accent}` : '1px solid #e5e5e0',
-                                                            borderRadius: '4px',
-                                                        }}>
-                                                            <div style={{ fontSize: '11px', color: '#6b6b6b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{cell.k}</div>
-                                                            <div style={{ fontSize: '14px', fontWeight: 700, fontFamily: 'Consolas, Menlo, monospace' }}>{cell.v}</div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13.5px' }}>
-                                                    <thead>
-                                                        <tr style={{ borderBottom: '1px solid #d8d8d8' }}>
-                                                            <th style={{ textAlign: 'left', padding: '6px 8px', fontWeight: 600 }}>Date</th>
-                                                            <th style={{ textAlign: 'left', padding: '6px 8px', fontWeight: 600 }}>Description</th>
-                                                            <th style={{ textAlign: 'right', padding: '6px 8px', fontWeight: 600 }}>Charges</th>
-                                                            <th style={{ textAlign: 'right', padding: '6px 8px', fontWeight: 600 }}>Payments</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {c.transactions.map((t, i) => (
-                                                            <tr key={i} style={{ borderBottom: '1px solid #d8d8d8' }}>
-                                                                <td style={{ padding: '6px 8px', fontFamily: 'Consolas, Menlo, monospace' }}>{t.date}</td>
-                                                                <td style={{ padding: '6px 8px' }}>{t.desc}</td>
-                                                                <td style={{ padding: '6px 8px', textAlign: 'right', fontFamily: 'Consolas, Menlo, monospace' }}>{t.charge != null ? fmt(t.charge) : '—'}</td>
-                                                                <td style={{ padding: '6px 8px', textAlign: 'right', fontFamily: 'Consolas, Menlo, monospace' }}>{t.payment != null ? fmt(t.payment) : '—'}</td>
-                                                            </tr>
-                                                        ))}
-                                                        <tr style={{ borderTop: '2px solid #1a1a1a', fontWeight: 700 }}>
-                                                            <td style={{ padding: '6px 8px' }}></td>
-                                                            <td style={{ padding: '6px 8px' }}>Totals</td>
-                                                            <td style={{ padding: '6px 8px', textAlign: 'right', fontFamily: 'Consolas, Menlo, monospace' }}>{fmt(c.chargesTotal)}</td>
-                                                            <td style={{ padding: '6px 8px', textAlign: 'right', fontFamily: 'Consolas, Menlo, monospace' }}>{fmt(c.paymentsTotal)}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </>
-                                        );
-                                    })()}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                );
-            };
-
-            const renderMariaReadback = () => (
-                <div className="p-4 max-w-2xl mx-auto">
-                    <Header />
-
-                    <NarrativeBlock>
-                        By late afternoon the form is done. Maria runs her finger down each column.
-                    </NarrativeBlock>
-
-                    <div className="rounded-lg p-4 mb-4"
-                         style={{ border: `1px solid ${colors.earthLight}`, backgroundColor: 'white' }}>
-                        <p className="text-xs font-bold mb-2 tracking-wide" style={{ color: colors.primary }}>INSURABLE TOTALS</p>
-                        <div className="space-y-1 mono text-sm" style={{ color: colors.earthDark }}>
-                            {categoryDefs.map(cat => (
-                                <div key={cat.id} className="flex justify-between">
-                                    <span>{cat.label}</span>
-                                    <span>{fmt(subtotalForCat(cat.id))}</span>
-                                </div>
-                            ))}
-                            <div className="flex justify-between pt-2 mt-2 border-t-2 font-bold"
-                                 style={{ borderColor: colors.earthDark }}>
-                                <span>TOTAL (insurable)</span>
-                                <span>{fmt(totalInsurable)}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <MariaBox>
-                        &ldquo;OK. Equipment {fmt(subtotalForCat('equipment'))}. Computer equipment {fmt(subtotalForCat('computer'))}.
-                        Supplies {fmt(subtotalForCat('supplies'))}. Fixtures {fmt(subtotalForCat('fixtures'))}. Total of
-                        {fmt(totalInsurable)} &mdash; what you have on hand now. Property policy goes on that. Paperwork in the mail.&rdquo;
-                    </MariaBox>
-
-                    <NarrativeBlock>
-                        Maria packs up, hands you a copy of the form, and heads out. The doorbell jingles closed
-                        behind her.
-                    </NarrativeBlock>
-
-                    <ContinueButton onClick={() => setPhase('complete')}>
-                        Finish up
-                    </ContinueButton>
-                </div>
-            );
-
-            const renderComplete = () => {
-                // Deterministic end-of-tutorial summary — the insurable-property inventory only.
-                // 1.2 names just Maria's slice ("insurable property"); "Assets" / "Liabilities" /
-                // the Promises list are Anna's, in 1.3. Subtotals from the locked category targets.
-                const summary = categoryDefs.map(c => ({ label: c.label, amount: CATEGORY_TARGETS[c.id] || 0 }));
-                const summaryTotal = summary.reduce((s, c) => s + c.amount, 0); // $2,760
-
-                return (
-                    <div className="p-4 max-w-2xl mx-auto">
-                        <Header />
-
-                        <div className="text-center mb-6">
-                            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4"
-                                 style={{ backgroundColor: colors.accent }}>
-                                <span className="text-4xl">🏆</span>
-                            </div>
-                            <h2 className="text-2xl font-bold" style={{ color: colors.primary }}>
-                                Tutorial Complete!
-                            </h2>
-                        </div>
-
-                        {/* The finished form — insurable property, by category */}
-                        <div className="rounded-lg p-4 mb-4"
-                             style={{ backgroundColor: 'white', border: `1px solid ${colors.earthLight}` }}>
-                            <p className="text-xs font-bold tracking-wide mb-1" style={{ color: colors.primary }}>📌 INSURABLE PROPERTY</p>
-                            <p className="text-xs italic mb-3" style={{ color: colors.earth }}>Maria&rsquo;s form &mdash; what you own and could lose</p>
-                            <ul className="space-y-1 text-sm" style={{ color: colors.earthDark }}>
-                                {summary.map((c, i) => (
-                                    <li key={i} className="flex justify-between gap-2">
-                                        <span>{c.label}</span>
-                                        <span className="mono flex-shrink-0">{fmt(c.amount)}</span>
-                                    </li>
-                                ))}
-                                <li className="flex justify-between gap-2 pt-2 mt-1 font-bold border-t-2"
-                                    style={{ borderColor: colors.earthDark }}>
-                                    <span>Total insurable</span>
-                                    <span className="mono">{fmt(summaryTotal)}</span>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div className="rounded-lg p-4 mb-4 border-2"
-                             style={{ backgroundColor: 'white', borderColor: colors.success }}>
-                            <h3 className="font-bold mb-3" style={{ color: colors.primary }}>What You Discovered</h3>
-                            <ul className="space-y-2 text-sm" style={{ color: colors.earthDark }}>
-                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span>
-                                    Every Thing on your list got a dollar amount &mdash; but the amounts didn&rsquo;t all
-                                    come from the same place: a <strong>receipt</strong> for what you bought, an
-                                    <strong> eBay comp</strong> for the gear you&rsquo;d owned a while, a
-                                    <strong> shelf count</strong> for the supplies.</li>
-                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span>
-                                    Maria has her own name for the list &mdash; <strong>insurable property</strong>:
-                                    only what you own and could lose. You bought $500 of parts, but only the
-                                    <strong> $200</strong> still on the shelf goes on it.</li>
-                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span>
-                                    You valued one item in each section by hand, then finished the rest in one pass.
-                                    <em> Same move as last time</em> &mdash; once the pattern&rsquo;s clear, the volume is easy.</li>
-                            </ul>
-                        </div>
-
-                        <KeyInsightBox>
-                            <p className="font-semibold mb-2">The deeper point</p>
-                            <p>
-                                This is the same list of Things from last time &mdash; now sorted into categories with a
-                                number on every line. But it&rsquo;s only <em>one</em> slice of it: the part an insurer
-                                cares about. Other people will look at the very same list and see something different.
-                                The bigger picture it all belongs to is still being built &mdash; it&rsquo;ll have a name
-                                by the end of the module.
-                            </p>
-                        </KeyInsightBox>
-
-                        <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: colors.clayLight }}>
-                            <h3 className="font-bold mb-2" style={{ color: colors.primary }}>Coming Next</h3>
-                            <p className="text-sm mb-2" style={{ color: colors.earthDark }}>
-                                Anna&rsquo;s stopping by &mdash; your friend who kept the books at City Cycle for years.
-                                She&rsquo;ll have her own way of looking at this list, and a couple of names for what&rsquo;s on it.
-                            </p>
-                            <p className="font-bold" style={{ color: colors.primary }}>
-                                Next: Tutorial 1.3 &mdash; Anna and the Bank Statement
-                            </p>
-                        </div>
-
-                        <a href="13-anna-and-the-bank-statement.html"
-                           className="block w-full py-3 rounded-lg font-bold text-white text-center no-underline mb-3"
-                           style={{ backgroundColor: colors.primary }}>
-                            Next Tutorial →
-                        </a>
-                        <button onClick={handleRestart}
-                                className="w-full py-3 rounded-lg font-bold cursor-pointer"
-                                style={{ border: `2px solid ${colors.primary}`, color: colors.primary, backgroundColor: 'transparent' }}>
-                            ↺ Restart
-                        </button>
-                    </div>
-                );
-            };
-
-            // ============================================================
-            // Phase router
-            // ============================================================
-            const renderPhase = () => {
-                if (phase === 'welcome')            return renderWelcome();
-                if (phase === 'form')               return renderForm();
-                if (phase === 'maria-readback')     return renderMariaReadback();
-                if (phase === 'complete')           return renderComplete();
-                return null;
-            };
-
-            return (
-                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
-                    {renderPhase()}
-                    {showGlossary && <GlossaryModal />}
-                </div>
-            );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main" id="headerTitle">
+        <h1>Tutorial 1.2: Insurance and Maria</h1>
+        <p class="tut-header-sub">Bicycle repairs &middot; ~10 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart" aria-label="Restart tutorial" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="progress-meta"><span>Progress</span><span id="progPct">0%</span></div>
+    <div class="progress-track"><div class="progress-bar-fill" id="progFill"></div></div>
+    <div class="dev-bar" id="devBar" hidden>
+      <div class="dev-bar-label">Dev: skip to phase</div>
+      <div class="dev-bar-btns" id="devBtns"></div>
+    </div>
+
+    <!-- ===== Phase: welcome ===== -->
+    <div class="phase active" id="phase-welcome">
+      <div class="narrative-block">
+        <p>You called Citizens Mutual last week about insurance &mdash; you didn&rsquo;t want to be caught flat-footed if something happened. Maria, the agent, is coming by this afternoon to write a policy. She said she&rsquo;d need to know what&rsquo;s here.</p>
+        <p>Good thing you started that <strong>Things</strong> tab.</p>
+      </div>
+
+      <div class="xlsx">
+        <div class="xlsx-titlebar"><span><i data-lucide="file-spreadsheet" class="licon"></i> Bike-Repair.xlsx</span></div>
+        <div class="xlsx-grid" id="welcomeXlsx"></div>
+        <div class="xlsx-tabs"><div class="xlsx-tab">Things</div><div class="xlsx-tab-add"><i data-lucide="plus" class="licon"></i></div></div>
+      </div>
+
+      <div class="section-card">
+        <div class="card-title">What You&rsquo;ll Discover</div>
+        <ul class="bullet-list">
+          <li>Every Thing on your list needs a dollar value &mdash; and they don&rsquo;t all come from the same place.</li>
+          <li>Most values you&rsquo;ll read straight off a receipt; for gear you&rsquo;ve had a while, you&rsquo;ll work it out another way.</li>
+          <li>By the end, the insurer has her own name for the list.</li>
+        </ul>
+      </div>
+
+      <div class="narrative-block"><p>Thursday, 2pm. The doorbell jingles. Maria walks in with a clipboard.</p></div>
+
+      <div class="dialog-box maria">
+        <div class="dialog-label">MARIA</div>
+        <div class="dialog-text">&ldquo;Hi &mdash; Maria from Citizens Mutual. Good to meet you. I&rsquo;ll write you a property policy &mdash; I need an inventory of what you have first. Here&rsquo;s the form. Use your list: drop each thing into the right section, and put a dollar amount on it while you&rsquo;re there. Most amounts come straight off a receipt; one or two you&rsquo;ll have to look up.&rdquo;</div>
+      </div>
+
+      <button class="btn-continue btn-block" onclick="goto('form')">Start the inventory &rarr;</button>
+    </div>
+
+    <!-- ===== Phase: form ===== -->
+    <div class="phase" id="phase-form">
+      <div class="narrative-block">
+        <p>Maria&rsquo;s form has four sections &mdash; Equipment, Computer Equipment, Supplies, Fixtures. Take one item into each section and put a dollar amount on it &mdash; open the <strong>receipt</strong> it came on, or look it up. Once the pattern is clear for all four, you can finish the rest in one go.</p>
+      </div>
+
+      <div class="gate-armed" id="selectedHint" hidden></div>
+
+      <div class="ins-layout">
+        <div class="things-sidebar">
+          <div class="things-sidebar-label"><i data-lucide="pin" class="licon"></i> YOUR THINGS LIST</div>
+          <div class="things-sidebar-sub">(repair-related, from 1.1)</div>
+          <div class="sidebar-items" id="sidebarItems"></div>
+          <div class="sidebar-more" id="sidebarMore"></div>
+        </div>
+        <div class="ins-form">
+          <div class="ins-form-head">
+            <div class="ins-form-title">INSURABLE PROPERTY</div>
+            <div class="ins-form-sub">Citizens Mutual Insurance &middot; Coverage Estimate</div>
+          </div>
+          <div class="ins-form-body">
+            <div id="insSections"></div>
+            <div class="ins-total"><span>TOTAL INSURABLE PROPERTY</span><span class="mono" id="insTotal">$0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dialog-box maria" id="formNudge" hidden></div>
+      <div class="dialog-box maria" id="laptopNudge" hidden>
+        <div class="dialog-label">MARIA</div>
+        <div class="dialog-text"><span class="dialog-prefix">(looking over)</span>&ldquo;That laptop&rsquo;s got no receipt &mdash; you&rsquo;ve had it for years. For something used, we put down what it would <strong>sell for now</strong>. Tap <em>eBay comp</em> next to it, look at a few comparable ones, and write down a fair number.&rdquo;</div>
+      </div>
+
+      <div class="system-banner" id="systemBanner" hidden>
+        <div class="system-banner-title"><i data-lucide="settings" class="licon"></i> A few hours later&hellip;</div>
+        <div class="system-banner-sub">You worked down the rest of the list the same way &mdash; receipts read across, the shelf counted.</div>
+      </div>
+
+      <div class="gate-card" id="gateCard">
+        <div class="gate-card-title">Value one item in each section &mdash; from its own evidence &mdash; to unlock the rest:</div>
+        <ul class="gate-list" id="gateList"></ul>
+        <button class="btn-continue btn-block" id="doRestBtn" onclick="doTheRest()" disabled>Do the rest &rarr;</button>
+      </div>
+
+      <div id="formDoneBlock" hidden>
+        <div class="dialog-box maria">
+          <div class="dialog-label">MARIA</div>
+          <div class="dialog-text"><span class="dialog-prefix">(quietly)</span>&ldquo;And notice the supplies &mdash; you <strong>bought $500</strong> of parts, but only <strong>$200</strong> is still on the shelf to insure. The rest went into jobs. That gap comes back soon.&rdquo;</div>
+        </div>
+        <div class="insight-box">
+          <div class="insight-label"><i data-lucide="check" class="licon"></i> Every line came from somewhere</div>
+          <p>Every line has a number &mdash; and you can see <em>where each one came from</em>: a <strong>receipt</strong> for what you bought, an <strong>eBay comp</strong> for the gear you&rsquo;d owned a while, and a <strong>shelf count</strong> for the supplies.</p>
+        </div>
+        <button class="btn-continue btn-block" onclick="goto('maria-readback')">Maria reads it back &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ===== Phase: maria-readback ===== -->
+    <div class="phase" id="phase-maria-readback">
+      <div class="narrative-block"><p>By late afternoon the form is done. Maria runs her finger down each column.</p></div>
+      <div class="totals-card">
+        <div class="totals-label">INSURABLE TOTALS</div>
+        <div id="readbackRows"></div>
+      </div>
+      <div class="dialog-box maria" id="readbackMaria"></div>
+      <div class="narrative-block"><p>Maria packs up, hands you a copy of the form, and heads out. The doorbell jingles closed behind her.</p></div>
+      <button class="btn-continue btn-block" onclick="goto('complete')">Finish up &rarr;</button>
+    </div>
+
+    <!-- ===== Phase: complete ===== -->
+    <div class="phase" id="phase-complete">
+      <div class="complete-head">
+        <div class="trophy-badge"><i data-lucide="trophy"></i></div>
+        <div class="complete-title">Tutorial Complete!</div>
+      </div>
+      <div class="totals-card">
+        <div class="totals-label"><i data-lucide="pin" class="licon"></i> INSURABLE PROPERTY</div>
+        <div class="totals-sub">Maria&rsquo;s form &mdash; what you own and could lose</div>
+        <div class="totals-row"><span>EQUIPMENT</span><span class="mono">$1,200</span></div>
+        <div class="totals-row"><span>COMPUTER EQUIPMENT</span><span class="mono">$610</span></div>
+        <div class="totals-row"><span>SUPPLIES</span><span class="mono">$200</span></div>
+        <div class="totals-row"><span>FIXTURES</span><span class="mono">$750</span></div>
+        <div class="totals-row total"><span>Total insurable</span><span class="mono">$2,760</span></div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You Discovered</div>
+        <ul class="bullet-list check">
+          <li>Every Thing on your list got a dollar amount &mdash; but the amounts didn&rsquo;t all come from the same place: a <strong>receipt</strong> for what you bought, an <strong>eBay comp</strong> for the gear you&rsquo;d owned a while, a <strong>shelf count</strong> for the supplies.</li>
+          <li>Maria has her own name for the list &mdash; <strong>insurable property</strong>: only what you own and could lose. You bought $500 of parts, but only the <strong>$200</strong> still on the shelf goes on it.</li>
+          <li>You valued one item in each section by hand, then finished the rest in one pass. <em>Same move as last time</em> &mdash; once the pattern&rsquo;s clear, the volume is easy.</li>
+        </ul>
+      </div>
+      <div class="insight-box">
+        <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
+        <p>This is the same list of Things from last time &mdash; now sorted into categories with a number on every line. But it&rsquo;s only <em>one</em> slice of it: the part an insurer cares about. Other people will look at the very same list and see something different. The bigger picture it all belongs to is still being built &mdash; it&rsquo;ll have a name by the end of the module.</p>
+      </div>
+      <div class="next-card">
+        <div class="next-card-label">Coming Next &mdash; Tutorial 1.3: Anna and the Bank Statement</div>
+        <p>Anna&rsquo;s stopping by &mdash; your friend who kept the books at City Cycle for years. She&rsquo;ll have her own way of looking at this list, and a couple of names for what&rsquo;s on it.</p>
+      </div>
+      <div class="btn-row">
+        <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Restart</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<!-- ===== Document popup ===== -->
+<div class="doc-overlay" id="docOverlay" onclick="if(event.target===this) closeDoc()">
+  <div class="doc-modal" id="docModal"></div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var items = [
+  { id:'stand', name:'Park Tool repair stand', category:'equipment', cost:200, sourced:'receipt' },
+  { id:'conewr', name:'Cone wrench set', category:'equipment', cost:65, sourced:'receipt' },
+  { id:'torque', name:'Torque wrench', category:'equipment', cost:95, sourced:'receipt' },
+  { id:'hex', name:'Hex / Allen key set', category:'equipment', cost:45, sourced:'receipt' },
+  { id:'cutters', name:'Cable cutters', category:'equipment', cost:40, sourced:'receipt' },
+  { id:'breaker', name:'Chain breaker', category:'equipment', cost:35, sourced:'receipt' },
+  { id:'levers', name:'Tire levers', category:'equipment', cost:20, sourced:'receipt' },
+  { id:'compressor', name:'Air compressor', category:'equipment', cost:180, sourced:'credit-card' },
+  { id:'washer', name:'Parts washer', category:'equipment', cost:130, sourced:'credit-card' },
+  { id:'truing', name:'Wheel-truing stand', category:'equipment', cost:170, sourced:'credit-card' },
+  { id:'grinder', name:'Bench grinder', category:'equipment', cost:90, sourced:'estimate' },
+  { id:'headset', name:'Headset press', category:'equipment', cost:70, sourced:'estimate' },
+  { id:'vacuum', name:'Shop vacuum', category:'equipment', cost:60, sourced:'estimate' },
+  { id:'laptop', name:'Laptop', category:'computer', cost:610, sourced:'estimate' },
+  { id:'desk', name:'Desk', category:'fixtures', cost:250, sourced:'receipt' },
+  { id:'shelves', name:'Shelving units', category:'fixtures', cost:200, sourced:'receipt' },
+  { id:'display', name:'Display rack', category:'fixtures', cost:180, sourced:'receipt' },
+  { id:'pegboard', name:'Pegboard + hooks', category:'fixtures', cost:120, sourced:'receipt' },
+  { id:'chains', name:'Box of chains', category:'supplies', cost:50, sourced:'receipt', paidAmount:100, countLeft:'½ box left' },
+  { id:'pads', name:'Box of brake pads', category:'supplies', cost:40, sourced:'receipt', paidAmount:80, countLeft:'½ box left' },
+  { id:'cables', name:'Box of derailleur cables', category:'supplies', cost:20, sourced:'receipt', paidAmount:40, countLeft:'½ box left' },
+  { id:'cassettes', name:'Cassettes', category:'supplies', cost:40, sourced:'receipt', paidAmount:80, countLeft:'½ left' },
+  { id:'bbs', name:'Bottom brackets', category:'supplies', cost:20, sourced:'receipt', paidAmount:80, countLeft:'¼ left' },
+  { id:'spokes', name:'Spokes', category:'supplies', cost:20, sourced:'receipt', paidAmount:80, countLeft:'¼ left' },
+  { id:'tubes', name:'Tubes', category:'supplies', cost:10, sourced:'receipt', paidAmount:40, countLeft:'¼ left' }
+];
+function findItem(id){ return items.find(function(i){ return i.id===id; }); }
+var visibleIds = ['stand','compressor','laptop','chains','pegboard','desk'];
+var welcomeVisibleIds = ['stand','conewr','chains','pegboard','compressor','desk'];
+var categoryDefs = [
+  { id:'equipment', label:'EQUIPMENT', sub:'durable tools and gear' },
+  { id:'computer', label:'COMPUTER EQUIPMENT', sub:'computers and devices' },
+  { id:'supplies', label:'SUPPLIES', sub:'parts and consumables' },
+  { id:'fixtures', label:'FIXTURES', sub:'drawers, storage, built-ins' }
+];
+var CATEGORY_TARGETS = { equipment:1200, computer:610, supplies:200, fixtures:750 };
+function miscatNudge(item){
+  if(item.category==='equipment') return item.name + ' is Equipment — a durable tool, not parts you use up and not a storage piece.';
+  if(item.category==='computer') return item.name + ' is Computer Equipment — a computer or device, kept separate from your hand tools.';
+  if(item.category==='supplies') return item.name + ' is Supplies — something you go through on jobs, not a tool you keep.';
+  return item.name + ' is Fixtures — storage or built-ins, not a tool and not parts.';
+}
+var ebayComps = [520,610,585,640,515];
+var receipts = [
+  { id:'parktool', forItem:['stand'], vendor:'Cyclesport Supply', vendorSub:'professional bike tools & equipment', receiptNum:'Sales Receipt  #SR-4471', date:'May 3, 2026', paidWith:'Personal debit card', paidLast4:'•••• 6620', paidNote:'Not charged to the bike-repair credit card — paid from personal funds.', lineItems:[{name:'Park Tool PRS-25 Team Issue Repair Stand', amount:200}], total:200 },
+  { id:'tools', forItem:['conewr'], vendor:'Cyclesport Supply', vendorSub:'professional bike tools & equipment', receiptNum:'Sales Receipt  #SR-4488', date:'May 5, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Cone wrench set',amount:65},{name:'Torque wrench',amount:95},{name:'Hex / Allen key set',amount:45},{name:'Cable cutters',amount:40},{name:'Chain breaker',amount:35},{name:'Tire levers (set)',amount:20}], total:300 },
+  { id:'fixtures', forItem:['pegboard'], vendor:'Workspace Outfitters', vendorSub:'store fixtures & furnishings', receiptNum:'Invoice  #WO-20518', date:'May 5, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Work desk',amount:250},{name:'Shelving units (×2)',amount:200},{name:'Display rack',amount:180},{name:'Pegboard panel + hook set',amount:120}], total:750 },
+  { id:'qbp', forItem:['chains','cables','pads','cassettes','bbs','spokes','tubes'], vendor:'QBP', vendorSub:'Quality Bicycle Products — wholesale parts distributor', receiptNum:'Invoice  #QBP-887341  ·  Ship: UPS Ground', date:'May 15, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Chains (box)',amount:100},{name:'Brake pads (box)',amount:80},{name:'Derailleur cables (box)',amount:40},{name:'Cassettes (×4)',amount:80},{name:'Bottom brackets (assorted)',amount:80},{name:'Spokes (bundle)',amount:80},{name:'Tubes (box)',amount:40}], total:500 }
+];
+var creditCard = { issuer:'Harborline Visa', sub:'Personal card · repair and personal charges co-mingled', last4:'•••• 3902', period:'May 1 – May 31, 2026', opened:'Statement opened May 1, 2026', previousBalance:0, chargesTotal:2260, paymentsTotal:800, newBalance:1460, transactions:[
+  {date:'05/03',desc:'Stop & Shop — groceries',charge:85,payment:null},
+  {date:'05/05',desc:'Workspace Outfitters — fixtures',charge:750,payment:null},
+  {date:'05/05',desc:'Cyclesport Supply — hand tools',charge:300,payment:null},
+  {date:'05/08',desc:'Compressor Depot — air compressor',charge:180,payment:null},
+  {date:'05/09',desc:'Restaurant — dinner',charge:55,payment:null},
+  {date:'05/10',desc:'Industrial Supply — parts washer',charge:130,payment:null},
+  {date:'05/12',desc:'Cyclesport Supply — wheel-truing stand',charge:170,payment:null},
+  {date:'05/14',desc:'Gas station',charge:48,payment:null},
+  {date:'05/15',desc:'QBP — parts order',charge:500,payment:null},
+  {date:'05/16',desc:'ACH payment received — thank you',charge:null,payment:400},
+  {date:'05/18',desc:'Streaming service',charge:16,payment:null},
+  {date:'05/22',desc:'Pharmacy',charge:26,payment:null},
+  {date:'05/28',desc:'ACH payment received — thank you',charge:null,payment:400}
+]};
+var glossaryTerms = [
+  { term:'Insurable property', def:'The insurer’s name for what goes on a property policy: things you own and could lose. Not cash, and not what you don’t own.' },
+  { term:'Property policy', def:'Insurance that pays the owner if covered things are damaged or destroyed. Doesn’t cover cash, and doesn’t cover what you don’t own.' },
+  { term:'Replacement cost', def:'What it would cost today to buy a brand-new version of the thing.' },
+  { term:'Receipt', def:'The document a seller gives you when you buy something — it shows what you paid.' },
+  { term:'Supplier', def:'A company you buy from.' }
+];
+function fmt(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+/* ===== state ===== */
+var phaseOrder = ['welcome','form','maria-readback','complete'];
+var placements = {};   // id -> categoryId
+var values = {};       // id -> string
+var paidValues = {};   // id -> string
+var selectedId = null;
+var formDone = false, formFilling = false;
+
+var placeable = items.slice();
+
+/* ===== correctness ===== */
+function isValCorrect(id){ var it=findItem(id); return it && Number(values[id])===it.cost; }
+function isValWrong(id){ var v=Number(values[id]); return v>0 && !isValCorrect(id); }
+function isPaidCorrect(id){ var it=findItem(id); return it && it.paidAmount!=null && Number(paidValues[id])===it.paidAmount; }
+function isPaidWrong(id){ var v=Number(paidValues[id]); return v>0 && !isPaidCorrect(id); }
+function catHandValued(catId){
+  var placed = placeable.filter(function(i){ return placements[i.id]===catId; });
+  if(catId==='supplies') return placed.some(function(i){ return isValCorrect(i.id) && isPaidCorrect(i.id); });
+  return placed.some(function(i){ return isValCorrect(i.id); });
+}
+function formTriggerMet(){ return categoryDefs.every(function(c){ return catHandValued(c.id); }); }
+function subtotalForCat(catId){
+  return placeable.filter(function(i){ return placements[i.id]===catId; })
+    .reduce(function(s,i){ return s + (Number(values[i.id])||0); }, 0);
+}
+function totalInsurable(){ return categoryDefs.reduce(function(s,c){ return s + subtotalForCat(c.id); }, 0); }
+
+/* ===== phase nav ===== */
+function goto(p){
+  playClick();
+  phaseOrder.forEach(function(ph){ document.getElementById('phase-'+ph).classList.toggle('active', ph===p); });
+  var pct = Math.round((phaseOrder.indexOf(p)/(phaseOrder.length-1))*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  window.scrollTo(0,0);
+  if(p==='form') renderForm();
+  if(p==='maria-readback') renderReadback();
+}
+function restart(){
+  placements={}; values={}; paidValues={}; selectedId=null; formDone=false; formFilling=false;
+  document.getElementById('formNudge').hidden=true;
+  document.getElementById('laptopNudge').hidden=true;
+  document.getElementById('systemBanner').hidden=true;
+  document.getElementById('gateCard').hidden=false;
+  document.getElementById('formDoneBlock').hidden=true;
+  goto('welcome');
+}
+
+/* ===== welcome xlsx ===== */
+function renderWelcomeXlsx(){
+  var rows = '<div class="xlsx-row"><div class="xlsx-corner"></div><div class="xlsx-colhead">A&nbsp;&nbsp;Things (what I have for the repair work)</div></div>';
+  welcomeVisibleIds.forEach(function(id,r){
+    rows += '<div class="xlsx-row"><div class="xlsx-rownum">'+(r+1)+'</div><div class="xlsx-cell">'+findItem(id).name+'</div></div>';
+  });
+  rows += '<div class="xlsx-row"><div class="xlsx-rownum">'+(welcomeVisibleIds.length+1)+'</div><div class="xlsx-cell more">+ '+(items.length-welcomeVisibleIds.length)+' more…</div></div>';
+  document.getElementById('welcomeXlsx').innerHTML = rows;
+}
+
+/* ===== form render ===== */
+function renderSidebar(){
+  var remaining = visibleIds.map(findItem).filter(function(i){ return !placements[i.id]; });
+  var box = document.getElementById('sidebarItems');
+  if(formDone){ box.innerHTML = '<div class="sidebar-empty">All placed.</div>'; document.getElementById('sidebarMore').hidden=true; return; }
+  box.innerHTML = remaining.map(function(i){
+    return '<div class="sidebar-item'+(selectedId===i.id?' selected':'')+'" draggable="true" '+
+      'ondragstart="onDragStart(event,\''+i.id+'\')" ondragend="this.classList.remove(\'dragging\')" '+
+      'onclick="toggleSelect(\''+i.id+'\')">'+i.name+'</div>';
+  }).join('');
+  var hidden = items.length - visibleIds.length;
+  var more = document.getElementById('sidebarMore');
+  more.hidden = hidden<=0; more.textContent = '+ '+hidden+' more on the full list';
+}
+function valueCell(item){
+  var isLaptop = item.id==='laptop';
+  var isMachine = item.sourced==='estimate' && !isLaptop;
+  if(formDone || isMachine){
+    return '<span class="ins-val-static mono">'+fmt(Number(values[item.id])||0)+'</span>';
+  }
+  var cls = isValCorrect(item.id)?' ok':(isValWrong(item.id)?' wrong':'');
+  return '<span class="ins-val-wrap"><span class="ins-dollar mono">$</span>'+
+    '<input type="text" inputmode="numeric" class="ins-val mono'+cls+'" id="val-'+item.id+'" value="'+(values[item.id]||'')+'" placeholder="?" '+
+    'oninput="onValueInput(\''+item.id+'\', this)" onkeydown="if(event.key===\'Enter\')this.blur()"></span>';
+}
+function evidenceCell(item){
+  var isLaptop = item.id==='laptop';
+  var isMachine = item.sourced==='estimate' && !isLaptop;
+  if(isLaptop) return '<button class="ins-ev" onclick="openEbay()" title="Look up comparable used prices">eBay comp</button>';
+  if(isMachine) return '<span class="ins-ev static">eBay comp</span>';
+  var label = item.sourced==='credit-card'?'card':'receipt';
+  return '<button class="ins-ev" onclick="openDoc(\''+item.id+'\')" title="Show the document">'+label+'</button>';
+}
+function renderItemRow(item){
+  return '<div class="ins-row"><span class="ins-row-name">'+item.name+'</span>'+evidenceCell(item)+valueCell(item)+'</div>';
+}
+function renderSupplyRow(item){
+  var paidCell, shelfCell;
+  if(formDone){
+    paidCell = '<span class="ins-val-static mono">'+fmt(Number(paidValues[item.id])||0)+'</span>';
+    shelfCell = '<span class="ins-val-static mono">'+fmt(Number(values[item.id])||0)+'<span class="count-left">'+item.countLeft+'</span></span>';
+  } else {
+    var pcls = isPaidCorrect(item.id)?' ok':(isPaidWrong(item.id)?' wrong':'');
+    paidCell = '<span class="ins-val-wrap"><span class="ins-dollar mono">$</span><input type="text" inputmode="numeric" class="ins-val narrow mono'+pcls+'" id="paid-'+item.id+'" value="'+(paidValues[item.id]||'')+'" placeholder="?" oninput="onPaidInput(\''+item.id+'\', this)" onkeydown="if(event.key===\'Enter\')this.blur()"></span>';
+    var scls = isValCorrect(item.id)?' ok':(isValWrong(item.id)?' wrong':'');
+    shelfCell = '<span class="ins-val-wrap col"><span><span class="ins-dollar mono">$</span><input type="text" inputmode="numeric" class="ins-val narrow mono'+scls+'" id="val-'+item.id+'" value="'+(values[item.id]||'')+'" placeholder="?" oninput="onValueInput(\''+item.id+'\', this)" onkeydown="if(event.key===\'Enter\')this.blur()"></span><span class="count-left">'+item.countLeft+'</span></span>';
+  }
+  return '<div class="ins-row"><span class="ins-row-name">'+item.name+'</span>'+paidCell+shelfCell+'</div>';
+}
+function renderForm(){
+  renderSidebar();
+  var hint = document.getElementById('selectedHint');
+  if(selectedId && !formDone && !formFilling){
+    hint.hidden=false;
+    hint.innerHTML = 'Selected <strong>'+findItem(selectedId).name+'</strong> &mdash; click the section it belongs in. (Or just drag it.)';
+  } else { hint.hidden=true; }
+
+  var html = '';
+  categoryDefs.forEach(function(cat){
+    var placed = placeable.filter(function(i){ return placements[i.id]===cat.id; });
+    var isSupplies = cat.id==='supplies';
+    var zoneCls = 'ins-dropzone' + (placed.length?' filled':'') + ((selectedId && !formDone && !formFilling)?' armed':'');
+    var inner = '';
+    if(placed.length===0){
+      inner = '<div class="ins-dropzone-empty">'+((selectedId && !formDone && !formFilling)?('click to place “'+findItem(selectedId).name+'” here'):'drop items here')+'</div>';
+    } else {
+      if(isSupplies){
+        inner += '<div class="ins-colhead"><span class="ins-row-name">Item</span><button class="ins-ev" onclick="openDoc(\'chains\')" title="QBP receipt">paid (receipt)</button><span class="ins-val-static">on shelf now</span></div>';
+      }
+      inner += placed.map(function(i){ return isSupplies?renderSupplyRow(i):renderItemRow(i); }).join('');
+    }
+    html += '<div class="ins-section"><div class="ins-section-label">'+cat.label+'</div><div class="ins-section-sub">'+cat.sub+'</div>'+
+      '<div class="'+zoneCls+'" data-cat="'+cat.id+'" ondragover="event.preventDefault()" ondrop="onDropSection(event,\''+cat.id+'\')" onclick="onSectionClick(\''+cat.id+'\')">'+inner+'</div>'+
+      (placed.length?'<div class="ins-subtotal">'+cat.label+' subtotal: '+fmt(subtotalForCat(cat.id))+'</div>':'')+'</div>';
+  });
+  document.getElementById('insSections').innerHTML = html;
+  document.getElementById('insTotal').textContent = fmt(totalInsurable());
+  updateGate();
+}
+function updateTotalsOnly(){
+  categoryDefs.forEach(function(cat){
+    var zone = document.querySelector('.ins-dropzone[data-cat="'+cat.id+'"]');
+    if(!zone) return;
+    var sub = zone.parentElement.querySelector('.ins-subtotal');
+    if(sub) sub.textContent = cat.label+' subtotal: '+fmt(subtotalForCat(cat.id));
+  });
+  document.getElementById('insTotal').textContent = fmt(totalInsurable());
+}
+function updateGate(){
+  var list = document.getElementById('gateList');
+  list.innerHTML = categoryDefs.map(function(cat){
+    return '<li><span>'+(catHandValued(cat.id)?'<i data-lucide="check" class="licon"></i>':'·')+'</span><span>'+cat.label+(cat.id==='supplies'?' — both paid (receipt) and on-shelf':'')+'</span></li>';
+  }).join('');
+  if (window.lucide) lucide.createIcons();
+  var met = formTriggerMet();
+  var btn = document.getElementById('doRestBtn');
+  btn.disabled = !met;
+  var gate = document.getElementById('gateCard');
+  gate.classList.toggle('gate-armed', met);
+  gate.querySelector('.gate-card-title').textContent = met
+    ? 'The pattern’s clear — you’ve valued one item in every section. Finish the rest the same way.'
+    : 'Value one item in each section — from its own evidence — to unlock the rest:';
+  // laptop nudge
+  document.getElementById('laptopNudge').hidden = !(placements['laptop']==='computer' && !isValCorrect('laptop') && !formDone);
+}
+
+/* ===== input handlers ===== */
+function onValueInput(id, el){
+  el.value = el.value.replace(/[^0-9]/g,''); values[id] = el.value;
+  el.classList.toggle('ok', isValCorrect(id)); el.classList.toggle('wrong', isValWrong(id));
+  updateTotalsOnly(); updateGate();
+}
+function onPaidInput(id, el){
+  el.value = el.value.replace(/[^0-9]/g,''); paidValues[id] = el.value;
+  el.classList.toggle('ok', isPaidCorrect(id)); el.classList.toggle('wrong', isPaidWrong(id));
+  updateGate();
+}
+
+/* ===== placement ===== */
+function toggleSelect(id){ if(formDone||formFilling) return; selectedId = (selectedId===id)?null:id; renderForm(); }
+function onDragStart(e,id){ if(formDone||formFilling) return; selectedId=null; e.dataTransfer.setData('text/plain',id); e.currentTarget.classList.add('dragging'); }
+function onDropSection(e,catId){ e.preventDefault(); var id=e.dataTransfer.getData('text/plain'); if(id) placeItem(id,catId); }
+function onSectionClick(catId){ if(formDone||formFilling||!selectedId) return; placeItem(selectedId,catId); selectedId=null; }
+function placeItem(id, catId){
+  var item = findItem(id); if(!item) return;
+  var nudge = document.getElementById('formNudge');
+  if(item.category!==catId){
+    playNope();
+    nudge.hidden=false;
+    nudge.innerHTML = '<div class="dialog-label">MARIA</div><div class="dialog-text"><span class="dialog-prefix">(glancing over)</span>&ldquo;'+miscatNudge(item)+'&rdquo;</div>';
+  } else {
+    playSuccess();
+    placements[item.id]=catId;
+    nudge.hidden=true;
+    renderForm();
+  }
+}
+
+/* ===== do the rest ===== */
+function doTheRest(){
+  if(formDone||formFilling||!formTriggerMet()) return;
+  playClick();
+  formFilling=true;
+  selectedId=null;
+  document.getElementById('gateCard').hidden=true;
+  document.getElementById('formNudge').hidden=true;
+  document.getElementById('laptopNudge').hidden=true;
+  document.getElementById('systemBanner').hidden=false;
+  setTimeout(function(){
+    placeable.forEach(function(item){
+      placements[item.id]=item.category;
+      values[item.id]=String(item.cost);
+      if(item.paidAmount!=null) paidValues[item.id]=String(item.paidAmount);
+    });
+    formFilling=false; formDone=true;
+    playSuccess();
+    document.getElementById('systemBanner').hidden=true;
+    renderForm();
+    document.getElementById('formDoneBlock').hidden=false;
+  }, 1300);
+}
+
+/* ===== readback ===== */
+function renderReadback(){
+  var rows = categoryDefs.map(function(cat){
+    return '<div class="totals-row"><span>'+cat.label+'</span><span class="mono">'+fmt(subtotalForCat(cat.id))+'</span></div>';
+  }).join('');
+  rows += '<div class="totals-row total"><span>TOTAL (insurable)</span><span class="mono">'+fmt(totalInsurable())+'</span></div>';
+  document.getElementById('readbackRows').innerHTML = rows;
+  document.getElementById('readbackMaria').innerHTML = '<div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;OK. Equipment '+fmt(subtotalForCat('equipment'))+'. Computer equipment '+fmt(subtotalForCat('computer'))+'. Supplies '+fmt(subtotalForCat('supplies'))+'. Fixtures '+fmt(subtotalForCat('fixtures'))+'. Total of '+fmt(totalInsurable())+' &mdash; what you have on hand now. Property policy goes on that. Paperwork in the mail.&rdquo;</div>';
+}
+
+/* ===== document popups ===== */
+function openDoc(id){
+  var item = findItem(id);
+  var modal = document.getElementById('docModal');
+  modal.className = 'doc-modal';
+  if(item.sourced==='credit-card'){
+    modal.innerHTML = creditCardHTML(creditCard);
+  } else {
+    var r = receipts.find(function(rr){ return rr.forItem.indexOf(id)!==-1; });
+    if(!r) return;
+    modal.innerHTML = receiptHTML(r);
+  }
+  document.getElementById('docOverlay').classList.add('open');
+}
+function openEbay(){
+  var modal = document.getElementById('docModal');
+  modal.className = 'doc-modal narrow';
+  modal.innerHTML = '<span class="doc-badge">eBay — sold listings</span><button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>'+
+    '<div class="ebay-title">Used laptop &mdash; “like yours”, good condition</div>'+
+    '<p class="ebay-sub">Recent sold prices for comparable used laptops:</p>'+
+    '<div class="ebay-chips">'+ebayComps.map(function(p){ return '<span class="ebay-chip">'+fmt(p)+'</span>'; }).join('')+'</div>'+
+    '<p class="ebay-foot">They cluster around <strong>$610</strong>. Close this and put that on the form.</p>';
+  document.getElementById('docOverlay').classList.add('open');
+}
+function closeDoc(){ document.getElementById('docOverlay').classList.remove('open'); }
+function receiptHTML(r){
+  var rows = r.lineItems.map(function(li){ return '<tr><td>'+li.name+'</td><td class="num">'+fmt(li.amount)+'</td></tr>'; }).join('');
+  return '<span class="doc-badge">Receipt</span><button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>'+
+    '<div class="doc-vendor">'+r.vendor+'<span class="doc-vendor-sub">· '+r.vendorSub+'</span></div>'+
+    '<div class="doc-meta"><span>'+r.receiptNum+'</span><span>'+r.date+'</span></div>'+
+    '<table class="doc-table"><thead><tr><th>Item</th><th class="num">Amount</th></tr></thead><tbody>'+rows+
+    '<tr class="total"><td>Total</td><td class="num">'+fmt(r.total)+'</td></tr></tbody></table>'+
+    '<div class="doc-paid"><span><strong>Paid:</strong> '+r.paidWith+'</span><span class="muted">'+r.paidLast4+'</span></div>'+
+    (r.paidNote?'<p class="doc-note">'+r.paidNote+'</p>':'');
+}
+function creditCardHTML(c){
+  var rows = c.transactions.map(function(t){
+    return '<tr><td class="num">'+t.date+'</td><td>'+t.desc+'</td><td class="num">'+(t.charge!=null?fmt(t.charge):'—')+'</td><td class="num">'+(t.payment!=null?fmt(t.payment):'—')+'</td></tr>';
+  }).join('');
+  var cells = [['Previous balance',fmt(c.previousBalance),false],['Charges',fmt(c.chargesTotal),false],['Payments',fmt(c.paymentsTotal),false],['New balance',fmt(c.newBalance),true]]
+    .map(function(cell){ return '<div class="doc-cc-cell'+(cell[2]?' hl':'')+'"><div class="doc-cc-cell-k">'+cell[0]+'</div><div class="doc-cc-cell-v">'+cell[1]+'</div></div>'; }).join('');
+  return '<span class="doc-badge">Credit card statement</span><button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>'+
+    '<div class="doc-cc-head"><div><div class="doc-cc-issuer">'+c.issuer+'</div><div class="doc-cc-sub">'+c.sub+'</div></div>'+
+    '<div class="doc-cc-period"><div><strong>Statement period:</strong></div><div>'+c.period+'</div><div class="muted">Account '+c.last4+'</div><div class="muted">'+c.opened+'</div></div></div>'+
+    '<div class="doc-cc-cells">'+cells+'</div>'+
+    '<table class="doc-table"><thead><tr><th>Date</th><th>Description</th><th class="num">Charges</th><th class="num">Payments</th></tr></thead><tbody>'+rows+
+    '<tr class="total"><td></td><td>Totals</td><td class="num">'+fmt(c.chargesTotal)+'</td><td class="num">'+fmt(c.paymentsTotal)+'</td></tr></tbody></table>';
+}
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== dev mode ===== */
+(function(){
+  var clicks=0;
+  document.getElementById('headerTitle').addEventListener('click', function(){
+    clicks++;
+    if(clicks>=3){ clicks=0; var bar=document.getElementById('devBar'); bar.hidden=!bar.hidden;
+      if(!bar.hidden && !document.getElementById('devBtns').children.length){
+        document.getElementById('devBtns').innerHTML = phaseOrder.map(function(p){ return '<button class="dev-bar-btn" onclick="goto(\''+p+'\')">'+p+'</button>'; }).join('');
+      }
+    }
+  });
+})();
+
+/* ===== init ===== */
+renderWelcomeXlsx();
+</script>
 </body>
 </html>

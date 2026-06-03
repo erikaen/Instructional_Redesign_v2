@@ -1,360 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accounting Pre-Work — Welcome</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accounting Pre-Work — Welcome</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
 </head>
 <body>
-    <div id="root"></div>
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script type="text/babel">
-        const { useState } = React;
+<div class="page">
+  <div class="prework-wrap">
 
-        const colors = {
-            primary: '#00356b',
-            sand: '#f5f1e8',
-            earth: '#8b7355',
-            earthLight: '#d4c4a8',
-            earthDark: '#5c4d3d',
-            accent: '#c9a227',
-            clay: '#c4a574',
-            clayLight: '#e8dcc8',
-            clayDark: '#a08050',
-            success: '#22c55e',
-            successBg: '#f0fdf4',
-            warning: '#f59e0b',
-            warningBg: '#fffbeb',
-            error: '#dc2626',
-            errorBg: '#fef2f2',
-        };
+    <!-- ===== Course header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Accounting Pre-Work</h1>
+        <p class="tut-header-sub">Welcome &middot; Yale School of Management</p>
+      </div>
+      <div class="banner-instructor">
+        <div class="banner-instructor-name">Rick Antle</div>
+        <div class="banner-instructor-title">William S. Beinecke Professor of Accounting</div>
+      </div>
+    </div>
 
-        // Roadmap data. Module 1 is live (links into Tutorials-v2); every other module is a placeholder.
-        const roadmap = [
-            {
-                id: 'welcome',
-                module: 'Welcome',
-                title: 'Course orientation',
-                desc: 'You are here',
-                active: true,
-                activities: null,
-            },
-            {
-                id: 'm1',
-                module: 'Module 1 · The Journey',
-                title: 'Making sense of the repair work',
-                desc: 'The first months of fixing bikes for money — before there’s any “shop,” you set the work apart from the rest of your life, and the habits that let you read any set of books get built, transaction by transaction.',
-                activities: [
-                    { num: '1.1', title: 'Getting Organized', href: '11-getting-organized.html', tag: null },
-                    { num: '1.2', title: 'Insurance and Maria', href: '12-insurance-and-maria.html', tag: null },
-                    { num: '1.3', title: 'Anna and the Bank Statement', href: '13-anna-and-the-bank-statement.html', tag: null },
-                    { num: '1.4', title: 'Keeping the Reasons', href: '14-keeping-reasons.html', tag: null },
-                    { num: '1.5', title: 'Naming What You Built', href: '15-naming-what-you-built.html', tag: null },
-                ],
-            },
-            {
-                id: 'm2',
-                module: 'Module 2 · Getting Formal',
-                title: 'Choosing a form for the work',
-                desc: 'What a formal structure does — and does not — change about the books.',
-                placeholder: true,
-                activities: null,
-            },
-            {
-                id: 'm3',
-                module: 'Module 3 · The Full Set of Statements',
-                title: 'How the statements connect',
-                desc: 'Beyond the balance sheet — the statements that explain how it changes from one period to the next.',
-                placeholder: true,
-                activities: null,
-            },
-            {
-                id: 'm4',
-                module: 'Module 4 · Real Statements',
-                title: 'Reading real financial statements',
-                desc: 'The same architecture, customized — a for-profit and a nonprofit, read end to end.',
-                placeholder: true,
-                activities: null,
-            },
-            {
-                id: 'bonus',
-                module: 'Bonus · Optional add-on',
-                title: 'The Analyst’s Toolkit',
-                desc: 'For going beneath the surface — where management made choices, where the records leave room for interpretation.',
-                placeholder: true,
-                optional: true,
-                activities: null,
-            },
-        ];
+    <!-- ===== Welcome narrative ===== -->
+    <div class="narrative-block">
+      <p>Most people meet accounting as a pile of rules. This pre-work does the opposite. You&rsquo;ll build the architecture yourself, from small concrete problems &mdash; and when the formal names arrive, they&rsquo;ll land on something you&rsquo;ve already made.</p>
+      <p>It starts with bike repair &mdash; and, at first, no &ldquo;shop&rdquo; at all. You&rsquo;ve been fixing bikes for money for about six months, but it&rsquo;s all folded into ordinary life: tools at home and in the rented space, the money moving through your personal account, most of it kept in your head. Over five short sessions &mdash; with a little help from your friend Anna &mdash; you start setting the repair work apart from everything else: what you have, what you owe, and <em>why</em> the numbers move, transaction by transaction.</p>
+      <p>Setting that work apart turns out to be the whole game. The boundary you draw has a name &mdash; the <em>entity</em> &mdash; and on it you&rsquo;ll have built, by hand, the same structure the largest organizations file: a balance sheet around the accounting identity, maintained by double-entry. You build it; you don&rsquo;t find it. The modules that follow take it further &mdash; up to reading the real statements of actual organizations.</p>
+    </div>
 
-        // Rick's intro transcript. (The two references to the "$25k decision" have been removed so the
-        // page matches the revised course, which does not lead with that framing.)
-        const transcriptBeats = [
-            { label: 'Beats 1 & 2 — Scale problem and complexity',
-              text: '"Imagine you are running a small business. Three employees, a handful of customers, maybe a dozen transactions in a week. You could probably keep track of most of that in your head — or a notebook. Now imagine ten thousand employees. Operations in forty states and a few different countries. Millions of transactions a year. Suppliers deciding whether to extend credit. Lenders deciding whether to lend. Shareholders deciding where to put their capital. Regulators checking for compliance. Each of them drawing on the same underlying records to answer very different questions. You can’t run that from a notebook. And the systems built to handle that complexity — to capture it, organize it, report it in a form people can actually use — those systems are genuinely remarkable. They’ve been evolving for literally thousands of years, absorbing new demands, new technology, new types of organizations. What we use today isn’t something a committee designed from scratch. It’s the accumulated solution to a very long series of real problems."' },
-            { label: 'Self-introduction',
-              text: '"My name is Rick Antle. I’m the William S. Beinecke Professor of Accounting at the Yale School of Management. I’ve spent my career studying how accounting systems work — what they reveal, what they conceal, and why. First encounters with accounting can be disorienting — whether you’ve worked through rules and procedures, or been dropped into a set of financial statements with no map to navigate them. What’s often missing is a real understanding of the architecture — where it came from, what problems it was built to solve, and why it looks the way it does. This prework is my attempt to fix that."' },
-            { label: 'Beat 3 — Common-structure tease',
-              text: '"Here’s what might surprise you. The accounting system that CVS Health uses — one of the largest companies in the United States — runs on the same underlying architecture as the books of a small neighborhood nonprofit. And the books of a city government. The customizations are real. CVS reports under US GAAP; the nonprofit follows a different set of rules; the city follows yet another. But underneath, the same identity. The same evidence test for what goes on the books. The same insistence that every change in the entity’s position be traced through the statements, not declared. The customizations live on top of a shared skeleton. Once you can see the skeleton, a lot of the apparent variety in the accounting world stops being variety."' },
-            { label: 'Beat 4 — How we’ll work together',
-              text: '"Here is how we are going to do this. You are going to build the architecture yourself, from problems. I am not handing you a set of rules to memorize. I am putting you in front of small, concrete situations — a handful of items to sort, a month of transactions, real businesses, real nonprofits — and asking you to make sense of what just happened. The architecture is going to emerge from the doing. When the formal labels arrive — assets, liabilities, equities, the accounting identity — they will land on something you have already constructed. They will name what you already see. That is a different kind of knowing than memorizing definitions and hoping to apply them later. It tends to stick."' },
-            { label: 'Beat 5 — Fresh-mind ask',
-              text: '"If you’ve studied accounting before — a course, some work experience, anything at all — you’ve already assembled a mental model of how this works. And I’m going to ask you to set it aside for now. Not because it’s wrong. But because there’s a real difference between applying a framework you already have and building one from scratch — because you needed it to solve a problem in front of you. This prework is designed to give you that second experience. And you can’t have it if you’re pattern-matching to something you already know. So when you hit a problem and something in the back of your head says ‘I know where this is going’ — stay in the problem anyway. Let the architecture emerge. See if it looks the same from this angle. Give it a chance. I think you’ll find it’s worth it."' },
-            { label: 'Beat 6 — The two destinations',
-              text: '"Here is where we are headed. By the end of this prework, you are going to open the actual financial statements of two real organizations and read them. Not skim — read. First CVS Health, a for-profit corporation under US GAAP. Then Yale University, a nonprofit operating under a different set of conventions on top of the same underlying architecture. The architecture you will have built by then will let you navigate both. You will see where management made choices. You will see where the records are quiet about things that matter. You will see the path the statements take from one balance sheet to the next. Two examples, same skeleton, different customizations. That is the destination. Module 1 is the first step."' },
-            { label: 'Beat 7 — Closing invitation',
-              text: '"So. Module 1 starts with the morning you decided to get organized. From there we will record more, decompose more, name more. By the end of Module 1, you will have built — by hand — a way to read a set of books, and the names for what you made. Let’s get going."' },
-        ];
+    <!-- ===== Rick intro + transcript ===== -->
+    <div class="section-card">
+      <div class="eyebrow-label">Welcome from Rick &middot; about 2 minutes</div>
+      <div class="video-placeholder">
+        <div class="video-play-btn"><span class="video-play-icon"></span></div>
+        <div class="video-placeholder-caption">Video placeholder</div>
+      </div>
+      <button class="transcript-toggle" id="transcriptToggle" onclick="toggleTranscript()">
+        <i data-lucide="chevron-right" class="licon"></i> <span id="transcriptLabel">Read transcript</span>
+      </button>
+      <div class="transcript-box" id="transcriptBox">
+        <div class="transcript-beat">
+          <div class="transcript-beat-label">Beats 1 &amp; 2 &mdash; Scale problem and complexity</div>
+          <div class="transcript-beat-text">&ldquo;Imagine you are running a small business. Three employees, a handful of customers, maybe a dozen transactions in a week. You could probably keep track of most of that in your head &mdash; or a notebook. Now imagine ten thousand employees. Operations in forty states and a few different countries. Millions of transactions a year. Suppliers deciding whether to extend credit. Lenders deciding whether to lend. Shareholders deciding where to put their capital. Regulators checking for compliance. Each of them drawing on the same underlying records to answer very different questions. You can&rsquo;t run that from a notebook. And the systems built to handle that complexity &mdash; to capture it, organize it, report it in a form people can actually use &mdash; those systems are genuinely remarkable. They&rsquo;ve been evolving for literally thousands of years, absorbing new demands, new technology, new types of organizations. What we use today isn&rsquo;t something a committee designed from scratch. It&rsquo;s the accumulated solution to a very long series of real problems.&rdquo;</div>
+        </div>
+        <div class="transcript-beat">
+          <div class="transcript-beat-label">Self-introduction</div>
+          <div class="transcript-beat-text">&ldquo;My name is Rick Antle. I&rsquo;m the William S. Beinecke Professor of Accounting at the Yale School of Management. I&rsquo;ve spent my career studying how accounting systems work &mdash; what they reveal, what they conceal, and why. First encounters with accounting can be disorienting &mdash; whether you&rsquo;ve worked through rules and procedures, or been dropped into a set of financial statements with no map to navigate them. What&rsquo;s often missing is a real understanding of the architecture &mdash; where it came from, what problems it was built to solve, and why it looks the way it does. This prework is my attempt to fix that.&rdquo;</div>
+        </div>
+        <div class="transcript-beat">
+          <div class="transcript-beat-label">Beat 3 &mdash; Common-structure tease</div>
+          <div class="transcript-beat-text">&ldquo;Here&rsquo;s what might surprise you. The accounting system that CVS Health uses &mdash; one of the largest companies in the United States &mdash; runs on the same underlying architecture as the books of a small neighborhood nonprofit. And the books of a city government. The customizations are real. CVS reports under US GAAP; the nonprofit follows a different set of rules; the city follows yet another. But underneath, the same identity. The same evidence test for what goes on the books. The same insistence that every change in the entity&rsquo;s position be traced through the statements, not declared. The customizations live on top of a shared skeleton. Once you can see the skeleton, a lot of the apparent variety in the accounting world stops being variety.&rdquo;</div>
+        </div>
+        <div class="transcript-beat">
+          <div class="transcript-beat-label">Beat 4 &mdash; How we&rsquo;ll work together</div>
+          <div class="transcript-beat-text">&ldquo;Here is how we are going to do this. You are going to build the architecture yourself, from problems. I am not handing you a set of rules to memorize. I am putting you in front of small, concrete situations &mdash; a handful of items to sort, a month of transactions, real businesses, real nonprofits &mdash; and asking you to make sense of what just happened. The architecture is going to emerge from the doing. When the formal labels arrive &mdash; assets, liabilities, equities, the accounting identity &mdash; they will land on something you have already constructed. They will name what you already see. That is a different kind of knowing than memorizing definitions and hoping to apply them later. It tends to stick.&rdquo;</div>
+        </div>
+        <div class="transcript-beat">
+          <div class="transcript-beat-label">Beat 5 &mdash; Fresh-mind ask</div>
+          <div class="transcript-beat-text">&ldquo;If you&rsquo;ve studied accounting before &mdash; a course, some work experience, anything at all &mdash; you&rsquo;ve already assembled a mental model of how this works. And I&rsquo;m going to ask you to set it aside for now. Not because it&rsquo;s wrong. But because there&rsquo;s a real difference between applying a framework you already have and building one from scratch &mdash; because you needed it to solve a problem in front of you. This prework is designed to give you that second experience. And you can&rsquo;t have it if you&rsquo;re pattern-matching to something you already know. So when you hit a problem and something in the back of your head says &lsquo;I know where this is going&rsquo; &mdash; stay in the problem anyway. Let the architecture emerge. See if it looks the same from this angle. Give it a chance. I think you&rsquo;ll find it&rsquo;s worth it.&rdquo;</div>
+        </div>
+        <div class="transcript-beat">
+          <div class="transcript-beat-label">Beat 6 &mdash; The two destinations</div>
+          <div class="transcript-beat-text">&ldquo;Here is where we are headed. By the end of this prework, you are going to open the actual financial statements of two real organizations and read them. Not skim &mdash; read. First CVS Health, a for-profit corporation under US GAAP. Then Yale University, a nonprofit operating under a different set of conventions on top of the same underlying architecture. The architecture you will have built by then will let you navigate both. You will see where management made choices. You will see where the records are quiet about things that matter. You will see the path the statements take from one balance sheet to the next. Two examples, same skeleton, different customizations. That is the destination. Module 1 is the first step.&rdquo;</div>
+        </div>
+        <div class="transcript-beat">
+          <div class="transcript-beat-label">Beat 7 &mdash; Closing invitation</div>
+          <div class="transcript-beat-text">&ldquo;So. Module 1 starts with the morning you decided to get organized. From there we will record more, decompose more, name more. By the end of Module 1, you will have built &mdash; by hand &mdash; a way to read a set of books, and the names for what you made. Let&rsquo;s get going.&rdquo;</div>
+        </div>
+      </div>
+    </div>
 
-        const App = () => {
-            const [transcriptOpen, setTranscriptOpen] = useState(false);
-            const [expandedModules, setExpandedModules] = useState({});
+    <!-- ===== Roadmap ===== -->
+    <h2>Your Roadmap</h2>
+    <p class="prose">Module 1 is the journey itself &mdash; the sessions in which you build a way of reading any set of books by first making sense of your own repair work, setting it apart from everything else. The modules that follow build on it, up to reading the actual financial statements of real organizations. Module 1 is ready now; the rest are on the way.</p>
 
-            const toggleModule = (id) => {
-                setExpandedModules({ ...expandedModules, [id]: !expandedModules[id] });
-            };
+    <div class="roadmap">
 
-            const TagPill = ({ kind }) => {
-                if (!kind) return null;
-                const styles = {
-                    coming: { bg: '#f0e9d8', border: '#e0d3a8', color: '#8a6a1f', label: 'In progress' },
-                    soon:   { bg: '#eef2f7', border: '#d6dde6', color: '#5b6b7d', label: 'Coming soon' },
-                };
-                const s = styles[kind];
-                if (!s) return null;
-                return (
-                    <span className="text-xs font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full"
-                          style={{ backgroundColor: s.bg, border: `1px solid ${s.border}`, color: s.color }}>
-                        {s.label}
-                    </span>
-                );
-            };
+      <div class="roadmap-item active">
+        <div class="roadmap-item-head">
+          <div class="roadmap-dot"></div>
+          <div class="roadmap-body">
+            <div class="roadmap-module">Welcome</div>
+            <div class="roadmap-title">Course orientation</div>
+            <div class="roadmap-desc">You are here</div>
+          </div>
+        </div>
+      </div>
 
-            return (
-                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
-                    <div className="p-4 max-w-3xl mx-auto">
+      <div class="roadmap-item">
+        <div class="roadmap-item-head">
+          <div class="roadmap-dot"></div>
+          <div class="roadmap-body">
+            <div class="roadmap-module">Module 1 &middot; The Journey</div>
+            <div class="roadmap-title">Making sense of the repair work</div>
+            <div class="roadmap-desc">The first months of fixing bikes for money &mdash; before there&rsquo;s any &ldquo;shop,&rdquo; you set the work apart from the rest of your life, and the habits that let you read any set of books get built, transaction by transaction.</div>
+          </div>
+          <button class="roadmap-toggle" aria-expanded="false" onclick="toggleRoadmap(this, 'm1')"><span>Activities</span> <i data-lucide="chevron-down" class="licon"></i></button>
+        </div>
+        <div class="roadmap-activities" id="m1">
+          <a class="roadmap-activity" href="11-getting-organized.html"><span class="roadmap-activity-dot"></span><span class="roadmap-activity-text"><span class="roadmap-activity-num">1.1</span> &middot; Getting Organized</span></a>
+          <a class="roadmap-activity" href="12-insurance-and-maria.html"><span class="roadmap-activity-dot"></span><span class="roadmap-activity-text"><span class="roadmap-activity-num">1.2</span> &middot; Insurance and Maria</span></a>
+          <a class="roadmap-activity" href="13-anna-and-the-bank-statement.html"><span class="roadmap-activity-dot"></span><span class="roadmap-activity-text"><span class="roadmap-activity-num">1.3</span> &middot; Anna and the Bank Statement</span></a>
+          <a class="roadmap-activity" href="14-keeping-reasons.html"><span class="roadmap-activity-dot"></span><span class="roadmap-activity-text"><span class="roadmap-activity-num">1.4</span> &middot; Keeping the Reasons</span></a>
+          <a class="roadmap-activity" href="15-naming-what-you-built.html"><span class="roadmap-activity-dot"></span><span class="roadmap-activity-text"><span class="roadmap-activity-num">1.5</span> &middot; Naming What You Built</span></a>
+        </div>
+      </div>
 
-                        {/* Top header strip — matches the tutorials */}
-                        <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: colors.primary }}>
-                            <div className="flex justify-between items-center">
-                                <div>
-                                    <h1 className="text-lg font-bold text-white">Accounting Pre-Work</h1>
-                                    <p className="text-sm mt-1" style={{ color: colors.earthLight }}>
-                                        Welcome &middot; Yale School of Management
-                                    </p>
-                                </div>
-                                <div className="text-right">
-                                    <p className="text-xs" style={{ color: 'rgba(255,255,255,0.7)' }}>Rick Antle</p>
-                                    <p className="text-xs" style={{ color: 'rgba(255,255,255,0.5)' }}>William S. Beinecke Professor of Accounting</p>
-                                </div>
-                            </div>
-                        </div>
+      <div class="roadmap-item muted">
+        <div class="roadmap-item-head">
+          <div class="roadmap-dot"></div>
+          <div class="roadmap-body">
+            <div class="roadmap-module">Module 2 &middot; Getting Formal <span class="tag-pill soon">Coming soon</span></div>
+            <div class="roadmap-title">Choosing a form for the work</div>
+            <div class="roadmap-desc">What a formal structure does &mdash; and does not &mdash; change about the books.</div>
+          </div>
+        </div>
+      </div>
 
-                        {/* Welcome prose — NarrativeBlock style */}
-                        <div className="p-5 rounded-lg mb-4 italic"
-                             style={{ backgroundColor: 'white', borderLeft: `4px solid ${colors.accent}`, color: '#374151' }}>
-                            <p className="mb-3 leading-relaxed">
-                                Most people meet accounting as a pile of rules. This pre-work does the opposite. You’ll
-                                build the architecture yourself, from small concrete problems &mdash; and when the formal
-                                names arrive, they’ll land on something you’ve already made.
-                            </p>
-                            <p className="mb-3 leading-relaxed">
-                                It starts with bike repair &mdash; and, at first, no &ldquo;shop&rdquo; at all. You’ve been
-                                fixing bikes for money for about six months, but it’s all folded into ordinary life: tools at
-                                home and in the rented space, the money moving through your personal account, most of it kept
-                                in your head. Over five short sessions &mdash; with a little help from your friend Anna &mdash;
-                                you start setting the repair work apart from everything else: what you have, what you owe,
-                                and <em>why</em> the numbers move, transaction by transaction.
-                            </p>
-                            <p className="leading-relaxed">
-                                Setting that work apart turns out to be the whole game. The boundary you draw has a name
-                                &mdash; the <em>entity</em> &mdash; and on it you’ll have built, by hand, the same structure
-                                the largest organizations file: a balance sheet around the accounting identity, maintained by
-                                double-entry. You build it; you don’t find it. The modules that follow take it further &mdash;
-                                up to reading the real statements of actual organizations.
-                            </p>
-                        </div>
+      <div class="roadmap-item muted">
+        <div class="roadmap-item-head">
+          <div class="roadmap-dot"></div>
+          <div class="roadmap-body">
+            <div class="roadmap-module">Module 3 &middot; The Full Set of Statements <span class="tag-pill soon">Coming soon</span></div>
+            <div class="roadmap-title">How the statements connect</div>
+            <div class="roadmap-desc">Beyond the balance sheet &mdash; the statements that explain how it changes from one period to the next.</div>
+          </div>
+        </div>
+      </div>
 
-                        {/* Rick intro placeholder + transcript */}
-                        <div className="rounded-lg border-2 mb-4 p-4"
-                             style={{ borderColor: colors.earthLight, backgroundColor: 'white' }}>
-                            <p className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: colors.earth }}>
-                                Welcome from Rick &middot; about 2 minutes
-                            </p>
-                            {/* Video placeholder */}
-                            <div className="rounded-lg mx-auto mb-3 flex flex-col items-center justify-center"
-                                 style={{ backgroundColor: '#111', maxWidth: '480px', padding: '48px 24px' }}>
-                                <div className="rounded-full flex items-center justify-center mb-3 cursor-pointer hover:opacity-90"
-                                     style={{
-                                         width: '60px', height: '60px',
-                                         backgroundColor: 'rgba(255,255,255,0.12)',
-                                         border: '2px solid rgba(255,255,255,0.4)',
-                                     }}>
-                                    <div style={{
-                                        width: 0, height: 0,
-                                        borderTop: '11px solid transparent',
-                                        borderBottom: '11px solid transparent',
-                                        borderLeft: '18px solid rgba(255,255,255,0.7)',
-                                        marginLeft: '4px',
-                                    }}></div>
-                                </div>
-                                <p className="text-xs" style={{ color: 'rgba(255,255,255,0.6)' }}>Video placeholder</p>
-                            </div>
-                            <button
-                                onClick={() => setTranscriptOpen(!transcriptOpen)}
-                                className="text-sm border-0 bg-transparent cursor-pointer mx-auto block px-2 py-1"
-                                style={{ color: colors.earth }}
-                            >
-                                <span className="inline-block mr-1" style={{ transform: transcriptOpen ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>▶</span>
-                                {transcriptOpen ? 'Hide transcript' : 'Read transcript'}
-                            </button>
+      <div class="roadmap-item muted">
+        <div class="roadmap-item-head">
+          <div class="roadmap-dot"></div>
+          <div class="roadmap-body">
+            <div class="roadmap-module">Module 4 &middot; Real Statements <span class="tag-pill soon">Coming soon</span></div>
+            <div class="roadmap-title">Reading real financial statements</div>
+            <div class="roadmap-desc">The same architecture, customized &mdash; a for-profit and a nonprofit, read end to end.</div>
+          </div>
+        </div>
+      </div>
 
-                            {transcriptOpen && (
-                                <div className="mt-3 p-4 rounded-lg max-h-96 overflow-y-auto"
-                                     style={{ backgroundColor: '#fafaf7', border: `1px solid ${colors.earthLight}` }}>
-                                    {transcriptBeats.map((beat, i) => (
-                                        <div key={i} className="mb-4 last:mb-0">
-                                            <p className="text-xs font-bold uppercase tracking-wide mb-2"
-                                               style={{ color: colors.primary }}>{beat.label}</p>
-                                            <p className="text-sm leading-relaxed" style={{ color: colors.earthDark, fontFamily: 'Georgia, serif' }}>
-                                                {beat.text}
-                                            </p>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+      <div class="roadmap-item muted optional">
+        <div class="roadmap-item-head">
+          <div class="roadmap-dot"></div>
+          <div class="roadmap-body">
+            <div class="roadmap-module">Bonus &middot; Optional add-on <span class="tag-pill soon">Coming soon</span></div>
+            <div class="roadmap-title">The Analyst&rsquo;s Toolkit</div>
+            <div class="roadmap-desc">For going beneath the surface &mdash; where management made choices, where the records leave room for interpretation.</div>
+          </div>
+        </div>
+      </div>
 
-                        {/* Roadmap */}
-                        <div className="mb-4">
-                            <h2 className="text-lg font-bold mb-3" style={{ color: colors.primary }}>Your Roadmap</h2>
-                            <p className="text-sm mb-4 leading-relaxed" style={{ color: colors.earthDark }}>
-                                Module 1 is the journey itself &mdash; the sessions in which you build a way of reading any
-                                set of books by first making sense of your own repair work, setting it apart from everything
-                                else. The modules that follow build on it, up to reading the actual financial statements of
-                                real organizations. Module 1 is ready now; the rest are on the way.
-                            </p>
+    </div>
 
-                            <div className="space-y-3">
-                                {roadmap.map(item => {
-                                    const muted = item.placeholder || item.optional;
-                                    return (
-                                    <div key={item.id}
-                                         className="rounded-lg border-2"
-                                         style={{
-                                             backgroundColor: 'white',
-                                             borderColor: item.active ? colors.accent : (muted ? '#e0e0e0' : colors.earthLight),
-                                             borderStyle: item.optional ? 'dashed' : 'solid',
-                                             opacity: item.placeholder ? 0.85 : 1,
-                                         }}>
-                                        <div className="p-4 flex items-start gap-3">
-                                            {/* Dot */}
-                                            <div className="flex-shrink-0 mt-1">
-                                                <div className="rounded-full"
-                                                     style={{
-                                                         width: item.active ? '14px' : '10px',
-                                                         height: item.active ? '14px' : '10px',
-                                                         backgroundColor: item.active ? colors.accent : (muted ? 'white' : colors.earth),
-                                                         border: muted ? `2px solid ${colors.earthLight}` : 'none',
-                                                     }}></div>
-                                            </div>
-                                            <div className="flex-grow">
-                                                <div className="flex items-center gap-2 flex-wrap">
-                                                    <p className="text-xs font-bold uppercase tracking-wide"
-                                                       style={{ color: item.active ? colors.accent : (muted ? '#999' : colors.earth) }}>
-                                                        {item.module}
-                                                    </p>
-                                                    {item.placeholder && <TagPill kind="soon" />}
-                                                </div>
-                                                <p className="text-base font-medium mt-0.5" style={{ color: colors.earthDark }}>
-                                                    {item.title}
-                                                </p>
-                                                <p className="text-sm mt-1 italic" style={{ color: colors.earth }}>
-                                                    {item.desc}
-                                                </p>
-                                            </div>
-                                            {item.activities && (
-                                                <button
-                                                    onClick={() => toggleModule(item.id)}
-                                                    className="flex-shrink-0 text-xs font-bold uppercase tracking-wide border rounded px-2 py-1 cursor-pointer"
-                                                    style={{
-                                                        color: colors.earth,
-                                                        borderColor: colors.earthLight,
-                                                        backgroundColor: 'transparent',
-                                                    }}
-                                                >
-                                                    {expandedModules[item.id] ? 'Hide' : 'Activities'}
-                                                    <span className="inline-block ml-1"
-                                                          style={{ transform: expandedModules[item.id] ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
-                                                        ▾
-                                                    </span>
-                                                </button>
-                                            )}
-                                        </div>
-                                        {item.activities && expandedModules[item.id] && (
-                                            <div className="border-t pl-12 pr-4 py-2"
-                                                 style={{ borderColor: colors.earthLight, backgroundColor: '#fafaf7' }}>
-                                                {item.activities.map(a => {
-                                                    const isClickable = a.href !== null && a.tag !== 'coming';
-                                                    const content = (
-                                                        <div className="flex items-center gap-3 py-2">
-                                                            <div className="flex-shrink-0 rounded-full"
-                                                                 style={{
-                                                                     width: '7px', height: '7px',
-                                                                     backgroundColor: isClickable ? colors.earth : 'white',
-                                                                     border: isClickable ? 'none' : `1px solid ${colors.earthLight}`,
-                                                                 }}></div>
-                                                            <span className="text-sm flex-grow"
-                                                                  style={{ color: isClickable ? colors.earthDark : colors.earth }}>
-                                                                <span className="font-medium">{a.num}</span>
-                                                                <span className="mx-2">&middot;</span>
-                                                                {a.title}
-                                                            </span>
-                                                            <TagPill kind={a.tag} />
-                                                        </div>
-                                                    );
-                                                    return isClickable ? (
-                                                        <a key={a.num} href={a.href} className="block no-underline hover:bg-white px-2 -mx-2 rounded">
-                                                            {content}
-                                                        </a>
-                                                    ) : (
-                                                        <div key={a.num} className="px-2 -mx-2">{content}</div>
-                                                    );
-                                                })}
-                                            </div>
-                                        )}
-                                    </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
+    <hr class="divider">
 
-                        {/* Transition + Begin button */}
-                        <p className="italic mb-4 mt-6 pt-4 border-t leading-relaxed text-sm"
-                           style={{ color: colors.earth, borderColor: colors.earthLight }}>
-                            When you’re ready, the journey starts with a sort &mdash; ten things scattered between the rented space and home, six months in.
-                        </p>
+    <p class="prose"><em>When you&rsquo;re ready, the journey starts with a sort &mdash; ten things scattered between the rented space and home, six months in.</em></p>
 
-                        <a href="11-getting-organized.html"
-                           className="block w-full py-3 rounded-lg font-bold text-white text-center no-underline"
-                           style={{ backgroundColor: colors.primary }}>
-                            Begin Module 1 &rarr; Activity 1.1: Getting Organized
-                        </a>
+    <a href="11-getting-organized.html" class="btn-continue btn-block">Begin Module 1 &rarr; Activity 1.1: Getting Organized</a>
 
-                    </div>
-                </div>
-            );
-        };
+  </div>
+</div>
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  if (window.lucide) lucide.createIcons();
+
+  function toggleRoadmap(btn, id) {
+    var panel = document.getElementById(id);
+    var open = panel.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.classList.toggle('open', open);
+    btn.querySelector('span').textContent = open ? 'Hide' : 'Activities';
+  }
+
+  function toggleTranscript() {
+    var box = document.getElementById('transcriptBox');
+    var btn = document.getElementById('transcriptToggle');
+    var open = box.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    document.getElementById('transcriptLabel').textContent = open ? 'Hide transcript' : 'Read transcript';
+  }
+</script>
 </body>
 </html>
