@@ -22,6 +22,33 @@ Keep every HTML page visually consistent by routing shared presentation through 
 * Any new classes must inherit the shared design tokens from shared.css, such as var(--primary), var(--accent), var(--primary-faint), the established font family, and existing font size patterns.
 * Any new classes must also include appropriate dark mode rules in shared.css.
 * Before creating new JavaScript, check shared.js to see whether reusable behavior or helper functions already exist.
+* Do not use emojis in HTML copy, button labels, feedback messages, or JavaScript strings unless the user explicitly asks for them.
+* For icons, use Lucide (this repo’s static HTML setup — not Lucide React). Do not use emojis, Unicode symbols, or other icon libraries as substitutes.
+
+## Icons (Lucide)
+
+This project is plain HTML/JS, not React. Use **Lucide** via the existing pattern:
+
+```html
+<button class="icon-btn" aria-label="Open glossary">
+  <i data-lucide="book-open" class="licon"></i>
+</button>
+```
+
+```html
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  if (window.lucide) lucide.createIcons();
+</script>
+```
+
+Rules:
+
+* Pick icon names from [Lucide icons](https://lucide.dev/icons/) (`book-open`, `chevron-right`, `rotate-ccw`, etc.).
+* Use `<i data-lucide="icon-name">` (optional `.licon` class to match existing pages).
+* Always call `lucide.createIcons()` after adding or changing icons, including after dynamic DOM updates.
+* Style icons with shared classes (e.g. `.icon-btn`, `.licon`) — do not inline icon sizing or colors.
+* Do **not** install `lucide-react` or add React — this codebase does not use React.
 
 ## Very important shared-file editing rules
 
@@ -117,6 +144,8 @@ Do not duplicate data or logic that already lives in `shared.js`.
 | Modifying existing shared.js functions | Add new helper; explain issue first |
 | Raw hex in HTML | Token-based classes in `shared.css` |
 | Light-mode-only new component | Light rules + dark `@media` rules appended to `shared.css` |
+| Emojis or random Unicode icons | Lucide `<i data-lucide="...">` + `lucide.createIcons()` |
+| `lucide-react` or other icon libraries | Lucide via unpkg + `data-lucide` |
 
 ## Verification checklist
 
@@ -127,6 +156,8 @@ Do not duplicate data or logic that already lives in `shared.js`.
 - [ ] New classes use design tokens and include dark mode
 - [ ] New JS checked against `shared.js` first
 - [ ] Visual style matches sibling pages in both light and dark mode
+- [ ] No emojis in copy or feedback
+- [ ] Icons use Lucide `data-lucide` and `lucide.createIcons()` is called
 
 ## Reference files
 
