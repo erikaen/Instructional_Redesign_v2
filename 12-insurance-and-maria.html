@@ -34,7 +34,7 @@
     <!-- ===== Phase: welcome ===== -->
     <div class="phase active" id="phase-welcome">
       <div class="narrative-block">
-        <p>You called Citizens Mutual last week about insurance &mdash; you didn&rsquo;t want to be caught flat-footed if something happened. Maria, the agent, is coming by this afternoon to write a policy. She said she&rsquo;d need to know what&rsquo;s here.</p>
+        <p>You called Citizens Mutual last week about insurance. You didn&rsquo;t want to be caught flat-footed if something happened. Maria, the agent, is coming by this afternoon to write a policy. She said she&rsquo;d need to know what&rsquo;s here.</p>
         <p>Good thing you started that <strong>Things</strong> tab.</p>
       </div>
 
@@ -47,7 +47,7 @@
       <div class="section-card">
         <div class="card-title">What You&rsquo;ll Discover</div>
         <ul class="bullet-list">
-          <li>Every Thing on your list needs a dollar value &mdash; and they don&rsquo;t all come from the same place.</li>
+          <li>Every Thing on your list needs a dollar value, and they don&rsquo;t all come from the same place.</li>
           <li>Most values you&rsquo;ll read straight off a receipt; for gear you&rsquo;ve had a while, you&rsquo;ll work it out another way.</li>
           <li>By the end, the insurer has her own name for the list.</li>
         </ul>
@@ -57,7 +57,7 @@
 
       <div class="dialog-box maria">
         <div class="dialog-label">MARIA</div>
-        <div class="dialog-text">&ldquo;Hi &mdash; Maria from Citizens Mutual. Good to meet you. I&rsquo;ll write you a property policy &mdash; I need an inventory of what you have first. Here&rsquo;s the form. Use your list: drop each thing into the right section, and put a dollar amount on it while you&rsquo;re there. Most amounts come straight off a receipt; one or two you&rsquo;ll have to look up.&rdquo;</div>
+        <div class="dialog-text">&ldquo;Hi, Maria from Citizens Mutual. Good to meet you. I&rsquo;ll write you a property policy. I need an inventory of what you have first. Here&rsquo;s the form. Use your list: drop each thing into the right section, and put a dollar amount on it while you&rsquo;re there. Most amounts come straight off a receipt; one or two you&rsquo;ll have to look up.&rdquo;</div>
       </div>
 
       <button class="btn-continue btn-block" onclick="goto('form')">Start the inventory &rarr;</button>
@@ -66,7 +66,7 @@
     <!-- ===== Phase: form ===== -->
     <div class="phase" id="phase-form">
       <div class="narrative-block">
-        <p>Maria&rsquo;s form has four sections &mdash; Equipment, Computer Equipment, Supplies, Fixtures. Take one item into each section and put a dollar amount on it &mdash; open the <strong>receipt</strong> it came on, or look it up. Once the pattern is clear for all four, you can finish the rest in one go.</p>
+        <p>Maria&rsquo;s form has four sections: Equipment, Computer Equipment, Supplies, Fixtures. <strong>Drag</strong> one item into each section and click to open the <strong>receipt</strong> it came on to identify the corresponding dollar amount. Once the pattern is clear for all four sections, you can finish the rest in one go.</p>
       </div>
 
       <div class="gate-armed" id="selectedHint" hidden></div>
@@ -77,6 +77,7 @@
           <div class="things-sidebar-sub">(repair-related, from 1.1)</div>
           <div class="sidebar-items" id="sidebarItems"></div>
           <div class="sidebar-more" id="sidebarMore"></div>
+          <div class="feedback" id="formNudge"></div>
         </div>
         <div class="ins-form">
           <div class="ins-form-head">
@@ -90,7 +91,6 @@
         </div>
       </div>
 
-      <div class="dialog-box maria" id="formNudge" hidden></div>
       <div class="dialog-box maria" id="laptopNudge" hidden>
         <div class="dialog-label">MARIA</div>
         <div class="dialog-text"><span class="dialog-prefix">(looking over)</span>&ldquo;That laptop&rsquo;s got no receipt &mdash; you&rsquo;ve had it for years. For something used, we put down what it would <strong>sell for now</strong>. Tap <em>eBay comp</em> next to it, look at a few comparable ones, and write down a fair number.&rdquo;</div>
@@ -102,7 +102,7 @@
       </div>
 
       <div class="gate-card" id="gateCard">
-        <div class="gate-card-title">Value one item in each section &mdash; from its own evidence &mdash; to unlock the rest:</div>
+        <div class="gate-card-title">Drag at least one item for each section to unlock the rest:</div>
         <ul class="gate-list" id="gateList"></ul>
         <button class="btn-continue btn-block" id="doRestBtn" onclick="doTheRest()" disabled>Do the rest &rarr;</button>
       </div>
@@ -150,18 +150,18 @@
       <div class="section-card">
         <div class="card-title">What You Discovered</div>
         <ul class="bullet-list check">
-          <li>Every Thing on your list got a dollar amount &mdash; but the amounts didn&rsquo;t all come from the same place: a <strong>receipt</strong> for what you bought, an <strong>eBay comp</strong> for the gear you&rsquo;d owned a while, a <strong>shelf count</strong> for the supplies.</li>
-          <li>Maria has her own name for the list &mdash; <strong>insurable property</strong>: only what you own and could lose. You bought $500 of parts, but only the <strong>$200</strong> still on the shelf goes on it.</li>
-          <li>You valued one item in each section by hand, then finished the rest in one pass. <em>Same move as last time</em> &mdash; once the pattern&rsquo;s clear, the volume is easy.</li>
+          <li>Every Thing on your list got a dollar amount, but the amounts didn&rsquo;t all come from the same place: a <strong>receipt</strong> for what you bought, an <strong>eBay comp</strong> for the gear you&rsquo;d owned a while, a <strong>shelf count</strong> for the supplies.</li>
+          <li>Maria has her own name for the list &mdash; <strong>Insurable Property</strong>: only what you own and could lose. You bought $500 of parts, but only the <strong>$200</strong> still on the shelf goes on it.</li>
+          <li>You valued one item in each section by hand, then finished the rest in one pass. Same move as last time: once the pattern&rsquo;s clear, the volume is easy.</li>
         </ul>
       </div>
       <div class="insight-box">
         <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
-        <p>This is the same list of Things from last time &mdash; now sorted into categories with a number on every line. But it&rsquo;s only <em>one</em> slice of it: the part an insurer cares about. Other people will look at the very same list and see something different. The bigger picture it all belongs to is still being built &mdash; it&rsquo;ll have a name by the end of the module.</p>
+        <p>This is the same list of Things from last time. All items are now sorted into categories with a number on every line. But it&rsquo;s only one slice of it: the part an insurer cares about. Other people will look at the very same list and see something different. The bigger picture it all belongs to is still being built. It&rsquo;ll have a name by the end of the module.</p>
       </div>
       <div class="next-card">
         <div class="next-card-label">Coming Next &mdash; Tutorial 1.3: Anna and the Bank Statement</div>
-        <p>Anna&rsquo;s stopping by &mdash; your friend who kept the books at City Cycle for years. She&rsquo;ll have her own way of looking at this list, and a couple of names for what&rsquo;s on it.</p>
+        <p>Anna, your friend who kept the books at City Cycle for years, is stopping by. She&rsquo;ll have her own way of looking at this list, and a couple of names for what&rsquo;s on it.</p>
       </div>
       <div class="btn-row">
         <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Restart</button>
@@ -247,7 +247,7 @@ var ebayComps = [520,610,585,640,515];
 var receipts = [
   { id:'parktool', forItem:['stand'], vendor:'Cyclesport Supply', vendorSub:'professional bike tools & equipment', receiptNum:'Sales Receipt  #SR-4471', date:'May 3, 2026', paidWith:'Personal debit card', paidLast4:'•••• 6620', paidNote:'Not charged to the bike-repair credit card — paid from personal funds.', lineItems:[{name:'Park Tool PRS-25 Team Issue Repair Stand', amount:200}], total:200 },
   { id:'tools', forItem:['conewr'], vendor:'Cyclesport Supply', vendorSub:'professional bike tools & equipment', receiptNum:'Sales Receipt  #SR-4488', date:'May 5, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Cone wrench set',amount:65},{name:'Torque wrench',amount:95},{name:'Hex / Allen key set',amount:45},{name:'Cable cutters',amount:40},{name:'Chain breaker',amount:35},{name:'Tire levers (set)',amount:20}], total:300 },
-  { id:'fixtures', forItem:['pegboard'], vendor:'Workspace Outfitters', vendorSub:'store fixtures & furnishings', receiptNum:'Invoice  #WO-20518', date:'May 5, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Work desk',amount:250},{name:'Shelving units (×2)',amount:200},{name:'Display rack',amount:180},{name:'Pegboard panel + hook set',amount:120}], total:750 },
+  { id:'fixtures', forItem:['pegboard','desk','shelves','display'], vendor:'Workspace Outfitters', vendorSub:'store fixtures & furnishings', receiptNum:'Invoice  #WO-20518', date:'May 5, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Work desk',amount:250},{name:'Shelving units (×2)',amount:200},{name:'Display rack',amount:180},{name:'Pegboard panel + hook set',amount:120}], total:750 },
   { id:'qbp', forItem:['chains','cables','pads','cassettes','bbs','spokes','tubes'], vendor:'QBP', vendorSub:'Quality Bicycle Products — wholesale parts distributor', receiptNum:'Invoice  #QBP-887341  ·  Ship: UPS Ground', date:'May 15, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Chains (box)',amount:100},{name:'Brake pads (box)',amount:80},{name:'Derailleur cables (box)',amount:40},{name:'Cassettes (×4)',amount:80},{name:'Bottom brackets (assorted)',amount:80},{name:'Spokes (bundle)',amount:80},{name:'Tubes (box)',amount:40}], total:500 }
 ];
 var creditCard = { issuer:'Harborline Visa', sub:'Personal card · repair and personal charges co-mingled', last4:'•••• 3902', period:'May 1 – May 31, 2026', opened:'Statement opened May 1, 2026', previousBalance:0, chargesTotal:2260, paymentsTotal:800, newBalance:1460, transactions:[
@@ -314,7 +314,7 @@ function goto(p){
 }
 function restart(){
   placements={}; values={}; paidValues={}; selectedId=null; formDone=false; formFilling=false;
-  document.getElementById('formNudge').hidden=true;
+  document.getElementById('formNudge').className='feedback';
   document.getElementById('laptopNudge').hidden=true;
   document.getElementById('systemBanner').hidden=true;
   document.getElementById('gateCard').hidden=false;
@@ -338,9 +338,8 @@ function renderSidebar(){
   var box = document.getElementById('sidebarItems');
   if(formDone){ box.innerHTML = '<div class="sidebar-empty">All placed.</div>'; document.getElementById('sidebarMore').hidden=true; return; }
   box.innerHTML = remaining.map(function(i){
-    return '<div class="sidebar-item'+(selectedId===i.id?' selected':'')+'" draggable="true" '+
-      'ondragstart="onDragStart(event,\''+i.id+'\')" ondragend="this.classList.remove(\'dragging\')" '+
-      'onclick="toggleSelect(\''+i.id+'\')">'+i.name+'</div>';
+    return '<div class="sidebar-item" draggable="true" '+
+      'ondragstart="onDragStart(event,\''+i.id+'\')" ondragend="this.classList.remove(\'dragging\')">'+i.name+'</div>';
   }).join('');
   var hidden = items.length - visibleIds.length;
   var more = document.getElementById('sidebarMore');
@@ -404,7 +403,7 @@ function renderForm(){
       inner += placed.map(function(i){ return isSupplies?renderSupplyRow(i):renderItemRow(i); }).join('');
     }
     html += '<div class="ins-section"><div class="ins-section-label">'+cat.label+'</div><div class="ins-section-sub">'+cat.sub+'</div>'+
-      '<div class="'+zoneCls+'" data-cat="'+cat.id+'" ondragover="event.preventDefault()" ondrop="onDropSection(event,\''+cat.id+'\')" onclick="onSectionClick(\''+cat.id+'\')">'+inner+'</div>'+
+      '<div class="'+zoneCls+'" data-cat="'+cat.id+'" ondragover="event.preventDefault()" ondrop="onDropSection(event,\''+cat.id+'\')">'+inner+'</div>'+
       (placed.length?'<div class="ins-subtotal">'+cat.label+' subtotal: '+fmt(subtotalForCat(cat.id))+'</div>':'')+'</div>';
   });
   document.getElementById('insSections').innerHTML = html;
@@ -423,7 +422,7 @@ function updateTotalsOnly(){
 function updateGate(){
   var list = document.getElementById('gateList');
   list.innerHTML = categoryDefs.map(function(cat){
-    return '<li><span>'+(catHandValued(cat.id)?'<i data-lucide="check" class="licon"></i>':'·')+'</span><span>'+cat.label+(cat.id==='supplies'?' — both paid (receipt) and on-shelf':'')+'</span></li>';
+    return '<li><span>'+(catHandValued(cat.id)?'<i data-lucide="check" class="licon"></i>':'·')+'</span><span>'+cat.label+''+'</span></li>';
   }).join('');
   if (window.lucide) lucide.createIcons();
   var met = formTriggerMet();
@@ -433,7 +432,7 @@ function updateGate(){
   gate.classList.toggle('gate-armed', met);
   gate.querySelector('.gate-card-title').textContent = met
     ? 'The pattern’s clear — you’ve valued one item in every section. Finish the rest the same way.'
-    : 'Value one item in each section — from its own evidence — to unlock the rest:';
+    : 'Corretly group and identify dollar value(s) for at least one item in each section to unlock the rest:';
   // laptop nudge
   document.getElementById('laptopNudge').hidden = !(placements['laptop']==='computer' && !isValCorrect('laptop') && !formDone);
 }
@@ -460,12 +459,14 @@ function placeItem(id, catId){
   var nudge = document.getElementById('formNudge');
   if(item.category!==catId){
     playNope();
-    nudge.hidden=false;
-    nudge.innerHTML = '<div class="dialog-label">MARIA</div><div class="dialog-text"><span class="dialog-prefix">(glancing over)</span>&ldquo;'+miscatNudge(item)+'&rdquo;</div>';
+    nudge.className = 'feedback err show';
+    nudge.innerHTML = '✗ '+miscatNudge(item);
   } else {
     playSuccess();
     placements[item.id]=catId;
-    nudge.hidden=true;
+    var catLabel = categoryDefs.filter(function(c){ return c.id===catId; })[0].label;
+    nudge.className = 'feedback ok show';
+    nudge.innerHTML = '✓ '+item.name+' — correctly grouped as '+catLabel+'.';
     renderForm();
   }
 }
@@ -477,7 +478,7 @@ function doTheRest(){
   formFilling=true;
   selectedId=null;
   document.getElementById('gateCard').hidden=true;
-  document.getElementById('formNudge').hidden=true;
+  document.getElementById('formNudge').className='feedback';
   document.getElementById('laptopNudge').hidden=true;
   document.getElementById('systemBanner').hidden=false;
   setTimeout(function(){
@@ -501,7 +502,7 @@ function renderReadback(){
   }).join('');
   rows += '<div class="totals-row total"><span>TOTAL (insurable)</span><span class="mono">'+fmt(totalInsurable())+'</span></div>';
   document.getElementById('readbackRows').innerHTML = rows;
-  document.getElementById('readbackMaria').innerHTML = '<div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;OK. Equipment '+fmt(subtotalForCat('equipment'))+'. Computer equipment '+fmt(subtotalForCat('computer'))+'. Supplies '+fmt(subtotalForCat('supplies'))+'. Fixtures '+fmt(subtotalForCat('fixtures'))+'. Total of '+fmt(totalInsurable())+' &mdash; what you have on hand now. Property policy goes on that. Paperwork in the mail.&rdquo;</div>';
+  document.getElementById('readbackMaria').innerHTML = '<div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;OK. Equipment '+fmt(subtotalForCat('equipment'))+'. Computer equipment '+fmt(subtotalForCat('computer'))+'. Supplies '+fmt(subtotalForCat('supplies'))+'. Fixtures '+fmt(subtotalForCat('fixtures'))+'. Total of '+fmt(totalInsurable())+'. That is what you have on hand now. Property policy goes on that. Paperwork in the mail.&rdquo;</div>';
 }
 
 /* ===== document popups ===== */
