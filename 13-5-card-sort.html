@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1.3 — Sort the Credit Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1.3: Anna and the Bank Statement</h1>
+        <p class="tut-header-sub">Bicycle repair shop &middot; ~20 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="seg-progress" id="segProgress"></div>
+    <div class="phase-title" id="phaseTitle"></div>
+
+    <div class="narrative-block"><p>You dig out last month&rsquo;s credit-card statement. Same story as the checking account &mdash; the shop&rsquo;s charges are tangled up with your own.</p></div>
+    <div class="dialog-box anna">
+      <div class="dialog-label">ANNA</div>
+      <div class="dialog-text">&ldquo;Same drill as the bank. Go down the card and mark each charge: is it the <em>repair work</em>, or <em>personal</em>? Tap <strong>info</strong> on a row to see what it was.&rdquo;</div>
+    </div>
+    <div id="cardArea"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 4;
+var PHASE_TITLE = 'Sort the Credit Card';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var cardTxns = [
+  { id:'k01', date:'May 3', desc:'Stop & Shop — groceries', amt:85, kind:'charge', cat:'personal', info:'Weekly groceries. Nothing to do with the shop.' },
+  { id:'k02', date:'May 5', desc:'Workspace Outfitters — fixtures', amt:750, kind:'charge', cat:'repair', info:'The desk, shelving, display rack, and pegboard for the shop.' },
+  { id:'k03', date:'May 5', desc:'Cyclesport Supply — hand tools', amt:300, kind:'charge', cat:'repair', info:'Cone wrenches, torque wrench, hex keys, cutters — the hand tools.' },
+  { id:'k04', date:'May 8', desc:'Compressor Depot — air compressor', amt:180, kind:'charge', cat:'repair', info:'Shop air compressor.' },
+  { id:'k05', date:'May 9', desc:'Restaurant — dinner', amt:55, kind:'charge', cat:'personal', info:'Dinner out. Personal.' },
+  { id:'k06', date:'May 10', desc:'Industrial Supply — parts washer', amt:130, kind:'charge', cat:'repair', info:'Parts washer for the shop.' },
+  { id:'k07', date:'May 12', desc:'Cyclesport Supply — wheel-truing stand', amt:170, kind:'charge', cat:'repair', info:'Wheel-truing stand.' },
+  { id:'k08', date:'May 14', desc:'Gas station', amt:48, kind:'charge', cat:'personal', info:'Filled up the car. Personal.' },
+  { id:'k09', date:'May 15', desc:'QBP — parts order', amt:500, kind:'charge', cat:'repair', info:'Wholesale parts order — chains, pads, cables, cassettes, etc.' },
+  { id:'k10', date:'May 16', desc:'ACH payment — thank you', amt:400, kind:'payment', cat:'repair', info:'You paid $400 down on the card from the repair account.' },
+  { id:'k11', date:'May 18', desc:'Streaming service', amt:16, kind:'charge', cat:'personal', info:'Monthly streaming subscription. Personal.' },
+  { id:'k12', date:'May 22', desc:'Pharmacy', amt:26, kind:'charge', cat:'personal', info:'Prescription pickup. Personal.' },
+  { id:'k13', date:'May 28', desc:'ACH payment — thank you', amt:400, kind:'payment', cat:'repair', info:'A second $400 paydown from the repair account.' }
+];
+
+var glossaryTerms = [
+  { term:'Asset', def:"Something you have — a present right to something useful. Everything on your 'have' list: the gear, the parts, the prepaid month, cash." },
+  { term:'Liability', def:"Something you owe — a present obligation to pay or do something later. Everything on your 'owe' (Promises) list: the card balance, Smith's frame." },
+  { term:'Prepaid rent', def:"Rent paid ahead for a month you haven't used yet — a future benefit you still hold, so it counts as an asset." },
+  { term:'Promise', def:'Something you have agreed to do or pay, where the doing or paying comes later.' },
+  { term:'Bill', def:'A statement of money you owe to someone.' },
+  { term:'Deposit', def:'Money paid in advance for something you will receive or have done.' },
+  { term:'Customer', def:'Someone who pays you for goods or services.' },
+  { term:'Supplier', def:'A company you buy from.' },
+  { term:'Withdrawal', def:'Money taken out of a bank account.' }
+];
+
+function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+/* ===== state ===== */
+var cardClass = {}, cardExpandedId = null, cardSortChecked = false, cardSortAutoDone = false;
+
+/* ===== generic statement ===== */
+function renderStatement(rows, opts){
+  var grid = opts.bank ? 'stmt-grid-bank' : 'stmt-grid-card';
+  var html = '<div class="stmt">';
+  html += '<div class="stmt-head"><div><div class="stmt-bank">'+opts.bankName+'</div><div class="stmt-acct">'+opts.acct+'</div></div>'+
+    '<div style=""><div class="stmt-period-label">Statement period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
+  html += '<div class="stmt-balrow"><span>'+opts.topLabel+'</span><span class="stmt-num">'+opts.topVal+'</span></div>';
+  if(opts.bank){
+    html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Withdrawal</span><span class="stmt-num">Deposit</span><span class="stmt-num">Balance</span><span></span></div>';
+  } else {
+    html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Charge</span><span class="stmt-num">Payment</span><span></span></div>';
+  }
+  rows.forEach(function(tx, i){
+    var cls = opts.classObj[tx.id];
+    var wrong = opts.checked && cls && cls !== tx.cat;
+    var stripeCls = wrong ? 'wrong' : (cls || '');
+    var open = opts.expandedId === tx.id;
+    var tag = '';
+    if(cls){ var lbl = cls.charAt(0).toUpperCase()+cls.slice(1); tag = '<span class="stmt-tag '+cls+'">'+lbl+'</span>'; }
+    if(wrong) tag += '<span class="stmt-tag rethink">rethink</span>';
+    html += '<div class="stmt-row '+grid+(i%2?' alt':'')+'">'+
+      '<div class="stmt-stripe '+stripeCls+'"></div>'+
+      '<span class="mono">'+tx.date+'</span>'+
+      '<span>'+tx.desc+tag+'</span>';
+    if(opts.bank){
+      html += '<span class="stmt-num stmt-with">'+(tx.w>0?fmt(tx.w):'&mdash;')+'</span>'+
+        '<span class="stmt-num stmt-dep">'+(tx.d>0?fmt(tx.d):'&mdash;')+'</span>'+
+        '<span class="stmt-num">'+fmt(tx.bal)+'</span>';
+    } else {
+      html += '<span class="stmt-num stmt-with">'+(tx.kind==='charge'?fmt(tx.amt):'&mdash;')+'</span>'+
+        '<span class="stmt-num stmt-dep">'+(tx.kind==='payment'?fmt(tx.amt):'&mdash;')+'</span>';
+    }
+    html += '<button class="stmt-info-btn'+(open?' open':'')+'" onclick="'+opts.toggleFn+'(\''+tx.id+'\')" aria-label="More info"><i data-lucide="info" class="licon"></i></button></div>';
+    if(open){
+      var a = opts.catA, b = opts.catB;
+      html += '<div class="stmt-expand"><div class="stmt-expand-info">'+tx.info+'</div><div class="classify-row"><span class="classify-label">Classify:</span>'+
+        '<button class="classify-btn'+(cls===a.id?' active-'+a.id:'')+'" onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+a.id+'\')">'+a.label+'</button>'+
+        '<button class="classify-btn'+(cls===b.id?' active-'+b.id:'')+'" onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+b.id+'\')">'+b.label+'</button>'+
+        (cls?'<button class="classify-clear" onclick="'+opts.clearFn+'(\''+tx.id+'\')">Clear</button>':'')+
+        '</div></div>';
+    }
+  });
+  html += '<div class="stmt-balrow bottom"><span>'+opts.botLabel+'</span><span class="stmt-num">'+opts.botVal+'</span></div>';
+  html += '</div>';
+  return html;
+}
+function sortProgress(shop, personal, unsorted, shopLabel){
+  return '<div class="sortprog"><div class="sortprog-title">Sort progress</div><div class="sortprog-grid">'+
+    '<div class="sortprog-box shop"><div class="sortprog-label">'+shopLabel+'</div><div class="sortprog-num">'+shop+'</div></div>'+
+    '<div class="sortprog-box personal"><div class="sortprog-label">Personal</div><div class="sortprog-num">'+personal+'</div></div>'+
+    '<div class="sortprog-box'+(unsorted===0?' done':'')+'"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">'+unsorted+'</div></div>'+
+    '</div></div>';
+}
+
+/* ===== card-sort ===== */
+function renderCardSort(){
+  var repair = Object.values(cardClass).filter(function(c){return c==='repair';}).length;
+  var personal = Object.values(cardClass).filter(function(c){return c==='personal';}).length;
+  var unsorted = cardTxns.length - repair - personal;
+  var correctCount = cardTxns.filter(function(t){return cardClass[t.id]===t.cat;}).length;
+  var hasR = cardTxns.some(function(t){return cardClass[t.id]==='repair' && t.cat==='repair';});
+  var hasP = cardTxns.some(function(t){return cardClass[t.id]==='personal' && t.cat==='personal';});
+  var wrongIds = cardTxns.filter(function(t){return cardClass[t.id] && cardClass[t.id]!==t.cat;}).map(function(t){return t.id;});
+  var triggerMet = correctCount>=4 && hasR && hasP && unsorted>0 && !cardSortAutoDone;
+
+  var html = renderStatement(cardTxns, { bank:false, bankName:'HARBORLINE VISA', acct:'Personal card · account ending •••• 3902',
+    topLabel:'Previous balance', topVal:'$0.00', botLabel:'New balance (May 31)', botVal:'$1,460.00',
+    classObj:cardClass, expandedId:cardExpandedId, checked:cardSortChecked,
+    toggleFn:'toggleCardDesc', classifyFn:'classifyCard', clearFn:'clearCard',
+    catA:{id:'repair',label:'Repair work'}, catB:{id:'personal',label:'Personal'} });
+  html += sortProgress(repair, personal, unsorted, 'Repair');
+
+  if(triggerMet){
+    html += '<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Repair charges or personal &mdash; same as the bank. Apply it to the rest.</p><button class="btn-continue btn-block" onclick="cardAutocomplete()">Sort the rest &rarr;</button></div>';
+  } else if(unsorted>0){
+    html += '<button class="btn-continue btn-block" disabled>'+unsorted+' still to classify</button>';
+  } else if(!cardSortChecked){
+    html += '<button class="btn-continue btn-block" onclick="checkCardSort()">Check my sort</button>';
+  } else if(wrongIds.length===0){
+    var repairCharges = cardTxns.filter(function(t){return t.cat==='repair'&&t.kind==='charge';}).reduce(function(s,t){return s+t.amt;},0);
+    var personalCharges = cardTxns.filter(function(t){return t.cat==='personal'&&t.kind==='charge';}).reduce(function(s,t){return s+t.amt;},0);
+    var paydowns = cardTxns.filter(function(t){return t.kind==='payment';}).reduce(function(s,t){return s+t.amt;},0);
+    var owes = repairCharges - paydowns;
+    html += '<div class="card-result"><div class="card-result-line"><span>Repair charges</span><span class="mono">'+dollars(repairCharges)+'</span></div>'+
+      '<div class="card-result-line muted"><span>&minus; paid down (from the repair account)</span><span class="mono">&minus;'+dollars(paydowns)+'</span></div>'+
+      '<div class="card-result-line total"><span>Owed on the card &mdash; for the repair work</span><span class="mono">'+dollars(owes)+'</span></div>'+
+      '<div class="card-result-note">The '+dollars(personalCharges)+' of personal charges is yours, not the shop&rsquo;s &mdash; it stays off.</div></div>'+
+      '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;There it is. You charged <strong>'+dollars(repairCharges)+'</strong> of repair stuff, paid <strong>'+dollars(paydowns)+'</strong> back &mdash; so you still owe <strong>'+dollars(owes)+'</strong> on the card for the repair work. That&rsquo;s a second promise. Put it on the list, right next to Smith&rsquo;s.&rdquo;</div></div>'+
+      '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+  } else {
+    html += '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Take another look at '+(wrongIds.length===1?'the marked row':'the '+wrongIds.length+' marked rows')+' &mdash; open the <strong>info</strong> and re-classify.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" disabled>'+wrongIds.length+' '+(wrongIds.length===1?'row':'rows')+' need another look</button>';
+  }
+  document.getElementById('cardArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function toggleCardDesc(id){ cardExpandedId = (cardExpandedId===id)?null:id; renderCardSort(); }
+function classifyCard(id, kind){ cardClass[id]=kind; cardExpandedId=null; playClick(); renderCardSort(); }
+function clearCard(id){ delete cardClass[id]; renderCardSort(); }
+function checkCardSort(){ cardSortChecked=true; playClick(); renderCardSort(); }
+function cardAutocomplete(){ playClick(); cardTxns.forEach(function(t){ if(!cardClass[t.id]) cardClass[t.id]=t.cat; }); cardSortAutoDone=true; cardExpandedId=null; playSuccess(); renderCardSort(); }
+
+/* ===== restart ===== */
+function restart(){
+  cardClass={}; cardExpandedId=null; cardSortChecked=false; cardSortAutoDone=false;
+  renderCardSort(); scrollTo(0,0);
+}
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  var html = '';
+  for(var i = 0; i < 9; i++){
+    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
+    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
+  }
+  document.getElementById('segProgress').innerHTML = html;
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+renderCardSort();
+</script>
+</body>
+</html>

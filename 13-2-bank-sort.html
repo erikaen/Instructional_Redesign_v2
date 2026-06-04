@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1.3 — Sort the Bank Statement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1.3: Anna and the Bank Statement</h1>
+        <p class="tut-header-sub">Bicycle repair shop &middot; ~20 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="seg-progress" id="segProgress"></div>
+    <div class="phase-title" id="phaseTitle"></div>
+
+    <div class="narrative-block"><p>You&rsquo;ve been using your personal bank account for shop activity. Last month&rsquo;s statement just arrived. Anna sits down at the workbench with you to look it over.</p></div>
+    <div class="dialog-box anna">
+      <div class="dialog-label">ANNA</div>
+      <div class="dialog-text">&ldquo;First thing: there&rsquo;s a lot in here that has nothing to do with the shop. Apartment rent, groceries, your paycheck. Let&rsquo;s pull out only the shop-related transactions so we can look at them clearly. Click <strong>info</strong> on any row to see what it was, then classify it as <em>shop-related</em> or <em>personal</em>.&rdquo;</div>
+    </div>
+    <div id="bankArea"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 1;
+var PHASE_TITLE = 'Sort the Bank Statement';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var txns = [
+  { id:'t01', date:'May 1', desc:'Payroll deposit — employer', w:0, d:1800, bal:4300.00, cat:'personal', info:'Your full-time job paycheck — direct-deposited twice a month.' },
+  { id:'t02', date:'May 1', desc:'Check #1041 — rent', w:1300, d:0, bal:3000.00, cat:'shop', info:"Lease check for the new bike-repair space. First month's rent ($650) plus last month's rent held by the landlord ($650). Paid May 1." },
+  { id:'t03', date:'May 3', desc:'Debit — Cyclesport Supply', w:200, d:0, bal:2800.00, cat:'shop', info:'Park Tool PRS-25 repair stand. Paid from personal debit, not the bike-repair credit card.' },
+  { id:'t04', date:'May 5', desc:'Apartment rent — autopay', w:1400, d:0, bal:1400.00, cat:'personal', info:'Monthly rent on your apartment.' },
+  { id:'t05', date:'May 7', desc:'Venmo deposit', w:0, d:340, bal:1740.00, cat:'shop', info:'Customer payments at the shop, deposited via Venmo. Saturday — brake job, tune-up, two tire mountings.' },
+  { id:'t06', date:'May 9', desc:'Groceries — Stop & Shop', w:135, d:0, bal:1605.00, cat:'personal', info:'Groceries for the week.' },
+  { id:'t07', date:'May 10', desc:'Venmo deposit', w:0, d:180, bal:1785.00, cat:'shop', info:'More customer payments via Venmo. Walk-ins — mixed work, no itemization on the receipt.' },
+  { id:'t08', date:'May 11', desc:'Utilities — UI', w:120, d:0, bal:1665.00, cat:'personal', info:'Electric bill — United Illuminating.' },
+  { id:'t09', date:'May 12', desc:'Venmo deposit', w:0, d:80, bal:1745.00, cat:'shop', info:'Customer payment — tune-up.' },
+  { id:'t10', date:'May 14', desc:'Venmo deposit', w:0, d:140, bal:1885.00, cat:'shop', info:'Customer payment — brake overhaul.' },
+  { id:'t11', date:'May 15', desc:'Payroll deposit — employer', w:0, d:1800, bal:3685.00, cat:'personal', info:'Second paycheck of the month.' },
+  { id:'t12', date:'May 16', desc:'ACH — Harborline Visa payment', w:400, d:0, bal:3285.00, cat:'shop', info:'Paydown on the bike-repair credit card. First of two ACH transfers from this account to the Harborline Visa during May.' },
+  { id:'t13', date:'May 18', desc:'ATM cash withdrawal', w:50, d:0, bal:3235.00, cat:'personal', info:'Personal walking-around money.' },
+  { id:'t14', date:'May 19', desc:'Venmo deposit', w:0, d:130, bal:3365.00, cat:'shop', info:'Customer payment — chain and cassette replacement.' },
+  { id:'t15', date:'May 20', desc:'Streaming subscription', w:16, d:0, bal:3349.00, cat:'personal', info:'Streaming service for your apartment.' },
+  { id:'t16', date:'May 22', desc:'Check deposit — Smith', w:0, d:220, bal:3569.00, cat:'shop', info:"Smith's deposit on the custom frame build. Notebook says: \"deposit, frame build, 4-6 weeks.\"" },
+  { id:'t17', date:'May 23', desc:'Venmo deposit', w:0, d:100, bal:3669.00, cat:'shop', info:'Customer payment — tune-up and minor repair.' },
+  { id:'t18', date:'May 24', desc:'Groceries — Stop & Shop', w:145, d:0, bal:3524.00, cat:'personal', info:'Groceries for the week.' },
+  { id:'t19', date:'May 27', desc:'Venmo deposit', w:0, d:150, bal:3674.00, cat:'shop', info:'Customer payment — custom wheel work, new spokes.' },
+  { id:'t20', date:'May 28', desc:'ACH — Harborline Visa payment', w:400, d:0, bal:3274.00, cat:'shop', info:'Second ACH paydown to the bike-repair credit card.' }
+];
+
+var glossaryTerms = [
+  { term:'Asset', def:"Something you have — a present right to something useful. Everything on your 'have' list: the gear, the parts, the prepaid month, cash." },
+  { term:'Liability', def:"Something you owe — a present obligation to pay or do something later. Everything on your 'owe' (Promises) list: the card balance, Smith's frame." },
+  { term:'Prepaid rent', def:"Rent paid ahead for a month you haven't used yet — a future benefit you still hold, so it counts as an asset." },
+  { term:'Promise', def:'Something you have agreed to do or pay, where the doing or paying comes later.' },
+  { term:'Bill', def:'A statement of money you owe to someone.' },
+  { term:'Deposit', def:'Money paid in advance for something you will receive or have done.' },
+  { term:'Customer', def:'Someone who pays you for goods or services.' },
+  { term:'Supplier', def:'A company you buy from.' },
+  { term:'Withdrawal', def:'Money taken out of a bank account.' }
+];
+
+function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+/* ===== state ===== */
+var classifications = {}, expandedDescId = null, sortChecked = false, sortAutoDone = false;
+
+/* ===== generic statement ===== */
+function renderStatement(rows, opts){
+  var grid = opts.bank ? 'stmt-grid-bank' : 'stmt-grid-card';
+  var html = '<div class="stmt">';
+  html += '<div class="stmt-head"><div><div class="stmt-bank">'+opts.bankName+'</div><div class="stmt-acct">'+opts.acct+'</div></div>'+
+    '<div style=""><div class="stmt-period-label">Statement period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
+  html += '<div class="stmt-balrow"><span>'+opts.topLabel+'</span><span class="stmt-num">'+opts.topVal+'</span></div>';
+  if(opts.bank){
+    html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Withdrawal</span><span class="stmt-num">Deposit</span><span class="stmt-num">Balance</span><span></span></div>';
+  } else {
+    html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Charge</span><span class="stmt-num">Payment</span><span></span></div>';
+  }
+  rows.forEach(function(tx, i){
+    var cls = opts.classObj[tx.id];
+    var wrong = opts.checked && cls && cls !== tx.cat;
+    var stripeCls = wrong ? 'wrong' : (cls || '');
+    var open = opts.expandedId === tx.id;
+    var tag = '';
+    if(cls){ var lbl = cls.charAt(0).toUpperCase()+cls.slice(1); tag = '<span class="stmt-tag '+cls+'">'+lbl+'</span>'; }
+    if(wrong) tag += '<span class="stmt-tag rethink">rethink</span>';
+    html += '<div class="stmt-row '+grid+(i%2?' alt':'')+'">'+
+      '<div class="stmt-stripe '+stripeCls+'"></div>'+
+      '<span class="mono">'+tx.date+'</span>'+
+      '<span>'+tx.desc+tag+'</span>';
+    if(opts.bank){
+      html += '<span class="stmt-num stmt-with">'+(tx.w>0?fmt(tx.w):'&mdash;')+'</span>'+
+        '<span class="stmt-num stmt-dep">'+(tx.d>0?fmt(tx.d):'&mdash;')+'</span>'+
+        '<span class="stmt-num">'+fmt(tx.bal)+'</span>';
+    } else {
+      html += '<span class="stmt-num stmt-with">'+(tx.kind==='charge'?fmt(tx.amt):'&mdash;')+'</span>'+
+        '<span class="stmt-num stmt-dep">'+(tx.kind==='payment'?fmt(tx.amt):'&mdash;')+'</span>';
+    }
+    html += '<button class="stmt-info-btn'+(open?' open':'')+'" onclick="'+opts.toggleFn+'(\''+tx.id+'\')" aria-label="More info"><i data-lucide="info" class="licon"></i></button></div>';
+    if(open){
+      var a = opts.catA, b = opts.catB;
+      html += '<div class="stmt-expand"><div class="stmt-expand-info">'+tx.info+'</div><div class="classify-row"><span class="classify-label">Classify:</span>'+
+        '<button class="classify-btn'+(cls===a.id?' active-'+a.id:'')+'" onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+a.id+'\')">'+a.label+'</button>'+
+        '<button class="classify-btn'+(cls===b.id?' active-'+b.id:'')+'" onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+b.id+'\')">'+b.label+'</button>'+
+        (cls?'<button class="classify-clear" onclick="'+opts.clearFn+'(\''+tx.id+'\')">Clear</button>':'')+
+        '</div></div>';
+    }
+  });
+  html += '<div class="stmt-balrow bottom"><span>'+opts.botLabel+'</span><span class="stmt-num">'+opts.botVal+'</span></div>';
+  html += '</div>';
+  return html;
+}
+function sortProgress(shop, personal, unsorted, shopLabel){
+  return '<div class="sortprog"><div class="sortprog-title">Sort progress</div><div class="sortprog-grid">'+
+    '<div class="sortprog-box shop"><div class="sortprog-label">'+shopLabel+'</div><div class="sortprog-num">'+shop+'</div></div>'+
+    '<div class="sortprog-box personal"><div class="sortprog-label">Personal</div><div class="sortprog-num">'+personal+'</div></div>'+
+    '<div class="sortprog-box'+(unsorted===0?' done':'')+'"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">'+unsorted+'</div></div>'+
+    '</div></div>';
+}
+
+/* ===== bank-sort ===== */
+function renderBankSort(){
+  var shop = Object.values(classifications).filter(function(c){return c==='shop';}).length;
+  var personal = Object.values(classifications).filter(function(c){return c==='personal';}).length;
+  var unsorted = txns.length - shop - personal;
+  var correctCount = txns.filter(function(t){return classifications[t.id]===t.cat;}).length;
+  var hasShop = txns.some(function(t){return classifications[t.id]==='shop' && t.cat==='shop';});
+  var hasPers = txns.some(function(t){return classifications[t.id]==='personal' && t.cat==='personal';});
+  var wrongIds = txns.filter(function(t){return classifications[t.id] && classifications[t.id]!==t.cat;}).map(function(t){return t.id;});
+  var triggerMet = correctCount>=5 && hasShop && hasPers && unsorted>0 && !sortAutoDone;
+
+  var html = renderStatement(txns, { bank:true, bankName:'ELM CITY BANK', acct:'Personal Checking · account ending •••• 8814',
+    topLabel:'Beginning balance (May 1)', topVal:'$2,500.00', botLabel:'Ending balance (May 31)', botVal:'$3,274.00',
+    classObj:classifications, expandedId:expandedDescId, checked:sortChecked,
+    toggleFn:'toggleBankDesc', classifyFn:'classifyBank', clearFn:'clearBank',
+    catA:{id:'shop',label:'Shop-related'}, catB:{id:'personal',label:'Personal'} });
+  html += sortProgress(shop, personal, unsorted, 'Shop-related');
+
+  if(triggerMet){
+    html += '<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Five sorted correctly, both sides covered. Apply it to the rest.</p><button class="btn-continue btn-block" onclick="bankAutocomplete()">Sort the rest &rarr;</button></div>';
+  } else if(unsorted>0){
+    html += '<button class="btn-continue btn-block" disabled>'+unsorted+' still to classify</button>';
+  } else if(!sortChecked){
+    html += '<button class="btn-continue btn-block" onclick="checkBankSort()">Check my sort</button>';
+  } else if(wrongIds.length===0){
+    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Nicely sorted</div><p>Twelve shop-related transactions to dig into.</p></div>'+
+      '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+  } else {
+    html += '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Let&rsquo;s take another look at '+(wrongIds.length===1?'this one':'these '+wrongIds.length)+'. I&rsquo;ve marked the '+(wrongIds.length===1?'row':'rows')+' that need a second pass. Open the <strong>info</strong> to re-read what each was, then re-classify.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" disabled>'+wrongIds.length+' '+(wrongIds.length===1?'row':'rows')+' still need another look</button>';
+  }
+  document.getElementById('bankArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function toggleBankDesc(id){ expandedDescId = (expandedDescId===id)?null:id; renderBankSort(); }
+function classifyBank(id, kind){ classifications[id]=kind; expandedDescId=null; playClick(); renderBankSort(); }
+function clearBank(id){ delete classifications[id]; renderBankSort(); }
+function checkBankSort(){ sortChecked=true; playClick(); renderBankSort(); }
+function bankAutocomplete(){ playClick(); txns.forEach(function(t){ if(!classifications[t.id]) classifications[t.id]=t.cat; }); sortAutoDone=true; expandedDescId=null; playSuccess(); renderBankSort(); }
+
+/* ===== restart ===== */
+function restart(){
+  classifications={}; expandedDescId=null; sortChecked=false; sortAutoDone=false;
+  renderBankSort(); scrollTo(0,0);
+}
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  var html = '';
+  for(var i = 0; i < 9; i++){
+    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
+    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
+  }
+  document.getElementById('segProgress').innerHTML = html;
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+renderBankSort();
+</script>
+</body>
+</html>

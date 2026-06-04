@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1.3 — Tutorial Complete</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1.3: Anna and the Bank Statement</h1>
+        <p class="tut-header-sub">Bicycle repair shop &middot; ~20 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      </div>
+    </div>
+    <div class="seg-progress" id="segProgress"></div>
+    <div class="phase-title" id="phaseTitle"></div>
+
+    <div class="complete-head">
+      <div class="trophy-badge"><i data-lucide="trophy"></i></div>
+      <div class="complete-title">Tutorial Complete!</div>
+    </div>
+    <div class="section-card">
+      <div class="card-title">What You Discovered</div>
+      <ul class="bullet-list check">
+        <li>The bank statement is the <em>bank&rsquo;s</em> record, mixed in with your personal life. You had to pull the repair work&rsquo;s cash out of it &mdash; net &minus;$960 for the month.</li>
+        <li>Not all money <em>in</em> is yours to keep: Smith&rsquo;s $220 was an advance &mdash; cash you have <em>and</em> a promise you owe. It started a second list: <strong>Promises</strong>.</li>
+        <li>A promise only goes on the list when something <em>happens</em> to create it: Jones asked for a frame too, but put nothing down &mdash; so it stayed <em>off</em>.</li>
+        <li>The credit card is a promise to pay &mdash; you sorted it just like the bank ($2,030 repair charges &minus; $800 paid down = $1,230 owed).</li>
+        <li>Not all money <em>out</em> is gone: half the rent bought a future month &mdash; a prepaid asset you still hold.</li>
+        <li>Your two lists earned their names: <strong>Assets</strong> ($3,410) and <strong>Liabilities</strong> ($1,450).</li>
+      </ul>
+    </div>
+    <div class="insight-box">
+      <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
+      <p>A list of cash going in and out isn&rsquo;t the same as what you <em>have</em> and <em>owe</em>. You had to <em>interpret</em> the bank&rsquo;s record &mdash; separate the repair from the personal, tell an advance from money earned, split a rent payment into used-up and paid-ahead &mdash; to see your real picture. That interpretation is what turns a bank statement into a set of Assets and Liabilities. The records and the economic reality are not the same thing.</p>
+    </div>
+    <div class="next-card">
+      <div class="next-card-label">Coming Next &mdash; Tutorial 1.4: Keeping the Reasons</div>
+      <p>Your two lists won&rsquo;t sit still &mdash; they change every week as you work. The amounts tell you <em>what</em> changed, but never <em>why</em>. Next, you&rsquo;ll set up a way to keep the reasons alongside the numbers.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 8;
+var PHASE_TITLE = 'Tutorial Complete';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var glossaryTerms = [
+  { term:'Asset', def:"Something you have — a present right to something useful. Everything on your 'have' list: the gear, the parts, the prepaid month, cash." },
+  { term:'Liability', def:"Something you owe — a present obligation to pay or do something later. Everything on your 'owe' (Promises) list: the card balance, Smith's frame." },
+  { term:'Prepaid rent', def:"Rent paid ahead for a month you haven't used yet — a future benefit you still hold, so it counts as an asset." },
+  { term:'Promise', def:'Something you have agreed to do or pay, where the doing or paying comes later.' },
+  { term:'Bill', def:'A statement of money you owe to someone.' },
+  { term:'Deposit', def:'Money paid in advance for something you will receive or have done.' },
+  { term:'Customer', def:'Someone who pays you for goods or services.' },
+  { term:'Supplier', def:'A company you buy from.' },
+  { term:'Withdrawal', def:'Money taken out of a bank account.' }
+];
+
+function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  var html = '';
+  for(var i = 0; i < 9; i++){
+    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
+    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
+  }
+  document.getElementById('segProgress').innerHTML = html;
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+</script>
+</body>
+</html>
