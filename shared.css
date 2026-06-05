@@ -2447,6 +2447,14 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .sortprog-num { font-size: var(--font-lg); font-weight: 700; color: var(--primary); }
 .sortprog-box.personal .sortprog-num { color: #555; }
 .sortprog-box.done .sortprog-num { color: var(--success-text); }
+.sortprog-hint { font-size: var(--font-s); color: #666; line-height: 1.55; margin-top: 10px; }
+.phase-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.phase-title-row .phase-title { margin-bottom: 0; }
+.sortprog .btn-continue { margin-top: 12px; }
+.sortprog-hint + .sortprog-grid { margin-top: 10px; }
+.hint-pulse { position: relative; }
+.hint-pulse::after { content: ''; position: absolute; width: 34px; height: 34px; top: 50%; left: 50%; border-radius: 50%; border: 2px solid var(--primary); animation: hint-pulse-ring 1.2s ease-out infinite; pointer-events: none; }
+@keyframes hint-pulse-ring { 0% { transform: translate(-50%, -50%) scale(0.9); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; } }
 
 /* ----- Transaction card ----- */
 .txcard { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: white; border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; }
@@ -2583,6 +2591,7 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .sortprog { background: #32303c; border-color: var(--border); }
   .sortprog-box { border-color: var(--border); }
   .sortprog-box.personal { background: #2a2830; }
+  .sortprog-hint { color: #8a8898; }
   .txcard { background: #32303c; border-color: var(--border); }
   .dep-chip { background: #32303c; }
   .dep-card { background: #32303c; border-color: var(--border); }

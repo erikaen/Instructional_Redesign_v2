@@ -13,23 +13,16 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 1.3: Anna and the Bank Statement</h1>
-        <p class="tut-header-sub">Bicycle repair shop &middot; ~20 min</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
-    <div class="seg-progress" id="segProgress"></div>
-    <div class="phase-title" id="phaseTitle"></div>
 
-    <div class="narrative-block"><p>You&rsquo;ve been using your personal bank account for shop activity. Last month&rsquo;s statement just arrived. Anna sits down at the workbench with you to look it over.</p></div>
+    <div class="narrative-block"><p>You&rsquo;ve been using your personal bank account for the repair work. Last month&rsquo;s statement just arrived. Anna sits down at the workbench with you to look it over.</p></div>
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;First thing: there&rsquo;s a lot in here that has nothing to do with the shop. Apartment rent, groceries, your paycheck. Let&rsquo;s pull out only the shop-related transactions so we can look at them clearly. Click <strong>info</strong> on any row to see what it was, then classify it as <em>shop-related</em> or <em>personal</em>.&rdquo;</div>
+      <div class="dialog-text">&ldquo;First thing: there&rsquo;s a lot in here that has nothing to do with the shop. Apartment rent, groceries, your paycheck. Let&rsquo;s pull out only the repair-related transactions so we can look at them clearly. Click <strong><i data-lucide="info" class="licon"></i></strong> on any row to see what it was, then classify it as <em>repair-related</em> or <em>personal</em>.&rdquo;</div>
     </div>
     <div id="bankArea"></div>
 
@@ -102,7 +95,7 @@ function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:
 function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
 
 /* ===== state ===== */
-var classifications = {}, expandedDescId = null, sortChecked = false, sortAutoDone = false;
+var classifications = {}, expandedDescId = null, sortChecked = false, sortAutoDone = false, hintSeen = false;
 
 /* ===== generic statement ===== */
 function renderStatement(rows, opts){
@@ -122,8 +115,8 @@ function renderStatement(rows, opts){
     var stripeCls = wrong ? 'wrong' : (cls || '');
     var open = opts.expandedId === tx.id;
     var tag = '';
-    if(cls){ var lbl = cls.charAt(0).toUpperCase()+cls.slice(1); tag = '<span class="stmt-tag '+cls+'">'+lbl+'</span>'; }
-    if(wrong) tag += '<span class="stmt-tag rethink">rethink</span>';
+    if(cls){ var lbl = cls==='shop'?'Repair':cls.charAt(0).toUpperCase()+cls.slice(1); tag = '<span class="stmt-tag '+cls+'">'+lbl+'</span>'; }
+    if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
     html += '<div class="stmt-row '+grid+(i%2?' alt':'')+'">'+
       '<div class="stmt-stripe '+stripeCls+'"></div>'+
       '<span class="mono">'+tx.date+'</span>'+
@@ -136,13 +129,12 @@ function renderStatement(rows, opts){
       html += '<span class="stmt-num stmt-with">'+(tx.kind==='charge'?fmt(tx.amt):'&mdash;')+'</span>'+
         '<span class="stmt-num stmt-dep">'+(tx.kind==='payment'?fmt(tx.amt):'&mdash;')+'</span>';
     }
-    html += '<button class="stmt-info-btn'+(open?' open':'')+'" onclick="'+opts.toggleFn+'(\''+tx.id+'\')" aria-label="More info"><i data-lucide="info" class="licon"></i></button></div>';
+    html += '<button class="stmt-info-btn'+(open?' open':'')+''+(i===0&&opts.showHint?' hint-pulse':'')+'" onclick="'+opts.toggleFn+'(\''+tx.id+'\')" aria-label="More info"><i data-lucide="info" class="licon"></i></button></div>';
     if(open){
       var a = opts.catA, b = opts.catB;
       html += '<div class="stmt-expand"><div class="stmt-expand-info">'+tx.info+'</div><div class="classify-row"><span class="classify-label">Classify:</span>'+
         '<button class="classify-btn'+(cls===a.id?' active-'+a.id:'')+'" onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+a.id+'\')">'+a.label+'</button>'+
         '<button class="classify-btn'+(cls===b.id?' active-'+b.id:'')+'" onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+b.id+'\')">'+b.label+'</button>'+
-        (cls?'<button class="classify-clear" onclick="'+opts.clearFn+'(\''+tx.id+'\')">Clear</button>':'')+
         '</div></div>';
     }
   });
@@ -150,12 +142,19 @@ function renderStatement(rows, opts){
   html += '</div>';
   return html;
 }
-function sortProgress(shop, personal, unsorted, shopLabel){
-  return '<div class="sortprog"><div class="sortprog-title">Sort progress</div><div class="sortprog-grid">'+
+function sortProgress(shop, personal, unsorted, shopLabel, triggerMet, showCheck){
+  var btn = unsorted > 0
+    ? '<button class="btn-continue btn-block"'+(triggerMet?' onclick="bankAutocomplete()"':' disabled')+'>Sort the rest</button>'
+    : (showCheck ? '<button class="btn-continue btn-block" onclick="checkBankSort()">Check my sort</button>' : '');
+  return '<div class="sortprog"><div class="sortprog-title">Sort the transactions</div>'+
+    '<p class="sortprog-hint">A shortcut to auto-sort the remaining transactions will unlock as you go. You&rsquo;re welcome to sort all 20 yourself.</p>'+
+    '<div class="sortprog-grid">'+
     '<div class="sortprog-box shop"><div class="sortprog-label">'+shopLabel+'</div><div class="sortprog-num">'+shop+'</div></div>'+
     '<div class="sortprog-box personal"><div class="sortprog-label">Personal</div><div class="sortprog-num">'+personal+'</div></div>'+
     '<div class="sortprog-box'+(unsorted===0?' done':'')+'"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">'+unsorted+'</div></div>'+
-    '</div></div>';
+    '</div>'+
+    btn+
+    '</div>';
 }
 
 /* ===== bank-sort ===== */
@@ -169,38 +168,29 @@ function renderBankSort(){
   var wrongIds = txns.filter(function(t){return classifications[t.id] && classifications[t.id]!==t.cat;}).map(function(t){return t.id;});
   var triggerMet = correctCount>=5 && hasShop && hasPers && unsorted>0 && !sortAutoDone;
 
-  var html = renderStatement(txns, { bank:true, bankName:'ELM CITY BANK', acct:'Personal Checking · account ending •••• 8814',
+  var html = sortProgress(shop, personal, unsorted, 'Repair-related', triggerMet, !sortChecked && unsorted===0);
+  if(sortChecked && wrongIds.length>0){
+    html += '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Not all of these are in the right place. I&rsquo;ve marked the ones that need another look. Open the <strong><i data-lucide="info" class="licon"></i></strong> on each marked row, re-read what it was, and re-classify.&rdquo;</div></div>';
+  }
+  if(sortChecked && wrongIds.length===0){
+    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Nicely sorted</div><p>Twelve repair-related transactions to dig into.</p></div>';
+  }
+  html += renderStatement(txns, { bank:true, bankName:'ELM CITY BANK', acct:'Personal Checking · account ending •••• 8814',
     topLabel:'Beginning balance (May 1)', topVal:'$2,500.00', botLabel:'Ending balance (May 31)', botVal:'$3,274.00',
     classObj:classifications, expandedId:expandedDescId, checked:sortChecked,
-    toggleFn:'toggleBankDesc', classifyFn:'classifyBank', clearFn:'clearBank',
-    catA:{id:'shop',label:'Shop-related'}, catB:{id:'personal',label:'Personal'} });
-  html += sortProgress(shop, personal, unsorted, 'Shop-related');
-
-  if(triggerMet){
-    html += '<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Five sorted correctly, both sides covered. Apply it to the rest.</p><button class="btn-continue btn-block" onclick="bankAutocomplete()">Sort the rest &rarr;</button></div>';
-  } else if(unsorted>0){
-    html += '<button class="btn-continue btn-block" disabled>'+unsorted+' still to classify</button>';
-  } else if(!sortChecked){
-    html += '<button class="btn-continue btn-block" onclick="checkBankSort()">Check my sort</button>';
-  } else if(wrongIds.length===0){
-    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Nicely sorted</div><p>Twelve shop-related transactions to dig into.</p></div>'+
-      '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
-  } else {
-    html += '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Let&rsquo;s take another look at '+(wrongIds.length===1?'this one':'these '+wrongIds.length)+'. I&rsquo;ve marked the '+(wrongIds.length===1?'row':'rows')+' that need a second pass. Open the <strong>info</strong> to re-read what each was, then re-classify.&rdquo;</div></div>'+
-      '<button class="btn-continue btn-block" disabled>'+wrongIds.length+' '+(wrongIds.length===1?'row':'rows')+' still need another look</button>';
-  }
+    toggleFn:'toggleBankDesc', classifyFn:'classifyBank', showHint:!hintSeen,
+    catA:{id:'shop',label:'Repair-related'}, catB:{id:'personal',label:'Personal'} });
   document.getElementById('bankArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
-function toggleBankDesc(id){ expandedDescId = (expandedDescId===id)?null:id; renderBankSort(); }
+function toggleBankDesc(id){ hintSeen=true; expandedDescId = (expandedDescId===id)?null:id; renderBankSort(); }
 function classifyBank(id, kind){ classifications[id]=kind; expandedDescId=null; playClick(); renderBankSort(); }
-function clearBank(id){ delete classifications[id]; renderBankSort(); }
 function checkBankSort(){ sortChecked=true; playClick(); renderBankSort(); }
 function bankAutocomplete(){ playClick(); txns.forEach(function(t){ if(!classifications[t.id]) classifications[t.id]=t.cat; }); sortAutoDone=true; expandedDescId=null; playSuccess(); renderBankSort(); }
 
 /* ===== restart ===== */
 function restart(){
-  classifications={}; expandedDescId=null; sortChecked=false; sortAutoDone=false;
+  classifications={}; expandedDescId=null; sortChecked=false; sortAutoDone=false; hintSeen=false;
   renderBankSort(); scrollTo(0,0);
 }
 
@@ -213,19 +203,8 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 
-/* ===== progress ===== */
-function renderSegProgress(){
-  var html = '';
-  for(var i = 0; i < 9; i++){
-    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
-    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
-  }
-  document.getElementById('segProgress').innerHTML = html;
-  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
-}
-
 /* ===== init ===== */
-renderSegProgress();
+document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 renderBankSort();
 </script>
 </body>
