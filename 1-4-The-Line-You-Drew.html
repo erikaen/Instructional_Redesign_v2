@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1 — The Line You Drew</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Module 1: Getting Organized</h1>
+        <p class="tut-header-sub">A side activity becomes a thing &middot; ~10 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="seg-progress" id="segProgress"></div>
+    <div class="phase-title" id="phaseTitle"></div>
+
+    <div class="narrative-block"><p>You filled the <strong>Things</strong> tab from both places, and left a lot behind. You drew a line. What is the line actually about?</p></div>
+    <div class="mc-card">
+      <div class="mc-q">Which best describes what ended up on the Things tab?</div>
+      <div class="mc-opts" id="q1Opts"></div>
+      <div class="feedback" id="q1Feedback"></div>
+    </div>
+    <div class="btn-row" id="q1SubmitRow"><button class="btn-continue" id="q1Submit" onclick="submitQ1()" disabled>Submit</button></div>
+    <div id="q1Done" hidden>
+      <div class="insight-box">
+        <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i>The line you drew</div>
+        <p>You drew a line: things related to the repair work go in &mdash; wherever they sit, whatever their job &mdash; and everything else stays out. Not where it is, not what it&rsquo;s used for, not who &ldquo;owns&rdquo; it. Just: <strong>is this part of the repair work, or not?</strong> Nobody taught you to draw it. You did it because the work had become its own thing, and you needed to see it clearly.</p>
+      </div>
+      <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 3;
+var PHASE_TITLE = 'The Line You Drew';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac() { if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} } return audioCtx; }
+function tone(f, d, t, v) { var c = ac(); if(!c) return; var o = c.createOscillator(), g = c.createGain(); o.type = t||'sine'; o.frequency.value = f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05, c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + d); o.start(); o.stop(c.currentTime + d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){ tone(784,0.16); },110); }
+function playNope(){ tone(180,0.16,'sine',0.05); }
+function playBuzzer(){ tone(120,0.3,'square',0.05); }
+
+/* ===== data ===== */
+var q1Options = [
+  { id:'a', text:'Things related to your repair work' },
+  { id:'b', text:'Things you use for repairing bicycles' },
+  { id:'c', text:'Things in the rented space' },
+  { id:'d', text:'Things the business owns' }
+];
+var Q1_CORRECT = 'a';
+var q1OptionFeedback = {
+  b: 'Not quite. You don’t repair anything with the cash drawer — it just holds change for customers — yet it went in. It isn’t about what you use to fix bikes. Look again at what the things in the box have in common.',
+  c: 'Not quite. The laptop and the desk were sitting at home, not in the space — and your own commuter bike was right there in the space but stayed out. So it isn’t about where things are.',
+  d: 'Careful — there’s no separate “business” here yet. You own all of it: the stand, the laptop, the cash drawer, and the couch and your commuter bike too. “You own it” is just as true of the things you left out, so ownership can’t be the line. What the things in the box share is that they’re for your repair work.'
+};
+var q1Answer = 'Things related to your repair work. The stand, the parts, the cash drawer, the laptop on your desk at home — all of it relates to the repair work, wherever it sits and whatever its job. The guitar, the couch, your own commuter bike — they don’t. That line is the most important thing you drew today.';
+
+var GLOSSARY = [
+  { term:'The repair work', def:'The bike-repair activity you do, separate from the rest of your life. We don’t give it a formal name yet — you’ll feel it become its own thing before anyone names it.' },
+  { term:'Things', def:'Plain word for the stuff you have for the repair work. No dollar values yet — those come in Module 2.' },
+  { term:'A tab', def:'A sheet in your spreadsheet. You build your books one tab at a time, starting with the Things tab here.' }
+];
+
+/* ===== state ===== */
+var q1Sel = null, q1Attempts = 0, q1Submitted = false;
+
+/* ===== reflect (MCQ) ===== */
+function renderQ1() {
+  var box = document.getElementById('q1Opts');
+  box.innerHTML = q1Options.map(function(o) {
+    return '<div class="mc-opt" data-id="' + o.id + '" onclick="selectQ1(\'' + o.id + '\')">' +
+      '<div class="mc-letter">' + o.id.toUpperCase() + '</div><div>' + o.text + '</div></div>';
+  }).join('');
+}
+function selectQ1(id) {
+  if (q1Submitted) return;
+  q1Sel = id;
+  document.querySelectorAll('#q1Opts .mc-opt').forEach(function(el){
+    el.classList.toggle('selected', el.getAttribute('data-id') === id);
+  });
+  document.getElementById('q1Submit').disabled = false;
+  document.getElementById('q1Feedback').classList.remove('show');
+}
+function lockQ1() {
+  document.querySelectorAll('#q1Opts .mc-opt').forEach(function(el){ el.classList.add('locked'); });
+}
+function showCorrectQ1() {
+  q1Submitted = true;
+  document.querySelectorAll('#q1Opts .mc-opt').forEach(function(el){
+    if (el.getAttribute('data-id') === Q1_CORRECT) el.classList.add('correct');
+  });
+  lockQ1();
+  document.getElementById('q1SubmitRow').hidden = true;
+  document.getElementById('q1Done').hidden = false;
+}
+function submitQ1() {
+  if (q1Sel === null || q1Submitted) return;
+  var fb = document.getElementById('q1Feedback');
+  if (q1Sel === Q1_CORRECT) {
+    playSuccess();
+    fb.className = 'feedback ok show';
+    fb.textContent = q1Answer;
+    showCorrectQ1();
+  } else {
+    q1Attempts++;
+    var wrongEl = document.querySelector('#q1Opts .mc-opt[data-id="' + q1Sel + '"]');
+    if (q1Attempts >= 3) {
+      playBuzzer();
+      if (wrongEl) wrongEl.classList.add('wrong');
+      fb.className = 'feedback ok show';
+      fb.innerHTML = '<strong>Here’s what we were looking for:</strong> ' + q1Answer;
+      showCorrectQ1();
+    } else {
+      playNope();
+      if (wrongEl) wrongEl.classList.add('wrong');
+      fb.className = 'feedback err show';
+      fb.textContent = q1OptionFeedback[q1Sel];
+    }
+  }
+}
+
+/* ===== restart ===== */
+function restart() {
+  q1Sel = null; q1Attempts = 0; q1Submitted = false;
+  document.getElementById('q1SubmitRow').hidden = false;
+  document.getElementById('q1Submit').disabled = true;
+  document.getElementById('q1Done').hidden = true;
+  document.getElementById('q1Feedback').classList.remove('show');
+  renderQ1();
+  window.scrollTo(0, 0);
+}
+
+/* ===== glossary ===== */
+function openGlossary() {
+  document.getElementById('glossaryList').innerHTML = GLOSSARY.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">' + g.term + '</div><div class="glossary-entry-def">' + g.def + '</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary() { document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  var html = '';
+  for(var i = 0; i < 5; i++){
+    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
+    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
+  }
+  document.getElementById('segProgress').innerHTML = html;
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+renderQ1();
+</script>
+</body>
+</html>
