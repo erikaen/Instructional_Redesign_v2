@@ -22,7 +22,6 @@
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
       </div>
     </div>
-    <div class="seg-progress" id="segProgress"></div>
     <div class="phase-title" id="phaseTitle"></div>
 
     <div class="narrative-block">
@@ -99,12 +98,6 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 
 /* ===== progress ===== */
 function renderSegProgress(){
-  var html = '';
-  for(var i = 0; i < 7; i++){
-    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
-    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
-  }
-  document.getElementById('segProgress').innerHTML = html;
   document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 }
 
