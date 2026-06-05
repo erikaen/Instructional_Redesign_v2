@@ -145,7 +145,9 @@ var items = [
   { id:'cassettes', name:'Cassettes', category:'supplies', cost:40, sourced:'receipt', paidAmount:80, countLeft:'½ left' },
   { id:'bbs', name:'Bottom brackets', category:'supplies', cost:20, sourced:'receipt', paidAmount:80, countLeft:'¼ left' },
   { id:'spokes', name:'Spokes', category:'supplies', cost:20, sourced:'receipt', paidAmount:80, countLeft:'¼ left' },
-  { id:'tubes', name:'Tubes', category:'supplies', cost:10, sourced:'receipt', paidAmount:40, countLeft:'¼ left' }
+  { id:'tubes', name:'Tubes', category:'supplies', cost:10, sourced:'receipt', paidAmount:40, countLeft:'¼ left' },
+  { id:'drawer', name:'Cash drawer', category:'none', sourced:'none' },
+  { id:'receipts', name:'Box of customer receipts', category:'none', sourced:'none' }
 ];
 function findItem(id){ return items.find(function(i){ return i.id===id; }); }
 var visibleIds = ['stand','compressor','laptop','chains','pegboard','desk'];
@@ -199,7 +201,7 @@ var values = {};
 var paidValues = {};
 var selectedId = null;
 var formDone = false, formFilling = false;
-var placeable = items.slice();
+var placeable = items.filter(function(i){ return i.category!=='none'; });
 
 /* ===== correctness ===== */
 function isValCorrect(id){ var it=findItem(id); return it && Number(values[id])===it.cost; }
@@ -243,7 +245,17 @@ function restart(){
 function renderSidebar(){
   var remaining = visibleIds.map(findItem).filter(function(i){ return !placements[i.id]; });
   var box = document.getElementById('sidebarItems');
-  if(formDone){ box.innerHTML = '<div class="sidebar-empty">All placed.</div>'; document.getElementById('sidebarMore').hidden=true; return; }
+  if(formDone){
+    var leftover = items.filter(function(i){ return i.category==='none'; });
+    box.innerHTML = leftover.map(function(i){
+      return '<div class="sidebar-item" title="Not insurable property">'+i.name+'</div>';
+    }).join('');
+    document.getElementById('sidebarMore').hidden=true;
+    var note = document.getElementById('formNudge');
+    note.className = 'mcq-fb inf show';
+    note.innerHTML = 'Cash drawer and Box of customer receipts stay on your Things list, but they’re not added to the insurance form — a property policy covers physical goods you’d replace, not the cash inside a drawer or paperwork.';
+    return;
+  }
   box.innerHTML = remaining.map(function(i){
     return '<div class="sidebar-item" draggable="true" '+
       'ondragstart="onDragStart(event,\''+i.id+'\')" ondragend="this.classList.remove(\'dragging\')">'+i.name+'</div>';
