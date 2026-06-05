@@ -13,31 +13,23 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 1.3: Anna and the Bank Statement</h1>
-        <p class="tut-header-sub">Bicycle repair shop &middot; ~20 min</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
-    <div class="seg-progress" id="segProgress"></div>
-    <div class="phase-title" id="phaseTitle"></div>
 
-    <div class="narrative-block"><p>Anna stopped on the eight customer deposits &mdash; money coming in from customers across the month. The bank statement showed them as money in, nothing more. But what were they for?</p></div>
-    <div class="dep-grid" id="depChips"></div>
-    <div class="dialog-box anna">
+    <div class="narrative-block"><p>The cash sheet shows eight customer deposits during May. The bank statement tells you that money came in, but it does not tell you what each customer paid for.</p></div>
+    <div id="depChips" style="margin-top: 20px;"></div>
+    <div class="dialog-box anna" style="margin-top:20px; margin-bottom:0;">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;So these deposits are from cash you got from customers, but why did they give it to you? Let&rsquo;s check the receipts.&rdquo;</div>
+      <div class="dialog-text">&ldquo;To figure out what each customer paid for, we need to check the receipts.&rdquo;</div>
     </div>
-    <button class="reveal-doc-btn" id="showReceiptsBtn" onclick="showReceipts()"><i data-lucide="receipt" class="licon"></i> Pull out the customer receipts</button>
-    <div id="depWrap" hidden>
-      <div class="callout">Some receipts are clearer than others. For each deposit, decide what it was &mdash; or whether you can tell at all.</div>
+    <button class="reveal-doc-btn" id="showReceiptsBtn" onclick="showReceipts()" style="margin-top:20px;"><i data-lucide="receipt" class="licon"></i> Pull out the customer receipts</button>
+    <div id="depWrap" hidden style="margin-top:20px;">
       <div id="depList"></div>
     </div>
-    <div id="depositsClose" hidden></div>
+    <div id="depositsClose" hidden style="margin-top:20px;"></div>
 
   </div>
 </div>
@@ -71,23 +63,23 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 /* ===== data ===== */
 var deposits = [
   { id:'d1', date:'May 7', amount:340, receiptNum:'#001', payment:'Venmo', lineItems:[{name:'Brake job',amount:120},{name:'Tune-up',amount:80},{name:'Tire mounting (×2)',amount:140}], note:null, correct:'done',
-    annaSays:{ done:"Right. The receipt is clear — multiple completed repairs. That's money you earned.", tocome:"Hmm — look at the receipt again. Brake job, tune-up, tire mountings. All work you already finished. You earned it — not a deposit on future work.", notsure:"You actually have enough to know on this one. Brake job, tune-up, tire mountings — work you finished. Try again." } },
+    annaSays:{ done:"Correct. The receipt lists completed repairs: a brake job, a tune-up, and two tire mountings. Those jobs were already finished, so this payment is for work done.", tocome:"Not quite. This receipt lists completed repairs: a brake job, a tune-up, and two tire mountings. The customer paid for work that was already done." } },
   { id:'d2', date:'May 10', amount:180, receiptNum:'#002', payment:'Venmo', lineItems:[{name:'Walk-ins — mixed work',amount:180}], note:'No itemization on this one.', correct:'done',
-    annaSays:{ done:"Best guess — and a defensible one. The receipt doesn't itemize. But your only outstanding future-work obligation is Smith's frame, and that's the May 22 deposit. By elimination, this had to be for work you'd already done.", tocome:"Hmm — but your only outstanding future-work obligation is Smith's frame, and that's the May 22 deposit. If this $180 were also a deposit on future work, you'd have another open promise to deliver. You don't.", notsure:"You can narrow it down. What other future work do you owe? Just Smith's frame — and that's the May 22 deposit. So this has to be for work already done." } },
+    annaSays:{ done:"Correct. This receipt is less specific, but it still points to work done. It says &ldquo;walk-ins&rdquo; and does not mention a deposit or future work.", tocome:"Not quite. This receipt is less specific, but it says &ldquo;walk-ins&rdquo; and does not mention a deposit, future work, or balance due." } },
   { id:'d3', date:'May 12', amount:80, receiptNum:'#003', payment:'Venmo', lineItems:[{name:'Tune-up',amount:80}], note:null, correct:'done',
-    annaSays:{ done:"Right — tune-up, done. Earnings.", tocome:"Hmm — a finished tune-up isn't a deposit on future work. You earned it.", notsure:"The receipt says the tune-up is done. You earned it." } },
+    annaSays:{ done:"Correct. The receipt lists a tune-up, which is completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a tune-up. That is completed repair work, not work still to come." } },
   { id:'d4', date:'May 14', amount:140, receiptNum:'#004', payment:'Venmo', lineItems:[{name:'Brake overhaul',amount:140}], note:null, correct:'done',
-    annaSays:{ done:"Right — brake overhaul, finished. Earnings.", tocome:"The overhaul is on the receipt as completed work. Not a deposit.", notsure:"The receipt is clear — brake overhaul done. You earned it." } },
+    annaSays:{ done:"Correct. The receipt lists a brake overhaul, which is completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a brake overhaul. That work was already completed, so this payment is for work done." } },
   { id:'d5', date:'May 19', amount:130, receiptNum:'#005', payment:'Venmo', lineItems:[{name:'Chain + cassette replacement',amount:130}], note:null, correct:'done',
-    annaSays:{ done:"Right — chain and cassette swap, done.", tocome:"The chain and cassette went on the customer's bike. Finished work, not a deposit.", notsure:"Receipt says it's done. Earnings." } },
-  { id:'d6', date:'May 22', amount:220, receiptNum:'#008', payment:'Check', lineItems:[{name:'Custom frame build — deposit',amount:220}], note:'Balance due on delivery (~Jul 3).', correct:'tocome',
-    annaSays:{ done:"Look at the receipt — 'deposit, balance due on delivery.' Smith hasn't gotten his frame yet. You owe him work. That's not earnings.", tocome:"Yes. Smith paid you, but you owe him a frame. The money is in your account but it comes with a debt — work you still have to do.", notsure:"You actually do know this one — the receipt says 'deposit, balance due on delivery (~Jul 3).' That's work to come." } },
-  { id:'d7', date:'May 23', amount:100, receiptNum:'#006', payment:'Venmo', lineItems:[{name:'Tune-up + minor repair',amount:100}], note:null, correct:'done',
-    annaSays:{ done:"Right — tune-up plus a small fix. Done. Earnings.", tocome:"Both items are finished work. Not a deposit.", notsure:"Receipt is clear — finished work. Earnings." } },
-  { id:'d8', date:'May 27', amount:150, receiptNum:'#007', payment:'Venmo', lineItems:[{name:'Custom wheel work + new spokes',amount:150}], note:null, correct:'done',
-    annaSays:{ done:"Right — wheel work and spokes, completed. Earnings.", tocome:"The wheel is back on the customer's bike. Done work, not a deposit.", notsure:"Receipt says the wheel work is finished. Earnings." } }
+    annaSays:{ done:"Correct. The receipt lists a chain and cassette replacement, which is completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a chain and cassette replacement. That is completed repair work, not a payment for future work." } },
+  { id:'d6', date:'May 22', amount:220, receiptNum:'#006', payment:'Check', lineItems:[{name:'Custom frame build — deposit',amount:220}], note:'Balance due on delivery (~Jul 3).', correct:'tocome',
+    annaSays:{ done:"Not quite. The receipt says &ldquo;deposit,&rdquo; and the balance is due on delivery. Smith has not received the frame yet, so this is not payment for completed work. It is work to come.", tocome:"Correct. This receipt says &ldquo;deposit,&rdquo; and the balance is due when the frame is delivered. Smith paid you now, but you still owe him the custom frame. This payment is for work to come." } },
+  { id:'d7', date:'May 23', amount:100, receiptNum:'#007', payment:'Venmo', lineItems:[{name:'Tune-up + minor repair',amount:100}], note:null, correct:'done',
+    annaSays:{ done:"Correct. The receipt lists a tune-up and a minor repair, which are completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a tune-up and a minor repair. Those jobs were already completed, so this payment is for work done." } },
+  { id:'d8', date:'May 27', amount:150, receiptNum:'#008', payment:'Venmo', lineItems:[{name:'Custom wheel work + new spokes',amount:150}], note:null, correct:'done',
+    annaSays:{ done:"Correct. The receipt lists custom wheel work and new spokes, which are completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists custom wheel work and new spokes. That work was already completed, so this payment is for work done." } }
 ];
-var optionLabels = { done:'Work done', tocome:'Work to come', notsure:'Not sure' };
+var optionLabels = { done:'Work done', tocome:'Work to come' };
 
 var glossaryTerms = [
   { term:'Asset', def:"Something you have — a present right to something useful. Everything on your 'have' list: the gear, the parts, the prepaid month, cash." },
@@ -104,47 +96,84 @@ var glossaryTerms = [
 function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
 
+var bikeRepairCashFlows = [
+  { date:'May 1', desc:'Rent check &mdash; Westville Properties', amount:-1300 },
+  { date:'May 3', desc:'Park Tool stand &mdash; Cyclesport Supply', amount:-200 },
+  { date:'May 7', desc:'Customer payment &mdash; Venmo', amount:340 },
+  { date:'May 10', desc:'Customer payment &mdash; Venmo', amount:180 },
+  { date:'May 12', desc:'Customer payment &mdash; Venmo', amount:80 },
+  { date:'May 14', desc:'Customer payment &mdash; Venmo', amount:140 },
+  { date:'May 16', desc:'Card paydown &mdash; Harborline Visa', amount:-400 },
+  { date:'May 19', desc:'Customer payment &mdash; Venmo', amount:130 },
+  { date:'May 22', desc:'Smith deposit &mdash; frame build', amount:220 },
+  { date:'May 23', desc:'Customer payment &mdash; Venmo', amount:100 },
+  { date:'May 27', desc:'Customer payment &mdash; Venmo', amount:150 },
+  { date:'May 28', desc:'Card paydown &mdash; Harborline Visa', amount:-400 }
+];
+
 /* ===== state ===== */
-var depositAnswers = {}, autoFilledDeposits = {}, depositsAutoDone = false;
+var depositAnswers = {}, currentDeposit = 0;
 var jonesResolved = false;
 
+/* ===== cash sheet panel ===== */
+function renderCashSheetPanel(){
+  var inflows = bikeRepairCashFlows.filter(function(f){return f.amount>0;});
+  var outflows = bikeRepairCashFlows.filter(function(f){return f.amount<0;});
+  var totalIn = inflows.reduce(function(s,f){return s+f.amount;},0);
+  var totalOut = outflows.reduce(function(s,f){return s+f.amount;},0);
+  var net = totalIn+totalOut;
+  var cashHtml = '<div class="cash-sheet-head"><div class="cash-sheet-title">Bike-repair cash flows &mdash; May 1 &ndash; May 31, 2026</div><div class="cash-sheet-sub">Pulled from the transactions you classified as repair-related in your personal bank statement.</div></div>';
+  cashHtml += '<div class="cash-group in"><div class="cash-group-label">Cash in</div>';
+  inflows.forEach(function(f){ cashHtml += '<div class="cash-line" style="background:var(--success-bg);"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">+'+dollars(f.amount)+'</span></div>'; });
+  cashHtml += '<div class="cash-subtotal"><span>Total in</span><span class="cash-line-amt">'+dollars(totalIn)+'</span></div></div>';
+  cashHtml += '<div class="cash-group out"><div class="cash-group-label">Cash out</div>';
+  outflows.forEach(function(f){ cashHtml += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">&minus;'+dollars(Math.abs(f.amount))+'</span></div>'; });
+  cashHtml += '<div class="cash-subtotal"><span>Total out</span><span class="cash-line-amt">&minus;'+dollars(Math.abs(totalOut))+'</span></div></div>';
+  cashHtml += '<div class="cash-net"><span class="cash-net-label">NET CASH (May)</span><span class="cash-net-val">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</span></div>';
+  cashHtml += "<div class=\"cash-foot\">That's the month's <strong>flow</strong> &mdash; money in minus money out &mdash; not a balance.</div>";
+  document.getElementById('depChips').innerHTML = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">Cash Sheet</span></div>'+
+    '<div>'+cashHtml+'</div>'+
+    '</div>';
+  if(window.lucide) lucide.createIcons();
+}
+
 /* ===== deposits ===== */
-function showReceipts(){ playClick(); document.getElementById('showReceiptsBtn').hidden=true; document.getElementById('depWrap').hidden=false; renderDeposits(); }
+function showReceipts(){ playClick(); document.getElementById('showReceiptsBtn').style.display='none'; document.getElementById('depWrap').hidden=false; renderDeposits(); }
 function renderDeposits(){
-  document.getElementById('depChips').innerHTML = deposits.map(function(d){
-    return '<div class="dep-chip"><div class="dep-chip-date">'+d.date+'</div><div class="dep-chip-amt">+$'+d.amount+'</div></div>';
-  }).join('');
   if(document.getElementById('depWrap').hidden) return;
-  var correctCount = deposits.filter(function(d){return depositAnswers[d.id]===d.correct;}).length;
-  var hasDone = deposits.some(function(d){return depositAnswers[d.id]===d.correct && d.correct==='done';});
-  var hasTo = deposits.some(function(d){return depositAnswers[d.id]===d.correct && d.correct==='tocome';});
-  var allCorrect = deposits.every(function(d){return depositAnswers[d.id]===d.correct;});
-  var triggerMet = correctCount>=3 && hasDone && hasTo && !allCorrect && !depositsAutoDone;
-
-  var html = deposits.map(function(d){
-    var ans = depositAnswers[d.id]; var locked = ans===d.correct; var auto = autoFilledDeposits[d.id];
-    var rows = d.lineItems.map(function(li){ return '<tr><td>'+li.name+'</td><td class="num">$'+li.amount+'.00</td></tr>'; }).join('');
-    var choices = ['done','tocome','notsure'].map(function(ch){
-      var c='dep-choice'; if(locked && ans===ch) c+=' correct'; else if(!locked && ans===ch) c+=' wrong'; else if(ans===ch) c+=' sel';
-      return '<button class="'+c+'" onclick="answerDeposit(\''+d.id+'\',\''+ch+'\')"'+(locked?' disabled':'')+'>'+optionLabels[ch]+'</button>';
-    }).join('');
-    var fb='';
-    if(ans && !auto){ fb = '<div class="dep-fb '+(locked?'ok':'err')+'"><div class="dep-fb-label">ANNA</div>'+d.annaSays[ans]+'</div>'; }
-    else if(auto && locked){ fb = '<div class="dep-fb ok"><div class="dep-fb-label">ANNA</div>'+(d.correct==='tocome'?'Work to come — deposit on an obligation.':'Same shape as the others — work done, earnings.')+'</div>'; }
-    return '<div class="dep-card'+(locked?' done':'')+'">'+
-      '<div class="dep-card-head"><div><div class="dep-card-meta">'+d.date+' &middot; '+d.payment+' deposit</div><div class="dep-card-title">Customer payment</div></div><div class="dep-card-amt">+$'+d.amount+'.00</div></div>'+
-      '<div class="dep-receipt"><div class="dep-receipt-head"><span class="dep-receipt-label">Customer receipt '+d.receiptNum+'</span><span class="dep-receipt-meta">'+d.date+', 2026 &middot; '+d.payment+'</span></div>'+
-      '<table class="dep-receipt-table"><tbody>'+rows+'<tr class="total"><td>Total</td><td class="num">$'+d.amount+'.00</td></tr></tbody></table>'+
-      (d.note?'<div class="dep-receipt-note">'+d.note+'</div>':'')+'</div>'+
-      '<div class="dep-choices">'+choices+'</div>'+fb+'</div>';
+  var d = deposits[currentDeposit];
+  var ans = depositAnswers[d.id]; var locked = ans===d.correct;
+  var rows = d.lineItems.map(function(li){ return '<tr><td>'+li.name+'</td><td class="num">$'+li.amount+'.00</td></tr>'; }).join('');
+  var choices = ['done','tocome'].map(function(ch){
+    var c='dep-choice'; if(locked && ans===ch) c+=' correct'; else if(!locked && ans===ch) c+=' wrong'; else if(ans===ch) c+=' sel';
+    return '<button class="'+c+'" onclick="answerDeposit(\''+d.id+'\',\''+ch+'\')"'+(locked?' disabled':'')+'>'+optionLabels[ch]+'</button>';
   }).join('');
-
-  if(triggerMet){
-    html += '<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Most of these are work done. The one outlier is Smith&rsquo;s deposit. Apply it to the rest of the receipts.</p><button class="btn-continue btn-block" onclick="depositsAutocomplete()">Sort the rest &rarr;</button></div>';
+  var fb='';
+  if(ans){
+    var errStyle = locked ? '' : ' style="background:var(--error-bg); border-color:var(--error-border); color:var(--error-text);"';
+    fb = '<div class="dep-fb '+(locked?'ok':'err')+'"'+errStyle+'><div class="dep-fb-label">ANNA</div>'+d.annaSays[ans]+'</div>';
   }
+
+  var isFirst = currentDeposit===0;
+  var isLast = currentDeposit===deposits.length-1;
+  var backBtn = isFirst ? '<span></span>' : '<button class="btn-continue" onclick="prevDeposit()">&larr; Back</button>';
+  var nextBtn = isLast ? '' : '<button class="btn-continue" onclick="nextDeposit()"'+(locked?'':' disabled')+'>Next &rarr;</button>';
+  var nav = '<div style="display:flex; justify-content:space-between; gap:8px; margin-top:14px;">'+backBtn+nextBtn+'</div>';
+
+  var html = '<div class="dep-card">'+
+    '<div style="font-size:var(--font-xs); text-transform:uppercase; letter-spacing:0.5px; color:#888; font-weight:700; margin-bottom:10px;">Receipt '+(currentDeposit+1)+' of '+deposits.length+'</div>'+
+    '<div class="dep-card-head"><div><div class="dep-card-meta">'+d.date+' &middot; '+d.payment+' deposit</div><div class="dep-card-title">Customer payment</div></div><div class="dep-card-amt">+$'+d.amount+'.00</div></div>'+
+    '<div class="dep-receipt"><div class="dep-receipt-head"><span class="dep-receipt-label">Customer receipt '+d.receiptNum+'</span><span class="dep-receipt-meta">'+d.date+', 2026 &middot; '+d.payment+'</span></div>'+
+    '<table class="dep-receipt-table"><tbody>'+rows+'<tr class="total"><td>Total</td><td class="num">$'+d.amount+'.00</td></tr></tbody></table>'+
+    (d.note?'<div class="dep-receipt-note">'+d.note+'</div>':'')+'</div>'+
+    '<div class="dep-choices" style="grid-template-columns: repeat(2, 1fr);">'+choices+'</div>'+fb+nav+'</div>';
+
   document.getElementById('depList').innerHTML = html;
-  document.getElementById('depositsClose').hidden = !allCorrect;
-  if(allCorrect) renderDepositsClose();
+  var allCorrect = deposits.every(function(x){return depositAnswers[x.id]===x.correct;});
+  var closeEl = document.getElementById('depositsClose');
+  closeEl.hidden = !allCorrect;
+  if(allCorrect && !closeEl.innerHTML.trim()) renderDepositsClose();
   if(window.lucide) lucide.createIcons();
 }
 function answerDeposit(id, choice){
@@ -154,32 +183,25 @@ function answerDeposit(id, choice){
   if(choice===d.correct) playSuccess(); else playNope();
   renderDeposits();
 }
-function depositsAutocomplete(){
-  playClick();
-  deposits.forEach(function(d){ if(depositAnswers[d.id]!==d.correct){ depositAnswers[d.id]=d.correct; autoFilledDeposits[d.id]=true; } });
-  depositsAutoDone=true; playSuccess(); renderDeposits();
+function nextDeposit(){
+  var d = deposits[currentDeposit];
+  if(depositAnswers[d.id]!==d.correct) return;
+  if(currentDeposit < deposits.length-1){ currentDeposit++; playClick(); renderDeposits(); }
+}
+function prevDeposit(){
+  if(currentDeposit > 0){ currentDeposit--; playClick(); renderDeposits(); }
 }
 function renderDepositsClose(){
   var html =
-    '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;So you found two kinds. Seven of them &mdash; the Venmo deposits &mdash; were for work you&rsquo;d <strong>already finished</strong>. That money&rsquo;s yours to keep. Smith&rsquo;s check is the odd one out: he paid you, but you haven&rsquo;t built his frame yet.&rdquo;</div></div>'+
-    '<div class="dialog-box you"><div class="dialog-label">YOU</div><div class="dialog-text">&ldquo;Right &mdash; I <em>promised</em> Smith a custom frame. He put $220 down. I still owe him the work.&rdquo;</div></div>'+
-    '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Then that&rsquo;s a <strong>promise</strong> &mdash; something you owe. Your priced list doesn&rsquo;t show it anywhere. You need a second list for promises like this. Start it with Smith&rsquo;s $220.&rdquo;</div></div>'+
-    '<div class="twoplaces"><div class="twoplaces-title">Smith&rsquo;s $220 lands in two places at once</div><div class="twoplaces-grid">'+
-      '<div class="tp-card have"><div class="tp-card-label">What you have</div><div class="tp-card-text">The $220 cash is sitting in your account.</div></div>'+
-      '<div class="tp-card owe"><div class="tp-card-label">What you owe</div><div class="tp-card-text">You still owe Smith the frame &mdash; a promise.</div></div>'+
-      '</div><div class="twoplaces-foot">The same $220 shows up on both sides at once.</div></div>'+
-    '<div class="promises-born"><div class="promises-born-head">PROMISES &mdash; what I owe <span class="muted">(new list)</span></div><div class="promises-born-body"><div class="promises-line"><span>Smith&rsquo;s frame &mdash; paid $220 up front, not built yet</span><span class="mono">$220</span></div></div></div>'+
-    '<div class="dialog-box you"><div class="dialog-label">YOU</div><div class="dialog-text">&ldquo;Hang on &mdash; Jones came by last week and asked me to build <em>him</em> a frame too. I told him I&rsquo;d do it. Does that go on the Promises list?&rdquo;</div></div>'+
-    '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Did he put any money down?&rdquo;</div></div>'+
-    '<div class="dialog-box you"><div class="dialog-label">YOU</div><div class="dialog-text">&ldquo;No. We just talked about it.&rdquo;</div></div>'+
-    '<div class="mc-card"><div class="mc-q">Does Jones&rsquo;s frame go on the Promises list?</div><div class="mc-opts" id="jonesOpts">'+
-      '<div class="mc-opt" onclick="answerJones(\'on\')" data-j="on"><div>Add it &mdash; I promised him a frame</div></div>'+
-      '<div class="mc-opt" onclick="answerJones(\'off\')" data-j="off"><div>Leave it off &mdash; nothing&rsquo;s committed yet</div></div>'+
+    '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;So you found two kinds of customer payments. Seven of them were for work you had already finished. That money is yours to keep. Smith&rsquo;s check is the odd one out. He paid you $220 now, but you still owe him the custom frame.<br><br>That means Smith&rsquo;s payment belongs in <strong>two places</strong>. You have the cash, but you also have a promise to keep. Your priced <strong>Things</strong> list doesn&rsquo;t show promises like that, so you need a second list: <strong>promises you still owe</strong>. Start it with Smith&rsquo;s $220.&rdquo;</div>'+
+    '<div class="promises-born" style="margin-top:14px;"><div class="promises-born-head">PROMISES &mdash; what I owe <span class="muted">(new list)</span></div><div class="promises-born-body"><div class="promises-line"><span>Smith&rsquo;s frame &mdash; paid $220 up front, not built yet</span><span class="mono">$220</span></div></div></div>'+
+    '</div>'+
+    '<div class="mc-card" style="margin-top:20px;"><div class="mc-q">Last week, Jones asked you to build him a custom frame too, and you said you would. But Jones did not put any money down. You only talked about it. Should Jones&rsquo;s frame go on the Promises list?</div><div class="mc-opts" id="jonesOpts">'+
+      '<div class="mc-opt" onclick="answerJones(\'on\')" data-j="on"><div>Yes. You said you would build the frame, so it is a promise.</div></div>'+
+      '<div class="mc-opt" onclick="answerJones(\'off\')" data-j="off"><div>No. Nothing has happened yet to make it something you need to write down.</div></div>'+
       '</div><div class="feedback" id="jonesFb"></div></div>'+
     '<div id="jonesClose" hidden>'+
-      '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> A promise is written down when something happens</div><p>Smith&rsquo;s promise is real &mdash; he backed it with cash, so you owe the work. Jones&rsquo;s is just talk: no deposit, nothing&rsquo;s happened yet. Don&rsquo;t forget him &mdash; but he stays <em>off</em> the list until he commits.</p></div>'+
-      '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now &mdash; the <em>other</em> big promise. That credit card: every charge on it is money you owe the bank. Same trouble as the checking account, though &mdash; it&rsquo;s got your personal spending mixed in. Let&rsquo;s sort it the exact same way.&rdquo;</div></div>'+
-      '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>'+
+      '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>'+
     '</div>';
   document.getElementById('depositsClose').innerHTML = html;
   if(jonesResolved){ document.getElementById('jonesClose').hidden=false; document.querySelectorAll('#jonesOpts .mc-opt').forEach(function(el){ el.classList.add('locked'); if(el.getAttribute('data-j')==='off') el.classList.add('correct'); }); }
@@ -193,21 +215,22 @@ function answerJones(choice){
     playSuccess(); jonesResolved=true;
     offEl.classList.add('correct');
     document.querySelectorAll('#jonesOpts .mc-opt').forEach(function(el){ el.classList.add('locked'); });
-    fb.classList.remove('show');
+    fb.className='feedback ok show';
+    fb.innerHTML = 'Anna: &ldquo;Correct. Jones stays off the Promises list for now. Smith paid $220, so you have his cash and still owe him the frame. Jones has not put any money down, so nothing has happened yet that needs to be recorded.&rdquo;';
     document.getElementById('jonesClose').hidden=false;
   } else {
     playNope(); onEl.classList.add('wrong');
     fb.className='feedback err show';
-    fb.innerHTML = 'Anna: &ldquo;Careful. Smith backed his promise with $220 &mdash; you&rsquo;ve got his cash, you owe the work, it&rsquo;s real. Jones just talked. Nothing&rsquo;s <em>happened</em> yet &mdash; so there&rsquo;s nothing to write down. Try the other one.&rdquo;';
+    fb.innerHTML = 'Anna: &ldquo;Not quite. Smith&rsquo;s promise went on the list because something happened: he paid $220, and you still owe him the frame. Jones has not put any money down. For now, there is nothing to add to the Promises list.&rdquo;';
   }
 }
 
 /* ===== restart ===== */
 function restart(){
-  depositAnswers={}; autoFilledDeposits={}; depositsAutoDone=false; jonesResolved=false;
+  depositAnswers={}; currentDeposit=0; jonesResolved=false;
   document.getElementById('depWrap').hidden=true;
-  document.getElementById('depositsClose').hidden=true;
-  document.getElementById('showReceiptsBtn').hidden=false;
+  var dc=document.getElementById('depositsClose'); dc.hidden=true; dc.innerHTML='';
+  document.getElementById('showReceiptsBtn').style.display='';
   renderDeposits(); scrollTo(0,0);
 }
 
@@ -220,19 +243,9 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 
-/* ===== progress ===== */
-function renderSegProgress(){
-  var html = '';
-  for(var i = 0; i < 9; i++){
-    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
-    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
-  }
-  document.getElementById('segProgress').innerHTML = html;
-  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
-}
-
 /* ===== init ===== */
-renderSegProgress();
+document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+renderCashSheetPanel();
 renderDeposits();
 </script>
 </body>
