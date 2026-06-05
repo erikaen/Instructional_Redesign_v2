@@ -20,7 +20,7 @@
     </div>
 
     <div class="narrative-block"><p>You&rsquo;ve been using your personal bank account for the repair work. Last month&rsquo;s statement just arrived. Anna sits down at the workbench with you to look it over.</p></div>
-    <div class="dialog-box anna">
+    <div class="dialog-box anna" style="margin-top: 20px;">
       <div class="dialog-label">ANNA</div>
       <div class="dialog-text">&ldquo;First thing: there&rsquo;s a lot in here that has nothing to do with the shop. Apartment rent, groceries, your paycheck. Let&rsquo;s pull out only the repair-related transactions so we can look at them clearly. Click <strong><i data-lucide="info" class="licon"></i></strong> on any row to see what it was, then classify it as <em>repair-related</em> or <em>personal</em>.&rdquo;</div>
     </div>
@@ -100,7 +100,7 @@ var classifications = {}, expandedDescId = null, sortChecked = false, sortAutoDo
 /* ===== generic statement ===== */
 function renderStatement(rows, opts){
   var grid = opts.bank ? 'stmt-grid-bank' : 'stmt-grid-card';
-  var html = '<div class="stmt">';
+  var html = '<div class="stmt" style="margin-top:20px;">';
   html += '<div class="stmt-head"><div><div class="stmt-bank">'+opts.bankName+'</div><div class="stmt-acct">'+opts.acct+'</div></div>'+
     '<div style=""><div class="stmt-period-label">Statement period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
   html += '<div class="stmt-balrow"><span>'+opts.topLabel+'</span><span class="stmt-num">'+opts.topVal+'</span></div>';
@@ -146,7 +146,7 @@ function sortProgress(shop, personal, unsorted, shopLabel, triggerMet, showCheck
   var btn = unsorted > 0
     ? '<button class="btn-continue btn-block"'+(triggerMet?' onclick="bankAutocomplete()"':' disabled')+'>Sort the rest</button>'
     : (showCheck ? '<button class="btn-continue btn-block" onclick="checkBankSort()">Check my sort</button>' : '');
-  return '<div class="sortprog"><div class="sortprog-title">Sort the transactions</div>'+
+  return '<div class="sortprog" style="margin-top:20px;"><div class="sortprog-title">Sort the transactions</div>'+
     '<p class="sortprog-hint">A shortcut to auto-sort the remaining transactions will unlock as you go. You&rsquo;re welcome to sort all 20 yourself.</p>'+
     '<div class="sortprog-grid">'+
     '<div class="sortprog-box shop"><div class="sortprog-label">'+shopLabel+'</div><div class="sortprog-num">'+shop+'</div></div>'+
@@ -180,6 +180,9 @@ function renderBankSort(){
     classObj:classifications, expandedId:expandedDescId, checked:sortChecked,
     toggleFn:'toggleBankDesc', classifyFn:'classifyBank', showHint:!hintSeen,
     catA:{id:'shop',label:'Repair-related'}, catB:{id:'personal',label:'Personal'} });
+  if(sortChecked && wrongIds.length===0){
+    html += '<div class="next-phase-msg" style="margin-top: 20px;">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+  }
   document.getElementById('bankArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
