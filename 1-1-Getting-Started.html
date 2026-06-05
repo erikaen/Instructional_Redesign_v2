@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1 — Getting Organized</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Module 1: Getting Organized</h1>
+        <p class="tut-header-sub">A side activity becomes a thing &middot; ~10 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      </div>
+    </div>
+    <div class="seg-progress" id="segProgress"></div>
+    <div class="phase-title" id="phaseTitle"></div>
+
+    <div class="narrative-block">
+      <p>You have a <strong>day job</strong>. In your free time you fix bikes &mdash; for friends, then friends of friends. You&rsquo;re good at it, and word gets around.</p>
+      <p>It grew. Enough that when the gear took over your apartment, you <strong>rented a small space</strong> nearby to work out of. But the repair work is still tangled up with the rest of your life &mdash; and this week, that started to cause problems.</p>
+    </div>
+    <div class="section-card">
+      <div class="card-title">What you&rsquo;ll discover</div>
+      <ul class="bullet-list">
+        <li>Why a little success forces you to get organized</li>
+        <li>The first line you draw &mdash; and what it&rsquo;s really about</li>
+        <li>How your repair work starts to become its own thing</li>
+      </ul>
+    </div>
+    <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 0;
+var PHASE_TITLE = 'Getting Started';
+
+var GLOSSARY = [
+  { term:'The repair work', def:'The bike-repair activity you do, separate from the rest of your life. We don’t give it a formal name yet — you’ll feel it become its own thing before anyone names it.' },
+  { term:'Things', def:'Plain word for the stuff you have for the repair work. No dollar values yet — those come in Module 2.' },
+  { term:'A tab', def:'A sheet in your spreadsheet. You build your books one tab at a time, starting with the Things tab here.' }
+];
+
+/* ===== glossary ===== */
+function openGlossary() {
+  document.getElementById('glossaryList').innerHTML = GLOSSARY.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">' + g.term + '</div><div class="glossary-entry-def">' + g.def + '</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary() { document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  var html = '';
+  for(var i = 0; i < 5; i++){
+    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
+    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
+  }
+  document.getElementById('segProgress').innerHTML = html;
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+</script>
+</body>
+</html>

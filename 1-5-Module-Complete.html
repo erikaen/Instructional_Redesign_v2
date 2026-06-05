@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1 — Module Complete</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Module 1: Getting Organized</h1>
+        <p class="tut-header-sub">A side activity becomes a thing &middot; ~10 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      </div>
+    </div>
+    <div class="seg-progress" id="segProgress"></div>
+    <div class="phase-title" id="phaseTitle"></div>
+
+    <div class="complete-head">
+      <div class="trophy-badge"><i data-lucide="trophy"></i></div>
+      <div class="complete-title">Module 1 complete</div>
+    </div>
+    <div class="section-card">
+      <div class="card-title">What you discovered</div>
+      <ul class="bullet-list check">
+        <li>A little success made it impossible to keep the repair work in your head.</li>
+        <li>Sorting your stuff, you drew a line &mdash; <strong>related to the repair work, or not</strong>.</li>
+        <li>That line isn&rsquo;t about <em>where</em> things are or <em>what</em> they&rsquo;re used for. It&rsquo;s about what belongs to the work.</li>
+      </ul>
+    </div>
+    <div class="insight-box">
+      <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i>The deeper point</div>
+      <p>The very first thing <em>anyone who runs anything</em> does &mdash; from a one-person bike shop to the largest company on earth &mdash; is decide what&rsquo;s inside it and what&rsquo;s outside. You just did it by hand, sorting a pile of stuff, without being taught. Hold onto that line; everything else builds on it.</p>
+    </div>
+    <div class="next-card">
+      <div class="next-card-label">Coming next &mdash; Module 2: Insurance and Maria</div>
+      <p>That fire two blocks over wasn&rsquo;t nothing. You call an insurance agent &mdash; and her form wants a <strong>dollar value</strong> next to every item on your Things tab.</p>
+    </div>
+    <div class="next-phase-msg">You&rsquo;ve finished this module &mdash; click <strong>Next</strong> to continue.</div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 4;
+var PHASE_TITLE = 'Module Complete';
+
+var GLOSSARY = [
+  { term:'The repair work', def:'The bike-repair activity you do, separate from the rest of your life. We don’t give it a formal name yet — you’ll feel it become its own thing before anyone names it.' },
+  { term:'Things', def:'Plain word for the stuff you have for the repair work. No dollar values yet — those come in Module 2.' },
+  { term:'A tab', def:'A sheet in your spreadsheet. You build your books one tab at a time, starting with the Things tab here.' }
+];
+
+/* ===== glossary ===== */
+function openGlossary() {
+  document.getElementById('glossaryList').innerHTML = GLOSSARY.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">' + g.term + '</div><div class="glossary-entry-def">' + g.def + '</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary() { document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  var html = '';
+  for(var i = 0; i < 5; i++){
+    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
+    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
+  }
+  document.getElementById('segProgress').innerHTML = html;
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+</script>
+</body>
+</html>
