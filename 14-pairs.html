@@ -21,8 +21,7 @@
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Restart" aria-label="Restart tutorial" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+              </div>
     </div>
     <div class="progress-meta"><span>Progress</span><span id="progPct">50%</span></div>
     <div class="progress-track"><div class="progress-bar-fill" id="progFill" style="width:50%"></div></div>
@@ -437,9 +436,9 @@ function renderPairs(){
   } else if(eliminateAutoActive){
     ctrl = '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Crossing out matched pairs&hellip;</div></div>';
   } else if(eliminateAutoDone){
-    ctrl = annaBox('Look what&rsquo;s left. Just the rows with no twin on this spreadsheet &mdash; your own money put in, the gear you brought, the customer payments, the parts and the month you used up. Each of these <em>moved your net</em>. Their other side lives somewhere you haven&rsquo;t built yet.', true) +
+    ctrl = annaBox('Look what&rsquo;s left: just the rows with <strong>no twin</strong> on this spreadsheet.Your own money put in, the gear you brought, the customer payments, the parts and the month you used up. Each of these <strong>moved your net</strong>. Their other side lives somewhere you haven&rsquo;t built yet.', true) +
       insightBox('The crossed-out ones just shuffled',
-        '<p>Buying parts on the card, paying the card down, Smith&rsquo;s deposit &mdash; what you <em>have</em> and what you <em>owe</em> moved by the same amount, so your net didn&rsquo;t change. The reasons that are <strong>left over are the ones that moved your net</strong> &mdash; the ones worth writing down to know how you&rsquo;re doing.</p>') +
+        '<p>Buying parts on the card, paying the card down, Smith&rsquo;s deposit...What you <em>have</em> and what you <em>owe</em> moved by the same amount, so your <strong>net</strong> didn&rsquo;t change. <strong>The reasons that are left over are the ones that moved your net</strong> &mdash; the ones worth writing down to know how you&rsquo;re doing.</p>') +
       contBtn('Sort the net-movers', "goto('net-movers')");
   }
   document.getElementById('pairsControls').innerHTML = ctrl;
@@ -474,7 +473,7 @@ function renderNetMovers(){
 
   var top = '';
   if(!done){
-    top += annaBox('These net-movers split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work &mdash; your own cash, gear you already had. The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month the work used up. Drop each row into the right bin.', true);
+    top += annaBox('These net-movers split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work &mdash; your own cash, gear you already had. These net-movers are <strong>contributed</strong>.The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month the work used up. These net-movers are <strong>generated</strong>. Sort each row into the right bin it belongs to.', true);
     if(sortNudge){
       var msg = (sortNudge.attempted==='contributed')
         ? 'That one didn&rsquo;t come from you bringing something in &mdash; it came from doing the repair work. Try the other bin.'
