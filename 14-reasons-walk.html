@@ -109,8 +109,8 @@ var REASONS = [
   { id:'r_laptop', account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
   { id:'r_gear',   account:'Equipment', delta:220, reason:'You brought gear you already owned: bench grinder, headset press, shop vacuum.' },
 
-  { id:'r_stand_a', account:'Equipment', delta:200, reason:'You bought the Park Tool stand for $200 (cash).' },
-  { id:'r_stand_b', account:'Cash',      delta:-200, reason:'You bought the Park Tool stand for $200 (cash).' },
+  { id:'r_stand_a', account:'Equipment', delta:200, reason:'Bought the Park Tool stand for $200 (cash).' },
+  { id:'r_stand_b', account:'Cash',      delta:-200, reason:'Bought the Park Tool stand for $200 (cash).' },
 
   { id:'r_tools_a', account:'Equipment',   delta:300, reason:'Bought $300 of hand tools on the card.' },
   { id:'r_tools_b', account:'Credit Card', delta:300, reason:'Bought $300 of hand tools on the card.' },
@@ -157,17 +157,17 @@ var CORRECT_CATEGORY = {
 var soloReasonIds = Object.keys(CORRECT_CATEGORY);
 
 var NARRATION_STEPS = [
-  { anna:"Start before May even began. You put in $960 of your own money, you brought your laptop from home, and you brought some gear you already owned. Each one's a single row, and the other side of that change (reason) isn't on this spreadsheet.",
-    reveal:['r_cashin','r_laptop','r_gear'] },
-  { anna:"The Park Tool stand is bought for $200 in cash. Then, Equipment went up; Cash went down. Same reason on both rows.",
+  { anna:"Start before May even began. You put in $960 of your own money, you brought your laptop from home, and you brought some gear you already owned. Each one's a single row, and the reason of that change isn't on this spreadsheet.",
+    reveal:['r_cashin','r_laptop','r_gear'], hideReasons:true },
+  { anna:"You filled the reason for each row.",
     reveal:['r_stand_a','r_stand_b'] },
-  { anna:"Hand tools, shop equipment, fixtures, parts... They are all on the card. For each one: the thing up, the card up. Two rows apiece.",
+  { anna:"The Park Tool stand is bought for $200 in cash. Then, Equipment went up; Cash went down. Same reason on both rows.",
     reveal:['r_tools_a','r_tools_b','r_equip_a','r_equip_b','r_fix_a','r_fix_b','r_parts_a','r_parts_b'] },
-  { anna:"Then about $300 of those parts went into customer jobs — used up. One row; the other side isn't here.",
+  { anna:"Hand tools, shop equipment, fixtures, parts... They are all on the card. For each one: the thing up, the card up. Two rows apiece.",
     reveal:['r_partsused'] },
-  { anna:"The lease — $1,300 from cash, first and last month paid in advance. Then May happened: you used the space, so one month's worth is gone. The paying is a pair; the using-up stands alone.",
+  { anna:"Then about $300 of those parts went into customer jobs. They're used up. One row. You noticed the other side isn't here.",
     reveal:['r_rent_a','r_rent_b','r_rentused'] },
-  { anna:"Now the cash side for May. Click the Cash tab — every customer Venmo, Smith's deposit, the two card paydowns.",
+  { anna:"Now the cash side for May. Click to the Cash tab. Every customer Venmo, Smith's deposit, and your own money, they are CASH IN. Then look at your CASH OUT. The lease ($1,300 from cash) was paid in advance first and last month. Then you used the space in May, so one month's worth is gone. There are also two card paydowns. You noticed that the paying is a pair; the using-up stands alone.",
     reveal:['r_v1','r_v2','r_v3','r_v4','r_v5','r_v6','r_v7','r_smith_a','r_smith_b','r_pay1_a','r_pay1_b','r_pay2_a','r_pay2_b'], goto:'cash' },
   { anna:"That's the whole month. Click back to the Reasons tab and look at the full list.",
     reveal:[], goto:'reasons' },
@@ -291,10 +291,12 @@ function reasonsSheetWalkPairs(){
   if(visible.length===0){ html += '<div class="bs-empty-msg">All paired rows crossed out.</div>'; return html; }
   html += '<div class="xl-row xl-reasons xl-head"><div class="xl-gutter"></div><div class="xl-c">ACCOUNT</div><div class="xl-v">Δ</div><div class="xl-c">REASON</div></div>';
   var clickable = (phase==='pairs' && !eliminateAutoActive && !eliminateAutoDone);
+  var hideReasons = phase==='reasons-walk' && NARRATION_STEPS[step] && NARRATION_STEPS[step].hideReasons;
   visible.forEach(function(r){
     var sel = (selectedReasonId===r.id) ? ' selected' : '';
     var onclick = clickable ? ' onclick="handleReasonClick(\''+r.id+'\')"' : '';
-    html += '<div class="xl-row xl-reasons xl-item'+sel+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-c">'+r.account+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div><div class="xl-c">'+r.reason+'</div></div>';
+    var reasonText = hideReasons ? '' : r.reason;
+    html += '<div class="xl-row xl-reasons xl-item'+sel+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-c">'+r.account+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div><div class="xl-c">'+reasonText+'</div></div>';
   });
   return html;
 }
@@ -376,7 +378,7 @@ function renderWalk(){
   } else {
     ctrl.innerHTML =
       insightBox('Most reasons show up in two rows',
-        '<p>Same event, two changes. Buy parts on the card: parts up <em>and</em> the card up. Pay the card down: cash down <em>and</em> the card down. Smith&rsquo;s deposit: cash up <em>and</em> what you owe him up. You didn&rsquo;t plan that &mdash; it just appeared once you wrote the reasons next to the changes.</p>'+
+        '<p>Same event, two changes. Buy parts on the card: parts up <em>and</em> the card up. Pay the card down: cash down <em>and</em> the card down. Smith&rsquo;s deposit: cash up <em>and</em> what you owe him up. You didn&rsquo;t plan that, but it just appeared once you wrote the reasons next to the changes.</p>'+
         '<p><strong>What if you crossed those matched pairs out?</strong></p>') +
       contBtn('Cross out the matched pairs', "goto('pairs')");
   }
@@ -540,7 +542,7 @@ contBtn = function(label, onclick){
 function restart(){ window.location.reload(); }
 
 /* ===== init ===== */
-phase='reasons-walk'; step=0; activeTab='reasons'; renderWalk();
+phase='reasons-walk'; step=0; activeTab='reasons'; NARRATION_STEPS[0].reveal.forEach(function(id){ revealed[id]=true; }); renderWalk();
 </script>
 </body>
 </html>
