@@ -222,7 +222,7 @@ function identityFormula(){
   return '<div class="eq-compare"><div class="eq-panel">'+
     '<div class="eq-panel-tag">The accounting identity</div>'+
     '<div class="eq-panel-row"><span class="eq-term a">Assets</span><span class="eq-op">&minus;</span><span class="eq-term l">Liabilities</span><span class="eq-op">=</span><span class="eq-term e">Equities</span></div>'+
-    '<div class="eq-panel-caption">An identity, not an equation. You don&rsquo;t solve it &mdash; it holds by definition, for every entity, every time.</div>'+
+    '<div class="eq-panel-caption">An identity, not something to solve. It holds by definition, for every entity, every time.</div>'+
     '</div></div>';
 }
 function balanceSheet(){
@@ -251,22 +251,23 @@ function renderIdentity(){
   }
   html += matchDisplay();
   if(idStage===1){
-    html += insightBox('They match &mdash; and they always will', '<p>Not a coincidence you arranged. Your net just <em>is</em> what&rsquo;s left after taking what you owe out of what you have. The reasons that moved it have to add up to it. It holds <strong>by construction</strong>, every time, for any set of books.</p>');
+    html += insightBox('They match &mdash; and they always will', '<p>This is not a coincidence. Your net is what remains after subtracting what you owe from what you have.</p><p>The reasons that changed your net must add up to the same amount. This works <strong>by construction</strong>, every time, for any set of books.</p>');
     html += continueBtn('Name what you just matched');
   } else if(idStage===2){
-    html += annaBox('&ldquo;That residual &mdash; have minus owe &mdash; has a name: <strong>Equities</strong>. Plural, on purpose. It&rsquo;s a <em>difference</em>, not a thing the owner could pocket &mdash; not the cash you&rsquo;d walk away with, just recorded Assets minus recorded Liabilities, gaps and all. The plural keeps it honest.&rdquo;');
+    html += annaBox('&ldquo;That residual &mdash; what you have minus what you owe &mdash; has a name: <strong>Equities</strong>.<br><br>It is plural on purpose. This is a <em>difference</em>, not a pile of cash the owner can pocket. It means recorded Assets minus recorded Liabilities, including all the gaps and estimates. The plural keeps us honest.&rdquo;');
     html += continueBtn('Write it down');
   } else if(idStage===3){
     html += identityFormula();
     html += balanceSheet();
     html += insightBox('This page is the balance sheet', '<p>It&rsquo;s built <em>around</em> the identity, not assembled to satisfy one. You list Assets, take out Liabilities, and Equities falls out as the difference &mdash; split into where it came from: <strong>contributed</strong> and <strong>generated</strong>. The fact that it lines up isn&rsquo;t a result. It&rsquo;s the construction.</p>');
-    html += continueBtn('Now read it honestly');
+    html += continueBtn('Interpret the balance sheet');
   } else if(idStage===4){
     html += balanceSheet();
-    html += annaBox('&ldquo;Before you trust this page, one honest thing. Everything on it earned its place with <strong>evidence</strong> &mdash; a receipt, a statement, a price you could point to. That&rsquo;s what makes it a <strong>record</strong>. And a record only holds what clears that bar.&rdquo;');
-    html += insightBox('The records show less than you have', '<p>Look at what&rsquo;s <em>not</em> on the page: your skill at the bench, the regulars who keep coming back, the name you&rsquo;re building on Whalley Ave. All real, all worth something to the work &mdash; none of it with a receipt, so none of it on the list.</p>'+
-      '<p>So read &ldquo;Assets, '+d(ASSETS_TOTAL)+'&rdquo; as <strong>what the records show</strong> &mdash; not everything the work is worth. The list shows what it can; you <strong>have</strong> more than it shows. That isn&rsquo;t a hole to plug. It&rsquo;s what a record <em>is</em>.</p>'+
-      '<p>It&rsquo;s also why <strong>Equities</strong> isn&rsquo;t your net worth: it&rsquo;s the gap between two <em>recorded</em> lists, everything they leave out baked in.</p>');
+    html += annaBox('&ldquo;Before you trust this page, remember one thing: every item on it has <strong>evidence</strong> &mdash; a receipt, a statement, or a price you can point to. That is what makes it a <strong>record</strong>. A record only includes things that meet that standard.&rdquo;');
+    html += insightBox('The records show less than you have', '<p>Look at what is <em>not</em> on the page: your skill at the bench, the regular customers who keep coming back, and the name you are building on Whalley Ave.</p>'+
+      '<p>All of those are real, and they matter to the repair work. But none of them has a receipt or a clear price you can point to, so none of them appears on this list.</p>'+
+      '<p>So read &ldquo;Assets, '+d(ASSETS_TOTAL)+'&rdquo; as <strong>what the records show</strong> &mdash; not everything the repair work is worth. The list shows what it can show. You <strong>have</strong> more than the list shows, but that is not a mistake. That is how records work.</p>'+
+      '<p>It is also why <strong>Equities</strong> is not your personal net worth. It is the difference between two <em>recorded</em> lists: recorded Assets minus recorded Liabilities.</p>');
     html += '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
   }
   c.innerHTML = html;
