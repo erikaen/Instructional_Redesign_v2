@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5 — Double-Entry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Module 5: Naming What You Built</h1>
+        <p class="tut-header-sub">Bicycle repair shop &middot; ~15 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      </div>
+    </div>
+    <div class="seg-progress" id="segProgress"></div>
+    <div class="phase-title" id="phaseTitle"></div>
+
+    <div class="narrative-block">
+      <p>Step back from the workbench for a second. None of what you built is new.</p>
+    </div>
+    <div class="section-card">
+      <div class="card-title">None of this is new</div>
+      <ul class="bullet-list">
+        <li><strong>~3000 BCE.</strong> Scribes in Mesopotamia pressed wedge marks into clay: so much grain in the storehouse, so many sheep, who owes what at harvest. A list of things and a list of promises &mdash; your Assets and Liabilities tabs, five thousand years early. That half is ancient.</li>
+        <li><strong>1494.</strong> A Franciscan friar, Luca Pacioli, writes down a method Italian merchants had used for two centuries: every change gets recorded on <em>two</em> sides. The pairing you stumbled into in your Reasons tab &mdash; where each change had a partner &mdash; is exactly it.</li>
+      </ul>
+    </div>
+    <div class="dialog-box anna">
+      <div class="dialog-label">ANNA</div>
+      <div class="dialog-text">&ldquo;That pairing has a name: <strong>double-entry</strong>. Two sides to every change. It&rsquo;s how the pairs canceled and the net-movers stood out when you pruned your Reasons. And it&rsquo;s not a relic &mdash; <em>every</em> number on <em>every</em> financial statement filed today still gets there by double-entry. The identity and the balance sheet you built by hand are the same structures the largest companies in the world file.&rdquo;</div>
+    </div>
+    <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 5;
+var PHASE_TITLE = 'Double-Entry';
+
+var glossaryTerms = [
+  { term:'Asset', def:'Something you have — a present right to an economic benefit. The gear, the parts, the prepaid month, cash.' },
+  { term:'Liability', def:'Something you owe — a present obligation to transfer an economic benefit later. The card balance, Smith&rsquo;s frame.' },
+  { term:'Equities', def:'The definitional residual: recorded Assets minus recorded Liabilities. Plural, to keep it from sounding like one thing the owner has. It&rsquo;s a difference, not a pile of cash.' },
+  { term:'Accounting identity', def:'Assets − Liabilities = Equities. Not an equation to solve — it holds by construction, for every entity, every time.' },
+  { term:'Balance sheet', def:'The one page that lays out Assets, Liabilities, and the residual between them — built around the identity, not assembled to satisfy one.' },
+  { term:'Entity', def:'The subject of a set of books — a perspective you draw a boundary around and adopt for a purpose. You make it; you don&rsquo;t find it.' },
+  { term:'Net Assets', def:'What an entity with no owners calls its residual (Assets − Liabilities). Same definition as Equities; the label differs because accountability runs to mission and donors, not owners.' },
+  { term:'Double-entry', def:'The centuries-old method in which every change has two sides. Still how every number on every financial statement gets there.' },
+  { term:'Contributed', def:'The part of the residual you put in from outside the work — your own cash, gear you already owned.' },
+  { term:'Generated', def:'The part of the residual the work itself produced and you kept — customer work, less what it used up.' }
+];
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  var html = '';
+  for(var i = 0; i < 7; i++){
+    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
+    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
+  }
+  document.getElementById('segProgress').innerHTML = html;
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+</script>
+</body>
+</html>
