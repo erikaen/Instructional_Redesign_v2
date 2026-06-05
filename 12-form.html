@@ -78,11 +78,11 @@
       <div id="formDoneBlock" hidden>
         <div class="dialog-box maria">
           <div class="dialog-label">MARIA</div>
-          <div class="dialog-text"><span class="dialog-prefix">(quietly)</span>&ldquo;And notice the supplies &mdash; you <strong>bought $500</strong> of parts, but only <strong>$200</strong> is still on the shelf to insure. The rest went into jobs. That gap comes back soon.&rdquo;</div>
+          <div class="dialog-text"><span class="dialog-prefix">(quietly)</span>&ldquo;And notice the supplies! you <strong>bought $500</strong> of parts, but only <strong>$200</strong> is still on the shelf to insure. The rest went into jobs. That gap comes back soon.&rdquo;</div>
         </div>
         <div class="insight-box">
           <div class="insight-label"><i data-lucide="check" class="licon"></i> Every line came from somewhere</div>
-          <p>Every line has a number &mdash; and you can see <em>where each one came from</em>: a <strong>receipt</strong> for what you bought, an <strong>eBay comp</strong> for the gear you&rsquo;d owned a while, and a <strong>shelf count</strong> for the supplies.</p>
+          <p>Every line has a <strong>number</strong>. And you can see <em>where each one came from</em>: a <strong>receipt</strong> for what you bought, an <strong>eBay comp</strong> for the gear you&rsquo;d owned a while, and a <strong>shelf count</strong> for the supplies.</p>
         </div>
         <button class="btn-continue btn-block" onclick="goto('maria-readback')">Maria reads it back &rarr;</button>
       </div>
@@ -253,7 +253,7 @@ function renderSidebar(){
     document.getElementById('sidebarMore').hidden=true;
     var note = document.getElementById('formNudge');
     note.className = 'mcq-fb inf show';
-    note.innerHTML = 'Cash drawer and Box of customer receipts stay on your Things list, but they’re not added to the insurance form — a property policy covers physical goods you’d replace, not the cash inside a drawer or paperwork.';
+    note.innerHTML = 'Cash drawer and Box of customer receipts stay on your Things list, but they’re not added to the insurance form. This is because a property policy covers physical goods you’d replace, not the cash inside a drawer or paperwork.';
     return;
   }
   box.innerHTML = remaining.map(function(i){
