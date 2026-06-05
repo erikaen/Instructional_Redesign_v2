@@ -24,8 +24,8 @@
         <button class="icon-btn" title="Restart" aria-label="Restart tutorial" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="progress-meta"><span>Progress</span><span id="progPct">0%</span></div>
-    <div class="progress-track"><div class="progress-bar-fill" id="progFill"></div></div>
+    <div class="seg-progress" id="segProgress"></div>
+    <div class="phase-title" id="phaseTitle"></div>
     <div class="dev-bar" id="devBar" hidden>
       <div class="dev-bar-label">Dev: skip to phase</div>
       <div class="dev-bar-btns" id="devBtns"></div>
@@ -309,6 +309,18 @@ function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
 
 /* ===== state ===== */
 var phaseOrder = ['welcome','bank-sort','cash-records','deposits','card-sort','promises-tab','prepaid-rent','name-it','complete'];
+var phaseTitles = {
+  'welcome':       'Meet Anna',
+  'bank-sort':     'Sort the Bank Statement',
+  'cash-records':  'The Cash Picture',
+  'deposits':      'Review the Deposits',
+  'card-sort':     'Sort the Credit Card',
+  'promises-tab':  'The Promises Tab',
+  'prepaid-rent':  'The Rent Payment',
+  'name-it':       'Name the Lists',
+  'complete':      'Tutorial Complete'
+};
+var highestPhase = 0;
 var classifications = {}, expandedDescId = null, sortChecked = false, sortAutoDone = false;
 var cashCorrect = false;
 var depositAnswers = {}, autoFilledDeposits = {}, depositsAutoDone = false;
@@ -320,12 +332,24 @@ var assetsNamed = false, rouRevealed = false, liabilitiesNamed = false;
 var curWb = null;
 
 /* ===== phase nav ===== */
+function renderSegProgress(p){
+  var idx = phaseOrder.indexOf(p);
+  document.getElementById('phaseTitle').textContent = phaseTitles[p] || '';
+  document.getElementById('segProgress').innerHTML = phaseOrder.map(function(ph, i){
+    var state = i===idx ? 'active' : (i<=highestPhase ? 'done' : 'locked');
+    var click = state==='done' ? ' onclick="goto(\''+ph+'\')" role="button" tabindex="0" aria-label="Phase '+(i+1)+'"' : '';
+    return '<div class="seg-step '+state+'"'+click+'>'+
+      '<div class="seg-step-num">'+(i+1)+'</div>'+
+      '<div class="seg-step-bar"></div>'+
+      '</div>';
+  }).join('');
+}
 function goto(p){
   playClick();
+  var idx = phaseOrder.indexOf(p);
+  if(idx > highestPhase) highestPhase = idx;
   phaseOrder.forEach(function(ph){ document.getElementById('phase-'+ph).classList.toggle('active', ph===p); });
-  var pct = Math.round((phaseOrder.indexOf(p)/(phaseOrder.length-1))*100);
-  document.getElementById('progFill').style.width = pct+'%';
-  document.getElementById('progPct').textContent = pct+'%';
+  renderSegProgress(p);
   window.scrollTo(0,0);
   if(p==='welcome'){ excelTab='things'; renderWorkbook('welcomeWb','welcome'); }
   if(p==='bank-sort') renderBankSort();
@@ -337,6 +361,7 @@ function goto(p){
   if(window.lucide) lucide.createIcons();
 }
 function restart(){
+  highestPhase=0;
   classifications={}; expandedDescId=null; sortChecked=false; sortAutoDone=false;
   cashCorrect=false; depositAnswers={}; autoFilledDeposits={}; depositsAutoDone=false; jonesResolved=false;
   cardClass={}; cardExpandedId=null; cardSortChecked=false; cardSortAutoDone=false;
@@ -794,6 +819,7 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 
 /* ===== init ===== */
 renderWorkbook('welcomeWb','welcome');
+renderSegProgress('welcome');
 </script>
 </body>
 </html>

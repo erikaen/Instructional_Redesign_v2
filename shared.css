@@ -2215,7 +2215,8 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .ins-dropzone-empty { text-align: center; font-size: var(--font-xs); font-style: italic; color: #888; padding: 14px; }
 .ins-colhead { display: flex; align-items: center; gap: 12px; padding: 4px 8px; font-size: var(--font-xs); font-weight: 600; color: #888; border-bottom: 1px solid var(--border); background: var(--primary-faint); }
 .ins-colhead .ins-ev { color: var(--primary); }
-.ins-row { display: flex; align-items: center; gap: 12px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.ins-row { display: flex; align-items: baseline; gap: 12px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.ins-dropzone .ins-row:last-child { border-bottom: none; }
 .ins-row-name { flex: 1; font-size: var(--font-s); color: #374151; }
 .ins-ev { width: 90px; text-align: right; font-size: var(--font-xs); font-style: italic; color: var(--primary); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; flex-shrink: 0; }
 .ins-ev.static { color: #888; cursor: default; text-decoration: none; }
@@ -2686,3 +2687,6 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .lease-table th { color: #8a8898; border-bottom-color: var(--border); }
   .lease-table td { color: #c8ccd8; }
 }
+
+/* Reasons sheet — three-column row layout (account | Δ | reason) */
+.xl-row.xl-reasons { grid-template-columns: 22px 1fr 1fr 2fr; }

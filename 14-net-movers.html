@@ -24,80 +24,18 @@
         <button class="icon-btn" title="Restart" aria-label="Restart tutorial" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="progress-meta"><span>Progress</span><span id="progPct">0%</span></div>
-    <div class="progress-track"><div class="progress-bar-fill" id="progFill"></div></div>
+    <div class="progress-meta"><span>Progress</span><span id="progPct">75%</span></div>
+    <div class="progress-track"><div class="progress-bar-fill" id="progFill" style="width:75%"></div></div>
     <div class="dev-bar" id="devBar" hidden>
       <div class="dev-bar-label">Dev: skip to phase</div>
       <div class="dev-bar-btns" id="devBtns"></div>
     </div>
 
-    <!-- ===== welcome ===== -->
-    <div class="phase active" id="phase-welcome">
-      <div class="narrative-block">
-        <p>Anna&rsquo;s back, coffee in hand. By now your workbook has two lists that earned their names in your last sit-down: <strong>Assets</strong> (what you have) and <strong>Liabilities</strong> (what you owe). You pull them up.</p>
-        <p>But something nags at you. These lists keep <em>changing</em>: parts bought, repairs finished, the card paid down...The numbers tell you <em>what</em> the total is now. They never tell you <em>why</em> it moved.</p>
-      </div>
-      <div id="wbWelcome"></div>
-      <div class="dialog-box anna">
-        <div class="dialog-label">ANNA</div>
-        <div class="dialog-text">&ldquo;Right! A list of totals is a snapshot. It can&rsquo;t tell you how you got here.&rdquo; She taps the screen. &ldquo;Try this: every time a number on one of these lists changes, jot down the <em>reason</em> next to it. Give it its own tab.&rdquo;</div>
-      </div>
-      <div class="section-card">
-        <div class="card-title">What You&rsquo;ll Discover</div>
-        <ul class="bullet-list">
-          <li>The amount tells you what moved; only the reason tells you what <em>happened</em>.</li>
-          <li>Once you write the reasons down, a pattern shows up on its own: changes come in <em>pairs</em>.</li>
-          <li>Some changes just shuffle; a few actually move your <em>net</em>, and those sort into two plain kinds.</li>
-        </ul>
-      </div>
-      <button class="btn-continue btn-block" onclick="goto('reasons-walk')">Add a Reasons tab &rarr;</button>
-    </div>
-
-    <!-- ===== reasons-walk ===== -->
-    <div class="phase" id="phase-reasons-walk">
-      <div id="walkAnna"></div>
-      <div id="wbWalk"></div>
-      <div id="walkControls"></div>
-    </div>
-
-    <!-- ===== pairs ===== -->
-    <div class="phase" id="phase-pairs">
-      <div id="pairsTop"></div>
-      <div id="wbPairs"></div>
-      <div id="pairsControls"></div>
-    </div>
-
     <!-- ===== net-movers ===== -->
-    <div class="phase" id="phase-net-movers">
+    <div class="phase active" id="phase-net-movers">
       <div id="nmTop"></div>
       <div id="wbNM"></div>
       <div id="nmControls"></div>
-    </div>
-
-    <!-- ===== complete ===== -->
-    <div class="phase" id="phase-complete">
-      <div class="complete-head">
-        <div class="trophy-badge"><i data-lucide="trophy"></i></div>
-        <div class="complete-title">Tutorial 1.4 complete</div>
-      </div>
-      <div class="section-card">
-        <div class="card-title">What You Discovered</div>
-        <ul class="bullet-list check">
-          <li>You kept a <strong>Reasons</strong> tab &mdash; one row for the why behind each change to a list.</li>
-          <li>Most reasons came in <strong>pairs</strong> &mdash; same event, two changes. You didn&rsquo;t arrange that; it showed up on its own.</li>
-          <li>The matched pairs just <strong>shuffle</strong> &mdash; have and owe move together, so your <strong>net</strong> doesn&rsquo;t budge.</li>
-          <li>The reasons that <strong>move your net</strong> are two plain kinds: what you <strong>contributed</strong> and what the work <strong>generated</strong>.</li>
-        </ul>
-      </div>
-      <div class="next-card">
-        <div class="next-card-label">Coming Next</div>
-        <p>You have three things now: what you have, what you owe, and the reasons your net moved. In 1.5 you&rsquo;ll lay them out on one page, watch how they fit together &mdash; and the names you&rsquo;ve been circling finally arrive.</p>
-        <p><strong>Next: Tutorial 1.5 &mdash; Naming What You Built</strong></p>
-      </div>
-      <a class="btn-continue btn-block" href="15-naming-what-you-built.html">Continue to Tutorial 1.5 &rarr;</a>
-      <div class="btn-row">
-        <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Restart</button>
-      </div>
     </div>
 
   </div>
@@ -225,7 +163,7 @@ var NARRATION_STEPS = [
     reveal:['r_stand_a','r_stand_b'] },
   { anna:"Hand tools, shop equipment, fixtures, parts... They are all on the card. For each one: the thing up, the card up. Two rows apiece.",
     reveal:['r_tools_a','r_tools_b','r_equip_a','r_equip_b','r_fix_a','r_fix_b','r_parts_a','r_parts_b'] },
-  { anna:"Then about $300 of those parts went into customer jobs. They used up. One row; the other side isn't here.",
+  { anna:"Then about $300 of those parts went into customer jobs — used up. One row; the other side isn't here.",
     reveal:['r_partsused'] },
   { anna:"The lease — $1,300 from cash, first and last month paid in advance. Then May happened: you used the space, so one month's worth is gone. The paying is a pair; the using-up stands alone.",
     reveal:['r_rent_a','r_rent_b','r_rentused'] },
@@ -249,7 +187,7 @@ var glossaryTerms = [
 
 /* ===== formatters ===== */
 function xlDollars(v){ return (v<0?'−$':'$') + Math.abs(v).toLocaleString('en-US'); }
-function signedDollars(v){ return (v>=0?'+':'−') + '$' + Math.abs(v).toLocaleString('en-US'); }
+function signedDollars(v){ var cls = v>=0 ? 'stmt-dep' : 'stmt-with'; return '<span class="'+cls+'">' + (v>=0?'+':'−') + '$' + Math.abs(v).toLocaleString('en-US') + '</span>'; }
 
 /* ===== state ===== */
 var phaseOrder = ['welcome','reasons-walk','pairs','net-movers','complete'];
@@ -306,7 +244,7 @@ function warnMsg(text){ return '<div class="sort-msg warn">'+text+'</div>'; }
 function assetsSheet(){
   var cats = ASSETS_SNAPSHOT.filter(function(c){ return c.cat!=='CASH'; });
   var total = cats.reduce(function(s,c){ return s+c.subtotal; },0);
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Asset</div><div class="xl-v">B&nbsp;&nbsp;Value</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Asset</div><div class="xl-v">Value</div></div>';
   var n=0;
   cats.forEach(function(cat){
     var label = cat.cat==='RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0)+cat.cat.slice(1).toLowerCase());
@@ -592,8 +530,17 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
   });
 })();
 
+/* ===== standalone-phase overrides ===== */
+function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
+var __origContBtn = contBtn;
+contBtn = function(label, onclick){
+  if(onclick && onclick.indexOf('goto(') >= 0) return '';
+  return __origContBtn(label, onclick);
+};
+function restart(){ window.location.reload(); }
+
 /* ===== init ===== */
-renderWorkbook('wbWelcome');
+phase='net-movers'; REASONS.forEach(function(r){ revealed[r.id]=true; }); eliminateAllPairs(); eliminateAutoDone=true; activeTab='reasons'; renderNetMovers();
 </script>
 </body>
 </html>
