@@ -2690,3 +2690,13 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 
 /* Reasons sheet — three-column row layout (account | Δ | reason) */
 .xl-row.xl-reasons { grid-template-columns: 22px 1fr 1fr 2fr; }
+
+/* Reasons sheet — interaction states */
+.xl-item.selected { background: #e0f2fe; }
+.xl-item.eliminated { opacity: 0.4; text-decoration: line-through; }
+.xl-item.eliminated .xl-c { text-decoration: line-through; }
+.xl-item.eliminated .xl-v { text-decoration: line-through; }
+
+@media (prefers-color-scheme: dark) {
+  .xl-item.selected { background: #1e3a5f; }
+}

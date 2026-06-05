@@ -281,20 +281,22 @@ function cashSheet(){
 }
 function reasonsSheetWalkPairs(){
   var revealedRows = REASONS.filter(function(r){ return revealed[r.id]; });
-  var visible = revealedRows.filter(function(r){ return !eliminated[r.id]; });
+  var notEliminated = revealedRows.filter(function(r){ return !eliminated[r.id]; });
   var sub;
   if(revealedRows.length===0) sub = 'Empty for now. Walk through the month to fill it in.';
-  else if(phase==='pairs'){ var ep = Object.keys(eliminated).length/2; sub = visible.length+' '+(visible.length===1?'row':'rows')+' left ('+ep+' '+(ep===1?'pair':'pairs')+' crossed out).'; }
+  else if(phase==='pairs'){ var ep = Object.keys(eliminated).length/2; sub = notEliminated.length+' '+(notEliminated.length===1?'row':'rows')+' left ('+ep+' '+(ep===1?'pair':'pairs')+' crossed out).'; }
   else sub = revealedRows.length+' '+(revealedRows.length===1?'row':'rows')+' so far.';
   var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons — one row per change</div><div class="cash-sheet-sub">'+sub+'</div></div>';
   if(revealedRows.length===0){ html += '<div class="bs-empty-msg">No reasons recorded yet.</div>'; return html; }
-  if(visible.length===0){ html += '<div class="bs-empty-msg">All paired rows crossed out.</div>'; return html; }
-  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Account &amp; reason</div><div class="xl-v">B&nbsp;&nbsp;Δ</div></div>';
+  if(notEliminated.length===0){ html += '<div class="bs-empty-msg">All paired rows crossed out.</div>'; return html; }
+  html += '<div class="xl-row xl-reasons xl-head"><div class="xl-gutter"></div><div class="xl-c">ACCOUNT</div><div class="xl-v">Δ</div><div class="xl-c">REASON</div></div>';
   var clickable = (phase==='pairs' && !eliminateAutoActive && !eliminateAutoDone);
-  visible.forEach(function(r){
-    var sel = (selectedReasonId===r.id) ? ' selected' : '';
-    var onclick = clickable ? ' onclick="handleReasonClick(\''+r.id+'\')"' : '';
-    html += '<div class="xl-row xl-item'+sel+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r.account+' &mdash; '+r.reason+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div></div>';
+  revealedRows.forEach(function(r){
+    var isEliminated = !!eliminated[r.id];
+    var isSelected = (selectedReasonId===r.id) ? ' selected' : '';
+    var elimClass = isEliminated ? ' eliminated' : '';
+    var onclick = (clickable && !isEliminated) ? ' onclick="handleReasonClick(\''+r.id+'\')"' : '';
+    html += '<div class="xl-row xl-reasons xl-item'+isSelected+elimClass+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-c">'+r.account+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div><div class="xl-c">'+r.reason+'</div></div>';
   });
   return html;
 }
