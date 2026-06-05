@@ -2105,6 +2105,8 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .loc-panel { background: white; border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
 .loc-panel-label { font-family: Inter, sans-serif; font-size: var(--font-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: #888; margin-bottom: 8px; }
 .loc-empty { font-size: var(--font-xs); color: #999; font-style: italic; }
+.loc-cols { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8px; align-items: start; }
+@media (max-width: 600px) { .loc-cols { grid-template-columns: 1fr; } }
 .item-chip { margin-bottom: 6px; }
 .item-chip-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px; border: 1px solid var(--primary); border-radius: 6px; background: white; cursor: grab; user-select: none; }
 .item-chip-row.dragging { background: var(--primary-faint); opacity: 0.6; }
@@ -2112,6 +2114,21 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .item-chip-info-btn { border: none; background: none; cursor: pointer; font-size: var(--font-s); color: #888; padding: 0 2px; line-height: 1; }
 .item-chip-info-btn.open { color: var(--accent); }
 .item-chip-info { padding: 6px 8px; margin-top: 2px; font-size: var(--font-xs); font-style: italic; color: #555; background: var(--warn-bg); border-left: 2px solid var(--accent); border-radius: 0 4px 4px 0; }
+.item-chip.hoverinfo { position: relative; }
+.item-chip.hoverinfo .item-chip-info { display: none; }
+.item-chip.hoverinfo:has(.item-chip-info-btn:hover) .item-chip-info,
+.item-chip.hoverinfo:has(.item-chip-info-btn:focus) .item-chip-info { display: block; }
+.item-chip.hoverinfo .item-chip-info-btn:hover { color: var(--accent); }
+.item-chip.hoverinfo .item-chip-info {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 30;
+  width: 230px; max-width: 78vw; margin-top: 0; padding: 9px 11px;
+  background: #3f3f46; color: #f4f4f5; font-style: normal;
+  border-left: 0; border-radius: 8px; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+.item-chip.hoverinfo .item-chip-info::after {
+  content: ''; position: absolute; top: -5px; right: 12px;
+  border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 5px solid #3f3f46;
+}
 
 /* ----- Excel-style destination tab ----- */
 .xlsx { border: 2px solid var(--border); border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 12px; }

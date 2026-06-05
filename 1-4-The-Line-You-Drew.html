@@ -23,7 +23,6 @@
         <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="seg-progress" id="segProgress"></div>
     <div class="phase-title" id="phaseTitle"></div>
 
     <div class="narrative-block"><p>You filled the <strong>Things</strong> tab from both places, and left a lot behind. You drew a line. What is the line actually about?</p></div>
@@ -171,12 +170,6 @@ function closeGlossary() { document.getElementById('glossaryOverlay').classList.
 
 /* ===== progress ===== */
 function renderSegProgress(){
-  var html = '';
-  for(var i = 0; i < 5; i++){
-    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
-    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
-  }
-  document.getElementById('segProgress').innerHTML = html;
   document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 }
 

@@ -23,19 +23,18 @@
         <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="seg-progress" id="segProgress"></div>
     <div class="phase-title" id="phaseTitle"></div>
 
     <div class="narrative-block">
       <p>Your stuff is in two places: the <strong>rented space</strong> you work out of, and your <strong>home</strong>. You open a spreadsheet to start a tab &mdash; <strong>Things</strong> &mdash; and go to fill it.</p>
-      <p class="scenario-card-text">Drag (or tap) into the <strong>Things</strong> tab only what belongs to <em>the repair work</em>. Leave everything else where it is. Use <i data-lucide="info" class="licon"></i> if you&rsquo;re not sure what something is.</p>
+      <p class="scenario-card-text">Tap (or drag) into the <strong>Things</strong> tab only what belongs to <em>the repair work</em>. Leave everything else where it is. Use <i data-lucide="info" class="licon"></i> if you&rsquo;re not sure what something is.</p>
     </div>
-    <div class="loc-grid">
-      <div class="loc-panel"><div class="loc-panel-label">At the rented space</div><div id="locSpace"></div></div>
-      <div class="loc-panel"><div class="loc-panel-label">At home</div><div id="locHome"></div></div>
+    <div class="loc-stack">
+      <div class="loc-panel"><div class="loc-panel-label">At the rented space</div><div id="locSpace" class="loc-cols"></div></div>
+      <div class="loc-panel"><div class="loc-panel-label">At home</div><div id="locHome" class="loc-cols"></div></div>
     </div>
     <div class="xlsx" id="xlsx" ondragover="event.preventDefault(); this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="onDropBox(event)">
-      <div class="xlsx-titlebar"><span><i data-lucide="file-spreadsheet" class="licon"></i> Bike-Repair.xlsx</span><span class="xlsx-titlebar-hint">drop here &darr;</span></div>
+      <div class="xlsx-titlebar"><span><i data-lucide="file-spreadsheet" class="licon"></i> Bike-Repair.xlsx</span></div>
       <div class="xlsx-grid" id="xlsxGrid"></div>
       <div class="xlsx-tabs"><div class="xlsx-tab">Things</div><div class="xlsx-tab-add"><i data-lucide="plus" class="licon"></i></div></div>
     </div>
@@ -137,13 +136,12 @@ var expandedId = null;
 
 /* ===== sort ===== */
 function renderItemChip(item) {
-  var open = expandedId === item.id;
-  var info = open ? '<div class="item-chip-info">' + item.info + '</div>' : '';
-  return '<div class="item-chip">' +
+  return '<div class="item-chip hoverinfo">' +
     '<div class="item-chip-row" draggable="' + (!sortDone) + '" ondragstart="onDragStart(event,\'' + item.id + '\')" ondragend="this.classList.remove(\'dragging\')">' +
       '<button class="item-chip-name" onclick="placeItem(\'' + item.id + '\')" title="Add to the repair-work box">' + item.text + '</button>' +
-      '<button class="item-chip-info-btn' + (open ? ' open' : '') + '" onclick="toggleInfo(\'' + item.id + '\')" title="What is this?" aria-label="More info"><i data-lucide="info" class="licon"></i></button>' +
-    '</div>' + info + '</div>';
+      '<button class="item-chip-info-btn" type="button" title="What is this?" aria-label="More info"><i data-lucide="info" class="licon"></i></button>' +
+    '</div>' +
+    '<div class="item-chip-info">' + item.info + '</div></div>';
 }
 function renderPanel(elId, items) {
   var remaining = items.filter(function(i){ return !placed[i.id]; });
@@ -171,7 +169,6 @@ function renderSort() {
   updateSortFeedback();
   if (window.lucide) lucide.createIcons();
 }
-function toggleInfo(id) { expandedId = (expandedId === id) ? null : id; renderSort(); }
 function placeItem(id) { if (sortDone) return; playPlace(); placed[id] = true; renderSort(); }
 function removeItem(id) { if (sortDone) return; playPlace(); delete placed[id]; renderSort(); }
 function onDragStart(e, id) { if (sortDone) return; e.dataTransfer.setData('text/plain', id); e.currentTarget.classList.add('dragging'); }
@@ -231,12 +228,6 @@ function closeGlossary() { document.getElementById('glossaryOverlay').classList.
 
 /* ===== progress ===== */
 function renderSegProgress(){
-  var html = '';
-  for(var i = 0; i < 5; i++){
-    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
-    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
-  }
-  document.getElementById('segProgress').innerHTML = html;
   document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 }
 
