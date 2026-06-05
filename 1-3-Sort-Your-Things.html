@@ -16,7 +16,7 @@
     <div class="tut-header">
       <div class="tut-header-main">
         <h1>Module 1: Getting Organized</h1>
-        <p class="tut-header-sub">A side activity becomes a thing &middot; ~10 min</p>
+        <p class="tut-header-sub">When a side activity becomes a business &middot; ~10 min</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -26,8 +26,8 @@
     <div class="phase-title" id="phaseTitle"></div>
 
     <div class="narrative-block">
-      <p>Your stuff is in two places: the <strong>rented space</strong> you work out of, and your <strong>home</strong>. You open a spreadsheet to start a tab &mdash; <strong>Things</strong> &mdash; and go to fill it.</p>
-      <p class="scenario-card-text">Tap (or drag) into the <strong>Things</strong> tab only what belongs to <em>the repair work</em>. Leave everything else where it is. Use <i data-lucide="info" class="licon"></i> if you&rsquo;re not sure what something is.</p>
+      <p>Your items are in two places: the <strong>rented space</strong> where you do your repair work, and your <strong>home</strong>. You open a spreadsheet and start with a tab called <strong>Things</strong>.</p>
+      <p class="scenario-card-text">Tap or drag into the <strong>Things</strong> tab only the items that belong to <em>the repair work</em>. Leave everything else where it is. Select <i data-lucide="info" class="licon"></i> if you&rsquo;re not sure what an item is.</p>
     </div>
     <div class="loc-stack">
       <div class="loc-panel"><div class="loc-panel-label">At the rented space</div><div id="locSpace" class="loc-cols"></div></div>
@@ -40,7 +40,7 @@
     </div>
     <div id="sortLive">
       <div class="sort-msg" id="sortMsg"></div>
-      <button class="btn-continue" id="sortAction" onclick="doTheRest()" disabled>Do the rest &rarr;</button>
+      <button class="btn-continue" id="sortAction" onclick="doTheRest()" disabled>Sort the rest &rarr;</button>
     </div>
     <div id="sortDoneBlock" hidden>
       <div class="insight-box">
@@ -188,15 +188,15 @@ function updateSortFeedback() {
   var msg = document.getElementById('sortMsg');
   var tone = 'info', text = '';
   if (personalInBox.length) { tone = 'warn'; text = '<i data-lucide="alert-triangle" class="licon"></i> “' + findItem(personalInBox[0]).text + '” is in the tab, but it’s yours — not part of the repair work. Take it back out.'; }
-  else if (placedShopCount < 5) { text = 'Keep going — pull the repair things into the tab.'; }
+  else if (placedShopCount < 5) { text = 'Keep going — move the repair-related items into the tab.'; }
   else if (intrudersFound < 2) { text = 'Some of the repair work is hiding at home, not in the space. (What about the laptop?)'; }
-  else { tone = 'ok'; text = '<i data-lucide="check" class="licon"></i> You’ve got the idea — you found the work-stuff at home and left your own things out. “Do the rest” will file the remaining repair things for you.'; }
+  else { tone = 'ok'; text = '<i data-lucide="check" class="licon"></i> You’ve got the idea — you found the work-stuff at home and left your own things out. “Sort the rest” will file the remaining repair things for you.'; }
   msg.className = 'sort-msg' + (tone === 'warn' ? ' warn' : tone === 'ok' ? ' ok' : '');
   msg.innerHTML = text;
 
   var btn = document.getElementById('sortAction');
   btn.disabled = !ready;
-  btn.textContent = shopIds.some(function(id){ return !placed[id]; }) ? 'Do the rest →' : 'Done →';
+  btn.textContent = shopIds.some(function(id){ return !placed[id]; }) ? 'Sort the rest →' : 'Done →';
 }
 function doTheRest() {
   if (sortDone) return;
