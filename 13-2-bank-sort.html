@@ -19,10 +19,10 @@
       <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
-    <div class="narrative-block"><p>You&rsquo;ve been using your personal bank account for the repair work. Last month&rsquo;s statement just arrived. Anna sits down at the workbench with you to look it over.</p></div>
+    <div class="narrative-block"><p>You&rsquo;ve been using your personal bank account for the repair work. Last month&rsquo;s bank statement just arrived. Anna sits down at the workbench with you to look it over.</p></div>
     <div class="dialog-box anna" style="margin-top: 20px;">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;First thing: there&rsquo;s a lot in here that has nothing to do with the shop. Apartment rent, groceries, your paycheck. Let&rsquo;s pull out only the repair-related transactions so we can look at them clearly. Click <strong><i data-lucide="info" class="licon"></i></strong> on any row to see what it was, then classify it as <em>repair-related</em> or <em>personal</em>.&rdquo;</div>
+      <div class="dialog-text">&ldquo;Okay, let&rsquo;s clean this up first. There&rsquo;s a lot in here that has nothing to do with your repair work, like your paycheck, apartment rent, and groceries. We have to pull out the rows that actually belong to the repair work. For each row, decide whether it belongs to the <strong>repair work</strong> or to your <strong>personal life</strong>. Click the <strong><i data-lucide="info" class="licon"></i></strong> on any row to see what it was.&rdquo;</div>
     </div>
     <div id="bankArea"></div>
 
@@ -45,7 +45,7 @@
 if (window.lucide) lucide.createIcons();
 
 var PHASE_INDEX = 1;
-var PHASE_TITLE = 'Sort the Bank Statement';
+var PHASE_TITLE = 'The Bank Statement';
 
 /* ===== sound ===== */
 var audioCtx = null;
@@ -57,26 +57,26 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== data ===== */
 var txns = [
-  { id:'t01', date:'May 1', desc:'Payroll deposit — employer', w:0, d:1800, bal:4300.00, cat:'personal', info:'Your full-time job paycheck — direct-deposited twice a month.' },
-  { id:'t02', date:'May 1', desc:'Check #1041 — rent', w:1300, d:0, bal:3000.00, cat:'shop', info:"Lease check for the new bike-repair space. First month's rent ($650) plus last month's rent held by the landlord ($650). Paid May 1." },
-  { id:'t03', date:'May 3', desc:'Debit — Cyclesport Supply', w:200, d:0, bal:2800.00, cat:'shop', info:'Park Tool PRS-25 repair stand. Paid from personal debit, not the bike-repair credit card.' },
-  { id:'t04', date:'May 5', desc:'Apartment rent — autopay', w:1400, d:0, bal:1400.00, cat:'personal', info:'Monthly rent on your apartment.' },
-  { id:'t05', date:'May 7', desc:'Venmo deposit', w:0, d:340, bal:1740.00, cat:'shop', info:'Customer payments at the shop, deposited via Venmo. Saturday — brake job, tune-up, two tire mountings.' },
+  { id:'t01', date:'May 1', desc:'Payroll deposit — employer', w:0, d:1800, bal:4300.00, cat:'personal', info:'Your full-time job paycheck, direct-deposited twice a month.' },
+  { id:'t02', date:'May 1', desc:'Check #1041 — rent', w:1300, d:0, bal:3000.00, cat:'shop', info:"Lease check for the rented workspace. First month's rent ($650) plus last month's rent held by the landlord ($650)." },
+  { id:'t03', date:'May 3', desc:'Debit — Cyclesport Supply', w:200, d:0, bal:2800.00, cat:'shop', info:'Park Tool PRS-25 repair stand. Paid with your debit card from this checking account.' },
+  { id:'t04', date:'May 5', desc:'Apartment rent — autopay', w:1400, d:0, bal:1400.00, cat:'personal', info:'Monthly rent for your apartment.' },
+  { id:'t05', date:'May 7', desc:'Venmo deposit', w:0, d:340, bal:1740.00, cat:'shop', info:'Customer payments from Saturday: brake job, tune-up, and two tire mountings.' },
   { id:'t06', date:'May 9', desc:'Groceries — Stop & Shop', w:135, d:0, bal:1605.00, cat:'personal', info:'Groceries for the week.' },
-  { id:'t07', date:'May 10', desc:'Venmo deposit', w:0, d:180, bal:1785.00, cat:'shop', info:'More customer payments via Venmo. Walk-ins — mixed work, no itemization on the receipt.' },
-  { id:'t08', date:'May 11', desc:'Utilities — UI', w:120, d:0, bal:1665.00, cat:'personal', info:'Electric bill — United Illuminating.' },
-  { id:'t09', date:'May 12', desc:'Venmo deposit', w:0, d:80, bal:1745.00, cat:'shop', info:'Customer payment — tune-up.' },
-  { id:'t10', date:'May 14', desc:'Venmo deposit', w:0, d:140, bal:1885.00, cat:'shop', info:'Customer payment — brake overhaul.' },
-  { id:'t11', date:'May 15', desc:'Payroll deposit — employer', w:0, d:1800, bal:3685.00, cat:'personal', info:'Second paycheck of the month.' },
-  { id:'t12', date:'May 16', desc:'ACH — Harborline Visa payment', w:400, d:0, bal:3285.00, cat:'shop', info:'Paydown on the bike-repair credit card. First of two ACH transfers from this account to the Harborline Visa during May.' },
-  { id:'t13', date:'May 18', desc:'ATM cash withdrawal', w:50, d:0, bal:3235.00, cat:'personal', info:'Personal walking-around money.' },
-  { id:'t14', date:'May 19', desc:'Venmo deposit', w:0, d:130, bal:3365.00, cat:'shop', info:'Customer payment — chain and cassette replacement.' },
+  { id:'t07', date:'May 10', desc:'Venmo deposit', w:0, d:180, bal:1785.00, cat:'shop', info:'Customer payments from walk-ins. Mixed work, no itemized receipt.' },
+  { id:'t08', date:'May 11', desc:'Utilities — UI', w:120, d:0, bal:1665.00, cat:'personal', info:'Electric bill from United Illuminating for your apartment.' },
+  { id:'t09', date:'May 12', desc:'Venmo deposit', w:0, d:80, bal:1745.00, cat:'shop', info:'Customer payment for a tune-up.' },
+  { id:'t10', date:'May 14', desc:'Venmo deposit', w:0, d:140, bal:1885.00, cat:'shop', info:'Customer payment for a brake overhaul.' },
+  { id:'t11', date:'May 15', desc:'Payroll deposit — employer', w:0, d:1800, bal:3685.00, cat:'personal', info:'Second full-time job paycheck of the month.' },
+  { id:'t12', date:'May 16', desc:'ACH — Harborline Visa payment', w:400, d:0, bal:3285.00, cat:'shop', info:'$400 payment to Harborline Visa. Your notes say this payment was applied to charges from setting up the rented workspace.' },
+  { id:'t13', date:'May 18', desc:'ATM cash withdrawal', w:50, d:0, bal:3235.00, cat:'personal', info:'Walking-around cash for lunch and errands.' },
+  { id:'t14', date:'May 19', desc:'Venmo deposit', w:0, d:130, bal:3365.00, cat:'shop', info:'Customer payment for chain and cassette replacement.' },
   { id:'t15', date:'May 20', desc:'Streaming subscription', w:16, d:0, bal:3349.00, cat:'personal', info:'Streaming service for your apartment.' },
   { id:'t16', date:'May 22', desc:'Check deposit — Smith', w:0, d:220, bal:3569.00, cat:'shop', info:"Smith's deposit on the custom frame build. Notebook says: \"deposit, frame build, 4-6 weeks.\"" },
-  { id:'t17', date:'May 23', desc:'Venmo deposit', w:0, d:100, bal:3669.00, cat:'shop', info:'Customer payment — tune-up and minor repair.' },
+  { id:'t17', date:'May 23', desc:'Venmo deposit', w:0, d:100, bal:3669.00, cat:'shop', info:'Customer payment for a tune-up and minor repair.' },
   { id:'t18', date:'May 24', desc:'Groceries — Stop & Shop', w:145, d:0, bal:3524.00, cat:'personal', info:'Groceries for the week.' },
-  { id:'t19', date:'May 27', desc:'Venmo deposit', w:0, d:150, bal:3674.00, cat:'shop', info:'Customer payment — custom wheel work, new spokes.' },
-  { id:'t20', date:'May 28', desc:'ACH — Harborline Visa payment', w:400, d:0, bal:3274.00, cat:'shop', info:'Second ACH paydown to the bike-repair credit card.' }
+  { id:'t19', date:'May 27', desc:'Venmo deposit', w:0, d:150, bal:3674.00, cat:'shop', info:'Customer payment for custom wheel work and new spokes.' },
+  { id:'t20', date:'May 28', desc:'ACH — Harborline Visa payment', w:400, d:0, bal:3274.00, cat:'shop', info:'Second $400 payment to Harborline Visa. Your notes say this payment was applied to charges from setting up the rented workspace.' }
 ];
 
 var glossaryTerms = [
@@ -102,7 +102,7 @@ function renderStatement(rows, opts){
   var grid = opts.bank ? 'stmt-grid-bank' : 'stmt-grid-card';
   var html = '<div class="stmt" style="margin-top:20px;">';
   html += '<div class="stmt-head"><div><div class="stmt-bank">'+opts.bankName+'</div><div class="stmt-acct">'+opts.acct+'</div></div>'+
-    '<div style=""><div class="stmt-period-label">Statement period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
+    '<div style=""><div class="stmt-period-label">Statement Period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
   html += '<div class="stmt-balrow"><span>'+opts.topLabel+'</span><span class="stmt-num">'+opts.topVal+'</span></div>';
   if(opts.bank){
     html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Withdrawal</span><span class="stmt-num">Deposit</span><span class="stmt-num">Balance</span><span></span></div>';
@@ -116,7 +116,8 @@ function renderStatement(rows, opts){
     var open = opts.expandedId === tx.id;
     var tag = '';
     if(cls){ var lbl = cls==='shop'?'Repair':cls.charAt(0).toUpperCase()+cls.slice(1); tag = '<span class="stmt-tag '+cls+'">'+lbl+'</span>'; }
-    if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
+    if(wrong) tag += '<span style="color:#dc2626;font-weight:600;font-size:0.85em;margin-left:4px;">Try Again</span>';
+    if(opts.checked && cls && !wrong) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
     html += '<div class="stmt-row '+grid+(i%2?' alt':'')+'">'+
       '<div class="stmt-stripe '+stripeCls+'"></div>'+
       '<span class="mono">'+tx.date+'</span>'+
@@ -132,9 +133,11 @@ function renderStatement(rows, opts){
     html += '<button class="stmt-info-btn'+(open?' open':'')+''+(i===0&&opts.showHint?' hint-pulse':'')+'" onclick="'+opts.toggleFn+'(\''+tx.id+'\')" aria-label="More info"><i data-lucide="info" class="licon"></i></button></div>';
     if(open){
       var a = opts.catA, b = opts.catB;
-      html += '<div class="stmt-expand"><div class="stmt-expand-info">'+tx.info+'</div><div class="classify-row"><span class="classify-label">Classify:</span>'+
-        '<button class="classify-btn'+(cls===a.id?' active-'+a.id:'')+'" onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+a.id+'\')">'+a.label+'</button>'+
-        '<button class="classify-btn'+(cls===b.id?' active-'+b.id:'')+'" onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+b.id+'\')">'+b.label+'</button>'+
+      var lockedRow = opts.allCorrect || (opts.checked && cls && !wrong);
+      html += '<div class="stmt-expand"><div class="stmt-expand-info">'+tx.info+'</div>'+
+        '<div class="classify-row"><span class="classify-label">Classify:</span>'+
+        '<button class="classify-btn'+(cls===a.id?' active-'+a.id:'')+'"'+(lockedRow?' disabled':' onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+a.id+'\')"')+'>'+a.label+'</button>'+
+        '<button class="classify-btn'+(cls===b.id?' active-'+b.id:'')+'"'+(lockedRow?' disabled':' onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+b.id+'\')"')+'>'+b.label+'</button>'+
         '</div></div>';
     }
   });
@@ -170,17 +173,16 @@ function renderBankSort(){
 
   var html = sortProgress(shop, personal, unsorted, 'Repair-related', triggerMet, !sortChecked && unsorted===0);
   if(sortChecked && wrongIds.length>0){
-    html += '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Not all of these are in the right place. I&rsquo;ve marked the ones that need another look. Open the <strong><i data-lucide="info" class="licon"></i></strong> on each marked row, re-read what it was, and re-classify.&rdquo;</div></div>';
+    html += '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Not all of these look right yet. I&rsquo;ve marked the ones that need another look. Try again.&rdquo;</div></div>';
   }
-  if(sortChecked && wrongIds.length===0){
-    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Nicely sorted</div><p>Twelve repair-related transactions to dig into.</p></div>';
-  }
-  html += renderStatement(txns, { bank:true, bankName:'ELM CITY BANK', acct:'Personal Checking · account ending •••• 8814',
+  html += renderStatement(txns, { bank:true, bankName:'ELM CITY BANK', acct:'Personal Checking · Account Ending •••• 8814',
     topLabel:'Beginning balance (May 1)', topVal:'$2,500.00', botLabel:'Ending balance (May 31)', botVal:'$3,274.00',
     classObj:classifications, expandedId:expandedDescId, checked:sortChecked,
     toggleFn:'toggleBankDesc', classifyFn:'classifyBank', showHint:!hintSeen,
-    catA:{id:'shop',label:'Repair-related'}, catB:{id:'personal',label:'Personal'} });
+    catA:{id:'shop',label:'Repair'}, catB:{id:'personal',label:'Personal'},
+    allCorrect:sortChecked && wrongIds.length===0 });
   if(sortChecked && wrongIds.length===0){
+    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Good. Now we can see which rows belong to the repair work and which ones belong to your personal life. Next, let&rsquo;s pull the repair-related rows into one place and see how cash moved during May.&rdquo;</div></div>';
     html += '<div class="next-phase-msg" style="margin-top: 20px;">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
   }
   document.getElementById('bankArea').innerHTML = html;
