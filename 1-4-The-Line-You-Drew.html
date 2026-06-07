@@ -132,6 +132,7 @@ function submitQ1() {
     showCorrectQ1();
   } else {
     q1Attempts++;
+    document.querySelectorAll('#q1Opts .mc-opt').forEach(function(el){ el.classList.remove('wrong'); });
     var wrongEl = document.querySelector('#q1Opts .mc-opt[data-id="' + q1Sel + '"]');
     if (q1Attempts >= 3) {
       playBuzzer();

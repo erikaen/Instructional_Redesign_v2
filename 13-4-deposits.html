@@ -220,9 +220,10 @@ function answerJones(choice){
     fb.innerHTML = 'Correct. Jones stays off the Promises list for now. Smith paid upfront, so you have his cash and still owe him the frame. Jones only talked about it, so nothing has happened yet that needs to be recorded.';
     var insightEl = document.getElementById('jonesInsight');
     insightEl.className = 'insight-box';
-    insightEl.innerHTML = '<div class="insight-label">Not just cash</div><p>This does <strong>not</strong> mean cash always has to change hands for something to be recorded. What matters is whether something has happened that affects what the repair work has or owes. Smith&rsquo;s upfront payment created an obligation to deliver the frame. Jones only talked about a possible frame, so there is no obligation to record yet.</p>';
+    insightEl.innerHTML = '<div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Not just cash</div><p>This does <strong>not</strong> mean cash always has to change hands for something to be recorded. What matters is whether something has happened that affects what the repair work has or owes. Smith&rsquo;s upfront payment created an obligation to deliver the frame. Jones only talked about a possible frame, so there is no obligation to record yet.</p>';
     insightEl.hidden = false;
     document.getElementById('jonesClose').hidden=false;
+    if(window.lucide) lucide.createIcons();
   } else {
     playNope(); onEl.classList.add('wrong');
     fb.className='feedback err show';

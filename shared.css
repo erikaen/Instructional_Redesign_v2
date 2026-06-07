@@ -2013,6 +2013,7 @@ body { background: var(--page-bg); font-family: 'Open Sans', sans-serif; color: 
 
 /* Full-width page wrapper (edge-to-edge, no horizontal padding) */
 .prework-wrap { width: 100%; max-width: none; margin: 0; padding: 24px 0 64px; }
+.prework-wrap > * + * { margin-top: 20px; }
 
 /* ----- Banner instructor meta (right side of .activity-header) ----- */
 .banner-instructor { text-align: right; flex-shrink: 0; }

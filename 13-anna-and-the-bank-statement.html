@@ -561,7 +561,7 @@ function renderCashQuiz(){
 function answerCash(id){
   if(cashCorrect) return;
   var fb = document.getElementById('cashFb');
-  document.querySelectorAll('#cashOpts .mc-opt').forEach(function(el){ el.classList.remove('selected'); });
+  document.querySelectorAll('#cashOpts .mc-opt').forEach(function(el){ el.classList.remove('selected'); el.classList.remove('wrong'); });
   var el = document.querySelector('#cashOpts .mc-opt[data-id="'+id+'"]');
   if(id==='c'){
     playSuccess(); cashCorrect=true;
@@ -755,7 +755,7 @@ function answerRent(id){
   if(q1Correct) return;
   var fb=document.getElementById('rentFb');
   var el=document.querySelector('#rentOpts .mc-opt[data-id="'+id+'"]');
-  document.querySelectorAll('#rentOpts .mc-opt').forEach(function(x){ x.classList.remove('selected'); });
+  document.querySelectorAll('#rentOpts .mc-opt').forEach(function(x){ x.classList.remove('selected'); x.classList.remove('wrong'); });
   if(id==='b'){
     playSuccess(); q1Correct=true;
     el.classList.add('correct');
