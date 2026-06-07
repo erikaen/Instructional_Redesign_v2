@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 1.3 — The Promises Tab</title>
+  <title>Tutorial 1.3 — The Promises</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -13,22 +13,12 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 1.3: Anna and the Bank Statement</h1>
-        <p class="tut-header-sub">Bicycle repair shop &middot; ~20 min</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
-    </div>
-    <div class="seg-progress" id="segProgress"></div>
     <div class="phase-title" id="phaseTitle"></div>
 
-    <div class="narrative-block"><p>Two promises now &mdash; Smith&rsquo;s frame and the card. You add another sheet to the workbook, right next to <strong>Things</strong> and <strong>Cash</strong>, and call it <strong>Promises</strong>. One workbook: what you <em>have</em>, what you <em>owe</em>, and the cash you pulled.</p></div>
+    <div class="narrative-block"><p>You&rsquo;ve found two promises so far: Smith&rsquo;s custom frame and the amount still owed on your credit card for the repair work. You add a new sheet to the Excel workbook, next to <strong>Things</strong> and <strong>Cash</strong>, and call it <strong>Promises</strong>.</p></div>
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;There you go. Keep them side by side. Click between the tabs whenever you want to see one or the other.&rdquo;</div>
+      <div class="dialog-text">&ldquo;Good. Keep these side by side. The Cash sheet shows the <strong>money that moved in and out during May</strong>. The Things sheet shows <strong>what the repair work has</strong>, and the Promises sheet shows <strong>what it still owes</strong>.&rdquo;</div>
     </div>
     <div id="promisesWb"></div>
     <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>
@@ -52,7 +42,7 @@
 if (window.lucide) lucide.createIcons();
 
 var PHASE_INDEX = 5;
-var PHASE_TITLE = 'The Promises Tab';
+var PHASE_TITLE = 'The Promises';
 
 /* ===== sound ===== */
 var audioCtx = null;
@@ -109,7 +99,7 @@ var curWb = null;
 /* ===== Excel workbook ===== */
 function renderOutlineSheet(cats, colA, totalLabel, newCat){
   var total = cats.reduce(function(s,c){return s+c.subtotal;},0);
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;'+colA+'</div><div class="xl-v">B&nbsp;&nbsp;Value</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+colA+'</div><div class="xl-v">Value</div></div>';
   var n = 0;
   cats.forEach(function(cat){
     var label = cat.cat==='RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0)+cat.cat.slice(1).toLowerCase());
@@ -130,15 +120,15 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
   return html;
 }
-function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Thing', 'TOTAL — what I have'); }
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things (What I have)', 'TOTAL'); }
 function promisesSheet(){
-  var rows = [ {label:"Smith's frame — paid $220 up front, not built yet", amount:220}, {label:'What you owe on the bike-repair credit card', amount:1230} ];
+  var rows = [ {label:"Smith's frame — paid $220 up front, not built yet", amount:220}, {label:'Amount still owed on the credit card for the repair work', amount:1230} ];
   var total = 1450;
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Promise (what I owe)</div><div class="xl-v">B&nbsp;&nbsp;Amount</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Promises (What I owe)</div><div class="xl-v">Amount</div></div>';
   rows.forEach(function(r,i){
     html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+r.label+'</div><div class="xl-v">'+dollars(r.amount)+'</div></div>';
   });
-  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL — what I owe</div><div class="xl-v">'+dollars(total)+'</div></div>';
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+dollars(total)+'</div></div>';
   return html;
 }
 function cashSheet(){
@@ -147,15 +137,15 @@ function cashSheet(){
   var totalIn = inflows.reduce(function(s,f){return s+f.amount;},0);
   var totalOut = outflows.reduce(function(s,f){return s+f.amount;},0);
   var net = totalIn+totalOut;
-  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Bike-repair cash flows — May</div><div class="cash-sheet-sub">Pulled from the repair-flagged rows of the personal bank statement.</div></div>';
+  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Bike-repair cash flows — May 1 &ndash; May 31, 2026</div><div class="cash-sheet-sub">Pulled from the transactions you classified as repair-related in your bank statement.</div></div>';
   html += '<div class="cash-group in"><div class="cash-group-label">Cash in</div>';
   inflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">+'+dollars(f.amount)+'</span></div>'; });
   html += '<div class="cash-subtotal"><span>Total in</span><span class="cash-line-amt">'+dollars(totalIn)+'</span></div></div>';
   html += '<div class="cash-group out"><div class="cash-group-label">Cash out</div>';
   outflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">&minus;'+dollars(Math.abs(f.amount))+'</span></div>'; });
   html += '<div class="cash-subtotal"><span>Total out</span><span class="cash-line-amt">&minus;'+dollars(Math.abs(totalOut))+'</span></div></div>';
-  html += '<div class="cash-net"><span class="cash-net-label">NET CASH (May)</span><span class="cash-net-val">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</span></div>';
-  html += "<div class=\"cash-foot\">That's the month's <strong>flow</strong> — money in minus money out — not a balance.</div>";
+  html += '<div class="cash-net"><span class="cash-net-label">NET CASH FLOW (May)</span><span class="cash-net-val">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</span></div>';
+  html += "<div class=\"cash-foot\">This is the month's <strong>flow</strong> — cash in minus cash out — not a balance.</div>";
   return html;
 }
 function renderWorkbook(containerId, phaseKey){
@@ -169,7 +159,7 @@ function renderWorkbook(containerId, phaseKey){
   var activeLabel = tabs.find(function(t){return t.id===excelTab;}).label;
   var tabsHtml = tabs.map(function(t){ return '<button class="xlwb-tab'+(t.id===excelTab?' active':'')+'" onclick="setTab(\''+t.id+'\')">'+t.label+'</button>'; }).join('');
   var html = '<div class="xlwb">'+
-    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' sheet</span></div>'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' Sheet</span></div>'+
     '<div>'+body+'</div>'+
     '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
   document.getElementById(containerId).innerHTML = html;
@@ -187,19 +177,8 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 
-/* ===== progress ===== */
-function renderSegProgress(){
-  var html = '';
-  for(var i = 0; i < 9; i++){
-    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
-    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
-  }
-  document.getElementById('segProgress').innerHTML = html;
-  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
-}
-
 /* ===== init ===== */
-renderSegProgress();
+document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 renderWorkbook('promisesWb','promises');
 </script>
 </body>

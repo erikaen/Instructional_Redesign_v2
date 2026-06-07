@@ -109,7 +109,7 @@ var curWb = null;
 /* ===== Excel workbook ===== */
 function renderOutlineSheet(cats, colA, totalLabel, newCat){
   var total = cats.reduce(function(s,c){return s+c.subtotal;},0);
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;'+colA+'</div><div class="xl-v">B&nbsp;&nbsp;Value</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+colA+'</div><div class="xl-v">Value</div></div>';
   var n = 0;
   cats.forEach(function(cat){
     var label = cat.cat==='RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0)+cat.cat.slice(1).toLowerCase());
@@ -131,15 +131,15 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
   return html;
 }
 function assetsSheet(){ return renderOutlineSheet(rouRevealed ? THINGS_CATS.concat([ROU_CAT]) : THINGS_CATS, 'Asset', 'TOTAL — what I have', rouRevealed ? 'RIGHT OF USE' : null); }
-function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Thing', 'TOTAL — what I have'); }
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things (What I have)', 'TOTAL'); }
 function promisesSheet(){
-  var rows = [ {label:"Smith's frame — paid $220 up front, not built yet", amount:220}, {label:'What you owe on the bike-repair credit card', amount:1230} ];
+  var rows = [ {label:"Smith's frame — paid $220 up front, not built yet", amount:220}, {label:'Amount still owed on the credit card for the repair work', amount:1230} ];
   var total = 1450;
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Promise (what I owe)</div><div class="xl-v">B&nbsp;&nbsp;Amount</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Promises (What I owe)</div><div class="xl-v">Amount</div></div>';
   rows.forEach(function(r,i){
     html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+r.label+'</div><div class="xl-v">'+dollars(r.amount)+'</div></div>';
   });
-  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL — what I owe</div><div class="xl-v">'+dollars(total)+'</div></div>';
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+dollars(total)+'</div></div>';
   return html;
 }
 function cashSheet(){

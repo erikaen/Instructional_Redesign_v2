@@ -105,7 +105,7 @@ var curWb = null;
 /* ===== Excel workbook ===== */
 function renderOutlineSheet(cats, colA, totalLabel, newCat){
   var total = cats.reduce(function(s,c){return s+c.subtotal;},0);
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;'+colA+'</div><div class="xl-v">B&nbsp;&nbsp;Value</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+colA+'</div><div class="xl-v">Value</div></div>';
   var n = 0;
   cats.forEach(function(cat){
     var label = cat.cat==='RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0)+cat.cat.slice(1).toLowerCase());
@@ -126,7 +126,7 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
   return html;
 }
-function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Thing', 'TOTAL — what I have'); }
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things (What I have)', 'TOTAL'); }
 function renderWorkbook(containerId, phaseKey){
   curWb = { container: containerId, phase: phaseKey };
   var tabs = [{id:'things',label:'Things'}];

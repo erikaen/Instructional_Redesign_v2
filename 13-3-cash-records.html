@@ -21,7 +21,7 @@
 
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;We&rsquo;ve pulled the repair-related rows out of your bank statement: 12 rows in total. It would be much simpler if the repair work had its own bank account, but for now, this gives us a cleaner view of the cash connected to the repair work.<br><br>Take a look at the cash sheet below. In May, <strong>$1,340 came in</strong> and <strong>$2,300 went out</strong>, resulting in a <strong>net cash flow of &minus;$960</strong>.&rdquo;</div>
+      <div class="dialog-text">&ldquo;We&rsquo;ve pulled the repair-related rows out of your bank statement: 12 rows in total. It would be much simpler if the repair work had its own bank account, but for now, this gives us a cleaner view of the cash connected to the repair work.<br><br>Take a look at the Cash sheet below. In May, <strong>$1,340 came in</strong> and <strong>$2,300 went out</strong>, resulting in a <strong>net cash flow of &minus;$960</strong>.&rdquo;</div>
     </div>
     <div id="cashWb" style="margin-top: 20px;"></div>
     <div class="mc-card" style="margin-top: 20px;">
@@ -172,7 +172,7 @@ function toggleCat(cat){ playClick(); thingsExpanded[cat] = !thingsExpanded[cat]
 function renderCashQuiz(){
   var opts=[ {id:'a',text:'Yes. Since net cash flow was &minus;$960, the repair work must be worse off.'},
     {id:'b',text:'No. Since customers paid money during May, the repair work must be doing fine.'},
-    {id:'c',text:'Not from the cash sheet alone. We need to know what the money came in for and what the money went out for.'} ];
+    {id:'c',text:'Not from the Cash sheet alone. We need to know what the money came in for and what the money went out for.'} ];
   document.getElementById('cashOpts').innerHTML = opts.map(function(o){
     return '<div class="mc-opt" data-id="'+o.id+'" onclick="answerCash(\''+o.id+'\')"><div class="mc-letter">'+o.id.toUpperCase()+'</div><div>'+o.text+'</div></div>';
   }).join('');
@@ -187,7 +187,7 @@ function answerCash(id){
     el.classList.add('correct');
     document.querySelectorAll('#cashOpts .mc-opt').forEach(function(x){ x.classList.add('locked'); });
     fb.className='feedback ok show';
-    fb.innerHTML='Right. Cash isn&rsquo;t the whole story. Some of what went out bought you things you still have. Some of what came in came with strings attached. The cash sheet alone can&rsquo;t tell us what happened. We have to go through it line by line. Let&rsquo;s start with the money coming in.';
+    fb.innerHTML='Right. Cash isn&rsquo;t the whole story. Some of what went out bought you things you still have. Some of what came in came with strings attached. The Cash sheet alone can&rsquo;t tell us what happened. We have to go through it line by line. Let&rsquo;s start with the money coming in.';
     document.getElementById('cashClose').hidden=false;
   } else {
     playNope();
