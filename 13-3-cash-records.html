@@ -25,7 +25,7 @@
     </div>
     <div id="cashWb" style="margin-top: 20px;"></div>
     <div class="mc-card" style="margin-top: 20px;">
-      <div class="mc-q">The cash sheet shows <strong>net cash of &minus;$960</strong> for May. Based on that number alone, can you tell whether the repair work was better or worse off at the end of the month?</div>
+      <div class="mc-q">The Cash sheet shows <strong>net cash flow of &minus;$960</strong> for May. Based on that number alone, can you tell whether the repair work was better or worse off at the end of the month?</div>
       <div class="mc-opts" id="cashOpts"></div>
       <div class="feedback" id="cashFb"></div>
     </div>
@@ -131,7 +131,7 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
   return html;
 }
-function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Thing', 'TOTAL (What I have)'); }
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things (What I have)', 'TOTAL'); }
 function cashSheet(){
   var inflows = bikeRepairCashFlows.filter(function(f){return f.amount>0;});
   var outflows = bikeRepairCashFlows.filter(function(f){return f.amount<0;});
@@ -170,7 +170,7 @@ function toggleCat(cat){ playClick(); thingsExpanded[cat] = !thingsExpanded[cat]
 
 /* ===== cash quiz ===== */
 function renderCashQuiz(){
-  var opts=[ {id:'a',text:'Yes. Since net cash was &minus;$960, the repair work must be worse off.'},
+  var opts=[ {id:'a',text:'Yes. Since net cash flow was &minus;$960, the repair work must be worse off.'},
     {id:'b',text:'No. Since customers paid money during May, the repair work must be doing fine.'},
     {id:'c',text:'Not from the cash sheet alone. We need to know what the money came in for and what the money went out for.'} ];
   document.getElementById('cashOpts').innerHTML = opts.map(function(o){
