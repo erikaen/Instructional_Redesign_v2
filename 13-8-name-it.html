@@ -13,20 +13,13 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 1.3: Anna and the Bank Statement</h1>
-        <p class="tut-header-sub">Bicycle repair shop &middot; ~20 min</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
-    <div class="seg-progress" id="segProgress"></div>
-    <div class="phase-title" id="phaseTitle"></div>
 
-    <div class="narrative-block"><p>Late afternoon. You and Anna have been at it for hours, and your workbook has a few tabs now &mdash; what you have, what you owe, and the cash you pulled. Time to give the have-and-owe lists their proper names.</p></div>
+    <div class="narrative-block"><p>You and Anna have been working through the records one piece at a time. The workbook now has three tabs: <strong>Things</strong>, <strong>Promises</strong>, and <strong>Cash</strong>. You have listed what the repair work has, what it still owes, and the money that moved in and out during May.</p><p>Now Anna says it is time to give the lists their proper names.</p></div>
     <div id="nameWb"></div>
     <div id="nameSteps"></div>
 
@@ -48,8 +41,7 @@
 <script>
 if (window.lucide) lucide.createIcons();
 
-var PHASE_INDEX = 7;
-var PHASE_TITLE = 'Name the Lists';
+var PHASE_TITLE = 'Naming the Lists';
 
 /* ===== sound ===== */
 var audioCtx = null;
@@ -130,7 +122,7 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
   return html;
 }
-function assetsSheet(){ return renderOutlineSheet(rouRevealed ? THINGS_CATS.concat([ROU_CAT]) : THINGS_CATS, 'Asset', 'TOTAL — what I have', rouRevealed ? 'RIGHT OF USE' : null); }
+function assetsSheet(){ return renderOutlineSheet(rouRevealed ? THINGS_CATS.concat([ROU_CAT]) : THINGS_CATS, 'Assets', 'TOTAL', rouRevealed ? 'RIGHT OF USE' : null); }
 function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things (What I have)', 'TOTAL'); }
 function promisesSheet(){
   var rows = [ {label:"Smith's frame — paid $220 up front, not built yet", amount:220}, {label:'Amount still owed on the credit card for the repair work', amount:1230} ];
@@ -148,15 +140,15 @@ function cashSheet(){
   var totalIn = inflows.reduce(function(s,f){return s+f.amount;},0);
   var totalOut = outflows.reduce(function(s,f){return s+f.amount;},0);
   var net = totalIn+totalOut;
-  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Bike-repair cash flows — May</div><div class="cash-sheet-sub">Pulled from the repair-flagged rows of the personal bank statement.</div></div>';
+  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Bike-repair cash flows — May 1 &ndash; May 31, 2026</div><div class="cash-sheet-sub">Pulled from the transactions you classified as repair-related in your bank statement.</div></div>';
   html += '<div class="cash-group in"><div class="cash-group-label">Cash in</div>';
   inflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">+'+dollars(f.amount)+'</span></div>'; });
   html += '<div class="cash-subtotal"><span>Total in</span><span class="cash-line-amt">'+dollars(totalIn)+'</span></div></div>';
   html += '<div class="cash-group out"><div class="cash-group-label">Cash out</div>';
   outflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">&minus;'+dollars(Math.abs(f.amount))+'</span></div>'; });
   html += '<div class="cash-subtotal"><span>Total out</span><span class="cash-line-amt">&minus;'+dollars(Math.abs(totalOut))+'</span></div></div>';
-  html += '<div class="cash-net"><span class="cash-net-label">NET CASH (May)</span><span class="cash-net-val">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</span></div>';
-  html += "<div class=\"cash-foot\">That's the month's <strong>flow</strong> — money in minus money out — not a balance.</div>";
+  html += '<div class="cash-net"><span class="cash-net-label">NET CASH FLOW (May)</span><span class="cash-net-val">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</span></div>';
+  html += "<div class=\"cash-foot\">This is the month's <strong>flow</strong> — cash in minus cash out — not a balance.</div>";
   return html;
 }
 function renderWorkbook(containerId, phaseKey){
@@ -170,7 +162,7 @@ function renderWorkbook(containerId, phaseKey){
   var activeLabel = tabs.find(function(t){return t.id===excelTab;}).label;
   var tabsHtml = tabs.map(function(t){ return '<button class="xlwb-tab'+(t.id===excelTab?' active':'')+'" onclick="setTab(\''+t.id+'\')">'+t.label+'</button>'; }).join('');
   var html = '<div class="xlwb">'+
-    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' sheet</span></div>'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' Sheet</span></div>'+
     '<div>'+body+'</div>'+
     '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
   document.getElementById(containerId).innerHTML = html;
@@ -183,17 +175,17 @@ function toggleCat(cat){ playClick(); thingsExpanded[cat] = !thingsExpanded[cat]
 function renderNameSteps(){
   var html='';
   if(!assetsNamed){
-    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Start with this first sheet &mdash; everything you have, priced. Accountants have a word for that whole list: your <strong>Assets</strong>.&rdquo;</div></div>'+
-      '<button class="btn-continue btn-block" onclick="nameAssets()">Rename the Things tab &ldquo;Assets&rdquo; &rarr;</button>';
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Let&rsquo;s start with the Things sheet. It lists everything you have that is related to the repair work, with a dollar value for each. Accountants call this list <strong>Assets</strong>.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" style="margin-top:20px" onclick="nameAssets()">Rename Things to Assets</button>';
   } else if(!rouRevealed){
-    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now &mdash; accountants think about assets more expansively than just <em>things</em>. An asset is a <strong>present right to an economic benefit</strong> &mdash; anything that will do you economic good down the road, whether or not you can put your hands on it. By that definition, your list is missing one.&rdquo;</div></div>'+
-      '<button class="btn-continue btn-block" onclick="revealRou()">What&rsquo;s missing? &rarr;</button>';
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now we need to think a little bigger. Assets are not just physical objects you can see or touch. An asset is a <strong>present right to an economic benefit</strong>. Remember the $650 paid ahead for the final month of the lease? You have not used that month yet, so that right belongs on the Assets list too.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" style="margin-top:20px" onclick="revealRou()">Add the Missing Asset</button>';
   } else if(!liabilitiesNamed){
-    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;There it is. Remember the last month of rent you already paid? You can&rsquo;t touch it &mdash; but you hold the <strong>right to occupy the space</strong> that month. That&rsquo;s a real economic benefit coming to you, so it counts as an asset. It isn&rsquo;t a thing, though, so it gets its own category: <strong>Right of Use</strong>. With that, your assets come to <strong>'+dollars(ASSETS_TOTAL)+'</strong>. Now the other sheet &mdash; your Promises. Accountants call those <strong>Liabilities</strong>.&rdquo;</div></div>'+
-      '<button class="btn-continue btn-block" onclick="nameLiabilities()">Rename the Promises tab &ldquo;Liabilities&rdquo; &rarr;</button>';
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;There it is. The final month&rsquo;s rent is different from the tools and supplies. You cannot touch it, but it represents a right to use the repair workspace later. That right has value, so it belongs on the Assets list.<br><br>Since it is not a physical thing, we will give it its own category: <strong>Right of Use</strong>. With that added, the Assets list now totals <strong>'+dollars(ASSETS_TOTAL)+'</strong>.<br><br>Now let&rsquo;s name the other list. The Promises sheet shows what the repair work still owes. Accountants call those <strong>Liabilities</strong>.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" style="margin-top:20px" onclick="nameLiabilities()">Rename Promises to Liabilities</button>';
   } else {
-    html = '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Two sheets, two names</div><p><strong>Assets</strong> ('+dollars(ASSETS_TOTAL)+') &mdash; everything you have, including the right to that prepaid month. <strong>Liabilities</strong> ('+dollars(LIABILITIES_TOTAL)+') &mdash; everything you owe. And you learned an asset is a <em>right to an economic benefit</em>, not just a thing.</p></div>'+
-      '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now you have the two names. <strong>Assets</strong> are what the repair work has: <strong>'+dollars(ASSETS_TOTAL)+'</strong>, including the right to use the workspace later. <strong>Liabilities</strong> are what the repair work owes: <strong>'+dollars(LIABILITIES_TOTAL)+'</strong>. And now you know that an asset is a <strong>present right to an economic benefit</strong>, not just a thing.&rdquo;</div></div>'+
+      '<div class="next-phase-msg" style="margin-top:20px">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
   }
   document.getElementById('nameSteps').innerHTML = html;
   if(window.lucide) lucide.createIcons();
@@ -217,19 +209,8 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 
-/* ===== progress ===== */
-function renderSegProgress(){
-  var html = '';
-  for(var i = 0; i < 9; i++){
-    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
-    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
-  }
-  document.getElementById('segProgress').innerHTML = html;
-  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
-}
-
 /* ===== init ===== */
-renderSegProgress();
+document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 renderWorkbook('nameWb','name');
 renderNameSteps();
 </script>
