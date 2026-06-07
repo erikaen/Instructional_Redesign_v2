@@ -19,7 +19,7 @@
       <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
-    <div class="narrative-block"><p>The cash sheet shows eight customer deposits during May. The bank statement tells you that money came in, but it does not tell you what each customer paid for.</p></div>
+    <div class="narrative-block"><p>The cash sheet shows eight customer deposits during May, but it does not tell you what each customer paid for.</p></div>
     <div id="depChips" style="margin-top: 20px;"></div>
     <div class="dialog-box anna" style="margin-top:20px; margin-bottom:0;">
       <div class="dialog-label">ANNA</div>
@@ -64,19 +64,19 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 var deposits = [
   { id:'d1', date:'May 7', amount:340, receiptNum:'#001', payment:'Venmo', lineItems:[{name:'Brake job',amount:120},{name:'Tune-up',amount:80},{name:'Tire mounting (×2)',amount:140}], note:null, correct:'done',
     annaSays:{ done:"Correct. The receipt lists completed repairs: a brake job, a tune-up, and two tire mountings. Those jobs were already finished, so this payment is for work done.", tocome:"Not quite. This receipt lists completed repairs: a brake job, a tune-up, and two tire mountings. The customer paid for work that was already done." } },
-  { id:'d2', date:'May 10', amount:180, receiptNum:'#002', payment:'Venmo', lineItems:[{name:'Walk-ins — mixed work',amount:180}], note:'No itemization on this one.', correct:'done',
+  { id:'d2', date:'May 10', amount:180, receiptNum:'#002', payment:'Venmo', lineItems:[{name:'Mixed walk-in work',amount:180}], note:'<strong>Note:</strong> No itemization.', correct:'done',
     annaSays:{ done:"Correct. This receipt is less specific, but it still points to work done. It says &ldquo;walk-ins&rdquo; and does not mention a deposit or future work.", tocome:"Not quite. This receipt is less specific, but it says &ldquo;walk-ins&rdquo; and does not mention a deposit, future work, or balance due." } },
   { id:'d3', date:'May 12', amount:80, receiptNum:'#003', payment:'Venmo', lineItems:[{name:'Tune-up',amount:80}], note:null, correct:'done',
     annaSays:{ done:"Correct. The receipt lists a tune-up, which is completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a tune-up. That is completed repair work, not work still to come." } },
   { id:'d4', date:'May 14', amount:140, receiptNum:'#004', payment:'Venmo', lineItems:[{name:'Brake overhaul',amount:140}], note:null, correct:'done',
     annaSays:{ done:"Correct. The receipt lists a brake overhaul, which is completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a brake overhaul. That work was already completed, so this payment is for work done." } },
-  { id:'d5', date:'May 19', amount:130, receiptNum:'#005', payment:'Venmo', lineItems:[{name:'Chain + cassette replacement',amount:130}], note:null, correct:'done',
+  { id:'d5', date:'May 19', amount:130, receiptNum:'#005', payment:'Venmo', lineItems:[{name:'Chain and cassette replacement',amount:130}], note:null, correct:'done',
     annaSays:{ done:"Correct. The receipt lists a chain and cassette replacement, which is completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a chain and cassette replacement. That is completed repair work, not a payment for future work." } },
-  { id:'d6', date:'May 22', amount:220, receiptNum:'#006', payment:'Check', lineItems:[{name:'Custom frame build — deposit',amount:220}], note:'Balance due on delivery (~Jul 3).', correct:'tocome',
+  { id:'d6', date:'May 22', amount:220, receiptNum:'#006', payment:'Check', lineItems:[{name:'Deposit toward custom frame build',amount:220}], note:'<strong>Note:</strong> Paid in full upfront. Frame to be built and delivered on July 3.', correct:'tocome',
     annaSays:{ done:"Not quite. The receipt says &ldquo;deposit,&rdquo; and the balance is due on delivery. Smith has not received the frame yet, so this is not payment for completed work. It is work to come.", tocome:"Correct. This receipt says &ldquo;deposit,&rdquo; and the balance is due when the frame is delivered. Smith paid you now, but you still owe him the custom frame. This payment is for work to come." } },
-  { id:'d7', date:'May 23', amount:100, receiptNum:'#007', payment:'Venmo', lineItems:[{name:'Tune-up + minor repair',amount:100}], note:null, correct:'done',
+  { id:'d7', date:'May 23', amount:100, receiptNum:'#007', payment:'Venmo', lineItems:[{name:'Tune-up and minor repair',amount:100}], note:null, correct:'done',
     annaSays:{ done:"Correct. The receipt lists a tune-up and a minor repair, which are completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a tune-up and a minor repair. Those jobs were already completed, so this payment is for work done." } },
-  { id:'d8', date:'May 27', amount:150, receiptNum:'#008', payment:'Venmo', lineItems:[{name:'Custom wheel work + new spokes',amount:150}], note:null, correct:'done',
+  { id:'d8', date:'May 27', amount:150, receiptNum:'#008', payment:'Venmo', lineItems:[{name:'Custom wheel work and new spokes',amount:150}], note:null, correct:'done',
     annaSays:{ done:"Correct. The receipt lists custom wheel work and new spokes, which are completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists custom wheel work and new spokes. That work was already completed, so this payment is for work done." } }
 ];
 var optionLabels = { done:'Work done', tocome:'Work to come' };
@@ -122,15 +122,15 @@ function renderCashSheetPanel(){
   var totalIn = inflows.reduce(function(s,f){return s+f.amount;},0);
   var totalOut = outflows.reduce(function(s,f){return s+f.amount;},0);
   var net = totalIn+totalOut;
-  var cashHtml = '<div class="cash-sheet-head"><div class="cash-sheet-title">Bike-repair cash flows &mdash; May 1 &ndash; May 31, 2026</div><div class="cash-sheet-sub">Pulled from the transactions you classified as repair-related in your personal bank statement.</div></div>';
+  var cashHtml = '<div class="cash-sheet-head"><div class="cash-sheet-title">Bike-repair cash flows &mdash; May 1 &ndash; May 31, 2026</div><div class="cash-sheet-sub">Pulled from the transactions you classified as repair-related in your bank statement.</div></div>';
   cashHtml += '<div class="cash-group in"><div class="cash-group-label">Cash in</div>';
   inflows.forEach(function(f){ cashHtml += '<div class="cash-line" style="background:var(--success-bg);"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">+'+dollars(f.amount)+'</span></div>'; });
   cashHtml += '<div class="cash-subtotal"><span>Total in</span><span class="cash-line-amt">'+dollars(totalIn)+'</span></div></div>';
   cashHtml += '<div class="cash-group out"><div class="cash-group-label">Cash out</div>';
   outflows.forEach(function(f){ cashHtml += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">&minus;'+dollars(Math.abs(f.amount))+'</span></div>'; });
   cashHtml += '<div class="cash-subtotal"><span>Total out</span><span class="cash-line-amt">&minus;'+dollars(Math.abs(totalOut))+'</span></div></div>';
-  cashHtml += '<div class="cash-net"><span class="cash-net-label">NET CASH (May)</span><span class="cash-net-val">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</span></div>';
-  cashHtml += "<div class=\"cash-foot\">That's the month's <strong>flow</strong> &mdash; money in minus money out &mdash; not a balance.</div>";
+  cashHtml += '<div class="cash-net"><span class="cash-net-label">NET CASH FLOW (May)</span><span class="cash-net-val">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</span></div>';
+  cashHtml += "<div class=\"cash-foot\">This is the month's <strong>flow</strong> &mdash; cash in minus cash out &mdash; not a balance.</div>";
   document.getElementById('depChips').innerHTML = '<div class="xlwb">'+
     '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">Cash Sheet</span></div>'+
     '<div>'+cashHtml+'</div>'+
@@ -152,7 +152,7 @@ function renderDeposits(){
   var fb='';
   if(ans){
     var errStyle = locked ? '' : ' style="background:var(--error-bg); border-color:var(--error-border); color:var(--error-text);"';
-    fb = '<div class="dep-fb '+(locked?'ok':'err')+'"'+errStyle+'><div class="dep-fb-label">ANNA</div>'+d.annaSays[ans]+'</div>';
+    fb = '<div class="dep-fb '+(locked?'ok':'err')+'"'+errStyle+'>'+d.annaSays[ans]+'</div>';
   }
 
   var isFirst = currentDeposit===0;
@@ -163,7 +163,6 @@ function renderDeposits(){
 
   var html = '<div class="dep-card">'+
     '<div style="font-size:var(--font-xs); text-transform:uppercase; letter-spacing:0.5px; color:#888; font-weight:700; margin-bottom:10px;">Receipt '+(currentDeposit+1)+' of '+deposits.length+'</div>'+
-    '<div class="dep-card-head"><div><div class="dep-card-meta">'+d.date+' &middot; '+d.payment+' deposit</div><div class="dep-card-title">Customer payment</div></div><div class="dep-card-amt">+$'+d.amount+'.00</div></div>'+
     '<div class="dep-receipt"><div class="dep-receipt-head"><span class="dep-receipt-label">Customer receipt '+d.receiptNum+'</span><span class="dep-receipt-meta">'+d.date+', 2026 &middot; '+d.payment+'</span></div>'+
     '<table class="dep-receipt-table"><tbody>'+rows+'<tr class="total"><td>Total</td><td class="num">$'+d.amount+'.00</td></tr></tbody></table>'+
     (d.note?'<div class="dep-receipt-note">'+d.note+'</div>':'')+'</div>'+
@@ -194,12 +193,13 @@ function prevDeposit(){
 function renderDepositsClose(){
   var html =
     '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;So you found two kinds of customer payments. Seven of them were for work you had already finished. That money is yours to keep. Smith&rsquo;s check is the odd one out. He paid you $220 now, but you still owe him the custom frame.<br><br>That means Smith&rsquo;s payment belongs in <strong>two places</strong>. You have the cash, but you also have a promise to keep. Your priced <strong>Things</strong> list doesn&rsquo;t show promises like that, so you need a second list: <strong>promises you still owe</strong>. Start it with Smith&rsquo;s $220.&rdquo;</div>'+
-    '<div class="promises-born" style="margin-top:14px;"><div class="promises-born-head">PROMISES &mdash; what I owe <span class="muted">(new list)</span></div><div class="promises-born-body"><div class="promises-line"><span>Smith&rsquo;s frame &mdash; paid $220 up front, not built yet</span><span class="mono">$220</span></div></div></div>'+
+    '<div class="promises-born" style="margin-top:14px;"><div class="promises-born-head">Promises (What I owe)</div><div class="promises-born-body"><div class="promises-line"><span>Smith&rsquo;s frame &mdash; paid $220 up front, not built yet</span><span class="mono">$220</span></div></div></div>'+
     '</div>'+
     '<div class="mc-card" style="margin-top:20px;"><div class="mc-q">Last week, Jones asked you to build him a custom frame too, and you said you would. But Jones did not put any money down. You only talked about it. Should Jones&rsquo;s frame go on the Promises list?</div><div class="mc-opts" id="jonesOpts">'+
       '<div class="mc-opt" onclick="answerJones(\'on\')" data-j="on"><div>Yes. You said you would build the frame, so it is a promise.</div></div>'+
       '<div class="mc-opt" onclick="answerJones(\'off\')" data-j="off"><div>No. Nothing has happened yet to make it something you need to write down.</div></div>'+
       '</div><div class="feedback" id="jonesFb"></div></div>'+
+    '<div id="jonesInsight" hidden style="margin-top:20px;"></div>'+
     '<div id="jonesClose" hidden>'+
       '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>'+
     '</div>';
@@ -211,17 +211,22 @@ function answerJones(choice){
   var fb = document.getElementById('jonesFb');
   var offEl = document.querySelector('#jonesOpts .mc-opt[data-j="off"]');
   var onEl = document.querySelector('#jonesOpts .mc-opt[data-j="on"]');
+  document.querySelectorAll('#jonesOpts .mc-opt').forEach(function(el){ el.classList.remove('wrong'); });
   if(choice==='off'){
     playSuccess(); jonesResolved=true;
     offEl.classList.add('correct');
     document.querySelectorAll('#jonesOpts .mc-opt').forEach(function(el){ el.classList.add('locked'); });
     fb.className='feedback ok show';
-    fb.innerHTML = 'Anna: &ldquo;Correct. Jones stays off the Promises list for now. Smith paid $220, so you have his cash and still owe him the frame. Jones has not put any money down, so nothing has happened yet that needs to be recorded.&rdquo;';
+    fb.innerHTML = 'Correct. Jones stays off the Promises list for now. Smith paid upfront, so you have his cash and still owe him the frame. Jones only talked about it, so nothing has happened yet that needs to be recorded.';
+    var insightEl = document.getElementById('jonesInsight');
+    insightEl.className = 'insight-box';
+    insightEl.innerHTML = '<div class="insight-label">Not just cash</div><p>This does <strong>not</strong> mean cash always has to change hands for something to be recorded. What matters is whether something has happened that affects what the repair work has or owes. Smith&rsquo;s upfront payment created an obligation to deliver the frame. Jones only talked about a possible frame, so there is no obligation to record yet.</p>';
+    insightEl.hidden = false;
     document.getElementById('jonesClose').hidden=false;
   } else {
     playNope(); onEl.classList.add('wrong');
     fb.className='feedback err show';
-    fb.innerHTML = 'Anna: &ldquo;Not quite. Smith&rsquo;s promise went on the list because something happened: he paid $220, and you still owe him the frame. Jones has not put any money down. For now, there is nothing to add to the Promises list.&rdquo;';
+    fb.innerHTML = 'Not quite. Saying you will build the frame is not enough by itself. Smith&rsquo;s frame went on the list because something happened that created a real obligation: Smith paid upfront, and you still owe him the frame. Jones hasn&rsquo;t done anything that makes this something to record yet.';
   }
 }
 
