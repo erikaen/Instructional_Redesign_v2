@@ -13,33 +13,26 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 1.3: Anna and the Bank Statement</h1>
-        <p class="tut-header-sub">Bicycle repair shop &middot; ~20 min</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="seg-progress" id="segProgress"></div>
-    <div class="phase-title" id="phaseTitle"></div>
 
     <div class="narrative-block">
-      <p>A few days after Maria the insurance agent came by, your friend <strong>Anna</strong> stops in. She kept the books at City Cycle for years before her kid, and she still does her own brake jobs.</p>
-      <p>Since Maria&rsquo;s visit, you took the <strong>Insurable Property</strong> list you&rsquo;d prepared for her and put all of it into your Excel <strong>Things</strong> list &mdash; every item priced, grouped by category. You can <em>collapse</em> a category to one line, or <em>expand</em> it to see everything inside. This is what you pull up to show Anna.</p>
+      <p>A few days after Maria, the insurance agent, came by, your friend Anna stops in. Anna kept the books at City Cycle for years, and she still does her own brake jobs.</p>
+      <p>Since Maria&rsquo;s visit, you took the <strong>Insurable Property</strong> list you prepared for her and entered it into your Excel workbook as a <strong>Things</strong> list. Each item has a dollar value and is grouped by category. You can collapse a category to one line or expand it to see the items inside. This is what you pull up to show Anna.</p>
     </div>
     <div id="welcomeWb"></div>
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;Nice &mdash; you actually put numbers on everything. That&rsquo;s more than most people do.&rdquo; She looks it over. &ldquo;But this is all <em>stuff</em> &mdash; tools, parts, the laptop. Where&rsquo;s your <em>cash</em>? None of this is money. You can&rsquo;t tell how the shop&rsquo;s doing without finding the cash first.&rdquo;</div>
+      <div class="dialog-text">&ldquo;Nice! You actually put dollar values on everything. That&rsquo;s more than most people do. But this list is still only part of the picture. Where&rsquo;s the cash? We need to look at the money moving through your bank account.&rdquo;</div>
     </div>
     <div class="section-card">
       <div class="card-title">What You&rsquo;ll Discover</div>
       <ul class="bullet-list">
-        <li>A bank statement is the <em>bank&rsquo;s</em> record, mixed in with your personal life &mdash; you have to pull the repair work&rsquo;s money out of it.</li>
-        <li>Cash going in and out isn&rsquo;t the same as what you <em>have</em> and what you <em>owe</em>.</li>
-        <li>Along the way, a second list appears &mdash; the things you&rsquo;ve <em>promised</em>.</li>
+        <li>The bank statement mixes the repair work with personal activity, so you have to separate them first.</li>
+        <li>Cash moving in and out is not the same as what the repair work has and owes.</li>
+        <li>Some payments create promises you still owe. Some payments create things you still have.</li>
       </ul>
     </div>
     <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>
@@ -62,7 +55,6 @@
 <script>
 if (window.lucide) lucide.createIcons();
 
-var PHASE_INDEX = 0;
 var PHASE_TITLE = 'Meet Anna';
 
 /* ===== sound ===== */
@@ -135,7 +127,7 @@ function renderWorkbook(containerId, phaseKey){
   var activeLabel = tabs.find(function(t){return t.id===excelTab;}).label;
   var tabsHtml = tabs.map(function(t){ return '<button class="xlwb-tab'+(t.id===excelTab?' active':'')+'" onclick="setTab(\''+t.id+'\')">'+t.label+'</button>'; }).join('');
   var html = '<div class="xlwb">'+
-    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' sheet</span></div>'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' Sheet</span></div>'+
     '<div>'+body+'</div>'+
     '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
   document.getElementById(containerId).innerHTML = html;
@@ -153,19 +145,8 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 
-/* ===== progress ===== */
-function renderSegProgress(){
-  var html = '';
-  for(var i = 0; i < 9; i++){
-    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
-    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
-  }
-  document.getElementById('segProgress').innerHTML = html;
-  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
-}
-
 /* ===== init ===== */
-renderSegProgress();
+document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 renderWorkbook('welcomeWb','welcome');
 </script>
 </body>
