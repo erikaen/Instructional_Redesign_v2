@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module Viewer</title>
+  <style>
+    html, body { margin: 0; height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+    #bar { height: 54px; box-sizing: border-box; display: flex; align-items: center; gap: 10px;
+           padding: 0 14px; border-bottom: 1px solid #e2e6ee; background: #f7f9fc; }
+    #bar .title { flex: 1; text-align: center; min-width: 0; }
+    #bar .title .mod { font-weight: 700; color: #00329d; font-size: .98rem; }
+    #bar .title .pg { color: #6b7280; font-weight: 400; font-size: .82rem; margin-left: 6px; }
+    .navbtn { padding: 8px 15px; border: 1px solid #c7ccd6; border-radius: 8px; background: #fff;
+              cursor: pointer; font-size: .9rem; color: #1a1a2e; text-decoration: none; white-space: nowrap; }
+    .navbtn:hover:not([disabled]) { background: #eef2f8; }
+    .navbtn[disabled] { opacity: .35; cursor: default; }
+    a.idx { padding: 8px 12px; border: 1px solid #c7ccd6; border-radius: 8px; background: #fff;
+            color: #286dc0; text-decoration: none; font-size: .85rem; }
+    #frame { width: 100%; height: calc(100% - 55px); border: 0; display: block; background: #fff; }
+  </style>
+</head>
+<body>
+  <div id="bar">
+    <button class="navbtn" id="prev">&larr; Back</button>
+    <a class="idx" href="review.html" title="Back to module index">Index</a>
+    <div class="title" id="title"></div>
+    <button class="navbtn" id="next">Next &rarr;</button>
+  </div>
+  <iframe id="frame" title="Module page"></iframe>
+
+  <script>
+  var PAGES = [
+    {f:'1-1-Getting-Started.html',          m:'Module 1: Getting Organized',          t:'Getting Started'},
+    {f:'1-2-A-Rough-Week.html',             m:'Module 1: Getting Organized',          t:'A Rough Week'},
+    {f:'1-3-Sort-Your-Things.html',         m:'Module 1: Getting Organized',          t:'Sort Your Things'},
+    {f:'1-4-The-Line-You-Drew.html',        m:'Module 1: Getting Organized',          t:'The Line You Drew'},
+    {f:'1-5-Module-Complete.html',          m:'Module 1: Getting Organized',          t:'Module Complete'},
+    {f:'2-1-Meet-Maria.html',               m:'Module 2: Insurance and Maria',        t:'Meet Maria'},
+    {f:'2-2-Marias-Form.html',              m:'Module 2: Insurance and Maria',        t:"Maria’s Form"},
+    {f:'2-3-The-Read-Back.html',            m:'Module 2: Insurance and Maria',        t:'The Read-Back'},
+    {f:'2-4-Module-Complete.html',          m:'Module 2: Insurance and Maria',        t:'Module Complete'},
+    {f:'3-1-Meet-Anna.html',                m:'Module 3: Anna and the Bank Statement',t:'Meet Anna'},
+    {f:'3-2-The-Bank-Statement.html',       m:'Module 3: Anna and the Bank Statement',t:'The Bank Statement'},
+    {f:'3-3-The-Cash-Movement.html',        m:'Module 3: Anna and the Bank Statement',t:'The Cash Movement'},
+    {f:'3-4-The-Customer-Payments.html',    m:'Module 3: Anna and the Bank Statement',t:'The Customer Payments'},
+    {f:'3-5-The-Credit-Card-Statement.html',m:'Module 3: Anna and the Bank Statement',t:'The Credit Card Statement'},
+    {f:'3-6-The-Promises.html',             m:'Module 3: Anna and the Bank Statement',t:'The Promises'},
+    {f:'3-7-The-Rent-Payment.html',         m:'Module 3: Anna and the Bank Statement',t:'The Rent Payment'},
+    {f:'3-8-Naming-the-Lists.html',         m:'Module 3: Anna and the Bank Statement',t:'Naming the Lists'},
+    {f:'3-9-Module-Complete.html',          m:'Module 3: Anna and the Bank Statement',t:'Module Complete'},
+    {f:'4-1-Why-Keep-the-Reasons.html',     m:'Module 4: Keeping the Reasons',        t:'Why Keep the Reasons'},
+    {f:'4-2-Walk-the-Reasons.html',         m:'Module 4: Keeping the Reasons',        t:'Walk the Reasons'},
+    {f:'4-3-Pairs-That-Cancel.html',        m:'Module 4: Keeping the Reasons',        t:'Pairs That Cancel'},
+    {f:'4-4-The-Net-Movers.html',           m:'Module 4: Keeping the Reasons',        t:'The Net Movers'},
+    {f:'4-5-Module-Complete.html',          m:'Module 4: Keeping the Reasons',        t:'Module Complete'},
+    {f:'5-1-Bringing-It-Together.html',     m:'Module 5: Naming What You Built',      t:'Bringing It Together'},
+    {f:'5-2-Find-the-Net.html',             m:'Module 5: Naming What You Built',      t:'Find the Net'},
+    {f:'5-3-The-Accounting-Identity.html',  m:'Module 5: Naming What You Built',      t:'The Accounting Identity'},
+    {f:'5-4-The-Entity.html',               m:'Module 5: Naming What You Built',      t:'The Entity'},
+    {f:'5-5-Net-Assets.html',               m:'Module 5: Naming What You Built',      t:'Net Assets'},
+    {f:'5-6-Double-Entry.html',             m:'Module 5: Naming What You Built',      t:'Double-Entry'},
+    {f:'5-7-Module-Complete.html',          m:'Module 5: Naming What You Built',      t:'Module Complete'}
+  ];
+
+  function qp(name){
+    var m = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return m ? decodeURIComponent(m[1]) : null;
+  }
+  function startIndex(){
+    var i = qp('i'); if (i !== null) { i = parseInt(i, 10); if (!isNaN(i)) return Math.max(0, Math.min(PAGES.length-1, i)); }
+    var p = qp('p'); if (p) { for (var k=0;k<PAGES.length;k++){ if(PAGES[k].f===p) return k; } }
+    return 0;
+  }
+  var idx = startIndex();
+  var frame = document.getElementById('frame'), titleEl = document.getElementById('title');
+  var prevB = document.getElementById('prev'), nextB = document.getElementById('next');
+
+  function render(){
+    var pg = PAGES[idx];
+    frame.src = pg.f;
+    titleEl.innerHTML = '<span class="mod">' + pg.m + '</span><span class="pg">&middot; ' + pg.t + ' &middot; ' + (idx+1) + ' / ' + PAGES.length + '</span>';
+    prevB.disabled = (idx === 0);
+    nextB.disabled = (idx === PAGES.length - 1);
+    document.title = pg.m + ' — ' + pg.t;
+    history.replaceState(null, '', 'view.html?i=' + idx);
+  }
+  function go(d){ var n = idx + d; if (n>=0 && n<PAGES.length){ idx = n; render(); } }
+  prevB.onclick = function(){ go(-1); };
+  nextB.onclick = function(){ go(1); };
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowLeft')  go(-1);
+    if (e.key === 'ArrowRight') go(1);
+  });
+  render();
+  </script>
+</body>
+</html>
