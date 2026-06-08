@@ -347,7 +347,7 @@ function reasonsSheetWalkPairs(){
   html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Account &amp; reason</div><div class="xl-v">B&nbsp;&nbsp;Δ</div></div>';
   var clickable = (phase==='pairs' && !eliminateAutoActive && !eliminateAutoDone);
   visible.forEach(function(r){
-    var sel = (selectedReasonId===r.id) ? ' selected' : '';
+    var sel = (selectedReasonId===r.id) ? ' pair-selected' : '';
     var onclick = clickable ? ' onclick="handleReasonClick(\''+r.id+'\')"' : '';
     html += '<div class="xl-row xl-item'+sel+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r.account+' &mdash; '+r.reason+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div></div>';
   });

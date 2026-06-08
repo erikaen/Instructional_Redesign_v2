@@ -286,7 +286,7 @@ function reasonsSheetWalkPairs(){
   var clickable = (phase==='pairs' && !eliminateAutoActive && !eliminateAutoDone);
   revealedRows.forEach(function(r){
     var isEliminated = !!eliminated[r.id];
-    var isSelected = (selectedReasonId===r.id) ? ' selected' : '';
+    var isSelected = (selectedReasonId===r.id) ? ' pair-selected' : '';
     var elimClass = isEliminated ? ' eliminated' : '';
     var onclick = (clickable && !isEliminated) ? ' onclick="handleReasonClick(\''+r.id+'\')"' : '';
     html += '<div class="xl-row xl-reasons xl-item'+isSelected+elimClass+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-c">'+r.account+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div><div class="xl-c">'+r.reason+'</div></div>';
