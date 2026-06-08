@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 2 — The Read-Back</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <!-- ===== Phase: maria-readback ===== -->
+    <div class="phase active" id="phase-maria-readback">
+      <div class="narrative-block"><p>By late afternoon the form is done. Maria runs her finger down each column.</p></div>
+      <div class="totals-card">
+        <div class="totals-label">INSURABLE TOTALS</div>
+        <div id="readbackRows"></div>
+      </div>
+      <div class="dialog-box maria" id="readbackMaria"></div>
+      <div class="narrative-block"><p>Maria packs up, hands you a copy of the form, and heads out. The doorbell jingles closed behind her.</p></div>
+      <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var items = [
+  { id:'stand', name:'Park Tool repair stand', category:'equipment', cost:200, sourced:'receipt' },
+  { id:'conewr', name:'Cone wrench set', category:'equipment', cost:65, sourced:'receipt' },
+  { id:'torque', name:'Torque wrench', category:'equipment', cost:95, sourced:'receipt' },
+  { id:'hex', name:'Hex / Allen key set', category:'equipment', cost:45, sourced:'receipt' },
+  { id:'cutters', name:'Cable cutters', category:'equipment', cost:40, sourced:'receipt' },
+  { id:'breaker', name:'Chain breaker', category:'equipment', cost:35, sourced:'receipt' },
+  { id:'levers', name:'Tire levers', category:'equipment', cost:20, sourced:'receipt' },
+  { id:'compressor', name:'Air compressor', category:'equipment', cost:180, sourced:'credit-card' },
+  { id:'washer', name:'Parts washer', category:'equipment', cost:130, sourced:'credit-card' },
+  { id:'truing', name:'Wheel-truing stand', category:'equipment', cost:170, sourced:'credit-card' },
+  { id:'grinder', name:'Bench grinder', category:'equipment', cost:90, sourced:'estimate' },
+  { id:'headset', name:'Headset press', category:'equipment', cost:70, sourced:'estimate' },
+  { id:'vacuum', name:'Shop vacuum', category:'equipment', cost:60, sourced:'estimate' },
+  { id:'laptop', name:'Laptop', category:'computer', cost:610, sourced:'estimate' },
+  { id:'desk', name:'Desk', category:'fixtures', cost:250, sourced:'receipt' },
+  { id:'shelves', name:'Shelving units', category:'fixtures', cost:200, sourced:'receipt' },
+  { id:'display', name:'Display rack', category:'fixtures', cost:180, sourced:'receipt' },
+  { id:'pegboard', name:'Pegboard + hooks', category:'fixtures', cost:120, sourced:'receipt' },
+  { id:'chains', name:'Box of chains', category:'supplies', cost:50, sourced:'receipt', paidAmount:100, countLeft:'½ box left' },
+  { id:'pads', name:'Box of brake pads', category:'supplies', cost:40, sourced:'receipt', paidAmount:80, countLeft:'½ box left' },
+  { id:'cables', name:'Box of derailleur cables', category:'supplies', cost:20, sourced:'receipt', paidAmount:40, countLeft:'½ box left' },
+  { id:'cassettes', name:'Cassettes', category:'supplies', cost:40, sourced:'receipt', paidAmount:80, countLeft:'½ left' },
+  { id:'bbs', name:'Bottom brackets', category:'supplies', cost:20, sourced:'receipt', paidAmount:80, countLeft:'¼ left' },
+  { id:'spokes', name:'Spokes', category:'supplies', cost:20, sourced:'receipt', paidAmount:80, countLeft:'¼ left' },
+  { id:'tubes', name:'Tubes', category:'supplies', cost:10, sourced:'receipt', paidAmount:40, countLeft:'¼ left' }
+];
+function findItem(id){ return items.find(function(i){ return i.id===id; }); }
+var categoryDefs = [
+  { id:'equipment', label:'EQUIPMENT', sub:'durable tools and gear' },
+  { id:'computer', label:'COMPUTER EQUIPMENT', sub:'computers and devices' },
+  { id:'supplies', label:'SUPPLIES', sub:'parts and consumables' },
+  { id:'fixtures', label:'FIXTURES', sub:'drawers, storage, built-ins' }
+];
+var glossaryTerms = [
+  { term:'Insurable property', def:'The insurer\'s name for what goes on a property policy: things you own and could lose. Not cash, and not what you don\'t own.' },
+  { term:'Property policy', def:'Insurance that pays the owner if covered things are damaged or destroyed. Doesn\'t cover cash, and doesn\'t cover what you don\'t own.' },
+  { term:'Replacement cost', def:'What it would cost today to buy a brand-new version of the thing.' },
+  { term:'Receipt', def:'The document a seller gives you when you buy something — it shows what you paid.' },
+  { term:'Supplier', def:'A company you buy from.' }
+];
+function fmt(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+/* ===== state ===== */
+var phaseOrder = ['welcome','form','maria-readback','complete'];
+var placements = {};
+var values = {};
+var placeable = items.slice();
+
+/* ===== totals ===== */
+function subtotalForCat(catId){
+  return placeable.filter(function(i){ return placements[i.id]===catId; })
+    .reduce(function(s,i){ return s + (Number(values[i.id])||0); }, 0);
+}
+function totalInsurable(){ return categoryDefs.reduce(function(s,c){ return s + subtotalForCat(c.id); }, 0); }
+
+/* ===== phase nav ===== */
+function goto(p){ playClick(); }
+
+/* ===== readback ===== */
+function renderReadback(){
+  var rows = categoryDefs.map(function(cat){
+    return '<div class="totals-row"><span>'+cat.label+'</span><span class="mono">'+fmt(subtotalForCat(cat.id))+'</span></div>';
+  }).join('');
+  rows += '<div class="totals-row total"><span>TOTAL (insurable)</span><span class="mono">'+fmt(totalInsurable())+'</span></div>';
+  document.getElementById('readbackRows').innerHTML = rows;
+  document.getElementById('readbackMaria').innerHTML = '<div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;OK. Equipment '+fmt(subtotalForCat('equipment'))+'. Computer equipment '+fmt(subtotalForCat('computer'))+'. Supplies '+fmt(subtotalForCat('supplies'))+'. Fixtures '+fmt(subtotalForCat('fixtures'))+'. Total of '+fmt(totalInsurable())+'. That is what you have on hand now. Property policy goes on that. Paperwork in the mail.&rdquo;</div>';
+}
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== standalone-phase overrides ===== */
+function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
+function restart(){ window.location.reload(); }
+
+/* ===== segmented progress ===== */
+var PHASE_INDEX = 2;
+var PHASE_TITLE = 'The Read-Back';
+function renderSegProgress(){
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init: pre-fill completed form state ===== */
+renderSegProgress();
+items.forEach(function(item){
+  placements[item.id] = item.category;
+  values[item.id] = String(item.cost);
+});
+renderReadback();
+</script>
+</body>
+</html>

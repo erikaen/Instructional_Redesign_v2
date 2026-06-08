@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 — Module Complete</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <div class="complete-head">
+      <div class="trophy-badge"><i data-lucide="trophy"></i></div>
+      <div class="complete-title">Module 3 complete</div>
+    </div>
+    <div class="section-card">
+      <div class="card-title">What You Discovered</div>
+      <ul class="bullet-list check">
+        <li>Your personal bank statement mixed together two kinds of activity: the repair work and your personal activity. You first had to separate the repair-related rows from the personal rows.</li>
+        <li>The Cash sheet showed the money that moved in and out for the repair work during May. Net cash flow was &minus;$960, but that number alone did not tell whether the repair work was better or worse off.</li>
+        <li>Not all money coming in is yours to keep. Smith paid $220 upfront for a custom frame that had not been built yet. That gave the repair work cash, but it also created a promise to deliver the frame.</li>
+        <li>Jones asked for a custom frame too, but you only talked about it. Nothing happened yet that affected what the repair work has or owes, so Jones stayed off the Promises list.</li>
+        <li>Your credit card had repair-related activity mixed with personal activity. The card&rsquo;s ending balance was $1,460, but only $1,230 was still owed because of the repair work.</li>
+        <li>Not all money going out is gone. The $1,300 rent payment covered two things: $650 for using the workspace in May, and $650 paid ahead for the final month of the lease. That second $650 is a present right to use the workspace later.</li>
+        <li>Your informal lists now have accounting names: <strong>Assets</strong> ($3,410) and <strong>Liabilities</strong> ($1,450).</li>
+      </ul>
+    </div>
+    <div class="insight-box">
+      <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
+      <p style="margin-bottom:10px">A list of cash moving in and out is not the same as a list of what the repair work has and owes. To build the accounting picture, you had to interpret the evidence: separate repair work from personal activity, tell completed work from work still owed, separate repair-related card debt from personal card spending, and split one rent payment into a used-up part and a future-benefit part.</p><p>That is the key idea: accounting records are not created by copying cash transactions. They are created by interpreting what those transactions mean.</p>
+    </div>
+    <div class="next-card">
+      <div class="next-card-label">Coming Next</div>
+      <p>Now you have two named lists: <strong>Assets</strong> and <strong>Liabilities</strong>. But those lists will keep changing as the repair work continues. The amounts tell you what the repair work has and owes now, but they do not explain <strong>why</strong> those amounts changed. Next, you will add a way to keep the <strong>reasons</strong> alongside the numbers.</p>
+    </div>
+    <div class="next-phase-msg">You’ve finished this module — click <strong>Next</strong> to continue.</div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_TITLE = '';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var glossaryTerms = [
+  { term:'Asset', def:"Something you have — a present right to something useful. Everything on your 'have' list: the gear, the parts, the prepaid month, cash." },
+  { term:'Liability', def:"Something you owe — a present obligation to pay or do something later. Everything on your 'owe' (Promises) list: the card balance, Smith's frame." },
+  { term:'Prepaid rent', def:"Rent paid ahead for a month you haven't used yet — a future benefit you still hold, so it counts as an asset." },
+  { term:'Promise', def:'Something you have agreed to do or pay, where the doing or paying comes later.' },
+  { term:'Bill', def:'A statement of money you owe to someone.' },
+  { term:'Deposit', def:'Money paid in advance for something you will receive or have done.' },
+  { term:'Customer', def:'Someone who pays you for goods or services.' },
+  { term:'Supplier', def:'A company you buy from.' },
+  { term:'Withdrawal', def:'Money taken out of a bank account.' }
+];
+
+function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== init ===== */
+document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+</script>
+</body>
+</html>

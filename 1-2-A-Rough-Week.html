@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1 — A Rough Week</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <div class="narrative-block"><p>Three things happened this week. None of them went smoothly.</p></div>
+    <div class="loc-stack" id="scenarioList"></div>
+    <div id="scenariosTail" hidden>
+      <div class="callout">Three different moments, one realization: it&rsquo;s too much to keep in your head. If you&rsquo;re going to get a grip on this, the first step is to write down <strong>what you&rsquo;ve got</strong>.</div>
+      <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 1;
+var PHASE_TITLE = 'A Rough Week';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac() { if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} } return audioCtx; }
+function tone(f, d, t, v) { var c = ac(); if(!c) return; var o = c.createOscillator(), g = c.createGain(); o.type = t||'sine'; o.frequency.value = f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05, c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + d); o.start(); o.stop(c.currentTime + d); }
+function playClick(){ tone(330,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var scenarios = [
+  { label: 'A customer asks', content: 'A customer rolls in with a broken derailleur. “Got a 24mm cone wrench? I left mine at home.” You think you do — somewhere in that toolbox under the bench, or maybe the drawer. You start digging.' },
+  { label: 'It’s not all in your head anymore', content: 'Tonight you unwrapped a chain whip you bought last week — and found another one already in the drawer, still in its package. Third time this month you’ve reordered something you already had. The “keep it all in your head” system isn’t working.' },
+  { label: 'What if something happened?', content: 'A fire two blocks over last night gets you thinking: you should have insurance, and you don’t really know what’s at risk. The repair stand, the parts, all the tools, the laptop — it’s a lot, and you couldn’t list it from memory if you tried.' }
+];
+
+var GLOSSARY = [
+  { term:'The repair work', def:'The bike-repair activity you do, separate from the rest of your life. We don’t give it a formal name yet — you’ll feel it become its own thing before anyone names it.' },
+  { term:'Things', def:'Plain word for the stuff you have for the repair work. No dollar values yet — those come in Module 2.' },
+  { term:'A tab', def:'A sheet in your spreadsheet. You build your books one tab at a time, starting with the Things tab here.' }
+];
+
+/* ===== state ===== */
+var revealed = 1;
+
+/* ===== scenarios ===== */
+function renderScenarios() {
+  var list = document.getElementById('scenarioList');
+  list.innerHTML = '';
+  scenarios.forEach(function(s, i) {
+    var el = document.createElement('div');
+    if (i < revealed) {
+      el.className = 'scenario-card';
+      el.innerHTML = '<div class="scenario-card-label">' + s.label + '</div><div class="scenario-card-text">' + s.content + '</div>';
+    } else if (i === revealed) {
+      el.innerHTML = '<button class="reveal-next" onclick="revealNext()">Then what happened next &rarr;</button>';
+    } else {
+      el.className = 'scenario-pending';
+      el.textContent = '· · ·';
+    }
+    list.appendChild(el);
+  });
+  document.getElementById('scenariosTail').hidden = revealed < scenarios.length;
+}
+function revealNext() { playClick(); revealed++; renderScenarios(); }
+
+/* ===== glossary ===== */
+function openGlossary() {
+  document.getElementById('glossaryList').innerHTML = GLOSSARY.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">' + g.term + '</div><div class="glossary-entry-def">' + g.def + '</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary() { document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+renderScenarios();
+</script>
+</body>
+</html>

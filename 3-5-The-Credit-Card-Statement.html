@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 — Sort the Credit Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+    </div>
+
+    <div class="narrative-block"><p>You open your personal credit card statement for May and compare it with the Excel workbook you&rsquo;ve been building.</p></div>
+    <div class="dialog-box anna" style="margin-top:20px;">
+      <div class="dialog-label">ANNA</div>
+      <div class="dialog-text"><p>&ldquo;Smith&rsquo;s deposit gave you one kind of promise: you received cash before doing the work, so you still owe him the custom frame. Now let&rsquo;s look for a different kind of promise: money you still owe because you used the credit card to buy things.</p><br><p>Your credit card statement has repair-related activity mixed with personal spending. Some lines are <strong>charges</strong>, which <strong>increase</strong> what you owe. Other lines are <strong>payments</strong>, which <strong>reduce</strong> what you owe.</p><br><p>Let&rsquo;s sort the credit card statement the same way we sorted the bank statement. For each row, decide whether it belongs to the <strong>repair work</strong> or to your <strong>personal life</strong>. Click the <strong><i data-lucide="info" class="licon"></i></strong> on any row to see what it was.&rdquo;</p></div>
+    </div>
+    <div id="cardArea"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 4;
+var PHASE_TITLE = 'The Credit Card Statement';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var cardTxns = [
+  { id:'k01', date:'May 3', desc:'Stop & Shop — groceries', amt:85, kind:'charge', cat:'personal', info:'Weekly groceries for home.' },
+  { id:'k02', date:'May 5', desc:'Workspace Outfitters — fixtures', amt:750, kind:'charge', cat:'repair', info:'Desk, shelving, display rack, and pegboard for the rented workspace.' },
+  { id:'k03', date:'May 5', desc:'Cyclesport Supply — hand tools', amt:300, kind:'charge', cat:'repair', info:'Cone wrenches, torque wrench, hex keys, and cutters.' },
+  { id:'k04', date:'May 8', desc:'Compressor Depot — air compressor', amt:180, kind:'charge', cat:'repair', info:'Air compressor for the rented workspace.' },
+  { id:'k05', date:'May 9', desc:'Restaurant — dinner', amt:55, kind:'charge', cat:'personal', info:'Dinner out after work.' },
+  { id:'k06', date:'May 10', desc:'Industrial Supply — parts washer', amt:130, kind:'charge', cat:'repair', info:'Parts washer for the rented workspace.' },
+  { id:'k07', date:'May 12', desc:'Cyclesport Supply — wheel-truing stand', amt:170, kind:'charge', cat:'repair', info:'Wheel-truing stand for bike repairs.' },
+  { id:'k08', date:'May 14', desc:'Gas station', amt:48, kind:'charge', cat:'personal', info:'Filled up the car for weekend errands.' },
+  { id:'k09', date:'May 15', desc:'QBP — parts order', amt:500, kind:'charge', cat:'repair', info:'Wholesale parts order — chains, pads, cables, cassettes, etc.' },
+  { id:'k10', date:'May 16', desc:'ACH payment — thank you', amt:400, kind:'payment', cat:'repair', info:'$400 payment matching the May 16 Harborline Visa withdrawal on the bank statement.' },
+  { id:'k11', date:'May 18', desc:'Streaming service', amt:16, kind:'charge', cat:'personal', info:'Monthly streaming subscription for home.' },
+  { id:'k12', date:'May 22', desc:'Pharmacy', amt:26, kind:'charge', cat:'personal', info:'Prescription pickup for you.' },
+  { id:'k13', date:'May 28', desc:'ACH payment — thank you', amt:400, kind:'payment', cat:'repair', info:'Second $400 payment matching the May 28 Harborline Visa withdrawal on the bank statement.' }
+];
+
+var glossaryTerms = [
+  { term:'Asset', def:"Something you have — a present right to something useful. Everything on your 'have' list: the gear, the parts, the prepaid month, cash." },
+  { term:'Liability', def:"Something you owe — a present obligation to pay or do something later. Everything on your 'owe' (Promises) list: the card balance, Smith's frame." },
+  { term:'Prepaid rent', def:"Rent paid ahead for a month you haven't used yet — a future benefit you still hold, so it counts as an asset." },
+  { term:'Promise', def:'Something you have agreed to do or pay, where the doing or paying comes later.' },
+  { term:'Bill', def:'A statement of money you owe to someone.' },
+  { term:'Deposit', def:'Money paid in advance for something you will receive or have done.' },
+  { term:'Customer', def:'Someone who pays you for goods or services.' },
+  { term:'Supplier', def:'A company you buy from.' },
+  { term:'Withdrawal', def:'Money taken out of a bank account.' }
+];
+
+function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+/* ===== state ===== */
+var cardClass = {}, cardExpandedId = null, cardSortChecked = false, cardSortAutoDone = false, hintSeen = false;
+var cardMCQCorrect = false, cardMCQWrongSelected = null;
+
+/* ===== generic statement ===== */
+function renderStatement(rows, opts){
+  var grid = opts.bank ? 'stmt-grid-bank' : 'stmt-grid-card';
+  var html = '<div class="stmt" style="margin-top:20px;">';
+  html += '<div class="stmt-head"><div><div class="stmt-bank">'+opts.bankName+'</div><div class="stmt-acct">'+opts.acct+'</div></div>'+
+    '<div style=""><div class="stmt-period-label">Statement Period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
+  html += '<div class="stmt-balrow"><span>'+opts.topLabel+'</span><span class="stmt-num">'+opts.topVal+'</span></div>';
+  if(opts.bank){
+    html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Withdrawal</span><span class="stmt-num">Deposit</span><span class="stmt-num">Balance</span><span></span></div>';
+  } else {
+    html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Charge</span><span class="stmt-num">Payment</span><span></span></div>';
+  }
+  rows.forEach(function(tx, i){
+    var cls = opts.classObj[tx.id];
+    var wrong = opts.checked && cls && cls !== tx.cat;
+    var stripeCls = wrong ? 'wrong' : (cls || '');
+    var open = opts.expandedId === tx.id;
+    var tag = '';
+    if(cls){ var lbl = cls.charAt(0).toUpperCase()+cls.slice(1); tag = '<span class="stmt-tag '+cls+'">'+lbl+'</span>'; }
+    if(wrong) tag += '<span style="color:#dc2626;font-weight:600;font-size:0.85em;margin-left:4px;">Try Again</span>';
+    if(opts.checked && cls && !wrong) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
+    html += '<div class="stmt-row '+grid+(i%2?' alt':'')+'">'+
+      '<div class="stmt-stripe '+stripeCls+'"></div>'+
+      '<span class="mono">'+tx.date+'</span>'+
+      '<span>'+tx.desc+tag+'</span>';
+    if(opts.bank){
+      html += '<span class="stmt-num stmt-with">'+(tx.w>0?fmt(tx.w):'&mdash;')+'</span>'+
+        '<span class="stmt-num stmt-dep">'+(tx.d>0?fmt(tx.d):'&mdash;')+'</span>'+
+        '<span class="stmt-num">'+fmt(tx.bal)+'</span>';
+    } else {
+      html += '<span class="stmt-num stmt-with">'+(tx.kind==='charge'?fmt(tx.amt):'&mdash;')+'</span>'+
+        '<span class="stmt-num stmt-dep">'+(tx.kind==='payment'?fmt(tx.amt):'&mdash;')+'</span>';
+    }
+    html += '<button class="stmt-info-btn'+(open?' open':'')+''+(i===0&&opts.showHint?' hint-pulse':'')+'" onclick="'+opts.toggleFn+'(\''+tx.id+'\')" aria-label="More info"><i data-lucide="info" class="licon"></i></button></div>';
+    if(open){
+      var a = opts.catA, b = opts.catB;
+      var lockedRow = opts.allCorrect || (opts.checked && cls && !wrong);
+      html += '<div class="stmt-expand"><div class="stmt-expand-info">'+tx.info+'</div>'+
+        '<div class="classify-row"><span class="classify-label">Classify:</span>'+
+        '<button class="classify-btn'+(cls===a.id?' active-'+a.id:'')+'"'+(lockedRow?' disabled':' onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+a.id+'\')"')+'>'+a.label+'</button>'+
+        '<button class="classify-btn'+(cls===b.id?' active-'+b.id:'')+'"'+(lockedRow?' disabled':' onclick="'+opts.classifyFn+'(\''+tx.id+'\',\''+b.id+'\')"')+'>'+b.label+'</button>'+
+        '</div></div>';
+    }
+  });
+  html += '<div class="stmt-balrow bottom"><span>'+opts.botLabel+'</span><span class="stmt-num">'+opts.botVal+'</span></div>';
+  html += '</div>';
+  return html;
+}
+function sortProgress(shop, personal, unsorted, shopLabel, triggerMet, showCheck){
+  var btn = unsorted > 0
+    ? '<button class="btn-continue btn-block"'+(triggerMet?' onclick="cardAutocomplete()"':' disabled')+'>Sort the rest</button>'
+    : (showCheck ? '<button class="btn-continue btn-block" onclick="checkCardSort()">Check my sort</button>' : '');
+  return '<div class="sortprog" style="margin-top:20px;"><div class="sortprog-title">Sort the transactions</div>'+
+    '<p class="sortprog-hint">A shortcut to auto-sort the remaining transactions will unlock as you go. You&rsquo;re welcome to sort all 13 yourself.</p>'+
+    '<div class="sortprog-grid">'+
+    '<div class="sortprog-box shop"><div class="sortprog-label">'+shopLabel+'</div><div class="sortprog-num">'+shop+'</div></div>'+
+    '<div class="sortprog-box personal"><div class="sortprog-label">Personal</div><div class="sortprog-num">'+personal+'</div></div>'+
+    '<div class="sortprog-box'+(unsorted===0?' done':'')+'"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">'+unsorted+'</div></div>'+
+    '</div>'+
+    btn+
+    '</div>';
+}
+
+/* ===== card-sort ===== */
+function renderCardSort(){
+  var repair = Object.values(cardClass).filter(function(c){return c==='repair';}).length;
+  var personal = Object.values(cardClass).filter(function(c){return c==='personal';}).length;
+  var unsorted = cardTxns.length - repair - personal;
+  var correctCount = cardTxns.filter(function(t){return cardClass[t.id]===t.cat;}).length;
+  var hasR = cardTxns.some(function(t){return cardClass[t.id]==='repair' && t.cat==='repair';});
+  var hasP = cardTxns.some(function(t){return cardClass[t.id]==='personal' && t.cat==='personal';});
+  var wrongIds = cardTxns.filter(function(t){return cardClass[t.id] && cardClass[t.id]!==t.cat;}).map(function(t){return t.id;});
+  var triggerMet = correctCount>=4 && hasR && hasP && unsorted>0 && !cardSortAutoDone;
+
+  var html = sortProgress(repair, personal, unsorted, 'Repair', triggerMet, !cardSortChecked && unsorted===0);
+
+  if(cardSortChecked && wrongIds.length>0){
+    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Not all of these look right yet. I&rsquo;ve marked the ones that need another look. Try again.&rdquo;</div></div>';
+  }
+  html += renderStatement(cardTxns, { bank:false, bankName:'HARBORLINE VISA', acct:'Personal Credit Card · Account Ending •••• 3902',
+    topLabel:'Beginning balance (May 1)', topVal:'$0.00', botLabel:'Ending balance (May 31)', botVal:'$1,460.00',
+    classObj:cardClass, expandedId:cardExpandedId, checked:cardSortChecked,
+    toggleFn:'toggleCardDesc', classifyFn:'classifyCard', showHint:!hintSeen,
+    catA:{id:'repair',label:'Repair'}, catB:{id:'personal',label:'Personal'},
+    allCorrect:cardSortChecked && wrongIds.length===0 });
+
+  if(cardSortChecked && wrongIds.length===0){
+    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Good. Now we can see which rows belong to the repair work and which ones belong to your personal life. But look at the card&rsquo;s ending balance: <strong>$1,460.00</strong>. That is the <strong>total</strong> amount still owed on the card. The question now is how much of that balance belongs to the repair work.&rdquo;</div></div>';
+    var mcqWrongFb = {
+      'a': 'Not quite. $1,460.00 is the total amount still owed on the card, but it includes $230.00 of personal spending.',
+      'c': 'Not quite. $2,030.00 is the total repair-related amount charged to the card before the two $400 payments.'
+    };
+    var mcqOpts = [{id:'a',text:'$1,460.00'},{id:'b',text:'$1,230.00'},{id:'c',text:'$2,030.00'}];
+    var mcqOptsHtml = mcqOpts.map(function(o){
+      var cls = 'mc-opt';
+      if(cardMCQCorrect){ cls += (o.id==='b' ? ' correct locked' : ' locked'); }
+      else if(cardMCQWrongSelected === o.id){ cls += ' wrong'; }
+      var onclick = cardMCQCorrect ? '' : ' onclick="answerCardMCQ(\''+o.id+'\')"';
+      return '<div class="'+cls+'"'+onclick+' data-id="'+o.id+'"><div class="mc-letter">'+o.id.toUpperCase()+'</div><div>'+o.text+'</div></div>';
+    }).join('');
+    var mcqFbHtml = cardMCQCorrect
+      ? '<div class="feedback ok show">Correct. The ending balance is $1,460.00, but $230.00 came from personal spending. The amount still owed for the repair work is $1,230.00.</div>'
+      : (cardMCQWrongSelected ? '<div class="feedback err show">'+mcqWrongFb[cardMCQWrongSelected]+'</div>' : '<div class="feedback"></div>');
+    html += '<div class="mc-card" style="margin-top:20px;"><div class="mc-q">How much of the ending balance is still owed specifically because of the <strong>repair work</strong>?</div><div class="mc-opts">'+mcqOptsHtml+'</div>'+mcqFbHtml+'</div>';
+    if(cardMCQCorrect){
+      html += '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+    }
+  }
+  document.getElementById('cardArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function toggleCardDesc(id){ hintSeen=true; cardExpandedId = (cardExpandedId===id)?null:id; renderCardSort(); }
+function classifyCard(id, kind){ cardClass[id]=kind; cardExpandedId=null; playClick(); renderCardSort(); }
+function checkCardSort(){ cardSortChecked=true; playClick(); renderCardSort(); }
+function cardAutocomplete(){ playClick(); cardTxns.forEach(function(t){ if(!cardClass[t.id]) cardClass[t.id]=t.cat; }); cardSortAutoDone=true; cardExpandedId=null; playSuccess(); renderCardSort(); }
+function answerCardMCQ(id){ if(cardMCQCorrect) return; if(id==='b'){ cardMCQCorrect=true; playSuccess(); } else { cardMCQWrongSelected=id; playNope(); } renderCardSort(); }
+
+/* ===== restart ===== */
+function restart(){
+  cardClass={}; cardExpandedId=null; cardSortChecked=false; cardSortAutoDone=false; hintSeen=false;
+  cardMCQCorrect=false; cardMCQWrongSelected=null;
+  renderCardSort(); scrollTo(0,0);
+}
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== init ===== */
+document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+renderCardSort();
+</script>
+</body>
+</html>
