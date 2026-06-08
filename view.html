@@ -83,7 +83,7 @@
     prevB.disabled = (idx === 0);
     nextB.disabled = (idx === PAGES.length - 1);
     document.title = pg.m + ' — ' + pg.t;
-    history.replaceState(null, '', 'view.html?i=' + idx);
+    try { history.replaceState(null, '', 'view.html?i=' + idx); } catch (e) { /* file:// preview */ }
   }
   function go(d){ var n = idx + d; if (n>=0 && n<PAGES.length){ idx = n; render(); } }
   prevB.onclick = function(){ go(-1); };
