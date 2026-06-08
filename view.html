@@ -15,15 +15,29 @@
               cursor: pointer; font-size: .9rem; color: #1a1a2e; text-decoration: none; white-space: nowrap; }
     .navbtn:hover:not([disabled]) { background: #eef2f8; }
     .navbtn[disabled] { opacity: .35; cursor: default; }
-    a.idx { padding: 8px 12px; border: 1px solid #c7ccd6; border-radius: 8px; background: #fff;
-            color: #286dc0; text-decoration: none; font-size: .85rem; }
+    .idxwrap { position: relative; }
+    .idx { padding: 8px 12px; border: 1px solid #c7ccd6; border-radius: 8px; background: #fff;
+           color: #286dc0; font-size: .85rem; cursor: pointer; }
+    .idx:hover { background: #eef2f8; }
+    .idxmenu { position: absolute; top: calc(100% + 6px); left: 0; z-index: 50; background: #fff;
+               border: 1px solid #c7ccd6; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,.16);
+               max-height: 74vh; overflow-y: auto; min-width: 270px; padding: 6px 0; }
+    .idxmenu .mh { font-weight: 700; color: #00329d; font-size: .76rem; letter-spacing: .02em;
+                   padding: 9px 14px 3px; }
+    .idxmenu a { display: block; padding: 5px 14px 5px 28px; font-size: .88rem; color: #1a1a2e;
+                 text-decoration: none; cursor: pointer; }
+    .idxmenu a:hover { background: #eef2f8; }
+    .idxmenu a.cur { background: #e8eefc; color: #00329d; font-weight: 600; }
     #frame { width: 100%; height: calc(100% - 55px); border: 0; display: block; background: #fff; }
   </style>
 </head>
 <body>
   <div id="bar">
     <button class="navbtn" id="prev">&larr; Back</button>
-    <a class="idx" href="review.html" title="Back to module index">Index</a>
+    <div class="idxwrap">
+      <button class="idx" id="idxBtn" aria-haspopup="true" aria-expanded="false">Index &#9662;</button>
+      <div class="idxmenu" id="idxMenu" hidden></div>
+    </div>
     <div class="title" id="title"></div>
     <button class="navbtn" id="next">Next &rarr;</button>
   </div>
@@ -75,6 +89,30 @@
   var idx = startIndex();
   var frame = document.getElementById('frame'), titleEl = document.getElementById('title');
   var prevB = document.getElementById('prev'), nextB = document.getElementById('next');
+  var idxBtn = document.getElementById('idxBtn'), menu = document.getElementById('idxMenu');
+
+  function buildMenu(){
+    var html = '', lastMod = '';
+    for (var k = 0; k < PAGES.length; k++){
+      if (PAGES[k].m !== lastMod){ html += '<div class="mh">' + PAGES[k].m + '</div>'; lastMod = PAGES[k].m; }
+      html += '<a data-i="' + k + '">' + PAGES[k].t + '</a>';
+    }
+    menu.innerHTML = html;
+    var links = menu.querySelectorAll('a');
+    for (var j = 0; j < links.length; j++){
+      links[j].onclick = function(){ idx = parseInt(this.getAttribute('data-i'), 10); render(); closeMenu(); };
+    }
+  }
+  function openMenu(){
+    menu.hidden = false; idxBtn.setAttribute('aria-expanded', 'true');
+    var links = menu.querySelectorAll('a'), cur = null;
+    for (var j = 0; j < links.length; j++){
+      var on = parseInt(links[j].getAttribute('data-i'), 10) === idx;
+      links[j].classList.toggle('cur', on); if (on) cur = links[j];
+    }
+    if (cur) cur.scrollIntoView({ block: 'nearest' });
+  }
+  function closeMenu(){ menu.hidden = true; idxBtn.setAttribute('aria-expanded', 'false'); }
 
   function render(){
     var pg = PAGES[idx];
@@ -88,10 +126,15 @@
   function go(d){ var n = idx + d; if (n>=0 && n<PAGES.length){ idx = n; render(); } }
   prevB.onclick = function(){ go(-1); };
   nextB.onclick = function(){ go(1); };
+  idxBtn.onclick = function(e){ e.stopPropagation(); if (menu.hidden) openMenu(); else closeMenu(); };
+  menu.onclick = function(e){ e.stopPropagation(); };
+  document.addEventListener('click', closeMenu);
   document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') { closeMenu(); return; }
     if (e.key === 'ArrowLeft')  go(-1);
     if (e.key === 'ArrowRight') go(1);
   });
+  buildMenu();
   render();
   </script>
 </body>
