@@ -2013,6 +2013,7 @@ body { background: var(--page-bg); font-family: 'Open Sans', sans-serif; color: 
 
 /* Full-width page wrapper (edge-to-edge, no horizontal padding) */
 .prework-wrap { width: 100%; max-width: none; margin: 0; padding: 24px 0 64px; }
+.prework-wrap > * + * { margin-top: 20px; }
 
 /* ----- Banner instructor meta (right side of .activity-header) ----- */
 .banner-instructor { text-align: right; flex-shrink: 0; }
@@ -2415,7 +2416,7 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .stmt-stripe { align-self: stretch; min-height: 22px; border-radius: 2px; background: transparent; }
 .stmt-stripe.shop, .stmt-stripe.repair { background: var(--primary); }
 .stmt-stripe.personal { background: #9ca3af; }
-.stmt-stripe.wrong { background: var(--warn-border); }
+.stmt-stripe.wrong { background: var(--error-border); }
 .stmt-num { text-align: right; font-family: 'JetBrains Mono', monospace; }
 .stmt-with { color: var(--error-text); }
 .stmt-dep { color: var(--success-text); }
@@ -2425,7 +2426,7 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .stmt-tag { display: inline-flex; align-items: center; font-size: var(--font-xs); font-weight: 600; padding: 1px 7px; border-radius: 5px; margin-left: 8px; border: 1px solid; }
 .stmt-tag.shop, .stmt-tag.repair { background: var(--primary-faint); color: var(--primary); border-color: var(--primary); }
 .stmt-tag.personal { background: #f3f4f6; color: #555; border-color: #9ca3af; }
-.stmt-tag.rethink { background: var(--warn-bg); color: var(--warn-text); border-color: var(--warn-border); }
+.stmt-tag.rethink { background: transparent; color: #dc2626; border-color: transparent; }
 .stmt-expand { padding: 12px 12px 12px 56px; border-bottom: 1px solid var(--primary-faint); background: #fbfbf9; }
 .stmt-expand-info { font-size: var(--font-s); font-style: italic; color: #555; margin-bottom: 10px; }
 .classify-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -2448,14 +2449,6 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .sortprog-num { font-size: var(--font-lg); font-weight: 700; color: var(--primary); }
 .sortprog-box.personal .sortprog-num { color: #555; }
 .sortprog-box.done .sortprog-num { color: var(--success-text); }
-.sortprog-hint { font-size: var(--font-s); color: #666; line-height: 1.55; margin-top: 10px; }
-.phase-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-.phase-title-row .phase-title { margin-bottom: 0; }
-.sortprog .btn-continue { margin-top: 12px; }
-.sortprog-hint + .sortprog-grid { margin-top: 10px; }
-.hint-pulse { position: relative; }
-.hint-pulse::after { content: ''; position: absolute; width: 34px; height: 34px; top: 50%; left: 50%; border-radius: 50%; border: 2px solid var(--primary); animation: hint-pulse-ring 1.2s ease-out infinite; pointer-events: none; }
-@keyframes hint-pulse-ring { 0% { transform: translate(-50%, -50%) scale(0.9); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; } }
 
 /* ----- Transaction card ----- */
 .txcard { display: flex; justify-content: space-between; align-items: center; gap: 12px; background: white; border: 2px solid var(--border); border-radius: 10px; padding: 12px 16px; margin-bottom: 16px; }
@@ -2592,7 +2585,6 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .sortprog { background: #32303c; border-color: var(--border); }
   .sortprog-box { border-color: var(--border); }
   .sortprog-box.personal { background: #2a2830; }
-  .sortprog-hint { color: #8a8898; }
   .txcard { background: #32303c; border-color: var(--border); }
   .dep-chip { background: #32303c; }
   .dep-card { background: #32303c; border-color: var(--border); }
@@ -2695,6 +2687,22 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .lease-terms { color: #c8ccd8; border-bottom-color: var(--border); }
   .lease-table th { color: #8a8898; border-bottom-color: var(--border); }
   .lease-table td { color: #c8ccd8; }
+}
+
+/* Reasons sheet — three-column row layout (account | Δ | reason) */
+.xl-row.xl-reasons { grid-template-columns: 22px 1fr 1fr 2fr; }
+
+/* Reasons sheet — interaction states */
+.xl-item.selected { background: var(--primary-faint); outline: 2px solid var(--accent); outline-offset: -2px; }
+/* Module 4 (pairs / keeping-reasons) — distinct blue-fill row pick, kept separate from .selected so it never overrides other modules */
+.xl-item.pair-selected { background: #e0f2fe; }
+.xl-item.eliminated { opacity: 0.4; text-decoration: line-through; }
+.xl-item.eliminated .xl-c { text-decoration: line-through; }
+.xl-item.eliminated .xl-v { text-decoration: line-through; }
+
+@media (prefers-color-scheme: dark) {
+  .xl-item.selected { background: var(--primary-faint); outline-color: var(--accent); }
+  .xl-item.pair-selected { background: #1e3a5f; }
 }
 
 /* ===================================================================
@@ -2812,11 +2820,35 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .calc-input:focus { border-color: var(--primary); }
 }
 
-/* ===== XL-ITEM SELECTED — clickable spreadsheet-row highlight (1.4 pairs) ===== */
-.xl-item.selected { background: var(--primary-faint); outline: 2px solid var(--accent); outline-offset: -2px; }
+/* ----- Sort-progress hint + pulse + title-row (13 / Module-3 activity; unused here, kept to match main) ----- */
+.sortprog-hint { font-size: var(--font-s); color: #666; line-height: 1.55; margin-top: 10px; }
+.phase-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.phase-title-row .phase-title { margin-bottom: 0; }
+.sortprog .btn-continue { margin-top: 12px; }
+.sortprog-hint + .sortprog-grid { margin-top: 10px; }
+.hint-pulse { position: relative; }
+.hint-pulse::after { content: ''; position: absolute; width: 34px; height: 34px; top: 50%; left: 50%; border-radius: 50%; border: 2px solid var(--primary); animation: hint-pulse-ring 1.2s ease-out infinite; pointer-events: none; }
+@keyframes hint-pulse-ring { 0% { transform: translate(-50%, -50%) scale(0.9); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; } }
+
 @media (prefers-color-scheme: dark) {
-  .xl-item.selected { background: var(--primary-faint); outline-color: var(--accent); }
+  .sortprog-hint { color: #8a8898; }
 }
 
-/* Reasons sheet — three-column row layout (account | Δ | reason) */
-.xl-row.xl-reasons { grid-template-columns: 22px 1fr 1fr 2fr; }
+/* ----- Hover/focus info tooltip + 2-col location grid (Sarah / Module-1 sort activity; kept for the cross-branch union) ----- */
+.loc-cols { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8px; align-items: start; }
+@media (max-width: 600px) { .loc-cols { grid-template-columns: 1fr; } }
+.item-chip.hoverinfo { position: relative; }
+.item-chip.hoverinfo .item-chip-info { display: none; }
+.item-chip.hoverinfo:has(.item-chip-info-btn:hover) .item-chip-info,
+.item-chip.hoverinfo:has(.item-chip-info-btn:focus) .item-chip-info { display: block; }
+.item-chip.hoverinfo .item-chip-info-btn:hover { color: var(--accent); }
+.item-chip.hoverinfo .item-chip-info {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 30;
+  width: 230px; max-width: 78vw; margin-top: 0; padding: 9px 11px;
+  background: #3f3f46; color: #f4f4f5; font-style: normal;
+  border-left: 0; border-radius: 8px; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+.item-chip.hoverinfo .item-chip-info::after {
+  content: ''; position: absolute; top: -5px; right: 12px;
+  border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 5px solid #3f3f46;
+}
