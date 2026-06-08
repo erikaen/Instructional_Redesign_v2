@@ -13,17 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Module 2: Insurance and Maria</h1>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="seg-progress" id="segProgress"></div>
-    <div class="phase-title" id="phaseTitle"></div>
 
     <!-- ===== Phase: welcome ===== -->
     <div class="phase active" id="phase-welcome">
@@ -256,12 +249,6 @@ function restart(){ window.location.reload(); }
 var PHASE_INDEX = 0;
 var PHASE_TITLE = 'Meet Maria';
 function renderSegProgress(){
-  var html = '';
-  for(var i = 0; i < 4; i++){
-    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
-    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
-  }
-  document.getElementById('segProgress').innerHTML = html;
   document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 }
 
