@@ -78,10 +78,32 @@ var q1OptionFeedback = {
 };
 var q1Answer = 'Things related to your repair work. The stand, the parts, the cash drawer, the laptop on your desk at home — all of it relates to the repair work, wherever it sits and whatever its job. The guitar, the couch, your own commuter bike — they don’t. That line is the most important thing you drew today.';
 
-var GLOSSARY = [
-  { term:'The repair work', def:'The bike-repair activity you do, separate from the rest of your life. We don’t give it a formal name yet — you’ll feel it become its own thing before anyone names it.' },
-  { term:'Things', def:'Plain word for the stuff you have for the repair work. No dollar values yet — those come in Module 2.' },
-  { term:'A tab', def:'A sheet in your spreadsheet. You build your books one tab at a time, starting with the Things tab here.' }
+var glossaryGroups = [
+  { module:'Module 2 &mdash; Insurance and Maria', terms:[
+    { term:'Property Policy', def:'Insurance that pays out if covered things are damaged or destroyed. Doesn&rsquo;t cover cash, or things you don&rsquo;t own (like the rented space).' },
+    { term:'Market Value', def:'What a comparable one sells for today (e.g. recent used &ldquo;eBay comp&rdquo; prices); the basis used to value the pre-owned laptop. One way to arrive at an asset&rsquo;s value &mdash; a choice, not the only one.' }
+  ] },
+  { module:'Module 3 &mdash; Anna and the Bank Statement', terms:[
+    { term:'Asset', def:'Something you have &mdash; a present right to an economic benefit (the gear, the parts, the prepaid month, cash). &ldquo;Right to,&rdquo; not &ldquo;owns&rdquo;: a leased item is an asset.' },
+    { term:'Noncash Asset', def:'An asset that isn&rsquo;t cash: equipment, parts on the shelf, fixtures, or a future right like prepaid rent.' },
+    { term:'Liability', def:'Something you owe &mdash; a present obligation to transfer an economic benefit later (the card balance; Smith&rsquo;s deposit, where what&rsquo;s owed is the work, not money).' },
+    { term:'Prepaid Rent', def:'Rent already paid for a future month; a present right (an asset) until the month is used, then it becomes a cost.' },
+    { term:'Promise', def:'Something you&rsquo;ve agreed to do or pay later. The plain word used before the term &ldquo;Liability.&rdquo;' },
+    { term:'Deposit', def:'Money paid in advance for something not yet received. For the receiver it&rsquo;s a liability (you owe the goods/work, or the money back), not earnings yet.' }
+  ] },
+  { module:'Module 4 &mdash; Keeping the Reasons', terms:[
+    { term:'Reason', def:'The why behind a change in a Noncash Asset, Liability, or Cash. One row per side of the change; every change has two sides (the felt beginning of double-entry).' },
+    { term:'Contributed', def:'Resources that came into the entity from outside its own repair work (owner cash, equipment, items from home). Formal name later: Contributed Capital.' },
+    { term:'Generated', def:'What the repair work produced, net of its costs (from running the repair work). Formal name later: Retained Earnings.' },
+    { term:'Cost of Repairs Done', def:'The value of parts/resources consumed in finished customer jobs; a reason that makes parts-on-the-shelf go down.' }
+  ] },
+  { module:'Module 5 &mdash; Naming What You Built', terms:[
+    { term:'Entity', def:'A perspective you adopt by deciding what counts as &ldquo;in&rdquo; (your repair work) vs. &ldquo;out&rdquo; (your personal life), for a purpose. The line is drawn, not found.' },
+    { term:'Accounting Identity', def:'Assets &minus; Liabilities = Equities. An identity, not an equation; it holds by definition for every entity.' },
+    { term:'Equities', def:'The definitional residual for a for-profit: A &minus; L = Equities. Plural by choice. Not &ldquo;net worth,&rdquo; not &ldquo;what the owner would walk away with,&rdquo; not the value of the business &mdash; a computed difference, not a pot of cash.' },
+    { term:'Net Assets', def:'The residual for an entity with no owners (charity, university): A &minus; L = Net Assets; split by donor-restriction status. Same &ldquo;definitional difference, not net worth&rdquo; caution as Equities.' },
+    { term:'Donor Restrictions', def:'For a nonprofit, strings a donor attaches to a gift. Not liabilities; recorded inside Net Assets.' }
+  ] }
 ];
 
 /* ===== state ===== */
@@ -156,8 +178,10 @@ function restart() {
 
 /* ===== glossary ===== */
 function openGlossary() {
-  document.getElementById('glossaryList').innerHTML = GLOSSARY.map(function(g){
-    return '<div class="glossary-entry"><div class="glossary-entry-term">' + g.term + '</div><div class="glossary-entry-def">' + g.def + '</div></div>';
+  document.getElementById('glossaryList').innerHTML = glossaryGroups.map(function(grp){
+    return '<div class="glossary-module">'+grp.module+'</div>'+grp.terms.map(function(g){
+      return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+    }).join('');
   }).join('');
   document.getElementById('glossaryOverlay').classList.add('open');
 }
