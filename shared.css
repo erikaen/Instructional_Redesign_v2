@@ -2013,6 +2013,7 @@ body { background: var(--page-bg); font-family: 'Open Sans', sans-serif; color: 
 
 /* Full-width page wrapper (edge-to-edge, no horizontal padding) */
 .prework-wrap { width: 100%; max-width: none; margin: 0; padding: 24px 0 64px; }
+.prework-wrap > * + * { margin-top: 20px; }
 
 /* ----- Banner instructor meta (right side of .activity-header) ----- */
 .banner-instructor { text-align: right; flex-shrink: 0; }
@@ -2215,7 +2216,8 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .ins-dropzone-empty { text-align: center; font-size: var(--font-xs); font-style: italic; color: #888; padding: 14px; }
 .ins-colhead { display: flex; align-items: center; gap: 12px; padding: 4px 8px; font-size: var(--font-xs); font-weight: 600; color: #888; border-bottom: 1px solid var(--border); background: var(--primary-faint); }
 .ins-colhead .ins-ev { color: var(--primary); }
-.ins-row { display: flex; align-items: center; gap: 12px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.ins-row { display: flex; align-items: baseline; gap: 12px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+.ins-dropzone .ins-row:last-child { border-bottom: none; }
 .ins-row-name { flex: 1; font-size: var(--font-s); color: #374151; }
 .ins-ev { width: 90px; text-align: right; font-size: var(--font-xs); font-style: italic; color: var(--primary); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; flex-shrink: 0; }
 .ins-ev.static { color: #888; cursor: default; text-decoration: none; }
@@ -2414,7 +2416,7 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .stmt-stripe { align-self: stretch; min-height: 22px; border-radius: 2px; background: transparent; }
 .stmt-stripe.shop, .stmt-stripe.repair { background: var(--primary); }
 .stmt-stripe.personal { background: #9ca3af; }
-.stmt-stripe.wrong { background: var(--warn-border); }
+.stmt-stripe.wrong { background: var(--error-border); }
 .stmt-num { text-align: right; font-family: 'JetBrains Mono', monospace; }
 .stmt-with { color: var(--error-text); }
 .stmt-dep { color: var(--success-text); }
@@ -2424,7 +2426,7 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .stmt-tag { display: inline-flex; align-items: center; font-size: var(--font-xs); font-weight: 600; padding: 1px 7px; border-radius: 5px; margin-left: 8px; border: 1px solid; }
 .stmt-tag.shop, .stmt-tag.repair { background: var(--primary-faint); color: var(--primary); border-color: var(--primary); }
 .stmt-tag.personal { background: #f3f4f6; color: #555; border-color: #9ca3af; }
-.stmt-tag.rethink { background: var(--warn-bg); color: var(--warn-text); border-color: var(--warn-border); }
+.stmt-tag.rethink { background: transparent; color: #dc2626; border-color: transparent; }
 .stmt-expand { padding: 12px 12px 12px 56px; border-bottom: 1px solid var(--primary-faint); background: #fbfbf9; }
 .stmt-expand-info { font-size: var(--font-s); font-style: italic; color: #555; margin-bottom: 10px; }
 .classify-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
@@ -2685,4 +2687,168 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .lease-terms { color: #c8ccd8; border-bottom-color: var(--border); }
   .lease-table th { color: #8a8898; border-bottom-color: var(--border); }
   .lease-table td { color: #c8ccd8; }
+}
+
+/* Reasons sheet — three-column row layout (account | Δ | reason) */
+.xl-row.xl-reasons { grid-template-columns: 22px 1fr 1fr 2fr; }
+
+/* Reasons sheet — interaction states */
+.xl-item.selected { background: var(--primary-faint); outline: 2px solid var(--accent); outline-offset: -2px; }
+/* Module 4 (pairs / keeping-reasons) — distinct blue-fill row pick, kept separate from .selected so it never overrides other modules */
+.xl-item.pair-selected { background: #e0f2fe; }
+.xl-item.eliminated { opacity: 0.4; text-decoration: line-through; }
+.xl-item.eliminated .xl-c { text-decoration: line-through; }
+.xl-item.eliminated .xl-v { text-decoration: line-through; }
+
+@media (prefers-color-scheme: dark) {
+  .xl-item.selected { background: var(--primary-faint); outline-color: var(--accent); }
+  .xl-item.pair-selected { background: #1e3a5f; }
+}
+
+/* ===================================================================
+   PREWORK — SEGMENTED PHASE PROGRESS BAR
+   Numbered segments (1–N), equal width. States: done (clickable,
+   primary blue), active (current, accent), locked (future, grey).
+   =================================================================== */
+
+.seg-progress {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 28px;
+}
+.seg-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+}
+.seg-step-num {
+  font-family: Inter, sans-serif;
+  font-size: var(--font-xs);
+  font-weight: 700;
+  color: #9ca3af;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.seg-step-bar {
+  height: 6px;
+  width: 100%;
+  background: var(--border-strong);
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+.seg-step.done {
+  cursor: pointer;
+}
+.seg-step.done .seg-step-num {
+  color: var(--primary);
+}
+.seg-step.done .seg-step-bar {
+  background: var(--primary);
+}
+.seg-step.done:hover .seg-step-bar {
+  background: var(--primary-light);
+}
+.seg-step.active .seg-step-num {
+  color: var(--accent);
+}
+.seg-step.active .seg-step-bar {
+  background: var(--accent);
+}
+
+/* ----- Current phase title (sits below segmented progress bar) ----- */
+.phase-title {
+  font-family: Inter, sans-serif;
+  font-size: var(--font-s);
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+.seg-progress + .phase-title {
+  margin-top: -20px;
+}
+.phase-title { font-size: var(--font-lg); }
+
+/* ----- Phase completion message (replaces final goto button in multi-file iframe setup) ----- */
+.next-phase-msg {
+  background: var(--primary-faint);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-family: Inter, sans-serif;
+  font-size: var(--font-m);
+  color: #374151;
+  text-align: center;
+  margin-top: 8px;
+}
+.next-phase-msg strong { color: var(--primary); font-weight: 700; }
+
+@media (prefers-color-scheme: dark) {
+  .next-phase-msg { background: var(--primary-faint); border-color: var(--border); color: #c8ccd8; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .seg-step-num { color: #4a4858; }
+  .seg-step-bar { background: #3a3848; }
+  .seg-step.done .seg-step-num { color: var(--primary); }
+  .seg-step.done .seg-step-bar { background: var(--primary); }
+  .seg-step.done:hover .seg-step-bar { background: var(--primary-light); }
+  .seg-step.active .seg-step-num { color: var(--accent); }
+  .seg-step.active .seg-step-bar { background: var(--accent); }
+}
+
+/* ===== CALC INPUT — numeric/dollar entry field (e.g. compute-the-net) ===== */
+.calc-input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 2px solid var(--border-strong);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  color: #374151;
+  background: white;
+  box-sizing: border-box;
+}
+.calc-input:focus { outline: none; border-color: var(--primary); }
+.calc-input:disabled { opacity: 0.6; cursor: default; }
+@media (prefers-color-scheme: dark) {
+  .calc-input { background: #28262e; border-color: var(--border-strong); color: #eeebf5; }
+  .calc-input:focus { border-color: var(--primary); }
+}
+
+/* ----- Sort-progress hint + pulse + title-row (13 / Module-3 activity; unused here, kept to match main) ----- */
+.sortprog-hint { font-size: var(--font-s); color: #666; line-height: 1.55; margin-top: 10px; }
+.phase-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+.phase-title-row .phase-title { margin-bottom: 0; }
+.sortprog .btn-continue { margin-top: 12px; }
+.sortprog-hint + .sortprog-grid { margin-top: 10px; }
+.hint-pulse { position: relative; }
+.hint-pulse::after { content: ''; position: absolute; width: 34px; height: 34px; top: 50%; left: 50%; border-radius: 50%; border: 2px solid var(--primary); animation: hint-pulse-ring 1.2s ease-out infinite; pointer-events: none; }
+@keyframes hint-pulse-ring { 0% { transform: translate(-50%, -50%) scale(0.9); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; } }
+
+@media (prefers-color-scheme: dark) {
+  .sortprog-hint { color: #8a8898; }
+}
+
+/* ----- Hover/focus info tooltip + 2-col location grid (Sarah / Module-1 sort activity; kept for the cross-branch union) ----- */
+.loc-cols { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8px; align-items: start; }
+@media (max-width: 600px) { .loc-cols { grid-template-columns: 1fr; } }
+.item-chip.hoverinfo { position: relative; }
+.item-chip.hoverinfo .item-chip-info { display: none; }
+.item-chip.hoverinfo:has(.item-chip-info-btn:hover) .item-chip-info,
+.item-chip.hoverinfo:has(.item-chip-info-btn:focus) .item-chip-info { display: block; }
+.item-chip.hoverinfo .item-chip-info-btn:hover { color: var(--accent); }
+.item-chip.hoverinfo .item-chip-info {
+  position: absolute; top: calc(100% + 6px); right: 0; z-index: 30;
+  width: 230px; max-width: 78vw; margin-top: 0; padding: 9px 11px;
+  background: #3f3f46; color: #f4f4f5; font-style: normal;
+  border-left: 0; border-radius: 8px; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28);
+}
+.item-chip.hoverinfo .item-chip-info::after {
+  content: ''; position: absolute; top: -5px; right: 12px;
+  border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 5px solid #3f3f46;
 }
