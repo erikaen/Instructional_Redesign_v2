@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 1.2: Insurance and Maria</title>
+  <title>Module 2 — Meet Maria</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -15,14 +15,15 @@
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
-      <div class="tut-header-main" id="headerTitle">
-        <h1>Tutorial 1.2: Insurance and Maria</h1>
-              </div>
+      <div class="tut-header-main">
+        <h1>Module 2: Insurance and Maria</h1>
+      </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-              </div>
+      </div>
     </div>
-    </div>
+    <div class="seg-progress" id="segProgress"></div>
+    <div class="phase-title" id="phaseTitle"></div>
 
     <!-- ===== Phase: welcome ===== -->
     <div class="phase active" id="phase-welcome">
@@ -53,7 +54,7 @@
         <div class="dialog-text">&ldquo;Hi, Maria from Citizens Mutual. Good to meet you. I&rsquo;ll write you a property policy. I need an inventory of what you have first. Here&rsquo;s the form. Use your list: drop each thing into the right section, and put a dollar amount on it while you&rsquo;re there. Most amounts come straight off a receipt; one or two you&rsquo;ll have to look up.&rdquo;</div>
       </div>
 
-      <button class="btn-continue btn-block" onclick="goto('form')">Start the inventory &rarr;</button>
+      <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>
     </div>
 
   </div>
@@ -206,7 +207,7 @@ function restart(){
 
 /* ===== welcome xlsx ===== */
 function renderWelcomeXlsx(){
-  var rows = '<div class="xlsx-row"><div class="xlsx-corner"></div><div class="xlsx-colhead">A&nbsp;&nbsp;Things (what I have for the repair work)</div></div>';
+  var rows = '<div class="xlsx-row"><div class="xlsx-corner"></div><div class="xlsx-colhead">Things (what I have for the repair work)</div></div>';
   welcomeVisibleIds.forEach(function(id,r){
     rows += '<div class="xlsx-row"><div class="xlsx-rownum">'+(r+1)+'</div><div class="xlsx-cell">'+findItem(id).name+'</div></div>';
   });
@@ -247,24 +248,25 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 
-/* ===== dev mode ===== */
-(function(){
-  var clicks=0;
-  document.getElementById('headerTitle').addEventListener('click', function(){
-    clicks++;
-    if(clicks>=3){ clicks=0; var bar=document.getElementById('devBar'); bar.hidden=!bar.hidden;
-      if(!bar.hidden && !document.getElementById('devBtns').children.length){
-        document.getElementById('devBtns').innerHTML = phaseOrder.map(function(p){ return '<button class="dev-bar-btn" onclick="goto(\''+p+'\')">'+p+'</button>'; }).join('');
-      }
-    }
-  });
-})();
-
 /* ===== standalone-phase overrides ===== */
 function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
 function restart(){ window.location.reload(); }
 
+/* ===== segmented progress ===== */
+var PHASE_INDEX = 0;
+var PHASE_TITLE = 'Meet Maria';
+function renderSegProgress(){
+  var html = '';
+  for(var i = 0; i < 4; i++){
+    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
+    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
+  }
+  document.getElementById('segProgress').innerHTML = html;
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
 /* ===== init ===== */
+renderSegProgress();
 renderWelcomeXlsx();
 </script>
 </body>

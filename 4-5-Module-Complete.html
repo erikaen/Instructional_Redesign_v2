@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 1.4: Keeping the Reasons</title>
+  <title>Module 4 — Module Complete</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -15,20 +15,21 @@
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
-      <div class="tut-header-main" id="headerTitle">
-        <h1>Tutorial 1.4: Keeping the Reasons</h1>
-              </div>
+      <div class="tut-header-main">
+        <h1>Module 4: Keeping the Reasons</h1>
+      </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-              </div>
+      </div>
     </div>
-    </div>
+    <div class="seg-progress" id="segProgress"></div>
+    <div class="phase-title" id="phaseTitle"></div>
 
     <!-- ===== complete ===== -->
     <div class="phase active" id="phase-complete">
       <div class="complete-head">
         <div class="trophy-badge"><i data-lucide="trophy"></i></div>
-        <div class="complete-title">Tutorial 1.4 complete</div>
+        <div class="complete-title">Module 4 complete</div>
       </div>
       <div class="section-card">
         <div class="card-title">What You Discovered</div>
@@ -41,13 +42,10 @@
       </div>
       <div class="next-card">
         <div class="next-card-label">Coming Next</div>
-        <p>You have three things now: what you have, what you owe, and the reasons your net moved. In 1.5 you&rsquo;ll lay them out on one page, watch how they fit together &mdash; and the names you&rsquo;ve been circling finally arrive.</p>
-        <p><strong>Next: Tutorial 1.5 &mdash; Naming What You Built</strong></p>
+        <p>You have three things now: what you have, what you owe, and the reasons your net moved. In Module 5 you&rsquo;ll lay them out on one page, watch how they fit together &mdash; and the names you&rsquo;ve been circling finally arrive.</p>
+        <p><strong>Next: Module 5 &mdash; Naming What You Built</strong></p>
       </div>
-      <a class="btn-continue btn-block" href="15-naming-what-you-built.html">Continue to Tutorial 1.5 &rarr;</a>
-      <div class="btn-row">
-        <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Restart</button>
-      </div>
+      <div class="next-phase-msg">You’ve finished this module — click <strong>Next</strong> to continue.</div>
     </div>
 
   </div>
@@ -268,7 +266,7 @@ function assetsSheet(){
   return html;
 }
 function liabilitiesSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Liability (what I owe)</div><div class="xl-v">B&nbsp;&nbsp;Amount</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liability (what I owe)</div><div class="xl-v">Amount</div></div>';
   LIABILITIES_SNAPSHOT.forEach(function(l,i){
     html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+l.label+'</div><div class="xl-v">'+xlDollars(l.amount)+'</div></div>';
   });
@@ -301,7 +299,7 @@ function reasonsSheetWalkPairs(){
   var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons — one row per change</div><div class="cash-sheet-sub">'+sub+'</div></div>';
   if(revealedRows.length===0){ html += '<div class="bs-empty-msg">No reasons recorded yet.</div>'; return html; }
   if(visible.length===0){ html += '<div class="bs-empty-msg">All paired rows crossed out.</div>'; return html; }
-  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Account &amp; reason</div><div class="xl-v">B&nbsp;&nbsp;Δ</div></div>';
+  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Account &amp; reason</div><div class="xl-v">Δ</div></div>';
   var clickable = (phase==='pairs' && !eliminateAutoActive && !eliminateAutoDone);
   visible.forEach(function(r){
     var sel = (selectedReasonId===r.id) ? ' selected' : '';
@@ -524,32 +522,28 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 
-/* ===== dev mode (triple-click title) ===== */
-(function(){
-  var clicks = 0;
-  document.getElementById('headerTitle').addEventListener('click', function(){
-    clicks++;
-    if(clicks>=3){
-      clicks = 0;
-      var bar = document.getElementById('devBar');
-      bar.hidden = !bar.hidden;
-      if(!bar.hidden && !document.getElementById('devBtns').children.length){
-        document.getElementById('devBtns').innerHTML = phaseOrder.map(function(p){
-          return '<button class="dev-bar-btn" onclick="goto(\''+p+'\')">'+p+'</button>';
-        }).join('');
-      }
-    }
-  });
-})();
-
 /* ===== standalone-phase overrides ===== */
 function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
 var __origContBtn = contBtn;
 contBtn = function(label, onclick){
-  if(onclick && onclick.indexOf('goto(') >= 0) return '';
+  if(onclick && onclick.indexOf('goto(') >= 0) return '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
   return __origContBtn(label, onclick);
 };
 function restart(){ window.location.reload(); }
+
+/* ===== segmented progress ===== */
+var PHASE_INDEX = 4;
+var PHASE_TITLE = 'Module Complete';
+function renderSegProgress(){
+  var html = '';
+  for(var i = 0; i < 5; i++){
+    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
+    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
+  }
+  document.getElementById('segProgress').innerHTML = html;
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+renderSegProgress();
 
 /* ===== init ===== */
 phase='complete'; /* no renderer needed */

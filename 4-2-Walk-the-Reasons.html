@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 1.4: Keeping the Reasons</title>
+  <title>Module 4 — Walk the Reasons</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -15,20 +15,22 @@
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
-      <div class="tut-header-main" id="headerTitle">
-        <h1>Tutorial 1.4: Keeping the Reasons</h1>
-              </div>
+      <div class="tut-header-main">
+        <h1>Module 4: Keeping the Reasons</h1>
+      </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-              </div>
+        <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
     </div>
-    </div>
+    <div class="seg-progress" id="segProgress"></div>
+    <div class="phase-title" id="phaseTitle"></div>
 
-    <!-- ===== net-movers ===== -->
-    <div class="phase active" id="phase-net-movers">
-      <div id="nmTop"></div>
-      <div id="wbNM"></div>
-      <div id="nmControls"></div>
+    <!-- ===== reasons-walk ===== -->
+    <div class="phase active" id="phase-reasons-walk">
+      <div id="walkAnna"></div>
+      <div id="wbWalk"></div>
+      <div id="walkControls"></div>
     </div>
 
   </div>
@@ -102,8 +104,8 @@ var REASONS = [
   { id:'r_laptop', account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
   { id:'r_gear',   account:'Equipment', delta:220, reason:'You brought gear you already owned: bench grinder, headset press, shop vacuum.' },
 
-  { id:'r_stand_a', account:'Equipment', delta:200, reason:'You bought the Park Tool stand for $200 (cash).' },
-  { id:'r_stand_b', account:'Cash',      delta:-200, reason:'You bought the Park Tool stand for $200 (cash).' },
+  { id:'r_stand_a', account:'Equipment', delta:200, reason:'Bought the Park Tool stand for $200 (cash).' },
+  { id:'r_stand_b', account:'Cash',      delta:-200, reason:'Bought the Park Tool stand for $200 (cash).' },
 
   { id:'r_tools_a', account:'Equipment',   delta:300, reason:'Bought $300 of hand tools on the card.' },
   { id:'r_tools_b', account:'Credit Card', delta:300, reason:'Bought $300 of hand tools on the card.' },
@@ -150,17 +152,17 @@ var CORRECT_CATEGORY = {
 var soloReasonIds = Object.keys(CORRECT_CATEGORY);
 
 var NARRATION_STEPS = [
-  { anna:"Start before May even began. You put in $960 of your own money, you brought your laptop from home, and you brought some gear you already owned. Each one's a single row, and the other side of that change (reason) isn't on this spreadsheet.",
-    reveal:['r_cashin','r_laptop','r_gear'] },
-  { anna:"The Park Tool stand — bought for $200 in cash. Equipment went up; cash went down. Same reason on both rows.",
+  { anna:"Start before May even began. You put in $960 of your own money, you brought your laptop from home, and you brought some gear you already owned. Each one's a single row, and the reason of that change isn't on this spreadsheet.",
+    reveal:['r_cashin','r_laptop','r_gear'], hideReasons:true },
+  { anna:"You filled the reason for each row.",
     reveal:['r_stand_a','r_stand_b'] },
-  { anna:"Hand tools, shop equipment, fixtures, parts... They are all on the card. For each one: the thing up, the card up. Two rows apiece.",
+  { anna:"The Park Tool stand is bought for $200 in cash. Then, Equipment went up; Cash went down. Same reason on both rows.",
     reveal:['r_tools_a','r_tools_b','r_equip_a','r_equip_b','r_fix_a','r_fix_b','r_parts_a','r_parts_b'] },
-  { anna:"Then about $300 of those parts went into customer jobs — used up. One row; the other side isn't here.",
+  { anna:"Hand tools, shop equipment, fixtures, parts... They are all on the card. For each one: the <strong>thing up</strong>, the <strong>card up</strong>. Two rows apiece.",
     reveal:['r_partsused'] },
-  { anna:"The lease — $1,300 from cash, first and last month paid in advance. Then May happened: you used the space, so one month's worth is gone. The paying is a pair; the using-up stands alone.",
+  { anna:"Then about $300 of those parts went into customer jobs. They're used up. One row. You noticed the other side isn't here.",
     reveal:['r_rent_a','r_rent_b','r_rentused'] },
-  { anna:"Now the cash side for May. Click the Cash tab — every customer Venmo, Smith's deposit, the two card paydowns.",
+  { anna:"Now the cash side for May. Click to the Cash tab. Every customer Venmo, Smith's deposit, and your own money, they are <strong>CASH IN</strong>. Then look at your <strong>CASH OUT</strong>. The lease ($1,300 from cash) was paid in advance first and last month. Then you used the space in May, so one month's worth is gone. There are also two card paydowns. You noticed that the <strong>paying</strong> is a pair; the <strong>using-up</strong> stands alone.",
     reveal:['r_v1','r_v2','r_v3','r_v4','r_v5','r_v6','r_v7','r_smith_a','r_smith_b','r_pay1_a','r_pay1_b','r_pay2_a','r_pay2_b'], goto:'cash' },
   { anna:"That's the whole month. Click back to the Reasons tab and look at the full list.",
     reveal:[], goto:'reasons' },
@@ -249,7 +251,7 @@ function assetsSheet(){
   return html;
 }
 function liabilitiesSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Liability (what I owe)</div><div class="xl-v">B&nbsp;&nbsp;Amount</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liability (what I owe)</div><div class="xl-v">Amount</div></div>';
   LIABILITIES_SNAPSHOT.forEach(function(l,i){
     html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+l.label+'</div><div class="xl-v">'+xlDollars(l.amount)+'</div></div>';
   });
@@ -274,22 +276,22 @@ function cashSheet(){
 }
 function reasonsSheetWalkPairs(){
   var revealedRows = REASONS.filter(function(r){ return revealed[r.id]; });
-  var notEliminated = revealedRows.filter(function(r){ return !eliminated[r.id]; });
+  var visible = revealedRows.filter(function(r){ return !eliminated[r.id]; });
   var sub;
   if(revealedRows.length===0) sub = 'Empty for now. Walk through the month to fill it in.';
-  else if(phase==='pairs'){ var ep = Object.keys(eliminated).length/2; sub = notEliminated.length+' '+(notEliminated.length===1?'row':'rows')+' left ('+ep+' '+(ep===1?'pair':'pairs')+' crossed out).'; }
+  else if(phase==='pairs'){ var ep = Object.keys(eliminated).length/2; sub = visible.length+' '+(visible.length===1?'row':'rows')+' left ('+ep+' '+(ep===1?'pair':'pairs')+' crossed out).'; }
   else sub = revealedRows.length+' '+(revealedRows.length===1?'row':'rows')+' so far.';
   var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons — one row per change</div><div class="cash-sheet-sub">'+sub+'</div></div>';
   if(revealedRows.length===0){ html += '<div class="bs-empty-msg">No reasons recorded yet.</div>'; return html; }
-  if(notEliminated.length===0){ html += '<div class="bs-empty-msg">All paired rows crossed out.</div>'; return html; }
+  if(visible.length===0){ html += '<div class="bs-empty-msg">All paired rows crossed out.</div>'; return html; }
   html += '<div class="xl-row xl-reasons xl-head"><div class="xl-gutter"></div><div class="xl-c">ACCOUNT</div><div class="xl-v">Δ</div><div class="xl-c">REASON</div></div>';
   var clickable = (phase==='pairs' && !eliminateAutoActive && !eliminateAutoDone);
-  revealedRows.forEach(function(r){
-    var isEliminated = !!eliminated[r.id];
-    var isSelected = (selectedReasonId===r.id) ? ' selected' : '';
-    var elimClass = isEliminated ? ' eliminated' : '';
-    var onclick = (clickable && !isEliminated) ? ' onclick="handleReasonClick(\''+r.id+'\')"' : '';
-    html += '<div class="xl-row xl-reasons xl-item'+isSelected+elimClass+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-c">'+r.account+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div><div class="xl-c">'+r.reason+'</div></div>';
+  var hideReasons = phase==='reasons-walk' && NARRATION_STEPS[step] && NARRATION_STEPS[step].hideReasons;
+  visible.forEach(function(r){
+    var sel = (selectedReasonId===r.id) ? ' selected' : '';
+    var onclick = clickable ? ' onclick="handleReasonClick(\''+r.id+'\')"' : '';
+    var reasonText = hideReasons ? '' : r.reason;
+    html += '<div class="xl-row xl-reasons xl-item'+sel+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-c">'+r.account+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div><div class="xl-c">'+reasonText+'</div></div>';
   });
   return html;
 }
@@ -371,7 +373,7 @@ function renderWalk(){
   } else {
     ctrl.innerHTML =
       insightBox('Most reasons show up in two rows',
-        '<p>Same event, two changes. Buy parts on the card: parts up <em>and</em> the card up. Pay the card down: cash down <em>and</em> the card down. Smith&rsquo;s deposit: cash up <em>and</em> what you owe him up. You didn&rsquo;t plan that &mdash; it just appeared once you wrote the reasons next to the changes.</p>'+
+        '<p>Same event, two changes. Buy parts on the card: parts up <em>and</em> the card up. Pay the card down: cash down <em>and</em> the card down. Smith&rsquo;s deposit: cash up <em>and</em> what you owe him up. You didn&rsquo;t plan that, but it just appeared once you wrote the reasons next to the changes.</p>'+
         '<p><strong>What if you crossed those matched pairs out?</strong></p>') +
       contBtn('Cross out the matched pairs', "goto('pairs')");
   }
@@ -467,7 +469,7 @@ function renderNetMovers(){
 
   var top = '';
   if(!done){
-    top += annaBox('These net-movers split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work &mdash; your own cash, gear you already had. These net-movers are <strong>contributed</strong>. The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month the work used up. These net-movers are <strong>generated</strong>. Sort each row into the right bin by clicking on the button in each row.', true);
+    top += annaBox('These net-movers split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work &mdash; your own cash, gear you already had. The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month the work used up. Drop each row into the right bin.', true);
     if(sortNudge){
       var msg = (sortNudge.attempted==='contributed')
         ? 'That one didn&rsquo;t come from you bringing something in &mdash; it came from doing the repair work. Try the other bin.'
@@ -507,35 +509,31 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 
-/* ===== dev mode (triple-click title) ===== */
-(function(){
-  var clicks = 0;
-  document.getElementById('headerTitle').addEventListener('click', function(){
-    clicks++;
-    if(clicks>=3){
-      clicks = 0;
-      var bar = document.getElementById('devBar');
-      bar.hidden = !bar.hidden;
-      if(!bar.hidden && !document.getElementById('devBtns').children.length){
-        document.getElementById('devBtns').innerHTML = phaseOrder.map(function(p){
-          return '<button class="dev-bar-btn" onclick="goto(\''+p+'\')">'+p+'</button>';
-        }).join('');
-      }
-    }
-  });
-})();
-
 /* ===== standalone-phase overrides ===== */
 function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
 var __origContBtn = contBtn;
 contBtn = function(label, onclick){
-  if(onclick && onclick.indexOf('goto(') >= 0) return '';
+  if(onclick && onclick.indexOf('goto(') >= 0) return '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
   return __origContBtn(label, onclick);
 };
 function restart(){ window.location.reload(); }
 
+/* ===== segmented progress ===== */
+var PHASE_INDEX = 1;
+var PHASE_TITLE = 'Walk the Reasons';
+function renderSegProgress(){
+  var html = '';
+  for(var i = 0; i < 5; i++){
+    var state = i < PHASE_INDEX ? 'done' : (i === PHASE_INDEX ? 'active' : 'locked');
+    html += '<div class="seg-step ' + state + '"><div class="seg-step-num">' + (i+1) + '</div><div class="seg-step-bar"></div></div>';
+  }
+  document.getElementById('segProgress').innerHTML = html;
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+renderSegProgress();
+
 /* ===== init ===== */
-phase='net-movers'; REASONS.forEach(function(r){ revealed[r.id]=true; }); eliminateAllPairs(); eliminateAutoDone=true; activeTab='reasons'; renderNetMovers();
+phase='reasons-walk'; step=0; activeTab='reasons'; NARRATION_STEPS[0].reveal.forEach(function(id){ revealed[id]=true; }); renderWalk();
 </script>
 </body>
 </html>
