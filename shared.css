@@ -1421,6 +1421,9 @@ body { background: var(--page-bg); font-family: 'Open Sans', sans-serif; color: 
   padding: 0 4px;
 }
 .glossary-close-btn:hover { color: var(--primary); }
+/* cursor: only the X (close) looks clickable, not the whole popup */
+.glossary-overlay, .glossary-panel, .glossary-panel * { cursor: default !important; }
+.glossary-close-btn { cursor: pointer !important; }
 .glossary-search-wrap {
   padding: 10px 20px;
   border-bottom: 1px solid var(--border);
@@ -1460,6 +1463,16 @@ body { background: var(--page-bg); font-family: 'Open Sans', sans-serif; color: 
   color: #555;
   line-height: 1.6;
 }
+.glossary-module {
+  font-family: Inter, sans-serif;
+  font-size: var(--font-m);
+  font-weight: 800;
+  color: var(--primary);
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 5px;
+  margin-top: 8px;
+}
+.glossary-module:first-child { margin-top: 0; }
 
 /* ===== NARRATIVE INSET — contrasting inner box inside .narrative-block ===== */
 /* Used by: Module-2/01-three-businesses.html */
