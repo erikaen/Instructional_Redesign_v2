@@ -2764,7 +2764,7 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   font-family: Inter, sans-serif;
   font-size: var(--font-s);
   font-weight: 600;
-  color: var(--accent);
+  color: var(--primary);
   margin-bottom: 20px;
 }
 .seg-progress + .phase-title {
@@ -2823,7 +2823,7 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 /* ----- Sort-progress hint + pulse + title-row (13 / Module-3 activity; unused here, kept to match main) ----- */
 .sortprog-hint { font-size: var(--font-s); color: #666; line-height: 1.55; margin-top: 10px; }
 .phase-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-.phase-title-row .phase-title { margin-bottom: 0; }
+.phase-title-row .phase-title { margin-bottom: 0; flex: 1; }
 .sortprog .btn-continue { margin-top: 12px; }
 .sortprog-hint + .sortprog-grid { margin-top: 10px; }
 .hint-pulse { position: relative; }

@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Module 1: Getting Organized</h1>
-        <p class="tut-header-sub">When a side activity becomes a business &middot; ~10 min</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle"></div>
 
     <div class="complete-head">
       <div class="trophy-badge"><i data-lucide="trophy"></i></div>
@@ -66,7 +60,7 @@
 if (window.lucide) lucide.createIcons();
 
 var PHASE_INDEX = 4;
-var PHASE_TITLE = 'Module Complete';
+var PHASE_TITLE = '';
 
 var GLOSSARY = [
   { term:'The repair work', def:'The bike-repair activity you do, separate from the rest of your life. We don’t give it a formal name yet — you’ll feel it become its own thing before anyone names it.' },
