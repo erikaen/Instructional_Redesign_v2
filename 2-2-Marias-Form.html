@@ -304,6 +304,11 @@ function renderItemRow(item){
   return '<div class="ins-row"><span class="ins-row-name">'+item.name+'</span>'+evidenceCell(item)+valueCell(item)+'</div>';
 }
 function renderSupplyRow(item){
+  // In categorize phase, only show the item name
+  if(formPhase==='categorize'){
+    return '<div class="ins-row"><span class="ins-row-name">'+item.name+'</span></div>';
+  }
+
   var paidCell, shelfCell;
   if(formDone){
     paidCell = '<span class="ins-val-static mono">'+fmt(Number(paidValues[item.id])||0)+'</span>';
