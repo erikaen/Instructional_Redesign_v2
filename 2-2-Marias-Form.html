@@ -21,8 +21,8 @@
 
     <!-- ===== Phase: form ===== -->
     <div class="phase active" id="phase-form">
-      <div class="narrative-block">
-        <p>Maria&rsquo;s form has four sections: Equipment, Computer Equipment, Supplies, Fixtures. <strong>Drag</strong> one item into each section and click to open the <strong>receipt</strong> it came on to identify the corresponding dollar amount. Once the pattern is clear for all four sections, you can finish the rest in one go.</p>
+      <div class="narrative-block" id="narrativeBlock">
+        <p>Maria&rsquo;s form has four sections: Equipment, Computer Equipment, Supplies, Fixtures. <strong>Drag</strong> each item from your list into the correct section.</p>
       </div>
 
       <div class="gate-armed" id="selectedHint" hidden></div>
@@ -209,6 +209,7 @@ var values = {};
 var paidValues = {};
 var selectedId = null;
 var formDone = false, formFilling = false;
+var formPhase = 'categorize'; // 'categorize' | 'valuate'
 var placeable = items.filter(function(i){ return i.category!=='none'; });
 
 /* ===== correctness ===== */
@@ -240,7 +241,7 @@ function goto(p){
   if(p==='maria-readback') renderReadback();
 }
 function restart(){
-  placements={}; values={}; paidValues={}; selectedId=null; formDone=false; formFilling=false;
+  placements={}; values={}; paidValues={}; selectedId=null; formDone=false; formFilling=false; formPhase='categorize';
   document.getElementById('formNudge').className='feedback';
   document.getElementById('laptopNudge').hidden=true;
   document.getElementById('systemBanner').hidden=true;
@@ -273,6 +274,9 @@ function renderSidebar(){
   more.hidden = hidden<=0; more.textContent = '+ '+hidden+' more on the full list';
 }
 function valueCell(item){
+  // In categorize phase, don't show value inputs
+  if(formPhase==='categorize') return '';
+
   var isLaptop = item.id==='laptop';
   var isMachine = item.sourced==='estimate' && !isLaptop;
   if(formDone || isMachine){
@@ -284,6 +288,9 @@ function valueCell(item){
     'oninput="onValueInput(\''+item.id+'\', this)" onkeydown="if(event.key===\'Enter\')this.blur()"></span>';
 }
 function evidenceCell(item){
+  // In categorize phase, don't show evidence buttons
+  if(formPhase==='categorize') return '';
+
   var isLaptop = item.id==='laptop';
   var isMachine = item.sourced==='estimate' && !isLaptop;
   if(isLaptop) return '<button class="ins-ev" onclick="openEbay()" title="Look up comparable used prices">eBay comp</button>';
@@ -324,18 +331,28 @@ function renderForm(){
     if(placed.length===0){
       inner = '<div class="ins-dropzone-empty">'+((selectedId && !formDone && !formFilling)?('click to place "'+findItem(selectedId).name+'" here'):'drop items here')+'</div>';
     } else {
-      if(isSupplies){
+      if(isSupplies && formPhase==='valuate'){
         inner += '<div class="ins-colhead"><span class="ins-row-name">Item</span><button class="ins-ev" onclick="openDoc(\'chains\')" title="QBP receipt">paid (receipt)</button><span class="ins-val-static">on shelf now</span></div>';
       }
       inner += placed.map(function(i){ return isSupplies?renderSupplyRow(i):renderItemRow(i); }).join('');
     }
+    var subtotal = (placed.length && formPhase==='valuate')?'<div class="ins-subtotal">'+cat.label+' subtotal: '+fmt(subtotalForCat(cat.id))+'</div>':'';
     html += '<div class="ins-section"><div class="ins-section-label">'+cat.label+'</div><div class="ins-section-sub">'+cat.sub+'</div>'+
       '<div class="'+zoneCls+'" data-cat="'+cat.id+'" ondragover="event.preventDefault()" ondrop="onDropSection(event,\''+cat.id+'\')">'+inner+'</div>'+
-      (placed.length?'<div class="ins-subtotal">'+cat.label+' subtotal: '+fmt(subtotalForCat(cat.id))+'</div>':'')+'</div>';
+      subtotal+'</div>';
   });
   document.getElementById('insSections').innerHTML = html;
-  document.getElementById('insTotal').textContent = fmt(totalInsurable());
-  updateGate();
+
+  // Show/hide totals and gate based on form phase
+  if(formPhase==='categorize'){
+    document.getElementById('insTotal').textContent = '';
+    document.getElementById('gateCard').hidden = true;
+    // Show Maria's nudge prompting transition
+    showMariaTransitionNudge();
+  } else {
+    document.getElementById('insTotal').textContent = fmt(totalInsurable());
+    updateGate();
+  }
 }
 function updateTotalsOnly(){
   categoryDefs.forEach(function(cat){
@@ -361,6 +378,29 @@ function updateGate(){
     ? 'The pattern’s clear — you’ve valued one item in every section. Finish the rest the same way.'
     : 'Correctly group and identify dollar value(s) for at least one item in each section to unlock the rest:';
   document.getElementById('laptopNudge').hidden = !(placements['laptop']==='computer' && !isValCorrect('laptop') && !formDone);
+}
+function showMariaTransitionNudge(){
+  // Check if all items have been placed in at least one category
+  var allPlaced = categoryDefs.every(function(cat){
+    return placeable.filter(function(i){ return placements[i.id]===cat.id; }).length > 0;
+  });
+
+  if(allPlaced){
+    var nudge = document.getElementById('formNudge');
+    nudge.className = 'feedback show';
+    nudge.innerHTML = '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;Good &mdash; everything's sorted by type. But look: I can't add these together. A stand plus a wrench plus a compressor equals...what? To write a policy, I need a dollar amount on each thing. Let's put numbers on them.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" onclick="transitionToValuePhase()" style="margin-top: 12px;">Add dollar values &rarr;</button>';
+    if (window.lucide) lucide.createIcons();
+  }
+}
+function transitionToValuePhase(){
+  playClick();
+  formPhase = 'valuate';
+  document.getElementById('formNudge').className = 'feedback';
+  document.getElementById('formNudge').innerHTML = '';
+  // Update narrative for valuate phase
+  document.getElementById('narrativeBlock').innerHTML = '<p>Now add a dollar amount to each item. Click to open the receipt or use the eBay comp for used gear. Once the pattern is clear for all four sections, you can finish the rest in one go.</p>';
+  renderForm();
 }
 
 /* ===== input handlers ===== */
