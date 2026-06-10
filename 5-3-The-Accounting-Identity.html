@@ -68,7 +68,7 @@ var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amo
 var NET = ASSETS_TOTAL - LIABILITIES_TOTAL; // 1960
 
 var CONTRIBUTED_ROWS = [
-  { account:'Cash',      delta:960, reason:'You put in $960 of your own money to get going.' },
+  { account:'Cash',      delta:960, reason:'Your own money, put in before May to get the repair work started.' },
   { account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
   { account:'Equipment', delta:220, reason:'You brought gear you already owned.' }
 ];
@@ -88,7 +88,7 @@ var GENERATED_TOTAL = GENERATED_ROWS.reduce(function(s,r){return s+r.delta;},0);
 var REASONS_TOTAL = CONTRIBUTED_TOTAL + GENERATED_TOTAL;                             // 1960
 
 var CASH_FLOWS = [
-  { date:'May 1',  desc:'Your own money, put in to get going', amount:960 },
+  { date:'Before May', desc:'Your own money — starting cash to get going', amount:960 },
   { date:'May 1',  desc:'Rent paid in advance', amount:-1300 },
   { date:'May 3',  desc:'Park Tool stand', amount:-200 },
   { date:'May 7',  desc:'Repair finished — customer paid', amount:340 },
@@ -251,6 +251,7 @@ function renderIdentity(){
   if(idStage===0){
     html += annaBox('&ldquo;You found your net two ways waiting to happen. One: Assets minus Liabilities, '+d(NET)+'. Now the other: total the <strong>Reasons</strong> that moved your net &mdash; the contributed pile and the generated pile. Add them up.&rdquo;');
     html += '<div id="identityWb"></div>';
+    html += '<div class="callout"><strong>About that +$960:</strong> it&rsquo;s the money you put into the repair work <strong>before May</strong>, to get it started. That&rsquo;s not the same as the <strong>&minus;$960</strong> net cash change you found on the bank statement back in Module&nbsp;3. The +$960 is where your starting cash <em>came from</em>; the &minus;$960 is what happened to that cash <em>during</em> May &mdash; you spent it down, which is why cash ends at <strong>$0</strong> on May&nbsp;31.</div>';
     html += continueBtn('Total the Reasons');
     c.innerHTML = html;
     excelTab = 'reasons'; reasonsExpanded = { contributed:true, generated:true };
