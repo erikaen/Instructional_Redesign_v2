@@ -16,7 +16,6 @@
     <div class="phase-title-row">
       <div class="phase-title" id="phaseTitle"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <div class="narrative-block"><p>You filled the <strong>Things</strong> tab from both places, and left a lot behind. You drew a line. What is the line actually about?</p></div>
@@ -25,7 +24,7 @@
       <div class="mc-opts" id="q1Opts"></div>
       <div class="feedback" id="q1Feedback"></div>
     </div>
-    <div class="btn-row" id="q1SubmitRow"><button class="btn-continue" id="q1Submit" onclick="submitQ1()" disabled>Submit</button></div>
+    <div class="btn-row" id="q1BtnRow"><button class="btn-continue" id="q1Submit" onclick="submitQ1()" disabled>Submit</button><button class="btn-continue" id="q1Reset" onclick="resetQ1()" style="display:none; margin-left:auto;">Reset</button></div>
     <div id="q1Done" hidden>
       <div class="insight-box">
         <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i>The line you drew</div>
@@ -107,7 +106,7 @@ var glossaryGroups = [
 ];
 
 /* ===== state ===== */
-var q1Sel = null, q1Attempts = 0, q1Submitted = false;
+var q1Sel = null, q1Submitted = false;
 
 /* ===== reflect (MCQ) ===== */
 function renderQ1() {
@@ -130,45 +129,37 @@ function lockQ1() {
   document.querySelectorAll('#q1Opts .mc-opt').forEach(function(el){ el.classList.add('locked'); });
 }
 function showCorrectQ1() {
-  q1Submitted = true;
   document.querySelectorAll('#q1Opts .mc-opt').forEach(function(el){
     if (el.getAttribute('data-id') === Q1_CORRECT) el.classList.add('correct');
   });
-  lockQ1();
-  document.getElementById('q1SubmitRow').hidden = true;
   document.getElementById('q1Done').hidden = false;
 }
 function submitQ1() {
   if (q1Sel === null || q1Submitted) return;
   var fb = document.getElementById('q1Feedback');
+  q1Submitted = true;
+  lockQ1();
+  document.getElementById('q1Submit').style.display = 'none';
+  document.getElementById('q1Reset').style.display = '';
   if (q1Sel === Q1_CORRECT) {
     playSuccess();
     fb.className = 'feedback ok show';
     fb.textContent = q1Answer;
     showCorrectQ1();
   } else {
-    q1Attempts++;
-    document.querySelectorAll('#q1Opts .mc-opt').forEach(function(el){ el.classList.remove('wrong'); });
+    playNope();
     var wrongEl = document.querySelector('#q1Opts .mc-opt[data-id="' + q1Sel + '"]');
-    if (q1Attempts >= 3) {
-      playBuzzer();
-      if (wrongEl) wrongEl.classList.add('wrong');
-      fb.className = 'feedback ok show';
-      fb.innerHTML = '<strong>Here’s what we were looking for:</strong> ' + q1Answer;
-      showCorrectQ1();
-    } else {
-      playNope();
-      if (wrongEl) wrongEl.classList.add('wrong');
-      fb.className = 'feedback err show';
-      fb.innerHTML = q1OptionFeedback[q1Sel];
-    }
+    if (wrongEl) wrongEl.classList.add('wrong');
+    fb.className = 'feedback err show';
+    fb.innerHTML = q1OptionFeedback[q1Sel];
   }
 }
 
-/* ===== restart ===== */
-function restart() {
-  q1Sel = null; q1Attempts = 0; q1Submitted = false;
-  document.getElementById('q1SubmitRow').hidden = false;
+/* ===== reset ===== */
+function resetQ1() {
+  q1Sel = null; q1Submitted = false;
+  document.getElementById('q1Reset').style.display = 'none';
+  document.getElementById('q1Submit').style.display = '';
   document.getElementById('q1Submit').disabled = true;
   document.getElementById('q1Done').hidden = true;
   document.getElementById('q1Feedback').classList.remove('show');

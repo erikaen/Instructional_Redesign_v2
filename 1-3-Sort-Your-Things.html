@@ -16,7 +16,6 @@
     <div class="phase-title-row">
       <div class="phase-title" id="phaseTitle"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <div class="narrative-block">
@@ -34,9 +33,13 @@
     </div>
     <div id="sortLive">
       <div class="sort-msg" id="sortMsg"></div>
-      <button class="btn-continue" id="sortAction" onclick="doTheRest()" disabled>Sort the rest &rarr;</button>
+      <div class="btn-row" style="justify-content: space-between;">
+        <button class="btn-continue" id="sortAction" onclick="doTheRest()" disabled>Sort the rest &rarr;</button>
+        <button class="btn-continue" onclick="restart()">Reset</button>
+      </div>
     </div>
     <div id="sortDoneBlock" hidden>
+      <div class="btn-row"><button class="btn-continue" onclick="sortBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>
       <div class="insight-box">
         <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i>Look at what you just did</div>
         <p>You pulled things into that box from <em>both</em> places &mdash; the laptop and the desk came from <strong>home</strong>, the cash drawer doesn&rsquo;t repair anything, and your own commuter bike stayed out even though it was in the space. So the box isn&rsquo;t &ldquo;stuff in the space,&rdquo; and it isn&rsquo;t &ldquo;tools.&rdquo; It&rsquo;s something else. The next question names it.</p>
@@ -149,6 +152,7 @@ var glossaryGroups = [
 var placed = {};
 var sortDone = false;
 var expandedId = null;
+var placedSnapshot = null;
 
 /* ===== sort ===== */
 function renderItemChip(item) {
@@ -216,12 +220,21 @@ function updateSortFeedback() {
 }
 function doTheRest() {
   if (sortDone) return;
+  placedSnapshot = Object.assign({}, placed);
   shopIds.forEach(function(id){ placed[id] = true; });
   sortDone = true;
   playSuccess();
   renderSort();
   document.getElementById('sortLive').hidden = true;
   document.getElementById('sortDoneBlock').hidden = false;
+}
+function sortBack() {
+  placed = placedSnapshot ? Object.assign({}, placedSnapshot) : {};
+  sortDone = false;
+  document.getElementById('sortDoneBlock').hidden = true;
+  document.getElementById('sortLive').hidden = false;
+  renderSort();
+  window.scrollTo(0, 0);
 }
 
 /* ===== restart ===== */
