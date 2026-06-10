@@ -47,6 +47,8 @@
         </div>
       </div>
 
+      <div id="transitionNudge" hidden></div>
+
       <div class="dialog-box maria" id="laptopNudge" hidden>
         <div class="dialog-label">MARIA</div>
         <div class="dialog-text"><span class="dialog-prefix">(looking over)</span>&ldquo;That laptop&rsquo;s got no receipt &mdash; you&rsquo;ve had it for years. For something used, we put down what it would <strong>sell for now</strong>. Tap <em>eBay comp</em> next to it, look at a few comparable ones, and write down a fair number.&rdquo;</div>
@@ -385,19 +387,23 @@ function showMariaTransitionNudge(){
     return placeable.filter(function(i){ return placements[i.id]===cat.id; }).length > 0;
   });
 
+  var nudge = document.getElementById('transitionNudge');
   if(allPlaced){
-    var nudge = document.getElementById('formNudge');
-    nudge.className = 'feedback show';
+    nudge.hidden = false;
     nudge.innerHTML = '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;Good &mdash; everything&rsquo;s sorted by type. But look: I can&rsquo;t add these together. A stand plus a wrench plus a compressor equals...what? To write a policy, I need a dollar amount on each thing. Let&rsquo;s put numbers on them.&rdquo;</div></div>'+
-      '<button class="btn-continue btn-block" onclick="transitionToValuePhase()" style="margin-top: 12px;">Add dollar values &rarr;</button>';
+      '<button class="btn-continue btn-block" onclick="transitionToValuePhase()">Add dollar values &rarr;</button>';
     if (window.lucide) lucide.createIcons();
+  } else {
+    nudge.hidden = true;
+    nudge.innerHTML = '';
   }
 }
 function transitionToValuePhase(){
   playClick();
   formPhase = 'valuate';
-  document.getElementById('formNudge').className = 'feedback';
-  document.getElementById('formNudge').innerHTML = '';
+  var nudge = document.getElementById('transitionNudge');
+  nudge.hidden = true;
+  nudge.innerHTML = '';
   // Update narrative for valuate phase
   document.getElementById('narrativeBlock').innerHTML = '<p>Now add a dollar amount to each item. Click to open the receipt or use the eBay comp for used gear. Once the pattern is clear for all four sections, you can finish the rest in one go.</p>';
   renderForm();
