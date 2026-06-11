@@ -139,11 +139,11 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
   return html;
 }
-function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things (What I have)', 'TOTAL'); }
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things that belong to the repair work', 'TOTAL'); }
 function promisesSheet(){
   var rows = [ {label:"Smith's frame — paid $220 up front, not built yet", amount:220}, {label:'Amount still owed on the credit card for the repair work', amount:1230} ];
   var total = 1450;
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Promises (What I owe)</div><div class="xl-v">Amount</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Promises that belong to the repair work</div><div class="xl-v">Amount</div></div>';
   rows.forEach(function(r,i){
     html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+r.label+'</div><div class="xl-v">'+dollars(r.amount)+'</div></div>';
   });

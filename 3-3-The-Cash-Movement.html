@@ -147,7 +147,7 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
   return html;
 }
-function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things (What I have)', 'TOTAL'); }
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things that belong to the repair work', 'TOTAL'); }
 function cashSheet(){
   var inflows = bikeRepairCashFlows.filter(function(f){return f.amount>0;});
   var outflows = bikeRepairCashFlows.filter(function(f){return f.amount<0;});
