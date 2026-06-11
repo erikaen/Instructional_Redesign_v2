@@ -16,7 +16,6 @@
     <div class="phase-title-row">
       <div class="phase-title" id="phaseTitle"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <div class="narrative-block"><p>The Cash sheet shows eight customer deposits during May, but it does not tell you what each customer paid for.</p></div>
@@ -50,7 +49,7 @@
 if (window.lucide) lucide.createIcons();
 
 var PHASE_INDEX = 3;
-var PHASE_TITLE = 'The Customer Payments';
+var PHASE_TITLE = '';
 
 /* ===== sound ===== */
 var audioCtx = null;
@@ -94,6 +93,8 @@ var glossaryGroups = [
     { term:'Promise', def:'Something you&rsquo;ve agreed to do or pay later. The plain word used before the term &ldquo;Liability.&rdquo;' },
     { term:'Deposit', def:'Money paid in advance for something not yet received. For the receiver it&rsquo;s a liability (you owe the goods/work, or the money back), not earnings yet.' }
   ] },
+  /* Module 4 & 5 glossary hidden in Module 3 for now
+
   { module:'Module 4: Keeping the Reasons', terms:[
     { term:'Reason', def:'The why behind a change in a Noncash Asset, Liability, or Cash. One row per side of the change; every change has two sides (the felt beginning of double-entry).' },
     { term:'Contributed', def:'Resources that came into the entity from outside its own repair work (owner cash, equipment, items from home). Formal name later: Contributed Capital.' },
@@ -107,6 +108,7 @@ var glossaryGroups = [
     { term:'Net Assets', def:'The residual for an entity with no owners (charity, university): A &minus; L = Net Assets; split by donor-restriction status. Same &ldquo;definitional difference, not net worth&rdquo; caution as Equities.' },
     { term:'Donor Restrictions', def:'For a nonprofit, strings a donor attaches to a gift. Not liabilities; recorded inside Net Assets.' }
   ] }
+  */
 ];
 
 function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -128,7 +130,7 @@ var bikeRepairCashFlows = [
 ];
 
 /* ===== state ===== */
-var depositAnswers = {}, currentDeposit = 0;
+var depositAnswers = {}, depositSel = {}, currentDeposit = 0;
 var jonesResolved = false;
 
 /* ===== cash sheet panel ===== */
@@ -159,23 +161,31 @@ function showReceipts(){ playClick(); document.getElementById('showReceiptsBtn')
 function renderDeposits(){
   if(document.getElementById('depWrap').hidden) return;
   var d = deposits[currentDeposit];
-  var ans = depositAnswers[d.id]; var locked = ans===d.correct;
+  var submitted = depositAnswers[d.id]!==undefined;
+  var ans = depositAnswers[d.id];
+  var sel = depositSel[d.id];
+  var correct = submitted && ans===d.correct;
   var rows = d.lineItems.map(function(li){ return '<tr><td>'+li.name+'</td><td class="num">$'+li.amount+'.00</td></tr>'; }).join('');
   var choices = ['done','tocome'].map(function(ch){
-    var c='dep-choice'; if(locked && ans===ch) c+=' correct'; else if(!locked && ans===ch) c+=' wrong'; else if(ans===ch) c+=' sel';
-    return '<button class="'+c+'" onclick="answerDeposit(\''+d.id+'\',\''+ch+'\')"'+(locked?' disabled':'')+'>'+optionLabels[ch]+'</button>';
+    var c='dep-choice';
+    if(submitted){ if(ch===ans) c += (correct ? ' correct' : ' wrong'); }
+    else if(sel===ch){ c += ' sel'; }
+    var click = submitted ? '' : ' onclick="selectDeposit(\''+d.id+'\',\''+ch+'\')"';
+    return '<button class="'+c+'"'+click+(submitted?' disabled':'')+'>'+optionLabels[ch]+'</button>';
   }).join('');
   var fb='';
-  if(ans){
-    var errStyle = locked ? '' : ' style="background:var(--error-bg); border-color:var(--error-border); color:var(--error-text);"';
-    fb = '<div class="dep-fb '+(locked?'ok':'err')+'"'+errStyle+'>'+d.annaSays[ans]+'</div>';
+  if(submitted){
+    var errStyle = correct ? '' : ' style="background:var(--error-bg); border-color:var(--error-border); color:var(--error-text);"';
+    fb = '<div class="dep-fb '+(correct?'ok':'err')+'"'+errStyle+'>'+d.annaSays[ans]+'</div>';
   }
 
   var isFirst = currentDeposit===0;
   var isLast = currentDeposit===deposits.length-1;
-  var backBtn = isFirst ? '<span></span>' : '<button class="btn-continue" onclick="prevDeposit()">&larr; Back</button>';
-  var nextBtn = isLast ? '' : '<button class="btn-continue" onclick="nextDeposit()"'+(locked?'':' disabled')+'>Next &rarr;</button>';
-  var nav = '<div style="display:flex; justify-content:space-between; gap:8px; margin-top:14px;">'+backBtn+nextBtn+'</div>';
+  var backBtn = isFirst ? '' : '<button class="btn-continue" onclick="prevDeposit()">&larr; Back</button>';
+  var submitBtn = submitted ? '' : '<button class="btn-continue" onclick="submitDeposit(\''+d.id+'\')"'+(sel?'':' disabled')+'>Submit</button>';
+  var resetBtn = submitted ? '<button class="btn-reset" onclick="resetDeposit(\''+d.id+'\')">Reset</button>' : '';
+  var nextBtn = isLast ? '' : '<button class="btn-continue" onclick="nextDeposit()"'+(correct?'':' disabled')+'>Next &rarr;</button>';
+  var nav = '<div style="display:flex; justify-content:space-between; gap:8px; margin-top:14px;"><div style="display:flex; gap:8px;">'+backBtn+submitBtn+'</div><div style="display:flex; gap:8px;">'+resetBtn+nextBtn+'</div></div>';
 
   var html = '<div class="dep-card">'+
     '<div style="font-size:var(--font-xs); text-transform:uppercase; letter-spacing:0.5px; color:#888; font-weight:700; margin-bottom:10px;">Receipt '+(currentDeposit+1)+' of '+deposits.length+'</div>'+
@@ -191,11 +201,23 @@ function renderDeposits(){
   if(allCorrect && !closeEl.innerHTML.trim()) renderDepositsClose();
   if(window.lucide) lucide.createIcons();
 }
-function answerDeposit(id, choice){
+function selectDeposit(id, ch){
+  if(depositAnswers[id]!==undefined) return; // already submitted; reset to change
+  depositSel[id]=ch;
+  renderDeposits();
+}
+function submitDeposit(id){
+  if(depositAnswers[id]!==undefined) return;
+  var ch = depositSel[id];
+  if(!ch) return;
   var d = deposits.find(function(x){return x.id===id;});
-  if(depositAnswers[id]===d.correct) return;
-  depositAnswers[id]=choice;
-  if(choice===d.correct) playSuccess(); else playNope();
+  depositAnswers[id]=ch;
+  if(ch===d.correct) playSuccess(); else playNope();
+  renderDeposits();
+}
+function resetDeposit(id){
+  delete depositAnswers[id];
+  delete depositSel[id];
   renderDeposits();
 }
 function nextDeposit(){
@@ -211,7 +233,7 @@ function renderDepositsClose(){
     '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;So you found two kinds of customer payments. Seven of them were for work you had already finished. That money is yours to keep. Smith&rsquo;s check is the odd one out. He paid you $220 now, but you still owe him the custom frame.<br><br>That means Smith&rsquo;s payment belongs in <strong>two places</strong>. You have the cash, but you also have a promise to keep. Your priced <strong>Things</strong> list doesn&rsquo;t show promises like that, so you need a second list: <strong>promises you still owe</strong>. Start it with Smith&rsquo;s $220.&rdquo;</div>'+
     '<div class="promises-born" style="margin-top:14px;"><div class="promises-born-head">Promises (What I owe)</div><div class="promises-born-body"><div class="promises-line"><span>Smith&rsquo;s frame &mdash; paid $220 up front, not built yet</span><span class="mono">$220</span></div></div></div>'+
     '</div>'+
-    '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+    '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   document.getElementById('depositsClose').innerHTML = html;
 }
 function answerJones(choice){
@@ -241,7 +263,7 @@ function answerJones(choice){
 
 /* ===== restart ===== */
 function restart(){
-  depositAnswers={}; currentDeposit=0; jonesResolved=false;
+  depositAnswers={}; depositSel={}; currentDeposit=0; jonesResolved=false;
   document.getElementById('depWrap').hidden=true;
   var dc=document.getElementById('depositsClose'); dc.hidden=true; dc.innerHTML='';
   document.getElementById('showReceiptsBtn').style.display='';

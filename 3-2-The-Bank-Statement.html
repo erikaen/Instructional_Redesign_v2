@@ -16,7 +16,6 @@
     <div class="phase-title-row">
       <div class="phase-title" id="phaseTitle"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <div class="narrative-block"><p>You&rsquo;ve been using your personal bank account for the repair work. Last month&rsquo;s bank statement just arrived. Anna sits down at the workbench with you to look it over.</p></div>
@@ -45,7 +44,7 @@
 if (window.lucide) lucide.createIcons();
 
 var PHASE_INDEX = 1;
-var PHASE_TITLE = 'The Bank Statement';
+var PHASE_TITLE = '';
 
 /* ===== sound ===== */
 var audioCtx = null;
@@ -92,6 +91,8 @@ var glossaryGroups = [
     { term:'Promise', def:'Something you&rsquo;ve agreed to do or pay later. The plain word used before the term &ldquo;Liability.&rdquo;' },
     { term:'Deposit', def:'Money paid in advance for something not yet received. For the receiver it&rsquo;s a liability (you owe the goods/work, or the money back), not earnings yet.' }
   ] },
+  /* Module 4 & 5 glossary hidden in Module 3 for now
+
   { module:'Module 4: Keeping the Reasons', terms:[
     { term:'Reason', def:'The why behind a change in a Noncash Asset, Liability, or Cash. One row per side of the change; every change has two sides (the felt beginning of double-entry).' },
     { term:'Contributed', def:'Resources that came into the entity from outside its own repair work (owner cash, equipment, items from home). Formal name later: Contributed Capital.' },
@@ -105,6 +106,7 @@ var glossaryGroups = [
     { term:'Net Assets', def:'The residual for an entity with no owners (charity, university): A &minus; L = Net Assets; split by donor-restriction status. Same &ldquo;definitional difference, not net worth&rdquo; caution as Equities.' },
     { term:'Donor Restrictions', def:'For a nonprofit, strings a donor attaches to a gift. Not liabilities; recorded inside Net Assets.' }
   ] }
+  */
 ];
 
 function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -197,9 +199,12 @@ function renderBankSort(){
     toggleFn:'toggleBankDesc', classifyFn:'classifyBank', showHint:!hintSeen,
     catA:{id:'shop',label:'Repair'}, catB:{id:'personal',label:'Personal'},
     allCorrect:sortChecked && wrongIds.length===0 });
+  if(correctCount>=5 && hasShop && hasPers){
+    html += '<div class="btn-row" style="justify-content: flex-end; margin-top: 16px;"><button class="btn-reset" onclick="restart()">Reset</button></div>';
+  }
   if(sortChecked && wrongIds.length===0){
     html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Good. Now we can see which rows belong to the repair work and which ones belong to your personal life. Next, let&rsquo;s pull the repair-related rows into one place and see how cash moved during May.&rdquo;</div></div>';
-    html += '<div class="next-phase-msg" style="margin-top: 20px;">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+    html += '<div class="next-phase-msg" style="margin-top: 20px;">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   }
   document.getElementById('bankArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();

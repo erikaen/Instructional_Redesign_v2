@@ -16,7 +16,6 @@
     <div class="phase-title-row">
       <div class="phase-title" id="phaseTitle"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <div class="narrative-block"><p>You and Anna have been working through the records one piece at a time. The workbook now has three tabs: <strong>Things</strong>, <strong>Promises</strong>, and <strong>Cash</strong>. You have listed what the repair work has, what it still owes, and the money that moved in and out during May.</p><p>Now Anna says it is time to give the lists their proper names.</p></div>
@@ -41,7 +40,7 @@
 <script>
 if (window.lucide) lucide.createIcons();
 
-var PHASE_TITLE = 'Naming the Lists';
+var PHASE_TITLE = '';
 
 /* ===== sound ===== */
 var audioCtx = null;
@@ -91,6 +90,8 @@ var glossaryGroups = [
     { term:'Promise', def:'Something you&rsquo;ve agreed to do or pay later. The plain word used before the term &ldquo;Liability.&rdquo;' },
     { term:'Deposit', def:'Money paid in advance for something not yet received. For the receiver it&rsquo;s a liability (you owe the goods/work, or the money back), not earnings yet.' }
   ] },
+  /* Module 4 & 5 glossary hidden in Module 3 for now
+
   { module:'Module 4: Keeping the Reasons', terms:[
     { term:'Reason', def:'The why behind a change in a Noncash Asset, Liability, or Cash. One row per side of the change; every change has two sides (the felt beginning of double-entry).' },
     { term:'Contributed', def:'Resources that came into the entity from outside its own repair work (owner cash, equipment, items from home). Formal name later: Contributed Capital.' },
@@ -104,6 +105,7 @@ var glossaryGroups = [
     { term:'Net Assets', def:'The residual for an entity with no owners (charity, university): A &minus; L = Net Assets; split by donor-restriction status. Same &ldquo;definitional difference, not net worth&rdquo; caution as Equities.' },
     { term:'Donor Restrictions', def:'For a nonprofit, strings a donor attaches to a gift. Not liabilities; recorded inside Net Assets.' }
   ] }
+  */
 ];
 
 function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -190,6 +192,7 @@ function toggleCat(cat){ playClick(); thingsExpanded[cat] = !thingsExpanded[cat]
 
 /* ===== name-it ===== */
 function renderNameSteps(){
+  var backHtml = assetsNamed ? '<div class="btn-row" style="margin-bottom:16px;"><button class="btn-reset" onclick="nameBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>' : '';
   var html='';
   if(!assetsNamed){
     html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Let&rsquo;s start with the Things sheet. It lists everything you have that is related to the repair work, with a dollar value for each. Accountants call this list <strong>Assets</strong>.&rdquo;</div></div>'+
@@ -198,18 +201,27 @@ function renderNameSteps(){
     html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now we need to think a little bigger. Assets are not just physical objects you can see or touch. An asset is a <strong>present right to an economic benefit</strong>. Remember the $650 paid ahead for the final month of the lease? You have not used that month yet, so that right belongs on the Assets list too.&rdquo;</div></div>'+
       '<button class="btn-continue btn-block" style="margin-top:20px" onclick="revealRou()">Add the Missing Asset</button>';
   } else if(!liabilitiesNamed){
-    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;There it is. The final month&rsquo;s rent is different from the tools and supplies. You cannot touch it, but it represents a right to use the repair workspace later. That right has value, so it belongs on the Assets list.<br><br>Since it is not a physical thing, we will give it its own category: <strong>Right of Use</strong>. With that added, the Assets list now totals <strong>'+dollars(ASSETS_TOTAL)+'</strong>.<br><br>Now let&rsquo;s name the other list. The Promises sheet shows what the repair work still owes. Accountants call those <strong>Liabilities</strong>.&rdquo;</div></div>'+
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;There it is. The final month&rsquo;s rent is different from the tools and supplies. You cannot touch it, but it represents a right to use the repair workspace later. That right has value, so it belongs on the Assets list.<br><br>Since it is not a physical thing, we will give it its own category: <strong>Right of Use</strong>. With that added, the Assets list now totals <strong>'+dollars(ASSETS_TOTAL)+'</strong>.<br><br>Now let&rsquo;s name the other list. The Promises sheet shows what the repair work still owes. Accountants call those <strong>Liabilities</strong>. A liability is a <strong>present obligation to transfer an economic benefit later</strong>.&rdquo;</div></div>'+
       '<button class="btn-continue btn-block" style="margin-top:20px" onclick="nameLiabilities()">Rename Promises to Liabilities</button>';
   } else {
-    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now you have the two names. <strong>Assets</strong> are what the repair work has: <strong>'+dollars(ASSETS_TOTAL)+'</strong>, including the right to use the workspace later. <strong>Liabilities</strong> are what the repair work owes: <strong>'+dollars(LIABILITIES_TOTAL)+'</strong>. And now you know that an asset is a <strong>present right to an economic benefit</strong>, not just a thing.&rdquo;</div></div>'+
-      '<div class="next-phase-msg" style="margin-top:20px">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now you have the two names. <strong>Assets</strong> are what the repair work has: <strong>'+dollars(ASSETS_TOTAL)+'</strong>, including the right to use the workspace later. <strong>Liabilities</strong> are what the repair work owes: <strong>'+dollars(LIABILITIES_TOTAL)+'</strong>. And now you know that an asset is a <strong>present right to an economic benefit</strong>, and a liability is a <strong>present obligation to transfer an economic benefit later</strong>.&rdquo;</div></div>'+
+      '<div class="next-phase-msg" style="margin-top:20px">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   }
-  document.getElementById('nameSteps').innerHTML = html;
+  document.getElementById('nameSteps').innerHTML = backHtml + html;
   if(window.lucide) lucide.createIcons();
 }
 function nameAssets(){ playClick(); assetsNamed=true; excelTab='things'; renderWorkbook('nameWb','name'); renderNameSteps(); }
 function revealRou(){ playClick(); rouRevealed=true; thingsExpanded['RIGHT OF USE']=true; excelTab='things'; renderWorkbook('nameWb','name'); renderNameSteps(); }
 function nameLiabilities(){ playClick(); liabilitiesNamed=true; excelTab='promises'; renderWorkbook('nameWb','name'); renderNameSteps(); }
+function nameBack(){
+  playClick();
+  if(liabilitiesNamed){ liabilitiesNamed=false; }
+  else if(rouRevealed){ rouRevealed=false; }
+  else if(assetsNamed){ assetsNamed=false; }
+  else return;
+  excelTab='things';
+  renderWorkbook('nameWb','name'); renderNameSteps();
+}
 
 /* ===== restart ===== */
 function restart(){
