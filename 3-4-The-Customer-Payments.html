@@ -211,16 +211,8 @@ function renderDepositsClose(){
     '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;So you found two kinds of customer payments. Seven of them were for work you had already finished. That money is yours to keep. Smith&rsquo;s check is the odd one out. He paid you $220 now, but you still owe him the custom frame.<br><br>That means Smith&rsquo;s payment belongs in <strong>two places</strong>. You have the cash, but you also have a promise to keep. Your priced <strong>Things</strong> list doesn&rsquo;t show promises like that, so you need a second list: <strong>promises you still owe</strong>. Start it with Smith&rsquo;s $220.&rdquo;</div>'+
     '<div class="promises-born" style="margin-top:14px;"><div class="promises-born-head">Promises (What I owe)</div><div class="promises-born-body"><div class="promises-line"><span>Smith&rsquo;s frame &mdash; paid $220 up front, not built yet</span><span class="mono">$220</span></div></div></div>'+
     '</div>'+
-    '<div class="mc-card" style="margin-top:20px;"><div class="mc-q">Last week, Jones asked you to build him a custom frame too, and you said you would. But Jones did not put any money down. You only talked about it. Should Jones&rsquo;s frame go on the Promises list?</div><div class="mc-opts" id="jonesOpts">'+
-      '<div class="mc-opt" onclick="answerJones(\'on\')" data-j="on"><div>Yes. You said you would build the frame, so it is a promise.</div></div>'+
-      '<div class="mc-opt" onclick="answerJones(\'off\')" data-j="off"><div>No. Nothing has happened yet to make it something you need to write down.</div></div>'+
-      '</div><div class="feedback" id="jonesFb"></div></div>'+
-    '<div id="jonesInsight" hidden style="margin-top:20px;"></div>'+
-    '<div id="jonesClose" hidden>'+
-      '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>'+
-    '</div>';
+    '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
   document.getElementById('depositsClose').innerHTML = html;
-  if(jonesResolved){ document.getElementById('jonesClose').hidden=false; document.querySelectorAll('#jonesOpts .mc-opt').forEach(function(el){ el.classList.add('locked'); if(el.getAttribute('data-j')==='off') el.classList.add('correct'); }); }
 }
 function answerJones(choice){
   if(jonesResolved) return;
