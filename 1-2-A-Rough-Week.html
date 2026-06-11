@@ -72,6 +72,8 @@ var glossaryGroups = [
     { term:'Promise', def:'Something you&rsquo;ve agreed to do or pay later. The plain word used before the term &ldquo;Liability.&rdquo;' },
     { term:'Deposit', def:'Money paid in advance for something not yet received. For the receiver it&rsquo;s a liability (you owe the goods/work, or the money back), not earnings yet.' }
   ] },
+  /* Module 4 & 5 glossary hidden in Module 1 for now
+
   { module:'Module 4: Keeping the Reasons', terms:[
     { term:'Reason', def:'The why behind a change in a Noncash Asset, Liability, or Cash. One row per side of the change; every change has two sides (the felt beginning of double-entry).' },
     { term:'Contributed', def:'Resources that came into the entity from outside its own repair work (owner cash, equipment, items from home). Formal name later: Contributed Capital.' },
@@ -85,6 +87,7 @@ var glossaryGroups = [
     { term:'Net Assets', def:'The residual for an entity with no owners (charity, university): A &minus; L = Net Assets; split by donor-restriction status. Same &ldquo;definitional difference, not net worth&rdquo; caution as Equities.' },
     { term:'Donor Restrictions', def:'For a nonprofit, strings a donor attaches to a gift. Not liabilities; recorded inside Net Assets.' }
   ] }
+  */
 ];
 
 /* ===== state ===== */
@@ -102,8 +105,7 @@ function renderScenarios() {
     } else if (i === revealed) {
       el.innerHTML = '<button class="reveal-next" onclick="revealNext()">Then what happened next &rarr;</button>';
     } else {
-      el.className = 'scenario-pending';
-      el.textContent = '· · ·';
+      return;
     }
     list.appendChild(el);
   });

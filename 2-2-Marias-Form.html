@@ -16,7 +16,6 @@
     <div class="phase-title-row">
       <div class="phase-title" id="phaseTitle"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <!-- ===== Phase: form ===== -->
@@ -46,6 +45,8 @@
           </div>
         </div>
       </div>
+
+      <div class="btn-row" id="formActions" style="margin-bottom: 20px;"></div>
 
       <div id="transitionNudge" hidden></div>
 
@@ -212,6 +213,7 @@ var paidValues = {};
 var selectedId = null;
 var formDone = false, formFilling = false;
 var formPhase = 'categorize'; // 'categorize' | 'valuate'
+var placementsSnapshot = {}, valuesSnapshot = {}, paidValuesSnapshot = {}; // captured right before "Do the rest"
 var placeable = items.filter(function(i){ return i.category!=='none'; });
 
 /* ===== correctness ===== */
@@ -361,6 +363,7 @@ function renderForm(){
     document.getElementById('gateCard').hidden = formDone || formFilling;
     updateGate();
   }
+  renderFormActions();
 }
 function updateTotalsOnly(){
   categoryDefs.forEach(function(cat){
@@ -381,11 +384,12 @@ function updateGate(){
   var btn = document.getElementById('doRestBtn');
   btn.disabled = !met;
   var gate = document.getElementById('gateCard');
-  gate.classList.toggle('gate-armed', met);
+  gate.classList.toggle('gate-armed-maria', met);
   gate.querySelector('.gate-card-title').textContent = met
     ? 'The pattern’s clear — you’ve valued one item in every section. Finish the rest the same way.'
     : 'Correctly group and identify dollar value(s) for at least one item in each section to unlock the rest:';
   document.getElementById('laptopNudge').hidden = !(placements['laptop']==='computer' && !isValCorrect('laptop') && !formDone);
+  renderFormActions();
 }
 function showMariaTransitionNudge(){
   // Check if all items have been placed in at least one category
@@ -453,6 +457,9 @@ function placeItem(id, catId){
 function doTheRest(){
   if(formDone||formFilling||!formTriggerMet()) return;
   playClick();
+  placementsSnapshot = Object.assign({}, placements);
+  valuesSnapshot = Object.assign({}, values);
+  paidValuesSnapshot = Object.assign({}, paidValues);
   formFilling=true;
   selectedId=null;
   document.getElementById('gateCard').hidden=true;
@@ -539,6 +546,62 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 /* ===== standalone-phase overrides ===== */
 function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
 function restart(){ window.location.reload(); }
+
+/* ===== reset / back (page-aware) ===== */
+function resetForm(){
+  if(formPhase === 'categorize'){
+    restart(); // page 1: reload so the list can be sorted again
+    return;
+  }
+  // page 2 or 3: go back to the original (un-filled) valuate form
+  playClick();
+  if(formDone){ placements = Object.assign({}, placementsSnapshot); } // drop the "Do the rest" auto-placements, restore your own sorting
+  values = {}; paidValues = {};
+  formDone = false; formFilling = false;
+  document.getElementById('systemBanner').hidden = true;
+  document.getElementById('formDoneBlock').hidden = true;
+  document.getElementById('laptopNudge').hidden = true;
+  renderForm();
+}
+function backToCategorize(){
+  // page 2 -> page 1: keep the sorting, drop the value inputs
+  playClick();
+  formPhase = 'categorize';
+  document.getElementById('narrativeBlock').innerHTML = '<p>Maria&rsquo;s form has four sections: Equipment, Computer Equipment, Supplies, Fixtures. <strong>Drag</strong> each item from your list into the correct section.</p>';
+  document.getElementById('laptopNudge').hidden = true;
+  renderForm();
+}
+function backToValuate(){
+  // page 3 -> page 2 with the record you had before "Do the rest"
+  playClick();
+  placements = Object.assign({}, placementsSnapshot);
+  values = Object.assign({}, valuesSnapshot);
+  paidValues = Object.assign({}, paidValuesSnapshot);
+  formDone = false; formFilling = false;
+  document.getElementById('systemBanner').hidden = true;
+  document.getElementById('formDoneBlock').hidden = true;
+  renderForm();
+}
+function renderFormActions(){
+  var el = document.getElementById('formActions');
+  if(!el) return;
+  var back = '', reset = '';
+  if(formPhase === 'categorize'){
+    // page 1: Reset appears at the same time as the "Add dollar values" button (every section has an item)
+    var addValuesShown = categoryDefs.every(function(cat){ return placeable.filter(function(i){ return placements[i.id]===cat.id; }).length > 0; });
+    if(addValuesShown) reset = '<button class="btn-reset" onclick="resetForm()">Reset</button>';
+  } else if(formDone){
+    // page 3: Back only (no Reset)
+    back = '<button class="btn-reset" onclick="backToValuate()"><i data-lucide="arrow-left" class="licon"></i> Back</button>';
+  } else {
+    // page 2: Back always; Reset appears once "Do the rest" lights up (gate met)
+    back = '<button class="btn-reset" onclick="backToCategorize()"><i data-lucide="arrow-left" class="licon"></i> Back</button>';
+    if(formTriggerMet()) reset = '<button class="btn-reset" onclick="resetForm()">Reset</button>';
+  }
+  el.style.justifyContent = (back && reset) ? 'space-between' : (back ? 'flex-start' : 'flex-end');
+  el.innerHTML = back + reset;
+  if(window.lucide) lucide.createIcons();
+}
 
 /* ===== segmented progress ===== */
 var PHASE_INDEX = 1;
