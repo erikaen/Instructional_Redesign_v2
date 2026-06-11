@@ -526,14 +526,14 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
 var __origContBtn = contBtn;
 contBtn = function(label, onclick){
-  if(onclick && onclick.indexOf('goto(') >= 0) return '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+  if(onclick && onclick.indexOf('goto(') >= 0) return '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   return __origContBtn(label, onclick);
 };
 function restart(){ window.location.reload(); }
 
 /* ===== segmented progress ===== */
 var PHASE_INDEX = 3;
-var PHASE_TITLE = 'The Net Movers';
+var PHASE_TITLE = '';
 function renderSegProgress(){
   document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 }

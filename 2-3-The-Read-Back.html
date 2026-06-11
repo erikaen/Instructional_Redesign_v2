@@ -27,7 +27,7 @@
       </div>
       <div class="dialog-box maria" id="readbackMaria"></div>
       <div class="narrative-block"><p>Maria packs up, hands you a copy of the form, and heads out. The doorbell jingles closed behind her.</p></div>
-      <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>
+      <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
     </div>
 
   </div>
@@ -161,7 +161,7 @@ function restart(){ window.location.reload(); }
 
 /* ===== segmented progress ===== */
 var PHASE_INDEX = 2;
-var PHASE_TITLE = 'The Read-Back';
+var PHASE_TITLE = '';
 function renderSegProgress(){
   document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 }

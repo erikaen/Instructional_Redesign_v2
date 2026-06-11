@@ -37,7 +37,7 @@
           <li>Some changes just shuffle; a few actually move your <em>net</em>, and those sort into two plain kinds.</li>
         </ul>
       </div>
-      <div class="next-phase-msg">You’ve finished this section — click <strong>Next</strong> to continue.</div>
+      <div class="next-phase-msg">You’ve finished this section — click <strong>Next -&gt;</strong> to continue.</div>
     </div>
 
   </div>
@@ -538,14 +538,14 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
 var __origContBtn = contBtn;
 contBtn = function(label, onclick){
-  if(onclick && onclick.indexOf('goto(') >= 0) return '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+  if(onclick && onclick.indexOf('goto(') >= 0) return '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   return __origContBtn(label, onclick);
 };
 function restart(){ window.location.reload(); }
 
 /* ===== segmented progress ===== */
 var PHASE_INDEX = 0;
-var PHASE_TITLE = 'Why Keep the Reasons';
+var PHASE_TITLE = '';
 function renderSegProgress(){
   document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 }
