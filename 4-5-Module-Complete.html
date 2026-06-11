@@ -38,7 +38,7 @@
         <p>You have three things now: what you have, what you owe, and the reasons your net moved. In Module 5 you&rsquo;ll lay them out on one page, watch how they fit together &mdash; and the names you&rsquo;ve been circling finally arrive.</p>
         <p><strong>Next: Module 5 &mdash; Naming What You Built</strong></p>
       </div>
-      <div class="next-phase-msg">You’ve finished this module — click <strong>Next</strong> to continue.</div>
+      <div class="next-phase-msg">You’ve finished this module — click <strong>Next -&gt;</strong> to continue.</div>
     </div>
 
   </div>
@@ -539,7 +539,7 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
 var __origContBtn = contBtn;
 contBtn = function(label, onclick){
-  if(onclick && onclick.indexOf('goto(') >= 0) return '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+  if(onclick && onclick.indexOf('goto(') >= 0) return '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   return __origContBtn(label, onclick);
 };
 function restart(){ window.location.reload(); }

@@ -45,7 +45,7 @@
 if (window.lucide) lucide.createIcons();
 
 var PHASE_INDEX = 4;
-var PHASE_TITLE = 'The Credit Card Statement';
+var PHASE_TITLE = '';
 
 /* ===== sound ===== */
 var audioCtx = null;
@@ -212,7 +212,7 @@ function renderCardSort(){
       : (cardMCQWrongSelected ? '<div class="feedback err show">'+mcqWrongFb[cardMCQWrongSelected]+'</div>' : '<div class="feedback"></div>');
     html += '<div class="mc-card" style="margin-top:20px;"><div class="mc-q">How much of the ending balance is still owed specifically because of the <strong>repair work</strong>?</div><div class="mc-opts">'+mcqOptsHtml+'</div>'+mcqFbHtml+'</div>';
     if(cardMCQCorrect){
-      html += '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+      html += '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
     }
   }
   document.getElementById('cardArea').innerHTML = html;

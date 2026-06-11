@@ -56,7 +56,7 @@
 if (window.lucide) lucide.createIcons();
 
 var PHASE_INDEX = 1;
-var PHASE_TITLE = 'Find the Net';
+var PHASE_TITLE = '';
 
 /* ===== sound ===== */
 var audioCtx = null;
@@ -256,7 +256,7 @@ function revealNet(){
   var close = document.getElementById('netClose');
   close.hidden = false;
   close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Your net is '+d(NET)+'</div><p>What&rsquo;s left when Liabilities come out of Assets. Hold onto that number.</p></div>'+
-    '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+    '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   if(window.lucide) lucide.createIcons();
 }
 

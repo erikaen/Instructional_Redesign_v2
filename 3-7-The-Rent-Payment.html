@@ -52,7 +52,7 @@
 <script>
 if (window.lucide) lucide.createIcons();
 
-var PHASE_TITLE = 'The Rent Payment';
+var PHASE_TITLE = '';
 
 /* ===== sound ===== */
 var audioCtx = null;
@@ -145,7 +145,7 @@ function answerRent(id){
     fb.innerHTML='Correct. The bank statement showed one $1,300 payment. The lease agreement shows that $650 was for May, and $650 was paid ahead for the final month of the lease.';
     var close=document.getElementById('rentClose'); close.hidden=false;
     close.innerHTML = '<div class="insight-box" style="margin-top:20px"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Something You Still Have</div><p>The bank statement only showed $1,300 going out. The lease agreement shows something more: $650 of that payment was for May, and the other $650 is still useful after May. It represents a <strong>present right to use the workspace in the future</strong>.</p></div>'+
-      '<div class="next-phase-msg" style="margin-top:20px">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+      '<div class="next-phase-msg" style="margin-top:20px">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
     if(window.lucide) lucide.createIcons();
   } else {
     playNope(); el.classList.add('wrong');

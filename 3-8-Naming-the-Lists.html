@@ -41,7 +41,7 @@
 <script>
 if (window.lucide) lucide.createIcons();
 
-var PHASE_TITLE = 'Naming the Lists';
+var PHASE_TITLE = '';
 
 /* ===== sound ===== */
 var audioCtx = null;
@@ -202,7 +202,7 @@ function renderNameSteps(){
       '<button class="btn-continue btn-block" style="margin-top:20px" onclick="nameLiabilities()">Rename Promises to Liabilities</button>';
   } else {
     html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now you have the two names. <strong>Assets</strong> are what the repair work has: <strong>'+dollars(ASSETS_TOTAL)+'</strong>, including the right to use the workspace later. <strong>Liabilities</strong> are what the repair work owes: <strong>'+dollars(LIABILITIES_TOTAL)+'</strong>. And now you know that an asset is a <strong>present right to an economic benefit</strong>, not just a thing.&rdquo;</div></div>'+
-      '<div class="next-phase-msg" style="margin-top:20px">You&rsquo;ve finished this section &mdash; click <strong>Next</strong> to continue.</div>';
+      '<div class="next-phase-msg" style="margin-top:20px">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   }
   document.getElementById('nameSteps').innerHTML = html;
   if(window.lucide) lucide.createIcons();
