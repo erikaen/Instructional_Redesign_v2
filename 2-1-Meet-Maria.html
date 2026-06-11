@@ -220,7 +220,7 @@ function restart(){
 
 /* ===== welcome xlsx ===== */
 function renderWelcomeXlsx(){
-  var rows = '<div class="xlsx-row"><div class="xlsx-corner"></div><div class="xlsx-colhead">Things (what I have for the repair work)</div></div>';
+  var rows = '<div class="xlsx-row"><div class="xlsx-corner"></div><div class="xlsx-colhead">Things that belong to the repair work</div></div>';
   welcomeVisibleIds.forEach(function(id,r){
     rows += '<div class="xlsx-row"><div class="xlsx-rownum">'+(r+1)+'</div><div class="xlsx-cell">'+findItem(id).name+'</div></div>';
   });
