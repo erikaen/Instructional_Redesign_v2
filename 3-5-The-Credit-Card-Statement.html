@@ -16,7 +16,6 @@
     <div class="phase-title-row">
       <div class="phase-title" id="phaseTitle"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <div class="narrative-block"><p>You open your personal credit card statement for May and compare it with the Excel workbook you&rsquo;ve been building.</p></div>
@@ -105,7 +104,7 @@ function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
 
 /* ===== state ===== */
 var cardClass = {}, cardExpandedId = null, cardSortChecked = false, cardSortAutoDone = false, hintSeen = false;
-var cardMCQCorrect = false, cardMCQWrongSelected = null;
+var cardMCQSel = null, cardMCQSubmitted = false;
 
 /* ===== generic statement ===== */
 function renderStatement(rows, opts){
@@ -193,25 +192,36 @@ function renderCardSort(){
     catA:{id:'repair',label:'Repair'}, catB:{id:'personal',label:'Personal'},
     allCorrect:cardSortChecked && wrongIds.length===0 });
 
+  if(correctCount>=4 && hasR && hasP){
+    html += '<div class="btn-row" style="justify-content: flex-end; margin-top: 16px;"><button class="btn-reset" onclick="restart()">Reset</button></div>';
+  }
+
   if(cardSortChecked && wrongIds.length===0){
     html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Good. Now we can see which rows belong to the repair work and which ones belong to your personal life. But look at the card&rsquo;s ending balance: <strong>$1,460.00</strong>. That is the <strong>total</strong> amount still owed on the card. The question now is how much of that balance belongs to the repair work.&rdquo;</div></div>';
     var mcqWrongFb = {
       'a': 'Not quite. $1,460.00 is the total amount still owed on the card, but it includes $230.00 of personal spending.',
       'c': 'Not quite. $2,030.00 is the total repair-related amount charged to the card before the two $400 payments.'
     };
+    var mcqCorrect = cardMCQSubmitted && cardMCQSel==='b';
     var mcqOpts = [{id:'a',text:'$1,460.00'},{id:'b',text:'$1,230.00'},{id:'c',text:'$2,030.00'}];
     var mcqOptsHtml = mcqOpts.map(function(o){
       var cls = 'mc-opt';
-      if(cardMCQCorrect){ cls += (o.id==='b' ? ' correct locked' : ' locked'); }
-      else if(cardMCQWrongSelected === o.id){ cls += ' wrong'; }
-      var onclick = cardMCQCorrect ? '' : ' onclick="answerCardMCQ(\''+o.id+'\')"';
+      if(cardMCQSubmitted){ cls += ' locked'; if(o.id===cardMCQSel) cls += (mcqCorrect ? ' correct' : ' wrong'); }
+      else if(cardMCQSel === o.id){ cls += ' selected'; }
+      var onclick = cardMCQSubmitted ? '' : ' onclick="selectCardMCQ(\''+o.id+'\')"';
       return '<div class="'+cls+'"'+onclick+' data-id="'+o.id+'"><div class="mc-letter">'+o.id.toUpperCase()+'</div><div>'+o.text+'</div></div>';
     }).join('');
-    var mcqFbHtml = cardMCQCorrect
-      ? '<div class="feedback ok show">Correct. The ending balance is $1,460.00, but $230.00 came from personal spending. The amount still owed for the repair work is $1,230.00.</div>'
-      : (cardMCQWrongSelected ? '<div class="feedback err show">'+mcqWrongFb[cardMCQWrongSelected]+'</div>' : '<div class="feedback"></div>');
-    html += '<div class="mc-card" style="margin-top:20px;"><div class="mc-q">How much of the ending balance is still owed specifically because of the <strong>repair work</strong>?</div><div class="mc-opts">'+mcqOptsHtml+'</div>'+mcqFbHtml+'</div>';
-    if(cardMCQCorrect){
+    var mcqFbHtml = '<div class="feedback"></div>';
+    if(cardMCQSubmitted){
+      mcqFbHtml = mcqCorrect
+        ? '<div class="feedback ok show">Correct. The ending balance is $1,460.00, but $230.00 came from personal spending. The amount still owed for the repair work is $1,230.00.</div>'
+        : '<div class="feedback err show">'+mcqWrongFb[cardMCQSel]+'</div>';
+    }
+    var mcqBtns = cardMCQSubmitted
+      ? '<div class="btn-row" style="margin-top:14px;"><button class="btn-reset" onclick="resetCardMCQ()" style="margin-left:auto;">Reset</button></div>'
+      : '<div class="btn-row" style="margin-top:14px;"><button class="btn-continue" onclick="submitCardMCQ()"'+(cardMCQSel?'':' disabled')+'>Submit</button></div>';
+    html += '<div class="mc-card" style="margin-top:20px;"><div class="mc-q">How much of the ending balance is still owed specifically because of the <strong>repair work</strong>?</div><div class="mc-opts">'+mcqOptsHtml+'</div>'+mcqFbHtml+mcqBtns+'</div>';
+    if(mcqCorrect){
       html += '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
     }
   }
@@ -222,12 +232,14 @@ function toggleCardDesc(id){ hintSeen=true; cardExpandedId = (cardExpandedId===i
 function classifyCard(id, kind){ cardClass[id]=kind; cardExpandedId=null; playClick(); renderCardSort(); }
 function checkCardSort(){ cardSortChecked=true; playClick(); renderCardSort(); }
 function cardAutocomplete(){ playClick(); cardTxns.forEach(function(t){ if(!cardClass[t.id]) cardClass[t.id]=t.cat; }); cardSortAutoDone=true; cardExpandedId=null; playSuccess(); renderCardSort(); }
-function answerCardMCQ(id){ if(cardMCQCorrect) return; if(id==='b'){ cardMCQCorrect=true; playSuccess(); } else { cardMCQWrongSelected=id; playNope(); } renderCardSort(); }
+function selectCardMCQ(id){ if(cardMCQSubmitted) return; cardMCQSel=id; renderCardSort(); }
+function submitCardMCQ(){ if(cardMCQSubmitted || !cardMCQSel) return; cardMCQSubmitted=true; if(cardMCQSel==='b') playSuccess(); else playNope(); renderCardSort(); }
+function resetCardMCQ(){ cardMCQSubmitted=false; cardMCQSel=null; renderCardSort(); }
 
 /* ===== restart ===== */
 function restart(){
   cardClass={}; cardExpandedId=null; cardSortChecked=false; cardSortAutoDone=false; hintSeen=false;
-  cardMCQCorrect=false; cardMCQWrongSelected=null;
+  cardMCQSel=null; cardMCQSubmitted=false;
   renderCardSort(); scrollTo(0,0);
 }
 

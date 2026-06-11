@@ -16,7 +16,6 @@
     <div class="phase-title-row">
       <div class="phase-title" id="phaseTitle"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <div class="narrative-block"><p>The Cash sheet shows eight customer deposits during May, but it does not tell you what each customer paid for.</p></div>
@@ -128,7 +127,7 @@ var bikeRepairCashFlows = [
 ];
 
 /* ===== state ===== */
-var depositAnswers = {}, currentDeposit = 0;
+var depositAnswers = {}, depositSel = {}, currentDeposit = 0;
 var jonesResolved = false;
 
 /* ===== cash sheet panel ===== */
@@ -159,23 +158,31 @@ function showReceipts(){ playClick(); document.getElementById('showReceiptsBtn')
 function renderDeposits(){
   if(document.getElementById('depWrap').hidden) return;
   var d = deposits[currentDeposit];
-  var ans = depositAnswers[d.id]; var locked = ans===d.correct;
+  var submitted = depositAnswers[d.id]!==undefined;
+  var ans = depositAnswers[d.id];
+  var sel = depositSel[d.id];
+  var correct = submitted && ans===d.correct;
   var rows = d.lineItems.map(function(li){ return '<tr><td>'+li.name+'</td><td class="num">$'+li.amount+'.00</td></tr>'; }).join('');
   var choices = ['done','tocome'].map(function(ch){
-    var c='dep-choice'; if(locked && ans===ch) c+=' correct'; else if(!locked && ans===ch) c+=' wrong'; else if(ans===ch) c+=' sel';
-    return '<button class="'+c+'" onclick="answerDeposit(\''+d.id+'\',\''+ch+'\')"'+(locked?' disabled':'')+'>'+optionLabels[ch]+'</button>';
+    var c='dep-choice';
+    if(submitted){ if(ch===ans) c += (correct ? ' correct' : ' wrong'); }
+    else if(sel===ch){ c += ' sel'; }
+    var click = submitted ? '' : ' onclick="selectDeposit(\''+d.id+'\',\''+ch+'\')"';
+    return '<button class="'+c+'"'+click+(submitted?' disabled':'')+'>'+optionLabels[ch]+'</button>';
   }).join('');
   var fb='';
-  if(ans){
-    var errStyle = locked ? '' : ' style="background:var(--error-bg); border-color:var(--error-border); color:var(--error-text);"';
-    fb = '<div class="dep-fb '+(locked?'ok':'err')+'"'+errStyle+'>'+d.annaSays[ans]+'</div>';
+  if(submitted){
+    var errStyle = correct ? '' : ' style="background:var(--error-bg); border-color:var(--error-border); color:var(--error-text);"';
+    fb = '<div class="dep-fb '+(correct?'ok':'err')+'"'+errStyle+'>'+d.annaSays[ans]+'</div>';
   }
 
   var isFirst = currentDeposit===0;
   var isLast = currentDeposit===deposits.length-1;
-  var backBtn = isFirst ? '<span></span>' : '<button class="btn-continue" onclick="prevDeposit()">&larr; Back</button>';
-  var nextBtn = isLast ? '' : '<button class="btn-continue" onclick="nextDeposit()"'+(locked?'':' disabled')+'>Next &rarr;</button>';
-  var nav = '<div style="display:flex; justify-content:space-between; gap:8px; margin-top:14px;">'+backBtn+nextBtn+'</div>';
+  var backBtn = isFirst ? '' : '<button class="btn-continue" onclick="prevDeposit()">&larr; Back</button>';
+  var submitBtn = submitted ? '' : '<button class="btn-continue" onclick="submitDeposit(\''+d.id+'\')"'+(sel?'':' disabled')+'>Submit</button>';
+  var resetBtn = submitted ? '<button class="btn-reset" onclick="resetDeposit(\''+d.id+'\')">Reset</button>' : '';
+  var nextBtn = isLast ? '' : '<button class="btn-continue" onclick="nextDeposit()"'+(correct?'':' disabled')+'>Next &rarr;</button>';
+  var nav = '<div style="display:flex; justify-content:space-between; gap:8px; margin-top:14px;"><div style="display:flex; gap:8px;">'+backBtn+submitBtn+'</div><div style="display:flex; gap:8px;">'+resetBtn+nextBtn+'</div></div>';
 
   var html = '<div class="dep-card">'+
     '<div style="font-size:var(--font-xs); text-transform:uppercase; letter-spacing:0.5px; color:#888; font-weight:700; margin-bottom:10px;">Receipt '+(currentDeposit+1)+' of '+deposits.length+'</div>'+
@@ -191,11 +198,23 @@ function renderDeposits(){
   if(allCorrect && !closeEl.innerHTML.trim()) renderDepositsClose();
   if(window.lucide) lucide.createIcons();
 }
-function answerDeposit(id, choice){
+function selectDeposit(id, ch){
+  if(depositAnswers[id]!==undefined) return; // already submitted; reset to change
+  depositSel[id]=ch;
+  renderDeposits();
+}
+function submitDeposit(id){
+  if(depositAnswers[id]!==undefined) return;
+  var ch = depositSel[id];
+  if(!ch) return;
   var d = deposits.find(function(x){return x.id===id;});
-  if(depositAnswers[id]===d.correct) return;
-  depositAnswers[id]=choice;
-  if(choice===d.correct) playSuccess(); else playNope();
+  depositAnswers[id]=ch;
+  if(ch===d.correct) playSuccess(); else playNope();
+  renderDeposits();
+}
+function resetDeposit(id){
+  delete depositAnswers[id];
+  delete depositSel[id];
   renderDeposits();
 }
 function nextDeposit(){
@@ -241,7 +260,7 @@ function answerJones(choice){
 
 /* ===== restart ===== */
 function restart(){
-  depositAnswers={}; currentDeposit=0; jonesResolved=false;
+  depositAnswers={}; depositSel={}; currentDeposit=0; jonesResolved=false;
   document.getElementById('depWrap').hidden=true;
   var dc=document.getElementById('depositsClose'); dc.hidden=true; dc.innerHTML='';
   document.getElementById('showReceiptsBtn').style.display='';

@@ -16,7 +16,6 @@
     <div class="phase-title-row">
       <div class="phase-title" id="phaseTitle"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <div class="dialog-box anna">
@@ -29,6 +28,7 @@
       <div class="mc-opts" id="cashOpts"></div>
       <div class="feedback" id="cashFb"></div>
     </div>
+    <div class="btn-row" id="cashBtnRow" style="margin-top: 20px;"><button class="btn-continue" id="cashSubmit" onclick="submitCash()" disabled>Submit</button><button class="btn-reset" id="cashReset" onclick="resetCash()" style="display:none; margin-left:auto;">Reset</button></div>
     <div id="cashClose" hidden style="margin-top: 20px;">
       <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
     </div>
@@ -119,7 +119,7 @@ function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:
 function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
 
 /* ===== state ===== */
-var cashCorrect = false;
+var cashSel = null, cashSubmitted = false;
 var excelTab = 'cash', thingsExpanded = {};
 var curWb = null;
 
@@ -190,18 +190,27 @@ function renderCashQuiz(){
     {id:'b',text:'No. Since customers paid money during May, the repair work must be doing fine.'},
     {id:'c',text:'Not from the Cash sheet alone. We need to know what the money came in for and what the money went out for.'} ];
   document.getElementById('cashOpts').innerHTML = opts.map(function(o){
-    return '<div class="mc-opt" data-id="'+o.id+'" onclick="answerCash(\''+o.id+'\')"><div class="mc-letter">'+o.id.toUpperCase()+'</div><div>'+o.text+'</div></div>';
+    return '<div class="mc-opt" data-id="'+o.id+'" onclick="selectCash(\''+o.id+'\')"><div class="mc-letter">'+o.id.toUpperCase()+'</div><div>'+o.text+'</div></div>';
   }).join('');
 }
-function answerCash(id){
-  if(cashCorrect) return;
+function selectCash(id){
+  if(cashSubmitted) return;
+  cashSel = id;
+  document.querySelectorAll('#cashOpts .mc-opt').forEach(function(el){ el.classList.toggle('selected', el.getAttribute('data-id')===id); });
+  document.getElementById('cashSubmit').disabled = false;
+  document.getElementById('cashFb').classList.remove('show');
+}
+function submitCash(){
+  if(cashSel===null || cashSubmitted) return;
   var fb = document.getElementById('cashFb');
-  document.querySelectorAll('#cashOpts .mc-opt').forEach(function(el){ el.classList.remove('selected','wrong'); });
-  var el = document.querySelector('#cashOpts .mc-opt[data-id="'+id+'"]');
-  if(id==='c'){
-    playSuccess(); cashCorrect=true;
+  cashSubmitted = true;
+  document.querySelectorAll('#cashOpts .mc-opt').forEach(function(el){ el.classList.add('locked'); });
+  document.getElementById('cashSubmit').style.display='none';
+  document.getElementById('cashReset').style.display='';
+  var el = document.querySelector('#cashOpts .mc-opt[data-id="'+cashSel+'"]');
+  if(cashSel==='c'){
+    playSuccess();
     el.classList.add('correct');
-    document.querySelectorAll('#cashOpts .mc-opt').forEach(function(x){ x.classList.add('locked'); });
     fb.className='feedback ok show';
     fb.innerHTML='Right. Cash isn&rsquo;t the whole story. Some of what went out bought you things you still have. Some of what came in came with strings attached. The Cash sheet alone can&rsquo;t tell us what happened. We have to go through it line by line. Let&rsquo;s start with the money coming in.';
     document.getElementById('cashClose').hidden=false;
@@ -209,19 +218,19 @@ function answerCash(id){
     playNope();
     el.classList.add('wrong');
     fb.className='feedback err show';
-    fb.innerHTML = id==='a'
+    fb.innerHTML = cashSel==='a'
       ? 'Careful. A negative cash flow does not automatically mean the repair work is worse off. Some of the cash that went out bought things you still have, like the repair stand, fixtures, and parts on the shelf. To know what happened, we need to look at what each cash outflow was for.'
       : 'Not quite. Customer payments came in, but that does not automatically mean the repair work is better off. Some cash can come with strings attached. Smith&rsquo;s $220, for example, was a deposit for work you still have to do. To know what happened, we need to look at what each cash inflow was for.';
   }
 }
-
-/* ===== restart ===== */
-function restart(){
-  cashCorrect=false;
+function resetCash(){
+  cashSel=null; cashSubmitted=false;
+  document.getElementById('cashReset').style.display='none';
+  document.getElementById('cashSubmit').style.display='';
+  document.getElementById('cashSubmit').disabled=true;
   document.getElementById('cashClose').hidden=true;
-  renderWorkbook('cashWb','cash');
+  document.getElementById('cashFb').classList.remove('show');
   renderCashQuiz();
-  scrollTo(0,0);
 }
 
 /* ===== glossary ===== */
