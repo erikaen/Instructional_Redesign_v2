@@ -2271,6 +2271,9 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .gate-list li { display: flex; gap: 8px; }
 .gate-armed { background: var(--warn-bg); border: 1px solid var(--accent); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
 .gate-armed p { font-size: var(--font-m); color: #374151; line-height: 1.6; margin-bottom: 8px; }
+.gate-armed-maria { background: var(--primary-faint); border: 1px solid var(--primary); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+.gate-armed-maria p { font-size: var(--font-m); color: #374151; line-height: 1.6; margin-bottom: 8px; }
+@media (prefers-color-scheme: dark) { .gate-armed-maria { background: #32303c; border-color: var(--primary); } .gate-armed-maria p { color: #c8ccd8; } }
 
 /* ----- Document facsimile popups (receipt / credit card / eBay) ----- */
 .doc-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 200; overflow: auto; }
