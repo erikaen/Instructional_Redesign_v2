@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.1: The Two You's</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.1: The Two You&rsquo;s</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart" aria-label="Restart tutorial" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle"></div>
+
+    <!-- ===== welcome ===== -->
+    <div class="phase active" id="phase-welcome">
+      <div class="narrative-block">
+        <p>The repair work has grown. More gear, more cash through the door, more customers than the month you started. Your books &mdash; <span class="mono">Bike-Repair.xlsx</span> &mdash; have kept the operation separate from your personal life since the very first week.</p>
+        <p>Then <strong>Maria</strong>, your insurance agent, calls back &mdash; with a question that has nothing to do with property, and everything to do with where <em>the repair work</em> ends and <em>you</em> begin.</p>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You&rsquo;ll Work Out</div>
+        <ul class="bullet-list">
+          <li>What Maria is really warning you about &mdash; and why a policy alone won&rsquo;t fix it.</li>
+          <li>Who, besides you, actually sees the repair work as separate from your own pocket.</li>
+          <li>What it would take to make that separation more than a habit.</li>
+        </ul>
+      </div>
+      <button class="btn-continue btn-block" onclick="goto('exposure')">Begin &rarr;</button>
+    </div>
+
+    <!-- ===== exposure ===== -->
+    <div class="phase" id="phase-exposure">
+      <div class="dialog-box maria">
+        <div class="dialog-label">MARIA</div>
+        <div class="dialog-text">&ldquo;Your property&rsquo;s well covered. But there&rsquo;s something the property policy never touched &mdash; and the bigger you get, the more it nags at me. <strong>Liability.</strong>&rdquo;<br><br>&ldquo;Say a bike you repaired fails on the road, and <strong>Smith</strong> &mdash; your customer &mdash; gets hurt. Smith doesn&rsquo;t sue &lsquo;the repair work.&rsquo; Smith sues <strong>you</strong>.&rdquo;</div>
+      </div>
+      <div id="exposureArea"></div>
+    </div>
+
+    <!-- ===== whoSeesTwo ===== -->
+    <div class="phase" id="phase-whoSeesTwo">
+      <div class="narrative-block">
+        <p>That stopped you &mdash; because in <em>your</em> books, the repair work and your personal life are clearly two different things. You&rsquo;ve kept them apart since day one: sorting that one co-mingled card by purpose every month, keeping a separate list, running a net. On paper, there are two of you. <strong>So why could Smith&rsquo;s claim cross over?</strong></p>
+      </div>
+      <div class="callout">Tap each one. <strong>Who treats the repair work as separate from you?</strong></div>
+      <div id="observerArea"></div>
+    </div>
+
+    <!-- ===== twoHats ===== -->
+    <div class="phase" id="phase-twoHats">
+      <div class="narrative-block">
+        <p>So there have been <strong>two of you</strong> all along &mdash; but only in a way you&rsquo;ve kept by hand. The <strong>person</strong>, and the <strong>operation</strong>. Same head, two hats.</p>
+        <p>Your books drew one line. What would it take for the bank, the customer, and the law to see two &mdash; the way your books do?</p>
+      </div>
+      <div id="twoHatsArea"></div>
+    </div>
+
+    <!-- ===== complete ===== -->
+    <div class="phase" id="phase-complete">
+      <div class="complete-head">
+        <div class="trophy-badge"><i data-lucide="puzzle"></i></div>
+        <div class="complete-title">The line you drew isn&rsquo;t the only line</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You Worked Out</div>
+        <ul class="bullet-list check">
+          <li>The separation you&rsquo;ve kept in your books since 1.1 is real &mdash; but informal, with no legal force.</li>
+          <li>To you it&rsquo;s two things; to the bank, the customer, and the law, it&rsquo;s one person.</li>
+          <li>A liability policy pays a claim. It does not build a wall between the repair work and your personal life.</li>
+          <li>That wall is a different kind of line &mdash; a legal one &mdash; and it has a name: an LLC.</li>
+        </ul>
+      </div>
+      <div class="insight-box">
+        <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
+        <p>You&rsquo;ve been keeping two you&rsquo;s apart by hand. What you don&rsquo;t have yet is a <strong>second line &mdash; a legal one</strong> &mdash; beside the line you drew in your books back in 1.1. They&rsquo;re two different lines, drawn for two different reasons. Next, you&rsquo;ll draw the legal one.</p>
+      </div>
+      <div class="next-card">
+        <div class="next-card-label">Coming Next &mdash; 2.2: Filing for a Legal Body</div>
+        <p>Anna&rsquo;s helped set up an LLC before &mdash; she did City Cycle&rsquo;s with the owner. She&rsquo;ll walk you through filing the one piece of paper that brings a legal body into existence.</p>
+      </div>
+      <div class="btn-row">
+        <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Restart</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var businessThings = ["Tools &amp; repair equipment","Parts on the shelf","Fixtures","Laptop","Prepaid rent"];
+var personalThings = ["Your savings","Your car","Your earnings"];
+
+var observers = [
+  { id:"books", who:"Your books", sub:"Bike-Repair.xlsx", sees:"two", verdict:"Sees TWO",
+    reason:"You drew the line yourself &mdash; sorting that one co-mingled card by purpose every month, keeping the Things list, running a net. The separation is real. But it&rsquo;s yours." },
+  { id:"bank", who:"The bank", sub:"your card &amp; account", sees:"one", verdict:"Sees ONE",
+    reason:"The card and the account are in your personal name. To the bank, every charge &mdash; chain lube or groceries &mdash; is yours." },
+  { id:"customer", who:"A customer", sub:"Smith", sees:"one", verdict:"Sees ONE",
+    reason:"Smith hired you. The receipt carries your name, not a separate legal one. There is no &ldquo;repair work&rdquo; for Smith to deal with &mdash; only you." },
+  { id:"law", who:"The law", sub:"a court", sees:"one", verdict:"Sees ONE",
+    reason:"In the eyes of the law there is one person here. No document anywhere says the repair work is anything separate from you." }
+];
+
+var glossaryTerms = [
+  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the repair work&rsquo;s tools and parts." },
+  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything the repair work owns." },
+  { term:"LLC", def:"Limited Liability Company &mdash; a legal form that can hold the operation and stand as a wall between a claim and your personal life. Maria names it here; you form one next." }
+];
+
+/* ===== state ===== */
+var phaseOrder = ['welcome','exposure','whoSeesTwo','twoHats','complete'];
+var phaseTitles = {
+  'welcome':    'The Call from Maria',
+  'exposure':   'Follow the Claim',
+  'whoSeesTwo': 'Who Sees Two?',
+  'twoHats':    'Same Head, Two Hats',
+  'complete':   'Complete'
+};
+var highestPhase = 0;
+var claimStep = 0;       /* exposure: 0 none, 1 reached the repair work, 2 crossed to personal */
+var openedObs = [];      /* whoSeesTwo: ids of observer cards opened */
+var wantRevealed = false;/* twoHats: the second-line reveal */
+
+/* ===== phase nav ===== */
+function renderPhaseTitle(p){
+  document.getElementById('phaseTitle').textContent = phaseTitles[p] || '';
+}
+function goto(p){
+  playClick();
+  var idx = phaseOrder.indexOf(p);
+  if(idx > highestPhase) highestPhase = idx;
+  phaseOrder.forEach(function(ph){ document.getElementById('phase-'+ph).classList.toggle('active', ph===p); });
+  renderPhaseTitle(p);
+  window.scrollTo(0,0);
+  if(p==='exposure') renderExposure();
+  if(p==='whoSeesTwo') renderObservers();
+  if(p==='twoHats') renderTwoHats();
+  if(window.lucide) lucide.createIcons();
+}
+function restart(){
+  highestPhase=0;
+  claimStep=0; openedObs=[]; wantRevealed=false;
+  goto('welcome');
+}
+
+/* ===== exposure: follow the claim ===== */
+function renderExposure(){
+  var bizReached = claimStep>=1, youReached = claimStep>=2;
+  var reached = ' style="border-color:var(--error-border);background:var(--error-bg)"';
+  var bizItems = businessThings.map(function(t){ return '<div>'+t+'</div>'; }).join('');
+  var youItems = personalThings.map(function(t){ return '<div>'+t+'</div>'; }).join('');
+  var html = '<div class="callout">A claim from Smith is coming. <strong>Where can it reach?</strong></div>';
+  html += '<div class="twoplaces"><div class="twoplaces-title">Where the claim can reach</div><div class="twoplaces-grid">'+
+    '<div class="tp-card"'+(bizReached?reached:'')+'><div class="tp-card-label">The repair work</div><div class="tp-card-text">'+bizItems+'</div></div>'+
+    '<div class="tp-card"'+(youReached?reached:'')+'><div class="tp-card-label">You <span style="font-weight:400">(not on any books)</span></div><div class="tp-card-text">'+youItems+'</div></div>'+
+    '</div>';
+  if(youReached){ html += '<div class="twoplaces-foot" style="color:var(--error-text);font-weight:600">&times; no legal wall here &mdash; the claim crosses straight through</div>'; }
+  html += '</div>';
+  if(!youReached){
+    var label = claimStep===0 ? 'Follow Smith&rsquo;s claim &rarr;' : 'Keep following &rarr;';
+    html += '<button class="btn-continue btn-block" onclick="followClaim()">'+label+'</button>';
+  } else {
+    html += '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;See it? It doesn&rsquo;t stop at the workbench. With nothing in the way, it comes straight through &mdash; your savings, your car, even your <strong>earnings</strong>.&rdquo;<br><br>&ldquo;I can sell you liability coverage &mdash; and you should carry it. But a policy <em>pays a claim</em>; it doesn&rsquo;t <strong>build a wall</strong>. If you want the repair work to stand on its own &mdash; so a claim stops there &mdash; that&rsquo;s a different thing entirely. It&rsquo;s called an <strong>LLC</strong>.&rdquo;</div></div>';
+    html += '<button class="btn-continue btn-block" onclick="goto(\'whoSeesTwo\')">That stopped me &rarr;</button>';
+  }
+  document.getElementById('exposureArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function followClaim(){ if(claimStep<2){ claimStep++; playNope(); } renderExposure(); }
+
+/* ===== whoSeesTwo: who treats it as separate ===== */
+function renderObservers(){
+  var cards = observers.map(function(o){
+    var opened = openedObs.indexOf(o.id) >= 0;
+    var two = o.sees==='two';
+    if(!opened){
+      return '<div class="tp-card" style="cursor:pointer" onclick="openObs(\''+o.id+'\')">'+
+        '<div class="tp-card-label">'+o.who+'</div>'+
+        '<div class="tp-card-text">'+o.sub+'</div>'+
+        '<div class="tp-card-text" style="color:var(--primary);font-weight:600;margin-top:6px">tap to find out &rarr;</div></div>';
+    }
+    var cardStyle = two ? ' style="border-color:var(--success-border);background:var(--success-bg)"' : '';
+    var pill = two
+      ? '<span style="white-space:nowrap;font-size:var(--font-s);font-weight:700;padding:2px 9px;border-radius:20px;background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border)">'+o.verdict+'</span>'
+      : '<span style="white-space:nowrap;font-size:var(--font-s);font-weight:700;padding:2px 9px;border-radius:20px;background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border)">'+o.verdict+'</span>';
+    return '<div class="tp-card"'+cardStyle+'>'+
+      '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">'+
+        '<div><div class="tp-card-label">'+o.who+'</div><div class="tp-card-text">'+o.sub+'</div></div>'+pill+
+      '</div>'+
+      '<div class="tp-card-text" style="margin-top:8px">'+o.reason+'</div></div>';
+  }).join('');
+  var html = '<div class="main-grid two-col">'+cards+'</div>';
+  if(observers.every(function(o){ return openedObs.indexOf(o.id) >= 0; })){
+    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="alert-triangle" class="licon"></i> Only your books see two</div>'+
+      '<p>Only <strong>your books</strong> see two. The bank, the customer, and the law all see <strong>one person</strong>. The line you drew is real &mdash; but it&rsquo;s <strong>informal</strong>. You keep it by hand, and it has <strong>no legal force</strong>. That&rsquo;s why the claim crossed straight over.</p></div>';
+    html += '<button class="btn-continue btn-block" onclick="goto(\'twoHats\')">So what&rsquo;s missing? &rarr;</button>';
+  }
+  document.getElementById('observerArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function openObs(id){
+  if(openedObs.indexOf(id) < 0){
+    var o = observers.find(function(x){ return x.id===id; });
+    openedObs.push(id);
+    if(o.sees==='two') playSuccess(); else playNope();
+  }
+  renderObservers();
+}
+
+/* ===== twoHats: the second line ===== */
+function renderTwoHats(){
+  var html;
+  if(!wantRevealed){
+    html = '<button class="btn-continue btn-block" onclick="revealWant()">Reveal &rarr;</button>';
+  } else {
+    html = '<div class="insight-box"><div class="insight-label"><i data-lucide="scale" class="licon"></i> The second line</div>'+
+      '<p>The separation you&rsquo;ve kept on paper needs a <strong>second line beside it &mdash; a legal one</strong>. A line the bank, the customer, and the law are bound to honor. Maria already named it: an <strong>LLC</strong>. Next, you&rsquo;ll go make it real.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="goto(\'complete\')">Finish up &rarr;</button>';
+  }
+  document.getElementById('twoHatsArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function revealWant(){ wantRevealed=true; playSuccess(); renderTwoHats(); }
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== init ===== */
+renderPhaseTitle('welcome');
+</script>
+</body>
+</html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.3: The Rules and the Two Signatures</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.3: The Rules and the Two Signatures</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart" aria-label="Restart tutorial" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle"></div>
+
+    <!-- ===== welcome ===== -->
+    <div class="phase active" id="phase-welcome">
+      <div class="narrative-block">
+        <p>The Certificate made the LLC <em>exist</em>. Now there&rsquo;s a second document &mdash; the one that says how it <strong>works</strong>. You ask Anna if she has ever seen one.</p>
+      </div>
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;I helped write City Cycle&rsquo;s. Every LLC needs an <strong>Operating Agreement</strong> &mdash; the rulebook: who the member is, what they put in, who&rsquo;s on the hook. But it&rsquo;s <em>yours</em>, with your facts.&rdquo;<br><br>&ldquo;Here&rsquo;s City Cycle&rsquo;s, just so you can see the <strong>shape</strong> of it &mdash;&rdquo;</div>
+      </div>
+      <div class="doc-modal" style="margin:0 auto 14px;border:1px dashed #a08050">
+        <div style="text-align:center;font-family:Georgia,'Times New Roman',serif">
+          <div style="font-weight:700;font-size:13px;letter-spacing:0.03em;color:#374151">OPERATING AGREEMENT</div>
+          <div style="font-size:11px;color:#6b6b6b">OF CITY CYCLE, LLC</div>
+        </div>
+        <div style="position:absolute;top:14px;right:16px;font-size:11px;padding:2px 8px;border-radius:6px;background:#e8dcc8;color:#a08050;font-family:Inter,sans-serif;white-space:nowrap">Anna&rsquo;s example</div>
+        <div style="font-family:Georgia,'Times New Roman',serif;font-size:12px;color:#374151;margin-top:8px">
+          <div>&sect;7&nbsp; <strong>Sole Member.</strong> The sole member is Marcus Webb.</div>
+          <div>&sect;9&nbsp; <strong>Capital Contributions.</strong> The member contributes the shop&rsquo;s assets and liabilities&hellip;</div>
+          <div>&sect;17&nbsp; <strong>Liability of the Sole Member.</strong> The member is not personally liable&hellip;</div>
+          <div style="text-align:center;margin-top:4px;color:#6b6b6b">&middot; &middot; &middot;</div>
+        </div>
+      </div>
+      <button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary);margin-bottom:14px" onclick="openDoc('anna')"><i data-lucide="file-text" class="licon"></i> Open City Cycle&rsquo;s full agreement &rarr;</button>
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;See the shape? Same sections for every LLC. Yours just carries <em>your</em> name, <em>your</em> business, <em>your</em> numbers. Generate it and we&rsquo;ll read it together.&rdquo; <span style="font-style:normal">(You can reopen City Cycle&rsquo;s example anytime from the button above.)</span></div>
+      </div>
+      <button class="btn-continue btn-block" onclick="goto('agreement')">Generate my Operating Agreement &rarr;</button>
+    </div>
+
+    <!-- ===== agreement ===== -->
+    <div class="phase" id="phase-agreement">
+      <div id="agreementArea"></div>
+    </div>
+
+    <!-- ===== contribution ===== -->
+    <div class="phase" id="phase-contribution">
+      <div class="narrative-block">
+        <p>You read it in your agreement &mdash; <strong>Section 9, Capital Contributions</strong>. It says what you put into the Company. The answer is <em>everything</em>. <strong>Schedule A</strong> lists it at its existing book amounts. Move it in, and watch the totals.</p>
+      </div>
+      <div class="callout" style="font-family:Georgia,'Times New Roman',serif"><strong>&sect;9.</strong> &ldquo;The Sole Member contributes the assets and liabilities of the bicycle-repair business, at their existing book amounts, as set forth on Schedule A.&rdquo;</div>
+      <div id="contributionArea"></div>
+    </div>
+
+    <!-- ===== wall ===== -->
+    <div class="phase" id="phase-wall">
+      <div class="narrative-block">
+        <p>And <strong>Section 17, Liability of the Sole Member</strong>: the Company&rsquo;s debts are the <strong>Company&rsquo;s</strong>, not yours. Remember Smith&rsquo;s claim from 2.1 &mdash; the one that came after your savings, your car, even your earnings? Send it again, now that the wall exists.</p>
+      </div>
+      <div class="callout" style="font-family:Georgia,'Times New Roman',serif"><strong>&sect;17.</strong> &ldquo;The Sole Member is not personally liable for the debts or obligations of the Company.&rdquo;</div>
+      <div id="wallArea"></div>
+    </div>
+
+    <!-- ===== keystone ===== -->
+    <div class="phase" id="phase-keystone">
+      <div class="narrative-block">
+        <p>A legal body. Rules. Your business inside it. A wall. It really feels like the repair work <em>became real</em> today. So, a question worth sitting with:</p>
+        <p style="margin-top:8px;font-weight:600;color:var(--primary)">When did this entity actually become real?</p>
+      </div>
+      <div id="keystoneArea"></div>
+    </div>
+
+    <!-- ===== complete ===== -->
+    <div class="phase" id="phase-complete">
+      <div class="complete-head">
+        <div class="trophy-badge"><i data-lucide="key-round"></i></div>
+        <div class="complete-title">Accounting-entity &ne; legal-entity</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You Worked Out</div>
+        <ul class="bullet-list check">
+          <li>You wrote your own Operating Agreement &mdash; City Cycle&rsquo;s (the one Anna set up) was only an example.</li>
+          <li>You signed it once for the Company and once as yourself &mdash; the two &ldquo;you&rsquo;s&rdquo; made legal and literal.</li>
+          <li>The whole business was contributed in at book carryover &mdash; not one number changed; &ldquo;what you put in&rdquo; became members&rsquo; capital ($1,790 + $170 retained = $1,960).</li>
+          <li>Limited liability put a wall between the Company&rsquo;s debts and your personal life &mdash; who can be pursued, not what the records show.</li>
+          <li>And the keystone: the accounting entity (since 1.1) is not the legal entity (days old). A legal body was wrapped around a boundary that already existed.</li>
+        </ul>
+      </div>
+      <div class="insight-box">
+        <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
+        <p>The same machine runs all the way up. A giant company draws <strong>one</strong> accounting boundary around <strong>dozens</strong> of separate legal companies; you drew one around an operation that, for now, has a single legal body younger than itself. The accounting line and the legal line are <strong>different lines, drawn for different reasons</strong> &mdash; and they rarely coincide.</p>
+      </div>
+      <div class="next-card">
+        <div class="next-card-label">Coming Next &mdash; 2.4: The Entity&rsquo;s Own Number, and Stopping the Co-mingling</div>
+        <p>The Company needs its own identity to the outside world &mdash; an EIN, its own bank account and card. The separation you&rsquo;ve drawn by hand since 1.1 finally goes institutional.</p>
+      </div>
+      <div class="btn-row">
+        <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Restart</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<!-- ===== Document viewer overlay ===== -->
+<div class="doc-overlay" id="docOverlay" style="align-items:flex-start" onclick="if(event.target===this) closeDoc()">
+  <div class="doc-modal" id="docModal" style="max-width:640px;margin:32px auto">
+    <button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>
+    <div id="docBody"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playPen(){ tone(520,0.18,'triangle',0.12); }
+function playThud(){ tone(150,0.3,'sine',0.3); }
+
+/* ===== data ===== */
+var glossaryTerms = [
+  { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
+  { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
+  { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
+  { term:"Members&rsquo; capital / Members&rsquo; equity", def:"The LLC&rsquo;s name for the residual A &minus; L. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($1,790) and the retained slice ($170) are kept separate." },
+  { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
+  { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
+];
+
+/* asset rows (book amounts, unchanged) */
+var assetRows = [['Cash','0'],['Prepaid rent','650'],['Parts on the shelf','200'],['Tools & equipment','1,200'],['Fixtures','750'],['Laptop','610']];
+
+/* ===== state ===== */
+var phaseOrder = ['welcome','agreement','contribution','wall','keystone','complete'];
+var phaseTitles = {
+  'welcome':      "The Operating Agreement",
+  'agreement':    "The Two Signatures",
+  'contribution': "What You Put In",
+  'wall':         "The Wall",
+  'keystone':     "When Did It Become Real?",
+  'complete':     "Complete"
+};
+var memberName = '';
+var generated = false;
+var signedCompany = false;
+var signedMember = false;
+var contributed = false;
+var claimRun = false;
+var keystonePick = null;
+var expanded = ['7','9','17'];
+var docOpen = null;
+
+/* ===== helpers ===== */
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
+function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
+
+/* ===== facts (raw values; escaped at injection) ===== */
+function annaFacts(){
+  return {
+    entity:'City Cycle, LLC', member:'Marcus Webb', date:'May 9, 2018',
+    state:'Connecticut', act:'Connecticut Uniform Limited Liability Company Act',
+    purpose:'bicycle sales & service', office:'266 Crown Street, New Haven, CT 06511',
+    sched:{ assets:[['Bicycle & parts inventory','3,200'],['Store fixtures & displays','900'],['Repair tools & equipment','400']], assetsTotal:'4,500', liabs:[['Equipment loan','600']], liabsTotal:'600', net:'3,900' },
+    sig:{ company:'Marcus Webb', member:'Marcus Webb' }
+  };
+}
+function myFacts(){
+  return {
+    entity:llcName(), member:memberDisplay(), date:'June 1, 2026',
+    state:'Connecticut', act:'Connecticut Uniform Limited Liability Company Act',
+    purpose:'bicycle repair and maintenance', office:'142 Whalley Avenue, Unit B, New Haven, CT 06511',
+    sched:{ assets:assetRows, assetsTotal:'3,410', liabs:[['Credit-card balance (business)','1,230'],['Customer advance — Smith','220']], liabsTotal:'1,450', net:'1,960' },
+    sig:{ company: signedCompany ? memberDisplay() : null, member: signedMember ? memberDisplay() : null }
+  };
+}
+function clauseData(f){
+  return [
+    ['1','Organization','The Company is a '+f.state+' limited liability company, formed under the '+f.act+'.'],
+    ['2','Name','The name of the Company is '+f.entity+'.'],
+    ['3','Purpose','The purpose of the Company is '+f.purpose+', and any other lawful activity for which a limited liability company may be formed.'],
+    ['4','Principal Office','The principal office of the Company is '+f.office+', or such other place as the Sole Member may determine.'],
+    ['5','Registered Agent','The registered agent of the Company for service of process in '+f.state+' is '+f.member+', at the principal office.'],
+    ['6','Term','The Company began upon the filing of its Certificate of Organization and continues until dissolved in accordance with this Agreement.'],
+    ['7','Sole Member','The sole member of the Company is '+f.member+'.'],
+    ['8','Management; Powers','The business and affairs of the Company are managed by the Sole Member, who may execute documents and otherwise act for and bind the Company.'],
+    ['9','Capital Contributions','The Sole Member contributes the assets and liabilities of the business, at their existing book amounts, as set forth on Schedule A. Net book value contributed: $'+f.sched.net+'.'],
+    ['10','Additional Capital Contributions','No additional contributions are required of the Sole Member, though further contributions may be made at the Sole Member’s discretion.'],
+    ['11','Allocation of Profits and Losses','All profits and losses of the Company are allocated 100% to the Sole Member.'],
+    ['12','Distributions','Distributions are made to the Sole Member at such times and in such amounts as the Sole Member determines.'],
+    ['13','Assignments','The Sole Member may assign its interest in the Company, in whole or in part.'],
+    ['14','Admission of Additional Members','The Sole Member may admit one or more additional members; upon admission, this Agreement is amended to reflect their interests.'],
+    ['15','Dissolution and Liquidation','The Company may be dissolved by the Sole Member. On dissolution, its assets are applied first to its debts, and the remainder distributed to the Sole Member.'],
+    ['16','Tax Matters','The Company is disregarded as separate from its owner for U.S. federal income-tax purposes; the fiscal year ends December 31.'],
+    ['17','Liability of the Sole Member','The Sole Member is not personally liable for the debts or obligations of the Company.'],
+    ['18','Indemnification','The Company indemnifies the Sole Member to the fullest extent permitted by law.'],
+    ['19','Miscellaneous','This Agreement is governed by the laws of '+f.state+'; the section headings are for convenience only.']
+  ];
+}
+
+/* ===== build the Operating Agreement (paper facsimile) ===== */
+function sigBlock(label, f, which, interactive){
+  var inner;
+  if(interactive){
+    var isSigned = which==='company' ? signedCompany : signedMember;
+    if(isSigned){
+      inner = '<span style="font-family:\'Segoe Script\',\'Snell Roundhand\',\'Brush Script MT\',cursive;font-size:22px;color:#1a2b6b">'+esc(memberDisplay())+'</span>';
+    } else {
+      inner = '<button onclick="'+(which==='company'?'signCompany()':'signMember()')+'" style="background:#e8dcc8;color:#a08050;border:0;border-radius:6px;padding:4px 12px;font-weight:600;font-size:13px;cursor:pointer;font-family:Inter,sans-serif">&#9997; Sign here</button>';
+    }
+  } else {
+    var s = which==='company' ? f.sig.company : f.sig.member;
+    inner = s ? '<span style="font-family:\'Segoe Script\',\'Snell Roundhand\',\'Brush Script MT\',cursive;font-size:22px;color:#1a2b6b">'+esc(s)+'</span>' : '';
+  }
+  var roleSub = which==='company' ? esc(f.member)+', Managing Member' : esc(f.member)+', as an individual';
+  return '<div><div style="font-size:11px;text-transform:uppercase;color:#6b6b6b">'+label+'</div>'+
+    '<div style="min-height:34px;border-bottom:1px solid #374151;display:flex;align-items:flex-end;padding-bottom:2px">'+inner+'</div>'+
+    '<div style="font-size:11px;color:#6b6b6b;margin-top:2px">'+roleSub+'</div>'+
+    '<div style="font-size:11px;color:#6b6b6b">Dated: '+esc(f.date)+'</div></div>';
+}
+function buildAgreement(f, interactive){
+  var marks = ['7','9','17'];
+  var html = '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">';
+  html += '<div style="text-align:center;font-weight:700;font-size:16px;letter-spacing:0.04em">OPERATING AGREEMENT</div>';
+  html += '<div style="text-align:center;font-weight:700;font-size:13px;color:var(--primary);margin-bottom:10px">OF '+esc(f.entity.toUpperCase())+'</div>';
+  html += '<p style="text-align:justify;margin-bottom:8px">This Operating Agreement of '+esc(f.entity)+', dated '+esc(f.date)+', is entered into by '+esc(f.member)+' (the &ldquo;Sole Member&rdquo;) and '+esc(f.entity)+' (the &ldquo;Company&rdquo;).</p>';
+  html += '<p style="font-size:11px;color:#6b6b6b;font-family:Inter,sans-serif;margin-bottom:8px">All nineteen sections are here &mdash; tap any heading to expand it.</p>';
+  clauseData(f).forEach(function(c){
+    var n=c[0], title=c[1], body=c[2];
+    var star = marks.indexOf(n) >= 0;
+    var open = expanded.indexOf(n) >= 0;
+    html += '<div style="margin-bottom:3px;padding-left:10px;border-left:3px solid '+(star?'var(--accent)':'#e5e0d5')+'">';
+    html += '<div onclick="toggleClause(\''+n+'\')" style="cursor:pointer;display:flex;align-items:baseline;gap:6px">';
+    html += '<span style="color:#6b6b6b;font-size:11px">'+(open?'&#9662;':'&#9656;')+'</span>';
+    html += '<span style="font-weight:700">'+n+'. '+esc(title)+'.</span>';
+    if(star) html += '<span style="font-size:11px;font-weight:700;color:var(--accent)">&#9733; watch this</span>';
+    html += '</div>';
+    if(open) html += '<div style="padding-left:18px;padding-top:2px;padding-bottom:3px">'+esc(body)+'</div>';
+    html += '</div>';
+  });
+  html += '<div style="margin-top:12px;margin-bottom:4px;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;color:#6b6b6b">Schedule A &mdash; Contributed Property</div>';
+  html += '<div style="max-width:380px">';
+  f.sched.assets.forEach(function(a){ html += '<div style="display:flex;justify-content:space-between"><span>'+esc(a[0])+'</span><span class="mono">'+a[1]+'</span></div>'; });
+  html += '<div style="display:flex;justify-content:space-between;font-weight:600;border-top:1px solid #d8d8d8"><span>Total assets</span><span class="mono">'+f.sched.assetsTotal+'</span></div>';
+  f.sched.liabs.forEach(function(l){ html += '<div style="display:flex;justify-content:space-between"><span>'+esc(l[0])+'</span><span class="mono">('+l[1]+')</span></div>'; });
+  html += '<div style="display:flex;justify-content:space-between;font-weight:600"><span>Total liabilities assumed</span><span class="mono">('+f.sched.liabsTotal+')</span></div>';
+  html += '<div style="display:flex;justify-content:space-between;font-weight:700;border-top:2px solid #374151"><span>Net contribution (members&rsquo; capital)</span><span class="mono">'+f.sched.net+'</span></div>';
+  html += '</div>';
+  html += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;color:#6b6b6b;font-size:12px">&mdash; signature page &mdash;</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
+  html += sigBlock('For the Company', f, 'company', interactive);
+  html += sigBlock('As an individual', f, 'member', interactive);
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+/* ===== phase nav ===== */
+function renderPhaseTitle(p){ document.getElementById('phaseTitle').textContent = phaseTitles[p] || ''; }
+function goto(p){
+  playClick();
+  phaseOrder.forEach(function(ph){ document.getElementById('phase-'+ph).classList.toggle('active', ph===p); });
+  renderPhaseTitle(p);
+  window.scrollTo(0,0);
+  if(p==='agreement') renderAgreement();
+  if(p==='contribution') renderContribution();
+  if(p==='wall') renderWall();
+  if(p==='keystone') renderKeystone();
+  if(window.lucide) lucide.createIcons();
+}
+function restart(){
+  generated=false; signedCompany=false; signedMember=false; contributed=false; claimRun=false;
+  keystonePick=null; expanded=['7','9','17']; docOpen=null;
+  closeDoc();
+  goto('welcome');
+}
+
+/* ===== agreement: generate + sign ===== */
+function renderAgreement(){
+  var area = document.getElementById('agreementArea');
+  if(!generated){
+    area.innerHTML =
+      '<div class="narrative-block"><p>Everything the agreement needs, you already have: <strong>your name</strong>, your LLC&rsquo;s name, and the business you&rsquo;ll put in.</p><p>Confirm who&rsquo;s signing, then generate it.</p></div>'+
+      '<div class="section-card">'+
+        '<label for="mnInput" style="display:block;font-size:var(--font-s);font-weight:600;margin-bottom:8px">The member (you)</label>'+
+        '<input id="mnInput" type="text" placeholder="Type your name&hellip;" oninput="onAgreementNameInput()" onkeydown="if(event.key===\'Enter\'){generateAgreement();}" autocomplete="off" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border-strong);border-radius:8px;font-size:16px;font-family:inherit;background:transparent;color:inherit;outline:none">'+
+        '<div style="font-size:var(--font-xs);margin-top:10px">Your LLC: <strong style="color:var(--primary)" id="agEntityPreview"></strong></div>'+
+      '</div>'+
+      '<button class="btn-continue btn-block" onclick="generateAgreement()">Generate my Operating Agreement &rarr;</button>';
+    var inp = document.getElementById('mnInput'); if(inp) inp.value = memberName;
+    document.getElementById('agEntityPreview').textContent = llcName();
+    return;
+  }
+  var html = '<p style="font-size:var(--font-s);margin-bottom:12px">Here&rsquo;s <strong>your</strong> Operating Agreement &mdash; the whole document, Schedule A and all. Read the <span style="color:var(--accent);font-weight:600">&#9733; marked</span> sections, then sign it at the bottom.</p>';
+  html += '<div class="doc-modal" style="margin:0 auto 14px">'+buildAgreement(myFacts(), true)+'</div>';
+  html += '<button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary)" onclick="openDoc(\'anna\')"><i data-lucide="file-text" class="licon"></i> View Anna&rsquo;s example &rarr;</button>';
+  if(signedCompany && signedMember){
+    html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="pen-line" class="licon"></i> Two signatures, one hand</div>'+
+      '<p>Your own name, signed twice &mdash; once <strong>for the Company</strong> (as its manager), once <strong>as yourself</strong> (the Sole Member). The two hats you felt back in 2.1 are now <strong>legal and literal</strong>: the law recognizes both of you, on one page.</p></div>';
+    html += '<button class="btn-continue btn-block" onclick="goto(\'contribution\')">Now drill into &sect;9 &mdash; what you put in &rarr;</button>';
+  }
+  area.innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function onAgreementNameInput(){
+  memberName = document.getElementById('mnInput').value;
+  document.getElementById('agEntityPreview').textContent = llcName();
+}
+function generateAgreement(){
+  var inp = document.getElementById('mnInput'); if(inp) memberName = inp.value;
+  if(memberName.trim()){ try{ localStorage.setItem('m2Member', memberName.trim()); }catch(e){} }
+  generated = true;
+  playSuccess();
+  renderAgreement();
+}
+function signCompany(){ signedCompany=true; playPen(); renderAgreement(); if(docOpen==='mine') renderDocBody(); }
+function signMember(){ signedMember=true; playPen(); renderAgreement(); if(docOpen==='mine') renderDocBody(); }
+function toggleClause(n){
+  var i = expanded.indexOf(n);
+  if(i>=0) expanded.splice(i,1); else expanded.push(n);
+  if(docOpen) renderDocBody();
+  if(generated && document.getElementById('phase-agreement').classList.contains('active')) renderAgreement();
+}
+
+/* ===== contribution: §9 balance sheet ===== */
+function balanceSheetHTML(){
+  var title = contributed ? esc(llcName()) : 'The repair work &mdash; your books';
+  var assets = '';
+  assetRows.forEach(function(a){ assets += '<div class="acct-line"><span>'+esc(a[0])+'</span><span class="acct-val mono">'+a[1]+'</span></div>'; });
+  var liabLabel = contributed ? 'Liabilities &amp; equity' : 'Liabilities &amp; the net';
+  var rcLabel = contributed ? 'Members&rsquo; capital &mdash; contributed' : '&ldquo;What you put in&rdquo;';
+  var reLabel = contributed ? 'Retained earnings' : '&ldquo;What the work made&rdquo;';
+  var netLabel = contributed ? 'Members&rsquo; equity' : 'The net (have &minus; owe)';
+  var resStyle = contributed ? ' style="background:var(--success-bg);border-radius:4px;padding:2px 6px;margin-top:4px"' : ' style="margin-top:4px"';
+  var html = '<div style="text-align:center;font-weight:700;margin-bottom:2px;'+(contributed?'color:var(--primary)':'')+'">'+title+'</div>';
+  html += '<div class="section-sub" style="text-align:center;margin-bottom:14px">Balance sheet &middot; June 1, 2026</div>';
+  html += '<div class="main-grid two-col">';
+  html += '<div class="acct-col"><h4>Assets</h4>'+assets+'<div class="acct-total"><span>Assets</span><span class="mono">3,410</span></div></div>';
+  html += '<div class="acct-col"><h4>'+liabLabel+'</h4>'+
+    '<div class="acct-line"><span>Credit card</span><span class="acct-val mono">1,230</span></div>'+
+    '<div class="acct-line"><span>Customer advance &mdash; Smith</span><span class="acct-val mono">220</span></div>'+
+    '<div class="acct-total" style="border-top:1px solid var(--border)"><span>Liabilities</span><span class="mono">1,450</span></div>'+
+    '<div'+resStyle+'>'+
+      '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">1,790</span></div>'+
+      '<div class="acct-line"><span>'+reLabel+'</span><span class="acct-val mono">170</span></div>'+
+      '<div class="acct-total"><span>'+netLabel+'</span><span class="mono">1,960</span></div>'+
+    '</div>'+
+  '</div>';
+  html += '</div>';
+  return html;
+}
+function renderContribution(){
+  var area = document.getElementById('contributionArea');
+  var html = balanceSheetHTML();
+  if(!contributed){
+    html += '<button class="btn-continue btn-block" style="margin-top:14px" onclick="doContribute()">Contribute the business to the LLC &rarr;</button>';
+  } else {
+    html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="check" class="licon"></i> Not one number changed</div>'+
+      '<p>The same balance sheet you built informally is now the <strong>Company&rsquo;s</strong> &mdash; legally contributed in. Only the <em>words</em> on the right moved: &ldquo;what you put in&rdquo; became <strong>members&rsquo; capital ($1,790)</strong>, &ldquo;what the work made&rdquo; became <strong>retained earnings ($170)</strong>. Same $1,960. The contributed slice and the earned slice stay separate &mdash; the history carries over intact.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="goto(\'wall\')">Now drill into &sect;17 &mdash; the wall &rarr;</button>';
+  }
+  area.innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function doContribute(){ contributed=true; playSuccess(); renderContribution(); }
+
+/* ===== wall: §17 limited liability ===== */
+function renderWall(){
+  var area = document.getElementById('wallArea');
+  var en = esc(llcName());
+  var compStyle = claimRun ? 'background:var(--error-bg);border:2px solid var(--error-border)' : 'background:var(--primary-faint);border:2px solid var(--border-strong)';
+  var youStyle = claimRun ? 'background:var(--success-bg);border:2px solid var(--success-border)' : 'background:var(--primary-faint);border:2px solid var(--border-strong)';
+  var wallColor = claimRun ? 'var(--primary)' : 'var(--border-strong)';
+  var html = '<div class="section-card">';
+  html += '<div style="display:grid;grid-template-columns:1fr 26px 1fr;gap:0;align-items:stretch">';
+  html += '<div style="border-radius:10px;padding:12px;'+compStyle+';transition:all 0.4s">'+
+    '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;color:var(--primary)">The Company</div>'+
+    '<div style="font-size:var(--font-s);margin-top:2px">'+en+'</div>'+
+    '<div style="font-size:var(--font-xs);margin-top:4px;color:var(--primary)">its tools, parts, fixtures, cash</div></div>';
+  html += '<div style="display:flex;align-items:center;justify-content:center"><div title="the LLC &mdash; limited liability" style="width:6px;align-self:stretch;border-radius:3px;background:'+wallColor+';transition:all 0.4s"></div></div>';
+  html += '<div style="border-radius:10px;padding:12px;'+youStyle+';transition:all 0.4s">'+
+    '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;color:var(--primary)">You</div>'+
+    '<div style="font-size:var(--font-s);margin-top:2px">your savings, car, earnings</div>'+
+    (claimRun?'<div style="font-size:var(--font-xs);margin-top:4px;font-weight:600;color:var(--success-text)">&#10003; behind the wall &mdash; safe</div>':'')+'</div>';
+  html += '</div>';
+  html += '<div style="text-align:center;margin:12px 0;min-height:18px">'+(claimRun?'<span style="font-size:var(--font-xs);font-weight:600;color:var(--primary)">the claim reaches the Company &mdash; and stops at the wall</span>':'')+'</div>';
+  if(!claimRun){
+    html += '<button class="btn-continue btn-block" style="background:var(--error-bg);color:var(--error-text);border:1.5px solid var(--error-border)" onclick="runClaim()">Send Smith&rsquo;s claim again &rarr;</button>';
+  } else {
+    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="shield" class="licon"></i> The wall</div>'+
+      '<p>This is the wall Maria wanted. <strong>Limited liability</strong> is a <em>legal</em> fact &mdash; it changes <strong>who can be pursued</strong>, not what the records show. The balance sheet didn&rsquo;t move; the exposure did.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="goto(\'keystone\')">One last thing &rarr;</button>';
+  }
+  html += '</div>';
+  area.innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function runClaim(){ claimRun=true; playThud(); renderWall(); }
+
+/* ===== keystone: the question ===== */
+function renderKeystone(){
+  var area = document.getElementById('keystoneArea');
+  var right = keystonePick==='1.1';
+  var opts = [
+    ['cert','When you filed the Certificate (2.2)'],
+    ['oa','Just now, when you signed this agreement'],
+    ['1.1','Back in 1.1 &mdash; when you first drew the line in your books']
+  ];
+  var html = '<div style="display:flex;flex-direction:column;gap:10px">';
+  opts.forEach(function(o){
+    var id=o[0], label=o[1];
+    var picked = keystonePick===id;
+    var isRight = id==='1.1';
+    var show = keystonePick!==null;
+    var st = 'background:var(--primary-faint);border:2px solid var(--border-strong)';
+    if(show && picked){ st = isRight ? 'background:var(--success-bg);border:2px solid var(--success-border)' : 'background:var(--error-bg);border:2px solid var(--error-border)'; }
+    html += '<button onclick="pickKeystone(\''+id+'\')"'+(right?' disabled':'')+' style="text-align:left;border-radius:10px;padding:12px;cursor:pointer;font-family:inherit;font-size:var(--font-m);color:inherit;'+st+'">'+label;
+    if(show && picked && !isRight){ html += '<span style="display:block;font-size:var(--font-xs);margin-top:4px;color:var(--error-text)">Not quite &mdash; that&rsquo;s the day it became a <em>legal</em> entity. Try again.</span>'; }
+    html += '</button>';
+  });
+  html += '</div>';
+  if(right){
+    html += '<div class="callout" style="margin-top:14px">Right. This document gave the operation a legal body &mdash; but it <strong>did not create the entity</strong>. You&rsquo;ve kept these books, this boundary, since <strong>1.1</strong>. The <strong>accounting</strong> line came first &mdash; by months, and in a real firm, by years.</div>';
+    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="key-round" class="licon"></i> The keystone</div>'+
+      '<p style="font-size:var(--font-lg);font-weight:700;color:var(--primary);margin-bottom:6px">Accounting&#8209;entity &ne; legal&#8209;entity.</p>'+
+      '<p>The accounting entity is a boundary you drew <em>for information</em> &mdash; it can exist with or without any legal body, and here it came first. The LLC is a legal wrapper placed around it. Getting an LLC didn&rsquo;t make the entity &ldquo;finally real&rdquo;; it was a real <em>accounting</em> entity all along.</p></div>';
+    html += '<button class="btn-continue btn-block" onclick="goto(\'complete\')">Finish up &rarr;</button>';
+  }
+  area.innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function pickKeystone(id){
+  if(keystonePick==='1.1') return;
+  keystonePick = id;
+  if(id==='1.1') playSuccess(); else playNope();
+  renderKeystone();
+}
+
+/* ===== document viewer ===== */
+function renderDocBody(){
+  var f = docOpen==='anna' ? annaFacts() : myFacts();
+  var title = docOpen==='anna' ? "City Cycle&rsquo;s Operating Agreement &middot; Anna&rsquo;s example" : "Your Operating Agreement";
+  document.getElementById('docBody').innerHTML =
+    '<div style="font-weight:700;color:var(--primary);margin-bottom:12px;font-family:Inter,sans-serif">'+title+'</div>'+
+    buildAgreement(f, false);
+}
+function openDoc(which){
+  docOpen = which;
+  renderDocBody();
+  document.getElementById('docOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeDoc(){
+  docOpen = null;
+  document.getElementById('docOverlay').classList.remove('open');
+}
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== init ===== */
+try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
+renderPhaseTitle('welcome');
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeDoc(); } });
+</script>
+</body>
+</html>

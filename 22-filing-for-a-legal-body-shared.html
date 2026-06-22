@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.2: Filing for a Legal Body</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.2: Filing for a Legal Body</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart" aria-label="Restart tutorial" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle"></div>
+
+    <!-- ===== welcome ===== -->
+    <div class="phase active" id="phase-welcome">
+      <div class="narrative-block">
+        <p>You left Maria wanting one thing: a <strong>legal wall</strong> between the repair work and your own pocket &mdash; the kind a policy can&rsquo;t give you. So you call <strong>Anna</strong> &mdash; she kept the books at <strong>City Cycle</strong> for years and helped the owner set it up as an LLC.</p>
+        <p>She doesn&rsquo;t overthink it.</p>
+      </div>
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;Form an <strong>LLC</strong>. That&rsquo;s the wall. I set one up with the owner at City Cycle &mdash; we used an attorney back then; these days you could just have an <strong>AI assistant</strong> walk you through it and check it against the state &mdash; honestly, it&rsquo;s a couple of forms.&rdquo;<br><br>&ldquo;Start with the one that actually brings it into existence. After that, it&rsquo;s a legal <em>person</em> &mdash; and the claims that scared you stop at <em>its</em> door, not yours.&rdquo;</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You&rsquo;ll Work Out</div>
+        <ul class="bullet-list">
+          <li>What it actually takes to bring a legal entity into existence.</li>
+          <li>What changes the instant it exists &mdash; and what, surprisingly, doesn&rsquo;t.</li>
+          <li>Which is older: the legal body, or the operation it wraps.</li>
+        </ul>
+      </div>
+      <button class="btn-continue btn-block" onclick="goto('name')">Get started &rarr;</button>
+    </div>
+
+    <!-- ===== name ===== -->
+    <div class="phase" id="phase-name">
+      <div class="narrative-block">
+        <p>First, your LLC needs a <strong>name</strong>. Until now it&rsquo;s just been &ldquo;the repair work&rdquo; or &ldquo;the operation.&rdquo; Now it gets one of its <em>own</em> &mdash; and it&rsquo;ll carry <strong>your</strong> name, even as it becomes legally separate from you.</p>
+      </div>
+      <div class="section-card">
+        <label for="memberName" style="display:block;font-size:var(--font-s);font-weight:600;margin-bottom:8px">Your name</label>
+        <input id="memberName" type="text" placeholder="Type your name&hellip;" oninput="onNameInput()" onkeydown="if(event.key==='Enter'){lockName();}" autocomplete="off"
+               style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border-strong);border-radius:8px;font-size:16px;font-family:inherit;background:transparent;color:inherit;outline:none;margin-bottom:14px">
+        <div style="font-size:var(--font-xs);text-transform:uppercase;letter-spacing:0.04em;color:var(--primary);margin-bottom:4px">Your LLC will be called</div>
+        <div id="entityPreview" style="font-family:Georgia,'Times New Roman',serif;text-align:center;font-size:20px;font-weight:700;color:var(--primary);background:var(--primary-faint);border-radius:8px;padding:12px 16px">[Your Name]&rsquo;s Bike Repairs, LLC</div>
+        <p id="nameHint" style="font-size:var(--font-xs);margin-top:8px">Type a name (or leave it &mdash; the documents carry a <span class="mono">[Your Name]</span> placeholder you can imagine as your own).</p>
+      </div>
+      <button class="btn-continue btn-block" onclick="lockName()">Lock in the name &rarr;</button>
+    </div>
+
+    <!-- ===== file ===== -->
+    <div class="phase" id="phase-file">
+      <div id="fileArea"></div>
+    </div>
+
+    <!-- ===== whatChanged ===== -->
+    <div class="phase" id="phase-whatChanged">
+      <div class="narrative-block">
+        <p>A legal person was just born. That <em>feels</em> like a big change. So walk the shop and check: <strong>what actually moved?</strong> Tap each one.</p>
+      </div>
+      <div id="whatChangedArea"></div>
+    </div>
+
+    <!-- ===== complete ===== -->
+    <div class="phase" id="phase-complete">
+      <div class="complete-head">
+        <div class="trophy-badge"><i data-lucide="landmark"></i></div>
+        <div class="complete-title">A legal body &mdash; born today, wrapping work that&rsquo;s older</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You Worked Out</div>
+        <ul class="bullet-list check">
+          <li>A legal entity is born by a filing &mdash; one page, and a new legal person exists.</li>
+          <li>The instant it existed, nothing about the operation changed: same tools, same customers, same balance sheet.</li>
+          <li>The legal line is brand-new; the accounting line you drew back in 1.1 is far older.</li>
+          <li>Your shop carries your name &mdash; yet it&rsquo;s now legally a separate person from you.</li>
+        </ul>
+      </div>
+      <div class="insight-box">
+        <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
+        <p>The Certificate gave the operation a <strong>legal body</strong> &mdash; but it didn&rsquo;t <em>create</em> the operation. You&rsquo;ve kept these books, this boundary, since 1.1. There&rsquo;s a legal line and an accounting line, and they&rsquo;re <strong>not the same line</strong>. Next, they finally get a name.</p>
+      </div>
+      <div class="next-card">
+        <div class="next-card-label">Coming Next &mdash; 2.3: The Rules and the Two Signatures</div>
+        <p>Anna hands you the Operating Agreement &mdash; the LLC&rsquo;s rulebook. You&rsquo;ll sign it twice, move your whole business into it, and finally name what&rsquo;s been true since 1.1.</p>
+      </div>
+      <div class="btn-row">
+        <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Restart</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playStamp(){ tone(180,0.25,'triangle',0.3); }
+
+/* ===== data ===== */
+var glossaryTerms = [
+  { term:"Certificate of Organization", def:"In Connecticut, the one-page filing that brings a limited liability company (LLC) into legal existence. (Delaware calls its version a &ldquo;Certificate of Formation.&rdquo;)" },
+  { term:"Legal entity", def:"A &ldquo;person&rdquo; in the eyes of the law that can own things, owe debts, sign contracts, and be sued &mdash; separate from the human beings behind it. An LLC is one." },
+  { term:"Registered agent", def:"The person or office an LLC names to receive legal mail at a real in-state address. A small owner often serves as their own." },
+  { term:"LLC", def:"Limited Liability Company &mdash; a legal form that holds the operation and stands as a wall between a claim and the owner&rsquo;s personal life." }
+];
+
+var movedItems = [
+  { id:"legal", label:"Your legal standing", changed:true, after:"A separate legal person now exists" },
+  { id:"ops",   label:"Your tools, customers, the work today", changed:false, after:"Exactly the same &mdash; nothing moved" },
+  { id:"sheet", label:"The balance sheet", changed:false, after:"A $3,410 &minus; L $1,450 = $1,960" }
+];
+
+var TWO_BIRTHDAYS_HTML =
+  '<div class="section-card" style="margin-top:16px"><div class="card-title" style="text-transform:uppercase;letter-spacing:0.04em;font-size:var(--font-xs)">Two birthdays</div>'+
+  '<div style="position:relative;height:64px;margin-top:8px">'+
+    '<div style="position:absolute;top:28px;left:0;right:0;height:2px;background:var(--border-strong)"></div>'+
+    '<div style="position:absolute;top:20px;left:8%;transform:translateX(-50%)"><div style="width:14px;height:14px;border-radius:50%;background:var(--primary);margin:0 auto"></div></div>'+
+    '<div style="position:absolute;top:44px;left:8%;transform:translateX(-50%);font-size:11px;color:var(--primary);font-weight:600;white-space:nowrap;text-align:center">accounting line<br>since 1.1</div>'+
+    '<div style="position:absolute;top:20px;left:92%;transform:translateX(-50%)"><div style="width:14px;height:14px;border-radius:50%;background:var(--accent);margin:0 auto"></div></div>'+
+    '<div style="position:absolute;top:44px;left:92%;transform:translateX(-50%);font-size:11px;color:var(--accent);font-weight:600;white-space:nowrap;text-align:center">legal line<br>today</div>'+
+    '<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:11px">&larr; months of real operating &rarr;</div>'+
+  '</div></div>';
+
+/* ===== state ===== */
+var phaseOrder = ['welcome','name','file','whatChanged','complete'];
+var phaseTitles = {
+  'welcome':     "Anna’s Advice",
+  'name':        "Name the LLC",
+  'file':        "File the Certificate",
+  'whatChanged': "What Changed?",
+  'complete':    "Complete"
+};
+var memberName = '';
+var filed = false;
+var movedOpened = [];
+
+/* ===== helpers ===== */
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
+function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
+
+/* ===== phase nav ===== */
+function renderPhaseTitle(p){ document.getElementById('phaseTitle').textContent = phaseTitles[p] || ''; }
+function goto(p){
+  playClick();
+  phaseOrder.forEach(function(ph){ document.getElementById('phase-'+ph).classList.toggle('active', ph===p); });
+  renderPhaseTitle(p);
+  window.scrollTo(0,0);
+  if(p==='name') syncName();
+  if(p==='file') renderFile();
+  if(p==='whatChanged') renderWhatChanged();
+  if(window.lucide) lucide.createIcons();
+}
+function restart(){ memberName=''; filed=false; movedOpened=[]; goto('welcome'); }
+
+/* ===== name ===== */
+function syncName(){
+  var inp = document.getElementById('memberName');
+  if(inp) inp.value = memberName;
+  updateNamePreview();
+}
+function onNameInput(){ memberName = document.getElementById('memberName').value; updateNamePreview(); }
+function updateNamePreview(){
+  document.getElementById('entityPreview').textContent = llcName();
+  document.getElementById('nameHint').style.display = memberName.trim() ? 'none' : '';
+}
+function lockName(){
+  if(memberName.trim()){ try{ localStorage.setItem('m2Member', memberName.trim()); }catch(e){} }
+  goto('file');
+}
+
+/* ===== file: the Certificate of Organization ===== */
+function renderFile(){
+  var en = llcName(), dn = memberDisplay();
+  var stamp = filed
+    ? '<div style="position:absolute;top:18px;right:18px;border:3px solid #15803d;color:#15803d;border-radius:8px;padding:4px 12px;font-weight:800;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;transform:rotate(-8deg)">Filed &middot; Jun 1, 2026</div>'
+    : '';
+  var cert = '<div class="doc-modal" style="margin:0 auto 16px;font-family:Georgia,&quot;Times New Roman&quot;,serif">'+stamp+
+    '<div style="text-align:center;font-weight:700;font-size:17px;letter-spacing:0.04em;color:#374151">CERTIFICATE OF ORGANIZATION</div>'+
+    '<div style="text-align:center;font-size:12px;color:#6b6b6b">OF</div>'+
+    '<div style="text-align:center;font-weight:700;font-size:15px;color:var(--primary);margin-bottom:14px">'+esc(en.toUpperCase())+'</div>'+
+    '<p style="font-size:13.5px;text-align:justify;margin-bottom:12px;color:#1a1a1a">This Certificate of Organization of '+esc(en)+', dated June 1, 2026, is executed and filed by '+esc(dn)+', as an authorized person, to form a limited liability company under the Connecticut Uniform Limited Liability Company Act (Conn. Gen. Stat. &sect; 34-243, <em>et seq.</em>).</p>'+
+    '<div style="font-size:13px;color:#1a1a1a">'+
+      '<div style="margin-bottom:8px"><span style="font-weight:700;font-size:11.5px;letter-spacing:0.03em">FIRST.</span>&nbsp; Name: <strong>'+esc(en)+'</strong></div>'+
+      '<div style="margin-bottom:8px"><span style="font-weight:700;font-size:11.5px;letter-spacing:0.03em">SECOND.</span>&nbsp; Registered agent: '+esc(dn)+', 142 Whalley Avenue, Unit B, New Haven, Connecticut 06511 &mdash; the principal office.</div>'+
+      '<div><span style="font-weight:700;font-size:11.5px;letter-spacing:0.03em">THIRD.</span>&nbsp; Management is vested in the member(s).</div>'+
+    '</div></div>';
+  var below;
+  if(!filed){
+    below = '<button class="btn-continue btn-block" onclick="fileIt()">File with the State of Connecticut &rarr;</button>';
+  } else {
+    below = '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Filed</div>'+
+      '<p>The State accepts the filing. As of this moment, <strong>'+esc(en)+'</strong> exists &mdash; a brand-new <strong>legal person</strong>, able to own things, owe debts, and be sued in its own name.</p></div>'+
+      '<p class="callout">You filed in <strong>Connecticut</strong> &mdash; your home state, simple and cheap. (The biggest companies shop for Delaware&rsquo;s business-friendly courts; a one-person shop just forms where it works. Even <em>which state</em> is a choice.)</p>'+
+      '<button class="btn-continue btn-block" onclick="goto(\'whatChanged\')">So what just changed? &rarr;</button>';
+  }
+  document.getElementById('fileArea').innerHTML =
+    '<p class="callout">Here&rsquo;s the document Anna meant &mdash; Connecticut&rsquo;s <strong>Certificate of Organization</strong>. Read it over, then file it.</p>'+cert+below;
+  if(window.lucide) lucide.createIcons();
+}
+function fileIt(){ filed=true; playStamp(); renderFile(); }
+
+/* ===== whatChanged: what actually moved ===== */
+function renderWhatChanged(){
+  var cards = movedItems.map(function(m){
+    var opened = movedOpened.indexOf(m.id) >= 0;
+    if(!opened){
+      return '<div class="tp-card" style="cursor:pointer" onclick="openMoved(\''+m.id+'\')">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center">'+
+          '<span class="tp-card-label">'+m.label+'</span><span class="tp-card-text">tap &rarr;</span></div></div>';
+    }
+    var badge = m.changed
+      ? '<span style="white-space:nowrap;font-size:var(--font-s);font-weight:700;padding:2px 9px;border-radius:20px;background:var(--accent);color:#fff">CHANGED</span>'
+      : '<span style="white-space:nowrap;font-size:var(--font-s);font-weight:700;padding:2px 9px;border-radius:20px;background:var(--success-border);color:#fff">UNCHANGED</span>';
+    var brd = m.changed ? 'var(--accent)' : 'var(--success-border)';
+    var after = (m.id==='sheet') ? '<span class="mono">'+m.after+'</span>' : m.after;
+    return '<div class="tp-card" style="border-color:'+brd+'">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center"><span class="tp-card-label">'+m.label+'</span>'+badge+'</div>'+
+      '<div class="tp-card-text" style="margin-top:8px">'+after+'</div></div>';
+  }).join('');
+  var html = '<div style="display:flex;flex-direction:column;gap:12px">'+cards+'</div>';
+  if(movedItems.every(function(m){ return movedOpened.indexOf(m.id) >= 0; })){
+    html += '<div class="insight-box" style="margin-top:16px"><div class="insight-label"><i data-lucide="scale" class="licon"></i> No tool moved today</div>'+
+      '<p>One thing changed &mdash; your <strong>legal standing</strong>. The operation didn&rsquo;t move an inch, and the balance sheet is <strong>identical</strong>. A legal <em>wrapper</em> was born; nothing economic happened. <strong>No tool moved today.</strong></p></div>';
+    html += TWO_BIRTHDAYS_HTML;
+    html += '<p class="callout">Two different lines, drawn at two different times, for two different reasons. The operation has been running &mdash; and you&rsquo;ve kept its books &mdash; since long before today. The legal body is <strong>hours old</strong>.</p>';
+    html += '<button class="btn-continue btn-block" onclick="goto(\'complete\')">Finish up &rarr;</button>';
+  }
+  document.getElementById('whatChangedArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function openMoved(id){
+  if(movedOpened.indexOf(id) < 0){
+    var m = movedItems.find(function(x){ return x.id===id; });
+    movedOpened.push(id);
+    if(m.changed) playSuccess(); else playClick();
+  }
+  renderWhatChanged();
+}
+
+/* ===== glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== init ===== */
+renderPhaseTitle('welcome');
+</script>
+</body>
+</html>
