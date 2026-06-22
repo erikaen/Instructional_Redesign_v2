@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.2: Filing for a Legal Body &middot; File the Certificate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.2: Filing for a Legal Body</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 3 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">File the Certificate</div>
+
+    <!-- ===== file ===== -->
+    <div class="phase active" id="phase-file">
+      <div id="fileArea"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playStamp(){ tone(180,0.25,'triangle',0.3); }
+
+/* ===== glossary (shared across all phases of 2.2) ===== */
+var glossaryTerms = [
+  { term:"Certificate of Organization", def:"In Connecticut, the one-page filing that brings a limited liability company (LLC) into legal existence. (Delaware calls its version a &ldquo;Certificate of Formation.&rdquo;)" },
+  { term:"Legal entity", def:"A &ldquo;person&rdquo; in the eyes of the law that can own things, owe debts, sign contracts, and be sued &mdash; separate from the human beings behind it. An LLC is one." },
+  { term:"Registered agent", def:"The person or office an LLC names to receive legal mail at a real in-state address. A small owner often serves as their own." },
+  { term:"LLC", def:"Limited Liability Company &mdash; a legal form that holds the operation and stands as a wall between a claim and the owner&rsquo;s personal life." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== navigation / reset (each phase is its own file) ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== member name (read from localStorage, set in the name phase) ===== */
+var memberName = '';
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
+function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
+
+/* ===== state (phase-local) ===== */
+var filed = false;
+
+/* ===== file: the Certificate of Organization ===== */
+function renderFile(){
+  var en = llcName(), dn = memberDisplay();
+  var stamp = filed
+    ? '<div style="position:absolute;top:18px;right:18px;border:3px solid #15803d;color:#15803d;border-radius:8px;padding:4px 12px;font-weight:800;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;transform:rotate(-8deg)">Filed &middot; Jun 1, 2026</div>'
+    : '';
+  var cert = '<div class="doc-modal" style="margin:0 auto 16px;font-family:Georgia,&quot;Times New Roman&quot;,serif">'+stamp+
+    '<div style="text-align:center;font-weight:700;font-size:17px;letter-spacing:0.04em;color:#374151">CERTIFICATE OF ORGANIZATION</div>'+
+    '<div style="text-align:center;font-size:12px;color:#6b6b6b">OF</div>'+
+    '<div style="text-align:center;font-weight:700;font-size:15px;color:var(--primary);margin-bottom:14px">'+esc(en.toUpperCase())+'</div>'+
+    '<p style="font-size:13.5px;text-align:justify;margin-bottom:12px;color:#1a1a1a">This Certificate of Organization of '+esc(en)+', dated June 1, 2026, is executed and filed by '+esc(dn)+', as an authorized person, to form a limited liability company under the Connecticut Uniform Limited Liability Company Act (Conn. Gen. Stat. &sect; 34-243, <em>et seq.</em>).</p>'+
+    '<div style="font-size:13px;color:#1a1a1a">'+
+      '<div style="margin-bottom:8px"><span style="font-weight:700;font-size:11.5px;letter-spacing:0.03em">FIRST.</span>&nbsp; Name: <strong>'+esc(en)+'</strong></div>'+
+      '<div style="margin-bottom:8px"><span style="font-weight:700;font-size:11.5px;letter-spacing:0.03em">SECOND.</span>&nbsp; Registered agent: '+esc(dn)+', 142 Whalley Avenue, Unit B, New Haven, Connecticut 06511 &mdash; the principal office.</div>'+
+      '<div><span style="font-weight:700;font-size:11.5px;letter-spacing:0.03em">THIRD.</span>&nbsp; Management is vested in the member(s).</div>'+
+    '</div></div>';
+  var below;
+  if(!filed){
+    below = '<button class="btn-continue btn-block" onclick="fileIt()">File with the State of Connecticut &rarr;</button>';
+  } else {
+    below = '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Filed</div>'+
+      '<p>The State accepts the filing. As of this moment, <strong>'+esc(en)+'</strong> exists &mdash; a brand-new <strong>legal person</strong>, able to own things, owe debts, and be sued in its own name.</p></div>'+
+      '<p class="callout">You filed in <strong>Connecticut</strong> &mdash; your home state, simple and cheap. (The biggest companies shop for Delaware&rsquo;s business-friendly courts; a one-person shop just forms where it works. Even <em>which state</em> is a choice.)</p>'+
+      '<button class="btn-continue btn-block" onclick="nav(\'22-4-whatChanged.html\')">So what just changed? &rarr;</button>';
+  }
+  document.getElementById('fileArea').innerHTML =
+    '<p class="callout">Here&rsquo;s the document Anna meant &mdash; Connecticut&rsquo;s <strong>Certificate of Organization</strong>. Read it over, then file it.</p>'+cert+below;
+  if(window.lucide) lucide.createIcons();
+}
+function fileIt(){ filed=true; playStamp(); renderFile(); }
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== init ===== */
+try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
+renderFile();
+</script>
+</body>
+</html>
