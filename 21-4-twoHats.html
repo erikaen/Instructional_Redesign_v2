@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.1: The Two You's &middot; Same Head, Two Hats</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.1: The Two You&rsquo;s</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 4 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Same Head, Two Hats</div>
+
+    <!-- ===== twoHats ===== -->
+    <div class="phase active" id="phase-twoHats">
+      <div class="narrative-block">
+        <p>So there have been <strong>two of you</strong> all along &mdash; but only in a way you&rsquo;ve kept by hand. The <strong>person</strong>, and the <strong>operation</strong>. Same head, two hats.</p>
+        <p>Your books drew one line. What would it take for the bank, the customer, and the law to see two &mdash; the way your books do?</p>
+      </div>
+      <div id="twoHatsArea"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary (shared across all phases of 2.1) ===== */
+var glossaryTerms = [
+  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the repair work&rsquo;s tools and parts." },
+  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything the repair work owns." },
+  { term:"LLC", def:"Limited Liability Company &mdash; a legal form that can hold the operation and stand as a wall between a claim and your personal life. Maria names it here; you form one next." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== cross-phase navigation (each phase is its own file) ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== state (phase-local) ===== */
+var wantRevealed = false;
+
+/* ===== twoHats: the second line ===== */
+function renderTwoHats(){
+  var html;
+  if(!wantRevealed){
+    html = '<button class="btn-continue btn-block" onclick="revealWant()">Reveal &rarr;</button>';
+  } else {
+    html = '<div class="insight-box"><div class="insight-label"><i data-lucide="scale" class="licon"></i> The second line</div>'+
+      '<p>The separation you&rsquo;ve kept on paper needs a <strong>second line beside it &mdash; a legal one</strong>. A line the bank, the customer, and the law are bound to honor. Maria already named it: an <strong>LLC</strong>. Next, you&rsquo;ll go make it real.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="nav(\'21-5-complete.html\')">Finish up &rarr;</button>';
+  }
+  document.getElementById('twoHatsArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function revealWant(){ wantRevealed=true; playSuccess(); renderTwoHats(); }
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== init ===== */
+renderTwoHats();
+</script>
+</body>
+</html>

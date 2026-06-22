@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.1: The Two You's &middot; Follow the Claim</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.1: The Two You&rsquo;s</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 2 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Follow the Claim</div>
+
+    <!-- ===== exposure ===== -->
+    <div class="phase active" id="phase-exposure">
+      <div class="dialog-box maria">
+        <div class="dialog-label">MARIA</div>
+        <div class="dialog-text">&ldquo;Your property&rsquo;s well covered. But there&rsquo;s something the property policy never touched &mdash; and the bigger you get, the more it nags at me. <strong>Liability.</strong>&rdquo;<br><br>&ldquo;Say a bike you repaired fails on the road, and <strong>Smith</strong> &mdash; your customer &mdash; gets hurt. Smith doesn&rsquo;t sue &lsquo;the repair work.&rsquo; Smith sues <strong>you</strong>.&rdquo;</div>
+      </div>
+      <div id="exposureArea"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary (shared across all phases of 2.1) ===== */
+var glossaryTerms = [
+  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the repair work&rsquo;s tools and parts." },
+  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything the repair work owns." },
+  { term:"LLC", def:"Limited Liability Company &mdash; a legal form that can hold the operation and stand as a wall between a claim and your personal life. Maria names it here; you form one next." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== cross-phase navigation (each phase is its own file) ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== data ===== */
+var businessThings = ["Tools &amp; repair equipment","Parts on the shelf","Fixtures","Laptop","Prepaid rent"];
+var personalThings = ["Your savings","Your car","Your earnings"];
+
+/* ===== state (phase-local) ===== */
+var claimStep = 0;   /* 0 none, 1 reached the repair work, 2 crossed to personal */
+
+/* ===== exposure: follow the claim ===== */
+function renderExposure(){
+  var bizReached = claimStep>=1, youReached = claimStep>=2;
+  var reached = ' style="border-color:var(--error-border);background:var(--error-bg)"';
+  var bizItems = businessThings.map(function(t){ return '<div>'+t+'</div>'; }).join('');
+  var youItems = personalThings.map(function(t){ return '<div>'+t+'</div>'; }).join('');
+  var html = '<div class="callout">A claim from Smith is coming. <strong>Where can it reach?</strong></div>';
+  html += '<div class="twoplaces"><div class="twoplaces-title">Where the claim can reach</div><div class="twoplaces-grid">'+
+    '<div class="tp-card"'+(bizReached?reached:'')+'><div class="tp-card-label">The repair work</div><div class="tp-card-text">'+bizItems+'</div></div>'+
+    '<div class="tp-card"'+(youReached?reached:'')+'><div class="tp-card-label">You <span style="font-weight:400">(not on any books)</span></div><div class="tp-card-text">'+youItems+'</div></div>'+
+    '</div>';
+  if(youReached){ html += '<div class="twoplaces-foot" style="color:var(--error-text);font-weight:600">&times; no legal wall here &mdash; the claim crosses straight through</div>'; }
+  html += '</div>';
+  if(!youReached){
+    var label = claimStep===0 ? 'Follow Smith&rsquo;s claim &rarr;' : 'Keep following &rarr;';
+    html += '<button class="btn-continue btn-block" onclick="followClaim()">'+label+'</button>';
+  } else {
+    html += '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;See it? It doesn&rsquo;t stop at the workbench. With nothing in the way, it comes straight through &mdash; your savings, your car, even your <strong>earnings</strong>.&rdquo;<br><br>&ldquo;I can sell you liability coverage &mdash; and you should carry it. But a policy <em>pays a claim</em>; it doesn&rsquo;t <strong>build a wall</strong>. If you want the repair work to stand on its own &mdash; so a claim stops there &mdash; that&rsquo;s a different thing entirely. It&rsquo;s called an <strong>LLC</strong>.&rdquo;</div></div>';
+    html += '<button class="btn-continue btn-block" onclick="nav(\'21-3-whoSeesTwo.html\')">That stopped me &rarr;</button>';
+  }
+  document.getElementById('exposureArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function followClaim(){ if(claimStep<2){ claimStep++; playNope(); } renderExposure(); }
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== init ===== */
+renderExposure();
+</script>
+</body>
+</html>

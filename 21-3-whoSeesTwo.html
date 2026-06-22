@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.1: The Two You's &middot; Who Sees Two?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.1: The Two You&rsquo;s</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 3 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Who Sees Two?</div>
+
+    <!-- ===== whoSeesTwo ===== -->
+    <div class="phase active" id="phase-whoSeesTwo">
+      <div class="narrative-block">
+        <p>That stopped you &mdash; because in <em>your</em> books, the repair work and your personal life are clearly two different things. You&rsquo;ve kept them apart since day one: sorting that one co-mingled card by purpose every month, keeping a separate list, running a net. On paper, there are two of you. <strong>So why could Smith&rsquo;s claim cross over?</strong></p>
+      </div>
+      <div class="callout">Tap each one. <strong>Who treats the repair work as separate from you?</strong></div>
+      <div id="observerArea"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary (shared across all phases of 2.1) ===== */
+var glossaryTerms = [
+  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the repair work&rsquo;s tools and parts." },
+  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything the repair work owns." },
+  { term:"LLC", def:"Limited Liability Company &mdash; a legal form that can hold the operation and stand as a wall between a claim and your personal life. Maria names it here; you form one next." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== cross-phase navigation (each phase is its own file) ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== data ===== */
+var observers = [
+  { id:"books", who:"Your books", sub:"Bike-Repair.xlsx", sees:"two", verdict:"Sees TWO",
+    reason:"You drew the line yourself &mdash; sorting that one co-mingled card by purpose every month, keeping the Things list, running a net. The separation is real. But it&rsquo;s yours." },
+  { id:"bank", who:"The bank", sub:"your card &amp; account", sees:"one", verdict:"Sees ONE",
+    reason:"The card and the account are in your personal name. To the bank, every charge &mdash; chain lube or groceries &mdash; is yours." },
+  { id:"customer", who:"A customer", sub:"Smith", sees:"one", verdict:"Sees ONE",
+    reason:"Smith hired you. The receipt carries your name, not a separate legal one. There is no &ldquo;repair work&rdquo; for Smith to deal with &mdash; only you." },
+  { id:"law", who:"The law", sub:"a court", sees:"one", verdict:"Sees ONE",
+    reason:"In the eyes of the law there is one person here. No document anywhere says the repair work is anything separate from you." }
+];
+
+/* ===== state (phase-local) ===== */
+var openedObs = [];   /* ids of observer cards opened */
+
+/* ===== whoSeesTwo: who treats it as separate ===== */
+function renderObservers(){
+  var cards = observers.map(function(o){
+    var opened = openedObs.indexOf(o.id) >= 0;
+    var two = o.sees==='two';
+    if(!opened){
+      return '<div class="tp-card" style="cursor:pointer" onclick="openObs(\''+o.id+'\')">'+
+        '<div class="tp-card-label">'+o.who+'</div>'+
+        '<div class="tp-card-text">'+o.sub+'</div>'+
+        '<div class="tp-card-text" style="color:var(--primary);font-weight:600;margin-top:6px">tap to find out &rarr;</div></div>';
+    }
+    var cardStyle = two ? ' style="border-color:var(--success-border);background:var(--success-bg)"' : '';
+    var pill = two
+      ? '<span style="white-space:nowrap;font-size:var(--font-s);font-weight:700;padding:2px 9px;border-radius:20px;background:var(--success-bg);color:var(--success-text);border:1px solid var(--success-border)">'+o.verdict+'</span>'
+      : '<span style="white-space:nowrap;font-size:var(--font-s);font-weight:700;padding:2px 9px;border-radius:20px;background:var(--warn-bg);color:var(--warn-text);border:1px solid var(--warn-border)">'+o.verdict+'</span>';
+    return '<div class="tp-card"'+cardStyle+'>'+
+      '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">'+
+        '<div><div class="tp-card-label">'+o.who+'</div><div class="tp-card-text">'+o.sub+'</div></div>'+pill+
+      '</div>'+
+      '<div class="tp-card-text" style="margin-top:8px">'+o.reason+'</div></div>';
+  }).join('');
+  var html = '<div class="main-grid two-col">'+cards+'</div>';
+  if(observers.every(function(o){ return openedObs.indexOf(o.id) >= 0; })){
+    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="alert-triangle" class="licon"></i> Only your books see two</div>'+
+      '<p>Only <strong>your books</strong> see two. The bank, the customer, and the law all see <strong>one person</strong>. The line you drew is real &mdash; but it&rsquo;s <strong>informal</strong>. You keep it by hand, and it has <strong>no legal force</strong>. That&rsquo;s why the claim crossed straight over.</p></div>';
+    html += '<button class="btn-continue btn-block" onclick="nav(\'21-4-twoHats.html\')">So what&rsquo;s missing? &rarr;</button>';
+  }
+  document.getElementById('observerArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function openObs(id){
+  if(openedObs.indexOf(id) < 0){
+    var o = observers.find(function(x){ return x.id===id; });
+    openedObs.push(id);
+    if(o.sees==='two') playSuccess(); else playNope();
+  }
+  renderObservers();
+}
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== init ===== */
+renderObservers();
+</script>
+</body>
+</html>

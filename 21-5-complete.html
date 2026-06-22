@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.1: The Two You's &middot; Complete</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.1: The Two You&rsquo;s</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 5 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Complete</div>
+
+    <!-- ===== complete ===== -->
+    <div class="phase active" id="phase-complete">
+      <div class="complete-head">
+        <div class="trophy-badge"><i data-lucide="puzzle"></i></div>
+        <div class="complete-title">The line you drew isn&rsquo;t the only line</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You Worked Out</div>
+        <ul class="bullet-list check">
+          <li>The separation you&rsquo;ve kept in your books since 1.1 is real &mdash; but informal, with no legal force.</li>
+          <li>To you it&rsquo;s two things; to the bank, the customer, and the law, it&rsquo;s one person.</li>
+          <li>A liability policy pays a claim. It does not build a wall between the repair work and your personal life.</li>
+          <li>That wall is a different kind of line &mdash; a legal one &mdash; and it has a name: an LLC.</li>
+        </ul>
+      </div>
+      <div class="insight-box">
+        <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
+        <p>You&rsquo;ve been keeping two you&rsquo;s apart by hand. What you don&rsquo;t have yet is a <strong>second line &mdash; a legal one</strong> &mdash; beside the line you drew in your books back in 1.1. They&rsquo;re two different lines, drawn for two different reasons. Next, you&rsquo;ll draw the legal one.</p>
+      </div>
+      <div class="next-card">
+        <div class="next-card-label">Coming Next &mdash; 2.2: Filing for a Legal Body</div>
+        <p>Anna&rsquo;s helped set up an LLC before &mdash; she did City Cycle&rsquo;s with the owner. She&rsquo;ll walk you through filing the one piece of paper that brings a legal body into existence.</p>
+      </div>
+      <div class="btn-row">
+        <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Reset this phase</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary (shared across all phases of 2.1) ===== */
+var glossaryTerms = [
+  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the repair work&rsquo;s tools and parts." },
+  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything the repair work owns." },
+  { term:"LLC", def:"Limited Liability Company &mdash; a legal form that can hold the operation and stand as a wall between a claim and your personal life. Maria names it here; you form one next." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== cross-phase navigation (each phase is its own file) ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+</script>
+</body>
+</html>
