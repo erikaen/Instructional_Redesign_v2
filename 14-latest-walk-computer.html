@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1.4 · Walk Computer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1.4: Keeping the Reasons</h1>
+        <div class="tut-header-sub">Phase 3 of 11 — Walk Computer Equipment</div>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      </div>
+    </div>
+
+    <div class="phase active" id="phase-walk-computer"></div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="evidenceOverlay" onclick="if(event.target===this) closeEvidence()">
+  <div class="glossary-panel" id="evidencePanel"></div>
+</div>
+
+<script src="14-shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+window.WB_PHASE = 'walk-computer';
+window.WB_WC_ANSWERED = true;
+window.WB_ASSETS_EXPANDED = { 'COMPUTER EQUIPMENT': true };
+window.WB_ACTIVE_TAB = 'assets';
+
+document.getElementById('phase-walk-computer').innerHTML =
+  annaBox('A one-item walk: the laptop, brought from home. Evidence is an eBay comp (Doc 9). Placeholder for now &mdash; the full walk lands in Pass 2.', true) +
+  '<div id="wbComp"></div>' +
+  '<div class="section-card"><div class="card-title">Walk Computer Equipment</div>'+
+    '<p class="prose">The laptop is the single item in this category. Learner answers <em>Brought from home</em>; the row records and a single reason is added to the Reasons tab.</p>'+
+  '</div>';
+
+renderWorkbook('wbComp');
+if(window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1.4 · Complete</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1.4: Keeping the Reasons</h1>
+        <div class="tut-header-sub">Phase 11 of 11 — Complete</div>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      </div>
+    </div>
+
+    <div class="phase active" id="phase-complete">
+      <div class="complete-head">
+        <div class="trophy-badge"><i data-lucide="trophy"></i></div>
+        <div class="complete-title">Tutorial 1.4 complete</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You Discovered</div>
+        <ul class="bullet-list check">
+          <li>You kept a <strong>Reasons</strong> tab &mdash; one row for the why behind each change to a list.</li>
+          <li>Most reasons came in <strong>pairs</strong> &mdash; same event, two changes. You didn&rsquo;t arrange that; it showed up on its own.</li>
+          <li>The matched pairs just <strong>shuffle</strong> &mdash; have and owe move together, so your <strong>net</strong> doesn&rsquo;t budge.</li>
+          <li>The reasons that <strong>move your net</strong> are two plain kinds: what you <strong>contributed</strong> and what the work <strong>generated</strong>.</li>
+        </ul>
+      </div>
+      <div class="next-card">
+        <div class="next-card-label">Coming Next</div>
+        <p>You have three things now: what you have, what you owe, and the reasons your net moved. In 1.5 you&rsquo;ll lay them out on one page, watch how they fit together &mdash; and the names you&rsquo;ve been circling finally arrive.</p>
+        <p><strong>Next: Tutorial 1.5 &mdash; Naming What You Built</strong></p>
+      </div>
+      <a class="btn-continue btn-block" href="15-naming-what-you-built.html">Continue to Tutorial 1.5 &rarr;</a>
+    </div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="14-shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

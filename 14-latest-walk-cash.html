@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1.4 · Walk Cash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1.4: Keeping the Reasons</h1>
+        <div class="tut-header-sub">Phase 8 of 11 — Walk Cash (the discovery)</div>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      </div>
+    </div>
+
+    <div class="phase active" id="phase-walk-cash"></div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="evidenceOverlay" onclick="if(event.target===this) closeEvidence()">
+  <div class="glossary-panel" id="evidencePanel"></div>
+</div>
+
+<script src="14-shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+window.WB_PHASE = 'walk-cash';
+window.WB_WC_ANSWERED = true;
+window.WB_ASSETS_EXPANDED = {};
+window.WB_ACTIVE_TAB = 'cash';
+
+document.getElementById('phase-walk-cash').innerHTML =
+  annaBox('Walk the cash side. Most rows reuse reasons already recorded. After all twelve rows, one piece is still missing &mdash; that&rsquo;s the discovery: where the $960 went. Placeholder for now.', true) +
+  '<div id="wbCash"></div>' +
+  '<div class="section-card"><div class="card-title">Walk Cash + Discovery</div>'+
+    '<p class="prose">Twelve cash-tab rows. Eleven reuse reasons from earlier walks. The twelfth &mdash; <em>From your personal self &mdash; covering what the work drew down ($960)</em> &mdash; is revealed only after the learner tallies the flows and sees the gap. This converts the Cash line from &minus;$960 to $0.</p>'+
+  '</div>';
+
+renderWorkbook('wbCash');
+if(window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

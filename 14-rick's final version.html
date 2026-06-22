@@ -1,0 +1,2287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutorial 1.4: Keeping the Reasons</title>
+    <link href="lib/font-3.css" rel="stylesheet">
+    <link href="lib/font-4.css" rel="stylesheet">
+    <link href="lib/font-2.css" rel="stylesheet">
+    <script src="lib/tailwind.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        @keyframes systemPulse {
+            0%, 100% { opacity: 0.85; transform: scale(1); }
+            50%      { opacity: 1;    transform: scale(1.02); }
+        }
+        .system-sorting { animation: systemPulse 1.2s ease-in-out infinite; }
+        @keyframes rowFade {
+            from { opacity: 0; transform: translateY(-4px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .row-fade { animation: rowFade 0.5s ease-out; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script src="lib/react.production.min.js"></script>
+    <script src="lib/react-dom.production.min.js"></script>
+    <script src="lib/babel.min.js?v=7"></script>
+    <script type="text/babel">
+        const { useState } = React;
+
+        /**
+         * Tutorial 1.4: Keeping the Reasons
+         * CMU METALS / Yale SOM Accounting Prework — Module 1, Activity 4
+         *
+         * @version 3.0 (unified-workbook redesign SANDBOX — v3 increments 1–5 built)
+         * @date 2026-06-11
+         * @description ONE workbook, TWO persistent windows: window 1 = the real Assets /
+         *   Liabilities tabs (Cash folded into Assets — born in the welcome via the
+         *   "is cash a right to future benefits?" choice, reading −$960 ⚠ with the honest
+         *   total $2,450 ⚠); window 2 = THE Reasons tab, growing one receipt-level row at
+         *   a time. ONE gesture everywhere: click a workbook line, give it its reason —
+         *   CREATE a new one (choice + ⓘ evidence; two-part cards for net-of-two-events
+         *   lines) or REUSE an existing one when the row is a second half (the statement's
+         *   charges, the bank's flows — records others kept; ⟷ badges). The −$960 mystery
+         *   resolves at the Cash walk: "Did you pay it to yourself?" → "No — my personal
+         *   self paid my bike-repair self" (entity boundary, ex post — NEVER upfront);
+         *   cash repairs to $0, total snaps to $3,410. Then crossout (the ⟷ shufflers) and
+         *   the sort: Contributed $1,790 (gear 220 + laptop 610 + ex-post 960) / Generated
+         *   $170 (1,120 − 300 − 650). No identity; "Equities" / double-entry land in 1.5.
+         *   (Internal state key for the second pile stays 'earned'; user-facing label is "Generated".)
+         */
+
+        const colors = {
+            primary: '#00356b', sand: '#f5f1e8', earth: '#8b7355', earthLight: '#d4c4a8',
+            earthDark: '#5c4d3d', accent: '#c9a227', clay: '#c4a574', clayLight: '#e8dcc8',
+            clayDark: '#a08050', success: '#22c55e', successBg: '#f0fdf4',
+            warning: '#f59e0b', warningBg: '#fffbeb', error: '#dc2626', errorBg: '#fef2f2',
+        };
+
+        const glossaryTerms = [
+            { term: 'Asset', definition: "Something you have — a present right to something useful. The gear, the parts, the prepaid month, cash." },
+            { term: 'Liability', definition: "Something you owe — a present obligation to pay or do something later. The card balance, Smith's frame." },
+            { term: 'Reason', definition: 'The why behind a change to one of your lists. You jot it next to the change — it lives on its own tab, one row per side.' },
+            { term: 'Net', definition: 'What you have minus what you owe. The bottom-line number a reason either moves or leaves alone.' },
+            { term: 'Contributed', definition: 'A net-mover where you put something in from outside the repair work — your own cash, gear you already owned.' },
+            { term: 'Generated', definition: 'A net-mover that came from doing the repair work — what customers paid, less what the work used up.' },
+            { term: 'Right of Use', definition: "A month of space you've paid for but haven't used yet — a future benefit you still hold, so it counts as an asset." },
+        ];
+
+        const createAudioContext = () =>
+            new (window.AudioContext || window.webkitAudioContext)();
+
+        const playSuccessTone = () => {
+            try {
+                const ctx = createAudioContext();
+                [523.25, 659.25, 783.99].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.frequency.value = freq; osc.type = 'sine';
+                    const t = ctx.currentTime + i * 0.1;
+                    gain.gain.setValueAtTime(0, t);
+                    gain.gain.linearRampToValueAtTime(0.3, t + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
+                    osc.start(t); osc.stop(t + 0.25);
+                });
+                setTimeout(() => ctx.close(), 600);
+            } catch(e) {}
+        };
+
+        const playSoftNope = () => {
+            try {
+                const ctx = createAudioContext();
+                [400, 300].forEach((freq, i) => {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain); gain.connect(ctx.destination);
+                    osc.frequency.value = freq; osc.type = 'sine';
+                    const t = ctx.currentTime + i * 0.12;
+                    gain.gain.setValueAtTime(0, t);
+                    gain.gain.linearRampToValueAtTime(0.2, t + 0.02);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.12);
+                    osc.start(t); osc.stop(t + 0.17);
+                });
+                setTimeout(() => ctx.close(), 400);
+            } catch(e) {}
+        };
+
+        const playContinueClick = () => {
+            try {
+                const ctx = createAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.frequency.value = 600; osc.type = 'sine';
+                const t = ctx.currentTime;
+                gain.gain.setValueAtTime(0, t);
+                gain.gain.linearRampToValueAtTime(0.15, t + 0.01);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.08);
+                osc.start(t); osc.stop(t + 0.1);
+                setTimeout(() => ctx.close(), 150);
+            } catch(e) {}
+        };
+
+        // ============================================================
+        // DATA — the lists, carried from 1.3 (tie to the manifest)
+        // ============================================================
+        // Assets $3,410 — exactly as 1.3 left it (Equipment 1,200 · Computer 610 ·
+        // Supplies 200 · Fixtures 750 · Right of Use 650 · Cash 0).
+        const ASSETS_SNAPSHOT = [
+            {
+                cat: 'EQUIPMENT',
+                items: [
+                    { name: 'Park Tool repair stand', amount: 200 },
+                    { name: 'Cone wrench set',        amount: 65  },
+                    { name: 'Torque wrench',          amount: 95  },
+                    { name: 'Hex / Allen key set',    amount: 45  },
+                    { name: 'Cable cutters',          amount: 40  },
+                    { name: 'Chain breaker',          amount: 35  },
+                    { name: 'Tire levers',            amount: 20  },
+                    { name: 'Air compressor',         amount: 180 },
+                    { name: 'Parts washer',           amount: 130 },
+                    { name: 'Wheel-truing stand',     amount: 170 },
+                    { name: 'Bench grinder',          amount: 90  },
+                    { name: 'Headset press',          amount: 70  },
+                    { name: 'Shop vacuum',            amount: 60  },
+                ],
+            },
+            {
+                cat: 'COMPUTER EQUIPMENT',
+                items: [ { name: 'Laptop', amount: 610 } ],
+            },
+            {
+                cat: 'SUPPLIES',
+                items: [
+                    { name: 'Box of chains (on shelf)',            amount: 50 },
+                    { name: 'Box of brake pads (on shelf)',        amount: 40 },
+                    { name: 'Box of derailleur cables (on shelf)', amount: 20 },
+                    { name: 'Cassettes (on shelf)',                amount: 40 },
+                    { name: 'Bottom brackets (on shelf)',          amount: 20 },
+                    { name: 'Spokes (on shelf)',                   amount: 20 },
+                    { name: 'Tubes (on shelf)',                    amount: 10 },
+                ],
+            },
+            {
+                cat: 'FIXTURES',
+                items: [
+                    { name: 'Desk',             amount: 250 },
+                    { name: 'Shelving units',   amount: 200 },
+                    { name: 'Display rack',     amount: 180 },
+                    { name: 'Pegboard + hooks', amount: 120 },
+                ],
+            },
+            {
+                cat: 'CASH',
+                items: [ { name: 'Repair cash on hand (May 31)', amount: 0 } ],
+            },
+            {
+                cat: 'RIGHT OF USE',
+                items: [ { name: 'Right to occupy the space — last month, prepaid', amount: 650 } ],
+            },
+        ].map(c => ({ ...c, subtotal: c.items.reduce((s, i) => s + i.amount, 0) }));
+        const ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce((s, c) => s + c.subtotal, 0); // 3410
+
+        // The owe-list — named Liabilities at the end of 1.3. Card $1,230 + Smith $220.
+        const LIABILITIES_SNAPSHOT = [
+            { label: "Smith's frame — paid $220 up front, not built yet", amount: 220 },
+            { label: 'What you owe on the bike-repair credit card',       amount: 1230 },
+        ];
+        const LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce((s, l) => s + l.amount, 0); // 1450
+
+        // The Cash tab — May's REPAIR money in and out only. Personal cash is NOT shown here
+        // (per Rick, 2026-06-09): the repair flows alone net to −$960 — the work ran short.
+        // Where that $960 came from is deferred to 1.5 (no upfront "contributed cash" in M1).
+        const CASH_FLOWS = [
+            { date: 'May 1',  desc: 'Rent paid in advance (Westville Properties)', amount: -1300 },
+            { date: 'May 3',  desc: 'Park Tool stand — Cyclesport Supply', amount:  -200 },
+            { date: 'May 7',  desc: 'Repair finished — customer paid (Venmo)', amount:  340 },
+            { date: 'May 10', desc: 'Repair finished — customer paid (Venmo)', amount:  180 },
+            { date: 'May 12', desc: 'Repair finished — customer paid (Venmo)', amount:   80 },
+            { date: 'May 14', desc: 'Repair finished — customer paid (Venmo)', amount:  140 },
+            { date: 'May 16', desc: 'Card paydown — Harborline Visa', amount:  -400 },
+            { date: 'May 19', desc: 'Repair finished — customer paid (Venmo)', amount:  130 },
+            { date: 'May 22', desc: 'Smith deposit — frame build', amount:  220 },
+            { date: 'May 23', desc: 'Repair finished — customer paid (Venmo)', amount:  100 },
+            { date: 'May 27', desc: 'Repair finished — customer paid (Venmo)', amount:  150 },
+            { date: 'May 28', desc: 'Card paydown — Harborline Visa', amount:  -400 },
+        ];
+
+        // (The old flat REASONS sheet — one row per SIDE — was retired with the
+        //  reasons-walk scaffold on 2026-06-11. Pairs/net-movers now run on
+        //  PAIR_EVENTS, one row per EVENT at receipt level — defined below,
+        //  after the evidence data it references.)
+
+        // Equipment grouped by the purchase that brought each item in (two-pane Equipment view).
+        // Each group's amount = its Equipment-side reason delta; the six sum to $1,200. ev = the receipt.
+        const EQUIP_GROUPS = [
+            { id: 'g_gear', label: 'Gear brought from home', amount: 220, reasonId: 'r_gear',
+              ev: { kind: 'ebay', vendor: 'eBay — comparable sold listings', meta: 'Pre-owned · valued by market comp (Doc 9)', paid: 'Brought from home — no purchase',
+                    items: [ { name: 'Bench grinder', amt: 90 }, { name: 'Headset press', amt: 70 }, { name: 'Shop vacuum', amt: 60 } ] } },
+            { id: 'g_laptop', label: 'Laptop brought from home', amount: 610, reasonId: 'r_laptop',
+              ev: { kind: 'ebay', vendor: 'eBay — comparable sold listings', meta: 'Pre-owned · valued by market comp (Doc 9)', paid: 'Brought from home — no purchase',
+                    items: [ { name: 'Laptop (used)', amt: 610 } ] } },
+            { id: 'g_stand', label: 'Park Tool repair stand', amount: 200, reasonId: 'r_stand_a',
+              ev: { kind: 'receipt', vendor: 'Cyclesport Supply', meta: 'Sales Receipt #SR-4471 · May 3, 2026 (Doc 2)', paid: 'Personal debit card •••• 6620',
+                    items: [ { name: 'Park Tool PRS-25 Team Issue Repair Stand', amt: 200 } ] } },
+            { id: 'g_tools', label: 'Hand tools', amount: 300, reasonId: 'r_tools_a',
+              ev: { kind: 'receipt', vendor: 'Cyclesport Supply', meta: 'Sales Receipt #SR-4488 · May 5, 2026 (Doc 4)', paid: 'Harborline Visa •••• 3902',
+                    items: [ { name: 'Cone wrench set', amt: 65 }, { name: 'Torque wrench', amt: 95 }, { name: 'Hex / Allen key set', amt: 45 }, { name: 'Cable cutters', amt: 40 }, { name: 'Chain breaker', amt: 35 }, { name: 'Tire levers', amt: 20 } ] } },
+            { id: 'g_compressor', label: 'Air compressor', amount: 180, reasonId: 'r_compressor_a',
+              ev: { kind: 'receipt', vendor: 'Compressor Depot', meta: 'Sales Receipt #CD-2208 · May 8, 2026 (Doc 10)', paid: 'Harborline Visa •••• 3902',
+                    items: [ { name: 'Portable air compressor — 6 gal', amt: 180 } ] } },
+            { id: 'g_washer', label: 'Parts washer', amount: 130, reasonId: 'r_washer_a',
+              ev: { kind: 'receipt', vendor: 'Industrial Supply', meta: 'Invoice #IS-30742 · May 10, 2026 (Doc 11)', paid: 'Harborline Visa •••• 3902',
+                    items: [ { name: 'Parts washer — 20-gal solvent tank', amt: 130 } ] } },
+            { id: 'g_truing', label: 'Wheel-truing stand', amount: 170, reasonId: 'r_truing_a',
+              ev: { kind: 'receipt', vendor: 'Cyclesport Supply', meta: 'Sales Receipt #SR-4502 · May 12, 2026 (Doc 12)', paid: 'Harborline Visa •••• 3902',
+                    items: [ { name: 'Wheel-truing stand — shop grade', amt: 170 } ] } },
+            { id: 'g_fixtures', label: 'Fixtures', amount: 750, reasonId: 'r_fix_a',
+              ev: { kind: 'receipt', vendor: 'Workspace Outfitters', meta: 'Invoice #WO-20518 · May 5, 2026 (Doc 3)', paid: 'Harborline Visa •••• 3902',
+                    items: [ { name: 'Work desk', amt: 250 }, { name: 'Shelving units (×2)', amt: 200 }, { name: 'Display rack', amt: 180 }, { name: 'Pegboard panel + hook set', amt: 120 } ] } },
+        ];
+
+        // Equipment items (the Assets-tab rows) — each with its true source + the receipt group it belongs to.
+        // Names match ASSETS_SNAPSHOT exactly. Drives the item-level "how did it come in?" walk.
+        const EQUIP_ITEMS = [
+            { name: 'Park Tool repair stand', amt: 200, source: 'cash', group: 'g_stand' },
+            { name: 'Cone wrench set',        amt: 65,  source: 'card', group: 'g_tools' },
+            { name: 'Torque wrench',          amt: 95,  source: 'card', group: 'g_tools' },
+            { name: 'Hex / Allen key set',    amt: 45,  source: 'card', group: 'g_tools' },
+            { name: 'Cable cutters',          amt: 40,  source: 'card', group: 'g_tools' },
+            { name: 'Chain breaker',          amt: 35,  source: 'card', group: 'g_tools' },
+            { name: 'Tire levers',            amt: 20,  source: 'card', group: 'g_tools' },
+            { name: 'Air compressor',         amt: 180, source: 'card', group: 'g_compressor' },
+            { name: 'Parts washer',           amt: 130, source: 'card', group: 'g_washer' },
+            { name: 'Wheel-truing stand',     amt: 170, source: 'card', group: 'g_truing' },
+            { name: 'Bench grinder',          amt: 90,  source: 'home', group: 'g_gear' },
+            { name: 'Headset press',          amt: 70,  source: 'home', group: 'g_gear' },
+            { name: 'Shop vacuum',            amt: 60,  source: 'home', group: 'g_gear' },
+        ];
+        // Fixtures items (the Assets-tab rows) — all one card purchase (Doc 3). Names match ASSETS_SNAPSHOT.
+        const FIX_ITEMS = [
+            { name: 'Desk',             amt: 250, source: 'card', group: 'g_fixtures' },
+            { name: 'Shelving units',   amt: 200, source: 'card', group: 'g_fixtures' },
+            { name: 'Display rack',     amt: 180, source: 'card', group: 'g_fixtures' },
+            { name: 'Pegboard + hooks', amt: 120, source: 'card', group: 'g_fixtures' },
+        ];
+        // Computer Equipment items (the Assets-tab rows) — the laptop, brought from home (Doc 9 comp).
+        // Its own one-item walk, right after Equipment. Name matches ASSETS_SNAPSHOT.
+        const COMP_ITEMS = [
+            { name: 'Laptop', amt: 610, source: 'home', group: 'g_laptop' },
+        ];
+        const ITEM_BY_NAME = {};
+        [...EQUIP_ITEMS, ...COMP_ITEMS, ...FIX_ITEMS].forEach(it => { ITEM_BY_NAME[it.name] = it; });
+        const SOURCE_LABEL  = { card: 'On the card', cash: 'Paid cash (debit)', home: 'Brought from home' };
+        const SOURCE_REASON = { card: 'bought on the card', cash: 'bought with cash (debit)', home: 'brought from home' };
+
+        // Supplies pool (consumable): bought (documented) + used (inferred) → ending shelf.
+        const SUP_QBP = {
+            vendor: 'QBP — Quality Bicycle Products',
+            meta: 'Invoice #QBP-887341 · May 15, 2026 (Doc 5)',
+            paid: 'Harborline Visa •••• 3902',
+            items: [
+                { name: 'Chains (box)', amt: 100 }, { name: 'Brake pads (box)', amt: 80 },
+                { name: 'Derailleur cables (box)', amt: 40 }, { name: 'Cassettes (×4)', amt: 80 },
+                { name: 'Bottom brackets', amt: 80 }, { name: 'Spokes (bundle)', amt: 80 },
+                { name: 'Tubes (box)', amt: 40 },
+            ],
+        };
+
+        // Supplies, item by item (parallel to Equipment). Each part carries TWO reasons: the
+        // purchase (+bought, on the card) and the use (−used, inferred = bought − shelf).
+        // Names match ASSETS_SNAPSHOT exactly. bought 500 · used 300 · shelf 200 (ties to manifest).
+        const SUP_ITEMS = [
+            { name: 'Box of chains (on shelf)',            bought: 100, shelf: 50, used: 50, qty: '½ box' },
+            { name: 'Box of brake pads (on shelf)',        bought:  80, shelf: 40, used: 40, qty: '½ box' },
+            { name: 'Box of derailleur cables (on shelf)', bought:  40, shelf: 20, used: 20, qty: '½ box' },
+            { name: 'Cassettes (on shelf)',                bought:  80, shelf: 40, used: 40, qty: '2 left' },
+            { name: 'Bottom brackets (on shelf)',          bought:  80, shelf: 20, used: 60, qty: '¼ box' },
+            { name: 'Spokes (on shelf)',                   bought:  80, shelf: 20, used: 60, qty: '¼ bundle' },
+            { name: 'Tubes (on shelf)',                    bought:  40, shelf: 10, used: 30, qty: '¼ box' },
+        ];
+        const SUP_BY_NAME = {};
+        SUP_ITEMS.forEach(it => { SUP_BY_NAME[it.name] = it; });
+
+        // Right of Use (prepaid rent) — the consumable FOIL: used is KNOWN by the calendar, not inferred.
+        const ROU_LEASE = {
+            vendor: 'Rental Agreement — 142 Whalley Ave, Unit B',
+            meta: 'Lease (Doc 1) · first + last month paid in advance · $650/month',
+            paid: 'Paid from the bank (cash)',
+            items: [ { name: 'First month (May) — prepaid', amt: 650 }, { name: 'Last month — prepaid (still held)', amt: 650 } ],
+        };
+
+        // Liabilities — two flavors of obligation: money owed (card) vs work owed (Smith, unearned).
+        const CARD_EV = {
+            vendor: 'Credit Card Statement', meta: 'Harborline Visa •••• 3902 · May (Doc 6) — repair charges',
+            items: [ { name: 'Hand tools', amt: 300 }, { name: 'Air compressor', amt: 180 }, { name: 'Parts washer', amt: 130 }, { name: 'Wheel-truing stand', amt: 170 }, { name: 'Fixtures', amt: 750 }, { name: 'Parts (QBP)', amt: 500 } ],
+            charges: 2030, payments: 800, balance: 1230,
+        };
+        const SMITH_EV = { note: "Smith paid $220 up front for a custom frame you haven't built yet (Doc 8). You owe him the work — or his money back if you never do it." };
+
+        // ============================================================
+        // PAIRS / NET-MOVERS data (Increments 4–5, confirmed 2026-06-11).
+        // One row per EVENT at receipt level. Each event names the window where
+        // the student recorded it (win + rowId) and — for pairs — the window its
+        // OTHER side lives in (otherWin + otherRowId). Solos have otherWin: null;
+        // their other side isn't on any of these sheets, and they sort into
+        // cat: 'contributed' | 'earned' (user-facing label: Generated).
+        // The Liabilities/Cash "other side" rows come from records someone ELSE
+        // kept (the card statement, the bank) — the student never wrote them.
+        // ============================================================
+        const CASH_ROW_IDS = ['w_ca_rent', 'w_ca_stand', 'w_ca_v1', 'w_ca_v2', 'w_ca_v3', 'w_ca_v4', 'w_ca_pay1', 'w_ca_v5', 'w_ca_smith', 'w_ca_v6', 'w_ca_v7', 'w_ca_pay2'];
+        const PAIRS_WINDOWS = {
+            equipment: { title: 'Assets · Equipment', sub: 'your rows, grouped by receipt', total: { label: 'Equipment', amount: 1200 }, rows: [
+                { id: 'w_eq_stand', label: 'Park Tool repair stand', delta: 200 },
+                { id: 'w_eq_tools', label: 'Hand tools (6 items)', delta: 300 },
+                { id: 'w_eq_comp',  label: 'Air compressor', delta: 180 },
+                { id: 'w_eq_wash',  label: 'Parts washer', delta: 130 },
+                { id: 'w_eq_tru',   label: 'Wheel-truing stand', delta: 170 },
+                { id: 'w_eq_gear',  label: 'Gear from home (3 items)', delta: 220 },
+            ] },
+            computer: { title: 'Assets · Computer Equipment', sub: 'your row', total: { label: 'Computer Equipment', amount: 610 }, rows: [
+                { id: 'w_co_laptop', label: 'Laptop — from home (eBay comp)', delta: 610 },
+            ] },
+            supplies: { title: 'Assets · Supplies', sub: 'your pool rows', total: { label: 'On the shelf (counted)', amount: 200 }, rows: [
+                { id: 'w_su_bought', label: 'Parts bought — QBP (7 kinds)', delta: 500 },
+                { id: 'w_su_used',   label: 'Parts I must have used (inferred)', delta: -300 },
+            ] },
+            fixtures: { title: 'Assets · Fixtures', sub: 'your rows, one invoice', total: { label: 'Fixtures', amount: 750 }, rows: [
+                { id: 'w_fi_all', label: 'Fixtures (4 items, one invoice)', delta: 750 },
+            ] },
+            rou: { title: 'Assets · Right of Use', sub: 'your pool rows', total: { label: 'Prepaid (last month)', amount: 650 }, rows: [
+                { id: 'w_ro_paid', label: 'Rent paid in advance (2 months)', delta: 1300 },
+                { id: 'w_ro_used', label: 'May used up (by the calendar)', delta: -650 },
+            ] },
+            liab: { title: 'Liabilities', sub: 'the statement’s rows + Smith', total: { label: 'What you owe', amount: 1450 }, rows: [
+                { id: 'w_li_tools', label: 'May 5 — Cyclesport charge (hand tools)', delta: 300 },
+                { id: 'w_li_fix',   label: 'May 5 — Workspace Outfitters charge', delta: 750 },
+                { id: 'w_li_comp',  label: 'May 8 — Compressor Depot charge', delta: 180 },
+                { id: 'w_li_wash',  label: 'May 10 — Industrial Supply charge', delta: 130 },
+                { id: 'w_li_tru',   label: 'May 12 — Cyclesport charge (truing)', delta: 170 },
+                { id: 'w_li_parts', label: 'May 15 — QBP charge (parts)', delta: 500 },
+                { id: 'w_li_pay1',  label: 'May 16 — payment on the card', delta: -400 },
+                { id: 'w_li_pay2',  label: 'May 28 — payment on the card', delta: -400 },
+                { id: 'w_li_smith', label: 'Smith — the frame you owe (prepaid)', delta: 220 },
+            ] },
+            cash: { title: 'Cash', sub: 'the bank’s rows — repair flows only', total: { label: 'Net repair cash (short)', amount: -960 }, rows: CASH_FLOWS.map((f, i) => ({ id: CASH_ROW_IDS[i], label: `${f.date} — ${f.desc}`, delta: f.amount })) },
+        };
+        const WINROW_BY_ID = {};
+        Object.values(PAIRS_WINDOWS).forEach(w => w.rows.forEach(r => { WINROW_BY_ID[r.id] = r; }));
+
+        // ev: [modal, key] — which receipt popup backs this event's ⓘ.
+        const PAIR_EVENTS = [
+            // pairs — the other side is on another window
+            { id: 'e_stand', win: 'equipment', rowId: 'w_eq_stand',  otherWin: 'cash', otherRowId: 'w_ca_stand', ev: ['eq', 'g_stand'],      reason: 'Bought the Park Tool stand for $200 (debit — straight from the bank).' },
+            { id: 'e_tools', win: 'equipment', rowId: 'w_eq_tools',  otherWin: 'liab', otherRowId: 'w_li_tools', ev: ['eq', 'g_tools'],      reason: 'Bought $300 of hand tools on the card.' },
+            { id: 'e_comp',  win: 'equipment', rowId: 'w_eq_comp',   otherWin: 'liab', otherRowId: 'w_li_comp',  ev: ['eq', 'g_compressor'], reason: 'Bought an air compressor for $180 on the card.' },
+            { id: 'e_wash',  win: 'equipment', rowId: 'w_eq_wash',   otherWin: 'liab', otherRowId: 'w_li_wash',  ev: ['eq', 'g_washer'],     reason: 'Bought a parts washer for $130 on the card.' },
+            { id: 'e_tru',   win: 'equipment', rowId: 'w_eq_tru',    otherWin: 'liab', otherRowId: 'w_li_tru',   ev: ['eq', 'g_truing'],     reason: 'Bought a wheel-truing stand for $170 on the card.' },
+            { id: 'e_fix',   win: 'fixtures',  rowId: 'w_fi_all',    otherWin: 'liab', otherRowId: 'w_li_fix',   ev: ['eq', 'g_fixtures'],   reason: 'Bought $750 of fixtures on the card.' },
+            { id: 'e_parts', win: 'supplies',  rowId: 'w_su_bought', otherWin: 'liab', otherRowId: 'w_li_parts', ev: ['sup', 'qbp'],         reason: 'Bought $500 of parts on the card (QBP).' },
+            { id: 'e_rent',  win: 'rou',       rowId: 'w_ro_paid',   otherWin: 'cash', otherRowId: 'w_ca_rent',  ev: ['rou', 'lease'],       reason: 'Paid $1,300 of rent in advance (first + last month).' },
+            { id: 'e_smith', win: 'liab',      rowId: 'w_li_smith',  otherWin: 'cash', otherRowId: 'w_ca_smith', ev: ['liab', 'smith'],      reason: 'Smith paid $220 up front for a frame you haven’t built yet.' },
+            // v3: the paydowns are first met on the STATEMENT (walk-liab creates them); the bank's rows reuse them.
+            { id: 'e_pay1',  win: 'liab',      rowId: 'w_li_pay1',   otherWin: 'cash', otherRowId: 'w_ca_pay1',  ev: ['liab', 'card'],       reason: 'Paid $400 down on the card (May 16).' },
+            { id: 'e_pay2',  win: 'liab',      rowId: 'w_li_pay2',   otherWin: 'cash', otherRowId: 'w_ca_pay2',  ev: ['liab', 'card'],       reason: 'Paid $400 down on the card (May 28).' },
+            // solos — the other side isn't on any of these sheets
+            { id: 'e_gear',      win: 'equipment', rowId: 'w_eq_gear',   otherWin: null, cat: 'contributed', ev: ['eq', 'g_gear'],   reason: 'Brought gear you already owned — grinder, press, vacuum.' },
+            { id: 'e_laptop',    win: 'computer',  rowId: 'w_co_laptop', otherWin: null, cat: 'contributed', ev: ['eq', 'g_laptop'], reason: 'Brought your laptop from home.' },
+            { id: 'e_partsused', win: 'supplies',  rowId: 'w_su_used',   otherWin: null, cat: 'earned', ev: ['sup', 'used'],         reason: 'I must have used them doing repair work ($300 of parts).' },
+            { id: 'e_rentused',  win: 'rou',       rowId: 'w_ro_used',   otherWin: null, cat: 'earned', ev: ['rou', 'used'],         reason: 'Used the space for May ($650 — one of two prepaid months).' },
+            { id: 'e_v1', win: 'cash', rowId: 'w_ca_v1', otherWin: null, cat: 'earned', ev: null, reason: 'Finished a repair — customer paid $340 (May 7).' },
+            { id: 'e_v2', win: 'cash', rowId: 'w_ca_v2', otherWin: null, cat: 'earned', ev: null, reason: 'Finished a repair — customer paid $180 (May 10).' },
+            { id: 'e_v3', win: 'cash', rowId: 'w_ca_v3', otherWin: null, cat: 'earned', ev: null, reason: 'Finished a repair — customer paid $80 (May 12).' },
+            { id: 'e_v4', win: 'cash', rowId: 'w_ca_v4', otherWin: null, cat: 'earned', ev: null, reason: 'Finished a repair — customer paid $140 (May 14).' },
+            { id: 'e_v5', win: 'cash', rowId: 'w_ca_v5', otherWin: null, cat: 'earned', ev: null, reason: 'Finished a repair — customer paid $130 (May 19).' },
+            { id: 'e_v6', win: 'cash', rowId: 'w_ca_v6', otherWin: null, cat: 'earned', ev: null, reason: 'Finished a repair — customer paid $100 (May 23).' },
+            { id: 'e_v7', win: 'cash', rowId: 'w_ca_v7', otherWin: null, cat: 'earned', ev: null, reason: 'Finished a repair — customer paid $150 (May 27).' },
+            // the ex-post 12th solo — created only at the DISCOVERY in walk-cash (never upfront)
+            { id: 'e_plug', win: 'cash', rowId: 'w_ca_plug', otherWin: null, cat: 'contributed', ev: null, reason: 'My personal self covered what the work drew down — I only see it now, tallying up.' },
+        ];
+        const EV_BY_ID = {};
+        PAIR_EVENTS.forEach(e => { EV_BY_ID[e.id] = e; });
+        const SOLO_EVENT_IDS = PAIR_EVENTS.filter(e => !e.otherWin).map(e => e.id);
+        const PAIR_EVENT_COUNT = PAIR_EVENTS.filter(e => e.otherWin).length;
+        // Workbook row → the event it belongs to. side 1 = where the reason gets CREATED;
+        // side 2 = the second half (a record someone else kept) — answering it REUSES the reason.
+        const ROW_EVENT = {};
+        PAIR_EVENTS.forEach(e => {
+            ROW_EVENT[e.rowId] = { id: e.id, side: 1 };
+            if (e.otherRowId) ROW_EVENT[e.otherRowId] = { id: e.id, side: 2 };
+        });
+        WINROW_BY_ID['w_ca_plug'] = { id: 'w_ca_plug', label: 'From your personal self — covering what the work drew down', delta: 960 };
+        // v3 — receipt group → the reason (event) answering it creates; chip labels for the lists.
+        const GROUP_TO_EVENT = { g_stand: 'e_stand', g_tools: 'e_tools', g_compressor: 'e_comp', g_washer: 'e_wash', g_truing: 'e_tru', g_gear: 'e_gear', g_laptop: 'e_laptop', g_fixtures: 'e_fix' };
+        const LIST_LABEL = { equipment: 'Equipment', computer: 'Computer Equip.', supplies: 'Supplies', fixtures: 'Fixtures', rou: 'Right of Use', liab: 'Liabilities', cash: 'Cash' };
+
+
+        const xlDollars = (v) => (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US');
+        const signedDollars = (v) => (v >= 0 ? '+' : '−') + '$' + Math.abs(v).toLocaleString('en-US');
+
+        // ============================================================
+        // App
+        // ============================================================
+        const App = () => {
+            const [phase, setPhase] = useState('welcome');
+            const [step, setStep] = useState(0);
+            const [activeTab, setActiveTab] = useState('assets');
+            const [assetsExpanded, setAssetsExpanded] = useState({});
+
+            // Equipment item-level walk (Increment 1): "how did each item come in?"
+            const [eqItemRecorded, setEqItemRecorded] = useState({});   // item name -> recorded source
+            const [eqActiveItem, setEqActiveItem]     = useState(null); // item being answered
+            const [eqItemAttempts, setEqItemAttempts] = useState({});   // item name -> wrong-attempt count
+            const [eqItemNudge, setEqItemNudge]       = useState(null); // { item, attempted }
+            const [eqReceipt, setEqReceipt]           = useState(null); // group id whose receipt popup is open
+            const [eqAutoActive, setEqAutoActive]     = useState(false);
+            const [eqAutoDone, setEqAutoDone]         = useState(false);
+
+            // Supplies pool walk (Increment 2): bought + used, with the observed-vs-inferred beat
+            // Supplies — item-level (parallel to Equipment). Each part: purchase reason + use reason.
+            const [supActiveItem, setSupActiveItem] = useState(null);   // item name being recorded
+            const [supItemBought, setSupItemBought] = useState({});     // name → source ('card')
+            const [supItemUsed, setSupItemUsed]     = useState({});     // name → true (use recorded)
+            const [supItemAtt, setSupItemAtt]       = useState({});     // name → { bought, used }
+            const [supNudge, setSupNudge]           = useState(null);   // { item, step: 'bought'|'used' }
+            const [supAutoActive, setSupAutoActive] = useState(false);
+            const [supAutoDone, setSupAutoDone]     = useState(false);
+            const [supReceipt, setSupReceipt]       = useState(null);   // 'qbp' | 'used'
+
+            // Right of Use pool walk (Increment 3, the foil): paid + used, used is KNOWN (calendar)
+            const [rouActive, setRouActive]   = useState(null);  // 'paid' | 'used'
+            const [rouPaid, setRouPaid]       = useState(null);  // recorded source ('cash')
+            const [rouUsed, setRouUsed]       = useState(false); // recorded
+            const [rouPaidAtt, setRouPaidAtt] = useState(0);
+            const [rouUsedAtt, setRouUsedAtt] = useState(0);
+            const [rouNudge, setRouNudge]     = useState(null);  // 'paid' | 'used'
+            const [rouReceipt, setRouReceipt] = useState(null);  // 'lease' | 'used'
+
+            // v3 walk-liab / walk-cash — walking records OTHERS kept (the statement; the bank's flows).
+            // One row mechanic: side-1 rows CREATE reasons; side-2 rows REUSE them (⟷).
+            const [rowActive, setRowActive] = useState(null);  // workbook row id being answered
+            const [rowAtt, setRowAtt]       = useState({});    // row id -> wrong-attempt count
+            const [rowNudge, setRowNudge]   = useState(null);  // row id
+            const [rowAuto, setRowAuto]     = useState(null);  // 'liab' | 'cash' while autocompleting
+            const [liabReceipt, setLiabReceipt] = useState(null);  // 'card' | 'smith' (evidence modal)
+
+            // Welcome (v3): "does cash belong on this list?" → the −$960 reveal
+            const [wcAnswered, setWcAnswered] = useState(false);
+            const [wcAtt, setWcAtt]           = useState(0);
+            const [wcNudge, setWcNudge]       = useState(false);
+
+            // v3 — THE Reasons tab (window 2): one growing list across all walks
+            const [r3Created, setR3Created] = useState([]);  // event ids, creation order
+            const [r3Paired, setR3Paired]   = useState({});  // event id -> true once its second half is found (⟷)
+
+            // Crossout phase (v3): cross out the ⟷ reasons — they only shuffled
+            const [xOut, setXOut]   = useState({});    // event id -> true (crossed out)
+            const [xAuto, setXAuto] = useState(false);
+
+            // Sort phase (v3): the surviving solos into Contributed / Generated
+            const [categoryAssignments, setCategoryAssignments] = useState({});
+            const [sortAutoActive, setSortAutoActive] = useState(false);
+            const [sortAutoDone, setSortAutoDone] = useState(false);
+            const [sortNudge, setSortNudge] = useState(null);
+
+            // ★ The discovery (walk-cash): the ex-post $960 — recognized, never upfront
+            const [plugDone, setPlugDone]   = useState(false);
+            const [plugAtt, setPlugAtt]     = useState(0);
+            const [plugNudge, setPlugNudge] = useState(false);
+
+            const [showGlossary, setShowGlossary] = useState(false);
+            const [devMode, setDevMode] = useState(false);
+            const [headerClickCount, setHeaderClickCount] = useState(0);
+
+            // ----- Derived -----
+            const phaseOrder = ['welcome', 'walk-equipment', 'walk-computer', 'walk-supplies', 'walk-fixtures', 'walk-rou', 'walk-liab', 'walk-cash', 'crossout', 'sort', 'complete'];
+            const progress = Math.round((phaseOrder.indexOf(phase) / (phaseOrder.length - 1)) * 100);
+
+            const createdSolos = SOLO_EVENT_IDS.filter(id => r3Created.includes(id));
+            const correctlyAssignedCount = Object.keys(categoryAssignments).length;
+            const allSorted = createdSolos.length > 0 && correctlyAssignedCount === createdSolos.length;
+            const sortTriggerMet = correctlyAssignedCount >= 2 && !allSorted && !sortAutoActive && !sortAutoDone;
+
+            // v3: Cash lives ON the Assets tab — born in the welcome, repaired at the discovery.
+            const cashLineVisible = phase !== 'welcome' || wcAnswered;
+            const cashFlowRows = [
+                ...CASH_FLOWS.map((f, i) => ({ id: CASH_ROW_IDS[i], name: `${f.date} — ${f.desc}`, amount: f.amount })),
+                ...(plugDone ? [{ id: 'w_ca_plug', name: 'From your personal self — covering what the work drew down', amount: 960 }] : []),
+            ];
+            const cashBalance = cashFlowRows.reduce((s, r) => s + r.amount, 0); // −960 → 0
+
+            // ----- Handlers -----
+            const handleHeaderClick = () => {
+                const n = headerClickCount + 1;
+                setHeaderClickCount(n);
+                if (n >= 3) { setDevMode(!devMode); setHeaderClickCount(0); }
+            };
+
+            const handleRestart = () => {
+                playContinueClick();
+                setPhase('welcome'); setStep(0); setActiveTab('assets');
+                setAssetsExpanded({});
+                setXOut({}); setXAuto(false);
+                setCategoryAssignments({}); setSortAutoActive(false); setSortAutoDone(false); setSortNudge(null);
+                setPlugDone(false); setPlugAtt(0); setPlugNudge(false);
+                setEqItemRecorded({}); setEqActiveItem(null); setEqItemAttempts({});
+                setEqItemNudge(null); setEqReceipt(null); setEqAutoActive(false); setEqAutoDone(false);
+                setSupActiveItem(null); setSupItemBought({}); setSupItemUsed({});
+                setSupItemAtt({}); setSupNudge(null); setSupAutoActive(false); setSupAutoDone(false); setSupReceipt(null);
+                setRouActive(null); setRouPaid(null); setRouUsed(false);
+                setRouPaidAtt(0); setRouUsedAtt(0); setRouNudge(null); setRouReceipt(null);
+                setRowActive(null); setRowAtt({}); setRowNudge(null); setRowAuto(null); setLiabReceipt(null);
+                setWcAnswered(false); setWcAtt(0); setWcNudge(false);
+                setR3Created([]); setR3Paired({});
+            };
+
+            const toggleAssetCat = (cat) =>
+                setAssetsExpanded(prev => ({ ...prev, [cat]: !prev[cat] }));
+
+            // Equipment item-level handlers
+            const handleEqItemClick = (name) => {
+                if (eqItemRecorded[name] || eqAutoActive || eqAutoDone) return;
+                playContinueClick();
+                setEqActiveItem(name); setEqItemNudge(null);
+            };
+            // v3: answering for ANY item of a receipt group records the WHOLE group and creates
+            // ONE receipt-level reason row in the Reasons tab (one event, several things).
+            const createReason = (id) =>
+                setR3Created(prev => (prev.includes(id) ? prev : [...prev, id]));
+            const recordGroup = (groupId) => {
+                const members = [...EQUIP_ITEMS, ...COMP_ITEMS, ...FIX_ITEMS].filter(it => it.group === groupId);
+                setEqItemRecorded(prev => {
+                    const next = { ...prev };
+                    members.forEach(it => { next[it.name] = it.source; });
+                    return next;
+                });
+                createReason(GROUP_TO_EVENT[groupId]);
+            };
+            const handleEqItemAnswer = (name, source) => {
+                if (eqAutoActive) return;
+                const item = ITEM_BY_NAME[name];
+                if (source === item.source) {
+                    playSuccessTone(); recordGroup(item.group);
+                    setEqActiveItem(null); setEqItemNudge(null);
+                } else {
+                    const n = (eqItemAttempts[name] || 0) + 1;
+                    setEqItemAttempts(prev => ({ ...prev, [name]: n }));
+                    playSoftNope();
+                    if (n >= 3) {
+                        recordGroup(item.group);
+                        setEqActiveItem(null); setEqItemNudge(null);
+                    } else {
+                        setEqItemNudge({ item: name, attempted: source });
+                    }
+                }
+            };
+            const handleItemAutocomplete = (items) => {
+                if (eqAutoActive || eqAutoDone) return;
+                playContinueClick(); setEqAutoActive(true); setEqActiveItem(null); setEqItemNudge(null);
+                const remainingGroups = [...new Set(items.filter(it => !eqItemRecorded[it.name]).map(it => it.group))];
+                remainingGroups.forEach((g, i) => {
+                    setTimeout(() => {
+                        recordGroup(g);
+                        if (i === remainingGroups.length - 1) {
+                            setTimeout(() => { setEqAutoActive(false); setEqAutoDone(true); playSuccessTone(); }, 300);
+                        }
+                    }, i * 220);
+                });
+            };
+
+            // Supplies (v3): one QBP order, one shelf count — TWO pool-level reasons. Answering for
+            // any part covers them all (one event, one reason — the same rule as Equipment).
+            const handleSupItemClick = (name) => {
+                if (supItemBought[name] && supItemUsed[name]) return;
+                playContinueClick(); setSupActiveItem(name); setSupNudge(null);
+            };
+            const recordSupBought = () => {
+                createReason('e_parts');
+                setSupItemBought(() => { const m = {}; SUP_ITEMS.forEach(it => { m[it.name] = 'card'; }); return m; });
+            };
+            const recordSupUsed = () => {
+                createReason('e_partsused');
+                setSupItemUsed(() => { const m = {}; SUP_ITEMS.forEach(it => { m[it.name] = true; }); return m; });
+            };
+            const handleSupBoughtAnswer = (name, source) => {
+                if (source === 'card') { playSuccessTone(); recordSupBought(); setSupNudge(null); }
+                else {
+                    const n = (supItemAtt[name]?.bought || 0) + 1;
+                    setSupItemAtt(prev => ({ ...prev, [name]: { ...prev[name], bought: n } })); playSoftNope();
+                    if (n >= 3) { recordSupBought(); setSupNudge(null); }
+                    else setSupNudge({ item: name, step: 'bought' });
+                }
+            };
+            const handleSupUsedAnswer = (name, choice) => {
+                if (choice === 'used') { playSuccessTone(); recordSupUsed(); setSupActiveItem(null); setSupNudge(null); }
+                else {
+                    const n = (supItemAtt[name]?.used || 0) + 1;
+                    setSupItemAtt(prev => ({ ...prev, [name]: { ...prev[name], used: n } })); playSoftNope();
+                    if (n >= 3) { recordSupUsed(); setSupActiveItem(null); setSupNudge(null); }
+                    else setSupNudge({ item: name, step: 'used' });
+                }
+            };
+
+            // Right of Use (v3): ONE line on the Assets tab, TWO reasons behind it — the student
+            // clicks the workbook line (never the Reasons window); the card runs in two parts.
+            const handleRouLineClick = () => {
+                if (rouPaid && rouUsed) return;
+                playContinueClick(); setRouActive('line'); setRouNudge(null);
+            };
+            const handleRouPaidAnswer = (source) => {
+                if (source === 'cash') { playSuccessTone(); createReason('e_rent'); setRouPaid('cash'); setRouNudge(null); }
+                else {
+                    const n = rouPaidAtt + 1; setRouPaidAtt(n); playSoftNope();
+                    if (n >= 3) { createReason('e_rent'); setRouPaid('cash'); setRouNudge(null); }
+                    else setRouNudge('paid');
+                }
+            };
+            const handleRouUsedAnswer = (choice) => {
+                if (choice === 'known') { playSuccessTone(); createReason('e_rentused'); setRouUsed(true); setRouActive(null); setRouNudge(null); }
+                else {
+                    const n = rouUsedAtt + 1; setRouUsedAtt(n); playSoftNope();
+                    if (n >= 3) { createReason('e_rentused'); setRouUsed(true); setRouActive(null); setRouNudge(null); }
+                    else setRouNudge('used');
+                }
+            };
+
+            // v3 row mechanic (walk-liab + walk-cash): side-1 rows create, side-2 rows reuse.
+            const rowDone = (rowId) => {
+                const re = ROW_EVENT[rowId];
+                return re ? (re.side === 1 ? r3Created.includes(re.id) : !!r3Paired[re.id]) : false;
+            };
+            const recordRow = (rowId) => {
+                const re = ROW_EVENT[rowId];
+                if (re.side === 1) createReason(re.id);
+                else setR3Paired(prev => ({ ...prev, [re.id]: true }));
+            };
+            const handleRowClick = (rowId) => {
+                if (!ROW_EVENT[rowId] || rowDone(rowId) || rowAuto) return;
+                playContinueClick(); setRowActive(rowId); setRowNudge(null);
+            };
+            const handleRowAnswer = (rowId, ok) => {
+                if (ok) { playSuccessTone(); recordRow(rowId); setRowActive(null); setRowNudge(null); }
+                else {
+                    const n = (rowAtt[rowId] || 0) + 1;
+                    setRowAtt(prev => ({ ...prev, [rowId]: n })); playSoftNope();
+                    if (n >= 3) { recordRow(rowId); setRowActive(null); setRowNudge(null); }
+                    else setRowNudge(rowId);
+                }
+            };
+            const handleRowAutocomplete = (rowIds, key) => {
+                if (rowAuto) return;
+                playContinueClick(); setRowAuto(key); setRowActive(null); setRowNudge(null);
+                const remaining = rowIds.filter(id => !rowDone(id));
+                remaining.forEach((id, i) => {
+                    setTimeout(() => {
+                        recordRow(id);
+                        if (i === remaining.length - 1) setTimeout(() => { setRowAuto(null); playSuccessTone(); }, 300);
+                    }, i * 180);
+                });
+            };
+            // Stable reuse candidates: the correct reason + two other not-yet-paired ones (backfilled
+            // from already-paired reasons when the pool runs low), in Reasons-list order.
+            const reuseCandidates = (correctId) => {
+                let others = r3Created.filter(id => id !== correctId && EV_BY_ID[id].otherWin && !r3Paired[id]);
+                if (others.length < 2) {
+                    others = others.concat(r3Created.filter(id => id !== correctId && !others.includes(id)).slice(0, 2 - others.length));
+                }
+                others = others.slice(0, 2);
+                return [...others, correctId].sort((a, b) => r3Created.indexOf(a) - r3Created.indexOf(b));
+            };
+
+            // Crossout handlers — click a ⟷ reason to cross it out (it only shuffled)
+            const handleCrossClick = (id) => {
+                if (phase !== 'crossout' || !r3Paired[id] || xOut[id] || xAuto) return;
+                playSuccessTone(); setXOut(prev => ({ ...prev, [id]: true }));
+            };
+            const handleCrossAutocomplete = () => {
+                if (xAuto) return;
+                playContinueClick(); setXAuto(true);
+                const remaining = r3Created.filter(id => r3Paired[id] && !xOut[id]);
+                remaining.forEach((id, i) => {
+                    setTimeout(() => {
+                        setXOut(prev => ({ ...prev, [id]: true }));
+                        if (i === remaining.length - 1) setTimeout(() => { setXAuto(false); playSuccessTone(); }, 300);
+                    }, i * 160);
+                });
+            };
+
+            // Sort handlers — the surviving solos into Contributed / Generated
+            const handleCategoryAssign = (id, category) => {
+                if (phase !== 'sort' || sortAutoActive || sortAutoDone) return;
+                if (categoryAssignments[id]) return;
+                if (EV_BY_ID[id].cat === category) {
+                    playSuccessTone();
+                    setCategoryAssignments(prev => ({ ...prev, [id]: category }));
+                    setSortNudge(null);
+                } else {
+                    playSoftNope();
+                    setSortNudge({ id, attempted: category });
+                }
+            };
+            const handleSortAutocomplete = () => {
+                if (sortAutoActive || sortAutoDone) return;
+                playContinueClick(); setSortAutoActive(true); setSortNudge(null);
+                const unassigned = createdSolos.filter(id => !categoryAssignments[id]);
+                unassigned.forEach((id, i) => {
+                    setTimeout(() => {
+                        setCategoryAssignments(prev => ({ ...prev, [id]: EV_BY_ID[id].cat }));
+                        if (i === unassigned.length - 1) {
+                            setTimeout(() => { setSortAutoActive(false); setSortAutoDone(true); playSuccessTone(); }, 300);
+                        }
+                    }, i * 160);
+                });
+            };
+            const handlePlugAnswer = (choice) => {
+                if (choice === 'pocket') { playSuccessTone(); createReason('e_plug'); setPlugDone(true); setPlugNudge(false); }
+                else {
+                    const n = plugAtt + 1; setPlugAtt(n); playSoftNope();
+                    if (n >= 3) { createReason('e_plug'); setPlugDone(true); setPlugNudge(false); }
+                    else setPlugNudge(true);
+                }
+            };
+
+            // Welcome (v3): the student argues cash onto the Assets list (1.3's benefit definition);
+            // on the answer the 1.3 Cash tab folds into Assets (tab vanishes, line appears).
+            const handleWcAnswer = (choice) => {
+                if (choice === 'benefit') { playSuccessTone(); setWcAnswered(true); setWcNudge(false); setActiveTab('assets'); }
+                else {
+                    const n = wcAtt + 1; setWcAtt(n); playSoftNope();
+                    if (n >= 3) { setWcAnswered(true); setWcNudge(false); setActiveTab('assets'); }
+                    else setWcNudge(true);
+                }
+            };
+
+            // ============================================================
+            // Shared components
+            // ============================================================
+            const Header = () => (
+                <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: colors.primary }}>
+                    <div className="flex justify-between items-start">
+                        <div onClick={handleHeaderClick} style={{ cursor: 'pointer' }}>
+                            <h1 className="text-lg font-bold text-white">Tutorial 1.4: Keeping the Reasons</h1>
+                            <p className="text-sm mt-1" style={{ color: colors.earthLight }}>
+                                Bicycle repair shop &middot; ~15 min
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <a href="index.html"
+                               className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer no-underline inline-flex items-center justify-center"
+                               title="Return to Main" aria-label="Return to Main">🏠</a>
+                            <button onClick={() => setShowGlossary(true)}
+                                    className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer"
+                                    title="Glossary" aria-label="Open glossary">📖</button>
+                            <button onClick={handleRestart}
+                                    className="p-2 rounded-lg hover:bg-white/10 text-white text-xl border-0 bg-transparent cursor-pointer"
+                                    title="Restart tutorial" aria-label="Restart tutorial">↺</button>
+                        </div>
+                    </div>
+                    <div className="mt-4">
+                        <div className="flex justify-between text-xs mb-1" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                            <span>Progress</span><span>{progress}%</span>
+                        </div>
+                        <div className="h-2 rounded-full" style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
+                             role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100}>
+                            <div className="h-full rounded-full transition-all duration-500"
+                                 style={{ width: `${progress}%`, backgroundColor: colors.accent }} />
+                        </div>
+                    </div>
+                    {devMode && (
+                        <div className="mt-3 pt-3" style={{ borderTop: '1px solid rgba(255,255,255,0.2)' }}>
+                            <p className="text-xs mb-2" style={{ color: 'rgba(255,255,255,0.7)' }}>Dev: skip to phase</p>
+                            <div className="flex flex-wrap gap-1">
+                                {phaseOrder.map(p => (
+                                    <button key={p} onClick={() => { setStep(0); setPhase(p); }}
+                                            className="px-2 py-1 rounded text-xs border-0 cursor-pointer"
+                                            style={{
+                                                backgroundColor: phase === p ? 'white' : 'rgba(255,255,255,0.2)',
+                                                color: phase === p ? colors.primary : 'white'
+                                            }}>{p}</button>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+
+            const NarrativeBlock = ({ children }) => (
+                <div className="p-4 rounded-lg mb-4 italic"
+                     style={{ backgroundColor: colors.sand, borderLeft: `4px solid ${colors.accent}`, color: '#374151' }}>
+                    {children}
+                </div>
+            );
+
+            const InsightPanel = ({ children }) => (
+                <div className="p-4 rounded-lg border-2 mb-4"
+                     style={{ backgroundColor: colors.successBg, borderColor: colors.success }}>
+                    <div className="flex items-start gap-2">
+                        <span className="text-lg mt-0.5 flex-shrink-0" style={{ color: colors.success }}>✓</span>
+                        <div style={{ color: '#166534' }}>{children}</div>
+                    </div>
+                </div>
+            );
+
+            const KeyInsightBox = ({ children }) => (
+                <div className="p-4 rounded-lg border-2 mb-4"
+                     style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
+                    <div className="flex items-start gap-3">
+                        <span className="text-lg flex-shrink-0 mt-0.5" style={{ color: colors.accent }}>💡</span>
+                        <div style={{ color: colors.earthDark }}>{children}</div>
+                    </div>
+                </div>
+            );
+
+            const AnnaBox = ({ children }) => (
+                <div className="rounded-lg p-4 mb-3 border-2"
+                     style={{ borderColor: colors.clayDark, backgroundColor: 'white' }}>
+                    <p className="text-xs font-bold mb-2 tracking-wide" style={{ color: colors.primary }}>ANNA</p>
+                    <div className="text-sm italic" style={{ color: colors.earthDark }}>{children}</div>
+                </div>
+            );
+
+            const ContinueButton = ({ onClick, children = 'Continue', disabled = false, asLink = null }) => {
+                if (asLink) {
+                    return (
+                        <a href={asLink}
+                           className="w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 border-0 cursor-pointer no-underline"
+                           style={{ backgroundColor: colors.primary, color: 'white' }}>
+                            {children} →
+                        </a>
+                    );
+                }
+                return (
+                    <button onClick={() => { if (!disabled) { playContinueClick(); onClick(); } }}
+                            disabled={disabled}
+                            className="w-full py-3 rounded-lg font-bold flex items-center justify-center gap-2 border-0 cursor-pointer disabled:cursor-not-allowed"
+                            style={{ backgroundColor: disabled ? colors.earth : colors.primary, color: 'white', opacity: disabled ? 0.5 : 1 }}>
+                        {children} →
+                    </button>
+                );
+            };
+
+            const GlossaryModal = () => showGlossary && (
+                <div className="fixed inset-0 flex items-center justify-center p-4 z-50"
+                     style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setShowGlossary(false)}>
+                    <div className="bg-white rounded-xl max-w-md w-full" style={{ maxHeight: '80vh', overflowY: 'auto' }}
+                         onClick={(e) => e.stopPropagation()}>
+                        <div className="p-4 border-b flex justify-between items-center sticky top-0 bg-white"
+                             style={{ borderColor: colors.earthLight }}>
+                            <h3 className="font-bold" style={{ color: colors.primary }}>📖 Glossary</h3>
+                            <button onClick={() => setShowGlossary(false)}
+                                    className="text-gray-500 hover:text-gray-700 text-2xl font-light border-0 bg-transparent cursor-pointer"
+                                    aria-label="Close glossary">✕</button>
+                        </div>
+                        <div className="p-4 space-y-3">
+                            {glossaryTerms.map((item, i) => (
+                                <div key={i}>
+                                    <p className="font-semibold text-sm" style={{ color: colors.primary }}>{item.term}</p>
+                                    <p className="text-xs mt-0.5" style={{ color: colors.earthDark }}>{item.definition}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+
+            // ============================================================
+            // Excel workbook (Bike-Repair.xlsx) — carried from 1.3, + Reasons & Cash tabs
+            // ============================================================
+            const XLGRID = '22px 34px 1fr 110px'; // outline gutter · row# · label · value
+            const xlGutter = <div style={{ backgroundColor: '#e2e8f0', alignSelf: 'stretch', borderRight: '1px solid #cbd5e1' }}></div>;
+
+            // v3: the Cash tab (carried in from 1.3) appears ONLY in the welcome, until the
+            // student argues cash onto the Assets list — then it folds in and the tab vanishes.
+            const tabConfig = [
+                { id: 'assets',      label: 'Assets' },
+                { id: 'liabilities', label: 'Liabilities' },
+                { id: 'cash',        label: 'Cash' },
+                { id: 'reasons',     label: 'Reasons', isNew: true },
+            ];
+
+            const renderExcelWorkbook = (active, body) => {
+              const tabs = phase === 'welcome'
+                  ? tabConfig.filter(t => t.id !== 'reasons' && (wcAnswered ? t.id !== 'cash' : true))
+                  : tabConfig.filter(t => t.id !== 'cash');
+              return (
+                <div className="rounded-lg overflow-hidden mb-4" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 6px 18px rgba(0,0,0,0.12)' }}>
+                    <div className="px-4 py-2 flex items-center justify-between" style={{ background: 'linear-gradient(180deg, #138a4b 0%, #107C41 100%)', borderBottom: '1px solid #0e6b3a', color: 'white' }}>
+                        <span className="text-sm font-semibold tracking-tight flex items-center gap-2">
+                            <span style={{ fontSize: '15px' }}>▦</span>
+                            <span className="mono">Bike-Repair.xlsx</span>
+                            <span className="text-xs font-normal opacity-75">&mdash; Excel</span>
+                        </span>
+                        <span className="text-xs mono opacity-75">{tabs.find(t => t.id === active).label} sheet</span>
+                    </div>
+                    <div style={{ minHeight: '320px', backgroundColor: 'white' }}>{body}</div>
+                    <div className="flex" style={{ backgroundColor: '#e8e8e8', borderTop: '1px solid #c8c8c8' }}>
+                        {tabs.map(t => {
+                            const isActive = t.id === active;
+                            return (
+                                <button key={t.id} onClick={() => { playContinueClick(); setActiveTab(t.id); }}
+                                        className="px-4 py-1.5 text-sm font-medium border-0 cursor-pointer"
+                                        style={{ backgroundColor: isActive ? 'white' : 'transparent', color: isActive ? '#0e6b3a' : colors.earth, borderTop: isActive ? '2px solid #107C41' : '2px solid transparent', borderRight: '1px solid #c8c8c8', borderBottom: isActive ? '1px solid white' : 'none', marginBottom: isActive ? '-1px' : '0' }}>
+                                    {t.label}
+                                    {t.isNew && <span className="ml-1.5 text-xs font-normal italic" style={{ color: colors.accent }}>new</span>}
+                                </button>
+                            );
+                        })}
+                        <div className="px-3 py-1.5 text-sm" style={{ color: colors.earthLight }}>&#65291;</div>
+                    </div>
+                </div>
+              );
+            };
+
+            // ----- Assets sheet (collapsible outline; v3: Cash lives ON the list, honest sum) -----
+            const renderAssetsSheet = (interactiveCat = null) => {
+                // v3: Cash is an Assets line (a present right to FUTURE benefits — argued on in the
+                // welcome), expandable to the dated repair flows. It reads −$960 (the mystery, in
+                // warning style) until the discovery repairs it to $0; the TOTAL is the honest sum
+                // (2,450 ⚠ → 3,410).
+                const cats = ASSETS_SNAPSHOT.filter(c => c.cat !== 'CASH').map(c => ({ ...c, rows: c.items }));
+                if (cashLineVisible) {
+                    cats.push({ cat: 'CASH', subtotal: cashBalance,
+                                rows: cashFlowRows.map(r => ({ name: r.name, amount: r.amount, flow: true, rowId: r.id })) });
+                }
+                const total = cats.reduce((s, c) => s + c.subtotal, 0);
+                const totalGap = cashLineVisible && cashBalance < 0;
+                let n = 0; const rows = [];
+                cats.forEach(cat => {
+                    const label = cat.cat === 'RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0) + cat.cat.slice(1).toLowerCase());
+                    n += 1; rows.push({ kind: 'cat', cat: cat.cat, label, num: n, amount: cat.subtotal });
+                    cat.rows.forEach(it => { n += 1; rows.push({ kind: 'item', cat: cat.cat, num: n, label: it.name, amount: it.amount, flow: !!it.flow, rowId: it.rowId }); });
+                });
+                return (
+                    <>
+                        <div className="grid items-center text-xs font-semibold" style={{ gridTemplateColumns: XLGRID, backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: colors.earthDark }}>
+                            {xlGutter}
+                            <div className="text-center py-1" style={{ borderRight: '1px solid #cbd5e1' }}></div>
+                            <div className="py-1 px-2" style={{ borderRight: '1px solid #cbd5e1' }}>A&nbsp;&nbsp;Asset</div>
+                            <div className="py-1 px-2 text-right">B&nbsp;&nbsp;Value</div>
+                        </div>
+                        {rows.map(row => {
+                            if (row.kind === 'item' && !assetsExpanded[row.cat]) return null;
+                            const open = !!assetsExpanded[row.cat];
+                            if (row.kind === 'cat') {
+                                const cashGapRow = row.cat === 'CASH' && row.amount < 0;
+                                return (
+                                    <div key={row.cat} className="grid items-center" style={{ gridTemplateColumns: XLGRID, backgroundColor: cashGapRow ? colors.warningBg : '#eaf3ec', borderBottom: '1px solid #e2e8f0' }}>
+                                        <div className="flex items-center justify-center" style={{ backgroundColor: '#e2e8f0', alignSelf: 'stretch', borderRight: '1px solid #cbd5e1' }}>
+                                            <button onClick={() => { playContinueClick(); toggleAssetCat(row.cat); }} className="cursor-pointer flex items-center justify-center leading-none" style={{ width: '13px', height: '13px', border: '1px solid #6b7280', backgroundColor: 'white', color: '#374151', fontSize: '11px', fontWeight: 700, padding: 0, borderRadius: '1px' }} title={open ? 'Collapse' : 'Expand'} aria-expanded={open}>{open ? '−' : '+'}</button>
+                                        </div>
+                                        <div className="text-center text-xs py-1" style={{ backgroundColor: '#f8fafc', color: colors.earth, borderRight: '1px solid #e2e8f0' }}>{row.num}</div>
+                                        <div className="py-1 px-2 text-sm font-bold" style={{ color: cashGapRow ? '#92400e' : '#0e6b3a', borderRight: '1px solid #e2e8f0' }}>{row.label}{cashGapRow ? ' ⚠' : ''}</div>
+                                        <div className="py-1 px-2 text-right text-sm mono font-bold" style={{ color: cashGapRow ? '#92400e' : '#0e6b3a' }}>{cashGapRow ? signedDollars(row.amount) : xlDollars(row.amount)}</div>
+                                    </div>
+                                );
+                            }
+                            const isInteractive = interactiveCat && row.cat === interactiveCat;
+                            const isSup = isInteractive && interactiveCat === 'SUPPLIES';
+                            const isRou = isInteractive && interactiveCat === 'RIGHT OF USE';
+                            const isCash = isInteractive && interactiveCat === 'CASH';
+                            const rec = isInteractive && (isSup ? (supItemBought[row.label] && supItemUsed[row.label]) : isRou ? (rouPaid && rouUsed) : isCash ? rowDone(row.rowId) : eqItemRecorded[row.label]);
+                            const act = isInteractive && (isSup ? supActiveItem === row.label : isRou ? rouActive === 'line' : isCash ? rowActive === row.rowId : eqActiveItem === row.label);
+                            const autoBusy = isSup ? supAutoActive : isRou ? false : isCash ? !!rowAuto : eqAutoActive;
+                            const canClick = isInteractive && !rec && !autoBusy;
+                            const onItemClick = () => isSup ? handleSupItemClick(row.label) : isRou ? handleRouLineClick() : isCash ? handleRowClick(row.rowId) : handleEqItemClick(row.label);
+                            const onInfo = () => isSup ? setSupReceipt('qbp') : isRou ? setRouReceipt('lease') : isCash ? null : setEqReceipt(ITEM_BY_NAME[row.label].group);
+                            return (
+                                <div key={row.cat + row.num} className="grid items-center" style={{ gridTemplateColumns: XLGRID, borderBottom: '1px solid #eef2f7', backgroundColor: act ? '#fff7d6' : (rec ? '#f0fdf4' : 'white') }}>
+                                    {xlGutter}
+                                    <div className="text-center text-xs py-1" style={{ backgroundColor: '#f8fafc', color: colors.earth, borderRight: '1px solid #e2e8f0' }}>{row.num}</div>
+                                    <div className="py-1 px-2 pl-6 text-sm flex items-center gap-1" style={{ borderRight: '1px solid #eef2f7' }}>
+                                        {isInteractive ? (
+                                            <button onClick={onItemClick} disabled={!canClick}
+                                                    className="text-left border-0 bg-transparent flex-1 p-0 text-sm"
+                                                    style={{ cursor: canClick ? 'pointer' : 'default', color: rec ? colors.success : colors.earthDark, fontWeight: act ? 700 : 400 }}>
+                                                {rec ? '✓ ' : ''}{row.label}
+                                            </button>
+                                        ) : (
+                                            <span className="flex-1" style={{ color: colors.earthDark }}>{row.label}</span>
+                                        )}
+                                        {isInteractive && !isCash && (
+                                            <button onClick={onInfo} title="See the evidence"
+                                                    className="border-0 bg-transparent flex-shrink-0" style={{ color: colors.primary, fontSize: '13px', lineHeight: 1, cursor: 'pointer' }}>ⓘ</button>
+                                        )}
+                                    </div>
+                                    <div className="py-1 px-2 text-right text-sm mono" style={{ color: row.flow ? (row.amount > 0 ? '#166534' : colors.error) : (rec ? colors.success : colors.earthDark) }}>{row.flow ? signedDollars(row.amount) : xlDollars(row.amount)}</div>
+                                </div>
+                            );
+                        })}
+                        <div className="grid items-center" style={{ gridTemplateColumns: XLGRID, backgroundColor: totalGap ? colors.warningBg : colors.sand, borderTop: '2px solid #0e6b3a' }}>
+                            {xlGutter}
+                            <div className="text-center text-xs py-2" style={{ backgroundColor: '#f8fafc', borderRight: '1px solid #e2e8f0' }}></div>
+                            <div className="py-2 px-2 text-sm font-bold" style={{ color: colors.primary, borderRight: '1px solid #e2e8f0' }}>TOTAL &mdash; what I have</div>
+                            <div className="py-2 px-2 text-right text-sm mono font-bold" style={{ color: totalGap ? '#92400e' : colors.primary }}>{xlDollars(total)}{totalGap ? ' ⚠' : ''}</div>
+                        </div>
+                    </>
+                );
+            };
+
+            // ----- Liabilities sheet ($1,450; v3: the card line expands to the statement's rows;
+            //       interactive mode = walk-liab, where rows create or reuse reasons) -----
+            const renderLiabilitiesSheet = (interactive = false) => {
+                const cardOpen = !!assetsExpanded['CARD'];
+                const cardRows = PAIRS_WINDOWS.liab.rows.filter(r => r.id !== 'w_li_smith');
+                const smithRec = interactive && rowDone('w_li_smith');
+                const smithAct = interactive && rowActive === 'w_li_smith';
+                let n = 0;
+                return (
+                    <>
+                        <div className="grid items-center text-xs font-semibold" style={{ gridTemplateColumns: XLGRID, backgroundColor: '#f1f5f9', borderBottom: '1px solid #cbd5e1', color: colors.earthDark }}>
+                            {xlGutter}
+                            <div className="text-center py-1" style={{ borderRight: '1px solid #cbd5e1' }}></div>
+                            <div className="py-1 px-2" style={{ borderRight: '1px solid #cbd5e1' }}>A&nbsp;&nbsp;Liability (what I owe)</div>
+                            <div className="py-1 px-2 text-right">B&nbsp;&nbsp;Amount</div>
+                        </div>
+                        <div className="grid items-center" style={{ gridTemplateColumns: XLGRID, borderBottom: '1px solid #eef2f7', backgroundColor: smithAct ? '#fff7d6' : (smithRec ? '#f0fdf4' : 'white') }}>
+                            {xlGutter}
+                            <div className="text-center text-xs py-1" style={{ backgroundColor: '#f8fafc', color: colors.earth, borderRight: '1px solid #e2e8f0' }}>{++n}</div>
+                            <div className="py-1 px-2 text-sm" style={{ borderRight: '1px solid #eef2f7' }}>
+                                {interactive ? (
+                                    <button onClick={() => handleRowClick('w_li_smith')} disabled={smithRec || !!rowAuto}
+                                            className="text-left border-0 bg-transparent w-full p-0 text-sm"
+                                            style={{ cursor: smithRec || rowAuto ? 'default' : 'pointer', color: smithRec ? colors.success : colors.primary, fontWeight: smithAct ? 700 : 600 }}>
+                                        {smithRec ? '✓ ' : ''}{LIABILITIES_SNAPSHOT[0].label}
+                                    </button>
+                                ) : (
+                                    <span style={{ color: colors.earthDark }}>{LIABILITIES_SNAPSHOT[0].label}</span>
+                                )}
+                            </div>
+                            <div className="py-1 px-2 text-right text-sm mono" style={{ color: smithRec ? colors.success : colors.earthDark }}>{xlDollars(LIABILITIES_SNAPSHOT[0].amount)}</div>
+                        </div>
+                        <div className="grid items-center" style={{ gridTemplateColumns: XLGRID, backgroundColor: '#eaf3ec', borderBottom: '1px solid #e2e8f0' }}>
+                            <div className="flex items-center justify-center" style={{ backgroundColor: '#e2e8f0', alignSelf: 'stretch', borderRight: '1px solid #cbd5e1' }}>
+                                <button onClick={() => { playContinueClick(); toggleAssetCat('CARD'); }} className="cursor-pointer flex items-center justify-center leading-none" style={{ width: '13px', height: '13px', border: '1px solid #6b7280', backgroundColor: 'white', color: '#374151', fontSize: '11px', fontWeight: 700, padding: 0, borderRadius: '1px' }} title={cardOpen ? 'Collapse' : 'Expand'} aria-expanded={cardOpen}>{cardOpen ? '−' : '+'}</button>
+                            </div>
+                            <div className="text-center text-xs py-1" style={{ backgroundColor: '#f8fafc', color: colors.earth, borderRight: '1px solid #e2e8f0' }}>{++n}</div>
+                            <div className="py-1 px-2 text-sm font-bold" style={{ color: '#0e6b3a', borderRight: '1px solid #e2e8f0' }}>{LIABILITIES_SNAPSHOT[1].label}</div>
+                            <div className="py-1 px-2 text-right text-sm mono font-bold" style={{ color: '#0e6b3a' }}>{xlDollars(LIABILITIES_SNAPSHOT[1].amount)}</div>
+                        </div>
+                        {cardOpen && cardRows.map(r => {
+                            const rRec = interactive && rowDone(r.id);
+                            const rAct = interactive && rowActive === r.id;
+                            return (
+                                <div key={r.id} className="grid items-center" style={{ gridTemplateColumns: XLGRID, borderBottom: '1px solid #eef2f7', backgroundColor: rAct ? '#fff7d6' : (rRec ? '#f0fdf4' : 'white') }}>
+                                    {xlGutter}
+                                    <div className="text-center text-xs py-1" style={{ backgroundColor: '#f8fafc', color: colors.earth, borderRight: '1px solid #e2e8f0' }}>{++n}</div>
+                                    <div className="py-1 px-2 pl-6 text-sm" style={{ borderRight: '1px solid #eef2f7' }}>
+                                        {interactive ? (
+                                            <button onClick={() => handleRowClick(r.id)} disabled={rRec || !!rowAuto}
+                                                    className="text-left border-0 bg-transparent w-full p-0 text-sm"
+                                                    style={{ cursor: rRec || rowAuto ? 'default' : 'pointer', color: rRec ? colors.success : colors.primary, fontWeight: rAct ? 700 : 600 }}>
+                                                {rRec ? '✓ ' : ''}{r.label}
+                                            </button>
+                                        ) : (
+                                            <span style={{ color: colors.earthDark }}>{r.label}</span>
+                                        )}
+                                    </div>
+                                    <div className="py-1 px-2 text-right text-sm mono" style={{ color: rRec ? colors.success : (r.delta > 0 ? '#166534' : colors.error) }}>{signedDollars(r.delta)}</div>
+                                </div>
+                            );
+                        })}
+                        {cardOpen && (
+                            <div className="grid items-center" style={{ gridTemplateColumns: XLGRID, borderBottom: '1px solid #eef2f7', backgroundColor: '#fafaf7' }}>
+                                {xlGutter}
+                                <div className="text-center text-xs py-1" style={{ backgroundColor: '#f8fafc', borderRight: '1px solid #e2e8f0' }}></div>
+                                <div className="py-1 px-2 pl-6 text-xs italic" style={{ color: colors.earth, borderRight: '1px solid #eef2f7' }}>From the statement (Doc 6): $2,030 charged − $800 repaid</div>
+                                <div className="py-1 px-2 text-right text-xs mono" style={{ color: colors.earth }}>= $1,230</div>
+                            </div>
+                        )}
+                        <div className="grid items-center" style={{ gridTemplateColumns: XLGRID, backgroundColor: colors.sand, borderTop: '2px solid #0e6b3a' }}>
+                            {xlGutter}
+                            <div className="text-center text-xs py-2" style={{ backgroundColor: '#f8fafc', borderRight: '1px solid #e2e8f0' }}></div>
+                            <div className="py-2 px-2 text-sm font-bold" style={{ color: colors.primary, borderRight: '1px solid #e2e8f0' }}>TOTAL &mdash; what I owe</div>
+                            <div className="py-2 px-2 text-right text-sm mono font-bold" style={{ color: colors.primary }}>{xlDollars(LIABILITIES_TOTAL)}</div>
+                        </div>
+                    </>
+                );
+            };
+
+            // ----- THE Reasons tab (window 2 of the same workbook) — one growing list, all walks (v3) -----
+            const ReasonsWindow = ({ note, crossing = false }) => (
+                <div className="rounded-lg overflow-hidden" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+                    <div className="px-3 py-2 text-white text-sm font-semibold flex items-center justify-between" style={{ background: 'linear-gradient(180deg,#138a4b,#107C41)' }}>
+                        <span className="mono">Bike-Repair.xlsx:2</span><span className="text-xs opacity-80">Reasons <span className="italic font-normal">— side by side</span></span>
+                    </div>
+                    {r3Created.length === 0 ? (
+                        <div className="p-6 text-center"><p className="text-sm italic" style={{ color: colors.earth }}>{note || 'Your new tab, opened in a second window. Click a line on the left — its reason lands here.'}</p></div>
+                    ) : (
+                        <>
+                            <div className="grid text-xs uppercase tracking-wide font-semibold px-3 py-2 border-b" style={{ color: colors.earth, borderColor: colors.earthLight, gridTemplateColumns: '1fr 70px', backgroundColor: '#fafaf7' }}>
+                                <span>Reason</span><span className="text-right">Δ</span>
+                            </div>
+                            <div style={{ maxHeight: '430px', overflowY: 'auto' }}>
+                                {r3Created.map(id => {
+                                    const e = EV_BY_ID[id];
+                                    const d = WINROW_BY_ID[e.rowId].delta;
+                                    const crossed = !!xOut[id];
+                                    const crossable = crossing && r3Paired[id] && !crossed && !xAuto;
+                                    return (
+                                        <div key={id} onClick={() => crossing && handleCrossClick(id)} className="row-fade px-3 py-1.5"
+                                             style={{ borderBottom: `1px solid ${colors.earthLight}`, cursor: crossable ? 'pointer' : 'default', opacity: crossed ? 0.55 : 1, backgroundColor: crossed ? '#fafaf7' : 'white' }}>
+                                            <div className="grid items-start" style={{ gridTemplateColumns: '1fr 70px' }}>
+                                                <span className="text-xs" style={{ color: crossed ? colors.earth : colors.earthDark, textDecoration: crossed ? 'line-through' : 'none' }}>{e.reason}</span>
+                                                <span className="mono text-xs text-right" style={{ color: crossed ? colors.earth : (d > 0 ? '#166534' : colors.error), textDecoration: crossed ? 'line-through' : 'none' }}>{signedDollars(d)}</span>
+                                            </div>
+                                            <div className="flex gap-1 mt-0.5">
+                                                <span className="text-xs px-1.5 rounded" style={{ backgroundColor: '#eaf3ec', color: '#0e6b3a' }}>{LIST_LABEL[e.win]}</span>
+                                                {r3Paired[id] && e.otherWin && <span className="text-xs px-1.5 rounded font-bold" style={{ backgroundColor: '#fef9e7', color: colors.earthDark }}>⟷ {LIST_LABEL[e.otherWin]}</span>}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <div className="flex justify-between items-center px-3 py-2" style={{ backgroundColor: colors.sand, borderTop: `1px solid ${colors.earthLight}` }}>
+                                <span className="text-xs font-bold" style={{ color: colors.primary }}>{r3Created.length} {r3Created.length === 1 ? 'reason' : 'reasons'} so far</span>
+                            </div>
+                        </>
+                    )}
+                </div>
+            );
+
+            // ----- Reuse card (walk-liab + walk-cash): "which reason already explains this row?" -----
+            const ReuseCard = ({ rowId, evidence }) => {
+                const re = ROW_EVENT[rowId];
+                const row = WINROW_BY_ID[rowId];
+                const att = rowAtt[rowId] || 0;
+                return (
+                    <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                        <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}>
+                            <span style={{ color: colors.earthDark }}>{row.label} ({signedDollars(row.delta)})</span> — you've
+                            seen this event before. Which reason already explains it?
+                        </p>
+                        <div className="flex flex-col gap-2">
+                            {reuseCandidates(re.id).map(cid => (
+                                <button key={cid} onClick={() => handleRowAnswer(rowId, cid === re.id)}
+                                        className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer"
+                                        style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>{EV_BY_ID[cid].reason}</button>
+                            ))}
+                            {evidence && (
+                                <button onClick={evidence.onClick} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ borderColor: colors.earthLight, color: colors.earth, backgroundColor: colors.sand }}>{evidence.label}</button>
+                            )}
+                        </div>
+                        {rowNudge === rowId && att < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}>
+                                <p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {att}/2:</strong> {att === 1
+                                    ? 'Read the row — vendor, date, amount — then scan your Reasons window for the same event.'
+                                    : `Match the amount: this row moved ${signedDollars(row.delta)}. Only one reason moved exactly that much.`}</p>
+                            </div>
+                        )}
+                    </div>
+                );
+            };
+
+            // The 1.3 Cash tab, as the student left it — shown only in the welcome, pre-fold.
+            const renderCashTab = () => (
+                <div className="text-sm">
+                    <div className="px-3 py-2 border-b text-xs uppercase tracking-wide font-bold" style={{ borderColor: colors.earthLight, backgroundColor: '#fafaf7', color: colors.earth }}>Repair cash — pulled from the bank statement (May)</div>
+                    {CASH_FLOWS.map((f, i) => (
+                        <div key={i} className="flex justify-between px-3 py-1" style={{ borderBottom: `1px solid ${colors.earthLight}`, backgroundColor: i % 2 ? '#fafaf7' : 'white' }}>
+                            <span className="text-xs" style={{ color: colors.earthDark }}><span className="mono inline-block w-14" style={{ color: colors.earth }}>{f.date}</span>{f.desc}</span>
+                            <span className="mono text-xs" style={{ color: f.amount > 0 ? '#166534' : colors.error }}>{signedDollars(f.amount)}</span>
+                        </div>
+                    ))}
+                    <div className="flex justify-between px-3 py-2" style={{ backgroundColor: colors.warningBg, borderTop: `2px solid ${colors.warning}`, color: '#92400e', fontWeight: 700 }}>
+                        <span>Net repair cash — May</span><span className="mono">−$960 ⚠</span>
+                    </div>
+                </div>
+            );
+
+            const workbookBody = () => {
+                if (activeTab === 'assets')      return renderAssetsSheet();
+                if (activeTab === 'liabilities') return renderLiabilitiesSheet();
+                if (activeTab === 'cash')        return renderCashTab();
+                return null;
+            };
+
+            // ============================================================
+            // Phase renderers
+            // ============================================================
+            const renderWelcome = () => (
+                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-3xl mx-auto">
+                        <Header />
+                        <NarrativeBlock>
+                            Anna's back, coffee in hand. Your workbook is open to the two lists that earned their
+                            names in your last sit-down: <strong>Assets</strong> (what you have — $3,410) and
+                            {' '}<strong>Liabilities</strong> (what you owe — $1,450). And off to the side, still
+                            its own tab: <strong>Cash</strong> — the repair flows you pulled out of the bank
+                            statement together, netting <strong>−$960</strong> for the month.
+                            <br /><br />
+                            She studies the tab strip for a moment, then taps the screen. "That Cash tab has been
+                            bugging me since we built it. It's just… sitting there, off to the side."
+                        </NarrativeBlock>
+
+                        {renderExcelWorkbook(activeTab, workbookBody())}
+
+                        {!wcAnswered && (
+                            <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                                <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}>
+                                    "Everything on the Assets list earned its place by being useful to the work —
+                                    remember, an asset is a <em>right to a benefit</em>, not just a thing. So: the money
+                                    on that Cash tab. Does cash belong on the <span style={{ color: colors.earthDark }}>Assets
+                                    list itself</span>?"
+                                </p>
+                                <div className="flex flex-col gap-2">
+                                    <button onClick={() => handleWcAnswer('notbenefit')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>No — money isn't a benefit. It's just money.</button>
+                                    <button onClick={() => handleWcAnswer('benefit')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Yes — it's a right to future benefits. It gets me the next box of parts.</button>
+                                </div>
+                                {wcNudge && wcAtt < 3 && (
+                                    <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}>
+                                        <p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {wcAtt}/2:</strong> {wcAtt === 1
+                                            ? 'Think back to the lease: the prepaid month was an asset before you ever used the space — because of what it would do for you later. What does cash do for you later?'
+                                            : 'The bills themselves aren’t the benefit. What they can get you is — parts, rent, tools. A right to future benefits, held now.'}</p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {wcAnswered && (
+                            <>
+                                <AnnaBox>
+                                    "Right. Money isn't useful by itself — it's useful for what it gets you <em>later</em>.
+                                    A right to future benefits, held now. So it doesn't belong off to the side." She drags
+                                    the Cash tab into the Assets list. "There — the tab's gone. Cash is a line like
+                                    everything else now, with the bank's rows tucked under it."
+                                    <br /><br />
+                                    "But now look at it. <strong>Minus $960</strong> — the same number we pulled out of the
+                                    bank statement, but it's sitting <em>on a list of things you have</em>. Rights to
+                                    benefits. You can't hold a <em>negative</em> right. That line can't be right as it
+                                    stands." She frowns at it, then shrugs. "Leave it. The minus sign is trying to tell us
+                                    something — by the end of today you'll know what."
+                                </AnnaBox>
+
+                                <div className="rounded-lg p-4 border-2 mb-4" style={{ backgroundColor: 'white', borderColor: colors.earthLight }}>
+                                    <h3 className="font-bold mb-3" style={{ color: colors.primary }}>What You'll Discover</h3>
+                                    <ul className="space-y-2 text-sm" style={{ color: colors.earthDark }}>
+                                        <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span><span>The amount tells you what moved; only the <em>reason</em> tells you what happened.</span></li>
+                                        <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span><span>Once the reasons are written down, a pattern shows up on its own: most of them touch <em>two</em> lists.</span></li>
+                                        <li className="flex gap-2"><span style={{ color: colors.accent }}>→</span><span>And that <strong>−$960</strong> that shouldn't be able to exist? No amount on these lists can explain it — but a reason can.</span></li>
+                                    </ul>
+                                </div>
+
+                                <ContinueButton onClick={() => { setStep(0); setAssetsExpanded(prev => ({ ...prev, EQUIPMENT: true })); setPhase('walk-equipment'); }}>
+                                    Keep the reasons — add a tab
+                                </ContinueButton>
+                            </>
+                        )}
+                    </div>
+                    <GlossaryModal />
+                </div>
+            );
+
+            // ----- Phase: crossout — the short reveal: the ⟷ reasons only shuffled; cross them out -----
+            const renderCrossout = () => {
+                const paired = r3Created.filter(id => r3Paired[id]);
+                const crossedCount = paired.filter(id => xOut[id]).length;
+                const allCrossed = paired.length > 0 && crossedCount === paired.length;
+                const triggerMet = crossedCount >= 2 && !allCrossed && !xAuto;
+                return (
+                    <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                        <div className="p-4 max-w-3xl mx-auto">
+                            <Header />
+                            {!allCrossed && (
+                                <AnnaBox>
+                                    "Twenty-three reasons — and eleven wear that <strong>⟷</strong> badge: each of those
+                                    lives on <em>two</em> of your lists. When both sides sit on your lists, they move
+                                    together — what you have and what you owe shift by the same amount, and your
+                                    {' '}<strong>net</strong> doesn't budge. They just <em>shuffle</em>. Cross them out —
+                                    click a ⟷ reason."
+                                </AnnaBox>
+                            )}
+                            <div className="mb-3"><ReasonsWindow crossing /></div>
+                            {triggerMet && (
+                                <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
+                                    <p className="text-sm mb-2" style={{ color: colors.earthDark }}><strong>You've got the rule.</strong> Cross out the rest of the ⟷ reasons?</p>
+                                    <button onClick={handleCrossAutocomplete} className="w-full py-3 rounded-lg font-bold text-white border-0 cursor-pointer" style={{ backgroundColor: colors.primary }}>Cross out the rest →</button>
+                                </div>
+                            )}
+                            {xAuto && (
+                                <div className="rounded-lg p-4 mb-3 system-sorting" style={{ backgroundColor: colors.primary, color: 'white', textAlign: 'center' }}><p className="text-base font-bold">⚙ Crossing out the shufflers&hellip;</p></div>
+                            )}
+                            {allCrossed && !xAuto && (
+                                <>
+                                    <AnnaBox>
+                                        "Look at what stands: twelve reasons with no second list — the gear and laptop you
+                                        brought, the seven jobs customers paid for, the parts and the month the work used
+                                        up… and the $960 your personal self covered. Each one <em>moved your net</em>."
+                                    </AnnaBox>
+                                    <KeyInsightBox>
+                                        <p className="font-semibold mb-2">The crossed-out ones just shuffled.</p>
+                                        <p>Buy parts on the card: parts up <em>and</em> owed up. Pay the card down: cash
+                                           down <em>and</em> owed down. The <strong>survivors</strong> are how you know how
+                                           the repair work is doing — and they sort into two plain kinds. One last move.</p>
+                                    </KeyInsightBox>
+                                    <ContinueButton onClick={() => { setStep(0); setPhase('sort'); }}>Sort the net-movers</ContinueButton>
+                                </>
+                            )}
+                        </div>
+                        <GlossaryModal />
+                    </div>
+                );
+            };
+
+            // ----- Phase: sort — the surviving solos into Contributed / Generated -----
+            const renderSort = () => {
+                const solos = createdSolos.map(id => EV_BY_ID[id]);
+                const unassigned = solos.filter(e => !categoryAssignments[e.id]);
+                const contributed = solos.filter(e => categoryAssignments[e.id] === 'contributed');
+                const earned = solos.filter(e => categoryAssignments[e.id] === 'earned');
+                const contributedTotal = contributed.reduce((s, e) => s + WINROW_BY_ID[e.rowId].delta, 0);
+                const earnedTotal = earned.reduce((s, e) => s + WINROW_BY_ID[e.rowId].delta, 0);
+                const sorted = sortAutoDone || allSorted;
+                const nudgeEv = sortNudge ? EV_BY_ID[sortNudge.id] : null;
+
+                const binSection = (title, rows, total, color) => (
+                    <React.Fragment>
+                        <div className="flex justify-between items-center py-2 px-3" style={{ borderBottom: `1px solid ${colors.earthLight}`, borderTop: `2px solid ${color}`, backgroundColor: '#fafaf7' }}>
+                            <span className="font-bold text-sm" style={{ color }}>{title} <span style={{ color: colors.earth, fontWeight: 400 }}>({rows.length})</span></span>
+                            <span className="mono text-sm font-bold" style={{ color }}>{signedDollars(total)}</span>
+                        </div>
+                        {rows.length === 0 && (
+                            <div className="p-2 text-center"><p className="text-xs italic" style={{ color: colors.earth }}>(empty so far)</p></div>
+                        )}
+                        {rows.map((e, i) => (
+                            <div key={e.id} className="row-fade grid items-center text-xs px-3 py-1.5" style={{ borderBottom: `1px solid ${colors.earthLight}`, backgroundColor: i % 2 === 0 ? 'white' : '#fafaf7', gridTemplateColumns: '1.2fr 80px 2.4fr' }}>
+                                <span style={{ color: colors.earthDark }}>{LIST_LABEL[e.win]}</span>
+                                <span className="mono text-right pr-3" style={{ color: WINROW_BY_ID[e.rowId].delta > 0 ? '#166534' : colors.error }}>{signedDollars(WINROW_BY_ID[e.rowId].delta)}</span>
+                                <span className="pl-3" style={{ color: colors.earthDark }}>{e.reason}</span>
+                            </div>
+                        ))}
+                    </React.Fragment>
+                );
+
+                return (
+                    <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                        <div className="p-4 max-w-3xl mx-auto">
+                            <Header />
+                            {!sorted && (
+                                <AnnaBox>
+                                    "Twelve survivors — and they split into just two kinds. Some you <strong>put in</strong>
+                                    {' '}from outside the repair work — the gear, the laptop, the cash your personal self
+                                    covered. The rest came from <strong>doing the work</strong>: what customers paid, less
+                                    the parts and the month the work used up. Sort each row into its pile."
+                                </AnnaBox>
+                            )}
+                            {sortNudge && nudgeEv && !sorted && (
+                                <div className="rounded-lg p-3 mb-3" style={{ backgroundColor: colors.warningBg, border: `1px solid ${colors.warning}` }}>
+                                    <p className="text-sm italic" style={{ color: '#92400e' }}>
+                                        {sortNudge.attempted === 'contributed'
+                                            ? "That one didn't come from you bringing something in — it came from doing the repair work. Try the other pile."
+                                            : "That one didn't come from doing repair work — it came in from outside. Try the other pile."}
+                                    </p>
+                                </div>
+                            )}
+                            <div className="rounded-lg overflow-hidden mb-3" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+                                <div className="px-3 py-2 text-white text-sm font-semibold flex items-center justify-between" style={{ background: 'linear-gradient(180deg,#138a4b,#107C41)' }}>
+                                    <span className="mono">Reasons</span><span className="text-xs opacity-80">net-movers — two piles</span>
+                                </div>
+                                {unassigned.length > 0 && (
+                                    <>
+                                        <div className="px-3 py-2" style={{ backgroundColor: '#fafaf7', borderBottom: `1px solid ${colors.earthLight}` }}>
+                                            <p className="text-xs uppercase tracking-wide font-bold" style={{ color: colors.earth }}>To sort ({unassigned.length} {unassigned.length === 1 ? 'row' : 'rows'})</p>
+                                        </div>
+                                        {unassigned.map(e => (
+                                            <div key={e.id} className="row-fade px-3 py-2" style={{ borderBottom: `1px solid ${colors.earthLight}` }}>
+                                                <div className="grid items-center text-xs mb-1" style={{ gridTemplateColumns: '1.2fr 80px 2.4fr' }}>
+                                                    <span style={{ color: colors.earthDark }}>{LIST_LABEL[e.win]}</span>
+                                                    <span className="mono text-right pr-3" style={{ color: WINROW_BY_ID[e.rowId].delta > 0 ? '#166534' : colors.error }}>{signedDollars(WINROW_BY_ID[e.rowId].delta)}</span>
+                                                    <span className="pl-3" style={{ color: colors.earthDark }}>{e.reason}</span>
+                                                </div>
+                                                <div className="flex gap-2 mt-1 ml-1">
+                                                    <button onClick={() => handleCategoryAssign(e.id, 'contributed')}
+                                                            className="text-xs px-2 py-1 rounded border cursor-pointer"
+                                                            style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>→ Contributed</button>
+                                                    <button onClick={() => handleCategoryAssign(e.id, 'earned')}
+                                                            className="text-xs px-2 py-1 rounded border cursor-pointer"
+                                                            style={{ backgroundColor: 'white', borderColor: colors.accent, color: colors.earthDark }}>→ Generated</button>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </>
+                                )}
+                                {binSection('CONTRIBUTED', contributed, contributedTotal, colors.primary)}
+                                {binSection('GENERATED', earned, earnedTotal, colors.accent)}
+                            </div>
+                            {sortTriggerMet && (
+                                <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
+                                    <p className="text-sm mb-2" style={{ color: colors.earthDark }}><strong>You've got the rule.</strong> Sort the rest?</p>
+                                    <button onClick={handleSortAutocomplete} className="w-full py-3 rounded-lg font-bold text-white border-0 cursor-pointer" style={{ backgroundColor: colors.primary }}>Sort the rest →</button>
+                                </div>
+                            )}
+                            {sortAutoActive && (
+                                <div className="rounded-lg p-4 mb-3 system-sorting" style={{ backgroundColor: colors.primary, color: 'white', textAlign: 'center' }}>
+                                    <p className="text-base font-bold">⚙ Sorting the rest&hellip;</p>
+                                </div>
+                            )}
+                            {sorted && (
+                                <>
+                                    <AnnaBox>
+                                        "Two piles. <strong>Contributed {signedDollars(contributedTotal)}</strong> — what came
+                                        in from outside the work: the gear, the laptop, and the $960 you only saw by tallying
+                                        up. <strong>Generated {signedDollars(earnedTotal)}</strong> — what the work produced
+                                        on its own: customers paid $1,120, less the parts and the month it used. That's May,
+                                        explained."
+                                    </AnnaBox>
+                                    <KeyInsightBox>
+                                        <p className="font-semibold mb-2">Two ways your stake grew.</p>
+                                        <p><strong>Contributed ({signedDollars(contributedTotal)}):</strong> from outside the
+                                           repair work — including the personal cash it quietly drew down, the hole you plugged
+                                           without ever deciding to.</p>
+                                        <p className="mt-2"><strong>Generated ({signedDollars(earnedTotal)}):</strong> from
+                                           doing the work — what customers paid, less the parts and the month of space used up.</p>
+                                        <p className="mt-2">You haven't named what these piles add up to, or seen where the
+                                           survivors' other sides live. That's next.</p>
+                                    </KeyInsightBox>
+                                    <ContinueButton onClick={() => setPhase('complete')}>Finish up</ContinueButton>
+                                </>
+                            )}
+                        </div>
+                        <GlossaryModal />
+                    </div>
+                );
+            };
+
+            // ----- Equipment receipt popup (evidence behind a purchase) -----
+            const EqReceiptModal = () => {
+                if (!eqReceipt) return null;
+                const g = EQUIP_GROUPS.find(x => x.id === eqReceipt);
+                if (!g) return null;
+                const ev = g.ev;
+                return (
+                    <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setEqReceipt(null)}>
+                        <div className="bg-white rounded-xl w-full" style={{ maxWidth: '360px', maxHeight: '80vh', overflowY: 'auto' }} onClick={(e) => e.stopPropagation()}>
+                            <div className="p-3 border-b flex justify-between items-center" style={{ borderColor: colors.earthLight }}>
+                                <h3 className="font-bold text-sm" style={{ color: colors.primary }}>{ev.kind === 'ebay' ? 'Evidence — market value' : 'Evidence — receipt'}</h3>
+                                <button onClick={() => setEqReceipt(null)} className="text-gray-500 text-2xl font-light border-0 bg-transparent cursor-pointer" aria-label="Close">✕</button>
+                            </div>
+                            <div className="p-4">
+                                <p className="font-bold text-sm" style={{ color: colors.earthDark }}>{ev.vendor}</p>
+                                <p className="text-xs mb-3" style={{ color: colors.earth }}>{ev.meta}</p>
+                                <div>
+                                    {ev.items.map((it, i) => (
+                                        <div key={i} className="flex justify-between py-1 text-xs" style={{ borderBottom: `1px dashed ${colors.earthLight}`, color: colors.earthDark }}>
+                                            <span>{it.name}</span><span className="mono">${it.amt.toLocaleString('en-US')}</span>
+                                        </div>
+                                    ))}
+                                    <div className="flex justify-between py-1 text-xs font-bold" style={{ borderTop: `1px solid ${colors.earthDark}`, color: colors.primary }}>
+                                        <span>Total</span><span className="mono">${g.amount.toLocaleString('en-US')}</span>
+                                    </div>
+                                </div>
+                                <p className="text-xs mt-3" style={{ color: colors.earth }}><strong>Paid:</strong> {ev.paid}</p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            // ----- Phase: walk-equipment (two linked windows — Equipment ⇄ Reasons) -----
+            const renderWalkEquipment = () => {
+                const recordedCount = EQUIP_ITEMS.filter(it => eqItemRecorded[it.name]).length;
+                const allRecorded = recordedCount === EQUIP_ITEMS.length;
+                const groupsDone = [...new Set(EQUIP_ITEMS.filter(it => eqItemRecorded[it.name]).map(it => it.group))].length;
+                const active = eqActiveItem ? ITEM_BY_NAME[eqActiveItem] : null;
+                const attempts = eqActiveItem ? (eqItemAttempts[eqActiveItem] || 0) : 0;
+                const triggerMet = groupsDone >= 2 && !allRecorded && !active && !eqAutoActive && !eqAutoDone;
+                return (
+                  <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-5xl mx-auto">
+                      <Header />
+                      <AnnaBox>
+                        "There's your new <strong>Reasons</strong> tab — I opened it in a <em>second window</em>, side by
+                        side, so a reason always sits next to the change it explains. Now go down your
+                        {' '}<strong>Equipment</strong> list. Click an item and record <em>how it came in</em> — the
+                        receipt ({'ⓘ'}) is the clue. One receipt sometimes brought in several things: one reason covers
+                        them all."
+                      </AnnaBox>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3 items-start">
+                        {/* LEFT — window 1: the real Assets tab; Equipment items are interactive */}
+                        <div className="rounded-lg overflow-hidden" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+                          <div className="px-3 py-2 text-white text-sm font-semibold flex items-center justify-between" style={{ background: 'linear-gradient(180deg,#138a4b,#107C41)' }}>
+                            <span className="mono">Bike-Repair.xlsx:1</span><span className="text-xs opacity-80">Assets</span>
+                          </div>
+                          {renderAssetsSheet('EQUIPMENT')}
+                        </div>
+
+                        {/* RIGHT — window 2: THE Reasons tab (grows for the rest of the tutorial) */}
+                        <ReasonsWindow note="Your new tab, opened in a second window. Click an Equipment item on the left — its reason lands here." />
+                      </div>
+
+                      {/* Choice strip — appears when an item is active */}
+                      {active && !eqAutoActive && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                          <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}>How did <span style={{ color: colors.earthDark }}>{active.name} (${active.amt})</span> come in?</p>
+                          <div className="flex flex-wrap gap-2">
+                            {['card','cash','home'].map(opt => (
+                              <button key={opt} onClick={() => handleEqItemAnswer(active.name, opt)}
+                                      className="px-3 py-2 rounded-lg text-sm font-medium border-2 cursor-pointer"
+                                      style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>
+                                {SOURCE_LABEL[opt]}
+                              </button>
+                            ))}
+                            <button onClick={() => setEqReceipt(active.group)} className="px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ borderColor: colors.earthLight, color: colors.earth, backgroundColor: colors.sand }}>{'ⓘ'} See the receipt</button>
+                          </div>
+                          {eqItemNudge && eqItemNudge.item === active.name && attempts < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}>
+                              <p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {attempts}/2:</strong> {attempts === 1 ? 'Open the receipt — it shows how this one was paid.' : 'On the receipt: a Visa charge means the card; a debit means cash; an eBay value with no receipt means you brought it from home.'}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {triggerMet && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
+                          <p className="text-sm mb-2" style={{ color: colors.earthDark }}><strong>You've got the rhythm.</strong> Record the reason for the rest of the Equipment items?</p>
+                          <button onClick={() => handleItemAutocomplete(EQUIP_ITEMS)} className="w-full py-3 rounded-lg font-bold text-white border-0 cursor-pointer" style={{ backgroundColor: colors.primary }}>Record the rest →</button>
+                        </div>
+                      )}
+                      {eqAutoActive && (
+                        <div className="rounded-lg p-4 mb-3 system-sorting" style={{ backgroundColor: colors.primary, color: 'white', textAlign: 'center' }}>
+                          <p className="text-base font-bold">⚙ Recording the rest&hellip;</p>
+                        </div>
+                      )}
+                      {recordedCount > 0 && !active && !triggerMet && !allRecorded && !eqAutoActive && (
+                        <p className="text-sm italic text-center mb-3" style={{ color: colors.earth }}>Click the next Equipment item to record its reason.</p>
+                      )}
+                      {allRecorded && !eqAutoActive && (
+                        <>
+                          <KeyInsightBox>
+                            <p className="font-semibold mb-2">Thirteen items — six reasons.</p>
+                            <p>Equipment totals <strong>$1,200</strong>, and every line carries the <em>why</em> behind it:
+                               on the card, paid with the debit card, or brought from home. Six events brought in
+                               thirteen things — one event, one reason, however many items. The list shows <em>what you
+                               have</em>; the Reasons tab shows <em>how it got here</em>.</p>
+                          </KeyInsightBox>
+                          <ContinueButton onClick={() => { setStep(0); setEqActiveItem(null); setEqAutoActive(false); setEqAutoDone(false); setAssetsExpanded(prev => ({ ...prev, ['COMPUTER EQUIPMENT']: true })); setPhase('walk-computer'); }}>
+                            Next — Computer Equipment
+                          </ContinueButton>
+                        </>
+                      )}
+                    </div>
+                    <EqReceiptModal />
+                    <GlossaryModal />
+                  </div>
+                );
+            };
+
+            // ----- Phase: walk-computer (acquisition account, item-level like Equipment — one item) -----
+            const renderWalkComputer = () => {
+                const recordedCount = COMP_ITEMS.filter(it => eqItemRecorded[it.name]).length;
+                const allRecorded = recordedCount === COMP_ITEMS.length;
+                const recordedTotal = COMP_ITEMS.filter(it => eqItemRecorded[it.name]).reduce((s, it) => s + it.amt, 0);
+                const active = eqActiveItem ? ITEM_BY_NAME[eqActiveItem] : null;
+                const attempts = eqActiveItem ? (eqItemAttempts[eqActiveItem] || 0) : 0;
+                return (
+                  <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-5xl mx-auto">
+                      <Header />
+                      <AnnaBox>
+                        "Next line down: <strong>Computer Equipment</strong> — the laptop you run the shop on. Same move as
+                        the tools: click it and record <em>how it came in</em>. There's no store receipt for this one — open
+                        the ⓘ to see how it was valued."
+                      </AnnaBox>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3 items-start">
+                        {/* LEFT — window 1: the real Assets tab; Computer Equipment is interactive */}
+                        <div className="rounded-lg overflow-hidden" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+                          <div className="px-3 py-2 text-white text-sm font-semibold flex items-center justify-between" style={{ background: 'linear-gradient(180deg,#138a4b,#107C41)' }}>
+                            <span className="mono">Bike-Repair.xlsx:1</span><span className="text-xs opacity-80">Assets</span>
+                          </div>
+                          {renderAssetsSheet('COMPUTER EQUIPMENT')}
+                        </div>
+
+                        {/* RIGHT — window 2: THE Reasons tab (same list, still growing) */}
+                        <ReasonsWindow />
+                      </div>
+
+                      {/* Choice strip — appears when the item is active */}
+                      {active && !eqAutoActive && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                          <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}>How did <span style={{ color: colors.earthDark }}>{active.name} (${active.amt})</span> come in?</p>
+                          <div className="flex flex-wrap gap-2">
+                            {['card','cash','home'].map(opt => (
+                              <button key={opt} onClick={() => handleEqItemAnswer(active.name, opt)}
+                                      className="px-3 py-2 rounded-lg text-sm font-medium border-2 cursor-pointer"
+                                      style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>
+                                {SOURCE_LABEL[opt]}
+                              </button>
+                            ))}
+                            <button onClick={() => setEqReceipt(active.group)} className="px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ borderColor: colors.earthLight, color: colors.earth, backgroundColor: colors.sand }}>{'ⓘ'} See the valuation</button>
+                          </div>
+                          {eqItemNudge && eqItemNudge.item === active.name && attempts < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}>
+                              <p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {attempts}/2:</strong> {attempts === 1 ? 'Open the ⓘ — there\'s no store receipt for the laptop.' : 'No purchase, no card charge — it came over from home. Its value is an eBay comp (Doc 9).'}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {recordedCount === 0 && !active && (
+                        <p className="text-sm italic text-center mb-3" style={{ color: colors.earth }}>Click the Laptop row on the left to record its reason.</p>
+                      )}
+                      {allRecorded && (
+                        <>
+                          <KeyInsightBox>
+                            <p className="font-semibold mb-2">Same record, even with no receipt.</p>
+                            <p>The laptop's <strong>$610</strong> got on the list the same way as everything else — for a
+                               reason. There was no purchase this month; you <em>brought it from home</em>. The list shows
+                               <em> what you have</em>; the Reasons tab shows <em>how it got here</em>.</p>
+                          </KeyInsightBox>
+                          <ContinueButton onClick={() => { setStep(0); setEqActiveItem(null); setEqAutoActive(false); setEqAutoDone(false); setAssetsExpanded(prev => ({ ...prev, SUPPLIES: true })); setPhase('walk-supplies'); }}>
+                            Next — Supplies
+                          </ContinueButton>
+                        </>
+                      )}
+                    </div>
+                    <EqReceiptModal />
+                    <GlossaryModal />
+                  </div>
+                );
+            };
+
+            // ----- Supplies evidence popup (the QBP invoice, or the inference explainer) -----
+            const SupReceiptModal = () => {
+                if (!supReceipt) return null;
+                if (supReceipt === 'qbp') {
+                    return (
+                        <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setSupReceipt(null)}>
+                            <div className="bg-white rounded-xl w-full" style={{ maxWidth: '360px', maxHeight: '80vh', overflowY: 'auto' }} onClick={(e) => e.stopPropagation()}>
+                                <div className="p-3 border-b flex justify-between items-center" style={{ borderColor: colors.earthLight }}>
+                                    <h3 className="font-bold text-sm" style={{ color: colors.primary }}>Evidence — invoice</h3>
+                                    <button onClick={() => setSupReceipt(null)} className="text-gray-500 text-2xl font-light border-0 bg-transparent cursor-pointer" aria-label="Close">✕</button>
+                                </div>
+                                <div className="p-4">
+                                    <p className="font-bold text-sm" style={{ color: colors.earthDark }}>{SUP_QBP.vendor}</p>
+                                    <p className="text-xs mb-3" style={{ color: colors.earth }}>{SUP_QBP.meta}</p>
+                                    {SUP_QBP.items.map((it, i) => (
+                                        <div key={i} className="flex justify-between py-1 text-xs" style={{ borderBottom: `1px dashed ${colors.earthLight}`, color: colors.earthDark }}><span>{it.name}</span><span className="mono">${it.amt}</span></div>
+                                    ))}
+                                    <div className="flex justify-between py-1 text-xs font-bold" style={{ borderTop: `1px solid ${colors.earthDark}`, color: colors.primary }}><span>Total</span><span className="mono">$500</span></div>
+                                    <p className="text-xs mt-3" style={{ color: colors.earth }}><strong>Paid:</strong> {SUP_QBP.paid}</p>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+                if (supReceipt === 'shelfcount') {
+                    return (
+                        <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setSupReceipt(null)}>
+                            <div className="rounded-xl w-full" style={{ maxWidth: '360px', maxHeight: '85vh', overflowY: 'auto', backgroundColor: '#fffdf2' }} onClick={(e) => e.stopPropagation()}>
+                                <div className="p-3 border-b flex justify-between items-center" style={{ borderColor: colors.earthLight }}>
+                                    <h3 className="font-bold text-sm" style={{ color: colors.primary }}>Evidence — the shelf count <span className="font-normal" style={{ color: colors.earth }}>(Document 13)</span></h3>
+                                    <button onClick={() => setSupReceipt(null)} className="text-gray-500 text-2xl font-light border-0 bg-transparent cursor-pointer" aria-label="Close">✕</button>
+                                </div>
+                                <div className="p-4">
+                                    <div style={{ fontFamily: '"Caveat","Segoe Script",cursive', transform: 'rotate(-.5deg)', backgroundColor: '#fffdf2', border: '1px solid #e6e0c8', borderRadius: '6px', padding: '14px 16px', boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
+                                        <p className="mb-2" style={{ fontSize: '22px', fontWeight: 700, color: '#1f2937', borderBottom: '1px solid #cbbf95', paddingBottom: '4px' }}>Parts left on shelf — 5/31</p>
+                                        {SUP_ITEMS.map((it, i) => (
+                                            <div key={i} className="flex justify-between" style={{ fontSize: '19px', color: '#1f2937', padding: '1px 0' }}><span>{it.name.replace(' (on shelf)', '')}</span><span>{it.qty}</span></div>
+                                        ))}
+                                        <p style={{ fontSize: '16px', color: '#6b6450', marginTop: '10px', transform: 'rotate(.4deg)' }}>counted by hand on the shelf. rest went into May jobs.</p>
+                                    </div>
+                                    <p className="text-xs mt-3" style={{ color: colors.earth }}>This is what you <strong>counted</strong> — just the quantities left. The dollar values and totals get filled in on the Excel sheet; "used" is then backed out there: bought <span className="mono">$500</span> − shelf <span className="mono">$200</span> = used <span className="mono">$300</span>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+                return (
+                    <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setSupReceipt(null)}>
+                        <div className="bg-white rounded-xl w-full" style={{ maxWidth: '380px', maxHeight: '80vh', overflowY: 'auto' }} onClick={(e) => e.stopPropagation()}>
+                            <div className="p-3 border-b flex justify-between items-center" style={{ borderColor: colors.earthLight }}>
+                                <h3 className="font-bold text-sm" style={{ color: colors.primary }}>Why "used" is inferred</h3>
+                                <button onClick={() => setSupReceipt(null)} className="text-gray-500 text-2xl font-light border-0 bg-transparent cursor-pointer" aria-label="Close">✕</button>
+                            </div>
+                            <div className="p-4 text-sm" style={{ color: colors.earthDark }}>
+                                <p className="mb-2">There's no receipt for "used." You reach it by counting what's left and backing it out:</p>
+                                <div className="rounded p-2 mb-3" style={{ backgroundColor: colors.sand }}>
+                                    <div className="flex justify-between text-xs"><span>Bought (QBP invoice)</span><span className="mono">$500</span></div>
+                                    <div className="flex justify-between text-xs"><span>On the shelf (counted — Doc 13)</span><span className="mono">− $200</span></div>
+                                    <div className="flex justify-between text-xs font-bold" style={{ borderTop: `1px solid ${colors.earthDark}`, color: colors.primary }}><span>Used (inferred)</span><span className="mono">$300</span></div>
+                                </div>
+                                <p className="text-xs mb-2"><strong>Worked example — chains:</strong> you bought a box for <span className="mono">$100</span>, and <span className="mono">$50</span> is still on the shelf. So <span className="mono">$50</span> must have been used — you didn't <em>count</em> "used," you inferred it.</p>
+                                <p className="text-xs" style={{ color: colors.earth }}>The shelf total comes from the handwritten count (<strong>Document 13</strong>). This assumes everything gone was consumed in jobs (not lost or miscounted).</p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            // ----- Phase: walk-supplies (v3: one click, a two-part card — bought, then "I must have used them") -----
+            const renderWalkSupplies = () => {
+                const allDone = SUP_ITEMS.every(it => supItemBought[it.name] && supItemUsed[it.name]);
+                const active = supActiveItem ? SUP_BY_NAME[supActiveItem] : null;
+                const part = active ? (!supItemBought[active.name] ? 'bought' : 'used') : null;
+                const att = active ? (supItemAtt[active.name] || {}) : {};
+                const shortName = (n) => n.replace(' (on shelf)', '');
+                return (
+                  <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-5xl mx-auto">
+                      <Header />
+                      <AnnaBox>
+                        "Now <strong>Supplies</strong> — same gesture, but watch closely: a parts line isn't one event.
+                        Each number here is what's <em>left</em> after two things happened — parts came <em>in</em>, and
+                        some got <em>used up</em>. Click any part: <strong>two reasons</strong> live behind it."
+                      </AnnaBox>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3 items-start">
+                        {/* LEFT — window 1: the real Assets tab; Supplies items are interactive */}
+                        <div className="rounded-lg overflow-hidden" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+                          <div className="px-3 py-2 text-white text-sm font-semibold flex items-center justify-between" style={{ background: 'linear-gradient(180deg,#138a4b,#107C41)' }}>
+                            <span className="mono">Bike-Repair.xlsx:1</span><span className="text-xs opacity-80">Assets</span>
+                          </div>
+                          {renderAssetsSheet('SUPPLIES')}
+                        </div>
+
+                        {/* RIGHT — window 2: THE Reasons tab (same list, still growing) */}
+                        <ReasonsWindow />
+                      </div>
+
+                      {/* Two-part card: part 1 = the purchase, then it morphs into part 2 = the use */}
+                      {active && part === 'bought' && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                          <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}>Reason 1 of 2 — <span style={{ color: colors.earthDark }}>{shortName(active.name)}</span> arrived with the rest of the QBP order ($500 of parts). How did they come in?</p>
+                          <div className="flex flex-wrap gap-2">
+                            {[['card','On the card'],['cash','Paid cash (debit)'],['home','Brought from home']].map(([v,l]) => (
+                              <button key={v} onClick={() => handleSupBoughtAnswer(active.name, v)} className="px-3 py-2 rounded-lg text-sm font-medium border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>{l}</button>
+                            ))}
+                            <button onClick={() => setSupReceipt('qbp')} className="px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ borderColor: colors.earthLight, color: colors.earth, backgroundColor: colors.sand }}>ⓘ See the invoice</button>
+                          </div>
+                          {supNudge && supNudge.item === active.name && supNudge.step === 'bought' && (att.bought || 0) < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}><p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {att.bought}/2:</strong> Open the invoice (ⓘ) — QBP billed the whole order to the Harborline Visa.</p></div>
+                          )}
+                        </div>
+                      )}
+                      {active && part === 'used' && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                          <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}>Reason 2 of 2 — the invoice says <span style={{ color: colors.earthDark }}>$500</span> of parts came in, but the shelf only holds <span style={{ color: colors.earthDark }}>$200</span>. What happened to the other <span style={{ color: colors.earthDark }}>$300</span>?</p>
+                          <div className="flex flex-col gap-2">
+                            <button onClick={() => handleSupUsedAnswer(active.name, 'used')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>I must have used them doing repair work — $500 in − $200 left = $300</button>
+                            <button onClick={() => handleSupUsedAnswer(active.name, 'returned')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Returned to QBP for a refund</button>
+                            <button onClick={() => handleSupUsedAnswer(active.name, 'counted')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Nothing — I just counted $300 of used parts</button>
+                          </div>
+                          <div className="mt-2">
+                            <button onClick={() => setSupReceipt('shelfcount')} className="px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ borderColor: colors.earthLight, color: colors.earth, backgroundColor: colors.sand }}>ⓘ See the shelf count (Doc 13)</button>
+                          </div>
+                          {supNudge && supNudge.item === active.name && supNudge.step === 'used' && (att.used || 0) < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}><p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {att.used}/2:</strong> {(att.used || 0) === 1 ? 'There\'s no receipt for "used" — used parts are gone into finished jobs.' : 'You can\'t count what\'s gone; you back it out: what came in minus what\'s left on the shelf.'}</p></div>
+                          )}
+                        </div>
+                      )}
+
+                      {allDone && (
+                        <>
+                          <KeyInsightBox>
+                            <p className="font-semibold mb-2">Seven parts — two reasons, and one of them you can't point to.</p>
+                            <p>The <strong>$500</strong> bought you can point to (the QBP invoice). The <strong>$300</strong>
+                               {' '}used has no document — you <em>inferred</em> it from the shelf count: what came in minus
+                               what's left. The <strong>$200</strong> on the shelf is what remains after both. Both reasons
+                               sit in the books; they don't rest on the same kind of evidence.</p>
+                          </KeyInsightBox>
+                          <ContinueButton onClick={() => { setStep(0); setEqAutoActive(false); setEqAutoDone(false); setAssetsExpanded(prev => ({ ...prev, FIXTURES: true })); setPhase('walk-fixtures'); }}>
+                            Next — Fixtures
+                          </ContinueButton>
+                        </>
+                      )}
+                    </div>
+                    <SupReceiptModal />
+                    <GlossaryModal />
+                  </div>
+                );
+            };
+
+            // ----- Phase: walk-fixtures (acquisition account, item-level like Equipment) -----
+            const renderWalkFixtures = () => {
+                const recordedCount = FIX_ITEMS.filter(it => eqItemRecorded[it.name]).length;
+                const allRecorded = recordedCount === FIX_ITEMS.length;
+                const recordedTotal = FIX_ITEMS.filter(it => eqItemRecorded[it.name]).reduce((s, it) => s + it.amt, 0);
+                const active = eqActiveItem ? ITEM_BY_NAME[eqActiveItem] : null;
+                const attempts = eqActiveItem ? (eqItemAttempts[eqActiveItem] || 0) : 0;
+                const triggerMet = recordedCount >= 2 && !allRecorded && !active && !eqAutoActive && !eqAutoDone;
+                return (
+                  <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-5xl mx-auto">
+                      <Header />
+                      <AnnaBox>
+                        "Same gesture for <strong>Fixtures</strong> — the desk, shelving, display rack, pegboard. Click
+                        any of them and record how it came in. All four rode in on a single invoice, so one reason covers
+                        the lot — the receipt (ⓘ) is right there if you want to check."
+                      </AnnaBox>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3 items-start">
+                        {/* LEFT — window 1: the real Assets tab; Fixtures items are interactive */}
+                        <div className="rounded-lg overflow-hidden" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+                          <div className="px-3 py-2 text-white text-sm font-semibold flex items-center justify-between" style={{ background: 'linear-gradient(180deg,#138a4b,#107C41)' }}>
+                            <span className="mono">Bike-Repair.xlsx:1</span><span className="text-xs opacity-80">Assets</span>
+                          </div>
+                          {renderAssetsSheet('FIXTURES')}
+                        </div>
+
+                        {/* RIGHT — window 2: THE Reasons tab (same list, still growing) */}
+                        <ReasonsWindow />
+                      </div>
+
+                      {active && !eqAutoActive && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                          <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}>How did <span style={{ color: colors.earthDark }}>{active.name} (${active.amt})</span> come in?</p>
+                          <div className="flex flex-wrap gap-2">
+                            {['card','cash','home'].map(opt => (
+                              <button key={opt} onClick={() => handleEqItemAnswer(active.name, opt)} className="px-3 py-2 rounded-lg text-sm font-medium border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>{SOURCE_LABEL[opt]}</button>
+                            ))}
+                            <button onClick={() => setEqReceipt(active.group)} className="px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ borderColor: colors.earthLight, color: colors.earth, backgroundColor: colors.sand }}>{'ⓘ'} See the receipt</button>
+                          </div>
+                          {eqItemNudge && eqItemNudge.item === active.name && attempts < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}><p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {attempts}/2:</strong> {attempts === 1 ? 'Open the receipt — it shows how this was paid.' : 'The Workspace Outfitters invoice was billed to the Harborline Visa.'}</p></div>
+                          )}
+                        </div>
+                      )}
+                      {allRecorded && !eqAutoActive && (
+                        <>
+                          <KeyInsightBox>
+                            <p className="font-semibold mb-2">Four things, one purchase, one reason.</p>
+                            <p>All the fixtures arrived on a single card purchase — one event, one reason, four lines
+                               checked off at once. The list shows the four things; the Reasons tab shows the one way
+                               they came in.</p>
+                          </KeyInsightBox>
+                          <ContinueButton onClick={() => { setStep(0); setAssetsExpanded(prev => ({ ...prev, ['RIGHT OF USE']: true })); setPhase('walk-rou'); }}>
+                            Next — Right of Use
+                          </ContinueButton>
+                        </>
+                      )}
+                    </div>
+                    <EqReceiptModal />
+                    <GlossaryModal />
+                  </div>
+                );
+            };
+
+            // ----- Right of Use evidence popup (the lease, or the "known by calendar" explainer) -----
+            const RouReceiptModal = () => {
+                if (!rouReceipt) return null;
+                if (rouReceipt === 'lease') {
+                    return (
+                        <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setRouReceipt(null)}>
+                            <div className="bg-white rounded-xl w-full" style={{ maxWidth: '380px', maxHeight: '80vh', overflowY: 'auto' }} onClick={(e) => e.stopPropagation()}>
+                                <div className="p-3 border-b flex justify-between items-center" style={{ borderColor: colors.earthLight }}>
+                                    <h3 className="font-bold text-sm" style={{ color: colors.primary }}>Evidence — lease</h3>
+                                    <button onClick={() => setRouReceipt(null)} className="text-gray-500 text-2xl font-light border-0 bg-transparent cursor-pointer" aria-label="Close">✕</button>
+                                </div>
+                                <div className="p-4">
+                                    <p className="font-bold text-sm" style={{ color: colors.earthDark }}>{ROU_LEASE.vendor}</p>
+                                    <p className="text-xs mb-3" style={{ color: colors.earth }}>{ROU_LEASE.meta}</p>
+                                    {ROU_LEASE.items.map((it, i) => (
+                                        <div key={i} className="flex justify-between py-1 text-xs" style={{ borderBottom: `1px dashed ${colors.earthLight}`, color: colors.earthDark }}><span>{it.name}</span><span className="mono">${it.amt}</span></div>
+                                    ))}
+                                    <div className="flex justify-between py-1 text-xs font-bold" style={{ borderTop: `1px solid ${colors.earthDark}`, color: colors.primary }}><span>Paid in advance</span><span className="mono">$1,300</span></div>
+                                    <p className="text-xs mt-3" style={{ color: colors.earth }}><strong>Paid:</strong> {ROU_LEASE.paid}</p>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+                return (
+                    <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setRouReceipt(null)}>
+                        <div className="bg-white rounded-xl w-full" style={{ maxWidth: '380px', maxHeight: '80vh', overflowY: 'auto' }} onClick={(e) => e.stopPropagation()}>
+                            <div className="p-3 border-b flex justify-between items-center" style={{ borderColor: colors.earthLight }}>
+                                <h3 className="font-bold text-sm" style={{ color: colors.primary }}>Why rent-used is KNOWN (not inferred)</h3>
+                                <button onClick={() => setRouReceipt(null)} className="text-gray-500 text-2xl font-light border-0 bg-transparent cursor-pointer" aria-label="Close">✕</button>
+                            </div>
+                            <div className="p-4 text-sm" style={{ color: colors.earthDark }}>
+                                <p className="mb-2">You prepaid <strong>two</strong> months ($650 each). By May 31, <strong>one</strong> of them — May — has been used up. So $650 is used and $650 (the last month) is still held.</p>
+                                <p className="text-xs mb-2" style={{ color: colors.earth }}>You didn't have to count anything or back it out of a leftover — the <strong>calendar</strong> tells you directly. Contrast Supplies, where "used" had to be <em>inferred</em> (bought − what's on the shelf). Same ledger shape; different kind of evidence.</p>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            // ----- Phase: walk-rou (v3: click the line on the Assets tab; the FOIL — used is KNOWN by the calendar) -----
+            const renderWalkRoU = () => {
+                const bothDone = rouPaid && rouUsed;
+                const part = rouActive === 'line' ? (!rouPaid ? 'paid' : (!rouUsed ? 'used' : null)) : null;
+                return (
+                  <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-5xl mx-auto">
+                      <Header />
+                      <AnnaBox>
+                        "Next: <strong>Right of Use</strong> — the rent you paid ahead. Same as the parts: this line's
+                        number is what's <em>left</em> after two things happened. Click it — two reasons. But watch the
+                        second one; it isn't the same kind of number as the parts."
+                      </AnnaBox>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3 items-start">
+                        {/* LEFT — window 1: the real Assets tab; the Right of Use line is interactive */}
+                        <div className="rounded-lg overflow-hidden" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+                          <div className="px-3 py-2 text-white text-sm font-semibold flex items-center justify-between" style={{ background: 'linear-gradient(180deg,#138a4b,#107C41)' }}>
+                            <span className="mono">Bike-Repair.xlsx:1</span><span className="text-xs opacity-80">Assets</span>
+                          </div>
+                          {renderAssetsSheet('RIGHT OF USE')}
+                        </div>
+
+                        {/* RIGHT — window 2: THE Reasons tab (same list, still growing) */}
+                        <ReasonsWindow />
+                      </div>
+
+                      {/* Two-part card: part 1 = the prepayment, then it morphs into part 2 = the month used */}
+                      {part === 'paid' && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                          <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}>Reason 1 of 2 — the right to the space came in at <span style={{ color: colors.earthDark }}>$1,300</span> (two months, paid ahead). How did it get paid?</p>
+                          <div className="flex flex-wrap gap-2">
+                            {[['card','On the card'],['cash','Paid cash (from the bank)'],['none','Nothing paid yet — pay each month as it comes']].map(([v,l]) => (
+                              <button key={v} onClick={() => handleRouPaidAnswer(v)} className="px-3 py-2 rounded-lg text-sm font-medium border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>{l}</button>
+                            ))}
+                            <button onClick={() => setRouReceipt('lease')} className="px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ borderColor: colors.earthLight, color: colors.earth, backgroundColor: colors.sand }}>ⓘ See the lease</button>
+                          </div>
+                          {rouNudge === 'paid' && rouPaidAtt < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}><p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {rouPaidAtt}/2:</strong> Open the lease (ⓘ) — first and last month, $1,300, went out of the bank up front. Not the card, and not pay-as-you-go.</p></div>
+                          )}
+                        </div>
+                      )}
+                      {part === 'used' && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                          <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}>Reason 2 of 2 — you paid <span style={{ color: colors.earthDark }}>$1,300</span> for two months, but the line says <span style={{ color: colors.earthDark }}>$650</span>. Where did the other month go? The parts you had to <em>infer</em> — is this the same?</p>
+                          <div className="flex flex-col gap-2">
+                            <button onClick={() => handleRouUsedAnswer('inferred')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>I must have used it — back it out: $1,300 − $650, like the parts</button>
+                            <button onClick={() => handleRouUsedAnswer('known')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>No inferring needed — May is over. One of the two prepaid months is gone; the calendar says so</button>
+                          </div>
+                          {rouNudge === 'used' && rouUsedAtt < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}><p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {rouUsedAtt}/2:</strong> The math works either way ($1,300 − $650) — but unlike the parts, you don't have to guess. Rent is time: two months prepaid, May has passed. You <em>know</em> it directly.</p></div>
+                          )}
+                        </div>
+                      )}
+
+                      {bothDone && (
+                        <>
+                          <KeyInsightBox>
+                            <p className="font-semibold mb-2">Same shape, different evidence.</p>
+                            <p>Parts-used you <em>inferred</em> (counted what's left, backed out the rest — "I must have
+                               used them"). Rent-used you <em>know</em> directly — the calendar says one of the two prepaid
+                               months is gone. Both are "used up," but <strong>not every "used" is a guess.</strong></p>
+                          </KeyInsightBox>
+                          <ContinueButton onClick={() => { setStep(0); setAssetsExpanded(prev => ({ ...prev, CARD: true })); setPhase('walk-liab'); }}>
+                            Next — Liabilities
+                          </ContinueButton>
+                        </>
+                      )}
+                    </div>
+                    <RouReceiptModal />
+                    <GlossaryModal />
+                  </div>
+                );
+            };
+
+            // ----- Liabilities evidence popup (card statement / Smith's receipt) -----
+            const LiabReceiptModal = () => {
+                if (!liabReceipt) return null;
+                if (liabReceipt === 'card') {
+                    return (
+                        <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setLiabReceipt(null)}>
+                            <div className="bg-white rounded-xl w-full" style={{ maxWidth: '380px', maxHeight: '80vh', overflowY: 'auto' }} onClick={(e) => e.stopPropagation()}>
+                                <div className="p-3 border-b flex justify-between items-center" style={{ borderColor: colors.earthLight }}>
+                                    <h3 className="font-bold text-sm" style={{ color: colors.primary }}>Evidence — card statement</h3>
+                                    <button onClick={() => setLiabReceipt(null)} className="text-gray-500 text-2xl font-light border-0 bg-transparent cursor-pointer" aria-label="Close">✕</button>
+                                </div>
+                                <div className="p-4">
+                                    <p className="font-bold text-sm" style={{ color: colors.earthDark }}>{CARD_EV.vendor}</p>
+                                    <p className="text-xs mb-3" style={{ color: colors.earth }}>{CARD_EV.meta}</p>
+                                    {CARD_EV.items.map((it, i) => (
+                                        <div key={i} className="flex justify-between py-1 text-xs" style={{ borderBottom: `1px dashed ${colors.earthLight}`, color: colors.earthDark }}><span>{it.name}</span><span className="mono">${it.amt}</span></div>
+                                    ))}
+                                    <div className="flex justify-between py-1 text-xs" style={{ color: colors.earthDark }}><span>Charges</span><span className="mono">$2,030</span></div>
+                                    <div className="flex justify-between py-1 text-xs" style={{ color: colors.earthDark }}><span>Payments</span><span className="mono">− $800</span></div>
+                                    <div className="flex justify-between py-1 text-xs font-bold" style={{ borderTop: `1px solid ${colors.earthDark}`, color: colors.primary }}><span>Balance — what you owe</span><span className="mono">$1,230</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+                return (
+                    <div className="fixed inset-0 flex items-center justify-center p-4 z-50" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => setLiabReceipt(null)}>
+                        <div className="bg-white rounded-xl w-full" style={{ maxWidth: '380px', maxHeight: '80vh', overflowY: 'auto' }} onClick={(e) => e.stopPropagation()}>
+                            <div className="p-3 border-b flex justify-between items-center" style={{ borderColor: colors.earthLight }}>
+                                <h3 className="font-bold text-sm" style={{ color: colors.primary }}>Evidence — Smith's advance</h3>
+                                <button onClick={() => setLiabReceipt(null)} className="text-gray-500 text-2xl font-light border-0 bg-transparent cursor-pointer" aria-label="Close">✕</button>
+                            </div>
+                            <div className="p-4 text-sm" style={{ color: colors.earthDark }}><p>{SMITH_EV.note}</p></div>
+                        </div>
+                    </div>
+                );
+            };
+
+            // ----- Phase: walk-liab (v3: walk the statement's rows — six REUSE moments, three new reasons) -----
+            const LIAB_WALK_ROWS = ['w_li_tools', 'w_li_fix', 'w_li_comp', 'w_li_wash', 'w_li_tru', 'w_li_parts', 'w_li_pay1', 'w_li_pay2', 'w_li_smith'];
+            const renderWalkLiab = () => {
+                const doneCount = LIAB_WALK_ROWS.filter(rowDone).length;
+                const allDone = doneCount === LIAB_WALK_ROWS.length;
+                const activeRe = rowActive && LIAB_WALK_ROWS.includes(rowActive) ? ROW_EVENT[rowActive] : null;
+                const att = rowActive ? (rowAtt[rowActive] || 0) : 0;
+                const triggerMet = doneCount >= 3 && !allDone && !rowActive && !rowAuto;
+                return (
+                  <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-5xl mx-auto">
+                      <Header />
+                      <AnnaBox>
+                        "Flip to <strong>Liabilities</strong> — what you owe. I expanded the card so you can see the
+                        {' '}<em>statement's</em> rows — the card company's own record. Now read the first charge…
+                        Cyclesport, May 5, $300. <strong>You've seen that event before.</strong> Work down the list:
+                        if a reason already explains a row, find it; if a row is truly new, write it."
+                      </AnnaBox>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3 items-start">
+                        {/* LEFT — window 1: the Liabilities tab, card expanded; rows are interactive */}
+                        <div className="rounded-lg overflow-hidden" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+                          <div className="px-3 py-2 text-white text-sm font-semibold flex items-center justify-between" style={{ background: 'linear-gradient(180deg,#138a4b,#107C41)' }}>
+                            <span className="mono">Bike-Repair.xlsx:1</span><span className="text-xs opacity-80">Liabilities</span>
+                          </div>
+                          {renderLiabilitiesSheet(true)}
+                        </div>
+
+                        {/* RIGHT — window 2: THE Reasons tab (⟷ badges appear as second halves are found) */}
+                        <ReasonsWindow />
+                      </div>
+
+                      {/* Reuse card — the six statement charges */}
+                      {activeRe && activeRe.side === 2 && (
+                        <ReuseCard rowId={rowActive} evidence={{ label: 'ⓘ See the statement', onClick: () => setLiabReceipt('card') }} />
+                      )}
+                      {/* New-reason cards — the two payments and Smith */}
+                      {activeRe && activeRe.side === 1 && (rowActive === 'w_li_pay1' || rowActive === 'w_li_pay2') && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                          <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}><span style={{ color: colors.earthDark }}>{WINROW_BY_ID[rowActive].label} (−$400)</span> — this one's new. What happened?</p>
+                          <div className="flex flex-col gap-2">
+                            <button onClick={() => handleRowAnswer(rowActive, true)} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Paid the card down — what you owe shrank by $400</button>
+                            <button onClick={() => handleRowAnswer(rowActive, false)} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Bought something more on the card</button>
+                            <button onClick={() => handleRowAnswer(rowActive, false)} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>The card company charged a fee</button>
+                            <button onClick={() => setLiabReceipt('card')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ borderColor: colors.earthLight, color: colors.earth, backgroundColor: colors.sand }}>ⓘ See the statement</button>
+                          </div>
+                          {rowNudge === rowActive && att < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}><p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {att}/2:</strong> {att === 1 ? 'The statement calls it a payment — money went TO the card company, and the minus sign says what you owe went down.' : 'A payment shrinks the balance: $2,030 charged − $800 paid = $1,230 owed.'}</p></div>
+                          )}
+                        </div>
+                      )}
+                      {activeRe && rowActive === 'w_li_smith' && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                          <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}>Smith paid you <span style={{ color: colors.earthDark }}>$220</span> up front for a frame you haven't built. What do you owe him?</p>
+                          <div className="flex flex-col gap-2">
+                            <button onClick={() => handleRowAnswer(rowActive, true)} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Work — the frame he already paid for</button>
+                            <button onClick={() => handleRowAnswer(rowActive, false)} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Money — you'll repay him a loan</button>
+                            <button onClick={() => handleRowAnswer(rowActive, false)} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Nothing — the $220 is simply yours</button>
+                            <button onClick={() => setLiabReceipt('smith')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ borderColor: colors.earthLight, color: colors.earth, backgroundColor: colors.sand }}>ⓘ See the receipt</button>
+                          </div>
+                          {rowNudge === rowActive && att < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}><p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {att}/2:</strong> {att === 1 ? 'Smith bought a frame, not lent you money — and the $220 isn\'t free: it binds you to something.' : 'You owe him the work — or his money back if you never do it. An obligation to hand over cash or work.'}</p></div>
+                          )}
+                        </div>
+                      )}
+
+                      {triggerMet && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
+                          <p className="text-sm mb-2" style={{ color: colors.earthDark }}><strong>You've got the rhythm.</strong> Work through the rest of the statement?</p>
+                          <button onClick={() => handleRowAutocomplete(LIAB_WALK_ROWS, 'liab')} className="w-full py-3 rounded-lg font-bold text-white border-0 cursor-pointer" style={{ backgroundColor: colors.primary }}>Do the rest →</button>
+                        </div>
+                      )}
+                      {rowAuto === 'liab' && (
+                        <div className="rounded-lg p-4 mb-3 system-sorting" style={{ backgroundColor: colors.primary, color: 'white', textAlign: 'center' }}><p className="text-base font-bold">⚙ Matching reasons, writing the new ones&hellip;</p></div>
+                      )}
+                      {allDone && !rowAuto && (
+                        <>
+                          <KeyInsightBox>
+                            <p className="font-semibold mb-2">Two kinds of owing — and six rows that needed no new reason.</p>
+                            <p>The card you'll settle with <strong>money</strong>; Smith you'll settle with <strong>work</strong> —
+                               a liability is a present obligation to hand over one or the other. And notice: six of the
+                               statement's rows were <em>already explained</em> — the same reason now touches two lists
+                               (that's the <strong>⟷</strong> badge). The card company kept that record <em>for</em> you.</p>
+                          </KeyInsightBox>
+                          <ContinueButton onClick={() => { setStep(0); setAssetsExpanded(prev => ({ ...prev, CASH: true })); setPhase('walk-cash'); }}>
+                            Next — Cash
+                          </ContinueButton>
+                        </>
+                      )}
+                    </div>
+                    <LiabReceiptModal />
+                    <GlossaryModal />
+                  </div>
+                );
+            };
+
+            // ----- Phase: walk-cash (v3: walk the bank's rows — five REUSE moments, seven new reasons,
+            //       then ★ THE DISCOVERY: "Did you pay it to yourself?" — the entity boundary) -----
+            const renderWalkCash = () => {
+                const doneCount = CASH_ROW_IDS.filter(rowDone).length;
+                const allDone = doneCount === CASH_ROW_IDS.length;
+                const activeRe = rowActive && CASH_ROW_IDS.includes(rowActive) ? ROW_EVENT[rowActive] : null;
+                const att = rowActive ? (rowAtt[rowActive] || 0) : 0;
+                const triggerMet = doneCount >= 3 && !allDone && !rowActive && !rowAuto;
+                return (
+                  <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-5xl mx-auto">
+                      <Header />
+                      {!plugDone && (
+                      <AnnaBox>
+                        {!allDone ? (
+                          <>"Last stop — the <strong>Cash</strong> line that's been glaring at us all day. These are the
+                          bank's rows: the repair flows you sorted out of the bank statement last time, folded onto this
+                          list this morning. Most of them you've <em>already explained</em> — work down the list, same as
+                          the statement. The new ones are the seven times a customer paid you."</>
+                        ) : (
+                          <>"Every row explained. And yet — look at the line. It <strong>still</strong> reads −$960. More
+                          went out than came in, the records all agree… so where did the money that covered the
+                          difference come from?"</>
+                        )}
+                      </AnnaBox>
+                      )}
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3 items-start">
+                        {/* LEFT — window 1: the Assets tab, Cash expanded; the bank's rows are interactive */}
+                        <div className="rounded-lg overflow-hidden" style={{ border: '2px solid #0e6b3a', backgroundColor: 'white', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+                          <div className="px-3 py-2 text-white text-sm font-semibold flex items-center justify-between" style={{ background: 'linear-gradient(180deg,#138a4b,#107C41)' }}>
+                            <span className="mono">Bike-Repair.xlsx:1</span><span className="text-xs opacity-80">Assets</span>
+                          </div>
+                          {renderAssetsSheet('CASH')}
+                        </div>
+
+                        {/* RIGHT — window 2: THE Reasons tab */}
+                        <ReasonsWindow />
+                      </div>
+
+                      {/* Reuse card — rent, the stand, the two paydowns, Smith's deposit */}
+                      {activeRe && activeRe.side === 2 && (
+                        <ReuseCard rowId={rowActive} />
+                      )}
+                      {/* New-reason card — the seven customer payments */}
+                      {activeRe && activeRe.side === 1 && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                          <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}><span style={{ color: colors.earthDark }}>{WINROW_BY_ID[rowActive].label} ({signedDollars(WINROW_BY_ID[rowActive].delta)})</span> — this one's new. What happened?</p>
+                          <div className="flex flex-col gap-2">
+                            <button onClick={() => handleRowAnswer(rowActive, true)} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Finished a repair — the customer paid</button>
+                            <button onClick={() => handleRowAnswer(rowActive, false)} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Smith's deposit for the frame</button>
+                            <button onClick={() => handleRowAnswer(rowActive, false)} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Moved some personal money in</button>
+                          </div>
+                          {rowNudge === rowActive && att < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}><p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {att}/2:</strong> {att === 1 ? 'Seven of these landings look alike — a Venmo, a finished job each time.' : 'Smith\'s deposit has its own row (May 22), and personal money never got a row here. These are earnings.'}</p></div>
+                          )}
+                        </div>
+                      )}
+
+                      {triggerMet && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: '#fef9e7', borderColor: colors.accent }}>
+                          <p className="text-sm mb-2" style={{ color: colors.earthDark }}><strong>You've got the rhythm.</strong> Work through the rest of the bank's rows?</p>
+                          <button onClick={() => handleRowAutocomplete(CASH_ROW_IDS, 'cash')} className="w-full py-3 rounded-lg font-bold text-white border-0 cursor-pointer" style={{ backgroundColor: colors.primary }}>Do the rest →</button>
+                        </div>
+                      )}
+                      {rowAuto === 'cash' && (
+                        <div className="rounded-lg p-4 mb-3 system-sorting" style={{ backgroundColor: colors.primary, color: 'white', textAlign: 'center' }}><p className="text-base font-bold">⚙ Matching reasons, writing the new ones&hellip;</p></div>
+                      )}
+
+                      {/* ★ THE DISCOVERY — the entity boundary, found in your own wallet */}
+                      {allDone && !rowAuto && !plugDone && (
+                        <div className="rounded-lg p-3 mb-3 border-2" style={{ backgroundColor: 'white', borderColor: colors.clayDark }}>
+                          <p className="text-sm font-semibold mb-2" style={{ color: colors.primary }}>
+                            The work ran <span style={{ color: '#92400e' }}>$960</span> more out than in — yet your bank
+                            account never went negative. You covered it. <span style={{ color: colors.earthDark }}>Did you
+                            pay it to yourself?</span>
+                          </p>
+                          <div className="flex flex-col gap-2">
+                            <button onClick={() => handlePlugAnswer('samepocket')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>Yes — same pocket. It cancels out; nothing really happened</button>
+                            <button onClick={() => handlePlugAnswer('pocket')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>No — my personal self paid my bike-repair self</button>
+                            <button onClick={() => handlePlugAnswer('loan')} className="text-left px-3 py-2 rounded-lg text-sm border-2 cursor-pointer" style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>It's a loan — the repair work owes me $960 back</button>
+                          </div>
+                          {plugNudge && plugAtt < 3 && (
+                            <div className="mt-2 p-2 rounded" style={{ backgroundColor: colors.warningBg }}>
+                              <p className="text-sm" style={{ color: '#92400e' }}><strong>Hint {plugAtt}/2:</strong> {plugAtt === 1
+                                  ? 'If nothing really happened, why does the line read −$960? These lists keep score for the repair work — and the cash that filled the gap came from outside them.'
+                                  : 'A loan binds — you never set terms or promised yourself repayment, so there\'s no obligation. Smith and the card already have their lines. Whose pocket is left?'}</p>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {plugDone && (
+                        <>
+                          <AnnaBox>
+                            "There it is. Over May, your <strong>personal self</strong> quietly paid your
+                            {' '}<strong>bike-repair self</strong> $960 — and you never decided to. You only see it now,
+                            tallying up. Look at the list: the cash line repairs to <strong>$0</strong>, and the total
+                            reads <strong>$3,410</strong> again. You just drew a line through the middle of your own
+                            wallet — making that line official is the next module's job."
+                          </AnnaBox>
+                          <KeyInsightBox>
+                            <p className="font-semibold mb-2">The −$960 was never an error. It was a boundary, waiting to be seen.</p>
+                            <p>The lists keep score for <em>the repair work</em> — and from where they stand, your own
+                               other pocket is <strong>outside</strong>. The minus sign was the records telling you a line
+                               runs through the middle of your wallet: one account, two selves.</p>
+                          </KeyInsightBox>
+                          <ContinueButton onClick={() => { setStep(0); setPhase('crossout'); }}>
+                            One last look at the Reasons tab
+                          </ContinueButton>
+                        </>
+                      )}
+                    </div>
+                    <GlossaryModal />
+                  </div>
+                );
+            };
+
+            const renderComplete = () => (
+                <div className="min-h-screen" style={{ backgroundColor: colors.sand }}>
+                    <div className="p-4 max-w-3xl mx-auto">
+                        <Header />
+                        <div className="text-center mb-6">
+                            <p className="text-5xl mb-2">🏆</p>
+                            <p className="text-xl font-bold" style={{ color: colors.primary }}>Tutorial 1.4 complete</p>
+                        </div>
+                        <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: 'white', border: `1px solid ${colors.earthLight}` }}>
+                            <h3 className="font-bold mb-3" style={{ color: colors.primary }}>What You Discovered</h3>
+                            <ul className="space-y-2 text-sm" style={{ color: colors.earthDark }}>
+                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>You kept a <strong>Reasons</strong> window next to every list — one row for the why behind each change.</span></li>
+                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>Most reasons live in <strong>two windows</strong> — same event, two changes. You didn't arrange that, and half the second rows came from records others kept: the statement, the bank.</span></li>
+                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>The matched pairs just <strong>shuffle</strong> — have and owe move together, so your <strong>net</strong> doesn't budge.</span></li>
+                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>The reasons that <strong>move your net</strong> are two plain kinds: what you <strong>contributed</strong> and what the work <strong>generated</strong>.</span></li>
+                                <li className="flex gap-2"><span style={{ color: colors.success }}>✓</span><span>And one only showed up when you tallied: the <strong>$960</strong> of your own cash the work quietly drew down — the first real line between the repair work and you.</span></li>
+                            </ul>
+                        </div>
+                        <div className="rounded-lg p-4 mb-4" style={{ backgroundColor: colors.clayLight }}>
+                            <h3 className="font-bold mb-2" style={{ color: colors.primary }}>Coming Next</h3>
+                            <p className="text-sm mb-2" style={{ color: colors.earthDark }}>
+                                You have three things now: what you have, what you owe, and the reasons your net moved.
+                                In 1.5 you'll lay them out on one page, watch how they fit together — and the names you've
+                                been circling finally arrive.
+                            </p>
+                            <p className="font-bold" style={{ color: colors.primary }}>Next: Tutorial 1.5 &mdash; Naming What You Built</p>
+                        </div>
+                        <div className="mb-3"><ContinueButton asLink="15-naming-what-you-built.html">Continue to Tutorial 1.5</ContinueButton></div>
+                        <button onClick={handleRestart}
+                                className="block w-full py-3 rounded-lg font-bold border-2 cursor-pointer mb-3"
+                                style={{ backgroundColor: 'white', borderColor: colors.primary, color: colors.primary }}>
+                            ↺ Restart tutorial
+                        </button>
+                    </div>
+                    <GlossaryModal />
+                </div>
+            );
+
+            // ============================================================
+            // Router
+            // ============================================================
+            if (phase === 'welcome')        return renderWelcome();
+            if (phase === 'walk-equipment') return renderWalkEquipment();
+            if (phase === 'walk-computer')  return renderWalkComputer();
+            if (phase === 'walk-supplies')  return renderWalkSupplies();
+            if (phase === 'walk-fixtures')  return renderWalkFixtures();
+            if (phase === 'walk-rou')       return renderWalkRoU();
+            if (phase === 'walk-liab')      return renderWalkLiab();
+            if (phase === 'walk-cash')      return renderWalkCash();
+            if (phase === 'crossout')     return renderCrossout();
+            if (phase === 'sort')         return renderSort();
+            if (phase === 'complete')     return renderComplete();
+            return null;
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1.4 · Walk Supplies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1.4: Keeping the Reasons</h1>
+        <div class="tut-header-sub">Phase 4 of 11 — Walk Supplies</div>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      </div>
+    </div>
+
+    <div class="phase active" id="phase-walk-supplies"></div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="evidenceOverlay" onclick="if(event.target===this) closeEvidence()">
+  <div class="glossary-panel" id="evidencePanel"></div>
+</div>
+
+<script src="14-shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+window.WB_PHASE = 'walk-supplies';
+window.WB_WC_ANSWERED = true;
+window.WB_ASSETS_EXPANDED = { SUPPLIES: true };
+window.WB_ACTIVE_TAB = 'assets';
+
+document.getElementById('phase-walk-supplies').innerHTML =
+  annaBox('A two-step walk per item: first <em>where were they bought?</em> &rarr; on the card; then <em>did you use them?</em> &rarr; yes (inferred depletion). Placeholder for now.', true) +
+  '<div id="wbSup"></div>' +
+  '<div class="section-card"><div class="card-title">Walk Supplies</div>'+
+    '<p class="prose">For each supplies item, two questions create two reasons &mdash; one for the QBP purchase (paired with the credit card statement) and one for the inferred use (a solo reason that moves net).</p>'+
+  '</div>';
+
+renderWorkbook('wbSup');
+if(window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>
