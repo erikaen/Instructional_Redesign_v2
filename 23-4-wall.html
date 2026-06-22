@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.3: The Rules and the Two Signatures &middot; The Wall</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.3: The Rules and the Two Signatures</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 4 of 6</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Wall</div>
+
+    <!-- ===== wall ===== -->
+    <div class="phase active" id="phase-wall">
+      <div class="narrative-block">
+        <p>And <strong>Section 17, Liability of the Sole Member</strong>: the Company&rsquo;s debts are the <strong>Company&rsquo;s</strong>, not yours. Remember Smith&rsquo;s claim from 2.1 &mdash; the one that came after your savings, your car, even your earnings? Send it again, now that the wall exists.</p>
+      </div>
+      <div class="callout" style="font-family:Georgia,'Times New Roman',serif"><strong>&sect;17.</strong> &ldquo;The Sole Member is not personally liable for the debts or obligations of the Company.&rdquo;</div>
+      <div id="wallArea"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playThud(){ tone(150,0.3,'sine',0.3); }
+
+/* ===== glossary (shared across all phases of 2.3) ===== */
+var glossaryTerms = [
+  { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
+  { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
+  { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
+  { term:"Members&rsquo; capital / Members&rsquo; equity", def:"The LLC&rsquo;s name for the residual A &minus; L. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($1,790) and the retained slice ($170) are kept separate." },
+  { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
+  { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== navigation / reset ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== member name ===== */
+var memberName = '';
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
+function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
+
+/* ===== state (phase-local) ===== */
+var claimRun = false;
+
+/* ===== §17 limited-liability wall ===== */
+function renderWall(){
+  var area = document.getElementById('wallArea');
+  var en = esc(llcName());
+  var compStyle = claimRun ? 'background:var(--error-bg);border:2px solid var(--error-border)' : 'background:var(--primary-faint);border:2px solid var(--border-strong)';
+  var youStyle = claimRun ? 'background:var(--success-bg);border:2px solid var(--success-border)' : 'background:var(--primary-faint);border:2px solid var(--border-strong)';
+  var wallColor = claimRun ? 'var(--primary)' : 'var(--border-strong)';
+  var html = '<div class="section-card">';
+  html += '<div style="display:grid;grid-template-columns:1fr 26px 1fr;gap:0;align-items:stretch">';
+  html += '<div style="border-radius:10px;padding:12px;'+compStyle+';transition:all 0.4s">'+
+    '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;color:var(--primary)">The Company</div>'+
+    '<div style="font-size:var(--font-s);margin-top:2px">'+en+'</div>'+
+    '<div style="font-size:var(--font-xs);margin-top:4px;color:var(--primary)">its tools, parts, fixtures, cash</div></div>';
+  html += '<div style="display:flex;align-items:center;justify-content:center"><div title="the LLC &mdash; limited liability" style="width:6px;align-self:stretch;border-radius:3px;background:'+wallColor+';transition:all 0.4s"></div></div>';
+  html += '<div style="border-radius:10px;padding:12px;'+youStyle+';transition:all 0.4s">'+
+    '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;color:var(--primary)">You</div>'+
+    '<div style="font-size:var(--font-s);margin-top:2px">your savings, car, earnings</div>'+
+    (claimRun?'<div style="font-size:var(--font-xs);margin-top:4px;font-weight:600;color:var(--success-text)">&#10003; behind the wall &mdash; safe</div>':'')+'</div>';
+  html += '</div>';
+  html += '<div style="text-align:center;margin:12px 0;min-height:18px">'+(claimRun?'<span style="font-size:var(--font-xs);font-weight:600;color:var(--primary)">the claim reaches the Company &mdash; and stops at the wall</span>':'')+'</div>';
+  if(!claimRun){
+    html += '<button class="btn-continue btn-block" style="background:var(--error-bg);color:var(--error-text);border:1.5px solid var(--error-border)" onclick="runClaim()">Send Smith&rsquo;s claim again &rarr;</button>';
+  } else {
+    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="shield" class="licon"></i> The wall</div>'+
+      '<p>This is the wall Maria wanted. <strong>Limited liability</strong> is a <em>legal</em> fact &mdash; it changes <strong>who can be pursued</strong>, not what the records show. The balance sheet didn&rsquo;t move; the exposure did.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="nav(\'23-5-keystone.html\')">One last thing &rarr;</button>';
+  }
+  html += '</div>';
+  area.innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function runClaim(){ claimRun=true; playThud(); renderWall(); }
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== init ===== */
+try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
+renderWall();
+</script>
+</body>
+</html>
