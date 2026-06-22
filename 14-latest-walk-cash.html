@@ -47,17 +47,291 @@
 <script>
 window.WB_PHASE = 'walk-cash';
 window.WB_WC_ANSWERED = true;
-window.WB_ASSETS_EXPANDED = {};
-window.WB_ACTIVE_TAB = 'cash';
+window.WB_ASSETS_EXPANDED = { CASH: true };
+window.WB_ACTIVE_TAB = 'assets';
 
-document.getElementById('phase-walk-cash').innerHTML =
-  annaBox('Walk the cash side. Most rows reuse reasons already recorded. After all twelve rows, one piece is still missing &mdash; that&rsquo;s the discovery: where the $960 went. Placeholder for now.', true) +
-  '<div id="wbCash"></div>' +
-  '<div class="section-card"><div class="card-title">Walk Cash + Discovery</div>'+
-    '<p class="prose">Twelve cash-tab rows. Eleven reuse reasons from earlier walks. The twelfth &mdash; <em>From your personal self &mdash; covering what the work drew down ($960)</em> &mdash; is revealed only after the learner tallies the flows and sees the gap. This converts the Cash line from &minus;$960 to $0.</p>'+
+/* ===== Cumulative reasons carried in from prior phases =====
+   Equipment(6) + Computer(1) + Supplies(2) + Fixtures(1) + RoU(2) + Liab(3 new) = 15.
+   The six liab side-2 rows paired up earlier matched reasons; treat those as paired here. */
+var r3Created = ['e_stand','e_tools','e_comp','e_wash','e_tru','e_gear','e_laptop','e_parts','e_partsused','e_fix','e_rent','e_rentused','e_pay1','e_pay2','e_smith'];
+var r3Paired = { e_tools:true, e_fix:true, e_comp:true, e_wash:true, e_tru:true, e_parts:true };
+
+/* ===== Phase state ===== */
+var rowActive = null;
+var rowAtt = {};
+var rowNudge = null;
+var rowAuto = null;     /* 'cash' while autocompleting */
+var plugDone = false;
+var plugAtt = 0;
+var plugNudge = false;
+
+function createReason(id){ if(r3Created.indexOf(id) === -1) r3Created.push(id); }
+
+function rowDone(rowId){
+  var re = ROW_EVENT[rowId];
+  if(!re) return false;
+  return re.side === 1 ? r3Created.indexOf(re.id) !== -1 : !!r3Paired[re.id];
+}
+
+function recordRow(rowId){
+  var re = ROW_EVENT[rowId];
+  if(re.side === 1) createReason(re.id);
+  else r3Paired[re.id] = true;
+}
+
+function handleRowClick(rowId, ev){
+  if(ev && ev.target && ev.target.closest && ev.target.closest('.xl-info, .xl-toggle')) return;
+  if(!ROW_EVENT[rowId] || rowDone(rowId) || rowAuto) return;
+  playClick();
+  rowActive = rowId;
+  rowNudge = null;
+  render();
+}
+
+function handleRowAnswer(rowId, ok){
+  if(ok){
+    playSuccess(); recordRow(rowId);
+    rowActive = null; rowNudge = null;
+  } else {
+    var n = (rowAtt[rowId] || 0) + 1;
+    rowAtt[rowId] = n; playNope();
+    if(n >= 3){ recordRow(rowId); rowActive = null; rowNudge = null; }
+    else rowNudge = rowId;
+  }
+  render();
+}
+
+function handleRowAutocomplete(){
+  if(rowAuto) return;
+  playClick(); rowAuto = 'cash'; rowActive = null; rowNudge = null;
+  render();
+  var remaining = CASH_ROW_IDS.filter(function(id){ return !rowDone(id); });
+  remaining.forEach(function(id, i){
+    setTimeout(function(){
+      recordRow(id); render();
+      if(i === remaining.length - 1){
+        setTimeout(function(){ rowAuto = null; playSuccess(); render(); }, 300);
+      }
+    }, i * 160);
+  });
+}
+
+function handlePlugAnswer(choice){
+  if(choice === 'pocket'){
+    playSuccess(); createReason('e_plug'); plugDone = true; plugNudge = false;
+  } else {
+    plugAtt++; playNope();
+    if(plugAtt >= 3){ createReason('e_plug'); plugDone = true; plugNudge = false; }
+    else plugNudge = true;
+  }
+  render();
+}
+
+/* Stable reuse candidates: correct reason + 2 others, in r3Created order */
+function reuseCandidates(correctId){
+  var others = r3Created.filter(function(id){
+    return id !== correctId && EV_BY_ID[id].otherWin && !r3Paired[id];
+  });
+  if(others.length < 2){
+    others = others.concat(r3Created.filter(function(id){
+      return id !== correctId && others.indexOf(id) === -1;
+    }).slice(0, 2 - others.length));
+  }
+  others = others.slice(0, 2);
+  var pool = others.concat([correctId]);
+  pool.sort(function(a, b){ return r3Created.indexOf(a) - r3Created.indexOf(b); });
+  return pool;
+}
+
+/* ===== Renderers ===== */
+function renderAssetsSheetWithCash(){
+  var html = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx:1</span></span><span class="xlwb-bar-sheet">Assets</span></div>'+
+    '<div>';
+  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Asset</div><div class="xl-v">B&nbsp;&nbsp;Value</div></div>';
+  var n = 0;
+  var cashBalance = plugDone ? 0 : CASH_NET;
+  ASSETS_SNAPSHOT.forEach(function(cat){
+    if(cat.cat === 'CASH') return;
+    var label = cat.cat === 'RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0) + cat.cat.slice(1).toLowerCase());
+    n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+label+'</div><div class="xl-v">'+xlDollars(cat.subtotal)+'</div></div>';
+  });
+  /* Cash category row — the gap is the warning */
+  n++;
+  var gap = cashBalance < 0;
+  html += '<div class="xl-row xl-cat"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">Cash'+(gap?' <i data-lucide="alert-triangle" class="licon"></i>':'')+'</div><div class="xl-v">'+(gap?signedDollars(cashBalance):xlDollars(cashBalance))+'</div></div>';
+  /* Cash flow rows (bank rows, interactive) */
+  CASH_FLOWS.forEach(function(f, i){
+    var rowId = CASH_ROW_IDS[i];
+    n++;
+    var rRec = rowDone(rowId);
+    var rAct = rowActive === rowId;
+    var canClick = !rRec && !rowAuto;
+    var rowClass = 'xl-row xl-item' + (rAct ? ' selected' : '');
+    var onclick = canClick ? ' onclick="handleRowClick(\''+rowId+'\', event)"' : '';
+    html += '<div class="'+rowClass+'"'+onclick+'>'+
+      '<div class="xl-gutter"></div>'+
+      '<div class="xl-rownum">'+n+'</div>'+
+      '<div class="xl-c">'+(rRec?'<i data-lucide="check" class="licon"></i> ':'')+f.date+' &mdash; '+esc(f.desc)+'</div>'+
+      '<div class="xl-v">'+signedDollars(f.amount)+'</div></div>';
+  });
+  /* The discovery plug row, after plugDone */
+  if(plugDone){
+    n++;
+    html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c"><i data-lucide="check" class="licon"></i> From your personal self &mdash; covering what the work drew down</div><div class="xl-v">'+signedDollars(960)+'</div></div>';
+  }
+  var total = ASSETS_TOTAL + cashBalance;  /* ASSETS_TOTAL already has CASH subtotal = 0 */
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL &mdash; what I have</div><div class="xl-v">'+(total < 0 ? signedDollars(total) : xlDollars(total))+'</div></div>';
+  html += '</div>';
+  html += '<div class="xlwb-tabs">'+
+    '<button class="xlwb-tab active" type="button">Assets</button>'+
+    '<button class="xlwb-tab" type="button">Liabilities</button>'+
+    '<button class="xlwb-tab" type="button">Cash</button>'+
+    '<button class="xlwb-tab" type="button">Reasons <span class="xl-new-tag">new</span></button>'+
   '</div>';
+  html += '</div>';
+  return html;
+}
 
-renderWorkbook('wbCash');
+function renderReasonsWindowHTML(){
+  var html = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx:2</span></span><span class="xlwb-bar-sheet">Reasons &mdash; side by side</span></div>'+
+    '<div>';
+  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Reason</div><div class="xl-v">Δ</div></div>';
+  r3Created.forEach(function(id){
+    var e = EV_BY_ID[id];
+    var d = WINROW_BY_ID[e.rowId].delta;
+    var paired = !!r3Paired[id];
+    var pairBadge = paired && e.otherWin ? ' <span class="reason-pair-badge">&lrarr; '+LIST_LABEL[e.otherWin]+'</span>' : '';
+    html += '<div class="xl-row xl-item">'+
+      '<div class="xl-gutter"></div>'+
+      '<div class="xl-rownum"></div>'+
+      '<div class="xl-c"><strong>'+LIST_LABEL[e.win]+'</strong> &mdash; '+esc(e.reason)+pairBadge+'</div>'+
+      '<div class="xl-v">'+signedDollars(d)+'</div></div>';
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r3Created.length+' '+(r3Created.length === 1 ? 'reason' : 'reasons')+' so far</div><div class="xl-v"></div></div>';
+  html += '</div></div>';
+  return html;
+}
+
+function renderReuseCard(rowId){
+  var re = ROW_EVENT[rowId];
+  var row = WINROW_BY_ID[rowId];
+  var att = rowAtt[rowId] || 0;
+  var html = '<div class="mcq-card">'+
+    '<div class="mcq-question"><span>'+esc(row.label)+' ('+signedDollars(row.delta)+')</span> &mdash; you&rsquo;ve seen this event before. Which reason already explains it?</div>'+
+    '<div class="mcq-choices">';
+  reuseCandidates(re.id).forEach(function(cid){
+    var ok = cid === re.id;
+    html += '<button class="mcq-choice" onclick="handleRowAnswer(\''+rowId+'\', '+ok+')">'+esc(EV_BY_ID[cid].reason)+'</button>';
+  });
+  html += '</div>';
+  if(rowNudge === rowId && att < 3){
+    html += '<div class="mcq-fb err show"><strong>Hint '+att+'/2:</strong> '+(att === 1
+      ? 'Read the row &mdash; date, amount, description &mdash; then scan your Reasons window for the same event.'
+      : 'Match the amount: this row moved '+signedDollars(row.delta)+'. Only one reason moved exactly that much.')+'</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderNewCashCard(rowId){
+  var att = rowAtt[rowId] || 0;
+  var row = WINROW_BY_ID[rowId];
+  var html = '<div class="mcq-card">'+
+    '<div class="mcq-question"><span>'+esc(row.label)+' ('+signedDollars(row.delta)+')</span> &mdash; this one&rsquo;s new. What happened?</div>'+
+    '<div class="mcq-choices">'+
+      '<button class="mcq-choice" onclick="handleRowAnswer(\''+rowId+'\', true)">Finished a repair &mdash; the customer paid</button>'+
+      '<button class="mcq-choice" onclick="handleRowAnswer(\''+rowId+'\', false)">Smith&rsquo;s deposit for the frame</button>'+
+      '<button class="mcq-choice" onclick="handleRowAnswer(\''+rowId+'\', false)">Moved some personal money in</button>'+
+    '</div>';
+  if(rowNudge === rowId && att < 3){
+    html += '<div class="mcq-fb err show"><strong>Hint '+att+'/2:</strong> '+(att === 1
+      ? 'Seven of these landings look alike &mdash; a Venmo, a finished job each time.'
+      : 'Smith&rsquo;s deposit has its own row (May 22), and personal money never got a row here. These are earnings.')+'</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function renderPlugCard(){
+  var html = '<div class="mcq-card">'+
+    '<div class="mcq-question">The work ran <strong>$960</strong> more out than in &mdash; yet your bank account never went negative. You covered it. <em>Did you pay it to yourself?</em></div>'+
+    '<div class="mcq-choices">'+
+      '<button class="mcq-choice" onclick="handlePlugAnswer(\'samepocket\')">Yes &mdash; same pocket. It cancels out; nothing really happened</button>'+
+      '<button class="mcq-choice" onclick="handlePlugAnswer(\'pocket\')">No &mdash; my personal self paid my bike-repair self</button>'+
+      '<button class="mcq-choice" onclick="handlePlugAnswer(\'loan\')">It&rsquo;s a loan &mdash; the repair work owes me $960 back</button>'+
+    '</div>';
+  if(plugNudge && plugAtt < 3){
+    html += '<div class="mcq-fb err show"><strong>Hint '+plugAtt+'/2:</strong> '+(plugAtt === 1
+      ? 'If nothing really happened, why does the line read &minus;$960? These lists keep score for the repair work &mdash; and the cash that filled the gap came from outside them.'
+      : 'A loan binds &mdash; you never set terms or promised yourself repayment, so there&rsquo;s no obligation. Smith and the card already have their lines. Whose pocket is left?')+'</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function render(){
+  var doneCount = CASH_ROW_IDS.filter(rowDone).length;
+  var allDone = doneCount === CASH_ROW_IDS.length;
+  var activeRe = rowActive && CASH_ROW_IDS.indexOf(rowActive) !== -1 ? ROW_EVENT[rowActive] : null;
+  var triggerMet = doneCount >= 3 && !allDone && !rowActive && !rowAuto;
+
+  var html = '';
+  if(!plugDone){
+    html += annaBox(
+      !allDone
+        ? 'Last stop &mdash; the <strong>Cash</strong> line that&rsquo;s been glaring at us all day. These are the bank&rsquo;s rows: the repair flows you sorted out of the bank statement last time, folded onto this list this morning. Most of them you&rsquo;ve <em>already explained</em> &mdash; work down the list, same as the statement. The new ones are the seven times a customer paid you.'
+        : 'Every row explained. And yet &mdash; look at the line. It <strong>still</strong> reads &minus;$960. More went out than came in, the records all agree&hellip; so where did the money that covered the difference come from?',
+      true
+    );
+  }
+
+  html += '<div class="walk-pane">'+renderAssetsSheetWithCash()+renderReasonsWindowHTML()+'</div>';
+
+  if(activeRe){
+    if(activeRe.side === 2){
+      html += renderReuseCard(rowActive);
+    } else {
+      html += renderNewCashCard(rowActive);
+    }
+  }
+
+  if(triggerMet){
+    html += '<div class="gate-armed">'+
+      '<p><strong>You&rsquo;ve got the rhythm.</strong> Work through the rest of the bank&rsquo;s rows?</p>'+
+      '<button class="btn-continue btn-block" onclick="handleRowAutocomplete()">Do the rest &rarr;</button>'+
+    '</div>';
+  } else if(rowAuto === 'cash'){
+    html += '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Matching reasons, writing the new ones&hellip;</div></div>';
+  } else if(doneCount > 0 && !activeRe && !allDone){
+    html += '<p class="prose"><em>Click the next bank row to record it.</em></p>';
+  }
+
+  /* ★ The discovery — appears after all 12 rows are explained */
+  if(allDone && !rowAuto && !plugDone){
+    html += renderPlugCard();
+  }
+
+  if(plugDone){
+    html += annaBox(
+      'There it is. Over May, your <strong>personal self</strong> quietly paid your <strong>bike-repair self</strong> $960 &mdash; and you never decided to. You only see it now, tallying up. Look at the list: the cash line repairs to <strong>$0</strong>, and the total reads <strong>$3,410</strong> again. You just drew a line through the middle of your own wallet &mdash; making that line official is the next module&rsquo;s job.',
+      true
+    );
+    html += insightBox('The &minus;$960 was never an error. It was a boundary, waiting to be seen.',
+      '<p>The lists keep score for <em>the repair work</em> &mdash; and from where they stand, your own other pocket is <strong>outside</strong>. The minus sign was the records telling you a line runs through the middle of your wallet: one account, two selves.</p>'
+    );
+  }
+
+  /* Proceed button — non-navigating per standalone-file design */
+  html += '<button class="btn-continue btn-block" type="button">One last look at the Reasons tab &rarr;</button>';
+
+  document.getElementById('phase-walk-cash').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+
+render();
 if(window.lucide) lucide.createIcons();
 </script>
 </body>

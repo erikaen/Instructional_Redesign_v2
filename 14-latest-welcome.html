@@ -65,7 +65,7 @@ function renderWelcome(){
   if(!window.WB_WC_ANSWERED){
     html += '<div class="mcq-card">'+
       '<div class="dialog-label">ANNA</div>'+
-      '<div class="mcq-question">&ldquo;Everything on the Assets list earned its place by <strong> being useful to the work </strong>. Remember, an asset is a <em>right to a benefit</em>, not just a thing. So, does the money in the Cash tab belong on the Assets list itself?&rdquo;</div>'+
+      '<div class="mcq-question">&ldquo;Everything on the Assets list earned its place by <em> being useful to the work </em>. Remember, an asset is a <em>right to a benefit</em>, not just a thing. So, does the money in the Cash tab belong on the Assets list itself?&rdquo;</div>'+
       '<div class="mcq-choices">'+
         '<button class="mcq-choice" onclick="handleWcAnswer(\'notbenefit\')">No &mdash; money isn&rsquo;t a benefit. It&rsquo;s just money.</button>'+
         '<button class="mcq-choice" onclick="handleWcAnswer(\'benefit\')">Yes &mdash; it&rsquo;s a right to future benefits. It gets me the next box of parts.</button>'+
@@ -92,6 +92,8 @@ function renderWelcome(){
         '<li>And that <strong>&minus;$960</strong> shouldn&rsquo;t be able to exist? No amount on these lists can explain it &mdash; but a reason can.</li>'+
       '</ul>'+
     '</div>';
+
+    html += '<button class="btn-continue btn-block" type="button">Keep the reasons &mdash; add a tab &rarr;</button>';
   }
 
   document.getElementById('phase-welcome').innerHTML = html;
