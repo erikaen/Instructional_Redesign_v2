@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.4: The Entity's Own Number &middot; An Identity of Its Own</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.4: The Entity&rsquo;s Own Number</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 1 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">An Identity of Its Own</div>
+
+    <!-- ===== welcome ===== -->
+    <div class="phase active" id="phase-welcome">
+      <div class="narrative-block">
+        <p>The LLC exists, it has its rules, and it owns the business. But to the outside world it still has <strong>no identity of its own.</strong> You go to open a business bank account &mdash; and the bank stops you:</p>
+      </div>
+      <div class="dialog-box">
+        <div class="dialog-label">THE BANK</div>
+        <div class="dialog-text">&ldquo;We can&rsquo;t open this in your name. We need the <strong>LLC&rsquo;s</strong> number &mdash; its EIN &mdash; not your Social Security number.&rdquo;</div>
+      </div>
+      <div style="background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:8px;padding:14px 16px;margin-bottom:16px;color:var(--warn-text);font-size:var(--font-s);line-height:1.65">
+        Until now, the repair work has run through your <strong>personal accounts</strong> &mdash; your <strong>personal checking</strong> (Elm City Bank, <span class="mono">$3,274</span>) <em>and</em> your <strong>personal credit card</strong> (Harborline Visa) &mdash; <strong>both co-mingled</strong>: business deposits sitting next to your paycheck, parts charges next to your groceries. You&rsquo;ve sorted them apart <strong>by hand</strong> every month since 1.1. The entity needs its own.
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You&rsquo;ll Work Out</div>
+        <ul class="bullet-list">
+          <li>How the entity gets an identity the outside world will deal with.</li>
+          <li>What finally ends the by-hand sorting you&rsquo;ve done since day one.</li>
+          <li>The one move here that actually changes your balance sheet.</li>
+        </ul>
+      </div>
+      <button class="btn-continue btn-block" onclick="nav('24-2-ein.html')">Begin &rarr;</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary (shared across all phases of 2.4) ===== */
+var glossaryTerms = [
+  { term:"EIN", def:"Employer Identification Number &mdash; the entity&rsquo;s own tax ID with the IRS, like a Social Security number for a business. The bank needs it to open an account in the LLC&rsquo;s name." },
+  { term:"Co-mingling", def:"Running business and personal money through the same account, so they have to be sorted apart by hand. Opening the LLC&rsquo;s own account ends it." },
+  { term:"Capital contribution", def:"Money (or property) an owner puts into the company. Your $500 in cash is one: it raises the LLC&rsquo;s cash and its members&rsquo; capital by $500." },
+  { term:"Disregarded entity", def:"For federal income tax, a single-member LLC is &ldquo;looked through&rdquo; to its owner &mdash; even though it holds its own EIN for every other purpose. Different lines drawn for different purposes." },
+  { term:"Counterparty", def:"The other party to a transaction or contract. With its own EIN and accounts, the LLC is a counterparty in its own right &mdash; it deals with banks, customers, and the IRS in its own name, and can owe and be owed (even sue and be sued) as itself, not as you." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== navigation / reset ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+</script>
+</body>
+</html>
