@@ -282,7 +282,7 @@ function render(){
   if(!plugDone){
     html += annaBox(
       !allDone
-        ? 'Last stop &mdash; the <strong>Cash</strong> line that&rsquo;s been glaring at us all day. These are the bank&rsquo;s rows: the repair flows you sorted out of the bank statement last time, folded onto this list this morning. Most of them you&rsquo;ve <em>already explained</em> &mdash; work down the list, same as the statement. The new ones are the seven times a customer paid you.'
+        ? 'Last stop &mdash; the <strong>Cash</strong> line that&rsquo;s been glaring at us all day. These are the bank&rsquo;s rows: the repair flows you sorted out of the bank statement last time, folded onto this list this morning. You&rsquo;ve <em>already explained</em> most of them. Now work down the cash list, click each item and decide the reason that explains it, same as the statement. The new ones in the cash list are the seven times a customer paid you.'
         : 'Every row explained. And yet &mdash; look at the line. It <strong>still</strong> reads &minus;$960. More went out than came in, the records all agree&hellip; so where did the money that covered the difference come from?',
       true
     );
@@ -316,11 +316,11 @@ function render(){
 
   if(plugDone){
     html += annaBox(
-      'There it is. Over May, your <strong>personal self</strong> quietly paid your <strong>bike-repair self</strong> $960 &mdash; and you never decided to. You only see it now, tallying up. Look at the list: the cash line repairs to <strong>$0</strong>, and the total reads <strong>$3,410</strong> again. You just drew a line through the middle of your own wallet &mdash; making that line official is the next module&rsquo;s job.',
+      'There it is. Over May, your <strong>personal self</strong> quietly paid your <strong>bike-repair self</strong> $960 &mdash; but you never decided to. You only see it now, tallying up. Look at the list: the cash line repairs to <strong>$0</strong>, and the total reads <strong>$3,410</strong> again. You just <strong>drew a line through the middle of your own wallet</strong>, making that line official is the next module&rsquo;s job.',
       true
     );
     html += insightBox('The &minus;$960 was never an error. It was a boundary, waiting to be seen.',
-      '<p>The lists keep score for <em>the repair work</em> &mdash; and from where they stand, your own other pocket is <strong>outside</strong>. The minus sign was the records telling you a line runs through the middle of your wallet: one account, two selves.</p>'
+      '<p>The lists keep score for <em>the repair work</em>. And from where they stand, your own other pocket is <strong>outside</strong>. The minus sign was the records telling you a line runs through the middle of your wallet: one account, two selves.</p>'
     );
   }
 

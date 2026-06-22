@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1.4: Keeping the Reasons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main" id="headerTitle">
+        <h1>Tutorial 1.4: Keeping the Reasons</h1>
+        <p class="tut-header-sub">Bicycle repair shop &bull; ~15 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <a class="icon-btn" href="index.html" title="Return to Main" aria-label="Return to Main"><i data-lucide="home"></i></a>
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart" aria-label="Restart tutorial" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="progress-meta"><span>Progress</span><span id="progPct">0%</span></div>
+    <div class="progress-track"><div class="progress-bar-fill" id="progFill"></div></div>
+    <div class="dev-bar" id="devBar" hidden>
+      <div class="dev-bar-label">Dev: skip to phase</div>
+      <div class="dev-bar-btns" id="devBtns"></div>
+    </div>
+
+    <!-- ===== welcome ===== -->
+    <div class="phase active" id="phase-welcome">
+      <div class="narrative-block">
+        <p>Anna&rsquo;s back, coffee in hand. Your workbook is open to the two lists that earned their names in your last sit-down: <strong>Assets</strong> (what you have &mdash; $3,410) and <strong>Liabilities</strong> (what you owe &mdash; $1,450). And off to the side, still its own tab: <strong>Cash</strong> &mdash; the repair flows you pulled out of the bank statement together, netting <strong>&minus;$960</strong> for the month.</p>
+        <p>She studies the tab strip for a moment, then taps the screen. &ldquo;That Cash tab has been bugging me since we built it. It&rsquo;s just&hellip; sitting there, off to the side.&rdquo;</p>
+      </div>
+      <div id="wbWelcome"></div>
+      <div id="wcAnswerBlock"></div>
+      <div id="wcDoneBlock"></div>
+    </div>
+
+    <!-- ===== walk-equipment ===== -->
+    <div class="phase" id="phase-walk-equipment">
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;There&rsquo;s your new <strong>Reasons</strong> tab &mdash; I opened it in a <em>second window</em>, side by side, so a reason always sits next to the change it explains. Now go down your <strong>Equipment</strong> list. Click an item and record <em>how it came in</em> &mdash; the receipt (<i data-lucide="info" class="licon"></i>) is the clue. One receipt sometimes brought in several things: one reason covers them all.&rdquo;</div>
+      </div>
+      <div id="wbEqAssets"></div>
+      <div id="wbEqReasons"></div>
+      <div id="eqChoice"></div>
+      <div id="eqGate"></div>
+      <div id="eqDone"></div>
+    </div>
+
+    <!-- ===== walk-computer ===== -->
+    <div class="phase" id="phase-walk-computer">
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;Next line down: <strong>Computer Equipment</strong> &mdash; the laptop you run the shop on. Same move as the tools: click it and record <em>how it came in</em>. There&rsquo;s no store receipt for this one &mdash; open the <i data-lucide="info" class="licon"></i> to see how it was valued.&rdquo;</div>
+      </div>
+      <div id="wbCoAssets"></div>
+      <div id="wbCoReasons"></div>
+      <div id="coChoice"></div>
+      <div id="coHint"></div>
+      <div id="coDone"></div>
+    </div>
+
+    <!-- ===== walk-supplies ===== -->
+    <div class="phase" id="phase-walk-supplies">
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;Now <strong>Supplies</strong> &mdash; same gesture, but watch closely: a parts line isn&rsquo;t one event. Each number here is what&rsquo;s <em>left</em> after two things happened &mdash; parts came <em>in</em>, and some got <em>used up</em>. Click any part: <strong>two reasons</strong> live behind it.&rdquo;</div>
+      </div>
+      <div id="wbSuAssets"></div>
+      <div id="wbSuReasons"></div>
+      <div id="suChoice"></div>
+      <div id="suDone"></div>
+    </div>
+
+    <!-- ===== walk-fixtures ===== -->
+    <div class="phase" id="phase-walk-fixtures">
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;Same gesture for <strong>Fixtures</strong> &mdash; the desk, shelving, display rack, pegboard. Click any of them and record how it came in. All four rode in on a single invoice, so one reason covers the lot &mdash; the receipt (<i data-lucide="info" class="licon"></i>) is right there if you want to check.&rdquo;</div>
+      </div>
+      <div id="wbFxAssets"></div>
+      <div id="wbFxReasons"></div>
+      <div id="fxChoice"></div>
+      <div id="fxDone"></div>
+    </div>
+
+    <!-- ===== walk-rou ===== -->
+    <div class="phase" id="phase-walk-rou">
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;Next: <strong>Right of Use</strong> &mdash; the rent you paid ahead. Same as the parts: this line&rsquo;s number is what&rsquo;s <em>left</em> after two things happened. Click it &mdash; two reasons. But watch the second one; it isn&rsquo;t the same kind of number as the parts.&rdquo;</div>
+      </div>
+      <div id="wbRoAssets"></div>
+      <div id="wbRoReasons"></div>
+      <div id="roChoice"></div>
+      <div id="roDone"></div>
+    </div>
+
+    <!-- ===== walk-liab ===== -->
+    <div class="phase" id="phase-walk-liab">
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;Flip to <strong>Liabilities</strong> &mdash; what you owe. I expanded the card so you can see the <em>statement&rsquo;s</em> rows &mdash; the card company&rsquo;s own record. Now read the first charge&hellip; Cyclesport, May 5, $300. <strong>You&rsquo;ve seen that event before.</strong> Work down the list: if a reason already explains a row, find it; if a row is truly new, write it.&rdquo;</div>
+      </div>
+      <div id="wbLiLiab"></div>
+      <div id="wbLiReasons"></div>
+      <div id="liChoice"></div>
+      <div id="liGate"></div>
+      <div id="liAuto"></div>
+      <div id="liDone"></div>
+    </div>
+
+    <!-- ===== walk-cash ===== -->
+    <div class="phase" id="phase-walk-cash">
+      <div id="caAnna"></div>
+      <div id="wbCaAssets"></div>
+      <div id="wbCaReasons"></div>
+      <div id="caChoice"></div>
+      <div id="caGate"></div>
+      <div id="caAuto"></div>
+      <div id="caPlug"></div>
+      <div id="caDone"></div>
+    </div>
+
+    <!-- ===== crossout ===== -->
+    <div class="phase" id="phase-crossout">
+      <div id="xoTop"></div>
+      <div id="wbXoReasons"></div>
+      <div id="xoGate"></div>
+      <div id="xoAuto"></div>
+      <div id="xoDone"></div>
+    </div>
+
+    <!-- ===== sort ===== -->
+    <div class="phase" id="phase-sort">
+      <div id="srTop"></div>
+      <div id="wbSrReasons"></div>
+      <div id="srGate"></div>
+      <div id="srAuto"></div>
+      <div id="srDone"></div>
+    </div>
+
+    <!-- ===== complete ===== -->
+    <div class="phase" id="phase-complete">
+      <div class="complete-head">
+        <div class="trophy-badge"><i data-lucide="trophy"></i></div>
+        <div class="complete-title">Tutorial 1.4 complete</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You Discovered</div>
+        <ul class="bullet-list check">
+          <li>You kept a <strong>Reasons</strong> tab &mdash; one row for the why behind each change to a list.</li>
+          <li>Most reasons came in <strong>pairs</strong> &mdash; same event, two changes. You didn&rsquo;t arrange that; it showed up on its own.</li>
+          <li>The matched pairs just <strong>shuffle</strong> &mdash; have and owe move together, so your <strong>net</strong> doesn&rsquo;t budge.</li>
+          <li>The reasons that <strong>move your net</strong> are two plain kinds: what you <strong>contributed</strong> and what the work <strong>generated</strong>.</li>
+          <li>The <strong>&minus;$960</strong> Cash line was the work showing it had drawn more out than it brought in &mdash; covered by your personal self. A reason explained what no amount could.</li>
+        </ul>
+      </div>
+      <div class="next-card">
+        <div class="next-card-label">Coming Next</div>
+        <p>You have three things now: what you have, what you owe, and the reasons your net moved. In 1.5 you&rsquo;ll lay them out on one page, watch how they fit together &mdash; and the names you&rsquo;ve been circling finally arrive.</p>
+        <p><strong>Next: Tutorial 1.5 &mdash; Naming What You Built</strong></p>
+      </div>
+      <a class="btn-continue btn-block" href="15-naming-what-you-built.html">Continue to Tutorial 1.5 &rarr;</a>
+      <div class="btn-row">
+        <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Restart tutorial</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<!-- ===== Evidence (receipt) overlay — reuses glossary modal chrome ===== -->
+<div class="glossary-overlay" id="evidenceOverlay" onclick="if(event.target===this) closeEvidence()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title" id="evidenceTitle"><i data-lucide="file-text" class="licon"></i> Evidence</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeEvidence()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="evidenceBody"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data — ties to the v3 manifest ===== */
+var ASSETS_SNAPSHOT = [
+  { cat:'EQUIPMENT', items:[
+    { name:'Park Tool repair stand', amount:200 },{ name:'Cone wrench set', amount:65 },{ name:'Torque wrench', amount:95 },
+    { name:'Hex / Allen key set', amount:45 },{ name:'Cable cutters', amount:40 },{ name:'Chain breaker', amount:35 },
+    { name:'Tire levers', amount:20 },{ name:'Air compressor', amount:180 },{ name:'Parts washer', amount:130 },
+    { name:'Wheel-truing stand', amount:170 },{ name:'Bench grinder', amount:90 },{ name:'Headset press', amount:70 },{ name:'Shop vacuum', amount:60 } ] },
+  { cat:'COMPUTER EQUIPMENT', items:[ { name:'Laptop', amount:610 } ] },
+  { cat:'SUPPLIES', items:[
+    { name:'Box of chains (on shelf)', amount:50 },{ name:'Box of brake pads (on shelf)', amount:40 },{ name:'Box of derailleur cables (on shelf)', amount:20 },
+    { name:'Cassettes (on shelf)', amount:40 },{ name:'Bottom brackets (on shelf)', amount:20 },{ name:'Spokes (on shelf)', amount:20 },{ name:'Tubes (on shelf)', amount:10 } ] },
+  { cat:'FIXTURES', items:[
+    { name:'Desk', amount:250 },{ name:'Shelving units', amount:200 },{ name:'Display rack', amount:180 },{ name:'Pegboard + hooks', amount:120 } ] },
+  { cat:'CASH', items:[ { name:'Repair cash on hand (May 31)', amount:-960 } ] },
+  { cat:'RIGHT OF USE', items:[ { name:'Right to occupy the space — last month, prepaid', amount:650 } ] }
+].map(function(c){ c.subtotal = c.items.reduce(function(s,i){return s+i.amount;},0); return c; });
+
+var LIABILITIES_SNAPSHOT = [
+  { label:"Smith's frame — paid $220 up front, not built yet", amount:220 },
+  { label:'What you owe on the bike-repair credit card', amount:1230 }
+];
+
+var CASH_FLOWS = [
+  { date:'May 1',  desc:'Rent paid in advance (Westville Properties)', amount:-1300 },
+  { date:'May 3',  desc:'Park Tool stand — Cyclesport Supply', amount:-200 },
+  { date:'May 7',  desc:'Repair finished — customer paid (Venmo)', amount:340 },
+  { date:'May 10', desc:'Repair finished — customer paid (Venmo)', amount:180 },
+  { date:'May 12', desc:'Repair finished — customer paid (Venmo)', amount:80 },
+  { date:'May 14', desc:'Repair finished — customer paid (Venmo)', amount:140 },
+  { date:'May 16', desc:'Card paydown — Harborline Visa', amount:-400 },
+  { date:'May 19', desc:'Repair finished — customer paid (Venmo)', amount:130 },
+  { date:'May 22', desc:'Smith deposit — frame build', amount:220 },
+  { date:'May 23', desc:'Repair finished — customer paid (Venmo)', amount:100 },
+  { date:'May 27', desc:'Repair finished — customer paid (Venmo)', amount:150 },
+  { date:'May 28', desc:'Card paydown — Harborline Visa', amount:-400 }
+];
+var CASH_ROW_IDS = ['w_ca_rent','w_ca_stand','w_ca_v1','w_ca_v2','w_ca_v3','w_ca_v4','w_ca_pay1','w_ca_v5','w_ca_smith','w_ca_v6','w_ca_v7','w_ca_pay2'];
+
+/* receipt groups & item-level walks */
+var EQUIP_GROUPS = [
+  { id:'g_gear', label:'Gear brought from home', amount:220, kind:'ebay', vendor:'eBay — comparable sold listings', meta:'Pre-owned · valued by market comp (Doc 9)', paid:'Brought from home — no purchase', items:[ { name:'Bench grinder', amt:90 },{ name:'Headset press', amt:70 },{ name:'Shop vacuum', amt:60 } ] },
+  { id:'g_laptop', label:'Laptop brought from home', amount:610, kind:'ebay', vendor:'eBay — comparable sold listings', meta:'Pre-owned · valued by market comp (Doc 9)', paid:'Brought from home — no purchase', items:[ { name:'Laptop (used)', amt:610 } ] },
+  { id:'g_stand', label:'Park Tool repair stand', amount:200, kind:'receipt', vendor:'Cyclesport Supply', meta:'Sales Receipt #SR-4471 · May 3, 2026 (Doc 2)', paid:'Personal debit card •••• 6620', items:[ { name:'Park Tool PRS-25 Team Issue Repair Stand', amt:200 } ] },
+  { id:'g_tools', label:'Hand tools', amount:300, kind:'receipt', vendor:'Cyclesport Supply', meta:'Sales Receipt #SR-4488 · May 5, 2026 (Doc 4)', paid:'Harborline Visa •••• 3902', items:[ { name:'Cone wrench set', amt:65 },{ name:'Torque wrench', amt:95 },{ name:'Hex / Allen key set', amt:45 },{ name:'Cable cutters', amt:40 },{ name:'Chain breaker', amt:35 },{ name:'Tire levers', amt:20 } ] },
+  { id:'g_compressor', label:'Air compressor', amount:180, kind:'receipt', vendor:'Compressor Depot', meta:'Sales Receipt #CD-2208 · May 8, 2026 (Doc 10)', paid:'Harborline Visa •••• 3902', items:[ { name:'Portable air compressor — 6 gal', amt:180 } ] },
+  { id:'g_washer', label:'Parts washer', amount:130, kind:'receipt', vendor:'Industrial Supply', meta:'Invoice #IS-30742 · May 10, 2026 (Doc 11)', paid:'Harborline Visa •••• 3902', items:[ { name:'Parts washer — 20-gal solvent tank', amt:130 } ] },
+  { id:'g_truing', label:'Wheel-truing stand', amount:170, kind:'receipt', vendor:'Cyclesport Supply', meta:'Sales Receipt #SR-4502 · May 12, 2026 (Doc 12)', paid:'Harborline Visa •••• 3902', items:[ { name:'Wheel-truing stand — shop grade', amt:170 } ] },
+  { id:'g_fixtures', label:'Fixtures', amount:750, kind:'receipt', vendor:'Workspace Outfitters', meta:'Invoice #WO-20518 · May 5, 2026 (Doc 3)', paid:'Harborline Visa •••• 3902', items:[ { name:'Work desk', amt:250 },{ name:'Shelving units (×2)', amt:200 },{ name:'Display rack', amt:180 },{ name:'Pegboard panel + hook set', amt:120 } ] }
+];
+var GROUP_BY_ID = {}; EQUIP_GROUPS.forEach(function(g){ GROUP_BY_ID[g.id] = g; });
+
+var EQUIP_ITEMS = [
+  { name:'Park Tool repair stand', amt:200, source:'cash', group:'g_stand' },
+  { name:'Cone wrench set',        amt:65,  source:'card', group:'g_tools' },
+  { name:'Torque wrench',          amt:95,  source:'card', group:'g_tools' },
+  { name:'Hex / Allen key set',    amt:45,  source:'card', group:'g_tools' },
+  { name:'Cable cutters',          amt:40,  source:'card', group:'g_tools' },
+  { name:'Chain breaker',          amt:35,  source:'card', group:'g_tools' },
+  { name:'Tire levers',            amt:20,  source:'card', group:'g_tools' },
+  { name:'Air compressor',         amt:180, source:'card', group:'g_compressor' },
+  { name:'Parts washer',           amt:130, source:'card', group:'g_washer' },
+  { name:'Wheel-truing stand',     amt:170, source:'card', group:'g_truing' },
+  { name:'Bench grinder',          amt:90,  source:'home', group:'g_gear' },
+  { name:'Headset press',          amt:70,  source:'home', group:'g_gear' },
+  { name:'Shop vacuum',            amt:60,  source:'home', group:'g_gear' }
+];
+var FIX_ITEMS = [
+  { name:'Desk',             amt:250, source:'card', group:'g_fixtures' },
+  { name:'Shelving units',   amt:200, source:'card', group:'g_fixtures' },
+  { name:'Display rack',     amt:180, source:'card', group:'g_fixtures' },
+  { name:'Pegboard + hooks', amt:120, source:'card', group:'g_fixtures' }
+];
+var COMP_ITEMS = [ { name:'Laptop', amt:610, source:'home', group:'g_laptop' } ];
+var ITEM_BY_NAME = {};
+[].concat(EQUIP_ITEMS, COMP_ITEMS, FIX_ITEMS).forEach(function(it){ ITEM_BY_NAME[it.name] = it; });
+var SOURCE_LABEL = { card:'On the card', cash:'Paid cash (debit)', home:'Brought from home' };
+var SOURCE_REASON = { card:'bought on the card', cash:'bought with cash (debit)', home:'brought from home' };
+
+var SUP_QBP = { vendor:'QBP — Quality Bicycle Products', meta:'Invoice #QBP-887341 · May 15, 2026 (Doc 5)', paid:'Harborline Visa •••• 3902', items:[ { name:'Chains (box)', amt:100 },{ name:'Brake pads (box)', amt:80 },{ name:'Derailleur cables (box)', amt:40 },{ name:'Cassettes (×4)', amt:80 },{ name:'Bottom brackets', amt:80 },{ name:'Spokes (bundle)', amt:80 },{ name:'Tubes (box)', amt:40 } ] };
+var SUP_ITEMS = [
+  { name:'Box of chains (on shelf)',            bought:100, shelf:50, used:50, qty:'½ box' },
+  { name:'Box of brake pads (on shelf)',        bought:80,  shelf:40, used:40, qty:'½ box' },
+  { name:'Box of derailleur cables (on shelf)', bought:40,  shelf:20, used:20, qty:'½ box' },
+  { name:'Cassettes (on shelf)',                bought:80,  shelf:40, used:40, qty:'2 left' },
+  { name:'Bottom brackets (on shelf)',          bought:80,  shelf:20, used:60, qty:'¼ box' },
+  { name:'Spokes (on shelf)',                   bought:80,  shelf:20, used:60, qty:'¼ bundle' },
+  { name:'Tubes (on shelf)',                    bought:40,  shelf:10, used:30, qty:'¼ box' }
+];
+var SUP_BY_NAME = {}; SUP_ITEMS.forEach(function(it){ SUP_BY_NAME[it.name] = it; });
+
+var ROU_LEASE = { vendor:'Rental Agreement — 142 Whalley Ave, Unit B', meta:'Lease (Doc 1) · first + last month paid in advance · $650/month', paid:'Paid from the bank (cash)', items:[ { name:'First month (May) — prepaid', amt:650 },{ name:'Last month — prepaid (still held)', amt:650 } ] };
+var CARD_EV = { vendor:'Credit Card Statement', meta:'Harborline Visa •••• 3902 · May (Doc 6) — repair charges', items:[ { name:'Hand tools', amt:300 },{ name:'Air compressor', amt:180 },{ name:'Parts washer', amt:130 },{ name:'Wheel-truing stand', amt:170 },{ name:'Fixtures', amt:750 },{ name:'Parts (QBP)', amt:500 } ], charges:2030, payments:800, balance:1230 };
+var SMITH_EV = { note:"Smith paid $220 up front for a custom frame you haven't built yet (Doc 8). You owe him the work — or his money back if you never do it." };
+
+/* PAIR_EVENTS — receipt-level events: pairs (otherWin set) shuffle; solos (otherWin null) move the net. */
+var PAIR_EVENTS = [
+  { id:'e_stand', win:'equipment', rowId:'w_eq_stand',  otherWin:'cash', otherRowId:'w_ca_stand', reason:'Bought the Park Tool stand for $200 (debit — straight from the bank).' },
+  { id:'e_tools', win:'equipment', rowId:'w_eq_tools',  otherWin:'liab', otherRowId:'w_li_tools', reason:'Bought $300 of hand tools on the card.' },
+  { id:'e_comp',  win:'equipment', rowId:'w_eq_comp',   otherWin:'liab', otherRowId:'w_li_comp',  reason:'Bought an air compressor for $180 on the card.' },
+  { id:'e_wash',  win:'equipment', rowId:'w_eq_wash',   otherWin:'liab', otherRowId:'w_li_wash',  reason:'Bought a parts washer for $130 on the card.' },
+  { id:'e_tru',   win:'equipment', rowId:'w_eq_tru',    otherWin:'liab', otherRowId:'w_li_tru',   reason:'Bought a wheel-truing stand for $170 on the card.' },
+  { id:'e_fix',   win:'fixtures',  rowId:'w_fi_all',    otherWin:'liab', otherRowId:'w_li_fix',   reason:'Bought $750 of fixtures on the card.' },
+  { id:'e_parts', win:'supplies',  rowId:'w_su_bought', otherWin:'liab', otherRowId:'w_li_parts', reason:'Bought $500 of parts on the card (QBP).' },
+  { id:'e_rent',  win:'rou',       rowId:'w_ro_paid',   otherWin:'cash', otherRowId:'w_ca_rent',  reason:'Paid $1,300 of rent in advance (first + last month).' },
+  { id:'e_smith', win:'liab',      rowId:'w_li_smith',  otherWin:'cash', otherRowId:'w_ca_smith', reason:'Smith paid $220 up front for a frame you haven&rsquo;t built yet.' },
+  { id:'e_pay1',  win:'liab',      rowId:'w_li_pay1',   otherWin:'cash', otherRowId:'w_ca_pay1',  reason:'Paid $400 down on the card (May 16).' },
+  { id:'e_pay2',  win:'liab',      rowId:'w_li_pay2',   otherWin:'cash', otherRowId:'w_ca_pay2',  reason:'Paid $400 down on the card (May 28).' },
+  { id:'e_gear',      win:'equipment', rowId:'w_eq_gear',   otherWin:null, cat:'contributed', reason:'Brought gear you already owned — grinder, press, vacuum.', amount:220 },
+  { id:'e_laptop',    win:'computer',  rowId:'w_co_laptop', otherWin:null, cat:'contributed', reason:'Brought your laptop from home.', amount:610 },
+  { id:'e_partsused', win:'supplies',  rowId:'w_su_used',   otherWin:null, cat:'earned',      reason:'I must have used them doing repair work ($300 of parts).', amount:-300 },
+  { id:'e_rentused',  win:'rou',       rowId:'w_ro_used',   otherWin:null, cat:'earned',      reason:'Used the space for May ($650 — one of two prepaid months).', amount:-650 },
+  { id:'e_v1', win:'cash', rowId:'w_ca_v1', otherWin:null, cat:'earned', reason:'Finished a repair — customer paid $340 (May 7).', amount:340 },
+  { id:'e_v2', win:'cash', rowId:'w_ca_v2', otherWin:null, cat:'earned', reason:'Finished a repair — customer paid $180 (May 10).', amount:180 },
+  { id:'e_v3', win:'cash', rowId:'w_ca_v3', otherWin:null, cat:'earned', reason:'Finished a repair — customer paid $80 (May 12).', amount:80 },
+  { id:'e_v4', win:'cash', rowId:'w_ca_v4', otherWin:null, cat:'earned', reason:'Finished a repair — customer paid $140 (May 14).', amount:140 },
+  { id:'e_v5', win:'cash', rowId:'w_ca_v5', otherWin:null, cat:'earned', reason:'Finished a repair — customer paid $130 (May 19).', amount:130 },
+  { id:'e_v6', win:'cash', rowId:'w_ca_v6', otherWin:null, cat:'earned', reason:'Finished a repair — customer paid $100 (May 23).', amount:100 },
+  { id:'e_v7', win:'cash', rowId:'w_ca_v7', otherWin:null, cat:'earned', reason:'Finished a repair — customer paid $150 (May 27).', amount:150 },
+  { id:'e_plug', win:'cash', rowId:'w_ca_plug', otherWin:null, cat:'contributed', reason:'My personal self covered what the work drew down — I only see it now, tallying up.', amount:960 }
+];
+var EV_BY_ID = {}; PAIR_EVENTS.forEach(function(e){ EV_BY_ID[e.id] = e; });
+var ROW_EVENT = {};
+PAIR_EVENTS.forEach(function(e){
+  ROW_EVENT[e.rowId] = { id:e.id, side:1 };
+  if(e.otherRowId) ROW_EVENT[e.otherRowId] = { id:e.id, side:2 };
+});
+var GROUP_TO_EVENT = { g_stand:'e_stand', g_tools:'e_tools', g_compressor:'e_comp', g_washer:'e_wash', g_truing:'e_tru', g_gear:'e_gear', g_laptop:'e_laptop', g_fixtures:'e_fix' };
+
+var glossaryTerms = [
+  { term:'Asset', def:'Something you have &mdash; a present right to something useful. The gear, the parts, the prepaid month, cash.' },
+  { term:'Liability', def:"Something you owe &mdash; a present obligation to pay or do something later. The card balance, Smith's frame." },
+  { term:'Reason', def:'The why behind a change to one of your lists. You jot it next to the change &mdash; it lives on its own tab, one row per side.' },
+  { term:'Net', def:'What you have minus what you owe. The bottom-line number a reason either moves or leaves alone.' },
+  { term:'Contributed', def:'A net-mover where you put something in from outside the repair work &mdash; your own cash, gear you already owned.' },
+  { term:'Generated', def:'A net-mover that came from doing the repair work &mdash; what customers paid, less what the work used up.' },
+  { term:'Right of Use', def:"A month of space you've paid for but haven't used yet &mdash; a future benefit you still hold, so it counts as an asset." }
+];
+
+/* ===== formatters ===== */
+function xlDollars(v){ return (v<0?'−$':'$') + Math.abs(v).toLocaleString('en-US'); }
+function signedDollars(v){ var cls = v>=0 ? 'stmt-dep' : 'stmt-with'; return '<span class="'+cls+'">' + (v>=0?'+':'−') + '$' + Math.abs(v).toLocaleString('en-US') + '</span>'; }
+
+/* ===== state ===== */
+var phaseOrder = ['welcome','walk-equipment','walk-computer','walk-supplies','walk-fixtures','walk-rou','walk-liab','walk-cash','crossout','sort','complete'];
+var phase = 'welcome';
+var activeTab = 'assets';
+var assetsExpanded = {};
+var wcAnswered = false, wcAtt = 0, wcNudge = false;
+var eqItemRecorded = {}, eqActiveItem = null, eqItemAttempts = {}, eqItemNudge = null, eqAutoActive = false, eqAutoDone = false;
+var supActiveItem = null, supItemBought = {}, supItemUsed = {}, supItemAtt = {}, supNudge = null, supAutoActive = false, supAutoDone = false;
+var rouActive = null, rouPaid = null, rouUsed = false, rouPaidAtt = 0, rouUsedAtt = 0, rouNudge = null;
+var rowActive = null, rowAtt = {}, rowNudge = null, rowAuto = null;
+var r3Created = [], r3Paired = {};
+var xOut = {}, xAuto = false;
+var categoryAssignments = {}, sortAutoActive = false, sortAutoDone = false, sortNudge = null;
+var plugDone = false, plugAtt = 0, plugNudge = false;
+var curWbContainer = null;
+
+/* ===== Reasons window (right pane — vertical-stacked) ===== */
+function reasonsWindowHtml(opts){
+  opts = opts || {};
+  var crossing = !!opts.crossing;
+  var note = opts.note || '';
+  var html = '<div class="xlwb"><div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx:2</span></span><span class="xlwb-bar-sheet">Reasons</span></div>';
+  if(note && r3Created.length===0) html += '<div class="bs-empty-msg">'+note+'</div>';
+  if(r3Created.length===0 && !note) html += '<div class="bs-empty-msg">Empty for now. Click an item on the workbook above to write the first reason.</div>';
+  if(r3Created.length>0){
+    html += '<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons &mdash; one row per event</div><div class="cash-sheet-sub">'+r3Created.length+' '+(r3Created.length===1?'reason':'reasons')+' recorded';
+    var pCount = 0; r3Created.forEach(function(id){ if(r3Paired[id]) pCount++; });
+    if(pCount>0) html += ' ('+pCount+' touch two lists ⟷)';
+    html += '.</div></div>';
+    html += '<div class="xl-row xl-reasons xl-head"><div class="xl-gutter"></div><div class="xl-c">ACCOUNT</div><div class="xl-v">Δ</div><div class="xl-c">REASON</div></div>';
+    r3Created.forEach(function(id){
+      var e = EV_BY_ID[id];
+      var delta = (e.amount !== undefined) ? e.amount : (e.otherWin ? rowDelta(e.rowId) : 0);
+      var account = winLabel(e.win);
+      var badge = r3Paired[id] ? ' <span class="mono" style="font-weight:700">⟷</span>' : '';
+      var classes = 'xl-row xl-reasons xl-item';
+      if(r3Paired[id]) classes += ' pair-selected';
+      if(xOut[id]) classes += ' eliminated';
+      var onclick = '';
+      if(crossing && r3Paired[id] && !xOut[id] && !xAuto) onclick = ' onclick="handleCrossClick(\''+id+'\')"';
+      html += '<div class="'+classes+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-c">'+account+badge+'</div><div class="xl-v">'+signedDollars(delta)+'</div><div class="xl-c">'+e.reason+'</div></div>';
+    });
+  }
+  html += '</div>';
+  return html;
+}
+function winLabel(w){ return ({equipment:'Equipment',computer:'Computer Equip.',supplies:'Supplies',fixtures:'Fixtures',rou:'Right of Use',liab:'Liabilities',cash:'Cash'})[w] || w; }
+function rowDelta(rowId){
+  if(rowId==='w_eq_stand') return 200;
+  if(rowId==='w_eq_tools') return 300;
+  if(rowId==='w_eq_comp')  return 180;
+  if(rowId==='w_eq_wash')  return 130;
+  if(rowId==='w_eq_tru')   return 170;
+  if(rowId==='w_eq_gear')  return 220;
+  if(rowId==='w_co_laptop')return 610;
+  if(rowId==='w_su_bought')return 500;
+  if(rowId==='w_su_used')  return -300;
+  if(rowId==='w_fi_all')   return 750;
+  if(rowId==='w_ro_paid')  return 1300;
+  if(rowId==='w_ro_used')  return -650;
+  if(rowId==='w_li_smith') return 220;
+  if(rowId==='w_li_pay1' || rowId==='w_li_pay2') return -400;
+  if(rowId==='w_li_tools') return 300;
+  if(rowId==='w_li_comp')  return 180;
+  if(rowId==='w_li_wash')  return 130;
+  if(rowId==='w_li_tru')   return 170;
+  if(rowId==='w_li_fix')   return 750;
+  if(rowId==='w_li_parts') return 500;
+  if(rowId==='w_ca_plug')  return 960;
+  for(var i=0;i<CASH_ROW_IDS.length;i++){ if(CASH_ROW_IDS[i]===rowId) return CASH_FLOWS[i].amount; }
+  return 0;
+}
+function recordEvent(id){
+  if(r3Created.indexOf(id) < 0){ r3Created.push(id); }
+  var e = EV_BY_ID[id];
+  if(e && e.otherWin){
+    // mark paired if BOTH halves now exist; second half just sets paired = true
+    if(r3Created.indexOf(id) >= 0) r3Paired[id] = true;
+  }
+}
+
+/* ===== Workbook sheets — assets / liabilities / cash (single window) ===== */
+function assetsSheet(opts){
+  opts = opts || {};
+  var interactiveCat = opts.interactiveCat || null;   // EQUIPMENT | COMPUTER EQUIPMENT | SUPPLIES | FIXTURES | RIGHT OF USE | CASH
+  var clickHandler = opts.clickHandler || null;       // function(itemName) called when an interactive item is clicked
+  var hideCash = opts.hideCash;                       // true → exclude CASH (welcome before answered)
+  var cats = ASSETS_SNAPSHOT.slice();
+  if(hideCash) cats = cats.filter(function(c){ return c.cat !== 'CASH'; });
+  var total = cats.reduce(function(s,c){ return s+c.subtotal; }, 0);
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Asset</div><div class="xl-v">B&nbsp;&nbsp;Value</div></div>';
+  var n=0;
+  cats.forEach(function(cat){
+    var label = (cat.cat==='RIGHT OF USE') ? 'Right of Use' : (cat.cat==='COMPUTER EQUIPMENT' ? 'Computer Equipment' : (cat.cat.charAt(0)+cat.cat.slice(1).toLowerCase()));
+    var open = !!assetsExpanded[cat.cat]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleAssetCat(\''+cat.cat+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+label+'</div><div class="xl-v">'+xlDollars(cat.subtotal)+'</div></div>';
+    if(open){
+      cat.items.forEach(function(it){
+        n++;
+        var isInteractive = (cat.cat === interactiveCat && clickHandler);
+        // skip the interactive flag for an item already recorded if we want to show "done"
+        var rowClasses = 'xl-row xl-item';
+        var onclick = '';
+        if(isInteractive){
+          rowClasses += ' pair-selected';
+          onclick = ' onclick="'+clickHandler+'(\''+it.name.replace(/'/g, "\\'")+'\')" style="cursor:pointer"';
+        }
+        var marker = '';
+        if(cat.cat===interactiveCat && (eqItemRecorded[it.name] || supItemBought[it.name])) marker = ' <i data-lucide="check" class="licon" style="color:var(--success-text)"></i>';
+        html += '<div class="'+rowClasses+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+marker+'</div><div class="xl-v">'+xlDollars(it.amount)+'</div></div>';
+      });
+    }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL &mdash; what I have</div><div class="xl-v">'+xlDollars(total)+'</div></div>';
+  return html;
+}
+function liabilitiesSheet(opts){
+  opts = opts || {};
+  var expanded = !!opts.expanded;
+  var clickHandler = opts.clickHandler || null;
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">A&nbsp;&nbsp;Liability (what I owe)</div><div class="xl-v">B&nbsp;&nbsp;Amount</div></div>';
+  // Smith row
+  html += '<div class="xl-row xl-item"';
+  if(clickHandler) html += ' onclick="'+clickHandler+'(\'w_li_smith\')" style="cursor:pointer"';
+  html += '><div class="xl-gutter"></div><div class="xl-rownum">1</div><div class="xl-c">'+LIABILITIES_SNAPSHOT[0].label;
+  if(rowDone('w_li_smith')) html += ' <i data-lucide="check" class="licon" style="color:var(--success-text)"></i>';
+  html += '</div><div class="xl-v">'+xlDollars(LIABILITIES_SNAPSHOT[0].amount)+'</div></div>';
+  // Card category row (expandable)
+  html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleAssetCat(\'CARD\')" aria-expanded="'+expanded+'">'+(expanded?'−':'+')+'</button></div><div class="xl-rownum">2</div><div class="xl-c">'+LIABILITIES_SNAPSHOT[1].label+'</div><div class="xl-v">'+xlDollars(LIABILITIES_SNAPSHOT[1].amount)+'</div></div>';
+  if(expanded){
+    var n = 2;
+    var liabRows = [
+      { id:'w_li_tools', label:'May 5 — Cyclesport charge (hand tools)', amt:300 },
+      { id:'w_li_fix',   label:'May 5 — Workspace Outfitters charge', amt:750 },
+      { id:'w_li_comp',  label:'May 8 — Compressor Depot charge', amt:180 },
+      { id:'w_li_wash',  label:'May 10 — Industrial Supply charge', amt:130 },
+      { id:'w_li_tru',   label:'May 12 — Cyclesport charge (truing)', amt:170 },
+      { id:'w_li_parts', label:'May 15 — QBP charge (parts)', amt:500 },
+      { id:'w_li_pay1',  label:'May 16 — payment on the card', amt:-400 },
+      { id:'w_li_pay2',  label:'May 28 — payment on the card', amt:-400 }
+    ];
+    liabRows.forEach(function(r){
+      n++;
+      html += '<div class="xl-row xl-item"';
+      if(clickHandler) html += ' onclick="'+clickHandler+'(\''+r.id+'\')" style="cursor:pointer"';
+      html += '><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+r.label;
+      if(rowDone(r.id)) html += ' <i data-lucide="check" class="licon" style="color:var(--success-text)"></i>';
+      html += '</div><div class="xl-v">'+xlDollars(r.amt)+'</div></div>';
+    });
+  }
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL &mdash; what I owe</div><div class="xl-v">'+xlDollars(1450)+'</div></div>';
+  return html;
+}
+function cashSheet(opts){
+  opts = opts || {};
+  var clickHandler = opts.clickHandler || null;
+  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Repair cash &mdash; May</div><div class="cash-sheet-sub">the bank&rsquo;s rows — repair flows only</div></div>';
+  html += '<div class="cash-group"><div class="cash-group-label">Bank&rsquo;s rows</div>';
+  CASH_FLOWS.forEach(function(f,i){
+    var id = CASH_ROW_IDS[i];
+    var onclick = clickHandler ? ' onclick="'+clickHandler+'(\''+id+'\')" style="cursor:pointer"' : '';
+    var done = rowDone(id) ? ' <i data-lucide="check" class="licon" style="color:var(--success-text)"></i>' : '';
+    var sign = f.amount>=0 ? '+' : '';
+    html += '<div class="cash-line"'+onclick+'><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+done+'</span><span class="cash-line-amt">'+sign+xlDollars(f.amount)+'</span></div>';
+  });
+  if(plugDone){
+    html += '<div class="cash-line"><span><span class="cash-line-date">May 31</span>From your personal self &mdash; covering what the work drew down</span><span class="cash-line-amt">+$960</span></div>';
+  }
+  html += '</div>';
+  var net = plugDone ? 0 : -960;
+  html += '<div class="cash-net"><span class="cash-net-label">Net repair cash</span><span class="cash-net-val">'+xlDollars(net)+'</span></div>';
+  return html;
+}
+function rowDone(rowId){
+  var re = ROW_EVENT[rowId];
+  if(!re) return false;
+  return r3Created.indexOf(re.id) >= 0 && (re.side === 1 ? true : !!r3Paired[re.id]);
+}
+
+/* ===== Standalone workbook pane (used as one of the two "side-by-side" panes — here, stacked) ===== */
+function paneAssets(opts){
+  opts = opts || {};
+  var sheetLabel = opts.sheetLabel || 'Assets';
+  var inner = assetsSheet(opts);
+  return '<div class="xlwb"><div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx:1</span></span><span class="xlwb-bar-sheet">'+sheetLabel+'</span></div><div>'+inner+'</div></div>';
+}
+function paneLiabilities(opts){
+  opts = opts || {};
+  return '<div class="xlwb"><div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx:1</span></span><span class="xlwb-bar-sheet">Liabilities</span></div><div>'+liabilitiesSheet(opts)+'</div></div>';
+}
+function paneCash(opts){
+  opts = opts || {};
+  return '<div class="xlwb"><div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx:1</span></span><span class="xlwb-bar-sheet">Cash (folded into Assets)</span></div><div>'+cashSheet(opts)+'</div></div>';
+}
+
+/* ===== Welcome workbook (tabbed view, no Reasons tab yet) ===== */
+function renderWelcomeWorkbook(){
+  var allTabs = [{id:'assets',label:'Assets'},{id:'liabilities',label:'Liabilities'},{id:'cash',label:'Cash'}];
+  if(wcAnswered){
+    // Cash now folded into Assets; no separate Cash tab
+    allTabs = [{id:'assets',label:'Assets'},{id:'liabilities',label:'Liabilities'}];
+  }
+  var body;
+  if(activeTab==='assets') body = assetsSheet({ hideCash: !wcAnswered });
+  else if(activeTab==='liabilities') body = liabilitiesSheet({});
+  else body = cashSheet({});
+  if(!allTabs.some(function(t){ return t.id===activeTab; })) activeTab = allTabs[0].id;
+  var activeLabel = allTabs.find(function(t){ return t.id===activeTab; }).label;
+  var tabsHtml = allTabs.map(function(t){ return '<button class="xlwb-tab'+(t.id===activeTab?' active':'')+'" onclick="setTab(\''+t.id+'\')">'+t.label+'</button>'; }).join('');
+  var html = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span> &mdash; Excel</span><span class="xlwb-bar-sheet">'+activeLabel+' sheet</span></div>'+
+    '<div>'+body+'</div>'+
+    '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
+  document.getElementById('wbWelcome').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function setTab(id){ playClick(); activeTab = id; renderWelcomeWorkbook(); }
+function toggleAssetCat(cat){ playClick(); assetsExpanded[cat] = !assetsExpanded[cat]; renderCurrentPhase(); }
+
+/* ===== Phase nav ===== */
+function goto(p){
+  playClick();
+  phase = p;
+  phaseOrder.forEach(function(ph){ document.getElementById('phase-'+ph).classList.toggle('active', ph===p); });
+  var pct = Math.round((phaseOrder.indexOf(p)/(phaseOrder.length-1))*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  window.scrollTo(0,0);
+  renderCurrentPhase();
+}
+function restart(){
+  activeTab='assets'; assetsExpanded={}; wcAnswered=false; wcAtt=0; wcNudge=false;
+  eqItemRecorded={}; eqActiveItem=null; eqItemAttempts={}; eqItemNudge=null; eqAutoActive=false; eqAutoDone=false;
+  supActiveItem=null; supItemBought={}; supItemUsed={}; supItemAtt={}; supNudge=null; supAutoActive=false; supAutoDone=false;
+  rouActive=null; rouPaid=null; rouUsed=false; rouPaidAtt=0; rouUsedAtt=0; rouNudge=null;
+  rowActive=null; rowAtt={}; rowNudge=null; rowAuto=null;
+  r3Created=[]; r3Paired={}; xOut={}; xAuto=false;
+  categoryAssignments={}; sortAutoActive=false; sortAutoDone=false; sortNudge=null;
+  plugDone=false; plugAtt=0; plugNudge=false;
+  goto('welcome');
+}
+function renderCurrentPhase(){
+  if(phase==='welcome') renderWelcome();
+  else if(phase==='walk-equipment') renderWalkEquipment();
+  else if(phase==='walk-computer') renderWalkComputer();
+  else if(phase==='walk-supplies') renderWalkSupplies();
+  else if(phase==='walk-fixtures') renderWalkFixtures();
+  else if(phase==='walk-rou') renderWalkRoU();
+  else if(phase==='walk-liab') renderWalkLiab();
+  else if(phase==='walk-cash') renderWalkCash();
+  else if(phase==='crossout') renderCrossout();
+  else if(phase==='sort') renderSort();
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== WELCOME ===== */
+function renderWelcome(){
+  renderWelcomeWorkbook();
+  var ansEl = document.getElementById('wcAnswerBlock');
+  var doneEl = document.getElementById('wcDoneBlock');
+  if(!wcAnswered){
+    var hint = '';
+    if(wcNudge && wcAtt < 3){
+      var t = (wcAtt === 1)
+        ? 'Think back to the lease: the prepaid month was an asset before you ever used the space &mdash; because of what it would do for you later. What does cash do for you later?'
+        : 'The bills themselves aren&rsquo;t the benefit. What they can get you is &mdash; parts, rent, tools. A right to future benefits, held now.';
+      hint = '<div class="sort-msg warn"><strong>Hint '+wcAtt+'/2:</strong> '+t+'</div>';
+    }
+    ansEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title">&ldquo;Everything on the Assets list earned its place by being useful to the work &mdash; remember, an asset is a <em>right to a benefit</em>, not just a thing. So: the money on that Cash tab. Does cash belong on the <strong>Assets list itself</strong>?&rdquo;</div>'+
+        '<div class="btn-row">'+
+          '<button class="classify-btn" onclick="handleWcAnswer(\'notbenefit\')">No &mdash; money isn&rsquo;t a benefit. It&rsquo;s just money.</button>'+
+          '<button class="classify-btn" onclick="handleWcAnswer(\'benefit\')">Yes &mdash; it&rsquo;s a right to future benefits. It gets me the next box of parts.</button>'+
+        '</div>'+
+        hint +
+      '</div>';
+    doneEl.innerHTML = '';
+  } else {
+    ansEl.innerHTML = '';
+    doneEl.innerHTML =
+      '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Right. Money isn&rsquo;t useful by itself &mdash; it&rsquo;s useful for what it gets you <em>later</em>. A right to future benefits, held now. So it doesn&rsquo;t belong off to the side.&rdquo; She drags the Cash tab into the Assets list. &ldquo;There &mdash; the tab&rsquo;s gone. Cash is a line like everything else now, with the bank&rsquo;s rows tucked under it.&rdquo;<br><br>&ldquo;But now look at it. <strong>Minus $960</strong> &mdash; the same number we pulled out of the bank statement, but it&rsquo;s sitting <em>on a list of things you have</em>. Rights to benefits. You can&rsquo;t hold a <em>negative</em> right. That line can&rsquo;t be right as it stands.&rdquo; She frowns at it, then shrugs. &ldquo;Leave it. The minus sign is trying to tell us something &mdash; by the end of today you&rsquo;ll know what.&rdquo;</div></div>'+
+      '<div class="section-card"><div class="card-title">What You&rsquo;ll Discover</div>'+
+        '<ul class="bullet-list">'+
+          '<li>The amount tells you what moved; only the <em>reason</em> tells you what happened.</li>'+
+          '<li>Once the reasons are written down, a pattern shows up on its own: most of them touch <em>two</em> lists.</li>'+
+          '<li>And that <strong>&minus;$960</strong> that shouldn&rsquo;t be able to exist? No amount on these lists can explain it &mdash; but a reason can.</li>'+
+        '</ul></div>'+
+      '<button class="btn-continue btn-block" onclick="enterWalkEquipment()">Keep the reasons &mdash; add a tab &rarr;</button>';
+  }
+  if(window.lucide) lucide.createIcons();
+}
+function handleWcAnswer(v){
+  if(v==='benefit'){ playSuccess(); wcAnswered=true; renderWelcome(); }
+  else { playNope(); wcAtt = Math.min(2, wcAtt+1); wcNudge = true; renderWelcome(); }
+}
+function enterWalkEquipment(){ assetsExpanded['EQUIPMENT'] = true; goto('walk-equipment'); }
+
+/* ===== WALK-EQUIPMENT ===== */
+function renderWalkEquipment(){
+  document.getElementById('wbEqAssets').innerHTML = paneAssets({ interactiveCat:'EQUIPMENT', clickHandler:'pickEqItem' });
+  document.getElementById('wbEqReasons').innerHTML = reasonsWindowHtml({ note:'Your new tab, opened in a second window. Click an Equipment item on the left &mdash; its reason lands here.' });
+  var choiceEl = document.getElementById('eqChoice');
+  var gateEl = document.getElementById('eqGate');
+  var doneEl = document.getElementById('eqDone');
+  var recordedCount = EQUIP_ITEMS.filter(function(it){ return eqItemRecorded[it.name]; }).length;
+  var allRecorded = recordedCount === EQUIP_ITEMS.length;
+  var groupsDone = {}; EQUIP_ITEMS.forEach(function(it){ if(eqItemRecorded[it.name]) groupsDone[it.group]=true; });
+  var groupsDoneCount = Object.keys(groupsDone).length;
+  var active = eqActiveItem ? ITEM_BY_NAME[eqActiveItem] : null;
+  var triggerMet = groupsDoneCount >= 2 && !allRecorded && !active && !eqAutoActive && !eqAutoDone;
+
+  choiceEl.innerHTML = '';
+  if(active && !eqAutoActive){
+    var attempts = eqItemAttempts[eqActiveItem] || 0;
+    var hint = '';
+    if(eqItemNudge && eqItemNudge.item === eqActiveItem && attempts < 3){
+      var t = (attempts===1) ? 'Open the receipt &mdash; it shows how this one was paid.' : 'On the receipt: a Visa charge means the card; a debit means cash; an eBay value with no receipt means you brought it from home.';
+      hint = '<div class="sort-msg warn"><strong>Hint '+attempts+'/2:</strong> '+t+'</div>';
+    }
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title">How did <em>'+active.name+' ($'+active.amt+')</em> come in?</div>'+
+        '<div class="btn-row">'+
+          '<button class="classify-btn" onclick="handleEqItemAnswer(\''+escAttr(active.name)+'\',\'card\')">'+SOURCE_LABEL.card+'</button>'+
+          '<button class="classify-btn" onclick="handleEqItemAnswer(\''+escAttr(active.name)+'\',\'cash\')">'+SOURCE_LABEL.cash+'</button>'+
+          '<button class="classify-btn" onclick="handleEqItemAnswer(\''+escAttr(active.name)+'\',\'home\')">'+SOURCE_LABEL.home+'</button>'+
+          '<button class="btn-hint" onclick="openEvidence(\'group\',\''+active.group+'\')"><i data-lucide="info" class="licon"></i> See the receipt</button>'+
+        '</div>'+
+        hint +
+      '</div>';
+  }
+  gateEl.innerHTML = '';
+  if(triggerMet){
+    gateEl.innerHTML = '<div class="gate-armed"><p><strong>You&rsquo;ve got the rhythm.</strong> Record the reason for the rest of the Equipment items?</p><button class="btn-continue btn-block" onclick="autoRecordItems(EQUIP_ITEMS)">Record the rest &rarr;</button></div>';
+  } else if(eqAutoActive){
+    gateEl.innerHTML = '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Recording the rest&hellip;</div></div>';
+  } else if(recordedCount>0 && !active && !allRecorded){
+    gateEl.innerHTML = '<div class="callout">Click the next Equipment item to record its reason.</div>';
+  }
+  doneEl.innerHTML = '';
+  if(allRecorded && !eqAutoActive){
+    doneEl.innerHTML =
+      '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Thirteen items &mdash; six reasons</div>'+
+        '<p>Equipment totals <strong>$1,200</strong>, and every line carries the <em>why</em> behind it: on the card, paid with the debit card, or brought from home. Six events brought in thirteen things &mdash; one event, one reason, however many items. The list shows <em>what you have</em>; the Reasons tab shows <em>how it got here</em>.</p>'+
+      '</div>'+
+      '<button class="btn-continue btn-block" onclick="enterWalkComputer()">Next &mdash; Computer Equipment &rarr;</button>';
+  }
+}
+function pickEqItem(name){
+  if(eqItemRecorded[name]) return;
+  playClick(); eqActiveItem = name; renderCurrentPhase();
+}
+function handleEqItemAnswer(name, choice){
+  var it = ITEM_BY_NAME[name];
+  if(!it) return;
+  if(choice === it.source){
+    playSuccess();
+    eqItemRecorded[name] = choice;
+    eqActiveItem = null;
+    eqItemNudge = null;
+    var evId = GROUP_TO_EVENT[it.group];
+    if(evId) recordEvent(evId);
+    renderCurrentPhase();
+  } else {
+    playNope();
+    eqItemAttempts[name] = Math.min(2, (eqItemAttempts[name]||0)+1);
+    eqItemNudge = { item:name, attempted:choice };
+    renderCurrentPhase();
+  }
+}
+function autoRecordItems(list){
+  eqAutoActive = true; eqActiveItem = null; renderCurrentPhase();
+  setTimeout(function(){
+    list.forEach(function(it){
+      if(!eqItemRecorded[it.name]){
+        eqItemRecorded[it.name] = it.source;
+        var evId = GROUP_TO_EVENT[it.group];
+        if(evId) recordEvent(evId);
+      }
+    });
+    eqAutoActive = false; eqAutoDone = true; playSuccess(); renderCurrentPhase();
+  }, 700);
+}
+function enterWalkComputer(){ eqActiveItem=null; eqAutoActive=false; eqAutoDone=false; assetsExpanded['COMPUTER EQUIPMENT']=true; goto('walk-computer'); }
+
+/* ===== WALK-COMPUTER ===== */
+function renderWalkComputer(){
+  document.getElementById('wbCoAssets').innerHTML = paneAssets({ interactiveCat:'COMPUTER EQUIPMENT', clickHandler:'pickEqItem' });
+  document.getElementById('wbCoReasons').innerHTML = reasonsWindowHtml({});
+  var recordedCount = COMP_ITEMS.filter(function(it){ return eqItemRecorded[it.name]; }).length;
+  var allRecorded = recordedCount === COMP_ITEMS.length;
+  var active = eqActiveItem ? ITEM_BY_NAME[eqActiveItem] : null;
+  var choiceEl = document.getElementById('coChoice');
+  var hintEl = document.getElementById('coHint');
+  var doneEl = document.getElementById('coDone');
+  choiceEl.innerHTML = '';
+  if(active){
+    var attempts = eqItemAttempts[eqActiveItem] || 0;
+    var hint = '';
+    if(eqItemNudge && eqItemNudge.item === eqActiveItem && attempts < 3){
+      var t = (attempts===1) ? 'Open the <i data-lucide="info" class="licon"></i> &mdash; there&rsquo;s no store receipt for the laptop.' : 'No purchase, no card charge &mdash; it came over from home. Its value is an eBay comp (Doc 9).';
+      hint = '<div class="sort-msg warn"><strong>Hint '+attempts+'/2:</strong> '+t+'</div>';
+    }
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title">How did <em>'+active.name+' ($'+active.amt+')</em> come in?</div>'+
+        '<div class="btn-row">'+
+          '<button class="classify-btn" onclick="handleEqItemAnswer(\''+escAttr(active.name)+'\',\'card\')">'+SOURCE_LABEL.card+'</button>'+
+          '<button class="classify-btn" onclick="handleEqItemAnswer(\''+escAttr(active.name)+'\',\'cash\')">'+SOURCE_LABEL.cash+'</button>'+
+          '<button class="classify-btn" onclick="handleEqItemAnswer(\''+escAttr(active.name)+'\',\'home\')">'+SOURCE_LABEL.home+'</button>'+
+          '<button class="btn-hint" onclick="openEvidence(\'group\',\''+active.group+'\')"><i data-lucide="info" class="licon"></i> See the valuation</button>'+
+        '</div>'+
+        hint +
+      '</div>';
+  }
+  hintEl.innerHTML = (recordedCount===0 && !active) ? '<div class="callout">Click the Laptop row on the left to record its reason.</div>' : '';
+  doneEl.innerHTML = '';
+  if(allRecorded){
+    doneEl.innerHTML =
+      '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Same record, even with no receipt</div>'+
+        '<p>The laptop&rsquo;s <strong>$610</strong> got on the list the same way as everything else &mdash; for a reason. There was no purchase this month; you <em>brought it from home</em>. The list shows <em>what you have</em>; the Reasons tab shows <em>how it got here</em>.</p>'+
+      '</div>'+
+      '<button class="btn-continue btn-block" onclick="enterWalkSupplies()">Next &mdash; Supplies &rarr;</button>';
+  }
+}
+function enterWalkSupplies(){ eqActiveItem=null; assetsExpanded['SUPPLIES']=true; goto('walk-supplies'); }
+
+/* ===== WALK-SUPPLIES ===== */
+function renderWalkSupplies(){
+  document.getElementById('wbSuAssets').innerHTML = paneAssets({ interactiveCat:'SUPPLIES', clickHandler:'pickSupItem' });
+  document.getElementById('wbSuReasons').innerHTML = reasonsWindowHtml({});
+  var allDone = SUP_ITEMS.every(function(it){ return supItemBought[it.name] && supItemUsed[it.name]; });
+  var active = supActiveItem ? SUP_BY_NAME[supActiveItem] : null;
+  var part = active ? (!supItemBought[active.name] ? 'bought' : 'used') : null;
+  var att = active ? (supItemAtt[active.name] || {}) : {};
+  var shortName = function(n){ return n.replace(' (on shelf)', ''); };
+  var choiceEl = document.getElementById('suChoice');
+  var doneEl = document.getElementById('suDone');
+  choiceEl.innerHTML = '';
+  if(active && part === 'bought'){
+    var hint = '';
+    if(supNudge && supNudge.item === active.name && supNudge.step === 'bought' && (att.bought || 0) < 3){
+      hint = '<div class="sort-msg warn"><strong>Hint '+att.bought+'/2:</strong> Open the invoice (<i data-lucide="info" class="licon"></i>) &mdash; QBP billed the whole order to the Harborline Visa.</div>';
+    }
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title">Reason 1 of 2 &mdash; <em>'+shortName(active.name)+'</em> arrived with the rest of the QBP order ($500 of parts). How did they come in?</div>'+
+        '<div class="btn-row">'+
+          '<button class="classify-btn" onclick="handleSupBoughtAnswer(\''+escAttr(active.name)+'\',\'card\')">On the card</button>'+
+          '<button class="classify-btn" onclick="handleSupBoughtAnswer(\''+escAttr(active.name)+'\',\'cash\')">Paid cash (debit)</button>'+
+          '<button class="classify-btn" onclick="handleSupBoughtAnswer(\''+escAttr(active.name)+'\',\'home\')">Brought from home</button>'+
+          '<button class="btn-hint" onclick="openEvidence(\'sup\',\'qbp\')"><i data-lucide="info" class="licon"></i> See the invoice</button>'+
+        '</div>'+
+        hint +
+      '</div>';
+  }
+  if(active && part === 'used'){
+    var hintU = '';
+    if(supNudge && supNudge.item === active.name && supNudge.step === 'used' && (att.used || 0) < 3){
+      var t = ((att.used||0)===1) ? 'There&rsquo;s no receipt for &ldquo;used&rdquo; &mdash; used parts are gone into finished jobs.' : 'You can&rsquo;t count what&rsquo;s gone; you back it out: what came in minus what&rsquo;s left on the shelf.';
+      hintU = '<div class="sort-msg warn"><strong>Hint '+att.used+'/2:</strong> '+t+'</div>';
+    }
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title">Reason 2 of 2 &mdash; the invoice says <em>$500</em> of parts came in, but the shelf only holds <em>$200</em>. What happened to the other <em>$300</em>?</div>'+
+        '<div class="btn-row" style="flex-direction:column; align-items:stretch">'+
+          '<button class="classify-btn" onclick="handleSupUsedAnswer(\''+escAttr(active.name)+'\',\'used\')">I must have used them doing repair work &mdash; $500 in &minus; $200 left = $300</button>'+
+          '<button class="classify-btn" onclick="handleSupUsedAnswer(\''+escAttr(active.name)+'\',\'returned\')">Returned to QBP for a refund</button>'+
+          '<button class="classify-btn" onclick="handleSupUsedAnswer(\''+escAttr(active.name)+'\',\'counted\')">Nothing &mdash; I just counted $300 of used parts</button>'+
+          '<button class="btn-hint" onclick="openEvidence(\'sup\',\'shelfcount\')"><i data-lucide="info" class="licon"></i> See the shelf count (Doc 13)</button>'+
+        '</div>'+
+        hintU +
+      '</div>';
+  }
+  doneEl.innerHTML = '';
+  if(allDone){
+    doneEl.innerHTML =
+      '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Seven parts &mdash; two reasons, and one of them you can&rsquo;t point to</div>'+
+        '<p>The <strong>$500</strong> bought you can point to (the QBP invoice). The <strong>$300</strong> used has no document &mdash; you <em>inferred</em> it from the shelf count: what came in minus what&rsquo;s left. The <strong>$200</strong> on the shelf is what remains after both. Both reasons sit in the books; they don&rsquo;t rest on the same kind of evidence.</p>'+
+      '</div>'+
+      '<button class="btn-continue btn-block" onclick="enterWalkFixtures()">Next &mdash; Fixtures &rarr;</button>';
+  }
+}
+function pickSupItem(name){ playClick(); supActiveItem = name; renderCurrentPhase(); }
+function handleSupBoughtAnswer(name, v){
+  var atts = supItemAtt[name] || {};
+  if(v === 'card'){
+    playSuccess(); supItemBought[name] = 'card'; supNudge = null;
+    if(r3Created.indexOf('e_parts') < 0) recordEvent('e_parts');
+    renderCurrentPhase();
+  } else {
+    playNope();
+    atts.bought = Math.min(2, (atts.bought||0)+1);
+    supItemAtt[name] = atts; supNudge = { item:name, step:'bought' };
+    renderCurrentPhase();
+  }
+}
+function handleSupUsedAnswer(name, v){
+  var atts = supItemAtt[name] || {};
+  if(v === 'used'){
+    playSuccess(); supItemUsed[name] = true; supNudge = null;
+    if(r3Created.indexOf('e_partsused') < 0) recordEvent('e_partsused');
+    supActiveItem = null;
+    renderCurrentPhase();
+  } else {
+    playNope();
+    atts.used = Math.min(2, (atts.used||0)+1);
+    supItemAtt[name] = atts; supNudge = { item:name, step:'used' };
+    renderCurrentPhase();
+  }
+}
+function enterWalkFixtures(){ supActiveItem=null; assetsExpanded['FIXTURES']=true; goto('walk-fixtures'); }
+
+/* ===== WALK-FIXTURES ===== */
+function renderWalkFixtures(){
+  document.getElementById('wbFxAssets').innerHTML = paneAssets({ interactiveCat:'FIXTURES', clickHandler:'pickEqItem' });
+  document.getElementById('wbFxReasons').innerHTML = reasonsWindowHtml({});
+  var recordedCount = FIX_ITEMS.filter(function(it){ return eqItemRecorded[it.name]; }).length;
+  var allRecorded = recordedCount === FIX_ITEMS.length;
+  var active = eqActiveItem ? ITEM_BY_NAME[eqActiveItem] : null;
+  var choiceEl = document.getElementById('fxChoice');
+  var doneEl = document.getElementById('fxDone');
+  choiceEl.innerHTML = '';
+  if(active){
+    var attempts = eqItemAttempts[eqActiveItem] || 0;
+    var hint = '';
+    if(eqItemNudge && eqItemNudge.item === eqActiveItem && attempts < 3){
+      var t = (attempts===1) ? 'Open the receipt &mdash; it shows how this was paid.' : 'The Workspace Outfitters invoice was billed to the Harborline Visa.';
+      hint = '<div class="sort-msg warn"><strong>Hint '+attempts+'/2:</strong> '+t+'</div>';
+    }
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title">How did <em>'+active.name+' ($'+active.amt+')</em> come in?</div>'+
+        '<div class="btn-row">'+
+          '<button class="classify-btn" onclick="handleEqItemAnswer(\''+escAttr(active.name)+'\',\'card\')">'+SOURCE_LABEL.card+'</button>'+
+          '<button class="classify-btn" onclick="handleEqItemAnswer(\''+escAttr(active.name)+'\',\'cash\')">'+SOURCE_LABEL.cash+'</button>'+
+          '<button class="classify-btn" onclick="handleEqItemAnswer(\''+escAttr(active.name)+'\',\'home\')">'+SOURCE_LABEL.home+'</button>'+
+          '<button class="btn-hint" onclick="openEvidence(\'group\',\''+active.group+'\')"><i data-lucide="info" class="licon"></i> See the receipt</button>'+
+        '</div>'+
+        hint +
+      '</div>';
+  }
+  doneEl.innerHTML = '';
+  if(allRecorded){
+    doneEl.innerHTML =
+      '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Four things, one purchase, one reason</div>'+
+        '<p>All the fixtures arrived on a single card purchase &mdash; one event, one reason, four lines checked off at once. The list shows the four things; the Reasons tab shows the one way they came in.</p>'+
+      '</div>'+
+      '<button class="btn-continue btn-block" onclick="enterWalkRoU()">Next &mdash; Right of Use &rarr;</button>';
+  }
+}
+function enterWalkRoU(){ eqActiveItem=null; assetsExpanded['RIGHT OF USE']=true; goto('walk-rou'); }
+
+/* ===== WALK-ROU ===== */
+function renderWalkRoU(){
+  document.getElementById('wbRoAssets').innerHTML = paneAssets({ interactiveCat:'RIGHT OF USE', clickHandler:'pickRouLine' });
+  document.getElementById('wbRoReasons').innerHTML = reasonsWindowHtml({});
+  var bothDone = rouPaid && rouUsed;
+  var part = rouActive === 'line' ? (!rouPaid ? 'paid' : (!rouUsed ? 'used' : null)) : null;
+  var choiceEl = document.getElementById('roChoice');
+  var doneEl = document.getElementById('roDone');
+  choiceEl.innerHTML = '';
+  if(part === 'paid'){
+    var hint = '';
+    if(rouNudge === 'paid' && rouPaidAtt < 3){
+      hint = '<div class="sort-msg warn"><strong>Hint '+rouPaidAtt+'/2:</strong> Open the lease (<i data-lucide="info" class="licon"></i>) &mdash; first and last month, $1,300, went out of the bank up front. Not the card, and not pay-as-you-go.</div>';
+    }
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title">Reason 1 of 2 &mdash; the right to the space came in at <em>$1,300</em> (two months, paid ahead). How did it get paid?</div>'+
+        '<div class="btn-row">'+
+          '<button class="classify-btn" onclick="handleRouPaidAnswer(\'card\')">On the card</button>'+
+          '<button class="classify-btn" onclick="handleRouPaidAnswer(\'cash\')">Paid cash (from the bank)</button>'+
+          '<button class="classify-btn" onclick="handleRouPaidAnswer(\'none\')">Nothing paid yet &mdash; pay each month as it comes</button>'+
+          '<button class="btn-hint" onclick="openEvidence(\'rou\',\'lease\')"><i data-lucide="info" class="licon"></i> See the lease</button>'+
+        '</div>'+
+        hint +
+      '</div>';
+  }
+  if(part === 'used'){
+    var hintU = '';
+    if(rouNudge === 'used' && rouUsedAtt < 3){
+      hintU = '<div class="sort-msg warn"><strong>Hint '+rouUsedAtt+'/2:</strong> The math works either way ($1,300 &minus; $650) &mdash; but unlike the parts, you don&rsquo;t have to guess. Rent is time: two months prepaid, May has passed. You <em>know</em> it directly.</div>';
+    }
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title">Reason 2 of 2 &mdash; you paid <em>$1,300</em> for two months, but the line says <em>$650</em>. Where did the other month go? The parts you had to <em>infer</em> &mdash; is this the same?</div>'+
+        '<div class="btn-row" style="flex-direction:column; align-items:stretch">'+
+          '<button class="classify-btn" onclick="handleRouUsedAnswer(\'inferred\')">I must have used it &mdash; back it out: $1,300 &minus; $650, like the parts</button>'+
+          '<button class="classify-btn" onclick="handleRouUsedAnswer(\'known\')">No inferring needed &mdash; May is over. One of the two prepaid months is gone; the calendar says so</button>'+
+        '</div>'+
+        hintU +
+      '</div>';
+  }
+  doneEl.innerHTML = '';
+  if(bothDone){
+    doneEl.innerHTML =
+      '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Same shape, different evidence</div>'+
+        '<p>Parts-used you <em>inferred</em> (counted what&rsquo;s left, backed out the rest &mdash; &ldquo;I must have used them&rdquo;). Rent-used you <em>know</em> directly &mdash; the calendar says one of the two prepaid months is gone. Both are &ldquo;used up,&rdquo; but <strong>not every &ldquo;used&rdquo; is a guess.</strong></p>'+
+      '</div>'+
+      '<button class="btn-continue btn-block" onclick="enterWalkLiab()">Next &mdash; Liabilities &rarr;</button>';
+  }
+}
+function pickRouLine(){ playClick(); rouActive = 'line'; renderCurrentPhase(); }
+function handleRouPaidAnswer(v){
+  if(v === 'cash'){
+    playSuccess(); rouPaid = 'cash'; rouNudge = null;
+    recordEvent('e_rent');
+    renderCurrentPhase();
+  } else {
+    playNope(); rouPaidAtt = Math.min(2, rouPaidAtt+1); rouNudge = 'paid'; renderCurrentPhase();
+  }
+}
+function handleRouUsedAnswer(v){
+  if(v === 'known'){
+    playSuccess(); rouUsed = true; rouNudge = null; rouActive = null;
+    recordEvent('e_rentused');
+    renderCurrentPhase();
+  } else {
+    playNope(); rouUsedAtt = Math.min(2, rouUsedAtt+1); rouNudge = 'used'; renderCurrentPhase();
+  }
+}
+function enterWalkLiab(){ rouActive=null; assetsExpanded['CARD']=true; goto('walk-liab'); }
+
+/* ===== WALK-LIAB ===== */
+var LIAB_WALK_ROWS = ['w_li_tools','w_li_fix','w_li_comp','w_li_wash','w_li_tru','w_li_parts','w_li_pay1','w_li_pay2','w_li_smith'];
+function renderWalkLiab(){
+  document.getElementById('wbLiLiab').innerHTML = paneLiabilities({ expanded:true, clickHandler:'pickLiabRow' });
+  document.getElementById('wbLiReasons').innerHTML = reasonsWindowHtml({});
+  var doneCount = LIAB_WALK_ROWS.filter(rowDone).length;
+  var allDone = doneCount === LIAB_WALK_ROWS.length;
+  var activeRe = rowActive && LIAB_WALK_ROWS.indexOf(rowActive) >= 0 ? ROW_EVENT[rowActive] : null;
+  var att = rowActive ? (rowAtt[rowActive] || 0) : 0;
+  var triggerMet = doneCount >= 3 && !allDone && !rowActive && !rowAuto;
+  var choiceEl = document.getElementById('liChoice');
+  var gateEl = document.getElementById('liGate');
+  var autoEl = document.getElementById('liAuto');
+  var doneEl = document.getElementById('liDone');
+
+  choiceEl.innerHTML = '';
+  if(activeRe && activeRe.side === 2){
+    // Reuse card
+    var ev = EV_BY_ID[activeRe.id];
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title">This row matches a reason you&rsquo;ve already written. Find it.</div>'+
+        '<p class="prose"><em>'+rowLabel(rowActive)+'</em> &mdash; the second half of: <strong>'+ev.reason+'</strong></p>'+
+        '<div class="btn-row"><button class="classify-btn" onclick="confirmReuse(\''+rowActive+'\')">Reuse this reason <span class="mono">⟷</span></button>'+
+          '<button class="btn-hint" onclick="openEvidence(\'liab\',\'card\')"><i data-lucide="info" class="licon"></i> See the statement</button></div>'+
+      '</div>';
+  }
+  if(activeRe && (rowActive === 'w_li_pay1' || rowActive === 'w_li_pay2')){
+    var hint = '';
+    if(rowNudge === rowActive && att < 3){
+      var t = (att===1) ? 'The statement calls it a payment &mdash; money went TO the card company, and the minus sign says what you owe went down.' : 'A payment shrinks the balance: $2,030 charged &minus; $800 paid = $1,230 owed.';
+      hint = '<div class="sort-msg warn"><strong>Hint '+att+'/2:</strong> '+t+'</div>';
+    }
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title"><em>'+rowLabel(rowActive)+' (&minus;$400)</em> &mdash; this one&rsquo;s new. What happened?</div>'+
+        '<div class="btn-row" style="flex-direction:column; align-items:stretch">'+
+          '<button class="classify-btn" onclick="handleRowAnswer(\''+rowActive+'\', true)">Paid the card down &mdash; what you owe shrank by $400</button>'+
+          '<button class="classify-btn" onclick="handleRowAnswer(\''+rowActive+'\', false)">Bought something more on the card</button>'+
+          '<button class="classify-btn" onclick="handleRowAnswer(\''+rowActive+'\', false)">The card company charged a fee</button>'+
+          '<button class="btn-hint" onclick="openEvidence(\'liab\',\'card\')"><i data-lucide="info" class="licon"></i> See the statement</button>'+
+        '</div>'+
+        hint +
+      '</div>';
+  }
+  if(activeRe && rowActive === 'w_li_smith'){
+    var hintS = '';
+    if(rowNudge === rowActive && att < 3){
+      var t = (att===1) ? 'Smith bought a frame, not lent you money &mdash; and the $220 isn&rsquo;t free: it binds you to something.' : 'You owe him the work &mdash; or his money back if you never do it. An obligation to hand over cash or work.';
+      hintS = '<div class="sort-msg warn"><strong>Hint '+att+'/2:</strong> '+t+'</div>';
+    }
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title">Smith paid you <em>$220</em> up front for a frame you haven&rsquo;t built. What do you owe him?</div>'+
+        '<div class="btn-row" style="flex-direction:column; align-items:stretch">'+
+          '<button class="classify-btn" onclick="handleRowAnswer(\''+rowActive+'\', true)">Work &mdash; the frame he already paid for</button>'+
+          '<button class="classify-btn" onclick="handleRowAnswer(\''+rowActive+'\', false)">Money &mdash; you&rsquo;ll repay him a loan</button>'+
+          '<button class="classify-btn" onclick="handleRowAnswer(\''+rowActive+'\', false)">Nothing &mdash; the $220 is simply yours</button>'+
+          '<button class="btn-hint" onclick="openEvidence(\'liab\',\'smith\')"><i data-lucide="info" class="licon"></i> See the receipt</button>'+
+        '</div>'+
+        hintS +
+      '</div>';
+  }
+  gateEl.innerHTML = triggerMet
+    ? '<div class="gate-armed"><p><strong>You&rsquo;ve got the rhythm.</strong> Work through the rest of the statement?</p><button class="btn-continue btn-block" onclick="autoRowComplete(LIAB_WALK_ROWS, \'liab\')">Do the rest &rarr;</button></div>'
+    : '';
+  autoEl.innerHTML = (rowAuto === 'liab') ? '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Matching reasons, writing the new ones&hellip;</div></div>' : '';
+  doneEl.innerHTML = '';
+  if(allDone && !rowAuto){
+    doneEl.innerHTML =
+      '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Two kinds of owing &mdash; and six rows that needed no new reason</div>'+
+        '<p>The card you&rsquo;ll settle with <strong>money</strong>; Smith you&rsquo;ll settle with <strong>work</strong> &mdash; a liability is a present obligation to hand over one or the other. And notice: six of the statement&rsquo;s rows were <em>already explained</em> &mdash; the same reason now touches two lists (that&rsquo;s the <strong>⟷</strong> badge). The card company kept that record <em>for</em> you.</p>'+
+      '</div>'+
+      '<button class="btn-continue btn-block" onclick="enterWalkCash()">Next &mdash; Cash &rarr;</button>';
+  }
+}
+function rowLabel(rowId){
+  var labels = {
+    w_li_tools:'May 5 — Cyclesport charge (hand tools)', w_li_fix:'May 5 — Workspace Outfitters charge',
+    w_li_comp:'May 8 — Compressor Depot charge', w_li_wash:'May 10 — Industrial Supply charge',
+    w_li_tru:'May 12 — Cyclesport charge (truing)', w_li_parts:'May 15 — QBP charge (parts)',
+    w_li_pay1:'May 16 — payment on the card', w_li_pay2:'May 28 — payment on the card',
+    w_li_smith:'Smith — the frame you owe (prepaid)'
+  };
+  if(labels[rowId]) return labels[rowId];
+  var idx = CASH_ROW_IDS.indexOf(rowId);
+  if(idx >= 0) return CASH_FLOWS[idx].date + ' — ' + CASH_FLOWS[idx].desc;
+  return rowId;
+}
+function pickLiabRow(rowId){
+  if(rowDone(rowId)) return;
+  playClick(); rowActive = rowId; renderCurrentPhase();
+}
+function confirmReuse(rowId){
+  var re = ROW_EVENT[rowId]; if(!re) return;
+  playSuccess();
+  recordEvent(re.id); // marks paired
+  rowActive = null; rowNudge = null;
+  renderCurrentPhase();
+}
+function handleRowAnswer(rowId, correct){
+  if(correct){
+    playSuccess();
+    var re = ROW_EVENT[rowId]; if(re) recordEvent(re.id);
+    rowActive = null; rowNudge = null;
+    renderCurrentPhase();
+  } else {
+    playNope();
+    rowAtt[rowId] = Math.min(2, (rowAtt[rowId]||0)+1);
+    rowNudge = rowId;
+    renderCurrentPhase();
+  }
+}
+function autoRowComplete(rows, kind){
+  rowAuto = kind; rowActive = null; renderCurrentPhase();
+  setTimeout(function(){
+    rows.forEach(function(id){
+      if(!rowDone(id)){
+        var re = ROW_EVENT[id]; if(re) recordEvent(re.id);
+      }
+    });
+    rowAuto = null; playSuccess(); renderCurrentPhase();
+  }, 800);
+}
+function enterWalkCash(){ rowActive=null; assetsExpanded['CASH']=true; goto('walk-cash'); }
+
+/* ===== WALK-CASH ===== */
+function renderWalkCash(){
+  var annaEl = document.getElementById('caAnna');
+  var doneCount = CASH_ROW_IDS.filter(rowDone).length;
+  var allDone = doneCount === CASH_ROW_IDS.length;
+  if(!plugDone){
+    annaEl.innerHTML = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+
+      (!allDone
+        ? '&ldquo;Last stop &mdash; the <strong>Cash</strong> line that&rsquo;s been glaring at us all day. These are the bank&rsquo;s rows: the repair flows you sorted out of the bank statement last time, folded onto this list this morning. Most of them you&rsquo;ve <em>already explained</em> &mdash; work down the list, same as the statement. The new ones are the seven times a customer paid you.&rdquo;'
+        : '&ldquo;Every row explained. And yet &mdash; look at the line. It <strong>still</strong> reads &minus;$960. More went out than came in, the records all agree&hellip; so where did the money that covered the difference come from?&rdquo;'
+      )+'</div></div>';
+  } else {
+    annaEl.innerHTML = '';
+  }
+  document.getElementById('wbCaAssets').innerHTML = paneCash({ clickHandler:'pickCashRow' });
+  document.getElementById('wbCaReasons').innerHTML = reasonsWindowHtml({});
+
+  var activeRe = rowActive && CASH_ROW_IDS.indexOf(rowActive) >= 0 ? ROW_EVENT[rowActive] : null;
+  var att = rowActive ? (rowAtt[rowActive] || 0) : 0;
+  var triggerMet = doneCount >= 3 && !allDone && !rowActive && !rowAuto;
+  var choiceEl = document.getElementById('caChoice');
+  var gateEl = document.getElementById('caGate');
+  var autoEl = document.getElementById('caAuto');
+  var plugEl = document.getElementById('caPlug');
+  var doneEl = document.getElementById('caDone');
+
+  choiceEl.innerHTML = '';
+  if(activeRe && activeRe.side === 2){
+    var ev = EV_BY_ID[activeRe.id];
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title">This row matches a reason you&rsquo;ve already written. Find it.</div>'+
+        '<p class="prose"><em>'+rowLabel(rowActive)+'</em> &mdash; the second half of: <strong>'+ev.reason+'</strong></p>'+
+        '<div class="btn-row"><button class="classify-btn" onclick="confirmReuse(\''+rowActive+'\')">Reuse this reason <span class="mono">⟷</span></button></div>'+
+      '</div>';
+  }
+  if(activeRe && activeRe.side === 1){
+    // New reason for a customer payment row (e_v1..e_v7)
+    var ev = EV_BY_ID[activeRe.id];
+    var hint = '';
+    if(rowNudge === rowActive && att < 3){
+      hint = '<div class="sort-msg warn"><strong>Hint '+att+'/2:</strong> The bank shows money came IN &mdash; that&rsquo;s a customer finishing a job and paying you.</div>';
+    }
+    choiceEl.innerHTML =
+      '<div class="section-card">'+
+        '<div class="card-title"><em>'+rowLabel(rowActive)+'</em> &mdash; what happened?</div>'+
+        '<div class="btn-row" style="flex-direction:column; align-items:stretch">'+
+          '<button class="classify-btn" onclick="handleRowAnswer(\''+rowActive+'\', true)">Finished a repair &mdash; the customer paid (the new reason)</button>'+
+          '<button class="classify-btn" onclick="handleRowAnswer(\''+rowActive+'\', false)">A refund came back from a vendor</button>'+
+          '<button class="classify-btn" onclick="handleRowAnswer(\''+rowActive+'\', false)">My personal self transferred in some money</button>'+
+        '</div>'+
+        hint +
+      '</div>';
+  }
+  gateEl.innerHTML = triggerMet
+    ? '<div class="gate-armed"><p><strong>You&rsquo;ve got the rhythm.</strong> Work through the rest of the bank&rsquo;s rows?</p><button class="btn-continue btn-block" onclick="autoRowComplete(CASH_ROW_IDS, \'cash\')">Do the rest &rarr;</button></div>'
+    : '';
+  autoEl.innerHTML = (rowAuto === 'cash') ? '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Matching reasons, writing the new ones&hellip;</div></div>' : '';
+
+  // The discovery: shows after every cash row done but before plug answered
+  plugEl.innerHTML = '';
+  if(allDone && !plugDone && !rowAuto){
+    var pHint = '';
+    if(plugNudge && plugAtt < 3){
+      var t = (plugAtt===1) ? 'No row on the bank statement adds $960 in. Yet the math has to work: $960 of repair spending was covered by something not on this sheet.' : 'You moved money from your personal life into the repair work, without ever writing it down as a contribution. You only see it now.';
+      pHint = '<div class="sort-msg warn"><strong>Hint '+plugAtt+'/2:</strong> '+t+'</div>';
+    }
+    plugEl.innerHTML =
+      '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;The minus $960 isn&rsquo;t a mistake &mdash; it&rsquo;s a message. Did you pay it to yourself? Where did the money that covered the difference come from?&rdquo;</div></div>'+
+      '<div class="section-card">'+
+        '<div class="card-title">Where did the $960 come from?</div>'+
+        '<div class="btn-row" style="flex-direction:column; align-items:stretch">'+
+          '<button class="classify-btn" onclick="handlePlugAnswer(\'personal\')">My personal self paid my bike-repair self &mdash; from outside the work</button>'+
+          '<button class="classify-btn" onclick="handlePlugAnswer(\'customers\')">More customers paid than the bank shows</button>'+
+          '<button class="classify-btn" onclick="handlePlugAnswer(\'lost\')">Money just got lost &mdash; the books don&rsquo;t balance</button>'+
+        '</div>'+
+        pHint +
+      '</div>';
+  }
+
+  doneEl.innerHTML = '';
+  if(plugDone){
+    doneEl.innerHTML =
+      '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;That&rsquo;s the answer no amount could give you. <strong>Your personal self</strong> covered what the work drew down. The repair work is its own thing, and it ran short by $960 this month &mdash; you only see that by tallying. The Cash line snaps to $0, the way it actually was at month-end. And a twelfth reason joins the list &mdash; a contribution, but one you never decided to make.&rdquo;</div></div>'+
+      '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> A reason no amount could explain</div>'+
+        '<p>The negative cash line was the repair work telling you it had drawn down more than it brought in &mdash; covered by money from outside the work, recognized only ex post. The line repairs to <strong>$0</strong>; the reason joins the Reasons tab. Twenty-three reasons in all &mdash; eleven that touched two lists, twelve that moved your net.</p>'+
+      '</div>'+
+      '<button class="btn-continue btn-block" onclick="goto(\'crossout\')">Cross out the matched pairs &rarr;</button>';
+  }
+}
+function pickCashRow(rowId){
+  if(rowDone(rowId)) return;
+  playClick(); rowActive = rowId; renderCurrentPhase();
+}
+function handlePlugAnswer(v){
+  if(v === 'personal'){
+    playSuccess(); plugDone = true; plugNudge = false;
+    recordEvent('e_plug');
+    renderCurrentPhase();
+  } else {
+    playNope(); plugAtt = Math.min(2, plugAtt+1); plugNudge = true; renderCurrentPhase();
+  }
+}
+
+/* ===== CROSSOUT ===== */
+function renderCrossout(){
+  var pairedIds = r3Created.filter(function(id){ return r3Paired[id]; });
+  var crossedCount = pairedIds.filter(function(id){ return xOut[id]; }).length;
+  var allCrossed = pairedIds.length > 0 && crossedCount === pairedIds.length;
+  var triggerMet = crossedCount >= 2 && !allCrossed && !xAuto;
+  var topEl = document.getElementById('xoTop');
+  topEl.innerHTML = allCrossed ? '' :
+    '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Twenty-three reasons &mdash; and eleven wear that <strong>⟷</strong> badge: each of those lives on <em>two</em> of your lists. When both sides sit on your lists, they move together &mdash; what you have and what you owe shift by the same amount, and your <strong>net</strong> doesn&rsquo;t budge. They just <em>shuffle</em>. Cross them out &mdash; click a ⟷ reason.&rdquo;</div></div>';
+  document.getElementById('wbXoReasons').innerHTML = reasonsWindowHtml({ crossing:true });
+  document.getElementById('xoGate').innerHTML = triggerMet ? '<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Cross out the rest of the ⟷ reasons?</p><button class="btn-continue btn-block" onclick="crossAuto()">Cross out the rest &rarr;</button></div>' : '';
+  document.getElementById('xoAuto').innerHTML = xAuto ? '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Crossing out the shufflers&hellip;</div></div>' : '';
+  document.getElementById('xoDone').innerHTML = '';
+  if(allCrossed && !xAuto){
+    document.getElementById('xoDone').innerHTML =
+      '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Look at what stands: twelve reasons with no second list &mdash; the gear and laptop you brought, the seven jobs customers paid for, the parts and the month the work used up&hellip; and the $960 your personal self covered. Each one <em>moved your net</em>.&rdquo;</div></div>'+
+      '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The crossed-out ones just shuffled</div>'+
+        '<p>Buy parts on the card: parts up <em>and</em> owed up. Pay the card down: cash down <em>and</em> owed down. The <strong>survivors</strong> are how you know how the repair work is doing &mdash; and they sort into two plain kinds. One last move.</p>'+
+      '</div>'+
+      '<button class="btn-continue btn-block" onclick="goto(\'sort\')">Sort the net-movers &rarr;</button>';
+  }
+}
+function handleCrossClick(id){
+  if(!r3Paired[id] || xOut[id] || xAuto) return;
+  playSuccess(); xOut[id] = true; renderCurrentPhase();
+}
+function crossAuto(){
+  xAuto = true; renderCurrentPhase();
+  setTimeout(function(){
+    r3Created.forEach(function(id){ if(r3Paired[id]) xOut[id] = true; });
+    xAuto = false; playSuccess(); renderCurrentPhase();
+  }, 700);
+}
+
+/* ===== SORT ===== */
+function renderSort(){
+  var solos = r3Created.filter(function(id){ return EV_BY_ID[id] && !EV_BY_ID[id].otherWin; });
+  var unassigned = solos.filter(function(id){ return !categoryAssignments[id]; });
+  var contrib = solos.filter(function(id){ return categoryAssignments[id] === 'contributed'; });
+  var earned = solos.filter(function(id){ return categoryAssignments[id] === 'earned'; });
+  var contribTotal = contrib.reduce(function(s,id){ return s + (EV_BY_ID[id].amount || rowDelta(EV_BY_ID[id].rowId)); }, 0);
+  var earnedTotal = earned.reduce(function(s,id){ return s + (EV_BY_ID[id].amount || rowDelta(EV_BY_ID[id].rowId)); }, 0);
+  var correctlyAssigned = solos.filter(function(id){ return categoryAssignments[id] === EV_BY_ID[id].cat; }).length;
+  var allSorted = correctlyAssigned === solos.length;
+  var done = sortAutoDone || allSorted;
+  var triggerMet = correctlyAssigned >= 2 && !allSorted && !sortAutoActive && !sortAutoDone;
+
+  var topEl = document.getElementById('srTop');
+  topEl.innerHTML = '';
+  if(!done){
+    topEl.innerHTML = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Twelve survivors &mdash; and they split into just two kinds. Some you <strong>put in</strong> from outside the repair work &mdash; the gear, the laptop, the cash your personal self covered. The rest came from <strong>doing the work</strong>: what customers paid, less the parts and the month the work used up. Sort each row into its pile.&rdquo;</div></div>';
+    if(sortNudge){
+      var msg = (sortNudge.attempted === 'contributed')
+        ? 'That one didn&rsquo;t come from you bringing something in &mdash; it came from doing the repair work. Try the other pile.'
+        : 'That one didn&rsquo;t come from doing repair work &mdash; it came in from outside. Try the other pile.';
+      topEl.innerHTML += '<div class="sort-msg warn">'+msg+'</div>';
+    }
+  }
+  var html = '<div class="xlwb"><div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Reasons</span></span><span class="xlwb-bar-sheet">net-movers — two piles</span></div>';
+  if(unassigned.length > 0){
+    html += '<div class="cash-sheet-head"><div class="cash-sheet-title">To sort ('+unassigned.length+' '+(unassigned.length===1?'row':'rows')+')</div></div>';
+    unassigned.forEach(function(id){
+      var e = EV_BY_ID[id];
+      var delta = e.amount !== undefined ? e.amount : rowDelta(e.rowId);
+      html += '<div class="dep-card">'+
+        '<div class="dep-card-head"><div><div class="dep-card-meta">'+winLabel(e.win)+' &middot; '+signedDollars(delta)+'</div><div class="dep-card-title">'+e.reason+'</div></div></div>'+
+        '<div class="classify-row"><span class="classify-label">Sort:</span>'+
+          '<button class="classify-btn" onclick="assignSort(\''+id+'\',\'contributed\')">&rarr; Contributed</button>'+
+          '<button class="classify-btn" onclick="assignSort(\''+id+'\',\'earned\')">&rarr; Generated</button>'+
+        '</div></div>';
+    });
+  }
+  html += sortSection('CONTRIBUTED', contrib, contribTotal);
+  html += sortSection('GENERATED', earned, earnedTotal);
+  html += '</div>';
+  document.getElementById('wbSrReasons').innerHTML = html;
+
+  document.getElementById('srGate').innerHTML = triggerMet ? '<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Sort the rest?</p><button class="btn-continue btn-block" onclick="sortAuto()">Sort the rest &rarr;</button></div>' : '';
+  document.getElementById('srAuto').innerHTML = sortAutoActive ? '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Sorting the rest&hellip;</div></div>' : '';
+  document.getElementById('srDone').innerHTML = '';
+  if(done){
+    document.getElementById('srDone').innerHTML =
+      '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Two piles. <strong>Contributed '+signedDollars(contribTotal)+'</strong> &mdash; what came in from outside the work: the gear, the laptop, and the $960 you only saw by tallying up. <strong>Generated '+signedDollars(earnedTotal)+'</strong> &mdash; what the work produced on its own: customers paid $1,120, less the parts and the month it used. That&rsquo;s May, explained.&rdquo;</div></div>'+
+      '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Two ways your stake grew</div>'+
+        '<p><strong>Contributed ('+signedDollars(contribTotal)+'):</strong> from outside the repair work &mdash; including the personal cash it quietly drew down, the hole you plugged without ever deciding to.</p>'+
+        '<p><strong>Generated ('+signedDollars(earnedTotal)+'):</strong> from doing the work &mdash; what customers paid, less the parts and the month of space used up.</p>'+
+        '<p>You haven&rsquo;t named what these piles add up to, or seen where the survivors&rsquo; other sides live. That&rsquo;s next.</p>'+
+      '</div>'+
+      '<button class="btn-continue btn-block" onclick="goto(\'complete\')">Finish up &rarr;</button>';
+  }
+}
+function sortSection(title, ids, total){
+  var html = '<div class="xl-row xl-cat"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+title+' ('+ids.length+')</div><div class="xl-v">'+signedDollars(total)+'</div></div>';
+  if(ids.length === 0) html += '<div class="bs-empty-msg">(empty so far)</div>';
+  else ids.forEach(function(id){
+    var e = EV_BY_ID[id];
+    var delta = e.amount !== undefined ? e.amount : rowDelta(e.rowId);
+    html += '<div class="xl-row xl-reasons xl-item"><div class="xl-gutter"></div><div class="xl-c">'+winLabel(e.win)+'</div><div class="xl-v">'+signedDollars(delta)+'</div><div class="xl-c">'+e.reason+'</div></div>';
+  });
+  return html;
+}
+function assignSort(id, cat){
+  if(categoryAssignments[id]) return;
+  if(EV_BY_ID[id].cat === cat){
+    playSuccess(); categoryAssignments[id] = cat; sortNudge = null;
+  } else {
+    playNope(); sortNudge = { id:id, attempted:cat };
+  }
+  renderCurrentPhase();
+}
+function sortAuto(){
+  sortAutoActive = true; renderCurrentPhase();
+  setTimeout(function(){
+    var solos = r3Created.filter(function(id){ return EV_BY_ID[id] && !EV_BY_ID[id].otherWin; });
+    solos.forEach(function(id){ if(!categoryAssignments[id]) categoryAssignments[id] = EV_BY_ID[id].cat; });
+    sortAutoActive = false; sortAutoDone = true; playSuccess(); renderCurrentPhase();
+  }, 700);
+}
+
+/* ===== Evidence overlay (receipt modals) ===== */
+function openEvidence(kind, key){
+  var titleEl = document.getElementById('evidenceTitle');
+  var bodyEl = document.getElementById('evidenceBody');
+  var title = 'Evidence';
+  var body = '';
+  if(kind === 'group'){
+    var g = GROUP_BY_ID[key];
+    if(!g) return;
+    title = (g.kind === 'ebay') ? 'Evidence — market value' : 'Evidence — receipt';
+    body = '<div class="prose"><strong>'+g.vendor+'</strong></div><p class="cash-sheet-sub">'+g.meta+'</p>';
+    g.items.forEach(function(it){ body += '<div class="cash-line"><span>'+it.name+'</span><span class="cash-line-amt">$'+it.amt+'</span></div>'; });
+    body += '<div class="cash-subtotal"><span>Total</span><span class="cash-line-amt">$'+g.amount+'</span></div>';
+    body += '<p class="cash-foot"><strong>Paid:</strong> '+g.paid+'</p>';
+  } else if(kind === 'sup'){
+    if(key === 'qbp'){
+      title = 'Evidence — invoice';
+      body = '<div class="prose"><strong>'+SUP_QBP.vendor+'</strong></div><p class="cash-sheet-sub">'+SUP_QBP.meta+'</p>';
+      SUP_QBP.items.forEach(function(it){ body += '<div class="cash-line"><span>'+it.name+'</span><span class="cash-line-amt">$'+it.amt+'</span></div>'; });
+      body += '<div class="cash-subtotal"><span>Total</span><span class="cash-line-amt">$500</span></div>';
+      body += '<p class="cash-foot"><strong>Paid:</strong> '+SUP_QBP.paid+'</p>';
+    } else if(key === 'shelfcount'){
+      title = 'Evidence — the shelf count (Document 13)';
+      body = '<div class="prose"><strong>Parts left on shelf — 5/31</strong></div>';
+      SUP_ITEMS.forEach(function(it){ body += '<div class="cash-line"><span>'+it.name.replace(' (on shelf)','')+'</span><span class="cash-line-amt">'+it.qty+'</span></div>'; });
+      body += '<p class="cash-foot">Counted by hand on the shelf. Rest went into May jobs.</p>';
+      body += '<p class="prose">This is what you <strong>counted</strong> &mdash; just the quantities left. The dollar values and totals get filled in on the Excel sheet; &ldquo;used&rdquo; is then backed out there: bought <span class="mono">$500</span> &minus; shelf <span class="mono">$200</span> = used <span class="mono">$300</span>.</p>';
+    } else {
+      title = 'Why &ldquo;used&rdquo; is inferred';
+      body = '<p class="prose">There&rsquo;s no receipt for &ldquo;used.&rdquo; You reach it by counting what&rsquo;s left and backing it out:</p>'+
+        '<div class="cash-line"><span>Bought (QBP invoice)</span><span class="cash-line-amt">$500</span></div>'+
+        '<div class="cash-line"><span>On the shelf (counted &mdash; Doc 13)</span><span class="cash-line-amt">&minus; $200</span></div>'+
+        '<div class="cash-subtotal"><span>Used (inferred)</span><span class="cash-line-amt">$300</span></div>'+
+        '<p class="prose"><strong>Worked example &mdash; chains:</strong> you bought a box for <span class="mono">$100</span>, and <span class="mono">$50</span> is still on the shelf. So <span class="mono">$50</span> must have been used &mdash; you didn&rsquo;t <em>count</em> &ldquo;used,&rdquo; you inferred it.</p>'+
+        '<p class="cash-foot">The shelf total comes from the handwritten count (<strong>Document 13</strong>). This assumes everything gone was consumed in jobs (not lost or miscounted).</p>';
+    }
+  } else if(kind === 'rou'){
+    if(key === 'lease'){
+      title = 'Evidence — lease';
+      body = '<div class="prose"><strong>'+ROU_LEASE.vendor+'</strong></div><p class="cash-sheet-sub">'+ROU_LEASE.meta+'</p>';
+      ROU_LEASE.items.forEach(function(it){ body += '<div class="cash-line"><span>'+it.name+'</span><span class="cash-line-amt">$'+it.amt+'</span></div>'; });
+      body += '<div class="cash-subtotal"><span>Paid in advance</span><span class="cash-line-amt">$1,300</span></div>';
+      body += '<p class="cash-foot"><strong>Paid:</strong> '+ROU_LEASE.paid+'</p>';
+    } else {
+      title = 'Why rent-used is KNOWN (not inferred)';
+      body = '<p class="prose">You prepaid <strong>two</strong> months ($650 each). By May 31, <strong>one</strong> of them &mdash; May &mdash; has been used up. So $650 is used and $650 (the last month) is still held.</p>'+
+        '<p class="cash-foot">You didn&rsquo;t have to count anything or back it out of a leftover &mdash; the <strong>calendar</strong> tells you directly. Contrast Supplies, where &ldquo;used&rdquo; had to be <em>inferred</em> (bought &minus; what&rsquo;s on the shelf). Same ledger shape; different kind of evidence.</p>';
+    }
+  } else if(kind === 'liab'){
+    if(key === 'card'){
+      title = 'Evidence — card statement';
+      body = '<div class="prose"><strong>'+CARD_EV.vendor+'</strong></div><p class="cash-sheet-sub">'+CARD_EV.meta+'</p>';
+      CARD_EV.items.forEach(function(it){ body += '<div class="cash-line"><span>'+it.name+'</span><span class="cash-line-amt">$'+it.amt+'</span></div>'; });
+      body += '<div class="cash-line"><span>Charges</span><span class="cash-line-amt">$2,030</span></div>';
+      body += '<div class="cash-line"><span>Payments</span><span class="cash-line-amt">&minus; $800</span></div>';
+      body += '<div class="cash-subtotal"><span>Balance &mdash; what you owe</span><span class="cash-line-amt">$1,230</span></div>';
+    } else {
+      title = "Evidence — Smith&rsquo;s advance";
+      body = '<p class="prose">'+SMITH_EV.note+'</p>';
+    }
+  }
+  titleEl.innerHTML = '<i data-lucide="file-text" class="licon"></i> ' + title;
+  bodyEl.innerHTML = body;
+  document.getElementById('evidenceOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeEvidence(){ document.getElementById('evidenceOverlay').classList.remove('open'); }
+
+/* ===== Glossary ===== */
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== Dev mode (triple-click title) ===== */
+(function(){
+  var clicks = 0;
+  document.getElementById('headerTitle').addEventListener('click', function(){
+    clicks++;
+    if(clicks>=3){
+      clicks = 0;
+      var bar = document.getElementById('devBar');
+      bar.hidden = !bar.hidden;
+      if(!bar.hidden && !document.getElementById('devBtns').children.length){
+        document.getElementById('devBtns').innerHTML = phaseOrder.map(function(p){
+          return '<button class="dev-bar-btn" onclick="goto(\''+p+'\')">'+p+'</button>';
+        }).join('');
+      }
+    }
+  });
+})();
+
+/* ===== util ===== */
+function escAttr(s){ return String(s).replace(/'/g, "&#39;").replace(/"/g, "&quot;"); }
+
+/* ===== init ===== */
+renderCurrentPhase();
+</script>
+</body>
+</html>

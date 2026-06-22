@@ -318,7 +318,7 @@ function render(){
 
   var html = '';
   html += annaBox(
-    'Flip to <strong>Liabilities</strong> &mdash; what you owe. I expanded the card so you can see the <em>statement&rsquo;s</em> rows &mdash; the card company&rsquo;s own record. Now read the first charge&hellip; Cyclesport, May 5, $300. <strong>You&rsquo;ve seen that event before.</strong> Work down the list: if a reason already explains a row, find it; if a row is truly new, write it.',
+    'Flip to <strong>Liabilities</strong> (what you owe). I expanded the card so you can see the <em>statement&rsquo;s</em> rows &mdash; the card company&rsquo;s own record. Now read the first charge under &lsquo;What you owe on the bike-repair credit card&rsquo;&hellip; Cyclesport, May 5, $300. <strong>You&rsquo;ve seen that event before.</strong> Work down the list: click each item, and then check the Reasons tab on the right window. If a reason already explains a row, find it; if a row is truly new, write it into the Reasons tab. Once a row is worked, a checkmark appears, and you can move on to the next one.',
     true
   );
 
@@ -347,7 +347,7 @@ function render(){
 
   if(allDone && !rowAuto){
     html += insightBox('Two kinds of owing &mdash; and six rows that needed no new reason.',
-      '<p>The card you&rsquo;ll settle with <strong>money</strong>; Smith you&rsquo;ll settle with <strong>work</strong> &mdash; a liability is a present obligation to hand over one or the other. And notice: six of the statement&rsquo;s rows were <em>already explained</em> &mdash; the same reason now touches two lists (that&rsquo;s the <strong>&lrarr;</strong> badge). The card company kept that record <em>for</em> you.</p>'
+      '<p>You&rsquo;ll settle the card with <strong>money</strong>; you&rsquo;ll settle Smith with <strong>work</strong>. A liability is a present obligation to hand over one or the other. And notice: six of the statement&rsquo;s rows were <em>already explained</em>: the <strong>same reason</strong> now touches two lists (that&rsquo;s the <strong>&lrarr;</strong> badge). The card company kept that record <em>for</em> you.</p>'
     );
   }
 
