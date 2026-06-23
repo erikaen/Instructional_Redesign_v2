@@ -1,6 +1,6 @@
 /* =========================================================
  * 14-shared.js — Tutorial 1.4 shared data, audio, workbook renderer.
- * Used by 14-latest.html and 14-latest-[phase].html files.
+ * Used by 14-latest.html and 14-[N]-[phase].html files.
  * Pulls all design styling from shared.css; only behavior lives here.
  * ========================================================= */
 
@@ -404,6 +404,6 @@ function closeEvidence(){ document.getElementById('evidenceOverlay').classList.r
 
 /* ===== Phase nav between split files ===== */
 var PHASE_ORDER = ['welcome','walk-equipment','walk-computer','walk-supplies','walk-fixtures','walk-rou','walk-liab','walk-cash','crossout','sort','complete'];
-function phaseFile(p){ return '14-latest-'+p+'.html'; }
+function phaseFile(p){ var i = PHASE_ORDER.indexOf(p); return i >= 0 ? '14-'+(i+1)+'-'+p+'.html' : null; }
 function prevPhaseFile(p){ var i = PHASE_ORDER.indexOf(p); return i > 0 ? phaseFile(PHASE_ORDER[i-1]) : null; }
 function nextPhaseFile(p){ var i = PHASE_ORDER.indexOf(p); return i < PHASE_ORDER.length-1 ? phaseFile(PHASE_ORDER[i+1]) : null; }
