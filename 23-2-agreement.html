@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activity 2.3: The Rules and the Two Signatures &middot; The Two Signatures</title>
+  <title>Tutorial 3: The Rules and the Two Signatures &middot; The Two Signatures</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,7 +16,7 @@
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Activity 2.3: The Rules and the Two Signatures</h1>
+        <h1>Tutorial 3: The Rules and the Two Signatures</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 2 of 6</p>
       </div>
       <div class="tut-header-actions">
@@ -171,7 +171,7 @@ function buildAgreement(f, interactive){
     html += '<div onclick="toggleClause(\''+n+'\')" style="cursor:pointer;display:flex;align-items:baseline;gap:6px">';
     html += '<span style="color:#6b6b6b;font-size:11px">'+(open?'&#9662;':'&#9656;')+'</span>';
     html += '<span style="font-weight:700">'+n+'. '+esc(title)+'.</span>';
-    if(star) html += '<span style="font-size:11px;font-weight:700;color:var(--accent)">&#9733; watch this</span>';
+    if(star) html += '<span style="font-size:11px;font-weight:700;color:var(--accent)">&#9733;</span>';
     html += '</div>';
     if(open) html += '<div style="padding-left:18px;padding-top:2px;padding-bottom:3px">'+esc(body)+'</div>';
     html += '</div>';
@@ -200,7 +200,7 @@ function toggleClause(n){
 }
 function renderDocBody(){
   var f = docOpen==='anna' ? annaFacts() : myFacts();
-  var title = docOpen==='anna' ? "City Cycle&rsquo;s Operating Agreement &middot; Anna&rsquo;s example" : "Your Operating Agreement";
+  var title = docOpen==='anna' ? "City Cycle&rsquo;s Operating Agreement (Anna&rsquo;s Example)" : "Your Operating Agreement";
   document.getElementById('docBody').innerHTML =
     '<div style="font-weight:700;color:var(--primary);margin-bottom:12px;font-family:Inter,sans-serif">'+title+'</div>'+
     buildAgreement(f, false);
@@ -221,9 +221,9 @@ function renderAgreement(){
   var area = document.getElementById('agreementArea');
   if(!generated){
     area.innerHTML =
-      '<div class="narrative-block"><p>Everything the agreement needs, you already have: <strong>your name</strong>, your LLC&rsquo;s name, and the business you&rsquo;ll put in.</p><p>Confirm who&rsquo;s signing, then generate it.</p></div>'+
+      '<div class="narrative-block"><p>Everything the agreement needs, you already have: <strong>your name, the LLC&rsquo;s name, and the facts about the repair work</strong>.</p><p>Before you sign, confirm who the member is. Then generate the agreement.</p></div>'+
       '<div class="section-card">'+
-        '<label for="mnInput" style="display:block;font-size:var(--font-s);font-weight:600;margin-bottom:8px">The member (you)</label>'+
+        '<label for="mnInput" style="display:block;font-size:var(--font-s);font-weight:600;margin-bottom:8px">The member (You)</label>'+
         '<input id="mnInput" type="text" placeholder="Type your name&hellip;" oninput="onAgreementNameInput()" onkeydown="if(event.key===\'Enter\'){generateAgreement();}" autocomplete="off" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border-strong);border-radius:8px;font-size:16px;font-family:inherit;background:transparent;color:inherit;outline:none">'+
         '<div style="font-size:var(--font-xs);margin-top:10px">Your LLC: <strong style="color:var(--primary)" id="agEntityPreview"></strong></div>'+
       '</div>'+
@@ -232,13 +232,13 @@ function renderAgreement(){
     document.getElementById('agEntityPreview').textContent = llcName();
     return;
   }
-  var html = '<p style="font-size:var(--font-s);margin-bottom:12px">Here&rsquo;s <strong>your</strong> Operating Agreement &mdash; the whole document, Schedule A and all. Read the <span style="color:var(--accent);font-weight:600">&#9733; marked</span> sections, then sign it at the bottom.</p>';
-  html += '<div class="doc-modal" style="margin:0 auto 14px">'+buildAgreement(myFacts(), true)+'</div>';
-  html += '<button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary)" onclick="openDoc(\'anna\')"><i data-lucide="file-text" class="licon"></i> View Anna&rsquo;s example &rarr;</button>';
+  var html = '<div class="narrative-block"><p>Here&rsquo;s your Operating Agreement: the full document, including Schedule A and the signature page. Read the <span style="color:var(--accent);font-weight:600">&#9733; marked</span> sections, then sign in both places at the bottom.</p></div>';
+  html += '<div class="doc-modal" style="margin:0 auto 20px">'+buildAgreement(myFacts(), true)+'</div>';
+  html += '<button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary)" onclick="openDoc(\'anna\')"><i data-lucide="file-text" class="licon"></i> View Anna&rsquo;s example</button>';
   if(signedCompany && signedMember){
-    html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="pen-line" class="licon"></i> Two signatures, one hand</div>'+
-      '<p>Your own name, signed twice &mdash; once <strong>for the Company</strong> (as its manager), once <strong>as yourself</strong> (the Sole Member). The two hats you felt back in 2.1 are now <strong>legal and literal</strong>: the law recognizes both of you, on one page.</p></div>';
-    html += '<button class="btn-continue btn-block" onclick="nav(\'23-3-contribution.html\')">Now drill into &sect;9 &mdash; what you put in &rarr;</button>';
+    html += '<div class="insight-box" style="margin-top:20px"><div class="insight-label"><i data-lucide="pen-line" class="licon"></i> Two signatures, one hand</div>'+
+      '<p>You signed your name twice: once <strong>for the Company</strong>, and once <strong>as the Sole Member</strong>.<br><br>That does not mean there are two human people. It means the same person is acting in two different roles. In one signature, you act for the LLC. In the other, you act as the individual owner.<br><br>The &ldquo;two hats&rdquo; are now written into the legal document.</p></div>';
+    html += '<button class="btn-continue btn-block" onclick="nav(\'23-3-contribution.html\')">Next: &sect;9 (What goes into the company) &rarr;</button>';
   }
   area.innerHTML = html;
   if(window.lucide) lucide.createIcons();
