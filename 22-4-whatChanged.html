@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activity 2.2: Filing for a Legal Body &middot; What Changed?</title>
+  <title>Tutorial 2: Filing for a Legal Body &middot; What Changed?</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,7 +16,7 @@
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Activity 2.2: Filing for a Legal Body</h1>
+        <h1>Tutorial 2: Filing for a Legal Body</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 4 of 5</p>
       </div>
       <div class="tut-header-actions">
@@ -29,7 +29,8 @@
     <!-- ===== whatChanged ===== -->
     <div class="phase active" id="phase-whatChanged">
       <div class="narrative-block">
-        <p>A legal person was just born. That <em>feels</em> like a big change. So walk the shop and check: <strong>what actually moved?</strong> Tap each one.</p>
+        <p>The Certificate of Organization has been filed. <strong>The LLC now exists.</strong> That is a real legal change. But before you assume everything changed, check <strong>what changed because of the filing &mdash; and what did not</strong>.</p>
+        <p>Drag each card into the zone where it belongs.</p>
       </div>
       <div id="whatChangedArea"></div>
     </div>
@@ -57,6 +58,7 @@ var audioCtx = null;
 function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
 function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
 function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== glossary (shared across all phases of 2.2) ===== */
@@ -78,11 +80,18 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 function nav(url){ playClick(); window.location.href = url; }
 function restart(){ window.location.reload(); }
 
+/* ===== member name (read from localStorage, set in the name phase) ===== */
+var memberName = '';
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
+function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
+try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
+
 /* ===== data ===== */
 var movedItems = [
-  { id:"legal", label:"Your legal standing", changed:true, after:"A separate legal person now exists" },
-  { id:"ops",   label:"Your tools, customers, the work today", changed:false, after:"Exactly the same &mdash; nothing moved" },
-  { id:"sheet", label:"The balance sheet", changed:false, after:"A $3,410 &minus; L $1,450 = $1,960" }
+  { id:"legal", label:"The legal status of the repair work", changed:true, after:"Changed. A legal entity now exists: "+esc(llcName())+". It can own things, owe debts, sign contracts, and be sued in its own name." },
+  { id:"ops",   label:"The tools, customers, and work today", changed:false, after:"Did not change. The tools did not move, the customers did not change, and the work in the shop is the same as before." },
+  { id:"sheet", label:"The balance sheet", changed:false, after:"Did not change. The filing creates a legal entity, but by itself it does not change the recorded assets, the recorded liabilities, or the residual in the repair-work books." }
 ];
 
 var TWO_BIRTHDAYS_HTML =
@@ -90,52 +99,63 @@ var TWO_BIRTHDAYS_HTML =
   '<div style="position:relative;height:64px;margin-top:8px">'+
     '<div style="position:absolute;top:28px;left:0;right:0;height:2px;background:var(--border-strong)"></div>'+
     '<div style="position:absolute;top:20px;left:8%;transform:translateX(-50%)"><div style="width:14px;height:14px;border-radius:50%;background:var(--primary);margin:0 auto"></div></div>'+
-    '<div style="position:absolute;top:44px;left:8%;transform:translateX(-50%);font-size:11px;color:var(--primary);font-weight:600;white-space:nowrap;text-align:center">accounting line<br>since 1.1</div>'+
+    '<div style="position:absolute;top:44px;left:8%;transform:translateX(-50%);font-size:11px;color:var(--primary);font-weight:600;white-space:nowrap;text-align:center">Accounting Boundary<br>drawn in Module 1</div>'+
     '<div style="position:absolute;top:20px;left:92%;transform:translateX(-50%)"><div style="width:14px;height:14px;border-radius:50%;background:var(--accent);margin:0 auto"></div></div>'+
-    '<div style="position:absolute;top:44px;left:92%;transform:translateX(-50%);font-size:11px;color:var(--accent);font-weight:600;white-space:nowrap;text-align:center">legal line<br>today</div>'+
-    '<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:11px">&larr; months of real operating &rarr;</div>'+
+    '<div style="position:absolute;top:44px;left:92%;transform:translateX(-50%);font-size:11px;color:var(--accent);font-weight:600;white-space:nowrap;text-align:center">Legal Body<br>created June 1</div>'+
+    '<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:11px">&larr; Repair work already operating and recorded &rarr;</div>'+
   '</div></div>';
 
 /* ===== state (phase-local) ===== */
-var movedOpened = [];
+var placed = {};        /* movedItem id -> zone id, once correctly placed */
 
-/* ===== whatChanged: what actually moved ===== */
+var zones = [
+  { id:'changed',   label:'Changed when the Certificate was filed' },
+  { id:'unchanged', label:'Did not change when the Certificate was filed' }
+];
+function correctZone(m){ return m.changed ? 'changed' : 'unchanged'; }
+
+/* ===== whatChanged: drag each item into a zone ===== */
+function chipBank(m){
+  return '<div class="dnd-item" draggable="true"'+
+    ' ondragstart="onDragStart(event,\''+m.id+'\')" ondragend="this.classList.remove(\'dragging\')">'+m.label+'</div>';
+}
+function chipPlaced(m){
+  return '<div style="margin-bottom:8px">'+
+    '<div class="dnd-item correct" style="cursor:default">'+m.label+'</div>'+
+    '<div class="dnd-fb-soft" style="margin-top:6px">'+m.after+'</div></div>';
+}
 function renderWhatChanged(){
-  var cards = movedItems.map(function(m){
-    var opened = movedOpened.indexOf(m.id) >= 0;
-    if(!opened){
-      return '<div class="tp-card" style="cursor:pointer" onclick="openMoved(\''+m.id+'\')">'+
-        '<div style="display:flex;justify-content:space-between;align-items:center">'+
-          '<span class="tp-card-label">'+m.label+'</span><span class="tp-card-text">tap &rarr;</span></div></div>';
-    }
-    var badge = m.changed
-      ? '<span style="white-space:nowrap;font-size:var(--font-s);font-weight:700;padding:2px 9px;border-radius:20px;background:var(--accent);color:#fff">CHANGED</span>'
-      : '<span style="white-space:nowrap;font-size:var(--font-s);font-weight:700;padding:2px 9px;border-radius:20px;background:var(--success-border);color:#fff">UNCHANGED</span>';
-    var brd = m.changed ? 'var(--accent)' : 'var(--success-border)';
-    var after = (m.id==='sheet') ? '<span class="mono">'+m.after+'</span>' : m.after;
-    return '<div class="tp-card" style="border-color:'+brd+'">'+
-      '<div style="display:flex;justify-content:space-between;align-items:center"><span class="tp-card-label">'+m.label+'</span>'+badge+'</div>'+
-      '<div class="tp-card-text" style="margin-top:8px">'+after+'</div></div>';
-  }).join('');
-  var html = '<div style="display:flex;flex-direction:column;gap:12px">'+cards+'</div>';
-  if(movedItems.every(function(m){ return movedOpened.indexOf(m.id) >= 0; })){
-    html += '<div class="insight-box" style="margin-top:16px"><div class="insight-label"><i data-lucide="scale" class="licon"></i> No tool moved today</div>'+
-      '<p>One thing changed &mdash; your <strong>legal standing</strong>. The operation didn&rsquo;t move an inch, and the balance sheet is <strong>identical</strong>. A legal <em>wrapper</em> was born; nothing economic happened. <strong>No tool moved today.</strong></p></div>';
+  var bank = movedItems.filter(function(m){ return !placed[m.id]; });
+  var bankHtml = bank.length ? bank.map(chipBank).join('') : '<div class="dnd-zone-empty">All sorted</div>';
+  var html = '<div class="dnd-bank-wrap" style="margin-bottom:20px"><div class="dnd-bank-label">Drag into a zone</div><div class="dnd-bank">'+bankHtml+'</div></div>';
+  html += '<div class="dnd-zones-2col">';
+  zones.forEach(function(z){
+    var items = movedItems.filter(function(m){ return placed[m.id]===z.id; });
+    var itemsHtml = items.length ? items.map(chipPlaced).join('') : '<div class="dnd-zone-empty">Drop here</div>';
+    html += '<div class="dnd-zone-col" ondragover="event.preventDefault(); this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="onDrop(event,\''+z.id+'\')">'+
+      '<div class="dnd-zone-label">'+z.label+'</div>'+
+      '<div class="dnd-zone-items">'+itemsHtml+'</div></div>';
+  });
+  html += '</div>';
+  if(movedItems.every(function(m){ return placed[m.id]; })){
+    html += '<div class="insight-box" style="margin-top:16px"><div class="insight-label"><i data-lucide="scale" class="licon"></i> Legal Change, Not an Economic Change</div>'+
+      '<p>One thing changed today: <strong>the LLC now exists as a legal entity</strong>. That matters. But the filing, by itself, did <strong>not</strong> change the balance sheet. The recorded assets, recorded liabilities, and residual are still the same. The operation is the same operation you were already tracking. What is new is its <strong>legal standing</strong>.</p></div>';
     html += TWO_BIRTHDAYS_HTML;
-    html += '<p class="callout">Two different lines, drawn at two different times, for two different reasons. The operation has been running &mdash; and you&rsquo;ve kept its books &mdash; since long before today. The legal body is <strong>hours old</strong>.</p>';
-    html += '<button class="btn-continue btn-block" onclick="nav(\'22-5-complete.html\')">Finish up &rarr;</button>';
+    html += '<p class="callout">Two different lines, drawn at different times, for different reasons. The repair work was already operating, and you were already keeping its books, before today. The legal body is new.</p>';
+    html += '<button class="btn-continue btn-block" onclick="nav(\'22-5-complete.html\')">Continue &rarr;</button>';
   }
   document.getElementById('whatChangedArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
-function openMoved(id){
-  if(movedOpened.indexOf(id) < 0){
-    var m = movedItems.find(function(x){ return x.id===id; });
-    movedOpened.push(id);
-    if(m.changed) playSuccess(); else playClick();
-  }
+function place(id, zone){
+  var m = movedItems.find(function(x){ return x.id===id; });
+  if(!m || placed[m.id]) return;
+  if(correctZone(m)===zone){ placed[m.id]=zone; playSuccess(); }
+  else { playNope(); }   /* wrong zone: chip just returns to the bank */
   renderWhatChanged();
 }
+function onDragStart(e, id){ if(placed[id]) return; e.dataTransfer.setData('text/plain', id); e.currentTarget.classList.add('dragging'); }
+function onDrop(e, zone){ e.preventDefault(); e.currentTarget.classList.remove('over'); var id = e.dataTransfer.getData('text/plain'); if(id) place(id, zone); }
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 

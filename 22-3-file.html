@@ -90,7 +90,7 @@ function renderFile(){
   var stamp = filed
     ? '<div style="position:absolute;top:18px;right:18px;border:3px solid #15803d;color:#15803d;border-radius:8px;padding:4px 12px;font-weight:800;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;transform:rotate(-8deg)">Filed &middot; Jun 1, 2026</div>'
     : '';
-  var cert = '<div class="doc-modal" style="margin:0 auto 16px;font-family:Georgia,&quot;Times New Roman&quot;,serif">'+stamp+
+  var cert = '<div class="doc-modal" style="margin:0 auto 20px;font-family:Georgia,&quot;Times New Roman&quot;,serif">'+stamp+
     '<div style="text-align:center;font-weight:700;font-size:17px;letter-spacing:0.04em;color:#374151">CERTIFICATE OF ORGANIZATION</div>'+
     '<div style="text-align:center;font-size:12px;color:#6b6b6b">OF</div>'+
     '<div style="text-align:center;font-weight:700;font-size:15px;color:var(--primary);margin-bottom:14px">'+esc(en.toUpperCase())+'</div>'+
@@ -105,7 +105,7 @@ function renderFile(){
     below = '<button class="btn-continue btn-block" onclick="fileIt()">File with the State of Connecticut</button>';
   } else {
     below = '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Certificate of Organization Filed</div>'+
-      '<p style="margin-bottom:20px">The State accepts the filing. As of this moment, <strong>'+esc(en)+'</strong> exists. It is now a <strong>legal entity</strong> that can own things, owe debts, sign contracts, and be sued in its own name.</p>'+
+      '<p style="margin-bottom:20px">The State accepts the filing. As of this moment, <strong>'+esc(en)+'</strong> exists. It is now a <strong>legal entity</strong>: a &ldquo;legal person&rdquo; that can own things, owe debts, sign contracts, and be sued in its own name.</p>'+
       '<p>You filed in Connecticut because that is where you live and operate. Some companies choose another state, such as Delaware, for business or legal reasons. For this repair work, Connecticut is the straightforward choice.</p></div>'+
       '<button class="btn-continue btn-block" onclick="nav(\'22-4-whatChanged.html\')">Continue &rarr;</button>';
   }
