@@ -728,6 +728,7 @@ body { background: var(--page-bg); font-family: 'Open Sans', sans-serif; color: 
 .dnd-item.wrong    { border-color: var(--error-border) !important; background: var(--error-bg) !important; color: var(--error-text) !important; }
 .dnd-fb-card { background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: 8px; padding: 11px 14px; font-size: var(--font-m); color: var(--warn-text); line-height: 1.65; }
 .dnd-fb-label { display: block; font-weight: 700; margin-bottom: 4px; color: #6a4020; }
+.dnd-fb-soft { background: #f6fbf7; border: 1px solid #b7dfc3; border-radius: 8px; padding: 10px 12px; font-size: var(--font-s); line-height: 1.6; color: #2d4a35; }
 
 /* ===== DND — BANK/CARD STYLE (01-imposing) ===== */
 .dnd-section { margin: 24px 0; }
@@ -1746,6 +1747,7 @@ body { background: var(--page-bg); font-family: 'Open Sans', sans-serif; color: 
   .dnd-item { background: #3e3c48; border-color: var(--border-strong); color: #c8ccd8; }
   .dnd-item:hover:not(.checked) { border-color: var(--primary); color: var(--primary); background: var(--primary-faint); }
   .dnd-fb-label { color: var(--warn-text); }
+  .dnd-fb-soft { background: #1a2820; border-color: #2a5c38; color: #8dcc9a; }
 
   /* DND bank/card */
   .dnd-bank-card { background: #32303c; border-color: var(--border); }
