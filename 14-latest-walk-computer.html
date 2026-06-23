@@ -147,7 +147,7 @@ function renderAssetsSheetWithInteractive(interactiveCat){
         var rowOnclick = canClick ? ' onclick="handleEqItemClick(\''+it.name.replace(/'/g, "\\'")+'\', event)"' : '';
         var checkPrefix = rec ? '<i data-lucide="check" class="licon"></i> ' : '';
         var grp = (ITEM_BY_NAME[it.name] || {}).group || '';
-        var infoBtn = '<button type="button" class="xl-info" title="See the valuation" onclick="showReceipt(\''+grp+'\', event)"><i data-lucide="info" class="licon"></i></button>';
+        var infoBtn = '<button type="button" class="xl-info" title="See the valuation" onclick="event.stopPropagation(); showReceipt(\''+grp+'\');"><i data-lucide="info" class="licon"></i></button>';
         html += '<div class="'+rowClass+'"'+rowOnclick+'>'+
           '<div class="xl-gutter"></div>'+
           '<div class="xl-rownum">'+n+'</div>'+

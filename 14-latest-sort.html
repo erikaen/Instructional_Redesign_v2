@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 1.4 · Sort</title>
+  <title>Tutorial 1.4 · Sort net-movers</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,7 +16,7 @@
     <div class="tut-header">
       <div class="tut-header-main">
         <h1>Tutorial 1.4: Keeping the Reasons</h1>
-        <div class="tut-header-sub">Phase 10 of 11 — Sort (Contributed vs. Generated)</div>
+        <div class="tut-header-sub">Phase 10 of 11 — Sort net-movers</div>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -38,26 +38,162 @@
   </div>
 </div>
 
-<div class="glossary-overlay" id="evidenceOverlay" onclick="if(event.target===this) closeEvidence()">
-  <div class="glossary-panel" id="evidencePanel"></div>
-</div>
-
 <script src="14-shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 window.WB_PHASE = 'sort';
 window.WB_WC_ANSWERED = true;
-window.WB_ASSETS_EXPANDED = {};
-window.WB_ACTIVE_TAB = 'reasons';
 
-document.getElementById('phase-sort').innerHTML =
-  annaBox('Twelve net-movers; two kinds &mdash; <strong>Contributed</strong> (you put it in) vs. <strong>Generated</strong> (the work generated it). Sort each into the right bin. Placeholder for now.', true) +
-  '<div id="wbSort"></div>' +
-  '<div class="section-card"><div class="card-title">Sort the net-movers</div>'+
-    '<p class="prose">Contributed totals $1,790 (cash plug + laptop + gear). Generated totals $170 (customer payments minus parts and rent used). The sorting reveals the two ways a learner&rsquo;s stake grew.</p>'+
-  '</div>';
+/* The 12 surviving solos (the net-movers) in chronological recording order */
+var SOLO_IDS_ORDER = ['e_gear','e_laptop','e_partsused','e_rentused','e_v1','e_v2','e_v3','e_v4','e_v5','e_v6','e_v7','e_plug'];
+/* Phase state */
+var categoryAssignments = {};   /* id -> 'contributed' | 'earned' */
+var sortAutoActive = false;
+var sortAutoDone = false;
+var sortNudge = null;           /* { id, attempted } */
 
-renderWorkbook('wbSort');
+function handleCategoryAssign(id, category){
+  if(sortAutoActive || sortAutoDone) return;
+  if(categoryAssignments[id]) return;
+  var ev = EV_BY_ID[id];
+  if(ev.cat === category){
+    playSuccess();
+    categoryAssignments[id] = category;
+    sortNudge = null;
+  } else {
+    playNope();
+    sortNudge = { id:id, attempted:category };
+  }
+  render();
+}
+
+function handleSortAutocomplete(){
+  if(sortAutoActive || sortAutoDone) return;
+  playClick();
+  sortAutoActive = true;
+  sortNudge = null;
+  render();
+  var unassigned = SOLO_IDS_ORDER.filter(function(id){ return !categoryAssignments[id]; });
+  unassigned.forEach(function(id, i){
+    setTimeout(function(){
+      categoryAssignments[id] = EV_BY_ID[id].cat;
+      render();
+      if(i === unassigned.length - 1){
+        setTimeout(function(){
+          sortAutoActive = false;
+          sortAutoDone = true;
+          playSuccess();
+          render();
+        }, 300);
+      }
+    }, i * 160);
+  });
+}
+
+function reasonRow(ev, includeButtons){
+  var d = WINROW_BY_ID[ev.rowId].delta;
+  var html = '<div class="xl-row xl-item">'+
+    '<div class="xl-gutter"></div>'+
+    '<div class="xl-rownum"></div>'+
+    '<div class="xl-c">'+
+      '<div><span class="reason-badge win">'+LIST_LABEL[ev.win]+'</span>'+esc(ev.reason)+'</div>';
+  if(includeButtons){
+    html += '<div class="classify-row" style="margin-top:6px;">'+
+      '<button class="classify-btn" onclick="handleCategoryAssign(\''+ev.id+'\', \'contributed\')">&rarr; Contributed</button>'+
+      '<button class="classify-btn" onclick="handleCategoryAssign(\''+ev.id+'\', \'earned\')">&rarr; Generated</button>'+
+    '</div>';
+  }
+  html +=
+    '</div>'+
+    '<div class="xl-v">'+signedDollars(d)+'</div></div>';
+  return html;
+}
+
+function binSection(title, ids, total){
+  var html = '<div class="xl-row xl-cat">'+
+    '<div class="xl-gutter"></div>'+
+    '<div class="xl-rownum"></div>'+
+    '<div class="xl-c">'+title+' ('+ids.length+')</div>'+
+    '<div class="xl-v">'+signedDollars(total)+'</div></div>';
+  if(ids.length === 0){
+    html += '<div class="bs-empty-msg"><em>(empty so far)</em></div>';
+  } else {
+    ids.forEach(function(id){
+      var ev = EV_BY_ID[id];
+      html += reasonRow(ev, false);
+    });
+  }
+  return html;
+}
+
+function render(){
+  var unassigned = SOLO_IDS_ORDER.filter(function(id){ return !categoryAssignments[id]; });
+  var contributedIds = SOLO_IDS_ORDER.filter(function(id){ return categoryAssignments[id] === 'contributed'; });
+  var earnedIds = SOLO_IDS_ORDER.filter(function(id){ return categoryAssignments[id] === 'earned'; });
+  var contributedTotal = contributedIds.reduce(function(s, id){ return s + WINROW_BY_ID[EV_BY_ID[id].rowId].delta; }, 0);
+  var earnedTotal = earnedIds.reduce(function(s, id){ return s + WINROW_BY_ID[EV_BY_ID[id].rowId].delta; }, 0);
+  var allSorted = (contributedIds.length + earnedIds.length) === SOLO_IDS_ORDER.length;
+  var sorted = sortAutoDone || allSorted;
+  var correctCount = SOLO_IDS_ORDER.filter(function(id){ return categoryAssignments[id] === EV_BY_ID[id].cat; }).length;
+  var triggerMet = correctCount >= 2 && !sorted && !sortAutoActive;
+
+  var html = '';
+  if(!sorted){
+    html += annaBox(
+      'Twelve survivors &mdash; and they split into just two kinds. Some you <strong>put in</strong> from outside the repair work: the gear, the laptop, the cash your personal self covered. They are the ones you <strong>contributed</strong>. The rest came from <strong>doing the repair work</strong>: what customers paid, less the parts and the month the work used up. They are the ones you <strong>generated</strong>. Sort each row into its pile by clicking the category buttons.',
+      true
+    );
+  }
+
+  if(sortNudge && !sorted){
+    html += warnMsg(sortNudge.attempted === 'contributed'
+      ? '&ldquo;That one didn&rsquo;t come from you bringing something in &mdash; it came from doing the repair work. Try the other pile.&rdquo;'
+      : '&ldquo;That one didn&rsquo;t come from doing repair work &mdash; it came in from outside. Try the other pile.&rdquo;');
+  }
+
+  /* Sort workbook */
+  html += '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Reasons</span></span><span class="xlwb-bar-sheet">net-movers &mdash; two piles</span></div>'+
+    '<div>';
+  if(unassigned.length > 0){
+    html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TO SORT ('+unassigned.length+' '+(unassigned.length === 1 ? 'row' : 'rows')+')</div><div class="xl-v"></div></div>';
+    unassigned.forEach(function(id){
+      var ev = EV_BY_ID[id];
+      html += reasonRow(ev, true);
+    });
+  }
+  html += binSection('CONTRIBUTED', contributedIds, contributedTotal);
+  html += binSection('GENERATED', earnedIds, earnedTotal);
+  html += '</div></div>';
+
+  if(triggerMet){
+    html += '<div class="gate-armed">'+
+      '<p><strong>You&rsquo;ve got the rule.</strong> Sort the rest?</p>'+
+      '<button class="btn-continue btn-block" onclick="handleSortAutocomplete()">Sort the rest &rarr;</button>'+
+    '</div>';
+  } else if(sortAutoActive){
+    html += '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Sorting the rest&hellip;</div></div>';
+  }
+
+  if(sorted){
+    html += annaBox(
+      'Two piles. <strong>Contributed '+signedDollars(contributedTotal)+'</strong> &mdash; what came in from outside the work: the gear, the laptop, and the $960 you only saw by tallying up. <strong>Generated '+signedDollars(earnedTotal)+'</strong> &mdash; what the work produced on its own: customers paid $1,120, less the parts and the month it used. That&rsquo;s May, explained.',
+      true
+    );
+    html += insightBox('Two ways your stake grew.',
+      '<p><strong>Contributed ('+signedDollars(contributedTotal)+'):</strong> from outside the repair work &mdash; including the <em>personal cash</em> it quietly drew down, the hole you plugged without ever deciding to.</p>'+
+      '<p><strong>Generated ('+signedDollars(earnedTotal)+'):</strong> from doing the repair work &mdash; what customers paid, less the parts and the month of space used up.</p>'+
+      '<p>You haven&rsquo;t named what these piles add up to, or seen where the survivors&rsquo; other sides live. That&rsquo;s next.</p>'
+    );
+  }
+
+  html += '<button class="btn-continue btn-block" type="button">Finish up &rarr;</button>';
+
+  document.getElementById('phase-sort').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+
+render();
 if(window.lucide) lucide.createIcons();
 </script>
 </body>

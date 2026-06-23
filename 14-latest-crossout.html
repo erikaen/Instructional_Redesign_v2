@@ -38,26 +38,127 @@
   </div>
 </div>
 
-<div class="glossary-overlay" id="evidenceOverlay" onclick="if(event.target===this) closeEvidence()">
-  <div class="glossary-panel" id="evidencePanel"></div>
-</div>
-
 <script src="14-shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 window.WB_PHASE = 'crossout';
 window.WB_WC_ANSWERED = true;
-window.WB_ASSETS_EXPANDED = {};
-window.WB_ACTIVE_TAB = 'reasons';
 
-document.getElementById('phase-crossout').innerHTML =
-  annaBox('Twenty-three reasons recorded; eleven wear the &lrarr; badge (paired). Click each pair to cross it out &mdash; those reasons just shuffled, the net didn&rsquo;t budge. Placeholder for now.', true) +
-  '<div id="wbCross"></div>' +
-  '<div class="section-card"><div class="card-title">Crossout</div>'+
-    '<p class="prose">Reasons whose other side also sits on one of these lists (Equipment&hArr;Liabilities, RoU&hArr;Cash, etc.) cancel out the net. Crossing them out leaves only the 12 net-movers behind.</p>'+
-  '</div>';
+/* All 23 reasons in chronological order — the cumulative state at the end of walk-cash */
+var r3Created = [
+  'e_stand','e_tools','e_comp','e_wash','e_tru','e_gear',
+  'e_laptop',
+  'e_parts','e_partsused',
+  'e_fix',
+  'e_rent','e_rentused',
+  'e_smith','e_pay1','e_pay2',
+  'e_v1','e_v2','e_v3','e_v4','e_v5','e_v6','e_v7',
+  'e_plug'
+];
+/* 11 paired reasons — both sides have been recorded across walk-* phases */
+var r3Paired = { e_stand:true, e_tools:true, e_comp:true, e_wash:true, e_tru:true, e_fix:true, e_parts:true, e_rent:true, e_smith:true, e_pay1:true, e_pay2:true };
+var xOut = {};
+var xAuto = false;
 
-renderWorkbook('wbCross');
+function handleCrossClick(id){
+  if(!r3Paired[id] || xOut[id] || xAuto) return;
+  playSuccess();
+  xOut[id] = true;
+  render();
+}
+
+function handleCrossAutocomplete(){
+  if(xAuto) return;
+  playClick();
+  xAuto = true;
+  render();
+  var remaining = r3Created.filter(function(id){ return r3Paired[id] && !xOut[id]; });
+  remaining.forEach(function(id, i){
+    setTimeout(function(){
+      xOut[id] = true;
+      render();
+      if(i === remaining.length - 1){
+        setTimeout(function(){
+          xAuto = false;
+          playSuccess();
+          render();
+        }, 300);
+      }
+    }, i * 160);
+  });
+}
+
+function renderReasonsWindow(){
+  var html = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx:2</span></span><span class="xlwb-bar-sheet">Reasons &mdash; side by side</span></div>'+
+    '<div>';
+  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Reason</div><div class="xl-v">Δ</div></div>';
+  r3Created.forEach(function(id){
+    var e = EV_BY_ID[id];
+    var d = WINROW_BY_ID[e.rowId].delta;
+    var crossed = !!xOut[id];
+    var paired = !!r3Paired[id];
+    var clickable = paired && !crossed && !xAuto;
+    var rowClass = 'xl-row xl-item' + (crossed ? ' eliminated' : '');
+    var rowOnclick = clickable ? ' onclick="handleCrossClick(\''+id+'\')"' : '';
+    var badges = '<span class="reason-badge win">'+LIST_LABEL[e.win]+'</span>';
+    if(paired && e.otherWin){
+      badges += '<span class="reason-badge pair">&harr; '+LIST_LABEL[e.otherWin]+'</span>';
+    }
+    html += '<div class="'+rowClass+'"'+rowOnclick+'>'+
+      '<div class="xl-gutter"></div>'+
+      '<div class="xl-rownum"></div>'+
+      '<div class="xl-c"><div>'+esc(e.reason)+'</div><div>'+badges+'</div></div>'+
+      '<div class="xl-v">'+signedDollars(d)+'</div></div>';
+  });
+  var crossedCount = r3Created.filter(function(id){ return xOut[id]; }).length;
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r3Created.length+' reasons &mdash; '+crossedCount+' crossed out</div><div class="xl-v"></div></div>';
+  html += '</div></div>';
+  return html;
+}
+
+function render(){
+  var paired = r3Created.filter(function(id){ return r3Paired[id]; });
+  var crossedCount = paired.filter(function(id){ return xOut[id]; }).length;
+  var allCrossed = paired.length > 0 && crossedCount === paired.length;
+  var triggerMet = crossedCount >= 2 && !allCrossed && !xAuto;
+
+  var html = '';
+  if(!allCrossed){
+    html += annaBox(
+      'Twenty-three reasons, and eleven wear that <strong>&harr;</strong> badge: each of those lives on <em>two</em> of your lists. When both sides sit on your lists, they <strong>move together</strong> &mdash; what you have and what you owe shift by the same amount, and your <strong>net</strong> doesn&rsquo;t budge. They just <em>shuffle</em>. Click reasons with &harr; and cross them out.',
+      true
+    );
+  }
+
+  html += renderReasonsWindow();
+
+  if(triggerMet){
+    html += '<div class="gate-armed">'+
+      '<p><strong>You&rsquo;ve got the rule.</strong> Cross out the rest of the &harr; reasons?</p>'+
+      '<button class="btn-continue btn-block" onclick="handleCrossAutocomplete()">Cross out the rest &rarr;</button>'+
+    '</div>';
+  } else if(xAuto){
+    html += '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Crossing out the shufflers&hellip;</div></div>';
+  }
+
+  if(allCrossed && !xAuto){
+    html += annaBox(
+      'Look at what <strong>stands</strong>: twelve reasons with no second list &mdash; the gear and laptop you brought, the seven jobs customers paid for, the parts and the month the work used up&hellip; and the $960 your personal self covered. They are the ones that <strong>moved your net</strong>.',
+      true
+    );
+    html += insightBox('The crossed-out ones just shuffled.',
+      '<p>When you buy parts on the card: parts up <em>and</em> owed up. When you pay the card down: cash down <em>and</em> owed down. The <strong>survivors</strong> are the ones that moved your net &mdash; what you own minus what you owe, and they sort into two plain kinds. One last move.</p>'
+    );
+  }
+
+  html += '<button class="btn-continue btn-block" type="button">Sort the net-movers &rarr;</button>';
+
+  document.getElementById('phase-crossout').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+
+render();
 if(window.lucide) lucide.createIcons();
 </script>
 </body>

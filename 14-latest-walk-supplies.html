@@ -170,7 +170,7 @@ function renderAssetsSheetWithSupplies(){
         var rowClass = 'xl-row xl-item' + (act ? ' selected' : '');
         var rowOnclick = canClick ? ' onclick="handleSupItemClick(\''+it.name.replace(/'/g, "\\'")+'\', event)"' : '';
         var checkPrefix = rec ? '<i data-lucide="check" class="licon"></i> ' : '';
-        var infoBtn = '<button type="button" class="xl-info" title="See the invoice" onclick="showSupReceipt(\'qbp\', event)"><i data-lucide="info" class="licon"></i></button>';
+        var infoBtn = '<button type="button" class="xl-info" title="See the invoice" onclick="event.stopPropagation(); showSupReceipt(\'qbp\');"><i data-lucide="info" class="licon"></i></button>';
         html += '<div class="'+rowClass+'"'+rowOnclick+'>'+
           '<div class="xl-gutter"></div>'+
           '<div class="xl-rownum">'+n+'</div>'+

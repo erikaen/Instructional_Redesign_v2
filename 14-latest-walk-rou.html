@@ -138,7 +138,7 @@ function renderAssetsSheetWithRou(){
         var rowClass = 'xl-row xl-item' + (act ? ' selected' : '');
         var rowOnclick = canClick ? ' onclick="handleRouLineClick(event)"' : '';
         var checkPrefix = rec ? '<i data-lucide="check" class="licon"></i> ' : '';
-        var infoBtn = '<button type="button" class="xl-info" title="See the lease" onclick="showRouReceipt(\'lease\', event)"><i data-lucide="info" class="licon"></i></button>';
+        var infoBtn = '<button type="button" class="xl-info" title="See the lease" onclick="event.stopPropagation(); showRouReceipt(\'lease\');"><i data-lucide="info" class="licon"></i></button>';
         html += '<div class="'+rowClass+'"'+rowOnclick+'>'+
           '<div class="xl-gutter"></div>'+
           '<div class="xl-rownum">'+n+'</div>'+
