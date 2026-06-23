@@ -68,7 +68,7 @@ var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amo
 var NET = ASSETS_TOTAL - LIABILITIES_TOTAL; // 1960
 
 var CONTRIBUTED_ROWS = [
-  { account:'Cash',      delta:960, reason:'Your own money, put in before May to get the repair work started.' },
+  { account:'Cash',      delta:960, reason:'My personal self covered what the work drew down — I only see it now, tallying up.' },
   { account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
   { account:'Equipment', delta:220, reason:'You brought gear you already owned.' }
 ];
@@ -88,7 +88,6 @@ var GENERATED_TOTAL = GENERATED_ROWS.reduce(function(s,r){return s+r.delta;},0);
 var REASONS_TOTAL = CONTRIBUTED_TOTAL + GENERATED_TOTAL;                             // 1960
 
 var CASH_FLOWS = [
-  { date:'Before May', desc:'Your own money — starting cash to get going', amount:960 },
   { date:'May 1',  desc:'Rent paid in advance', amount:-1300 },
   { date:'May 3',  desc:'Park Tool stand', amount:-200 },
   { date:'May 7',  desc:'Repair finished — customer paid', amount:340 },
@@ -100,7 +99,8 @@ var CASH_FLOWS = [
   { date:'May 22', desc:'Smith deposit', amount:220 },
   { date:'May 23', desc:'Repair finished — customer paid', amount:100 },
   { date:'May 27', desc:'Repair finished — customer paid', amount:150 },
-  { date:'May 28', desc:'Card paydown', amount:-400 }
+  { date:'May 28', desc:'Card paydown', amount:-400 },
+  { date:'—',      desc:'From your personal self — covering what the work drew down', amount:960 }
 ];
 
 var glossaryGroups = [
@@ -139,6 +139,7 @@ function catLabel(cat){ return cat==='RIGHT OF USE' ? 'Right of Use' : (cat.char
 /* ===== state ===== */
 var excelTab = 'reasons';
 var reasonsExpanded = { contributed:false, generated:false };
+var cashOpen = false;
 var curWbContainer = null;
 var idStage = 0;
 
@@ -146,8 +147,16 @@ var idStage = 0;
 function assetsSheet(){
   var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Assets — what I have</div><div class="xl-v">Value</div></div>';
   var n=0;
-  ASSETS_SNAPSHOT.forEach(function(c){ n++;
-    html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+catLabel(c.cat)+' &mdash; '+c.note+'</div><div class="xl-v">'+d(c.amount)+'</div></div>';
+  ASSETS_SNAPSHOT.forEach(function(c){
+    if(c.cat==='CASH'){
+      // Cash folded into Assets: an expandable line (same idiom as the Reasons groups);
+      // open it to reveal May's flows via the existing cash sheet.
+      html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCash()" aria-expanded="'+cashOpen+'">'+(cashOpen?'−':'+')+'</button></div><div class="xl-rownum"></div><div class="xl-c">'+catLabel(c.cat)+' &mdash; '+c.note+'</div><div class="xl-v">'+d(c.amount)+'</div></div>';
+      if(cashOpen) html += cashSheet();
+    } else {
+      n++;
+      html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+catLabel(c.cat)+' &mdash; '+c.note+'</div><div class="xl-v">'+d(c.amount)+'</div></div>';
+    }
   });
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Total Assets — what the records show</div><div class="xl-v">'+d(ASSETS_TOTAL)+'</div></div>';
   return html;
@@ -195,11 +204,10 @@ function reasonsSheet(){
 }
 function renderWorkbook(containerId){
   curWbContainer = containerId;
-  var tabs = [{id:'assets',label:'Assets'},{id:'liabilities',label:'Liabilities'},{id:'cash',label:'Cash'},{id:'reasons',label:'Reasons'}];
+  var tabs = [{id:'assets',label:'Assets'},{id:'liabilities',label:'Liabilities'},{id:'reasons',label:'Reasons'}];
   var body;
   if(excelTab==='assets') body = assetsSheet();
   else if(excelTab==='liabilities') body = liabilitiesSheet();
-  else if(excelTab==='cash') body = cashSheet();
   else body = reasonsSheet();
   var activeLabel = tabs.find(function(t){return t.id===excelTab;}).label;
   var tabsHtml = tabs.map(function(t){ return '<button class="xlwb-tab'+(t.id===excelTab?' active':'')+'" onclick="setTab(\''+t.id+'\')">'+t.label+'</button>'; }).join('');
@@ -212,6 +220,7 @@ function renderWorkbook(containerId){
 }
 function setTab(id){ playClick(); excelTab = id; if(curWbContainer) renderWorkbook(curWbContainer); }
 function toggleReasonsCat(k){ playClick(); reasonsExpanded[k] = !reasonsExpanded[k]; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleCash(){ playClick(); cashOpen = !cashOpen; if(curWbContainer) renderWorkbook(curWbContainer); }
 
 /* ===== identity (staged reveal) ===== */
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
@@ -231,7 +240,7 @@ function identityFormula(){
   return '<div class="eq-compare"><div class="eq-panel">'+
     '<div class="eq-panel-tag">The accounting identity</div>'+
     '<div class="eq-panel-row"><span class="eq-term a">Assets</span><span class="eq-op">&minus;</span><span class="eq-term l">Liabilities</span><span class="eq-op">=</span><span class="eq-term e">Equities</span></div>'+
-    '<div class="eq-panel-caption">An identity, not something to solve. It holds by definition, for every entity, every time.</div>'+
+    '<div class="eq-panel-caption">An identity, not an equation. You don&rsquo;t solve it &mdash; it holds by definition, for every entity, every time.</div>'+
     '</div></div>';
 }
 function balanceSheet(){
@@ -251,7 +260,6 @@ function renderIdentity(){
   if(idStage===0){
     html += annaBox('&ldquo;You found your net two ways waiting to happen. One: Assets minus Liabilities, '+d(NET)+'. Now the other: total the <strong>Reasons</strong> that moved your net &mdash; the contributed pile and the generated pile. Add them up.&rdquo;');
     html += '<div id="identityWb"></div>';
-    html += '<div class="callout"><strong>About that +$960:</strong> it&rsquo;s the money you put into the repair work <strong>before May</strong>, to get it started. That&rsquo;s not the same as the <strong>&minus;$960</strong> net cash change you found on the bank statement back in Module&nbsp;3. The +$960 is where your starting cash <em>came from</em>; the &minus;$960 is what happened to that cash <em>during</em> May &mdash; you spent it down, which is why cash ends at <strong>$0</strong> on May&nbsp;31.</div>';
     html += continueBtn('Total the Reasons');
     c.innerHTML = html;
     excelTab = 'reasons'; reasonsExpanded = { contributed:true, generated:true };
@@ -261,23 +269,22 @@ function renderIdentity(){
   }
   html += matchDisplay();
   if(idStage===1){
-    html += insightBox('They match &mdash; and they always will', '<p>This is not a coincidence. Your net is what remains after subtracting what you owe from what you have.</p><p>The reasons that changed your net must add up to the same amount. This works <strong>by construction</strong>, every time, for any set of books.</p>');
+    html += insightBox('They match &mdash; and they always will', '<p>Not a coincidence you arranged. Your net just <em>is</em> what&rsquo;s left after taking what you owe out of what you have. The reasons that moved it have to add up to it. It holds <strong>by construction</strong>, every time, for any set of books.</p>');
     html += continueBtn('Name what you just matched');
   } else if(idStage===2){
-    html += annaBox('&ldquo;That residual &mdash; what you have minus what you owe &mdash; has a name: <strong>Equities</strong>.<br><br>It is plural on purpose. This is a <em>difference</em>, not a pile of cash the owner can pocket. It means recorded Assets minus recorded Liabilities, including all the gaps and estimates. The plural keeps us honest.&rdquo;');
+    html += annaBox('&ldquo;That residual &mdash; have minus owe &mdash; has a name: <strong>Equities</strong>. Plural, on purpose. It&rsquo;s a <em>difference</em>, not a thing the owner could pocket &mdash; not the cash you&rsquo;d walk away with, just recorded Assets minus recorded Liabilities, gaps and all. The plural keeps it honest.&rdquo;');
     html += continueBtn('Write it down');
   } else if(idStage===3){
     html += identityFormula();
     html += balanceSheet();
     html += insightBox('This page is the balance sheet', '<p>It&rsquo;s built <em>around</em> the identity, not assembled to satisfy one. You list Assets, take out Liabilities, and Equities falls out as the difference &mdash; split into where it came from: <strong>contributed</strong> and <strong>generated</strong>. The fact that it lines up isn&rsquo;t a result. It&rsquo;s the construction.</p>');
-    html += continueBtn('Interpret the balance sheet');
+    html += continueBtn('Now read it honestly');
   } else if(idStage===4){
     html += balanceSheet();
-    html += annaBox('&ldquo;Before you trust this page, remember one thing: every item on it has <strong>evidence</strong> &mdash; a receipt, a statement, or a price you can point to. That is what makes it a <strong>record</strong>. A record only includes things that meet that standard.&rdquo;');
-    html += insightBox('The records show less than you have', '<p>Look at what is <em>not</em> on the page: your skill at the bench, the regular customers who keep coming back, and the name you are building on Whalley Ave.</p>'+
-      '<p>All of those are real, and they matter to the repair work. But none of them has a receipt or a clear price you can point to, so none of them appears on this list.</p>'+
-      '<p>So read &ldquo;Assets, '+d(ASSETS_TOTAL)+'&rdquo; as <strong>what the records show</strong> &mdash; not everything the repair work is worth. The list shows what it can show. You <strong>have</strong> more than the list shows, but that is not a mistake. That is how records work.</p>'+
-      '<p>It is also why <strong>Equities</strong> is not your personal net worth. It is the difference between two <em>recorded</em> lists: recorded Assets minus recorded Liabilities.</p>');
+    html += annaBox('&ldquo;Before you trust this page, one honest thing. Everything on it earned its place with <strong>evidence</strong> &mdash; a receipt, a statement, a price you could point to. That&rsquo;s what makes it a <strong>record</strong>. And a record only holds what clears that bar.&rdquo;');
+    html += insightBox('The records show less than you have', '<p>Look at what&rsquo;s <em>not</em> on the page: your skill at the bench, the regulars who keep coming back, the name you&rsquo;re building on Whalley Ave. All real, all worth something to the work &mdash; none of it with a receipt, so none of it on the list.</p>'+
+      '<p>So read &ldquo;Assets, '+d(ASSETS_TOTAL)+'&rdquo; as <strong>what the records show</strong> &mdash; not everything the work is worth. The list shows what it can; you <strong>have</strong> more than it shows. That isn&rsquo;t a hole to plug. It&rsquo;s what a record <em>is</em>.</p>'+
+      '<p>It&rsquo;s also why <strong>Equities</strong> isn&rsquo;t your net worth: it&rsquo;s the gap between two <em>recorded</em> lists, everything they leave out baked in.</p>');
     html += '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   }
   c.innerHTML = html;
@@ -292,7 +299,7 @@ function identityNext(){
 
 /* ===== restart ===== */
 function restart(){
-  idStage=0; excelTab='reasons'; reasonsExpanded={ contributed:false, generated:false };
+  idStage=0; excelTab='reasons'; reasonsExpanded={ contributed:false, generated:false }; cashOpen=false;
   renderIdentity();
   window.scrollTo(0,0);
 }

@@ -70,13 +70,6 @@ shares one design system (`shared.css`) — compact `phase-title` header, segmen
 Every module page shares one glossary, grouped by module (`Module 2:` … `Module 5:`), opened
 from the book icon in the header.
 
-## Original monolithic versions (reference)
-
-The pre-split, single-file tutorials are kept for reference:
-`11-getting-organized.html`, `12-insurance-and-maria.html`,
-`13-anna-and-the-bank-statement.html`, `14-keeping-reasons.html`,
-`15-naming-what-you-built.html`.
-
 ## Shared assets
 
 - `shared.css` — the design system (typography, colors, components, dark mode). Kept
