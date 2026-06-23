@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activity 2.2: Filing for a Legal Body &middot; File the Certificate</title>
+  <title>Tutorial 2: Filing for a Legal Body &middot; File the Certificate</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,7 +16,7 @@
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Activity 2.2: Filing for a Legal Body</h1>
+        <h1>Tutorial 2: Filing for a Legal Body</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 3 of 5</p>
       </div>
       <div class="tut-header-actions">
@@ -102,15 +102,15 @@ function renderFile(){
     '</div></div>';
   var below;
   if(!filed){
-    below = '<button class="btn-continue btn-block" onclick="fileIt()">File with the State of Connecticut &rarr;</button>';
+    below = '<button class="btn-continue btn-block" onclick="fileIt()">File with the State of Connecticut</button>';
   } else {
-    below = '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Filed</div>'+
-      '<p>The State accepts the filing. As of this moment, <strong>'+esc(en)+'</strong> exists &mdash; a brand-new <strong>legal person</strong>, able to own things, owe debts, and be sued in its own name.</p></div>'+
-      '<p class="callout">You filed in <strong>Connecticut</strong> &mdash; your home state, simple and cheap. (The biggest companies shop for Delaware&rsquo;s business-friendly courts; a one-person shop just forms where it works. Even <em>which state</em> is a choice.)</p>'+
-      '<button class="btn-continue btn-block" onclick="nav(\'22-4-whatChanged.html\')">So what just changed? &rarr;</button>';
+    below = '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Certificate of Organization Filed</div>'+
+      '<p style="margin-bottom:20px">The State accepts the filing. As of this moment, <strong>'+esc(en)+'</strong> exists. It is now a <strong>legal entity</strong> that can own things, owe debts, sign contracts, and be sued in its own name.</p>'+
+      '<p>You filed in Connecticut because that is where you live and operate. Some companies choose another state, such as Delaware, for business or legal reasons. For this repair work, Connecticut is the straightforward choice.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="nav(\'22-4-whatChanged.html\')">Continue &rarr;</button>';
   }
   document.getElementById('fileArea').innerHTML =
-    '<p class="callout">Here&rsquo;s the document Anna meant &mdash; Connecticut&rsquo;s <strong>Certificate of Organization</strong>. Read it over, then file it.</p>'+cert+below;
+    '<div class="narrative-block"><p>Here&rsquo;s the document Anna meant: <strong>Connecticut&rsquo;s Certificate of Organization</strong>. This is the filing that brings the LLC into legal existence.</p></div>'+cert+below;
   if(window.lucide) lucide.createIcons();
 }
 function fileIt(){ filed=true; playStamp(); renderFile(); }
