@@ -16,7 +16,7 @@
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Activity 2.1: The Two You&rsquo;s</h1>
+        <h1>Tutorial 2: The Two You&rsquo;s</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 4 of 5</p>
       </div>
       <div class="tut-header-actions">
@@ -28,9 +28,9 @@
 
     <!-- ===== twoHats ===== -->
     <div class="phase active" id="phase-twoHats">
-      <div class="narrative-block">
-        <p>So there have been <strong>two of you</strong> all along &mdash; but only in a way you&rsquo;ve kept by hand. The <strong>person</strong>, and the <strong>operation</strong>. Same head, two hats.</p>
-        <p>Your books drew one line. What would it take for the bank, the customer, and the law to see two &mdash; the way your books do?</p>
+      <div class="narrative-block" style="margin-bottom:20px">
+        <p>So there have been <strong>two views of you</strong> all along: you as a <strong>person</strong>, and the repair work as the <strong>operation</strong> you have been tracking separately.</p>
+        <p>Your books drew one boundary. But that boundary still lives inside your records. The bank, Smith, and the law do not treat the repair work as separate from you yet.</p>
       </div>
       <div id="twoHatsArea"></div>
     </div>
@@ -85,11 +85,11 @@ var wantRevealed = false;
 function renderTwoHats(){
   var html;
   if(!wantRevealed){
-    html = '<button class="btn-continue btn-block" onclick="revealWant()">Reveal &rarr;</button>';
+    html = '<button class="btn-continue btn-block" onclick="revealWant()">Why wasn&rsquo;t the boundary enough?</button>';
   } else {
     html = '<div class="insight-box"><div class="insight-label"><i data-lucide="scale" class="licon"></i> The second line</div>'+
-      '<p>The separation you&rsquo;ve kept on paper needs a <strong>second line beside it &mdash; a legal one</strong>. A line the bank, the customer, and the law are bound to honor. Maria already named it: an <strong>LLC</strong>. Next, you&rsquo;ll go make it real.</p></div>'+
-      '<button class="btn-continue btn-block" onclick="nav(\'21-5-complete.html\')">Finish up &rarr;</button>';
+      '<p>The boundary in your books is real, but it is an <strong>accounting boundary</strong>. Now it needs a second line beside it: <strong>a legal line</strong>. That legal line gives others something separate from you to recognize.<br><br>Maria already named one common way to create that legal line: an <strong>LLC</strong>. Next, you will form one.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="nav(\'21-5-complete.html\')">Continue &rarr;</button>';
   }
   document.getElementById('twoHatsArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();
