@@ -2887,3 +2887,52 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 @media (prefers-color-scheme: dark) {
   .phase-title, .complete-title, .glossary-module { color: #f4f4f5; }
 }
+
+/* ----- Walk-phase two-pane layout (Tutorial 1.4 walk-* phases) -----
+   Places the Assets/Liabilities sheet and the Reasons sheet side-by-side so a reason
+   always sits next to the change it explains. Stacks on narrow viewports. */
+.walk-pane { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; align-items: start; }
+.walk-pane > .xlwb { margin-bottom: 0; min-width: 0; }
+@media (max-width: 720px) { .walk-pane { grid-template-columns: 1fr; } }
+
+/* ----- Reasons-tab paired badge (Tutorial 1.4 walk-liab / walk-cash) -----
+   Small ⟷ tag appended to a reason once its second half is found on another list. */
+.reason-pair-badge { display: inline-block; background: var(--warn-bg); border: 1px solid var(--accent); color: #92400e; font-size: var(--font-xs); font-weight: 600; padding: 1px 6px; border-radius: 3px; margin-left: 6px; }
+@media (prefers-color-scheme: dark) {
+  .reason-pair-badge { background: #3a2f12; border-color: #6b5520; color: #e2b566; }
+}
+
+/* ----- Inline info-icon button inside xl-item rows (Tutorial 1.4 walk-* phases) -----
+   Borderless, primary-colored, sized to the row's icon glyph. Click opens evidence modal;
+   the row's own click handler bails out when the event targets this button. Distinct from
+   .xl-toggle (the +/− collapse control) so the affordance reads as "view evidence".
+   `flex-shrink: 0` + `margin-left: auto` keep it pinned to the right of the narrow cell
+   in the two-pane layout — without this it gets squeezed off or out of the click zone.
+   `position: relative; z-index: 2` lifts it above the row's clickable surface. */
+.xl-info { border: 0; background: transparent; color: var(--primary); padding: 2px 4px; cursor: pointer; line-height: 1; display: inline-flex; align-items: center; flex-shrink: 0; margin-left: auto; position: relative; z-index: 2; border-radius: 3px; }
+.xl-info:hover { color: var(--primary-light); background: var(--primary-faint); }
+.xl-info:focus-visible { outline: 2px solid var(--primary); outline-offset: 1px; }
+.xl-info .licon { width: 1.05em; height: 1.05em; }
+@media (prefers-color-scheme: dark) {
+  .xl-info { color: var(--primary); }
+  .xl-info:hover { background: #1d2638; }
+}
+
+/* ----- Item-name span inside xl-item rows (Tutorial 1.4 walk-* phases) -----
+   Wraps the item label so it shares the flex row with the trailing ⓘ button. `flex: 1`
+   gives it the available space; `min-width: 0` lets it shrink below its content width
+   so the button doesn't get pushed out of the narrow two-pane column. */
+.xl-item-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Inline info icon button used in interactive xl-item rows — opens evidence/receipt modal */
+.xl-info { background: transparent; border: 0; padding: 2px 4px; margin-left: 4px; cursor: pointer; color: var(--primary); display: inline-flex; align-items: center; line-height: 1; }
+.xl-info:hover { color: var(--accent); }
+
+/* Small inline badges used in the Reasons window (walk-* and crossout phases) — show source list and pairing */
+.reason-badge { display: inline-block; font-size: var(--font-xs); padding: 1px 6px; border-radius: 3px; margin-right: 4px; font-weight: 600; }
+.reason-badge.win { background: #eaf3ec; color: #0e6b3a; }
+.reason-badge.pair { background: #fef9e7; color: #1f2937; font-weight: 700; }
+@media (prefers-color-scheme: dark) {
+  .reason-badge.win { background: #1a2e1f; color: #5fc785; }
+  .reason-badge.pair { background: #3a2f12; color: #ffe7a0; }
+}
