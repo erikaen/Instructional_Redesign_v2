@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.4: The Entity's Own Number &middot; Opening the Account</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.4: The Entity&rsquo;s Own Number</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 3 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Opening the Account</div>
+
+    <!-- ===== account ===== -->
+    <div class="phase active" id="phase-account">
+      <div class="narrative-block">
+        <p>With the EIN in hand, you can finally give the business its <strong>own</strong> accounts &mdash; and pull it out of your personal ones. Do it in three moves.</p>
+      </div>
+      <div id="accountArea"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<!-- ===== Source-document viewer overlay ===== -->
+<div class="doc-overlay" id="docOverlay" style="align-items:flex-start" onclick="if(event.target===this) closeDoc()">
+  <div class="doc-modal" id="docModal" style="max-width:640px;margin:32px auto">
+    <button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>
+    <div id="docBody"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playMove(){ tone(440,0.12,'sine',0.12); setTimeout(function(){tone(680,0.12,'sine',0.12);},90); }
+
+/* ===== glossary (shared across all phases of 2.4) ===== */
+var glossaryTerms = [
+  { term:"EIN", def:"Employer Identification Number &mdash; the entity&rsquo;s own tax ID with the IRS, like a Social Security number for a business. The bank needs it to open an account in the LLC&rsquo;s name." },
+  { term:"Co-mingling", def:"Running business and personal money through the same account, so they have to be sorted apart by hand. Opening the LLC&rsquo;s own account ends it." },
+  { term:"Capital contribution", def:"Money (or property) an owner puts into the company. Your $500 in cash is one: it raises the LLC&rsquo;s cash and its members&rsquo; capital by $500." },
+  { term:"Disregarded entity", def:"For federal income tax, a single-member LLC is &ldquo;looked through&rdquo; to its owner &mdash; even though it holds its own EIN for every other purpose. Different lines drawn for different purposes." },
+  { term:"Counterparty", def:"The other party to a transaction or contract. With its own EIN and accounts, the LLC is a counterparty in its own right &mdash; it deals with banks, customers, and the IRS in its own name, and can owe and be owed (even sue and be sued) as itself, not as you." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== navigation / reset ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== member name + escaping ===== */
+var memberName = '';
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
+function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
+
+/* ===== state (phase-local) ===== */
+var step = 0;   /* 0 none, 1 acct opened, 2 $500 in, 3 card moved */
+var docView = null;
+
+/* ===== SS-4 (for the viewer) ===== */
+function ss4Lines(){
+  var en = esc(llcName()), dn = esc(memberDisplay());
+  return [
+    ['1','Legal name of entity:',en],
+    ['7a','Responsible party:',dn],
+    ['8a','Is this for an LLC?','Yes &middot; 1 member'],
+    ['9a','Type of entity:','Other &rarr; Disregarded entity (single-member LLC)'],
+    ['10','Reason for applying:','Started a new business &rarr; bicycle repair services'],
+    ['12','Closing month of accounting year:','December']
+  ];
+}
+function ss4RowsHtml(){
+  return ss4Lines().map(function(l){
+    return '<div style="display:flex;border:1px solid #d8d8d8;border-top:none">'+
+      '<div style="flex:0 0 30px;background:#f4f4f1;border-right:1px solid #d8d8d8;text-align:center;font-weight:700;padding:5px 0;font-size:11px;color:#374151">'+l[0]+'</div>'+
+      '<div style="flex:1;padding:5px 8px"><span style="color:#374151">'+l[1]+'</span> <span style="font-weight:700;color:#10243f">'+l[2]+'</span></div></div>';
+  }).join('');
+}
+function ss4DocInner(){
+  return '<div style="font-family:Georgia,\'Times New Roman\',serif">'+
+    '<div style="text-align:center;font-weight:700;font-size:15px;color:#374151">FORM SS-4 &mdash; APPLICATION FOR EIN</div>'+
+    '<div style="text-align:center;font-size:12px;color:#6b6b6b;margin-bottom:12px">Filed June 1, 2026 &middot; EIN 88-3729104</div>'+
+    '<div style="border-top:1px solid #d8d8d8">'+ss4RowsHtml()+'</div></div>';
+}
+
+/* ===== statement facsimiles (for the viewer) ===== */
+function stmtInner(cfg){
+  var who = cfg.who.map(function(l){ return '<div style="font-size:11px;color:#6b6b6b">'+l+'</div>'; }).join('');
+  var box = cfg.box.map(function(b){ return '<div>'+b+'</div>'; }).join('');
+  var head = cfg.head.map(function(h,i){ return '<th style="text-align:'+(i<=1?'left':'right')+';padding:4px 6px;color:#6b6b6b;font-weight:600">'+h+'</th>'; }).join('');
+  var rows = cfg.rows.map(function(r){
+    var tds = r.cells.map(function(c,ci){
+      var v = (c && c.v!==undefined) ? c.v : c;
+      var tone = c && c.tone;
+      var col = tone==='pos' ? '#15803d' : (tone==='neg' ? '#b91c1c' : '#374151');
+      var cls = (ci===0 || ci>1) ? 'mono' : '';
+      return '<td class="'+cls+'" style="text-align:'+(ci<=1?'left':'right')+';padding:4px 6px;color:'+col+'">'+v+'</td>';
+    }).join('');
+    var trStyle = 'border-bottom:1px solid #d8d8d8;'+(r.total?'font-weight:700;border-top:2px solid #374151':'');
+    return '<tr style="'+trStyle+'">'+tds+'</tr>';
+  }).join('');
+  var note = cfg.note ? '<div style="margin-top:12px;border-radius:8px;padding:10px 12px;background:#f6f6f4;border:1px dashed #d8d8d8;font-size:12px;color:#444">'+cfg.note+'</div>' : '';
+  return '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">'+
+    '<div style="font-weight:700;font-size:15px;margin-bottom:8px">'+cfg.heading+'</div>'+
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:8px">'+
+      '<div><div style="font-size:16px;font-weight:700;color:var(--primary)">'+cfg.bank+'</div>'+who+'</div>'+
+      '<div style="border:1px solid #d8d8d8;border-radius:6px;padding:6px 10px;font-size:12px">'+box+'</div>'+
+    '</div>'+
+    '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px"><tbody>'+
+      '<tr style="border-bottom:1px solid #d8d8d8">'+head+'</tr>'+rows+
+    '</tbody></table></div>'+note+'</div>';
+}
+function stmtConfigs(en){
+  return {
+    ss4:null,
+    llcbank:{ heading:"Bank Statement #1 &mdash; the entity&rsquo;s own account", bank:"Elm City Bank",
+      who:[ en+" &middot; Business checking &middot; &bull;&bull;&bull;&bull; 2050", "EIN 88-3729104" ],
+      box:["Period: June 1&ndash;30, 2026","Beginning: $0.00","Ending: $500.00"],
+      head:["Date","Description","Dep.","W/d","Balance"],
+      rows:[ { cells:["06/01","Account opened","&mdash;","&mdash;","0.00"] },
+        { cells:["06/01","Opening deposit &mdash; member capital contribution",{v:"500.00",tone:"pos"},"&mdash;","500.00"] },
+        { cells:["","Ending balance","500.00","&mdash;","500.00"], total:true } ],
+      note:"The entity&rsquo;s first bank account &mdash; its <em>own</em> name and EIN. The <strong>$500 opening deposit is your capital contribution</strong> (Cash 0&rarr;500; members&rsquo; capital +500). The business&rsquo;s money runs through this account now." },
+    llccard:{ heading:"Card Statement #1 &mdash; the entity&rsquo;s own card", bank:"Harborline Visa",
+      who:[ en+" &middot; Business card &middot; &bull;&bull;&bull;&bull; 4180" ],
+      box:["Period: June 1&ndash;30, 2026","Previous: $0.00","New balance: $1,230.00"],
+      head:["Date","Description","Amount"],
+      rows:[ { cells:["06/01","Balance transfer &mdash; business charges from personal card (&bull;&bull;&bull;&bull; 3902)","1,230.00"] },
+        { cells:["","New balance","1,230.00"], total:true } ],
+      note:"The business charges that rode your personal card, now on the LLC&rsquo;s <em>own</em> card. The <strong>$1,230 was transferred over</strong> &mdash; the same balance the LLC assumed at formation, now in the Company&rsquo;s name. The $230 personal portion stayed on your card." },
+    perbank:{ heading:"Personal checking &mdash; after the split", bank:"Elm City Bank",
+      who:[ "Personal checking &middot; &bull;&bull;&bull;&bull; 8814" ],
+      box:["Period: June 1&ndash;30, 2026","Beginning: $3,274.00","Ending: $2,774.00"],
+      head:["Date","Description","Dep.","W/d","Balance"],
+      rows:[ { cells:["06/01","Transfer to "+en+" &mdash; business account","&mdash;",{v:"500.00",tone:"neg"},"2,774.00"] },
+        { cells:["","Ending balance","&mdash;","500.00","2,774.00"], total:true } ],
+      note:"Your personal checking, after the split &mdash; the <strong>$500 you moved out seeded the LLC&rsquo;s account</strong>. Personal only from here." },
+    percard:{ heading:"Personal card &mdash; after the split", bank:"Harborline Visa",
+      who:[ "Personal card &middot; &bull;&bull;&bull;&bull; 3902" ],
+      box:["Period: June 1&ndash;30, 2026","Previous: $1,460.00","New balance: $230.00"],
+      head:["Date","Description","Amount"],
+      rows:[ { cells:["06/01","Balance transfer &mdash; business charges to "+en+" card",{v:"(1,230.00)",tone:"neg"}] },
+        { cells:["","New balance (personal)","230.00"], total:true } ],
+      note:"Your personal card, after the split. The <strong>$1,230 business charges moved to the LLC card</strong>; the <strong>$230</strong> left was always personal. <strong>Co-mingling, ended.</strong>" }
+  };
+}
+
+/* ===== source-document viewer ===== */
+function getAcctDocs(en){
+  return [
+    { id:'ss4',     label:'Form SS-4 &mdash; EIN application',            sub: en },
+    { id:'llcbank', label:'Bank statement #1 &mdash; the LLC&rsquo;s checking', sub:'opening deposit $500' },
+    { id:'llccard', label:'Card statement #1 &mdash; the LLC&rsquo;s card',     sub:'balance $1,230' },
+    { id:'perbank', label:'Personal checking &mdash; after the split',     sub:'ending $2,774' },
+    { id:'percard', label:'Personal card &mdash; after the split',         sub:'balance $230' }
+  ];
+}
+function docsButton(){
+  return '<button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary);margin-top:12px" onclick="openDocs()"><i data-lucide="file-text" class="licon"></i> Source documents</button>';
+}
+function openDocs(){ docView='list'; renderDocBody(); document.getElementById('docOverlay').classList.add('open'); if(window.lucide) lucide.createIcons(); }
+function selectDoc(id){ docView=id; renderDocBody(); }
+function backDocs(){ docView='list'; renderDocBody(); }
+function closeDoc(){ docView=null; document.getElementById('docOverlay').classList.remove('open'); }
+function renderDocBody(){
+  var en = esc(llcName());
+  var body;
+  if(docView==='list'){
+    var items = getAcctDocs(en).map(function(d){
+      return '<button onclick="selectDoc(\''+d.id+'\')" style="display:block;width:100%;text-align:left;border:1px solid var(--border-strong);background:var(--primary-faint);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;font-family:inherit;color:inherit">'+
+        '<div style="font-weight:600;color:var(--primary)">'+d.label+'</div>'+
+        '<div style="font-size:var(--font-xs);opacity:0.7">'+d.sub+'</div></button>';
+    }).join('');
+    body = '<div style="font-weight:700;color:var(--primary);margin-bottom:12px;font-family:Inter,sans-serif"><i data-lucide="file-text" class="licon"></i> Source documents</div>'+items;
+  } else {
+    var cur = getAcctDocs(en).find(function(d){ return d.id===docView; });
+    var doc = (docView==='ss4') ? ss4DocInner() : stmtInner(stmtConfigs(en)[docView]);
+    body = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><button onclick="backDocs()" style="border:0;background:transparent;color:var(--primary);cursor:pointer;font-family:inherit;font-size:var(--font-s)">&larr; Documents</button>'+
+      '<span style="font-weight:700;color:var(--primary);font-family:Inter,sans-serif">'+(cur?cur.label:'')+'</span></div>'+doc;
+  }
+  document.getElementById('docBody').innerHTML = body;
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== account: three moves ===== */
+function acctRow(label, sub, amount, llc){
+  var border = llc ? 'var(--primary)' : 'var(--border-strong)';
+  var bg = llc ? 'var(--primary-faint)' : 'transparent';
+  var amt = (amount!=null) ? '<span class="mono" style="font-size:var(--font-s)">'+amount+'</span>' : '';
+  var subHtml = sub ? '<div style="font-size:var(--font-xs);opacity:0.7;margin-top:2px">'+sub+'</div>' : '';
+  return '<div style="border:1px solid '+border+';background:'+bg+';border-radius:8px;padding:8px 10px;margin-bottom:8px">'+
+    '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:var(--font-s);font-weight:600">'+label+'</span>'+amt+'</div>'+subHtml+'</div>';
+}
+function renderAccount(){
+  var en = esc(llcName());
+  var nextLabel = step===0 ? 'Open the LLC&rsquo;s bank account &rarr;'
+    : step===1 ? 'Move $500 in cash into the account &rarr;'
+    : step===2 ? 'Move the business card to the LLC &rarr;' : null;
+  var personalCol = '<div class="section-card"><div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;opacity:0.7;margin-bottom:8px">Your personal accounts</div>'+
+    acctRow('Checking &mdash; Elm City Bank', (step>=2?'personal only now':'co-mingled: business + personal'), (step>=2?'2,774':'3,274'), false)+
+    acctRow('Personal card', (step>=3?'personal only now':'co-mingled: business + personal'), null, false)+
+    '</div>';
+  var llcInner;
+  if(step>=1){
+    llcInner = acctRow('Bank account', en, (step>=2?'500':'0'), true) + (step>=3 ? acctRow('Business card', en, '1,230', true) : '');
+  } else {
+    llcInner = '<div style="font-size:var(--font-xs);font-style:italic;opacity:0.7">none yet</div>';
+  }
+  var llcCol = '<div class="section-card"><div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary);margin-bottom:8px">The LLC&rsquo;s accounts</div>'+llcInner+'</div>';
+  var html = '<div class="main-grid two-col" style="margin-bottom:12px">'+personalCol+llcCol+'</div>';
+  if(step===2){ html += '<div style="text-align:center;font-size:var(--font-xs);color:var(--primary);margin-bottom:10px">&uarr; your <strong>$500 cash contribution</strong> &mdash; Cash 0 &rarr; 500, members&rsquo; capital +500</div>'; }
+  if(nextLabel){
+    html += '<button class="btn-continue btn-block" onclick="advanceAccount()">'+nextLabel+'</button>';
+    html += docsButton();
+  } else {
+    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Co-mingling ended</div>'+
+      '<p>The LLC has its own account and card; your personal checking is personal again. The by-hand sorting you&rsquo;ve done since 1.1 is now <strong>institutional</strong> &mdash; banks, the IRS, and customers all deal with the LLC.</p></div>';
+    html += '<p class="callout">Two of those moves changed <em>nothing</em> on the books &mdash; the EIN, and the card sliding to the LLC&rsquo;s name (<span class="mono">$1,230</span> stays <span class="mono">$1,230</span>). The <strong>one real change</strong> was your <strong>$500</strong>: a capital contribution. Cash <span class="mono">0 &rarr; 500</span>; members&rsquo; capital <span class="mono">1,790 &rarr; 2,290</span>. You&rsquo;ll lay out the full sheet next.</p>';
+    html += docsButton();
+    html += '<button class="btn-continue btn-block" onclick="nav(\'24-4-statements.html\')">See the statements &rarr;</button>';
+  }
+  document.getElementById('accountArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function advanceAccount(){
+  if(step===1 || step===2) playMove(); else playSuccess();
+  if(step<3) step++;
+  renderAccount();
+}
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeDoc(); } });
+
+/* ===== init ===== */
+try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
+renderAccount();
+</script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.2: Filing for a Legal Body &middot; Anna's Advice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.2: Filing for a Legal Body</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 1 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Anna&rsquo;s Advice</div>
+
+    <!-- ===== welcome ===== -->
+    <div class="phase active" id="phase-welcome">
+      <div class="narrative-block">
+        <p>You left Maria wanting one thing: a <strong>legal wall</strong> between the repair work and your own pocket &mdash; the kind a policy can&rsquo;t give you. So you call <strong>Anna</strong> &mdash; she kept the books at <strong>City Cycle</strong> for years and helped the owner set it up as an LLC.</p>
+        <p>She doesn&rsquo;t overthink it.</p>
+      </div>
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;Form an <strong>LLC</strong>. That&rsquo;s the wall. I set one up with the owner at City Cycle &mdash; we used an attorney back then; these days you could just have an <strong>AI assistant</strong> walk you through it and check it against the state &mdash; honestly, it&rsquo;s a couple of forms.&rdquo;<br><br>&ldquo;Start with the one that actually brings it into existence. After that, it&rsquo;s a legal <em>person</em> &mdash; and the claims that scared you stop at <em>its</em> door, not yours.&rdquo;</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You&rsquo;ll Work Out</div>
+        <ul class="bullet-list">
+          <li>What it actually takes to bring a legal entity into existence.</li>
+          <li>What changes the instant it exists &mdash; and what, surprisingly, doesn&rsquo;t.</li>
+          <li>Which is older: the legal body, or the operation it wraps.</li>
+        </ul>
+      </div>
+      <button class="btn-continue btn-block" onclick="nav('22-2-name.html')">Get started &rarr;</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary (shared across all phases of 2.2) ===== */
+var glossaryTerms = [
+  { term:"Certificate of Organization", def:"In Connecticut, the one-page filing that brings a limited liability company (LLC) into legal existence. (Delaware calls its version a &ldquo;Certificate of Formation.&rdquo;)" },
+  { term:"Legal entity", def:"A &ldquo;person&rdquo; in the eyes of the law that can own things, owe debts, sign contracts, and be sued &mdash; separate from the human beings behind it. An LLC is one." },
+  { term:"Registered agent", def:"The person or office an LLC names to receive legal mail at a real in-state address. A small owner often serves as their own." },
+  { term:"LLC", def:"Limited Liability Company &mdash; a legal form that holds the operation and stands as a wall between a claim and the owner&rsquo;s personal life." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== navigation / reset (each phase is its own file) ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+</script>
+</body>
+</html>

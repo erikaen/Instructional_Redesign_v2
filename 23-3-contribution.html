@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.3: The Rules and the Two Signatures &middot; What You Put In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.3: The Rules and the Two Signatures</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 3 of 6</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">What You Put In</div>
+
+    <!-- ===== contribution ===== -->
+    <div class="phase active" id="phase-contribution">
+      <div class="narrative-block">
+        <p>You read it in your agreement &mdash; <strong>Section 9, Capital Contributions</strong>. It says what you put into the Company. The answer is <em>everything</em>. <strong>Schedule A</strong> lists it at its existing book amounts. Move it in, and watch the totals.</p>
+      </div>
+      <div class="callout" style="font-family:Georgia,'Times New Roman',serif"><strong>&sect;9.</strong> &ldquo;The Sole Member contributes the assets and liabilities of the bicycle-repair business, at their existing book amounts, as set forth on Schedule A.&rdquo;</div>
+      <div id="contributionArea"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary (shared across all phases of 2.3) ===== */
+var glossaryTerms = [
+  { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
+  { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
+  { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
+  { term:"Members&rsquo; capital / Members&rsquo; equity", def:"The LLC&rsquo;s name for the residual A &minus; L. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($1,790) and the retained slice ($170) are kept separate." },
+  { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
+  { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== navigation / reset ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== member name ===== */
+var memberName = '';
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
+function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
+var assetRows = [['Cash','0'],['Prepaid rent','650'],['Parts on the shelf','200'],['Tools & equipment','1,200'],['Fixtures','750'],['Laptop','610']];
+
+/* ===== state (phase-local) ===== */
+var contributed = false;
+
+/* ===== §9 balance sheet ===== */
+function balanceSheetHTML(){
+  var title = contributed ? esc(llcName()) : 'The repair work &mdash; your books';
+  var assets = '';
+  assetRows.forEach(function(a){ assets += '<div class="acct-line"><span>'+esc(a[0])+'</span><span class="acct-val mono">'+a[1]+'</span></div>'; });
+  var liabLabel = contributed ? 'Liabilities &amp; equity' : 'Liabilities &amp; the net';
+  var rcLabel = contributed ? 'Members&rsquo; capital &mdash; contributed' : '&ldquo;What you put in&rdquo;';
+  var reLabel = contributed ? 'Retained earnings' : '&ldquo;What the work made&rdquo;';
+  var netLabel = contributed ? 'Members&rsquo; equity' : 'The net (have &minus; owe)';
+  var resStyle = contributed ? ' style="background:var(--success-bg);border-radius:4px;padding:2px 6px;margin-top:4px"' : ' style="margin-top:4px"';
+  var html = '<div style="text-align:center;font-weight:700;margin-bottom:2px;'+(contributed?'color:var(--primary)':'')+'">'+title+'</div>';
+  html += '<div class="section-sub" style="text-align:center;margin-bottom:14px">Balance sheet &middot; June 1, 2026</div>';
+  html += '<div class="main-grid two-col">';
+  html += '<div class="acct-col"><h4>Assets</h4>'+assets+'<div class="acct-total"><span>Assets</span><span class="mono">3,410</span></div></div>';
+  html += '<div class="acct-col"><h4>'+liabLabel+'</h4>'+
+    '<div class="acct-line"><span>Credit card</span><span class="acct-val mono">1,230</span></div>'+
+    '<div class="acct-line"><span>Customer advance &mdash; Smith</span><span class="acct-val mono">220</span></div>'+
+    '<div class="acct-total" style="border-top:1px solid var(--border)"><span>Liabilities</span><span class="mono">1,450</span></div>'+
+    '<div'+resStyle+'>'+
+      '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">1,790</span></div>'+
+      '<div class="acct-line"><span>'+reLabel+'</span><span class="acct-val mono">170</span></div>'+
+      '<div class="acct-total"><span>'+netLabel+'</span><span class="mono">1,960</span></div>'+
+    '</div>'+
+  '</div>';
+  html += '</div>';
+  return html;
+}
+function renderContribution(){
+  var area = document.getElementById('contributionArea');
+  var html = balanceSheetHTML();
+  if(!contributed){
+    html += '<button class="btn-continue btn-block" style="margin-top:14px" onclick="doContribute()">Contribute the business to the LLC &rarr;</button>';
+  } else {
+    html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="check" class="licon"></i> Not one number changed</div>'+
+      '<p>The same balance sheet you built informally is now the <strong>Company&rsquo;s</strong> &mdash; legally contributed in. Only the <em>words</em> on the right moved: &ldquo;what you put in&rdquo; became <strong>members&rsquo; capital ($1,790)</strong>, &ldquo;what the work made&rdquo; became <strong>retained earnings ($170)</strong>. Same $1,960. The contributed slice and the earned slice stay separate &mdash; the history carries over intact.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="nav(\'23-4-wall.html\')">Now drill into &sect;17 &mdash; the wall &rarr;</button>';
+  }
+  area.innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function doContribute(){ contributed=true; playSuccess(); renderContribution(); }
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== init ===== */
+try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
+renderContribution();
+</script>
+</body>
+</html>

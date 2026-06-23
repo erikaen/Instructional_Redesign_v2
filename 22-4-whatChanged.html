@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.2: Filing for a Legal Body &middot; What Changed?</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.2: Filing for a Legal Body</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 4 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">What Changed?</div>
+
+    <!-- ===== whatChanged ===== -->
+    <div class="phase active" id="phase-whatChanged">
+      <div class="narrative-block">
+        <p>A legal person was just born. That <em>feels</em> like a big change. So walk the shop and check: <strong>what actually moved?</strong> Tap each one.</p>
+      </div>
+      <div id="whatChangedArea"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary (shared across all phases of 2.2) ===== */
+var glossaryTerms = [
+  { term:"Certificate of Organization", def:"In Connecticut, the one-page filing that brings a limited liability company (LLC) into legal existence. (Delaware calls its version a &ldquo;Certificate of Formation.&rdquo;)" },
+  { term:"Legal entity", def:"A &ldquo;person&rdquo; in the eyes of the law that can own things, owe debts, sign contracts, and be sued &mdash; separate from the human beings behind it. An LLC is one." },
+  { term:"Registered agent", def:"The person or office an LLC names to receive legal mail at a real in-state address. A small owner often serves as their own." },
+  { term:"LLC", def:"Limited Liability Company &mdash; a legal form that holds the operation and stands as a wall between a claim and the owner&rsquo;s personal life." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== navigation / reset (each phase is its own file) ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== data ===== */
+var movedItems = [
+  { id:"legal", label:"Your legal standing", changed:true, after:"A separate legal person now exists" },
+  { id:"ops",   label:"Your tools, customers, the work today", changed:false, after:"Exactly the same &mdash; nothing moved" },
+  { id:"sheet", label:"The balance sheet", changed:false, after:"A $3,410 &minus; L $1,450 = $1,960" }
+];
+
+var TWO_BIRTHDAYS_HTML =
+  '<div class="section-card" style="margin-top:16px"><div class="card-title" style="text-transform:uppercase;letter-spacing:0.04em;font-size:var(--font-xs)">Two birthdays</div>'+
+  '<div style="position:relative;height:64px;margin-top:8px">'+
+    '<div style="position:absolute;top:28px;left:0;right:0;height:2px;background:var(--border-strong)"></div>'+
+    '<div style="position:absolute;top:20px;left:8%;transform:translateX(-50%)"><div style="width:14px;height:14px;border-radius:50%;background:var(--primary);margin:0 auto"></div></div>'+
+    '<div style="position:absolute;top:44px;left:8%;transform:translateX(-50%);font-size:11px;color:var(--primary);font-weight:600;white-space:nowrap;text-align:center">accounting line<br>since 1.1</div>'+
+    '<div style="position:absolute;top:20px;left:92%;transform:translateX(-50%)"><div style="width:14px;height:14px;border-radius:50%;background:var(--accent);margin:0 auto"></div></div>'+
+    '<div style="position:absolute;top:44px;left:92%;transform:translateX(-50%);font-size:11px;color:var(--accent);font-weight:600;white-space:nowrap;text-align:center">legal line<br>today</div>'+
+    '<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:11px">&larr; months of real operating &rarr;</div>'+
+  '</div></div>';
+
+/* ===== state (phase-local) ===== */
+var movedOpened = [];
+
+/* ===== whatChanged: what actually moved ===== */
+function renderWhatChanged(){
+  var cards = movedItems.map(function(m){
+    var opened = movedOpened.indexOf(m.id) >= 0;
+    if(!opened){
+      return '<div class="tp-card" style="cursor:pointer" onclick="openMoved(\''+m.id+'\')">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center">'+
+          '<span class="tp-card-label">'+m.label+'</span><span class="tp-card-text">tap &rarr;</span></div></div>';
+    }
+    var badge = m.changed
+      ? '<span style="white-space:nowrap;font-size:var(--font-s);font-weight:700;padding:2px 9px;border-radius:20px;background:var(--accent);color:#fff">CHANGED</span>'
+      : '<span style="white-space:nowrap;font-size:var(--font-s);font-weight:700;padding:2px 9px;border-radius:20px;background:var(--success-border);color:#fff">UNCHANGED</span>';
+    var brd = m.changed ? 'var(--accent)' : 'var(--success-border)';
+    var after = (m.id==='sheet') ? '<span class="mono">'+m.after+'</span>' : m.after;
+    return '<div class="tp-card" style="border-color:'+brd+'">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center"><span class="tp-card-label">'+m.label+'</span>'+badge+'</div>'+
+      '<div class="tp-card-text" style="margin-top:8px">'+after+'</div></div>';
+  }).join('');
+  var html = '<div style="display:flex;flex-direction:column;gap:12px">'+cards+'</div>';
+  if(movedItems.every(function(m){ return movedOpened.indexOf(m.id) >= 0; })){
+    html += '<div class="insight-box" style="margin-top:16px"><div class="insight-label"><i data-lucide="scale" class="licon"></i> No tool moved today</div>'+
+      '<p>One thing changed &mdash; your <strong>legal standing</strong>. The operation didn&rsquo;t move an inch, and the balance sheet is <strong>identical</strong>. A legal <em>wrapper</em> was born; nothing economic happened. <strong>No tool moved today.</strong></p></div>';
+    html += TWO_BIRTHDAYS_HTML;
+    html += '<p class="callout">Two different lines, drawn at two different times, for two different reasons. The operation has been running &mdash; and you&rsquo;ve kept its books &mdash; since long before today. The legal body is <strong>hours old</strong>.</p>';
+    html += '<button class="btn-continue btn-block" onclick="nav(\'22-5-complete.html\')">Finish up &rarr;</button>';
+  }
+  document.getElementById('whatChangedArea').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function openMoved(id){
+  if(movedOpened.indexOf(id) < 0){
+    var m = movedItems.find(function(x){ return x.id===id; });
+    movedOpened.push(id);
+    if(m.changed) playSuccess(); else playClick();
+  }
+  renderWhatChanged();
+}
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== init ===== */
+renderWhatChanged();
+</script>
+</body>
+</html>

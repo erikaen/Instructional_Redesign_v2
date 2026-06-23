@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.2: Filing for a Legal Body &middot; Name the LLC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.2: Filing for a Legal Body</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 2 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Name the LLC</div>
+
+    <!-- ===== name ===== -->
+    <div class="phase active" id="phase-name">
+      <div class="narrative-block">
+        <p>First, your LLC needs a <strong>name</strong>. Until now it&rsquo;s just been &ldquo;the repair work&rdquo; or &ldquo;the operation.&rdquo; Now it gets one of its <em>own</em> &mdash; and it&rsquo;ll carry <strong>your</strong> name, even as it becomes legally separate from you.</p>
+      </div>
+      <div class="section-card">
+        <label for="memberName" style="display:block;font-size:var(--font-s);font-weight:600;margin-bottom:8px">Your name</label>
+        <input id="memberName" type="text" placeholder="Type your name&hellip;" oninput="onNameInput()" onkeydown="if(event.key==='Enter'){lockName();}" autocomplete="off"
+               style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border-strong);border-radius:8px;font-size:16px;font-family:inherit;background:transparent;color:inherit;outline:none;margin-bottom:14px">
+        <div style="font-size:var(--font-xs);text-transform:uppercase;letter-spacing:0.04em;color:var(--primary);margin-bottom:4px">Your LLC will be called</div>
+        <div id="entityPreview" style="font-family:Georgia,'Times New Roman',serif;text-align:center;font-size:20px;font-weight:700;color:var(--primary);background:var(--primary-faint);border-radius:8px;padding:12px 16px">[Your Name]&rsquo;s Bike Repairs, LLC</div>
+        <p id="nameHint" style="font-size:var(--font-xs);margin-top:8px">Type a name (or leave it &mdash; the documents carry a <span class="mono">[Your Name]</span> placeholder you can imagine as your own).</p>
+      </div>
+      <button class="btn-continue btn-block" onclick="lockName()">Lock in the name &rarr;</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary (shared across all phases of 2.2) ===== */
+var glossaryTerms = [
+  { term:"Certificate of Organization", def:"In Connecticut, the one-page filing that brings a limited liability company (LLC) into legal existence. (Delaware calls its version a &ldquo;Certificate of Formation.&rdquo;)" },
+  { term:"Legal entity", def:"A &ldquo;person&rdquo; in the eyes of the law that can own things, owe debts, sign contracts, and be sued &mdash; separate from the human beings behind it. An LLC is one." },
+  { term:"Registered agent", def:"The person or office an LLC names to receive legal mail at a real in-state address. A small owner often serves as their own." },
+  { term:"LLC", def:"Limited Liability Company &mdash; a legal form that holds the operation and stands as a wall between a claim and the owner&rsquo;s personal life." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== navigation / reset (each phase is its own file) ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== member name (persisted to localStorage; flows to file/23/24/25) ===== */
+var memberName = '';
+function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
+function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
+function syncName(){ var inp=document.getElementById('memberName'); if(inp) inp.value=memberName; updateNamePreview(); }
+function onNameInput(){ memberName = document.getElementById('memberName').value; updateNamePreview(); }
+function updateNamePreview(){
+  document.getElementById('entityPreview').textContent = llcName();
+  document.getElementById('nameHint').style.display = memberName.trim() ? 'none' : '';
+}
+function lockName(){
+  if(memberName.trim()){ try{ localStorage.setItem('m2Member', memberName.trim()); }catch(e){} }
+  nav('22-3-file.html');
+}
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== init: prefill from any saved name ===== */
+try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
+syncName();
+</script>
+</body>
+</html>
