@@ -1220,7 +1220,7 @@ body { background: var(--page-bg); font-family: 'Open Sans', sans-serif; color: 
   color: #374151;
   line-height: 1.65;
   font-family: Inter, system-ui, sans-serif;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 .narrative-block p { margin-bottom: 10px; }
 .narrative-block p:last-child { margin-bottom: 0; }
@@ -2204,7 +2204,7 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .mono { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
 
 /* ----- Speaker dialog boxes ----- */
-.dialog-box { background: var(--primary-faint); border: 1.5px solid var(--border-strong); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+.dialog-box { background: var(--primary-faint); border: 1.5px solid var(--border-strong); border-radius: 10px; padding: 14px 16px; margin-bottom: 20px; }
 .dialog-box.maria { border-color: var(--primary); }
 .dialog-box.anna { border-color: var(--primary); }
 .dialog-box.you { border: none; border-left: 4px solid var(--border-strong); background: var(--primary-faint); border-radius: 6px; padding: 12px 14px; }
