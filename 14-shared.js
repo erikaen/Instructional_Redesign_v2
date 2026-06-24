@@ -226,9 +226,10 @@ var PAIR_EVENTS = [
   { id:'e_fix',   win:'fixtures',  rowId:'w_fi_all',    otherWin:'liab', otherRowId:'w_li_fix',   ev:['eq','g_fixtures'],   reason:'Bought $750 of fixtures on the card.' },
   { id:'e_parts', win:'supplies',  rowId:'w_su_bought', otherWin:'liab', otherRowId:'w_li_parts', ev:['sup','qbp'],         reason:'Bought $500 of parts on the card (QBP).' },
   { id:'e_rent',  win:'rou',       rowId:'w_ro_paid',   otherWin:'cash', otherRowId:'w_ca_rent',  ev:['rou','lease'],       reason:'Paid $1,300 of rent in advance (first + last month).' },
-  { id:'e_smith', win:'liab',      rowId:'w_li_smith',  otherWin:'cash', otherRowId:'w_ca_smith', ev:['liab','smith'],      reason:"Smith paid $220 up front for a frame you haven't built yet." },
-  { id:'e_pay1',  win:'liab',      rowId:'w_li_pay1',   otherWin:'cash', otherRowId:'w_ca_pay1',  ev:['liab','card'],       reason:'Paid $400 down on the card (May 16).' },
-  { id:'e_pay2',  win:'liab',      rowId:'w_li_pay2',   otherWin:'cash', otherRowId:'w_ca_pay2',  ev:['liab','card'],       reason:'Paid $400 down on the card (May 28).' },
+  /* Flipped for new phase order (cash before liab): cash now creates these, liab reuses. */
+  { id:'e_smith', win:'cash',      rowId:'w_ca_smith',  otherWin:'liab', otherRowId:'w_li_smith', ev:['liab','smith'],      reason:"Smith paid $220 up front for a frame you haven't built yet." },
+  { id:'e_pay1',  win:'cash',      rowId:'w_ca_pay1',   otherWin:'liab', otherRowId:'w_li_pay1',  ev:['liab','card'],       reason:'Paid $400 down on the card (May 16).' },
+  { id:'e_pay2',  win:'cash',      rowId:'w_ca_pay2',   otherWin:'liab', otherRowId:'w_li_pay2',  ev:['liab','card'],       reason:'Paid $400 down on the card (May 28).' },
   { id:'e_gear',      win:'equipment', rowId:'w_eq_gear',   otherWin:null, cat:'contributed', ev:['eq','g_gear'],   reason:'Brought gear you already owned — grinder, press, vacuum.' },
   { id:'e_laptop',    win:'computer',  rowId:'w_co_laptop', otherWin:null, cat:'contributed', ev:['eq','g_laptop'], reason:'Brought your laptop from home.' },
   { id:'e_partsused', win:'supplies',  rowId:'w_su_used',   otherWin:null, cat:'earned',      ev:['sup','used'],    reason:'I must have used them doing repair work ($300 of parts).' },
