@@ -115,7 +115,7 @@ function ss4RowsHtml(){
 }
 function ss4Form(stamped){
   var stamp = stamped ? '<div style="position:absolute;top:16px;right:16px;border:3px solid #15803d;color:#15803d;border-radius:8px;padding:3px 10px;font-weight:800;font-size:12px;letter-spacing:0.04em;transform:rotate(-8deg)">EIN&nbsp;88-3729104</div>' : '';
-  return '<div class="doc-modal" style="margin:0 auto 14px;font-family:Inter,sans-serif">'+stamp+
+  return '<div class="doc-modal" style="margin:0 auto 20px;font-family:Inter,sans-serif">'+stamp+
     '<div style="display:flex;align-items:flex-end;justify-content:space-between;border-bottom:2px solid #374151;padding-bottom:6px;margin-bottom:10px">'+
       '<div><span style="font-size:11px;color:#6b6b6b">Form</span><div style="font-size:26px;font-weight:800;color:#374151;line-height:1">SS-4</div></div>'+
       '<div style="font-size:13px;font-weight:700;color:#374151;text-align:right">Application for Employer<br>Identification Number</div>'+
@@ -230,16 +230,14 @@ function renderDocBody(){
 
 /* ===== ein phase ===== */
 function renderEin(){
-  var html = '<p style="font-size:var(--font-s);margin-bottom:12px">To get the EIN, you file one IRS form &mdash; <strong>Form SS-4</strong>. Review it, then file.</p>';
+  var html = '<div class="narrative-block"><p>To get the EIN, you file one IRS form: <strong>Form SS-4</strong>. Review it, then file.</p></div>';
   html += ss4Form(einFiled);
   if(!einFiled){
-    html += '<button class="btn-continue btn-block" onclick="fileEin()">File Form SS-4 with the IRS &rarr;</button>';
+    html += '<button class="btn-continue btn-block" onclick="fileEin()">File Form SS-4 with the IRS</button>';
   } else {
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="badge-check" class="licon"></i> EIN issued</div>'+
-      '<p>The IRS issues <strong>'+esc(llcName())+'</strong> its own number &mdash; <span class="mono">EIN 88-3729104</span>, filed June 1, 2026. The entity now has an identity to the outside world, separate from your personal one.</p></div>';
-    html += '<p class="callout"><strong>One small irony (an aside, not the lesson):</strong> line 9a reads &ldquo;disregarded entity&rdquo; &mdash; for <em>income tax</em> the IRS looks back <em>through</em> the LLC to you, even though it now holds its own number for everything else. Different lines, drawn for different purposes.</p>';
-    html += docsButton();
-    html += '<button class="btn-continue btn-block" onclick="nav(\'24-3-account.html\')">Now open the account &rarr;</button>';
+      '<p>The IRS issues an EIN for '+esc(llcName())+': <span class="mono">EIN 88-3729104</span>, filed June 1, 2026. Now the LLC has an identifying number the bank can use. You no longer need to use your Social Security number to open accounts for the business.</p></div>';
+    html += '<button class="btn-continue btn-block" onclick="nav(\'24-3-account.html\')">Continue &rarr;</button>';
   }
   document.getElementById('einArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();
