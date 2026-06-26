@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 4: The Entity's Own Number &middot; The Statements</title>
+  <title>Tutorial 4: The Entity's Own Number &middot; The Account Statements</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -24,12 +24,12 @@
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">The Statements</div>
+    <div class="phase-title" id="phaseTitle">The Account Statements</div>
 
     <!-- ===== statements ===== -->
     <div class="phase active" id="phase-statements">
       <div class="narrative-block">
-        <p>The split isn&rsquo;t just a story &mdash; here&rsquo;s the paper. Four statements close out the month: the entity&rsquo;s <strong>own</strong> accounts, and your personal ones now that the business is out of them.</p>
+        <p>Now you can see the split in the account statements. The LLC has its own checking account and card, and your personal accounts show what stayed personal.</p>
       </div>
       <div id="statementsArea"></div>
     </div>
@@ -149,40 +149,40 @@ function stmtInner(cfg){
     '</tbody></table></div>'+note+'</div>';
 }
 function stmtCard(cfg){
-  return '<div class="doc-modal" style="max-width:none;margin:0 0 14px">'+stmtInner(cfg)+'</div>';
+  return '<div class="doc-modal" style="max-width:none;margin:0 0 20px">'+stmtInner(cfg)+'</div>';
 }
 function stmtConfigs(en){
   return {
     ss4:null,
-    llcbank:{ heading:"Bank Statement #1 &mdash; the entity&rsquo;s own account", bank:"Elm City Bank",
-      who:[ en+" &middot; Business checking &middot; &bull;&bull;&bull;&bull; 2050", "EIN 88-3729104" ],
+    llcbank:{ heading:"Bank Statement", bank:"Elm City Bank",
+      who:[ en+" &middot; Business Checking &middot; &bull;&bull;&bull;&bull; 2050", "EIN 88-3729104" ],
       box:["Period: June 1&ndash;30, 2026","Beginning: $0.00","Ending: $500.00"],
       head:["Date","Description","Dep.","W/d","Balance"],
       rows:[ { cells:["06/01","Account opened","&mdash;","&mdash;","0.00"] },
         { cells:["06/01","Opening deposit &mdash; member capital contribution",{v:"500.00",tone:"pos"},"&mdash;","500.00"] },
         { cells:["","Ending balance","500.00","&mdash;","500.00"], total:true } ],
-      note:"The entity&rsquo;s first bank account &mdash; its <em>own</em> name and EIN. The <strong>$500 opening deposit is your capital contribution</strong> (Cash 0&rarr;500; members&rsquo; capital +500). The business&rsquo;s money runs through this account now." },
-    llccard:{ heading:"Card Statement #1 &mdash; the entity&rsquo;s own card", bank:"Harborline Visa",
-      who:[ en+" &middot; Business card &middot; &bull;&bull;&bull;&bull; 4180" ],
+      note:"The LLC&rsquo;s first bank account is now open in the Company&rsquo;s name, using its EIN. The $500 opening deposit is a cash contribution: Cash increases by $500, and the equity side increases by $500." },
+    llccard:{ heading:"Card Statement", bank:"Harborline Visa",
+      who:[ en+" &middot; Business Card &middot; &bull;&bull;&bull;&bull; 4180" ],
       box:["Period: June 1&ndash;30, 2026","Previous: $0.00","New balance: $1,230.00"],
       head:["Date","Description","Amount"],
       rows:[ { cells:["06/01","Balance transfer &mdash; business charges from personal card (&bull;&bull;&bull;&bull; 3902)","1,230.00"] },
         { cells:["","New balance","1,230.00"], total:true } ],
-      note:"The business charges that rode your personal card, now on the LLC&rsquo;s <em>own</em> card. The <strong>$1,230 was transferred over</strong> &mdash; the same balance the LLC assumed at formation, now in the Company&rsquo;s name. The $230 personal portion stayed on your card." },
-    perbank:{ heading:"Personal checking &mdash; after the split", bank:"Elm City Bank",
-      who:[ "Personal checking &middot; &bull;&bull;&bull;&bull; 8814" ],
+      note:"The $1,230 business credit-card balance is now on the LLC&rsquo;s own card. This is the same credit-card liability already recorded for the business; the amount stays $1,230. The $230 personal portion stays on your personal card." },
+    perbank:{ heading:"Bank Statement", bank:"Elm City Bank",
+      who:[ "Personal Checking &middot; &bull;&bull;&bull;&bull; 8814" ],
       box:["Period: June 1&ndash;30, 2026","Beginning: $3,274.00","Ending: $2,774.00"],
       head:["Date","Description","Dep.","W/d","Balance"],
       rows:[ { cells:["06/01","Transfer to "+en+" &mdash; business account","&mdash;",{v:"500.00",tone:"neg"},"2,774.00"] },
         { cells:["","Ending balance","&mdash;","500.00","2,774.00"], total:true } ],
-      note:"Your personal checking, after the split &mdash; the <strong>$500 you moved out seeded the LLC&rsquo;s account</strong>. Personal only from here." },
-    percard:{ heading:"Personal card &mdash; after the split", bank:"Harborline Visa",
-      who:[ "Personal card &middot; &bull;&bull;&bull;&bull; 3902" ],
+      note:"Your personal checking account after the split. The $500 moved into the LLC&rsquo;s bank account as a cash contribution. Going forward, business cash should run through the LLC account." },
+    percard:{ heading:"Card Statement", bank:"Harborline Visa",
+      who:[ "Personal Card &middot; &bull;&bull;&bull;&bull; 3902" ],
       box:["Period: June 1&ndash;30, 2026","Previous: $1,460.00","New balance: $230.00"],
       head:["Date","Description","Amount"],
       rows:[ { cells:["06/01","Balance transfer &mdash; business charges to "+en+" card",{v:"(1,230.00)",tone:"neg"}] },
         { cells:["","New balance (personal)","230.00"], total:true } ],
-      note:"Your personal card, after the split. The <strong>$1,230 business charges moved to the LLC card</strong>; the <strong>$230</strong> left was always personal. <strong>Co-mingling, ended.</strong>" }
+      note:"Your personal card after the split. The $1,230 business credit-card balance is now on the LLC card; the $230 remaining balance is personal. Going forward, business card charges should run through the LLC card." }
   };
 }
 
@@ -214,10 +214,8 @@ function renderDocBody(){
     }).join('');
     body = '<div style="font-weight:700;color:var(--primary);margin-bottom:12px;font-family:Inter,sans-serif"><i data-lucide="file-text" class="licon"></i> Source documents</div>'+items;
   } else {
-    var cur = getAcctDocs(en).find(function(d){ return d.id===docView; });
     var doc = (docView==='ss4') ? ss4DocInner() : stmtInner(stmtConfigs(en)[docView]);
-    body = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><button onclick="backDocs()" style="border:0;background:transparent;color:var(--primary);cursor:pointer;font-family:inherit;font-size:var(--font-s)">&larr; Documents</button>'+
-      '<span style="font-weight:700;color:var(--primary);font-family:Inter,sans-serif">'+(cur?cur.label:'')+'</span></div>'+doc;
+    body = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><button onclick="backDocs()" style="border:0;background:transparent;color:var(--primary);cursor:pointer;font-family:inherit;font-size:var(--font-s)">&larr; Documents</button></div>'+doc;
   }
   document.getElementById('docBody').innerHTML = body;
   if(window.lucide) lucide.createIcons();
@@ -227,19 +225,18 @@ function renderDocBody(){
 function renderStatements(){
   var en = esc(llcName());
   var cfgs = stmtConfigs(en);
-  var html = '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary);margin:8px 0">The LLC&rsquo;s own accounts</div>';
+  var html = '<div style="font-size:var(--font-m);font-weight:800;color:var(--primary);margin:0 0 20px;padding-bottom:6px;border-bottom:2px solid var(--primary)">The LLC&rsquo;s Own Accounts: Bank Statement and Card Statement</div>';
   html += stmtCard(cfgs.llcbank);
   html += stmtCard(cfgs.llccard);
-  html += '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;opacity:0.7;margin:14px 0 8px">Your personal accounts &mdash; after the split</div>';
+  html += '<div style="font-size:var(--font-m);font-weight:800;color:var(--primary);margin:20px 0 20px;padding-bottom:6px;border-bottom:2px solid var(--primary)">Your Personal Accounts After the Split: Bank Statement and Card Statement</div>';
   html += stmtCard(cfgs.perbank);
   html += stmtCard(cfgs.percard);
-  html += '<div class="insight-box"><div class="insight-label"><i data-lucide="scale" class="licon"></i> It all ties out</div>'+
-    '<p>Nothing was created or lost &mdash; each co-mingled account just split into a business half and a personal half:</p>'+
-    '<p style="margin-top:6px">Checking: LLC <span class="mono">$500</span> + personal <span class="mono">$2,774</span> = <span class="mono">$3,274</span> (your old balance)</p>'+
-    '<p>Card: LLC <span class="mono">$1,230</span> + personal <span class="mono">$230</span> = <span class="mono">$1,460</span> (your old balance)</p>'+
-    '<p style="margin-top:6px">The only thing new to the <em>LLC</em> is the <strong>$500</strong> you moved into its account &mdash; your capital contribution. On the LLC&rsquo;s books: Cash <span class="mono">0 &rarr; 500</span>, members&rsquo; capital <span class="mono">+500</span>.</p></div>';
-  html += docsButton();
-  html += '<button class="btn-continue btn-block" onclick="nav(\'24-5-complete.html\')">Finish up &rarr;</button>';
+  html += '<div class="insight-box"><div class="insight-label"><i data-lucide="scale" class="licon"></i> It All Ties Out</div>'+
+    '<p>The split did not make the old balances disappear. It separated what belonged in the LLC&rsquo;s accounts from what stayed personal.</p>'+
+    '<p style="margin-top:6px">Checking: LLC <span class="mono">$500</span> + personal <span class="mono">$2,774</span> = <span class="mono">$3,274</span>, the old checking balance.</p>'+
+    '<p>Card: LLC <span class="mono">$1,230</span> + personal <span class="mono">$230</span> = <span class="mono">$1,460</span>, the old card balance.</p>'+
+    '<p style="margin-top:6px">The one new amount in this sequence is the <strong>$500 cash contribution</strong>. On the LLC&rsquo;s books, Cash increases by $500, and the equity side increases by $500.</p></div>';
+  html += '<button class="btn-continue btn-block" style="margin-top:20px" onclick="nav(\'24-5-complete.html\')">Continue &rarr;</button>';
   document.getElementById('statementsArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
