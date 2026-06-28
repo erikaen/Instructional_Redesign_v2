@@ -142,7 +142,6 @@ function stmtInner(cfg){
   }).join('');
   var note = cfg.note ? '<div style="margin-top:12px;border-radius:8px;padding:10px 12px;background:#f6f6f4;border:1px dashed #d8d8d8;font-size:12px;color:#444">'+cfg.note+'</div>' : '';
   return '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">'+
-    '<div style="font-weight:700;font-size:15px;margin-bottom:8px">'+cfg.heading+'</div>'+
     '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:8px">'+
       '<div><div style="font-size:16px;font-weight:700;color:var(--primary)">'+cfg.bank+'</div>'+who+'</div>'+
       '<div style="border:1px solid #d8d8d8;border-radius:6px;padding:6px 10px;font-size:12px">'+box+'</div>'+
@@ -190,10 +189,10 @@ function stmtConfigs(en){
 function getAcctDocs(en){
   return [
     { id:'ss4',     label:'Form SS-4 (EIN Application)',                  sub: en },
-    { id:'llcbank', label:'Bank Statement #1 (The LLC&rsquo;s Checking Account)', sub:'Opening Deposit $500' },
-    { id:'llccard', label:'Card Statement #1 (The LLC&rsquo;s Card)',     sub:'Balance $1,230' },
-    { id:'perbank', label:'Personal Checking Account (After the Split)',          sub:'Ending $2,774' },
-    { id:'percard', label:'Personal Card (After the Split)',              sub:'Balance $230' }
+    { id:'llcbank', label:'Checking Account Statement (Business)', sub:'Opening Deposit $500' },
+    { id:'llccard', label:'Credit Card Statement (Business)',     sub:'Balance $1,230' },
+    { id:'perbank', label:'Checking Account Statement (Personal)',          sub:'Ending $2,774' },
+    { id:'percard', label:'Credit Card Statement (Personal)',              sub:'Balance $230' }
   ];
 }
 function docsButton(){
@@ -246,7 +245,7 @@ function renderAccount(){
   var tracker = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">';
   stepLabels.forEach(function(label, idx){
     var n = idx+1, cls, txt;
-    if(step>=n){ cls='tag-pill tag-cfs'; txt='&#10003; '+label; }
+    if(step>=n){ cls='tag-pill tag-cfs'; txt='&#10003; Step '+n+': '+label; }
     else if(step===n-1){ cls='tag-pill tag-is'; txt='&#9656; Step '+n+': '+label; }
     else { cls='tag-pill soon'; txt='Step '+n+': '+label; }
     tracker += '<span class="'+cls+'" style="flex:1 1 150px;text-align:center;padding:6px 10px;line-height:1.35">'+txt+'</span>';
@@ -266,26 +265,31 @@ function renderAccount(){
     llcInner = '<div style="font-size:var(--font-xs);font-style:italic;opacity:0.7">None Yet</div>';
   }
   var llcCol = '<div class="section-card"><div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary);margin-bottom:8px">The LLC&rsquo;s accounts</div>'+llcInner+'</div>';
-  var html = tracker + '<div class="main-grid two-col" style="margin-bottom:20px">'+personalCol+llcCol+'</div>';
+  var nextLabel = step===0 ? 'Open account in the LLC&rsquo;s name &rarr;'
+    : step===1 ? 'Move $500 into the LLC account &rarr;'
+    : step===2 ? 'Put business card balance on the LLC card &rarr;' : null;
 
-  /* ----- short step-specific explanation under the comparison ----- */
-  var explain = step===1 ? 'The LLC now has a bank account in its own name.'
-    : step===2 ? 'The $500 cash contribution is the one new amount in this sequence. Cash increases by $500, and the equity side increases by $500.'
+  /* ----- per-step instruction callout (under the tracker, above the action button) ----- */
+  var instruction =
+    step===0 ? 'First, open a checking account in the LLC&rsquo;s name. This gives the business a place for its own cash.'
+    : step===1 ? 'The LLC now has a bank account in its own name.<br><br>Next, move <strong>$500</strong> of your personal cash into the LLC&rsquo;s account. This is a <strong>cash contribution</strong>. It is the only new economic event in this sequence: the LLC&rsquo;s cash increases by $500, and the equity side increases by $500.'
+    : step===2 ? 'Finally, put the existing $1,230 business credit-card balance on the LLC&rsquo;s card. <strong>This does not create a new charge.</strong> It moves the already-recorded business credit-card balance out of your personal card and onto the LLC card. The $230 personal balance stays on your personal card.'
     : '';
-  if(explain){ html += '<p class="callout" style="margin-bottom:20px">'+explain+'</p>'; }
 
-  /* ----- next action, or completion ----- */
-  var nextLabel = step===0 ? 'Open the LLC&rsquo;s bank account'
-    : step===1 ? 'Move $500 in cash into the account'
-    : step===2 ? 'Move the business card to the LLC' : null;
+  var html = tracker;
+
   if(nextLabel){
+    /* instruction callout, then the action button, then the comparison */
+    html += '<p class="callout" style="margin-bottom:20px">'+instruction+'</p>';
     html += '<button class="btn-continue btn-block" onclick="advanceAccount()">'+nextLabel+'</button>';
+    html += '<div class="main-grid two-col" style="margin-top:20px">'+personalCol+llcCol+'</div>';
     html += docsButton();
   } else {
+    html += '<div class="main-grid two-col" style="margin-bottom:20px">'+personalCol+llcCol+'</div>';
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Co-mingling ended</div>'+
-      '<p><strong>The LLC now has its own bank account and card.</strong> Going forward, the business&rsquo;s money and charges no longer have to run through your personal accounts.</p></div>';
-    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="calculator" class="licon"></i> Only One Amount Changed</div>'+
-      '<p>Two moves changed the setup, but not the recorded amounts: getting the EIN, and moving the existing <span class="mono">$1,230</span> business card balance into the LLC&rsquo;s name. <strong>The one new amount was your $500 cash contribution.</strong> Cash increases from $0 to $500, and the equity side increases by $500. You&rsquo;ll lay out the full sheet next.</p></div>';
+      '<p>The LLC now has its own bank account and card. Going forward, the business&rsquo;s money and charges no longer have to run through your personal accounts.</p></div>';
+    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="calculator" class="licon"></i> Only one new amount</div>'+
+      '<p>Opening the account created a place for LLC cash. Moving the business credit-card balance changed where the already-recorded <span class="mono">$1,230</span> credit-card liability is carried. The one new amount was the $500 cash contribution: Cash increases by $500, and the equity side increases by $500.</p></div>';
     html += docsButton();
     html += '<button class="btn-continue btn-block" style="margin-top:20px" onclick="nav(\'24-4-statements.html\')">Continue &rarr;</button>';
   }
