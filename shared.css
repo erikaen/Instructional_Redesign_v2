@@ -2936,3 +2936,10 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .reason-badge.win { background: #1a2e1f; color: #5fc785; }
   .reason-badge.pair { background: #3a2f12; color: #ffe7a0; }
 }
+
+/* ----- Module 2 (Getting Formal) roomier block spacing -----
+   Sarah's Module 2 redesign uses slightly more breathing room below narrative and
+   dialog blocks. Scoped to the .m2-roomy wrapper so the base .narrative-block (16px)
+   and .dialog-box (12px) spacing stays unchanged for Modules 1, 3, 4, and 5. */
+.prework-wrap.m2-roomy .narrative-block { margin-bottom: 20px; }
+.prework-wrap.m2-roomy .dialog-box { margin-bottom: 20px; }
