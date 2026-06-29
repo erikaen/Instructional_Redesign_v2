@@ -120,12 +120,13 @@ function bsRow(label, m1, llc, opts){
   var rowBg = (compared && diff) ? 'background:var(--warn-bg);border-radius:3px;' : '';
   var top = opts.rule ? 'border-top:2px solid var(--border-strong);margin-top:2px;' : '';
   var rowWeight = opts.bold ? '700' : '400';
+  var pfx = opts.dollar ? '$' : '';
   var m1col = compared
-    ? '<span class="mono" style="width:70px;text-align:right;opacity:'+(diff?'0.8':'0.45')+'">'+m1+'</span>'
+    ? '<span class="mono" style="width:70px;text-align:right;opacity:'+(diff?'0.8':'0.45')+'">'+pfx+m1+'</span>'
     : '';
   var llcColor = (compared && diff) ? 'var(--accent)' : 'inherit';
   var llcWeight = (compared && diff) ? '700' : (opts.bold ? '700' : '400');
-  var llccol = '<span class="mono" style="width:70px;text-align:right;color:'+llcColor+';font-weight:'+llcWeight+'">'+llc+'</span>';
+  var llccol = '<span class="mono" style="width:70px;text-align:right;color:'+llcColor+';font-weight:'+llcWeight+'">'+pfx+llc+'</span>';
   return '<div style="display:flex;align-items:baseline;font-size:var(--font-s);padding:3px 4px;'+top+rowBg+'font-weight:'+rowWeight+'"><span style="flex:1">'+label+'</span>'+m1col+llccol+'</div>';
 }
 function buildSheet(){
@@ -137,15 +138,15 @@ function buildSheet(){
     h += '<div style="display:flex;font-size:var(--font-xs);text-transform:uppercase;letter-spacing:0.04em;opacity:0.6;margin-bottom:2px;padding:0 4px"><span style="flex:1"></span><span style="width:70px;text-align:right">Pre-LLC</span><span style="width:70px;text-align:right">LLC</span></div>';
   }
   h += sectionLabel('Assets');
-  assetRows.forEach(function(r){ h += bsRow(r[0], r[1], r[2], {}); });
-  h += bsRow('Total Assets','3,410','3,910',{bold:true,rule:true});
+  assetRows.forEach(function(r, i){ h += bsRow(r[0], r[1], r[2], {dollar: i===0}); });
+  h += bsRow('Total Assets','3,410','3,910',{bold:true,rule:true,dollar:true});
   h += sectionLabel('Liabilities');
-  h += bsRow('Credit card (business)','1,230','1,230',{});
+  h += bsRow('Credit card (business)','1,230','1,230',{dollar:true});
   h += bsRow('Customer advance &mdash; Smith','220','220',{});
-  h += bsRow('Total Liabilities','1,450','1,450',{bold:true,rule:true});
+  h += bsRow('Total Liabilities','1,450','1,450',{bold:true,rule:true,dollar:true});
   h += sectionLabel('Equity');
-  h += bsRow('Member&rsquo;s Capital','1,960','2,460',{});
-  h += bsRow('Total Equities','1,960','2,460',{bold:true,rule:true});
+  h += bsRow('Member&rsquo;s Capital','1,960','2,460',{dollar:true});
+  h += bsRow('Total Equities','1,960','2,460',{bold:true,rule:true,dollar:true});
   h += '</div>';
   return h;
 }
@@ -166,7 +167,7 @@ function renderCapstone(){
     html += '<div class="insight-box" style="margin-top:20px"><div class="insight-label"><i data-lucide="flag" class="licon"></i> The Formal Starting Point</div>'+
       '<p style="margin-bottom:8px">Before the LLC, the repair work was already something your books could describe: a set of assets, liabilities, and equities separated from your personal life for accounting purposes.</p>'+
       '<p style="margin-bottom:8px">The LLC <strong>did not create those records from nothing</strong>. What it did was give the repair work a <strong>formal legal structure around the business</strong>.</p>'+
-      '<p>After that setup, and after the $500 cash contribution, this balance sheet becomes the LLC&rsquo;s <strong>formal starting point going forward</strong>: total assets of $3,910, total liabilities of $1,450, and total equities of $2,460.</p></div>';
+      '<p>After forming the LLC, and after the $500 cash contribution, <strong>this balance sheet becomes the baseline your business carries forward</strong>: total assets of $3,910, total liabilities of $1,450, and total equities of $2,460.</p></div>';
     html += '<button class="btn-continue btn-block" onclick="nav(\'25-3-complete.html\')">Continue &rarr;</button>';
   }
   area.innerHTML = html;
