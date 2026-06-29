@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 3.1: Run the Season &middot; A Season Goes By</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1: Run the Season</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">A Season Goes By</div>
+
+    <!-- ===== welcome ===== -->
+    <div class="phase active" id="phase-welcome">
+      <div class="narrative-block">
+        <p>In Module 2 you made the repair work into a legal body: <strong>Bike Repair, LLC</strong>. The day it became formal, your books &mdash; <span class="mono">Bike-Repair.xlsx</span> &mdash; showed a single balance sheet, one snapshot of the new entity:</p>
+      </div>
+      <div id="openingBS"></div>
+      <div class="narrative-block">
+        <p>Then summer came. You kept your day job and worked the shop in the evenings and on weekends &mdash; part-time, but busy. Repairs brought money <strong>in</strong>. Parts and rent got <strong>used up</strong>. You bought a new tool and took some cash out for yourself. Beside each change, you jotted a short <strong>Reason</strong>, the way you learned to back in Module 1.</p>
+        <p>Now it&rsquo;s the end of August, and <strong>Anna</strong> &mdash; who set up your books when you formed the LLC &mdash; checks back in. <em>&ldquo;I set up your books,&rdquo;</em> she says. <em>&ldquo;Now let&rsquo;s read them. A season has gone by &mdash; let&rsquo;s see how the shop did.&rdquo;</em></p>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What you&rsquo;ll discover</div>
+        <ul class="bullet-list">
+          <li>How the shop&rsquo;s numbers looked after a full summer of repairs &mdash; and how that compares to the day you opened.</li>
+          <li>Why a single fresh snapshot, on its own, leaves the most important question unanswered.</li>
+          <li>What a whole season&rsquo;s worth of Reasons is quietly pushing you toward.</li>
+        </ul>
+      </div>
+      <button class="btn-continue btn-block" onclick="nav('31-2-work-the-season.html')">Open Bike-Repair.xlsx &rarr;</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary (shared across all phases of 3.1) ===== */
+var glossaryTerms = [
+  { term:"Members&rsquo; capital", def:"The residual for an LLC: Assets &minus; Liabilities. It is the definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $3,910 &minus; $1,450 = $2,460." },
+  { term:"Reason", def:"The short note you jot beside a change in the books to record <em>why</em> it happened. You started the practice in Module 1; over a whole season the Reasons pile up." },
+  { term:"Balance sheet", def:"A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the residual. It says where things stand, not how they got there." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== cross-phase navigation (each phase is its own file) ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== the opening balance sheet (June 1) — the full statement, every line ===== */
+function bsSection(t){ return '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary);margin:10px 0 2px">'+t+'</div>'; }
+function bsRow(label,val,opts){
+  opts=opts||{};
+  var top=opts.rule?'border-top:2px solid var(--border-strong);margin-top:2px;':'';
+  var w=opts.bold?'700':'400';
+  return '<div style="display:flex;align-items:baseline;font-size:var(--font-s);padding:3px 4px;'+top+'font-weight:'+w+'"><span style="flex:1">'+label+'</span><span class="mono" style="width:84px;text-align:right">'+val+'</span></div>';
+}
+function buildOpeningBS(){
+  var h='<div class="section-card">';
+  h+='<div style="text-align:center;font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary)">Bike Repair, LLC</div>';
+  h+='<div style="text-align:center;font-size:var(--font-xs);opacity:0.65;margin-bottom:10px">Opening balance sheet &middot; June 1, 2026</div>';
+  h+=bsSection('Assets');
+  [['Cash','$500'],['Right of Use','$650'],['Parts','$200'],['Tools &amp; Repair Equipment','$1,200'],['Fixtures','$750'],['Office Equipment','$610']].forEach(function(r){ h+=bsRow(r[0],r[1],{}); });
+  h+=bsRow('Total assets','$3,910',{bold:true,rule:true});
+  h+=bsSection('Liabilities');
+  h+=bsRow('Credit Card','$1,230',{});
+  h+=bsRow('Unearned Revenue','$220',{});
+  h+=bsRow('Total liabilities','$1,450',{bold:true,rule:true});
+  h+=bsSection('Members&rsquo; capital');
+  h+=bsRow('Contributed Capital','$2,290',{});
+  h+=bsRow('Retained Earnings','$170',{});
+  h+=bsRow('Total members&rsquo; capital (Assets &minus; Liabilities)','$2,460',{bold:true,rule:true});
+  h+='</div>';
+  document.getElementById('openingBS').innerHTML=h;
+}
+buildOpeningBS();
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+</script>
+</body>
+</html>

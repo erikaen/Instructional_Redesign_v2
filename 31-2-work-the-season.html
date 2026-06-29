@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 3.1: Run the Season &middot; The Unadjusted Trial Balance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1: Run the Season</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Unadjusted Trial Balance</div>
+
+    <div id="anna"></div>
+    <div id="tb"></div>
+    <div id="extra"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Job-ticket modal ===== -->
+<div class="glossary-overlay" id="ticketOverlay" onclick="if(event.target===this) closeTicket()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="receipt" class="licon"></i> Job ticket</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeTicket()">&times;</button>
+    </div>
+    <div class="glossary-list" id="ticketBody"></div>
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nf(v){ return v ? v.toLocaleString('en-US') : ''; }
+
+/* ===== state =====
+   phase 0 = unadjusted trial balance · 1 = A/R recognized · 2 = Smith earned (mirror) */
+var phase=0;
+
+/* ===== the trial balance, by phase ===== */
+function tbData(){
+  var revenue = phase>=2 ? 6020 : (phase>=1 ? 5800 : 5500);
+  var ar      = phase>=1 ? 300 : 0;
+  var unearned= phase>=2 ? 0 : 220;
+  var rows = [
+    { name:'Cash', dr:620 },
+    { name:'Accounts Receivable', dr:ar, hot:(phase===1) },
+    { name:'Right of Use', dr:2600, faint:true },
+    { name:'Parts', dr:1400, faint:true },
+    { name:'Tools &amp; Repair Equipment', dr:1600, faint:true },
+    { name:'Fixtures', dr:750 },
+    { name:'Office Equipment', dr:610, faint:true },
+    { name:'Owner&rsquo;s Draw', dr:600 },
+    { name:'Unearned Revenue', cr:unearned, hot:(phase===2) },
+    { name:'Contributed Capital', cr:2290 },
+    { name:'Retained Earnings', cr:170 },
+    { name:'Sales (Revenue)', cr:revenue, hot:(phase>=1) }
+  ].filter(function(r){ return !(r.name==='Accounts Receivable' && phase===0); });
+  return rows;
+}
+function tbRow(r){
+  var hot = r.hot ? 'background:var(--warn-bg);border-radius:4px;' : '';
+  var faint = r.faint ? 'opacity:.6;' : '';
+  return '<div style="display:flex;align-items:baseline;font-size:var(--font-s);padding:4px 6px;'+hot+faint+'">'+
+    '<span style="flex:1">'+r.name+(r.faint?' <span style="font-size:var(--font-xs);opacity:.8">&middot; not yet used up</span>':'')+'</span>'+
+    '<span class="mono" style="width:88px;text-align:right">'+(r.dr?'$'+nf(r.dr):'')+'</span>'+
+    '<span class="mono" style="width:88px;text-align:right">'+(r.cr?'$'+nf(r.cr):'')+'</span></div>';
+}
+function renderTB(){
+  var rows=tbData();
+  var tot = rows.reduce(function(s,r){ return s+(r.dr||0); },0);
+  var h='<div class="section-card">';
+  h+='<div style="text-align:center;font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary)">Bike Repair, LLC</div>';
+  h+='<div style="text-align:center;font-size:var(--font-xs);opacity:0.65;margin-bottom:10px">'+(phase===0?'Unadjusted ':'')+'Trial balance &middot; August 31, 2026</div>';
+  h+='<div style="display:flex;font-size:var(--font-xs);text-transform:uppercase;letter-spacing:0.04em;opacity:.6;padding:0 6px 2px"><span style="flex:1">Account</span><span style="width:88px;text-align:right">Debit</span><span style="width:88px;text-align:right">Credit</span></div>';
+  rows.forEach(function(r){ h+=tbRow(r); });
+  h+='<div style="display:flex;align-items:baseline;font-size:var(--font-s);font-weight:700;padding:5px 6px;border-top:2px solid var(--border-strong);margin-top:2px;"><span style="flex:1">'+(phase===0?'Balanced':'Still balanced')+'</span><span class="mono" style="width:88px;text-align:right">$'+nf(tot)+'</span><span class="mono" style="width:88px;text-align:right">$'+nf(tot)+'</span></div>';
+  h+='</div>';
+  document.getElementById('tb').innerHTML=h;
+}
+
+/* ===== the two billed jobs — the source of the receivable (phase 1) ===== */
+function billedPanel(){
+  if(phase!==1){ document.getElementById('extra').innerHTML=''; return; }
+  var billed = BR_JOBS.filter(function(j){ return j.pay.indexOf('account')>=0; });
+  var h='<div class="section-card"><div class="card-title">The work you billed</div><div class="cash-group">';
+  billed.forEach(function(j){
+    h+='<div class="cash-line" onclick="openTicket(\''+j.id+'\')" style="cursor:pointer;"><span><i data-lucide="file-text" class="licon"></i> '+j.date+' &middot; '+j.work+' &middot; <span style="opacity:.7">'+j.customer+'</span> '+(j.collected?'<span class="stmt-tag">collected</span>':'<span class="stmt-tag" style="border-color:var(--error-text);color:var(--error-text)">outstanding</span>')+'</span><span class="cash-line-amt">$'+nf(j.charge)+'</span></div>';
+  });
+  h+='</div><p class="prose" style="font-size:var(--font-xs);opacity:.75;margin:8px 4px 0">$500 collected was already booked. The <strong>$300 outstanding</strong> is the receivable &mdash; earned, not yet in hand.</p></div>';
+  document.getElementById('extra').innerHTML=h;
+}
+
+/* ===== controls (guided reveal) ===== */
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+function renderControls(){
+  var a,c;
+  if(phase===0){
+    a="The whole quarter is recorded, and here&rsquo;s the <strong>trial balance</strong> &mdash; every account, debits in one column, credits in the other. They&rsquo;re equal: <strong>$8,180 = $8,180</strong>. But that only proves the bookkeeping is internally consistent &mdash; not that the books are <em>complete</em>. Look at <strong>Sales, $5,500</strong>: that&rsquo;s every dollar that <em>came in</em>. Is it every dollar you <em>earned</em>?";
+    c='<button class="btn-continue btn-block" onclick="toPhase(1)">Check the work you billed &rarr;</button>';
+  } else if(phase===1){
+    a="You finished <strong>$800</strong> of repairs <em>on account</em>. <strong>$500</strong> came in over the summer and you booked it. But <strong>$300</strong> is still owed &mdash; the work is done, the parts are gone, only the cash hasn&rsquo;t arrived. It feels wrong to call that revenue with nothing in hand. But revenue is about the <em>work</em>, not the cash, and the work is finished. So recognize it: <strong>Sales up $300</strong>, and a new asset &mdash; <strong>Accounts Receivable $300</strong>, your customers&rsquo; promise to pay.";
+    c='<button class="btn-continue btn-block" onclick="toPhase(2)">Now the mirror image &rarr;</button>';
+  } else {
+    a="<strong>Smith</strong> is the exact opposite. He paid <strong>$220</strong> up front, last period. You had the cash &mdash; but you&rsquo;d done no work and used no parts, so it wasn&rsquo;t revenue: it sat as <strong>Unearned Revenue</strong>, a liability, because you owed him a frame. This season you built it. Now it&rsquo;s <em>earned</em>: <strong>Sales up $220</strong>, <strong>Unearned Revenue down to $0</strong>.";
+    c=insightBox('Revenue follows the work, not the cash',
+      '<p><strong>Accounts Receivable</strong> &mdash; earned, not yet collected. <strong>Unearned Revenue</strong> &mdash; collected, not yet earned. The cash and the earning rarely fall on the same day; revenue tracks the <em>earning</em>.</p>') +
+      '<div class="next-phase-msg" style="margin-top:10px;">Two judgments made. The books still carry <strong>Parts</strong>, <strong>Right of Use</strong>, and the <strong>equipment</strong> as if nothing&rsquo;s been used up &mdash; those adjustments, and the trickiest one, <strong>depreciation</strong>, come next (Tutorials 3.2&ndash;3.3).</div>';
+  }
+  document.getElementById('anna').innerHTML=annaBox(a);
+  document.getElementById('controls').innerHTML=c;
+}
+function toPhase(p){ playSuccess(); phase=p; render(); window.scrollTo(0,0); }
+function render(){ renderTB(); billedPanel(); renderControls(); if(window.lucide) lucide.createIcons(); }
+
+/* ===== job-ticket modal ===== */
+function openTicket(id){
+  playClick();
+  var j=BR_JOBS.filter(function(x){return x.id===id;})[0]; if(!j) return;
+  var h='<div class="glossary-entry"><div class="glossary-entry-term">'+j.work+'</div><div class="glossary-entry-def"><span class="mono">'+j.id+'</span> &middot; '+j.date+', 2026 &middot; '+j.customer+'</div></div>';
+  h+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Parts used &mdash; '+j.parts+'</div><div class="xl-v">$'+nf(j.partsCost)+'</div></div>';
+  h+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Amount charged</div><div class="xl-v">$'+nf(j.charge)+'</div></div>';
+  h+='<div class="glossary-entry"><div class="glossary-entry-def"><strong>Payment:</strong> '+j.pay+(j.collected?' &middot; collected':' &middot; <span class="stmt-with">outstanding</span>')+'</div></div>';
+  if(j.note) h+='<div class="glossary-entry"><div class="glossary-entry-def"><em>'+j.note+'</em></div></div>';
+  document.getElementById('ticketBody').innerHTML=h;
+  document.getElementById('ticketOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeTicket(){ document.getElementById('ticketOverlay').classList.remove('open'); }
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Trial balance', def:'A list of every account&rsquo;s balance, debits in one column and credits in the other. Equal totals prove the bookkeeping is internally consistent &mdash; not that every earning and expiry has been recognized.' },
+  { term:'Accounts Receivable', def:'A customer&rsquo;s promise to pay for work already done &mdash; an asset. Revenue is earned when the work is finished, even before the cash arrives.' },
+  { term:'Unearned Revenue', def:'Cash a customer paid before you did the work &mdash; a liability (you owe the work). It becomes revenue only once the work is done.' },
+  { term:'Recognize', def:'To record an earning or a cost in the period it belongs to &mdash; tied to the <em>work</em>, not the movement of cash.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeTicket(); } });
+
+/* ===== init ===== */
+render();
+</script>
+</body>
+</html>
