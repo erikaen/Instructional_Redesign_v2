@@ -44,15 +44,16 @@
 window.WB_PHASE = 'crossout';
 window.WB_WC_ANSWERED = true;
 
-/* All 23 reasons in chronological order — the cumulative state at the end of walk-cash */
+/* All 23 reasons in chronological order — the cumulative state at the end of walk-liab.
+   New phase order: walks 2-6 (equipment → rou) create 12, walk-cash creates 11 (v's + smith + pay1/pay2 + plug),
+   walk-liab adds no new reasons (its rows are all side-2 reuses that just add ⟷ badges). */
 var r3Created = [
   'e_stand','e_tools','e_comp','e_wash','e_tru','e_gear',
   'e_laptop',
   'e_parts','e_partsused',
   'e_fix',
   'e_rent','e_rentused',
-  'e_smith','e_pay1','e_pay2',
-  'e_v1','e_v2','e_v3','e_v4','e_v5','e_v6','e_v7',
+  'e_v1','e_v2','e_v3','e_v4','e_pay1','e_v5','e_smith','e_v6','e_v7','e_pay2',
   'e_plug'
 ];
 /* 11 paired reasons — both sides have been recorded across walk-* phases */
