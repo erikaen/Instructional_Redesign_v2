@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1.4: Keeping the Reasons &middot; Walk the Reasons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Walk the Reasons</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+    </div>
+
+    <div id="walkAnna"></div>
+
+    <!-- two windows of the same workbook: Assets | Reasons -->
+    <div class="main-grid two-col" style="margin-bottom:12px;">
+      <div id="paneLeft"></div>
+      <div id="paneRight"></div>
+    </div>
+
+    <div id="walkControls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Receipt modal (reuses the glossary overlay shell) ===== -->
+<div class="glossary-overlay" id="receiptOverlay" onclick="if(event.target===this) closeReceipt()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="receipt" class="licon"></i> <span id="receiptKind">Receipt</span></div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeReceipt()">&times;</button>
+    </div>
+    <div class="glossary-list" id="receiptBody"></div>
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== formatters ===== */
+function dol(v){ return (v<0?'−$':'$')+Math.abs(v).toLocaleString('en-US'); }
+function signed(v){ var cls=v>=0?'stmt-dep':'stmt-with'; return '<span class="'+cls+'">'+(v>=0?'+':'−')+'$'+Math.abs(v).toLocaleString('en-US')+'</span>'; }
+function catLabel(cat){ return cat==='RIGHT OF USE' ? 'Right of Use' : (cat.charAt(0)+cat.slice(1).toLowerCase()); }
+
+/* ===== Assets snapshot (Module 1 plain labels; cash folded in at the 1.4 beat) =====
+   Walk categories carry item-level detail with each item's source + receipt group. */
+var ASSETS = [
+  { cat:'EQUIPMENT', amount:1200, items:[
+      { name:'Park Tool repair stand', amt:200, source:'cash', group:'g_stand' },
+      { name:'Cone wrench set', amt:65, source:'card', group:'g_tools' },
+      { name:'Torque wrench', amt:95, source:'card', group:'g_tools' },
+      { name:'Hex / Allen key set', amt:45, source:'card', group:'g_tools' },
+      { name:'Cable cutters', amt:40, source:'card', group:'g_tools' },
+      { name:'Chain breaker', amt:35, source:'card', group:'g_tools' },
+      { name:'Tire levers', amt:20, source:'card', group:'g_tools' },
+      { name:'Air compressor', amt:180, source:'card', group:'g_compressor' },
+      { name:'Parts washer', amt:130, source:'card', group:'g_washer' },
+      { name:'Wheel-truing stand', amt:170, source:'card', group:'g_truing' },
+      { name:'Bench grinder', amt:90, source:'home', group:'g_gear' },
+      { name:'Headset press', amt:70, source:'home', group:'g_gear' },
+      { name:'Shop vacuum', amt:60, source:'home', group:'g_gear' } ] },
+  { cat:'COMPUTER EQUIPMENT', amount:610, items:[
+      { name:'Laptop', amt:610, source:'home', group:'g_laptop' } ] },
+  { cat:'SUPPLIES', amount:200, items:[ { name:'Parts on the shelf', amt:200 } ] },
+  { cat:'FIXTURES', amount:750, items:[
+      { name:'Desk', amt:250, source:'card', group:'g_fixtures' },
+      { name:'Shelving units', amt:200, source:'card', group:'g_fixtures' },
+      { name:'Display rack', amt:180, source:'card', group:'g_fixtures' },
+      { name:'Pegboard + hooks', amt:120, source:'card', group:'g_fixtures' } ] },
+  { cat:'RIGHT OF USE', amount:650, items:[ { name:'The lease’s last month, prepaid', amt:650 } ] },
+  { cat:'CASH', amount:0, items:[ { name:'Repair cash on hand (May 31)', amt:0 } ] }
+];
+var ASSETS_TOTAL = ASSETS.reduce(function(s,c){ return s+c.amount; },0); // 3410
+var CAT_BY_KEY = {}; ASSETS.forEach(function(c){ CAT_BY_KEY[c.cat]=c; });
+var ITEM_INDEX = {}; ASSETS.forEach(function(c){ c.items.forEach(function(it){ ITEM_INDEX[it.name]={ it:it, cat:c.cat }; }); });
+
+var LIABS = [
+  { label:'Credit Card', note:'what you owe on the bike-repair card', amount:1230 },
+  { label:'Smith’s deposit', note:'paid $220 up front for a frame, not built yet', amount:220 }
+];
+var LIABS_TOTAL = LIABS.reduce(function(s,l){ return s+l.amount; },0); // 1450
+
+/* receipts (the evidence behind each item) */
+var GROUPS = {
+  g_stand: { kind:'receipt', vendor:'Cyclesport Supply', meta:'Sales Receipt #SR-4471 · May 3, 2026', paid:'Personal debit card •••• 6620', total:200, items:[{name:'Park Tool PRS-25 Repair Stand', amt:200}] },
+  g_tools: { kind:'receipt', vendor:'Cyclesport Supply', meta:'Sales Receipt #SR-4488 · May 5, 2026', paid:'Harborline Visa •••• 3902', total:300, items:[{name:'Cone wrench set', amt:65},{name:'Torque wrench', amt:95},{name:'Hex / Allen key set', amt:45},{name:'Cable cutters', amt:40},{name:'Chain breaker', amt:35},{name:'Tire levers', amt:20}] },
+  g_compressor: { kind:'receipt', vendor:'Compressor Depot', meta:'Sales Receipt #CD-2208 · May 8, 2026', paid:'Harborline Visa •••• 3902', total:180, items:[{name:'Portable air compressor — 6 gal', amt:180}] },
+  g_washer: { kind:'receipt', vendor:'Industrial Supply', meta:'Invoice #IS-30742 · May 10, 2026', paid:'Harborline Visa •••• 3902', total:130, items:[{name:'Parts washer — 20-gal solvent tank', amt:130}] },
+  g_truing: { kind:'receipt', vendor:'Cyclesport Supply', meta:'Sales Receipt #SR-4502 · May 12, 2026', paid:'Harborline Visa •••• 3902', total:170, items:[{name:'Wheel-truing stand — shop grade', amt:170}] },
+  g_gear: { kind:'ebay', vendor:'eBay — comparable sold listings', meta:'Pre-owned · valued by market comp', paid:'Brought from home — no purchase', total:220, items:[{name:'Bench grinder', amt:90},{name:'Headset press', amt:70},{name:'Shop vacuum', amt:60}] },
+  g_laptop: { kind:'ebay', vendor:'eBay — comparable sold listings', meta:'Pre-owned · valued by market comp', paid:'Brought from home — no purchase', total:610, items:[{name:'Laptop (used)', amt:610}] },
+  g_fixtures: { kind:'receipt', vendor:'Workspace Outfitters', meta:'Invoice #WO-20518 · May 5, 2026', paid:'Harborline Visa •••• 3902', total:750, items:[{name:'Work desk', amt:250},{name:'Shelving units (×2)', amt:200},{name:'Display rack', amt:180},{name:'Pegboard + hooks', amt:120}] }
+};
+var SOURCE_LABEL = { card:'On the card', cash:'Paid cash (debit)', home:'Brought from home' };
+
+/* per-item reason text (each piece goes in on its own) */
+function itemReasonText(it){
+  var nm = it.name.toLowerCase();
+  if(it.source==='card') return 'Bought the '+nm+' for '+dol(it.amt)+' on the card.';
+  if(it.source==='cash') return 'Bought the '+nm+' for '+dol(it.amt)+' (debit — straight from the bank).';
+  return 'Brought the '+nm+' from home ('+dol(it.amt)+').';
+}
+
+/* ===== the walk: a sequence of categories (acquisition categories built so far) ===== */
+var WALK_CATS = ['EQUIPMENT','COMPUTER EQUIPMENT','FIXTURES'];
+var CAT_ANNA = {
+  'EQUIPMENT':"There&rsquo;s your new <strong>Reasons</strong> tab &mdash; I opened it in a <em>second window</em>, side by side, so a reason always sits next to the change it explains. Go down your <strong>Equipment</strong> list and record each piece, one at a time: click an item and say <em>how it came in</em>. The receipt is the clue.",
+  'COMPUTER EQUIPMENT':"Next, your <strong>computer</strong> &mdash; just the laptop. Same gesture: click it and say how it came in.",
+  'FIXTURES':"Now <strong>Fixtures</strong> &mdash; the desk, shelving, display, pegboard. Record each one the same way: how did it come in?"
+};
+var CAT_DONE_NOTE = {
+  'EQUIPMENT':"<strong>Equipment</strong> &mdash; thirteen items, thirteen reasons. Every line carries its <em>why</em>.",
+  'COMPUTER EQUIPMENT':"The <strong>laptop</strong> &mdash; brought from home, valued by what a used one sells for.",
+  'FIXTURES':"<strong>Fixtures</strong> &mdash; all four bought together on the card."
+};
+
+/* ===== state ===== */
+var TABS = [{id:'assets',label:'Assets'},{id:'liabilities',label:'Liabilities'},{id:'reasons',label:'Reasons',isNew:true}];
+var paneTab = { left:'assets', right:'reasons' };
+var catIndex = 0;
+var assetsOpen = { EQUIPMENT:true };
+var recorded = {};        // item name -> source
+var reasonsCreated = [];  // item names, in recorded order
+var activeItem = null;
+var attempts = {};
+var nudge = null;
+var autoActive = false;
+
+function activeCat(){ return catIndex < WALK_CATS.length ? WALK_CATS[catIndex] : null; }
+function activeItems(){ var k=activeCat(); return k ? CAT_BY_KEY[k].items : []; }
+function catDone(catKey){ return CAT_BY_KEY[catKey].items.every(function(it){ return recorded[it.name]; }); }
+
+/* ===== shared builders ===== */
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+/* ===== sheets ===== */
+function assetsSheet(){
+  var act = activeCat();
+  var html='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Asset</div><div class="xl-v">Value</div></div>';
+  ASSETS.forEach(function(c,i){
+    var open=!!assetsOpen[c.cat];
+    var done = WALK_CATS.indexOf(c.cat)>=0 && catDone(c.cat);
+    var lbl = catLabel(c.cat) + (done?' <span class="stmt-dep">&#10003;</span>':'');
+    html+='<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\''+c.cat+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+lbl+'</div><div class="xl-v">'+dol(c.amount)+'</div></div>';
+    if(open) c.items.forEach(function(it){
+      var canClick = (c.cat===act) && it.source && !recorded[it.name] && !autoActive;
+      var sel = (activeItem===it.name);
+      var click = canClick ? ' onclick="clickItem(\''+it.name.replace(/'/g,"\\'")+'\')" style="cursor:pointer;"' : '';
+      var rec = recorded[it.name];
+      var tail = rec ? '<span class="stmt-dep">&#10003; '+SOURCE_LABEL[rec]+'</span>' : dol(it.amt);
+      html+='<div class="xl-row xl-item'+(sel?' selected':'')+'"'+click+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+tail+'</div></div>';
+    });
+  });
+  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL &mdash; what I have</div><div class="xl-v">'+dol(ASSETS_TOTAL)+'</div></div>';
+  return html;
+}
+function liabilitiesSheet(){
+  var html='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liability &mdash; what I owe</div><div class="xl-v">Amount</div></div>';
+  LIABS.forEach(function(l,i){ html+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+l.label+' &mdash; '+l.note+'</div><div class="xl-v">'+dol(l.amount)+'</div></div>'; });
+  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL &mdash; what I owe</div><div class="xl-v">'+dol(LIABS_TOTAL)+'</div></div>';
+  return html;
+}
+function reasonsSheet(){
+  var html='<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons &mdash; why each thing is here</div><div class="cash-sheet-sub">'+(reasonsCreated.length===0?'Click an item on the left &mdash; its reason lands here.':reasonsCreated.length+' so far')+'</div></div>';
+  if(reasonsCreated.length===0){ html+='<div class="bs-empty-msg">No reasons yet.</div>'; return html; }
+  html+='<div class="cash-group">';
+  reasonsCreated.forEach(function(name){
+    var rec=ITEM_INDEX[name]; var it=rec.it;
+    html+='<div class="cash-line"><span>'+itemReasonText(it)+' <span class="stmt-tag">'+catLabel(rec.cat)+'</span></span><span class="cash-line-amt">'+signed(it.amt)+'</span></div>';
+  });
+  html+='</div>';
+  return html;
+}
+
+/* ===== a pane = a window of the workbook, with tabs ===== */
+function renderPane(side){
+  var tab=paneTab[side];
+  var body = tab==='assets'?assetsSheet():(tab==='liabilities'?liabilitiesSheet():reasonsSheet());
+  var activeLabel=TABS.filter(function(t){return t.id===tab;})[0].label;
+  var tabsHtml=TABS.map(function(t){ return '<button class="xlwb-tab'+(t.id===tab?' active':'')+'" onclick="setPaneTab(\''+side+'\',\''+t.id+'\')">'+t.label+(t.isNew?' <span class="xl-new">new</span>':'')+'</button>'; }).join('');
+  return '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' sheet</span></div>'+
+    '<div>'+body+'</div>'+
+    '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
+}
+
+/* ===== controls ===== */
+function controls(){
+  var act = activeCat();
+  if(!act){
+    return insightBox('Every thing, its reason',
+      '<p>Equipment, the laptop, and the fixtures all carry their <em>why</em> now &mdash; on the card, the debit card, or brought from home. The Assets tab shows <em>what you have</em>; the Reasons tab shows <em>how each piece got here</em>.</p>') +
+      '<div class="next-phase-msg" style="margin-top:10px;">Next sub-walks &mdash; Supplies (bought &amp; used), Right of Use (paid &amp; used), Liabilities, and Cash (the 31-2 ledger, minus the $500 LLC deposit, with the $960 discovery) &mdash; come next.</div>';
+  }
+  var items = activeItems();
+  var recCount = items.filter(function(it){ return recorded[it.name]; }).length;
+  var allRec = recCount===items.length;
+  var trigger = recCount>=2 && !allRec && !activeItem && !autoActive;
+
+  if(allRec){
+    var nextLbl = catIndex<WALK_CATS.length-1 ? catLabel(WALK_CATS[catIndex+1]) : null;
+    var btn = nextLbl ? '<button class="btn-continue btn-block" onclick="advanceCat()">Next &mdash; '+nextLbl+' &rarr;</button>' : '<button class="btn-continue btn-block" onclick="advanceCat()">Finish the walk &rarr;</button>';
+    return insightBox('Done: '+catLabel(act), '<p>'+CAT_DONE_NOTE[act]+'</p>') + btn;
+  }
+  if(activeItem && !autoActive){
+    var it = items.filter(function(x){return x.name===activeItem;})[0];
+    var att = attempts[activeItem]||0;
+    var h='<div class="section-card"><div class="card-title">How did <span class="mono">'+it.name+'</span> ('+dol(it.amt)+') come in?</div>'+
+      '<div class="classify-row">'+
+        '<button class="classify-btn" onclick="answer(\'card\')">On the card</button>'+
+        '<button class="classify-btn" onclick="answer(\'cash\')">Paid cash (debit)</button>'+
+        '<button class="classify-btn" onclick="answer(\'home\')">Brought from home</button>'+
+        '<button class="btn-hint" onclick="openReceipt(\''+it.group+'\')"><i data-lucide="receipt" class="licon"></i> See the receipt</button>'+
+      '</div>';
+    if(nudge && nudge.item===activeItem && att<3){
+      h+='<div class="sort-msg warn">&ldquo;Hint '+att+'/2: '+(att===1?'open the receipt &mdash; it shows how this one was paid.':'a Visa charge means the card; a debit means cash; an eBay value with no receipt means you brought it from home.')+'&rdquo;</div>';
+    }
+    h+='</div>';
+    return h;
+  }
+  if(autoActive){ return '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Recording the rest&hellip;</div></div>'; }
+  if(trigger){
+    return '<div class="gate-armed"><p><strong>You&rsquo;ve got the rhythm.</strong> Record the rest of '+catLabel(act)+' the same way?</p><button class="btn-continue btn-block" onclick="recordRest()">Record the rest &rarr;</button></div>';
+  }
+  if(recCount>0){ return '<p class="prose" style="text-align:center;font-style:italic;opacity:.7;">Click the next item to record its reason.</p>'; }
+  return '<p class="prose" style="text-align:center;font-style:italic;opacity:.7;">Click an item in '+catLabel(act)+' to record its reason.</p>';
+}
+
+/* ===== render ===== */
+function render(){
+  var act = activeCat();
+  document.getElementById('walkAnna').innerHTML = act ? annaBox(CAT_ANNA[act]) : '';
+  document.getElementById('paneLeft').innerHTML = renderPane('left');
+  document.getElementById('paneRight').innerHTML = renderPane('right');
+  document.getElementById('walkControls').innerHTML = controls();
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== gesture ===== */
+function clickItem(name){ if(recorded[name]||autoActive) return; playClick(); paneTab.left='assets'; activeItem=name; nudge=null; render(); }
+function recordItem(name, source){ recorded[name]=source; if(reasonsCreated.indexOf(name)<0) reasonsCreated.push(name); }
+function answer(source){
+  if(!activeItem||autoActive) return;
+  var it = activeItems().filter(function(x){return x.name===activeItem;})[0];
+  if(source===it.source){ playSuccess(); recordItem(activeItem, source); activeItem=null; nudge=null; }
+  else {
+    var n=(attempts[activeItem]||0)+1; attempts[activeItem]=n; playNope();
+    if(n>=3){ recordItem(activeItem, it.source); activeItem=null; nudge=null; }
+    else nudge={item:activeItem, source:source};
+  }
+  render();
+}
+function recordRest(){
+  if(autoActive) return; playClick(); autoActive=true; activeItem=null; nudge=null; render();
+  var remaining = activeItems().filter(function(it){ return !recorded[it.name]; });
+  remaining.forEach(function(it,i){
+    setTimeout(function(){
+      recordItem(it.name, it.source);
+      if(i===remaining.length-1) setTimeout(function(){ autoActive=false; playSuccess(); render(); }, 220);
+      else render();
+    }, i*150);
+  });
+}
+function advanceCat(){
+  playClick();
+  if(activeCat()) assetsOpen[activeCat()]=false;
+  catIndex++;
+  if(activeCat()) assetsOpen[activeCat()]=true;
+  activeItem=null; nudge=null; autoActive=false;
+  window.scrollTo(0,0);
+  render();
+}
+
+/* ===== tabs / expand ===== */
+function setPaneTab(side,id){ playClick(); paneTab[side]=id; render(); }
+function toggleCat(cat){ playClick(); assetsOpen[cat]=!assetsOpen[cat]; render(); }
+
+/* ===== receipt modal ===== */
+function openReceipt(group){
+  playClick();
+  var g=GROUPS[group];
+  document.getElementById('receiptKind').textContent = g.kind==='ebay' ? 'Evidence — market value' : 'Evidence — receipt';
+  var html='<div class="glossary-entry"><div class="glossary-entry-term">'+g.vendor+'</div><div class="glossary-entry-def">'+g.meta+'</div></div>';
+  g.items.forEach(function(it){ html+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+dol(it.amt)+'</div></div>'; });
+  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Total</div><div class="xl-v">'+dol(g.total)+'</div></div>';
+  html+='<div class="glossary-entry"><div class="glossary-entry-def"><strong>Paid:</strong> '+g.paid+'</div></div>';
+  document.getElementById('receiptBody').innerHTML=html;
+  document.getElementById('receiptOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeReceipt(){ document.getElementById('receiptOverlay').classList.remove('open'); }
+
+/* ===== glossary ===== */
+var glossaryTerms=[
+  { term:'Reason', def:'The <em>why</em> behind a thing being on your list &mdash; how it came in. Each piece gets its own reason.' },
+  { term:'Receipt', def:'The evidence for a purchase &mdash; vendor, date, amount, and how it was paid. The clue for each reason.' },
+  { term:'Brought from home', def:'Gear you already owned and moved into the repair work &mdash; no purchase, valued by what a comparable one sells for.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeReceipt(); } });
+
+/* ===== init ===== */
+render();
+</script>
+</body>
+</html>

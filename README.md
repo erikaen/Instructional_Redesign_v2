@@ -20,44 +20,44 @@ compact `phase-title` header, segmented activities, "finished this section/modul
 and a shared glossary.
 
 ### Module 1, Tutorial 1 — Getting Organized
-1. `1-1-Getting-Started.html`
-2. `1-2-A-Rough-Week.html`
-3. `1-3-Sort-Your-Things.html`
-4. `1-4-The-Line-You-Drew.html`
-5. `1-5-Module-Complete.html`
+1. `11-1-Getting-Started.html`
+2. `11-2-A-Rough-Week.html`
+3. `11-3-Sort-Your-Things.html`
+4. `11-4-The-Line-You-Drew.html`
+5. `11-5-Module-Complete.html`
 
 ### Module 1, Tutorial 2 — Insurance and Maria
-1. `2-1-Meet-Maria.html`
-2. `2-2-Marias-Form.html`
-3. `2-3-The-Read-Back.html`
-4. `2-4-Module-Complete.html`
+1. `12-1-Meet-Maria.html`
+2. `12-2-Marias-Form.html`
+3. `12-3-The-Read-Back.html`
+4. `12-4-Module-Complete.html`
 
 ### Module 1, Tutorial 3 — Anna and the Bank Statement
-1. `3-1-Meet-Anna.html`
-2. `3-2-The-Bank-Statement.html`
-3. `3-3-The-Cash-Movement.html`
-4. `3-4-The-Customer-Payments.html`
-5. `3-5-The-Credit-Card-Statement.html`
-6. `3-6-The-Promises.html`
-7. `3-7-The-Rent-Payment.html`
-8. `3-8-Naming-the-Lists.html`
-9. `3-9-Module-Complete.html`
+1. `13-1-Meet-Anna.html`
+2. `13-2-The-Bank-Statement.html`
+3. `13-3-The-Cash-Movement.html`
+4. `13-4-The-Customer-Payments.html`
+5. `13-5-The-Credit-Card-Statement.html`
+6. `13-6-The-Promises.html`
+7. `13-7-The-Rent-Payment.html`
+8. `13-8-Naming-the-Lists.html`
+9. `13-9-Module-Complete.html`
 
 ### Module 1, Tutorial 4 — Keeping the Reasons
-1. `4-1-Why-Keep-the-Reasons.html`
-2. `4-2-Walk-the-Reasons.html`
-3. `4-3-Pairs-That-Cancel.html`
-4. `4-4-The-Net-Movers.html`
-5. `4-5-Module-Complete.html`
+1. `14-1-Why-Keep-the-Reasons.html`
+2. `14-2-Walk-the-Reasons.html`
+3. `14-3-Pairs-That-Cancel.html`
+4. `14-4-The-Net-Movers.html`
+5. `14-5-Module-Complete.html`
 
 ### Module 1, Tutorial 5 — Naming What You Built
-1. `5-1-Bringing-It-Together.html`
-2. `5-2-Find-the-Net.html`
-3. `5-3-The-Accounting-Identity.html`
-4. `5-4-The-Entity.html`
-5. `5-5-Net-Assets.html`
-6. `5-6-Double-Entry.html`
-7. `5-7-Module-Complete.html`
+1. `15-1-Bringing-It-Together.html`
+2. `15-2-Find-the-Net.html`
+3. `15-3-The-Accounting-Identity.html`
+4. `15-4-The-Entity.html`
+5. `15-5-Net-Assets.html`
+6. `15-6-Double-Entry.html`
+7. `15-7-Module-Complete.html`
 
 ### Module 2, Tutorial 1 — The Two You's
 1. `21-1-welcome.html`
