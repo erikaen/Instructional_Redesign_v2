@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activity 2.3: The Rules and the Two Signatures &middot; What You Put In</title>
+  <title>Tutorial 3: The Rules and the Two Signatures &middot; What You Put In</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,7 +16,7 @@
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Activity 2.3: The Rules and the Two Signatures</h1>
+        <h1>Tutorial 3: The Rules and the Two Signatures</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 3 of 6</p>
       </div>
       <div class="tut-header-actions">
@@ -29,9 +29,12 @@
     <!-- ===== contribution ===== -->
     <div class="phase active" id="phase-contribution">
       <div class="narrative-block">
-        <p>You read it in your agreement &mdash; <strong>Section 9, Capital Contributions</strong>. It says what you put into the Company. The answer is <em>everything</em>. <strong>Schedule A</strong> lists it at its existing book amounts. Move it in, and watch the totals.</p>
+        <p>You read it in your agreement: <strong>Section 9, Capital Contributions</strong>.</p>
+        <p>This section says what the Sole Member contributes to the Company. Here, it is the existing bike repair business: the assets and liabilities already recorded in the repair-work books.</p>
+        <p>The key phrase is <strong>existing book amounts</strong>. You are not starting over, and you are not making up new values. <strong>You are carrying the same recorded amounts into the LLC.</strong></p>
       </div>
-      <div class="callout" style="font-family:Georgia,'Times New Roman',serif"><strong>&sect;9.</strong> &ldquo;The Sole Member contributes the assets and liabilities of the bicycle-repair business, at their existing book amounts, as set forth on Schedule A.&rdquo;</div>
+      <div class="callout" style="font-family:Georgia,'Times New Roman',serif;margin-bottom:20px"><strong>&sect;9.</strong> &ldquo;The Sole Member contributes the assets and liabilities of the bicycle-repair business, at their existing book amounts, as set forth on Schedule A.&rdquo;</div>
+      <button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary);margin-bottom:20px" onclick="openDoc()"><i data-lucide="file-text" class="licon"></i> View my Operating Agreement</button>
       <div id="contributionArea"></div>
     </div>
 
@@ -46,6 +49,14 @@
       <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
     </div>
     <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<!-- ===== Document viewer overlay ===== -->
+<div class="doc-overlay" id="docOverlay" style="align-items:flex-start" onclick="if(event.target===this) closeDoc()">
+  <div class="doc-modal" id="docModal" style="max-width:640px;margin:32px auto">
+    <button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>
+    <div id="docBody"></div>
   </div>
 </div>
 
@@ -88,32 +99,148 @@ function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
 function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
 var assetRows = [['Cash','0'],['Prepaid rent','650'],['Parts on the shelf','200'],['Tools & equipment','1,200'],['Fixtures','750'],['Laptop','610']];
 
+/* ===== Operating Agreement (ported verbatim from 23-2; read-only, for comparison with Schedule A) ===== */
+var signedCompany = true, signedMember = true;  /* already signed in 2.3 phase 2; show both signatures */
+var expanded = ['9'];
+var docOpen = null;
+function myFacts(){
+  return {
+    entity:llcName(), member:memberDisplay(), date:'June 1, 2026',
+    state:'Connecticut', act:'Connecticut Uniform Limited Liability Company Act',
+    purpose:'bicycle repair and maintenance', office:'142 Whalley Avenue, Unit B, New Haven, CT 06511',
+    sched:{ assets:assetRows, assetsTotal:'3,410', liabs:[['Credit-card balance (business)','1,230'],['Customer advance — Smith','220']], liabsTotal:'1,450', net:'1,960' },
+    sig:{ company: signedCompany ? memberDisplay() : null, member: signedMember ? memberDisplay() : null }
+  };
+}
+function clauseData(f){
+  return [
+    ['1','Organization','The Company is a '+f.state+' limited liability company, formed under the '+f.act+'.'],
+    ['2','Name','The name of the Company is '+f.entity+'.'],
+    ['3','Purpose','The purpose of the Company is '+f.purpose+', and any other lawful activity for which a limited liability company may be formed.'],
+    ['4','Principal Office','The principal office of the Company is '+f.office+', or such other place as the Sole Member may determine.'],
+    ['5','Registered Agent','The registered agent of the Company for service of process in '+f.state+' is '+f.member+', at the principal office.'],
+    ['6','Term','The Company began upon the filing of its Certificate of Organization and continues until dissolved in accordance with this Agreement.'],
+    ['7','Sole Member','The sole member of the Company is '+f.member+'.'],
+    ['8','Management; Powers','The business and affairs of the Company are managed by the Sole Member, who may execute documents and otherwise act for and bind the Company.'],
+    ['9','Capital Contributions','The Sole Member contributes the assets and liabilities of the business, at their existing book amounts, as set forth on Schedule A. Net book value contributed: $'+f.sched.net+'.'],
+    ['10','Additional Capital Contributions','No additional contributions are required of the Sole Member, though further contributions may be made at the Sole Member’s discretion.'],
+    ['11','Allocation of Profits and Losses','All profits and losses of the Company are allocated 100% to the Sole Member.'],
+    ['12','Distributions','Distributions are made to the Sole Member at such times and in such amounts as the Sole Member determines.'],
+    ['13','Assignments','The Sole Member may assign its interest in the Company, in whole or in part.'],
+    ['14','Admission of Additional Members','The Sole Member may admit one or more additional members; upon admission, this Agreement is amended to reflect their interests.'],
+    ['15','Dissolution and Liquidation','The Company may be dissolved by the Sole Member. On dissolution, its assets are applied first to its debts, and the remainder distributed to the Sole Member.'],
+    ['16','Tax Matters','The Company is disregarded as separate from its owner for U.S. federal income-tax purposes; the fiscal year ends December 31.'],
+    ['17','Liability of the Sole Member','The Sole Member is not personally liable for the debts or obligations of the Company.'],
+    ['18','Indemnification','The Company indemnifies the Sole Member to the fullest extent permitted by law.'],
+    ['19','Miscellaneous','This Agreement is governed by the laws of '+f.state+'; the section headings are for convenience only.']
+  ];
+}
+function sigBlock(label, f, which, interactive){
+  var inner;
+  if(interactive){
+    var isSigned = which==='company' ? signedCompany : signedMember;
+    if(isSigned){
+      inner = '<span style="font-family:\'Segoe Script\',\'Snell Roundhand\',\'Brush Script MT\',cursive;font-size:22px;color:#1a2b6b">'+esc(memberDisplay())+'</span>';
+    } else {
+      inner = '<button onclick="'+(which==='company'?'signCompany()':'signMember()')+'" style="background:#e8dcc8;color:#a08050;border:0;border-radius:6px;padding:4px 12px;font-weight:600;font-size:13px;cursor:pointer;font-family:Inter,sans-serif">&#9997; Sign here</button>';
+    }
+  } else {
+    var s = which==='company' ? f.sig.company : f.sig.member;
+    inner = s ? '<span style="font-family:\'Segoe Script\',\'Snell Roundhand\',\'Brush Script MT\',cursive;font-size:22px;color:#1a2b6b">'+esc(s)+'</span>' : '';
+  }
+  var roleSub = which==='company' ? esc(f.member)+', Managing Member' : esc(f.member)+', as an individual';
+  return '<div><div style="font-size:11px;text-transform:uppercase;color:#6b6b6b">'+label+'</div>'+
+    '<div style="min-height:34px;border-bottom:1px solid #374151;display:flex;align-items:flex-end;padding-bottom:2px">'+inner+'</div>'+
+    '<div style="font-size:11px;color:#6b6b6b;margin-top:2px">'+roleSub+'</div>'+
+    '<div style="font-size:11px;color:#6b6b6b">Dated: '+esc(f.date)+'</div></div>';
+}
+function buildAgreement(f, interactive){
+  var marks = ['7','9','17'];
+  var html = '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">';
+  html += '<div style="text-align:center;font-weight:700;font-size:16px;letter-spacing:0.04em">OPERATING AGREEMENT</div>';
+  html += '<div style="text-align:center;font-weight:700;font-size:13px;color:var(--primary);margin-bottom:10px">OF '+esc(f.entity.toUpperCase())+'</div>';
+  html += '<p style="text-align:justify;margin-bottom:8px">This Operating Agreement of '+esc(f.entity)+', dated '+esc(f.date)+', is entered into by '+esc(f.member)+' (the &ldquo;Sole Member&rdquo;) and '+esc(f.entity)+' (the &ldquo;Company&rdquo;).</p>';
+  html += '<p style="font-size:11px;color:#6b6b6b;font-family:Inter,sans-serif;margin-bottom:8px">All nineteen sections are here &mdash; tap any heading to expand it.</p>';
+  clauseData(f).forEach(function(c){
+    var n=c[0], title=c[1], body=c[2];
+    var star = marks.indexOf(n) >= 0;
+    var open = expanded.indexOf(n) >= 0;
+    html += '<div style="margin-bottom:3px;padding-left:10px;border-left:3px solid '+(star?'var(--accent)':'#e5e0d5')+'">';
+    html += '<div onclick="toggleClause(\''+n+'\')" style="cursor:pointer;display:flex;align-items:baseline;gap:6px">';
+    html += '<span style="color:#6b6b6b;font-size:11px">'+(open?'&#9662;':'&#9656;')+'</span>';
+    html += '<span style="font-weight:700">'+n+'. '+esc(title)+'.</span>';
+    if(star) html += '<span style="font-size:11px;font-weight:700;color:var(--accent)">&#9733;</span>';
+    html += '</div>';
+    if(open) html += '<div style="padding-left:18px;padding-top:2px;padding-bottom:3px">'+esc(body)+'</div>';
+    html += '</div>';
+  });
+  html += '<div style="margin-top:12px;margin-bottom:4px;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;color:#6b6b6b">Schedule A &mdash; Contributed Property</div>';
+  html += '<div style="max-width:380px">';
+  f.sched.assets.forEach(function(a){ html += '<div style="display:flex;justify-content:space-between"><span>'+esc(a[0])+'</span><span class="mono">'+a[1]+'</span></div>'; });
+  html += '<div style="display:flex;justify-content:space-between;font-weight:600;border-top:1px solid #d8d8d8"><span>Total assets</span><span class="mono">'+f.sched.assetsTotal+'</span></div>';
+  f.sched.liabs.forEach(function(l){ html += '<div style="display:flex;justify-content:space-between"><span>'+esc(l[0])+'</span><span class="mono">('+l[1]+')</span></div>'; });
+  html += '<div style="display:flex;justify-content:space-between;font-weight:600"><span>Total liabilities assumed</span><span class="mono">('+f.sched.liabsTotal+')</span></div>';
+  html += '<div style="display:flex;justify-content:space-between;font-weight:700;border-top:2px solid #374151"><span>Net contribution (members&rsquo; capital)</span><span class="mono">'+f.sched.net+'</span></div>';
+  html += '</div>';
+  html += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;color:#6b6b6b;font-size:12px">&mdash; signature page &mdash;</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
+  html += sigBlock('For the Company', f, 'company', interactive);
+  html += sigBlock('As an individual', f, 'member', interactive);
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+function toggleClause(n){
+  var i = expanded.indexOf(n);
+  if(i>=0) expanded.splice(i,1); else expanded.push(n);
+  if(docOpen) renderDocBody();
+}
+function renderDocBody(){
+  document.getElementById('docBody').innerHTML = buildAgreement(myFacts(), false);
+}
+function openDoc(){
+  docOpen = 'mine';
+  renderDocBody();
+  document.getElementById('docOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeDoc(){
+  docOpen = null;
+  document.getElementById('docOverlay').classList.remove('open');
+}
+
 /* ===== state (phase-local) ===== */
 var contributed = false;
 
 /* ===== §9 balance sheet ===== */
 function balanceSheetHTML(){
-  var title = contributed ? esc(llcName()) : 'The repair work &mdash; your books';
+  var title = contributed ? (esc(llcName()) + ' Balance Sheet') : 'Repair Work Balance Sheet';
   var assets = '';
   assetRows.forEach(function(a){ assets += '<div class="acct-line"><span>'+esc(a[0])+'</span><span class="acct-val mono">'+a[1]+'</span></div>'; });
-  var liabLabel = contributed ? 'Liabilities &amp; equity' : 'Liabilities &amp; the net';
-  var rcLabel = contributed ? 'Members&rsquo; capital &mdash; contributed' : '&ldquo;What you put in&rdquo;';
-  var reLabel = contributed ? 'Retained earnings' : '&ldquo;What the work made&rdquo;';
-  var netLabel = contributed ? 'Members&rsquo; equity' : 'The net (have &minus; owe)';
+  var liabLabel = contributed ? 'Liabilities &amp; Member&rsquo;s Equity' : 'Liabilities &amp; Equities';
+  var rcLabel = contributed ? 'Member&rsquo;s capital' : 'Contributed equities';
+  var reLabel = contributed ? 'Retained earnings' : 'Generated equities';
+  var netLabel = contributed ? 'Member&rsquo;s equity' : 'Equities (assets &minus; liabilities)';
   var resStyle = contributed ? ' style="background:var(--success-bg);border-radius:4px;padding:2px 6px;margin-top:4px"' : ' style="margin-top:4px"';
-  var html = '<div style="text-align:center;font-weight:700;margin-bottom:2px;'+(contributed?'color:var(--primary)':'')+'">'+title+'</div>';
-  html += '<div class="section-sub" style="text-align:center;margin-bottom:14px">Balance sheet &middot; June 1, 2026</div>';
+  var equityRows = contributed
+    ? '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">1,960</span></div>'+
+      '<div class="acct-total"><span>'+netLabel+'</span><span class="mono">1,960</span></div>'
+    : '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">1,790</span></div>'+
+      '<div class="acct-line"><span>'+reLabel+'</span><span class="acct-val mono">170</span></div>'+
+      '<div class="acct-total"><span>'+netLabel+'</span><span class="mono">1,960</span></div>';
+  var statusPill = contributed
+    ? '<span class="tag-pill tag-cfs">After Contribution</span>'
+    : '<span class="tag-pill tag-is">Before Contribution</span>';
+  var html = '<div style="text-align:center;margin-bottom:6px">'+statusPill+'</div>';
+  html += '<div style="text-align:center;font-weight:700;margin-bottom:2px;'+(contributed?'color:var(--primary)':'')+'">'+title+'</div>';
+  html += '<div class="section-sub" style="text-align:center;margin-bottom:14px">June 1, 2026</div>';
   html += '<div class="main-grid two-col">';
   html += '<div class="acct-col"><h4>Assets</h4>'+assets+'<div class="acct-total"><span>Assets</span><span class="mono">3,410</span></div></div>';
   html += '<div class="acct-col"><h4>'+liabLabel+'</h4>'+
     '<div class="acct-line"><span>Credit card</span><span class="acct-val mono">1,230</span></div>'+
     '<div class="acct-line"><span>Customer advance &mdash; Smith</span><span class="acct-val mono">220</span></div>'+
     '<div class="acct-total" style="border-top:1px solid var(--border)"><span>Liabilities</span><span class="mono">1,450</span></div>'+
-    '<div'+resStyle+'>'+
-      '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">1,790</span></div>'+
-      '<div class="acct-line"><span>'+reLabel+'</span><span class="acct-val mono">170</span></div>'+
-      '<div class="acct-total"><span>'+netLabel+'</span><span class="mono">1,960</span></div>'+
-    '</div>'+
+    '<div'+resStyle+'>'+equityRows+'</div>'+
   '</div>';
   html += '</div>';
   return html;
@@ -124,16 +251,16 @@ function renderContribution(){
   if(!contributed){
     html += '<button class="btn-continue btn-block" style="margin-top:14px" onclick="doContribute()">Contribute the business to the LLC &rarr;</button>';
   } else {
-    html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="check" class="licon"></i> Not one number changed</div>'+
-      '<p>The same balance sheet you built informally is now the <strong>Company&rsquo;s</strong> &mdash; legally contributed in. Only the <em>words</em> on the right moved: &ldquo;what you put in&rdquo; became <strong>members&rsquo; capital ($1,790)</strong>, &ldquo;what the work made&rdquo; became <strong>retained earnings ($170)</strong>. Same $1,960. The contributed slice and the earned slice stay separate &mdash; the history carries over intact.</p></div>'+
-      '<button class="btn-continue btn-block" onclick="nav(\'23-4-wall.html\')">Now drill into &sect;17 &mdash; the wall &rarr;</button>';
+    html += '<div class="insight-box" style="margin-top:20px"><div class="insight-label"><i data-lucide="check" class="licon"></i> Same Net Amount, Now the Company&rsquo;s</div>'+
+      '<p>The balance sheet did not get revalued. The same recorded assets and the same recorded liabilities carry into the LLC at their existing book amounts. From the LLC&rsquo;s point of view on June 1, the business comes in as one net contribution from the Sole Member: <strong>$1,960</strong>. Show that amount as one <strong>Member&rsquo;s Capital</strong> line. The recorded amounts stayed the same, but the business is now shown as contributed to the Company.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="nav(\'23-4-wall.html\')">Next: &sect;17 (The legal wall) &rarr;</button>';
   }
   area.innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
 function doContribute(){ contributed=true; playSuccess(); renderContribution(); }
 
-document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeDoc(); } });
 
 /* ===== init ===== */
 try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
