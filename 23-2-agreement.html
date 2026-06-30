@@ -234,10 +234,9 @@ function renderAgreement(){
   }
   var html = '<div class="narrative-block"><p>Here&rsquo;s your Operating Agreement: the full document, including Schedule A and the signature page. Read the <span style="color:var(--accent);font-weight:600">&#9733; marked</span> sections, then sign in both places at the bottom.</p></div>';
   html += '<div class="doc-modal" style="margin:0 auto 20px">'+buildAgreement(myFacts(), true)+'</div>';
-  html += '<button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary)" onclick="openDoc(\'anna\')"><i data-lucide="file-text" class="licon"></i> View Anna&rsquo;s example</button>';
   if(signedCompany && signedMember){
     html += '<div class="insight-box" style="margin-top:20px"><div class="insight-label"><i data-lucide="pen-line" class="licon"></i> Two signatures, one hand</div>'+
-      '<p>You signed your name twice: once <strong>for the Company</strong>, and once <strong>as the Sole Member</strong>.<br><br>That does not mean there are two human people. It means the same person is acting in two different roles. In one signature, you act for the LLC. In the other, you act as the individual owner.<br><br>The &ldquo;two hats&rdquo; are now written into the legal document.</p></div>';
+      '<p>You signed your name twice: once <strong>for the Company</strong>, and once <strong>as the Sole Member</strong>. That does not mean there are two human people. It means the same person is acting in two different roles. In one signature, you act for the LLC. In the other, you act as the individual owner. The &ldquo;two hats&rdquo; are now written into the legal document.</p></div>';
     html += '<button class="btn-continue btn-block" onclick="nav(\'23-3-contribution.html\')">Next: &sect;9 (What goes into the company) &rarr;</button>';
   }
   area.innerHTML = html;
