@@ -45,14 +45,6 @@
   </div>
 </div>
 
-<!-- ===== Document viewer overlay ===== -->
-<div class="doc-overlay" id="docOverlay" style="align-items:flex-start" onclick="if(event.target===this) closeDoc()">
-  <div class="doc-modal" id="docModal" style="max-width:640px;margin:32px auto">
-    <button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>
-    <div id="docBody"></div>
-  </div>
-</div>
-
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -91,20 +83,10 @@ var memberName = '';
 var generated = false;
 var signedCompany = false, signedMember = false;
 var expanded = ['7','9','17'];
-var docOpen = null;
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
 function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
 var assetRows = [['Cash','0'],['Prepaid rent','650'],['Parts on the shelf','200'],['Tools & equipment','1,200'],['Fixtures','750'],['Laptop','610']];
-function annaFacts(){
-  return {
-    entity:'City Cycle, LLC', member:'Marcus Webb', date:'May 9, 2018',
-    state:'Connecticut', act:'Connecticut Uniform Limited Liability Company Act',
-    purpose:'bicycle sales & service', office:'266 Crown Street, New Haven, CT 06511',
-    sched:{ assets:[['Bicycle & parts inventory','3,200'],['Store fixtures & displays','900'],['Repair tools & equipment','400']], assetsTotal:'4,500', liabs:[['Equipment loan','600']], liabsTotal:'600', net:'3,900' },
-    sig:{ company:'Marcus Webb', member:'Marcus Webb' }
-  };
-}
 function myFacts(){
   return {
     entity:llcName(), member:memberDisplay(), date:'June 1, 2026',
@@ -195,25 +177,7 @@ function buildAgreement(f, interactive){
 function toggleClause(n){
   var i = expanded.indexOf(n);
   if(i>=0) expanded.splice(i,1); else expanded.push(n);
-  if(docOpen) renderDocBody();
   if(generated) renderAgreement();
-}
-function renderDocBody(){
-  var f = docOpen==='anna' ? annaFacts() : myFacts();
-  var title = docOpen==='anna' ? "City Cycle&rsquo;s Operating Agreement (Anna&rsquo;s Example)" : "Your Operating Agreement";
-  document.getElementById('docBody').innerHTML =
-    '<div style="font-weight:700;color:var(--primary);margin-bottom:12px;font-family:Inter,sans-serif">'+title+'</div>'+
-    buildAgreement(f, false);
-}
-function openDoc(which){
-  docOpen = which;
-  renderDocBody();
-  document.getElementById('docOverlay').classList.add('open');
-  if(window.lucide) lucide.createIcons();
-}
-function closeDoc(){
-  docOpen = null;
-  document.getElementById('docOverlay').classList.remove('open');
 }
 
 /* ===== agreement: generate + sign ===== */
@@ -253,10 +217,10 @@ function generateAgreement(){
   playSuccess();
   renderAgreement();
 }
-function signCompany(){ signedCompany=true; playPen(); renderAgreement(); if(docOpen==='mine') renderDocBody(); }
-function signMember(){ signedMember=true; playPen(); renderAgreement(); if(docOpen==='mine') renderDocBody(); }
+function signCompany(){ signedCompany=true; playPen(); renderAgreement(); }
+function signMember(){ signedMember=true; playPen(); renderAgreement(); }
 
-document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeDoc(); } });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
 /* ===== init ===== */
 try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
