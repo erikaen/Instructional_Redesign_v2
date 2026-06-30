@@ -216,30 +216,32 @@ var contributed = false;
 function balanceSheetHTML(){
   var title = contributed ? (esc(llcName()) + ' Balance Sheet') : 'Repair Work Balance Sheet';
   var assets = '';
-  assetRows.forEach(function(a){ assets += '<div class="acct-line"><span>'+esc(a[0])+'</span><span class="acct-val mono">'+a[1]+'</span></div>'; });
+  assetRows.forEach(function(a,i){ assets += '<div class="acct-line"><span>'+esc(a[0])+'</span><span class="acct-val mono">'+(i===0?'$':'')+a[1]+'</span></div>'; });
   var liabLabel = contributed ? 'Liabilities &amp; Member&rsquo;s Equity' : 'Liabilities &amp; Equities';
   var rcLabel = contributed ? 'Member&rsquo;s capital' : 'Contributed equities';
   var reLabel = contributed ? 'Retained earnings' : 'Generated equities';
-  var netLabel = contributed ? 'Member&rsquo;s equity' : 'Equities (assets &minus; liabilities)';
+  var netLabel = contributed ? 'Member&rsquo;s Equity' : 'Total Equities';
   var resStyle = contributed ? ' style="background:var(--success-bg);border-radius:4px;padding:2px 6px;margin-top:4px"' : ' style="margin-top:4px"';
   var equityRows = contributed
-    ? '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">1,960</span></div>'+
-      '<div class="acct-total"><span>'+netLabel+'</span><span class="mono">1,960</span></div>'
-    : '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">1,790</span></div>'+
+    ? '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">$1,960</span></div>'+
+      '<div class="acct-line" style="padding-left:14px"><span>Contributed capital</span><span class="acct-val mono">1,790</span></div>'+
+      '<div class="acct-line" style="padding-left:14px"><span>Retained earnings</span><span class="acct-val mono">170</span></div>'+
+      '<div class="acct-total"><span>'+netLabel+'</span><span class="mono">$1,960</span></div>'
+    : '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">$1,790</span></div>'+
       '<div class="acct-line"><span>'+reLabel+'</span><span class="acct-val mono">170</span></div>'+
-      '<div class="acct-total"><span>'+netLabel+'</span><span class="mono">1,960</span></div>';
+      '<div class="acct-total"><span>'+netLabel+'</span><span class="mono">$1,960</span></div>';
   var statusPill = contributed
     ? '<span class="tag-pill tag-cfs">After Contribution</span>'
-    : '<span class="tag-pill tag-is">Before Contribution</span>';
+    : '<span class="tag-pill" style="background:var(--error-bg);color:var(--error-text);border:1px solid var(--error-border)">Before Contribution</span>';
   var html = '<div style="text-align:center;margin-bottom:6px">'+statusPill+'</div>';
   html += '<div style="text-align:center;font-weight:700;margin-bottom:2px;'+(contributed?'color:var(--primary)':'')+'">'+title+'</div>';
   html += '<div class="section-sub" style="text-align:center;margin-bottom:14px">June 1, 2026</div>';
   html += '<div class="main-grid two-col">';
-  html += '<div class="acct-col"><h4>Assets</h4>'+assets+'<div class="acct-total"><span>Assets</span><span class="mono">3,410</span></div></div>';
+  html += '<div class="acct-col"><h4>Assets</h4>'+assets+'<div class="acct-total"><span>Total Assets</span><span class="mono">$3,410</span></div></div>';
   html += '<div class="acct-col"><h4>'+liabLabel+'</h4>'+
-    '<div class="acct-line"><span>Credit card</span><span class="acct-val mono">1,230</span></div>'+
+    '<div class="acct-line"><span>Credit card</span><span class="acct-val mono">$1,230</span></div>'+
     '<div class="acct-line"><span>Customer advance &mdash; Smith</span><span class="acct-val mono">220</span></div>'+
-    '<div class="acct-total" style="border-top:1px solid var(--border)"><span>Liabilities</span><span class="mono">1,450</span></div>'+
+    '<div class="acct-total" style="border-top:1px solid var(--border)"><span>Total Liabilities</span><span class="mono">$1,450</span></div>'+
     '<div'+resStyle+'>'+equityRows+'</div>'+
   '</div>';
   html += '</div>';
@@ -252,7 +254,7 @@ function renderContribution(){
     html += '<button class="btn-continue btn-block" style="margin-top:14px" onclick="doContribute()">Contribute the business to the LLC &rarr;</button>';
   } else {
     html += '<div class="insight-box" style="margin-top:20px"><div class="insight-label"><i data-lucide="check" class="licon"></i> Same Net Amount, Now the Company&rsquo;s</div>'+
-      '<p>The balance sheet did not get revalued. The same recorded assets and the same recorded liabilities carry into the LLC at their existing book amounts. From the LLC&rsquo;s point of view on June 1, the business comes in as one net contribution from the Sole Member: <strong>$1,960</strong>. Show that amount as one <strong>Member&rsquo;s Capital</strong> line. The recorded amounts stayed the same, but the business is now shown as contributed to the Company.</p></div>'+
+      '<p>The balance sheet did not get revalued. The same recorded assets and the same recorded liabilities carry into the LLC at their existing book amounts, and the residual carries over unchanged at <strong>$1,960</strong>. Inside the LLC, that member&rsquo;s equity keeps its two parts: <strong>$1,790</strong> of <strong>contributed capital</strong> (what was put in) and <strong>$170</strong> of <strong>retained earnings</strong> (what the business earned and kept). The recorded amounts stayed the same, but the business is now shown as contributed to the Company.</p></div>'+
       '<button class="btn-continue btn-block" onclick="nav(\'23-4-wall.html\')">Next: &sect;17 (The legal wall) &rarr;</button>';
   }
   area.innerHTML = html;
