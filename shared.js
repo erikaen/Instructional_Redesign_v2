@@ -271,6 +271,7 @@ var BRW = (function () {
   'use strict';
 
   var _reg = {};   // containerId -> { snap, ui:{tab, a:{}, l:{}, c:{}, g:{}} }
+  var _hook = null; // optional page callback: _hook(type, cid, kind|id, key) on tab/expand. Default no-op.
 
   function dol(v) { return (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US'); }
   function signed(v) {
@@ -290,6 +291,16 @@ var BRW = (function () {
   function detailRow(name, amount) {
     return '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">' + name + '</div><div class="xl-v">' + dol(amount) + '</div></div>';
   }
+  // A ledger row: each entry shows its own amount (kind 'note' → no amount).
+  function eventRow(ev) {
+    var v = (ev.kind === 'note') ? '' : signed(ev.amt);
+    return '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">' + ev.name + '</div><div class="xl-v">' + v + '</div></div>';
+  }
+  // Effective total of a line: sum of its event amounts (so the category total tracks its items), else its stated amount.
+  function lineTotal(l) {
+    if (l.events) return l.events.reduce(function (s, ev) { return s + (ev.kind === 'note' ? 0 : ev.amt); }, 0);
+    return l.amount;
+  }
   function catRow(cid, kind, key, num, label, amount, open) {
     return '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="BRW.x(\'' + cid + '\',\'' + kind + '\',\'' + key + '\')" aria-expanded="' + open + '">' + (open ? '−' : '+') + '</button></div>'
       + '<div class="xl-rownum">' + (num || '') + '</div><div class="xl-c">' + label + '</div><div class="xl-v">' + dol(amount) + '</div></div>';
@@ -297,7 +308,7 @@ var BRW = (function () {
 
   function listSheet(cid, kind, lines, headLeft, totalLabel) {
     var ex = _reg[cid].ui[kind];
-    var total = lines.reduce(function (s, l) { return s + l.amount; }, 0);
+    var total = lines.reduce(function (s, l) { return s + lineTotal(l); }, 0);
     var html = headRow(headLeft, 'Value');
     lines.forEach(function (l, i) {
       var open = !!ex[i];
@@ -310,6 +321,9 @@ var BRW = (function () {
       } else if (l.items) {
         html += catRow(cid, kind, i, i + 1, l.label + ' &mdash; ' + l.note, l.amount, open);
         if (open) l.items.forEach(function (it) { html += detailRow(it.name, it.amt); });
+      } else if (l.events) {
+        html += catRow(cid, kind, i, i + 1, l.label + (l.note ? ' &mdash; ' + l.note : ''), lineTotal(l), open);
+        if (open) l.events.forEach(function (ev) { html += eventRow(ev); });
       } else {
         html += flatRow(i + 1, l.label + ' &mdash; ' + l.note, l.amount);
       }
@@ -390,7 +404,8 @@ var BRW = (function () {
     dol: dol, signed: signed,
     mount: function (cid, snap) { _reg[cid] = { snap: snap, ui: { tab: (snap.tabs[0] || {}).id, a: {}, l: {}, c: {}, g: {} } }; render(cid); },
     update: function (cid, snap) { if (!_reg[cid]) return this.mount(cid, snap); _reg[cid].snap = snap; render(cid); },
-    tab: function (cid, id) { if (window.playClick) playClick(); _reg[cid].ui.tab = id; render(cid); },
-    x: function (cid, kind, key) { if (window.playClick) playClick(); var m = _reg[cid].ui[kind]; m[key] = (kind === 'g') ? (m[key] === false) : !m[key]; render(cid); }
+    tab: function (cid, id) { if (window.playClick) playClick(); _reg[cid].ui.tab = id; render(cid); if (_hook) _hook('tab', cid, id); },
+    x: function (cid, kind, key) { if (window.playClick) playClick(); var m = _reg[cid].ui[kind]; m[key] = (kind === 'g') ? (m[key] === false) : !m[key]; render(cid); if (_hook) _hook('expand', cid, kind, key); },
+    setHook: function (fn) { _hook = fn; }
   };
 })();
