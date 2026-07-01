@@ -1,5 +1,7 @@
 /* Bike Repair, LLC — job records for the summer quarter (Jun–Aug 2026).
    Auto-generated; ties to the locked totals (revenue 6,020 · COGS 1,200 · A/R 300).
+   `hours` = labor time spent on the job. Part-time shop (day job + evenings/weekends)
+   over ~13 weeks; the 21 jobs total 55.25 hrs of wrenching (~4–5 hrs/week billable).
    Reusable across Module 3 pages (31-2 detail, 3.4 cash flow, recognition beats). */
 var BR_JOBS = [
   {
@@ -10,6 +12,7 @@ var BR_JOBS = [
     "parts": "Inner tube",
     "partsCost": 10,
     "charge": 120,
+    "hours": 0.75,
     "pay": "Venmo",
     "collected": true
   },
@@ -18,9 +21,10 @@ var BR_JOBS = [
     "date": "Jun 5",
     "customer": "Marcus T.",
     "work": "Brake adjustment",
-    "parts": "\u2014 labor only",
+    "parts": "— labor only",
     "partsCost": 0,
     "charge": 150,
+    "hours": 1.0,
     "pay": "Venmo",
     "collected": true
   },
@@ -32,6 +36,7 @@ var BR_JOBS = [
     "parts": "Cables, chain lube",
     "partsCost": 25,
     "charge": 270,
+    "hours": 2.5,
     "pay": "Venmo",
     "collected": true
   },
@@ -43,6 +48,7 @@ var BR_JOBS = [
     "parts": "Chain, 11-spd cassette",
     "partsCost": 95,
     "charge": 300,
+    "hours": 1.5,
     "pay": "Venmo",
     "collected": true
   },
@@ -51,9 +57,10 @@ var BR_JOBS = [
     "date": "Jun 16",
     "customer": "Sofia M.",
     "work": "Wheel true (pair)",
-    "parts": "\u2014 labor only",
+    "parts": "— labor only",
     "partsCost": 0,
     "charge": 150,
+    "hours": 1.5,
     "pay": "Venmo",
     "collected": true
   },
@@ -65,6 +72,7 @@ var BR_JOBS = [
     "parts": "Chain, chainring, jockey wheels",
     "partsCost": 60,
     "charge": 360,
+    "hours": 3.0,
     "pay": "Venmo",
     "collected": true
   },
@@ -76,6 +84,7 @@ var BR_JOBS = [
     "parts": "Brake pads, bleed fluid",
     "partsCost": 40,
     "charge": 225,
+    "hours": 2.0,
     "pay": "Venmo",
     "collected": true
   },
@@ -87,6 +96,7 @@ var BR_JOBS = [
     "parts": "Valves, sealant, tape",
     "partsCost": 65,
     "charge": 210,
+    "hours": 1.5,
     "pay": "Venmo",
     "collected": true
   },
@@ -98,6 +108,7 @@ var BR_JOBS = [
     "parts": "Bottom bracket",
     "partsCost": 35,
     "charge": 240,
+    "hours": 2.0,
     "pay": "Venmo",
     "collected": true
   },
@@ -109,6 +120,7 @@ var BR_JOBS = [
     "parts": "Cables, chain lube",
     "partsCost": 25,
     "charge": 240,
+    "hours": 2.5,
     "pay": "Venmo",
     "collected": true
   },
@@ -120,6 +132,7 @@ var BR_JOBS = [
     "parts": "Rim, spokes, nipples",
     "partsCost": 125,
     "charge": 450,
+    "hours": 3.5,
     "pay": "Venmo",
     "collected": true
   },
@@ -131,6 +144,7 @@ var BR_JOBS = [
     "parts": "Seals, fork oil",
     "partsCost": 55,
     "charge": 360,
+    "hours": 3.0,
     "pay": "Venmo",
     "collected": true
   },
@@ -142,6 +156,7 @@ var BR_JOBS = [
     "parts": "Shift cables + housing",
     "partsCost": 45,
     "charge": 270,
+    "hours": 2.5,
     "pay": "Venmo",
     "collected": true
   },
@@ -153,6 +168,7 @@ var BR_JOBS = [
     "parts": "2 tires, 2 tubes",
     "partsCost": 100,
     "charge": 240,
+    "hours": 1.0,
     "pay": "Venmo",
     "collected": true
   },
@@ -164,6 +180,7 @@ var BR_JOBS = [
     "parts": "SS kit + tensioner",
     "partsCost": 80,
     "charge": 300,
+    "hours": 2.5,
     "pay": "Venmo",
     "collected": true
   },
@@ -175,6 +192,7 @@ var BR_JOBS = [
     "parts": "Cables, chain lube",
     "partsCost": 25,
     "charge": 240,
+    "hours": 2.5,
     "pay": "Venmo",
     "collected": true
   },
@@ -186,6 +204,7 @@ var BR_JOBS = [
     "parts": "2 rims, spokes, nipples",
     "partsCost": 129,
     "charge": 485,
+    "hours": 4.5,
     "pay": "Venmo",
     "collected": true
   },
@@ -197,6 +216,7 @@ var BR_JOBS = [
     "parts": "Chain, pads, cables",
     "partsCost": 70,
     "charge": 390,
+    "hours": 3.5,
     "pay": "Venmo",
     "collected": true
   },
@@ -208,7 +228,8 @@ var BR_JOBS = [
     "parts": "Chains, pads, cables (fleet)",
     "partsCost": 105,
     "charge": 500,
-    "pay": "On account \u00b7 net 15",
+    "hours": 5.0,
+    "pay": "On account · net 15",
     "collected": true
   },
   {
@@ -219,19 +240,21 @@ var BR_JOBS = [
     "parts": "Cables, sealant, pads",
     "partsCost": 75,
     "charge": 300,
-    "pay": "On account \u00b7 net 15",
+    "hours": 3.0,
+    "pay": "On account · net 15",
     "collected": false
   },
   {
     "id": "J-0021",
     "date": "Aug 30",
     "customer": "J. Smith",
-    "work": "Smith's custom frame \u2014 finished",
+    "work": "Smith's custom frame — finished",
     "parts": "Frame tubing, dropouts, braze rod",
     "partsCost": 36,
     "charge": 220,
+    "hours": 6.0,
     "pay": "Deposit applied ($220 prepaid last period)",
     "collected": true,
-    "note": "Custom frame completed \u2014 earns the $220 advance taken in Module 2."
+    "note": "Custom frame completed — earns the $220 advance taken in Module 2."
   }
 ];

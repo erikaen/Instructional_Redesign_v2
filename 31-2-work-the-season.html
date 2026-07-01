@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.1: Run the Season &middot; The Unadjusted Trial Balance</title>
+  <title>Tutorial 3.1: Run the Season &middot; Read the Books</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -23,21 +23,31 @@
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">The Unadjusted Trial Balance</div>
+    <div class="phase-title" id="phaseTitle">Read the Books</div>
+
+    <div class="narrative-block">
+      <p>Here is <span class="mono">Bike-Repair.xlsx</span> as you kept it through the summer &mdash; the same three tabs from Module 1: <strong>Assets</strong>, <strong>Liabilities</strong>, <strong>Reasons</strong>. A whole season later, you jotted a <strong>Reason</strong> beside each change, the way you learned to.</p>
+      <p>Anna leans in to read it with you. Every line opens &mdash; click the <strong>+</strong> to see what happened behind the number.</p>
+    </div>
+
+    <div id="wb"></div>
+
+    <button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every repair this summer</button>
+    <button class="btn-hint btn-block" onclick="openPartsOrders()"><i data-lucide="package" class="licon"></i> Open the parts orders &mdash; supplier invoices</button>
+    <button class="btn-hint btn-block" onclick="openBankStatements()"><i data-lucide="landmark" class="licon"></i> Open the bank statements &mdash; LLC checking</button>
+    <button class="btn-hint btn-block" onclick="openCardStatements()"><i data-lucide="credit-card" class="licon"></i> Open the credit card statements</button>
 
     <div id="anna"></div>
-    <div id="tb"></div>
-    <div id="extra"></div>
     <div id="controls"></div>
 
   </div>
 </div>
 
-<!-- ===== Job-ticket modal ===== -->
+<!-- ===== Job-log modal ===== -->
 <div class="glossary-overlay" id="ticketOverlay" onclick="if(event.target===this) closeTicket()">
   <div class="glossary-panel">
     <div class="glossary-panel-head">
-      <div class="glossary-panel-title"><i data-lucide="receipt" class="licon"></i> Job ticket</div>
+      <div class="glossary-panel-title"><i data-lucide="receipt" class="licon"></i> <span id="ticketTitle">Job log &middot; June&ndash;August 2026</span></div>
       <button class="glossary-close-btn" aria-label="Close" onclick="closeTicket()">&times;</button>
     </div>
     <div class="glossary-list" id="ticketBody"></div>
@@ -56,6 +66,10 @@
 </div>
 
 <script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-bank-statements.js"></script>
+<script src="bike-repair-card-statements.js"></script>
+<script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -66,99 +80,247 @@ function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webk
 function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
 function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
-function nf(v){ return v ? v.toLocaleString('en-US') : ''; }
 
-/* ===== state =====
-   phase 0 = unadjusted trial balance · 1 = A/R recognized · 2 = Smith earned (mirror) */
-var phase=0;
+/* ===== the Aug-31 snapshot — same three-tab workbook, a season later =====
+   Every line carries its FULL history: drilling a line shows every entry since the
+   recordkeeping began, with a running balance (no dates yet). Only what the novice
+   witnessed — cash moving, parts used, Smith's frame delivered. No receivable, no depreciation. */
 
-/* ===== the trial balance, by phase ===== */
-function tbData(){
-  var revenue = phase>=2 ? 6020 : (phase>=1 ? 5800 : 5500);
-  var ar      = phase>=1 ? 300 : 0;
-  var unearned= phase>=2 ? 0 : 220;
-  var rows = [
-    { name:'Cash', dr:620 },
-    { name:'Accounts Receivable', dr:ar, hot:(phase===1) },
-    { name:'Right of Use', dr:2600, faint:true },
-    { name:'Parts', dr:1400, faint:true },
-    { name:'Tools &amp; Repair Equipment', dr:1600, faint:true },
-    { name:'Fixtures', dr:750 },
-    { name:'Office Equipment', dr:610, faint:true },
-    { name:'Owner&rsquo;s Draw', dr:600 },
-    { name:'Unearned Revenue', cr:unearned, hot:(phase===2) },
-    { name:'Contributed Capital', cr:2290 },
-    { name:'Retained Earnings', cr:170 },
-    { name:'Sales (Revenue)', cr:revenue, hot:(phase>=1) }
-  ].filter(function(r){ return !(r.name==='Accounts Receivable' && phase===0); });
-  return rows;
-}
-function tbRow(r){
-  var hot = r.hot ? 'background:var(--warn-bg);border-radius:4px;' : '';
-  var faint = r.faint ? 'opacity:.6;' : '';
-  return '<div style="display:flex;align-items:baseline;font-size:var(--font-s);padding:4px 6px;'+hot+faint+'">'+
-    '<span style="flex:1">'+r.name+(r.faint?' <span style="font-size:var(--font-xs);opacity:.8">&middot; not yet used up</span>':'')+'</span>'+
-    '<span class="mono" style="width:88px;text-align:right">'+(r.dr?'$'+nf(r.dr):'')+'</span>'+
-    '<span class="mono" style="width:88px;text-align:right">'+(r.cr?'$'+nf(r.cr):'')+'</span></div>';
-}
-function renderTB(){
-  var rows=tbData();
-  var tot = rows.reduce(function(s,r){ return s+(r.dr||0); },0);
-  var h='<div class="section-card">';
-  h+='<div style="text-align:center;font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary)">Bike Repair, LLC</div>';
-  h+='<div style="text-align:center;font-size:var(--font-xs);opacity:0.65;margin-bottom:10px">'+(phase===0?'Unadjusted ':'')+'Trial balance &middot; August 31, 2026</div>';
-  h+='<div style="display:flex;font-size:var(--font-xs);text-transform:uppercase;letter-spacing:0.04em;opacity:.6;padding:0 6px 2px"><span style="flex:1">Account</span><span style="width:88px;text-align:right">Debit</span><span style="width:88px;text-align:right">Credit</span></div>';
-  rows.forEach(function(r){ h+=tbRow(r); });
-  h+='<div style="display:flex;align-items:baseline;font-size:var(--font-s);font-weight:700;padding:5px 6px;border-top:2px solid var(--border-strong);margin-top:2px;"><span style="flex:1">'+(phase===0?'Balanced':'Still balanced')+'</span><span class="mono" style="width:88px;text-align:right">$'+nf(tot)+'</span><span class="mono" style="width:88px;text-align:right">$'+nf(tot)+'</span></div>';
-  h+='</div>';
-  document.getElementById('tb').innerHTML=h;
-}
+// Cash — the complete ledger, first entry to today: pre-LLC activity → the founding → the season.
+var cashPreJune = [
+  { name:'Rent paid in advance (the lease)', amt:-1300 },
+  { name:'Park Tool repair stand', amt:-200 },
+  { name:'Repair, customer paid', amt:340 },
+  { name:'Repair, customer paid', amt:180 },
+  { name:'Repair, customer paid', amt:80 },
+  { name:'Repair, customer paid', amt:140 },
+  { name:'Credit-card paydown', amt:-400 },
+  { name:'Repair, customer paid', amt:130 },
+  { name:'Smith&rsquo;s deposit received', amt:220 },
+  { name:'Repair, customer paid', amt:100 },
+  { name:'Repair, customer paid', amt:150 },
+  { name:'Credit-card paydown', amt:-400 },
+  { name:'Covered from your personal funds', amt:960 },
+  { name:'Deposited to open the LLC bank account', amt:500 }
+];
+var cashRepairs = BR_JOBS.filter(function (j) { return j.collected && j.pay.indexOf('Deposit') < 0; })
+  .map(function (j) { return { name:'Repair collected &mdash; ' + j.customer, amt:j.charge }; });
+// The season's parts restock comes from the supplier orders (source docs, BR_PURCHASES).
+// Same buys feed Cash out and the Parts asset in.
+var monthName = { Jun:'June', Jul:'July', Aug:'August' };
+var partsBuys = BR_PURCHASES.map(function (p) { return { m:monthName[p.date.slice(0, 3)], amt:p.total, id:p.id }; });
+var cashCosts = partsBuys.map(function (b) { return { name:'Parts bought &mdash; ' + b.m, amt:-b.amt }; }).concat([
+  { name:'Rent paid &mdash; June', amt:-650 },
+  { name:'Rent paid &mdash; July', amt:-650 },
+  { name:'Rent paid &mdash; August', amt:-650 },
+  { name:'New repair tool', amt:-400 },
+  { name:'Credit card paid off', amt:-1230 },
+  { name:'Money taken out for personal use', amt:-600 }
+]);
+var cashEvents = cashPreJune.concat(cashRepairs, cashCosts);
 
-/* ===== the two billed jobs — the source of the receivable (phase 1) ===== */
-function billedPanel(){
-  if(phase!==1){ document.getElementById('extra').innerHTML=''; return; }
-  var billed = BR_JOBS.filter(function(j){ return j.pay.indexOf('account')>=0; });
-  var h='<div class="section-card"><div class="card-title">The work you billed</div><div class="cash-group">';
-  billed.forEach(function(j){
-    h+='<div class="cash-line" onclick="openTicket(\''+j.id+'\')" style="cursor:pointer;"><span><i data-lucide="file-text" class="licon"></i> '+j.date+' &middot; '+j.work+' &middot; <span style="opacity:.7">'+j.customer+'</span> '+(j.collected?'<span class="stmt-tag">collected</span>':'<span class="stmt-tag" style="border-color:var(--error-text);color:var(--error-text)">outstanding</span>')+'</span><span class="cash-line-amt">$'+nf(j.charge)+'</span></div>';
-  });
-  h+='</div><p class="prose" style="font-size:var(--font-xs);opacity:.75;margin:8px 4px 0">$500 collected was already booked. The <strong>$300 outstanding</strong> is the receivable &mdash; earned, not yet in hand.</p></div>';
-  document.getElementById('extra').innerHTML=h;
-}
+// Parts asset ledger — opening shelf, the three restocks, then each job's parts used (per-job detail).
+var partsComposition = [
+  { name:'Chains', amt:50 }, { name:'Brake pads', amt:40 }, { name:'Derailleur cables', amt:20 },
+  { name:'Cassettes', amt:40 }, { name:'Bottom brackets', amt:20 }, { name:'Spokes', amt:20 }, { name:'Tubes', amt:10 }
+];
+var partsEvents = partsComposition
+  .concat(partsBuys.map(function (b) { return { name:'Parts bought &mdash; ' + b.m, amt:b.amt }; }))
+  .concat(BR_JOBS.filter(function (j) { return j.partsCost > 0; }).map(function (j) { return { name:'Parts used &mdash; ' + j.customer, amt:-j.partsCost }; }));
 
-/* ===== controls (guided reveal) ===== */
+// GENERATED reasons — the novice's mess: job by job (each collection and its parts used together), rent when
+// paid, NOT sorted into revenue vs. expense. This is what books look like without Revenue/Expense accounts.
+var reasonRows = [];
+var rentPaid = {};
+BR_JOBS.forEach(function (j) {
+  var m = j.date.slice(0, 3);
+  if (!rentPaid[m]) { reasonRows.push({ kind:'net', cat:'generated', account:'Rent used', reason:monthName[m], delta:-650 }); rentPaid[m] = true; }
+  if (j.pay.indexOf('Deposit') >= 0) reasonRows.push({ kind:'net', cat:'generated', account:'Frame delivered', reason:j.customer, delta:j.charge });
+  else if (j.collected) reasonRows.push({ kind:'net', cat:'generated', account:'Repair collected', reason:j.customer, delta:j.charge });
+  if (j.partsCost > 0) reasonRows.push({ kind:'net', cat:'generated', account:'Parts used', reason:j.customer, delta:-j.partsCost });
+});
+reasonRows.push({ kind:'net', cat:'drawn', account:'Owner&rsquo;s draw', reason:'money taken out for personal use', delta:-600 });
+
+var SNAP = {
+  file:'Bike-Repair.xlsx',
+  tabs:[ {id:'assets',label:'Assets'}, {id:'liabilities',label:'Liabilities'}, {id:'reasons',label:'Reasons'} ],
+  assets:[
+    { label:'Cash', amount:620, events:cashEvents },
+    { label:'Right of Use', amount:650, events:[
+      { name:'Last month&rsquo;s rent, paid in advance (on deposit)', amt:650 }
+    ]},
+    { label:'Parts', amount:200, events:partsEvents },
+    { label:'Tools &amp; Repair Equipment', amount:1600, events:[
+      { name:'Repair stand', amt:200 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
+      { name:'Wheel-truing stand', amt:170 }, { name:'Cone wrench set', amt:65 }, { name:'Torque wrench', amt:95 },
+      { name:'Hex/Allen set', amt:45 }, { name:'Cable cutters', amt:40 }, { name:'Chain breaker', amt:35 },
+      { name:'Tire levers', amt:20 }, { name:'Bench grinder', amt:90 }, { name:'Headset press', amt:70 },
+      { name:'Shop vacuum', amt:60 }, { name:'New repair tool bought this season', amt:400 }
+    ]},
+    { label:'Fixtures', amount:750, events:[
+      { name:'Desk', amt:250 }, { name:'Shelving units', amt:200 }, { name:'Display rack', amt:180 }, { name:'Pegboard + hooks', amt:120 }
+    ]},
+    { label:'Laptop', amount:610, events:[
+      { name:'Laptop (from home)', amt:610 }
+    ]}
+  ],
+  liabilities:[
+    { label:'Credit Card', amount:0, events:[
+      { name:'Charged &mdash; hand tools', amt:300 }, { name:'Charged &mdash; air compressor', amt:180 },
+      { name:'Charged &mdash; parts washer', amt:130 }, { name:'Charged &mdash; wheel-truing stand', amt:170 },
+      { name:'Charged &mdash; fixtures', amt:750 }, { name:'Charged &mdash; parts (QBP order)', amt:500 },
+      { name:'Paydown', amt:-400 }, { name:'Paydown', amt:-400 },
+      { name:'Paid off in full this season', amt:-1230 }
+    ]},
+    { label:'Unearned Revenue', amount:0, events:[
+      { name:'Smith&rsquo;s advance for a custom frame', amt:220 },
+      { name:'Built and delivered Smith&rsquo;s frame &mdash; no longer owed', amt:-220 }
+    ]}
+  ],
+  reasons:{
+    carried:[
+      { label:'Contributed Capital', note:'what you put in', amount:2290, items:[
+        { name:'Cash to get the work going', amt:960 }, { name:'Laptop from home', amt:610 },
+        { name:'Gear from home', amt:220 }, { name:'Cash contributed forming the LLC', amt:500 } ] },
+      { label:'Retained Earnings', note:'what the work kept', amount:170, items:[
+        { name:'Repairs earned', amt:1120 }, { name:'Parts used', amt:-300 }, { name:'Space used (rent)', amt:-650 } ] }
+    ],
+    mode:'sorted',
+    groups:[
+      { key:'contributed', label:'CONTRIBUTED', blurb:'new money or gear you put in' },
+      { key:'generated',   label:'GENERATED',   blurb:'what the work itself produced' },
+      { key:'drawn',       label:'TAKEN OUT',    blurb:'what you took for yourself' }
+    ],
+    rows:reasonRows
+  }
+};
+
+/* ===== Anna's guided drill-down walk (targets line opens / tab switches in the workbook) ===== */
+var WALK = [
+  { needTab:'assets', target:{kind:'a',key:2},
+    q:'Start on the <strong>Assets</strong> tab, with <strong>Parts</strong>. It reads <strong>$200</strong> &mdash; exactly where it started in June. After a whole summer of repairs, you didn&rsquo;t buy any parts, or use any? Open it.',
+    hint:'Open the <strong>Parts</strong> line on the Assets tab.',
+    insight:'You bought <strong>$1,200</strong> of parts and used <strong>$1,200</strong> on jobs &mdash; it just happens to land back at $200. The flat number hides a whole season of parts moving in, then out.' },
+  { needTab:'assets', target:{kind:'a',key:1},
+    q:'<strong>Right of Use</strong> is still <strong>$650</strong>, too. But you paid rent every month this summer &mdash; where did all that go? Open it.',
+    hint:'Open the <strong>Right of Use</strong> line.',
+    insight:'This $650 is only the lease&rsquo;s <strong>last month</strong>, still on deposit. The <strong>$1,950</strong> of rent you actually used &mdash; June, July, August &mdash; you paid in cash and used up. It left through the Cash ledger; it isn&rsquo;t sitting here.' },
+  { needTab:'assets', target:{kind:'a',key:0},
+    q:'Now <strong>Cash</strong>: <strong>$620</strong> &mdash; up only <strong>$120</strong> since June. After all those repairs? Open it.',
+    hint:'Open the <strong>Cash</strong> line.',
+    insight:'A lot of money moved &mdash; <strong>$5,500</strong> came in from repairs, and rent, parts, a new tool, the card payoff, and your own draw all went out. Only <strong>$120</strong> stuck. Busy season, thin cash.' },
+  { needTab:'liabilities', target:{kind:'l',key:0},
+    q:'Switch to the <strong>Liabilities</strong> tab. <strong>Credit Card</strong> reads <strong>$0</strong> &mdash; it was $1,230 in June. Open it.',
+    hint:'Click the <strong>Liabilities</strong> tab, then open <strong>Credit Card</strong>.',
+    insight:'You <strong>paid it off in full</strong> during the season. That cash going out is one of the outflows you saw in the Cash ledger.' },
+  { needTab:'liabilities', target:{kind:'l',key:1},
+    q:'<strong>Unearned Revenue</strong> is $0 as well &mdash; Smith&rsquo;s $220 is gone. Open it.',
+    hint:'Open the <strong>Unearned Revenue</strong> line.',
+    insight:'You <strong>built and delivered Smith&rsquo;s frame</strong> this summer. You no longer owe him the work &mdash; so it&rsquo;s no longer something you owe. Doing the work turned it into earnings.' },
+  { needTab:'reasons', target:{tabSwitch:'reasons'},
+    q:'None of those tabs really say <em>how the season went</em>. Switch to the <strong>Reasons</strong> tab &mdash; that&rsquo;s where you wrote down <em>why</em> the books moved.',
+    hint:'Click the <strong>Reasons</strong> tab.',
+    insight:'There it is, in your familiar piles &mdash; every repair, every bit of parts used, each month&rsquo;s rent, jotted one by one. It all nets to <strong>GENERATED +$2,570</strong>, on top of the <strong>$170</strong> Retained you carried in. Nothing new <strong>CONTRIBUTED</strong>. And <strong>TAKEN OUT &minus;$600</strong>, your draw. A long list &mdash; and still no single line that says how the season went.' }
+];
+
+/* ===== state ===== */
+var step=0, stepDone=false;
+
+/* ===== Anna + controls ===== */
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
-function renderControls(){
-  var a,c;
-  if(phase===0){
-    a="The whole quarter is recorded, and here&rsquo;s the <strong>trial balance</strong> &mdash; every account, debits in one column, credits in the other. They&rsquo;re equal: <strong>$8,180 = $8,180</strong>. But that only proves the bookkeeping is internally consistent &mdash; not that the books are <em>complete</em>. Look at <strong>Sales, $5,500</strong>: that&rsquo;s every dollar that <em>came in</em>. Is it every dollar you <em>earned</em>?";
-    c='<button class="btn-continue btn-block" onclick="toPhase(1)">Check the work you billed &rarr;</button>';
-  } else if(phase===1){
-    a="You finished <strong>$800</strong> of repairs <em>on account</em>. <strong>$500</strong> came in over the summer and you booked it. But <strong>$300</strong> is still owed &mdash; the work is done, the parts are gone, only the cash hasn&rsquo;t arrived. It feels wrong to call that revenue with nothing in hand. But revenue is about the <em>work</em>, not the cash, and the work is finished. So recognize it: <strong>Sales up $300</strong>, and a new asset &mdash; <strong>Accounts Receivable $300</strong>, your customers&rsquo; promise to pay.";
-    c='<button class="btn-continue btn-block" onclick="toPhase(2)">Now the mirror image &rarr;</button>';
+function renderTalk(){
+  var anna='', ctrl='';
+  if(step<WALK.length){
+    anna=annaBox(WALK[step].q);
+    if(stepDone){
+      ctrl=insightBox(step<WALK.length-1?'What the line was hiding':'The season, in your own piles','<p>'+WALK[step].insight+'</p>')
+        + '<button class="btn-continue btn-block" onclick="nextStep()">'+(step<WALK.length-1?'Next question &rarr;':'So what&rsquo;s missing? &rarr;')+'</button>';
+    } else {
+      ctrl='<div class="next-phase-msg">'+WALK[step].hint+'</div>';
+    }
   } else {
-    a="<strong>Smith</strong> is the exact opposite. He paid <strong>$220</strong> up front, last period. You had the cash &mdash; but you&rsquo;d done no work and used no parts, so it wasn&rsquo;t revenue: it sat as <strong>Unearned Revenue</strong>, a liability, because you owed him a frame. This season you built it. Now it&rsquo;s <em>earned</em>: <strong>Sales up $220</strong>, <strong>Unearned Revenue down to $0</strong>.";
-    c=insightBox('Revenue follows the work, not the cash',
-      '<p><strong>Accounts Receivable</strong> &mdash; earned, not yet collected. <strong>Unearned Revenue</strong> &mdash; collected, not yet earned. The cash and the earning rarely fall on the same day; revenue tracks the <em>earning</em>.</p>') +
-      '<div class="next-phase-msg" style="margin-top:10px;">Two judgments made. The books still carry <strong>Parts</strong>, <strong>Right of Use</strong>, and the <strong>equipment</strong> as if nothing&rsquo;s been used up &mdash; those adjustments, and the trickiest one, <strong>depreciation</strong>, come next (Tutorials 3.2&ndash;3.3).</div>';
+    anna=annaBox('So the books did move &mdash; members&rsquo; capital went from <strong>$2,460</strong> in June to <strong>$4,430</strong> now (Assets $4,430 &minus; Liabilities $0). Every reason is in there. But look how scattered the story is across the tabs: money in, things used up, the card, Smith, your draw. If a banker asked &ldquo;how did the shop actually <em>do</em> this summer?&rdquo;, could you answer straight from this?');
+    ctrl=insightBox('A workbook, not yet a statement',
+      '<p>These three tabs show where things <strong>stand</strong> and <em>why</em> each balance moved. But they never line up, in one place, what you <strong>earned</strong> against what it <strong>cost</strong> to earn it. That comparison is the next thing to build.</p>')
+      + '<div class="next-phase-msg" style="margin-top:10px;">You read the whole season off these tabs. Next, you&rsquo;ll take that GENERATED pile and turn it into the statement that answers the banker&rsquo;s question.</div>'
+      + '<button class="btn-continue btn-block" onclick="nav(\'32-1-the-income-statement.html\')">Next: how the season went &rarr;</button>';
   }
-  document.getElementById('anna').innerHTML=annaBox(a);
-  document.getElementById('controls').innerHTML=c;
+  document.getElementById('anna').innerHTML=anna;
+  document.getElementById('controls').innerHTML=ctrl;
+  if(window.lucide) lucide.createIcons();
 }
-function toPhase(p){ playSuccess(); phase=p; render(); window.scrollTo(0,0); }
-function render(){ renderTB(); billedPanel(); renderControls(); if(window.lucide) lucide.createIcons(); }
 
-/* ===== job-ticket modal ===== */
-function openTicket(id){
+/* ===== BRW hook: advance the walk when the right line opens / tab switches ===== */
+function onBRW(type, cid, a, b){
+  if(step>=WALK.length || stepDone) return;
+  var t=WALK[step].target, hit=false;
+  if(type==='expand' && t.kind===a && String(t.key)===String(b)) hit=true;
+  if(type==='tab' && t.tabSwitch===a) hit=true;
+  if(hit){ stepDone=true; playSuccess(); renderTalk(); }
+}
+function nextStep(){ playClick(); step++; stepDone=false; renderTalk(); }
+
+/* ===== job log ===== */
+function payTag(j){
+  if(j.collected && j.pay.indexOf('account')>=0) return '<span class="stmt-tag repair">on account &middot; collected</span>';
+  if(!j.collected) return '<span class="stmt-tag" style="border-color:var(--error-text);color:var(--error-text)">on account &middot; outstanding</span>';
+  if(j.pay.indexOf('Deposit')>=0) return '<span class="stmt-tag personal">deposit applied</span>';
+  return '<span class="stmt-tag repair">paid</span>';
+}
+function openJobLog(){
   playClick();
-  var j=BR_JOBS.filter(function(x){return x.id===id;})[0]; if(!j) return;
-  var h='<div class="glossary-entry"><div class="glossary-entry-term">'+j.work+'</div><div class="glossary-entry-def"><span class="mono">'+j.id+'</span> &middot; '+j.date+', 2026 &middot; '+j.customer+'</div></div>';
-  h+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Parts used &mdash; '+j.parts+'</div><div class="xl-v">$'+nf(j.partsCost)+'</div></div>';
-  h+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Amount charged</div><div class="xl-v">$'+nf(j.charge)+'</div></div>';
-  h+='<div class="glossary-entry"><div class="glossary-entry-def"><strong>Payment:</strong> '+j.pay+(j.collected?' &middot; collected':' &middot; <span class="stmt-with">outstanding</span>')+'</div></div>';
-  if(j.note) h+='<div class="glossary-entry"><div class="glossary-entry-def"><em>'+j.note+'</em></div></div>';
-  document.getElementById('ticketBody').innerHTML=h;
+  document.getElementById('ticketTitle').innerHTML='Job log &middot; June&ndash;August 2026';
+  var charged=0, parts=0, hours=0;
+  var rows=BR_JOBS.map(function(j){
+    charged+=j.charge; parts+=j.partsCost; hours+=j.hours;
+    return '<div class="glossary-entry"><div class="glossary-entry-term" style="font-size:var(--font-s)">'+j.date+' &middot; '+j.work+' '+payTag(j)+'</div>'
+      +'<div class="glossary-entry-def"><span class="mono">'+j.id+'</span> &middot; '+j.customer+' &middot; '+j.hours+' hrs &middot; parts used $'+j.partsCost.toLocaleString('en-US')+' &middot; charged <strong>$'+j.charge.toLocaleString('en-US')+'</strong></div></div>';
+  }).join('');
+  rows+='<div class="glossary-entry"><div class="glossary-entry-def"><strong>'+BR_JOBS.length+' jobs</strong> &middot; '+hours+' hrs of labor &middot; charged $'+charged.toLocaleString('en-US')+' &middot; parts used $'+parts.toLocaleString('en-US')+'</div></div>';
+  document.getElementById('ticketBody').innerHTML=rows;
+  document.getElementById('ticketOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function openPartsOrders(){
+  playClick();
+  document.getElementById('ticketTitle').innerHTML='Parts orders &middot; supplier invoices';
+  var total=0;
+  var rows=BR_PURCHASES.map(function(p){
+    total+=p.total;
+    var items=p.items.map(function(it){ return it.name+' $'+it.cost.toLocaleString('en-US'); }).join(' &middot; ');
+    return '<div class="glossary-entry"><div class="glossary-entry-term" style="font-size:var(--font-s)">'+p.date+' &middot; '+p.supplier+' <span class="stmt-tag repair">'+p.id+'</span> &middot; <strong>$'+p.total.toLocaleString('en-US')+'</strong></div>'
+      +'<div class="glossary-entry-def">'+items+'</div></div>';
+  }).join('');
+  rows+='<div class="glossary-entry"><div class="glossary-entry-def"><strong>'+BR_PURCHASES.length+' orders</strong> &middot; total parts bought $'+total.toLocaleString('en-US')+'</div></div>';
+  document.getElementById('ticketBody').innerHTML=rows;
+  document.getElementById('ticketOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function stmtBlocks(list){
+  return list.map(function(s){
+    var h='<div class="glossary-entry"><div class="glossary-entry-term" style="font-size:var(--font-s)">'+s.title+'</div><div class="glossary-entry-def">'+s.sub+'</div></div>';
+    h+='<div class="xlwb">';
+    h+='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Opening balance</div><div class="xl-v">'+BRW.dol(s.opening)+'</div></div>';
+    s.txns.forEach(function(t){
+      h+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+t.desc+'</div><div class="xl-v">'+(t.note?'':BRW.signed(t.amt))+'</div></div>';
+    });
+    h+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Closing balance</div><div class="xl-v">'+BRW.dol(s.closing)+'</div></div>';
+    h+='</div>';
+    return h;
+  }).join('');
+}
+function openBankStatements(){
+  playClick();
+  document.getElementById('ticketTitle').innerHTML='Bank statements &middot; LLC checking';
+  document.getElementById('ticketBody').innerHTML=stmtBlocks(BR_BANK);
+  document.getElementById('ticketOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function openCardStatements(){
+  playClick();
+  document.getElementById('ticketTitle').innerHTML='Credit card statements';
+  document.getElementById('ticketBody').innerHTML=stmtBlocks(BR_CARD);
   document.getElementById('ticketOverlay').classList.add('open');
   if(window.lucide) lucide.createIcons();
 }
@@ -166,10 +328,10 @@ function closeTicket(){ document.getElementById('ticketOverlay').classList.remov
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Trial balance', def:'A list of every account&rsquo;s balance, debits in one column and credits in the other. Equal totals prove the bookkeeping is internally consistent &mdash; not that every earning and expiry has been recognized.' },
-  { term:'Accounts Receivable', def:'A customer&rsquo;s promise to pay for work already done &mdash; an asset. Revenue is earned when the work is finished, even before the cash arrives.' },
-  { term:'Unearned Revenue', def:'Cash a customer paid before you did the work &mdash; a liability (you owe the work). It becomes revenue only once the work is done.' },
-  { term:'Recognize', def:'To record an earning or a cost in the period it belongs to &mdash; tied to the <em>work</em>, not the movement of cash.' }
+  { term:'Balance sheet', def:'A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the residual. It says where things stand, not how they got there.' },
+  { term:'Members&rsquo; capital', def:'The residual for an LLC: Assets &minus; Liabilities. The definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $4,430 &minus; $0 = $4,430.' },
+  { term:'Reason', def:'The short note you jot beside a change in the books to record <em>why</em> it happened. Over a whole season the Reasons pile up &mdash; sorted into your familiar piles on the Reasons tab.' },
+  { term:'Used up', def:'A thing the work consumed &mdash; parts off the shelf and into a bike, a month of rent lived through. The records show it leaving; the benefit is gone.' }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
@@ -178,11 +340,14 @@ function openGlossary(){
   document.getElementById('glossaryOverlay').classList.add('open');
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeTicket(); } });
 
 /* ===== init ===== */
-render();
+BRW.mount('wb', SNAP);
+BRW.setHook(onBRW);
+renderTalk();
 </script>
 </body>
 </html>
