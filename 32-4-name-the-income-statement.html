@@ -133,6 +133,7 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
 /* ===== init — workbook on the Reasons tab (MONEY IN / USED UP); Income sheet appears on demand ===== */
+window.devFill = function(){ if(!laid) layItOut(); };
 BRW.registerSheet('income', incomeSheet);
 BRW.mount('wb', snap);
 BRW.tab('wb', 'reasons');

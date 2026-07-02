@@ -190,6 +190,7 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
 /* ===== init ===== */
+window.devFill = function(){ reasons.forEach(function(r){ placed[r.id]=r.flow; }); done=true; filling=false; BRW.update('wb', snap); renderDone(); };
 BRW.registerSheet('sort', sortSheet);
 BRW.mount('wb', snap);
 BRW.tab('wb', 'sort');

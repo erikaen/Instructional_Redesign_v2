@@ -415,3 +415,63 @@ var BRW = (function () {
     registerSheet: function (id, fn) { _sheets[id] = fn; }
   };
 })();
+
+/* ============================================================================
+ * DEV — gated dev harness for walking the tutorials fast (added 2026-07-02,
+ * Rick approved). Completely inert for real users. Activate with either:
+ *   • ?dev in the URL           → activate + AUTO-FILL each page on load (walk mode)
+ *   • localStorage.__dev === '1' → activate, no auto-fill (manual: press f / n)
+ * When active it shows a small DEV pill, wraps the page's nav() so ?dev carries
+ * to the next page, and binds keys: f = fill this page, n = fill + go next.
+ * A page opts in by defining window.devFill() (usually 1–3 lines calling its own
+ * finishers); pages with no gate need none — n just clicks their forward button.
+ * ========================================================================== */
+(function () {
+  'use strict';
+  function urlDev() { return /[?&]dev(=|&|$)/.test(location.search); }
+  function active() { try { return urlDev() || localStorage.getItem('__dev') === '1'; } catch (e) { return urlDev(); } }
+  if (!active()) return;
+  var autoFill = urlDev();
+
+  function withDev(u) { if (!u || /[?&]dev(=|&|$)/.test(u)) return u; return u + (u.indexOf('?') < 0 ? '?dev' : '&dev'); }
+  function fill() { try { if (typeof window.devFill === 'function') window.devFill(); } catch (e) { console.warn('[dev] devFill error:', e); } }
+  function fwd() {
+    var b = [].slice.call(document.querySelectorAll('[onclick]')).filter(function (el) {
+      var o = el.getAttribute('onclick') || ''; return /nav\(/.test(o) && /\.html/.test(o);
+    }).pop();
+    if (b) b.click();
+  }
+  function next() { fill(); setTimeout(fwd, 90); }
+
+  function boot() {
+    if (typeof window.nav === 'function') { var _nav = window.nav; window.nav = function (u) { return _nav(withDev(u)); }; }
+
+    var bar = document.createElement('div');
+    bar.setAttribute('data-dev-bar', '');
+    bar.style.cssText = 'position:fixed;left:10px;bottom:10px;z-index:99999;display:flex;gap:6px;align-items:center;'
+      + 'background:#111;color:#fff;font:700 12px/1 Inter,system-ui,sans-serif;padding:6px 8px;border-radius:8px;opacity:.85;box-shadow:0 2px 8px rgba(0,0,0,.3)';
+    function mkBtn(label, fn) {
+      var b = document.createElement('button');
+      b.textContent = label;
+      b.style.cssText = 'font:700 12px/1 Inter,system-ui,sans-serif;color:#111;background:#fff;border:0;border-radius:5px;padding:5px 8px;cursor:pointer';
+      b.onclick = fn; return b;
+    }
+    bar.appendChild(document.createTextNode('DEV'));
+    bar.appendChild(mkBtn('Fill · f', fill));
+    bar.appendChild(mkBtn('Next · n', next));
+    document.body.appendChild(bar);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      var t = e.target, tag = t && t.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || (t && t.isContentEditable)) return;
+      if (e.key === 'f') { e.preventDefault(); fill(); }
+      else if (e.key === 'n') { e.preventDefault(); next(); }
+    });
+
+    if (autoFill) setTimeout(fill, 70);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+})();

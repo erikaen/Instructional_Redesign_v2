@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dev Index — Bike-Repair tutorials</title>
+  <style>
+    body{font:15px/1.5 Inter,system-ui,sans-serif;max-width:900px;margin:24px auto;padding:0 16px;color:#111}
+    h1{font-size:22px;margin:0 0 4px}
+    .hint{color:#555;font-size:13px;margin:0 0 18px}
+    .hint code{background:#eee;padding:1px 5px;border-radius:4px}
+    .hint button{font:inherit;font-size:12px;border:1px solid #ccc;background:#fff;border-radius:5px;padding:3px 8px;cursor:pointer}
+    h2{font-size:14px;text-transform:uppercase;letter-spacing:.04em;color:#666;margin:22px 0 8px;border-bottom:1px solid #eee;padding-bottom:4px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:6px}
+    a{display:block;text-decoration:none;color:#1d4ed8;background:#f6f7fb;border:1px solid #e5e7eb;border-radius:6px;padding:7px 10px;font-size:13px}
+    a:hover{background:#eef2ff;border-color:#c7d2fe}
+    a .n{color:#111;font-weight:700;margin-right:6px}
+  </style>
+</head>
+<body>
+  <h1>Dev Index — Bike-Repair tutorials</h1>
+  <p class="hint">Every link opens with <code>?dev</code>: the page <b>auto-fills on load</b>, then click <b>Next · n</b> (or press <b>n</b>) to walk to the next page, <b>f</b> to re-fill.
+  Manual mode (badge + keys, no auto-fill):
+  <button onclick="localStorage.setItem('__dev','1');alert('manual dev mode ON')">enable</button>
+  <button onclick="localStorage.removeItem('__dev');alert('manual dev mode OFF')">disable</button></p>
+  <div id="list"></div>
+
+  <script>
+  var MODULES = {
+    'Module 1 — Foundations': [
+      '11-1-Getting-Started','11-2-A-Rough-Week','11-3-Sort-Your-Things','11-4-The-Line-You-Drew','11-5-Module-Complete',
+      '12-1-Meet-Maria','12-2-Marias-Form','12-3-The-Read-Back','12-4-Module-Complete',
+      '13-1-Meet-Anna','13-2-The-Bank-Statement','13-3-The-Cash-Movement','13-4-The-Customer-Payments','13-5-The-Credit-Card-Statement','13-6-The-Promises','13-7-The-Rent-Payment','13-8-Naming-the-Lists','13-9-Module-Complete',
+      '14-1-Why-Keep-the-Reasons','14-2-Walk-the-Reasons','14-3-Pairs-That-Cancel','14-4-The-Net-Movers','14-5-Module-Complete',
+      '15-1-Bringing-It-Together','15-2-Find-the-Net','15-3-The-Accounting-Identity','15-4-The-Entity','15-5-Net-Assets','15-6-Double-Entry','15-7-Module-Complete'
+    ],
+    'Module 2 — Getting Formal': [
+      '21-1-welcome','21-2-exposure','21-3-whoSeesTwo','21-4-twoHats','21-5-complete',
+      '22-1-welcome','22-2-name','22-3-file','22-4-whatChanged','22-5-complete',
+      '23-1-welcome','23-2-agreement','23-3-contribution','23-4-wall','23-5-keystone','23-6-complete',
+      '24-1-welcome','24-2-ein','24-3-account','24-4-statements','24-5-complete',
+      '25-1-welcome','25-2-capstone','25-3-complete'
+    ],
+    'Module 3 — The Story Between the Snapshots': [
+      '31-1-welcome','31-2-work-the-season',
+      '32-1-the-income-statement','32-2-two-kinds','32-3-revenue-follows-the-work','32-4-name-the-income-statement','32-5-what-the-season-kept'
+    ]
+  };
+  var host = document.getElementById('list');
+  Object.keys(MODULES).forEach(function(mod){
+    var h = document.createElement('h2'); h.textContent = mod; host.appendChild(h);
+    var g = document.createElement('div'); g.className = 'grid';
+    MODULES[mod].forEach(function(f){
+      var m = f.match(/^(\d\d-\d+)-(.*)$/);
+      var num = m ? m[1] : f, name = m ? m[2].replace(/-/g,' ') : f;
+      var a = document.createElement('a');
+      a.href = f + '.html?dev';
+      a.innerHTML = '<span class="n">'+num+'</span>'+name;
+      g.appendChild(a);
+    });
+    host.appendChild(g);
+  });
+  </script>
+</body>
+</html>

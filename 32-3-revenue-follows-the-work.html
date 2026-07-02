@@ -169,6 +169,7 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeTicket(); } });
 
 /* ===== init — the workbook with the season already sorted into MONEY IN / USED UP ===== */
+window.devFill = function(){ setStep(2); };
 BRW.mount('wb', BR_WB.snapshot({ flowGroups:true }));
 BRW.tab('wb', 'reasons');
 renderTalk();

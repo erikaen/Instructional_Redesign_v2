@@ -214,6 +214,7 @@ var paidValues = {};
 var selectedId = null;
 var formDone = false, formFilling = false;
 var formPhase = 'categorize'; // 'categorize' | 'valuate'
+var shelfCounted = false; // supplies: the on-shelf value can't be entered until the shelf is counted
 var placementsSnapshot = {}, valuesSnapshot = {}, paidValuesSnapshot = {}; // captured right before "Do the rest"
 var placeable = items.filter(function(i){ return i.category!=='none'; });
 
@@ -315,12 +316,17 @@ function renderSupplyRow(item){
   var paidCell, shelfCell;
   if(formDone){
     paidCell = '<span class="ins-val-static mono">'+fmt(Number(paidValues[item.id])||0)+'</span>';
-    shelfCell = '<span class="ins-val-static mono">'+fmt(Number(values[item.id])||0)+'<span class="count-left">'+item.countLeft+'</span></span>';
+    shelfCell = '<span class="ins-val-static mono">'+fmt(Number(values[item.id])||0)+'</span>';
   } else {
     var pcls = isPaidCorrect(item.id)?' ok':(isPaidWrong(item.id)?' wrong':'');
     paidCell = '<span class="ins-val-wrap"><span class="ins-dollar mono">$</span><input type="text" inputmode="numeric" class="ins-val narrow mono'+pcls+'" id="paid-'+item.id+'" value="'+(paidValues[item.id]||'')+'" placeholder="?" oninput="onPaidInput(\''+item.id+'\', this)" onkeydown="if(event.key===\'Enter\')this.blur()"></span>';
     var scls = isValCorrect(item.id)?' ok':(isValWrong(item.id)?' wrong':'');
-    shelfCell = '<span class="ins-val-wrap col"><span><span class="ins-dollar mono">$</span><input type="text" inputmode="numeric" class="ins-val narrow mono'+scls+'" id="val-'+item.id+'" value="'+(values[item.id]||'')+'" placeholder="?" oninput="onValueInput(\''+item.id+'\', this)" onkeydown="if(event.key===\'Enter\')this.blur()"></span><span class="count-left">'+item.countLeft+'</span></span>';
+    if(!shelfCounted){
+      // locked until the student opens the parts receipt and counts the shelf
+      shelfCell = '<span class="ins-val-wrap"><span class="ins-dollar mono">$</span><input type="text" class="ins-val narrow mono" placeholder="count first" disabled></span>';
+    } else {
+      shelfCell = '<span class="ins-val-wrap"><span class="ins-dollar mono">$</span><input type="text" inputmode="numeric" class="ins-val narrow mono'+scls+'" id="val-'+item.id+'" value="'+(values[item.id]||'')+'" placeholder="?" oninput="onValueInput(\''+item.id+'\', this)" onkeydown="if(event.key===\'Enter\')this.blur()"></span>';
+    }
   }
   return '<div class="ins-row"><span class="ins-row-name">'+item.name+'</span>'+paidCell+shelfCell+'</div>';
 }
@@ -342,7 +348,7 @@ function renderForm(){
       inner = '<div class="ins-dropzone-empty">'+((selectedId && !formDone && !formFilling)?('click to place "'+findItem(selectedId).name+'" here'):'drop items here')+'</div>';
     } else {
       if(isSupplies && formPhase==='valuate'){
-        inner += '<div class="ins-colhead"><span class="ins-row-name">Item</span><button class="ins-ev" onclick="openDoc(\'chains\')" title="QBP receipt">paid (receipt)</button><span class="ins-val-static">on shelf now</span></div>';
+        inner += '<div class="ins-colhead"><span class="ins-row-name">Item</span><button class="ins-ev" onclick="openDoc(\'chains\')" title="QBP receipt">paid (receipt)</button><button class="ins-ev" onclick="openShelfCount()" title="Handwritten shelf count — Doc 13">on shelf now</button></div>';
       }
       inner += placed.map(function(i){ return isSupplies?renderSupplyRow(i):renderItemRow(i); }).join('');
     }
@@ -497,6 +503,7 @@ function openDoc(id){
     modal.innerHTML = receiptHTML(r);
   }
   document.getElementById('docOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
 }
 function openEbay(){
   var modal = document.getElementById('docModal');
@@ -508,16 +515,45 @@ function openEbay(){
     '<p class="ebay-foot">They cluster around <strong>$610</strong>. Close this and put that on the form.</p>';
   document.getElementById('docOverlay').classList.add('open');
 }
+function openShelfCount(){
+  var firstCount = !shelfCounted;
+  shelfCounted = true;
+  var modal = document.getElementById('docModal');
+  modal.className = 'doc-modal';
+  modal.innerHTML = shelfCountHTML();
+  document.getElementById('docOverlay').classList.add('open');
+  if(firstCount) playSuccess();
+  renderForm(); // unlock the on-shelf inputs now that the shelf has been counted
+}
 function closeDoc(){ document.getElementById('docOverlay').classList.remove('open'); }
+function shelfCountHTML(){
+  // Document 13 — the handwritten parts shelf count (quantities only, no prices).
+  var shelf = [
+    ['Chains','½ box'], ['Brake pads','½ box'], ['Derailleur cables','½ box'],
+    ['Cassettes','2 left'], ['Bottom brackets','¼ box'], ['Spokes','¼ bundle'], ['Tubes','¼ box']
+  ];
+  var rows = shelf.map(function(s){ return '<tr><td>'+s[0]+'</td><td class="num">'+s[1]+'</td></tr>'; }).join('');
+  return '<span class="doc-badge">Shelf count · Doc 13</span><button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>'+
+    '<div class="doc-vendor">Parts shelf count<span class="doc-vendor-sub">· handwritten, end of May</span></div>'+
+    '<div class="doc-meta"><span>Parts left on shelf</span><span>5/31</span></div>'+
+    '<table class="doc-table"><thead><tr><th>Part</th><th class="num">On shelf</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<p class="doc-note">Quantities only &mdash; no prices. You walked the shelf on May 31 and jotted how much of each part was left. The dollar value gets worked out later against the QBP invoice (Doc 5): <strong>$500</strong> of parts came in, <strong>$200</strong> is still on the shelf.</p>';
+}
 function receiptHTML(r){
   var rows = r.lineItems.map(function(li){ return '<tr><td>'+li.name+'</td><td class="num">'+fmt(li.amount)+'</td></tr>'; }).join('');
-  return '<span class="doc-badge">Receipt</span><button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>'+
+  var html = '<span class="doc-badge">Receipt</span><button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>'+
     '<div class="doc-vendor">'+r.vendor+'<span class="doc-vendor-sub">· '+r.vendorSub+'</span></div>'+
     '<div class="doc-meta"><span>'+r.receiptNum+'</span><span>'+r.date+'</span></div>'+
     '<table class="doc-table"><thead><tr><th>Item</th><th class="num">Amount</th></tr></thead><tbody>'+rows+
     '<tr class="total"><td>Total</td><td class="num">'+fmt(r.total)+'</td></tr></tbody></table>'+
     '<div class="doc-paid"><span><strong>Paid:</strong> '+r.paidWith+'</span><span class="muted">'+r.paidLast4+'</span></div>'+
     (r.paidNote?'<p class="doc-note">'+r.paidNote+'</p>':'');
+  // The parts invoice is what came IN, for whole boxes. Maria wants what's still on the shelf — so count it.
+  if(r.id==='qbp'){
+    html += '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;That&rsquo;s what you <strong>paid</strong> &mdash; for whole boxes. But I don&rsquo;t insure what you bought; I insure what&rsquo;s <strong>still on the shelf</strong> after a season of repairs. How much is left? You&rsquo;ll have to count.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" onclick="openShelfCount()"><i data-lucide="clipboard-list" class="licon"></i> Count the shelf &rarr;</button>';
+  }
+  return html;
 }
 function creditCardHTML(c){
   var rows = c.transactions.map(function(t){
@@ -612,6 +648,14 @@ function renderSegProgress(){
 }
 
 /* ===== init ===== */
+window.devFill = function(){
+  formPhase='valuate'; shelfCounted=true;
+  placeable.forEach(function(it){ placements[it.id]=it.category; values[it.id]=String(it.cost); if(it.paidAmount!=null) paidValues[it.id]=String(it.paidAmount); });
+  formDone=true; formFilling=false;
+  var sb=document.getElementById('systemBanner'); if(sb) sb.hidden=true;
+  renderForm();
+  var fdb=document.getElementById('formDoneBlock'); if(fdb) fdb.hidden=false;
+};
 renderSegProgress();
 renderForm();
 </script>

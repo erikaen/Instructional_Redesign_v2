@@ -342,6 +342,7 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeTicket(); } });
 
 /* ===== init ===== */
+window.devFill = function(){ step = WALK.length; stepDone = false; renderTalk(); };
 BRW.mount('wb', SNAP);
 BRW.setHook(onBRW);
 renderTalk();
