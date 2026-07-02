@@ -272,6 +272,8 @@ var BRW = (function () {
 
   var _reg = {};   // containerId -> { snap, ui:{tab, a:{}, l:{}, c:{}, g:{}} }
   var _hook = null; // optional page callback: _hook(type, cid, kind|id, key) on tab/expand. Default no-op.
+  var _sheets = {}; // custom tab-id -> function(cid, snap) → body HTML. A page registers a renderer
+                    // (built from the shared xl-* classes + BRW.dol/signed) for a tab not built into BRW.
 
   function dol(v) { return (v < 0 ? '−$' : '$') + Math.abs(v).toLocaleString('en-US'); }
   function signed(v) {
@@ -395,6 +397,7 @@ var BRW = (function () {
     if (tab === 'assets') body = listSheet(cid, 'a', snap.assets || [], 'Assets &mdash; what I have', 'Total Assets &mdash; what the records show');
     else if (tab === 'liabilities') body = listSheet(cid, 'l', snap.liabilities || [], 'Liabilities &mdash; what I owe', 'Total Liabilities &mdash; what the records show');
     else if (tab === 'reasons') body = reasonsSheet(cid, snap.reasons || { rows: [] });
+    else if (_sheets[tab]) body = _sheets[tab](cid, snap);
     else body = '';
     document.getElementById(cid).innerHTML = shell(cid, snap, label, body);
     if (window.lucide) lucide.createIcons();
@@ -406,6 +409,9 @@ var BRW = (function () {
     update: function (cid, snap) { if (!_reg[cid]) return this.mount(cid, snap); _reg[cid].snap = snap; render(cid); },
     tab: function (cid, id) { if (window.playClick) playClick(); _reg[cid].ui.tab = id; render(cid); if (_hook) _hook('tab', cid, id); },
     x: function (cid, kind, key) { if (window.playClick) playClick(); var m = _reg[cid].ui[kind]; m[key] = (kind === 'g') ? (m[key] === false) : !m[key]; render(cid); if (_hook) _hook('expand', cid, kind, key); },
-    setHook: function (fn) { _hook = fn; }
+    setHook: function (fn) { _hook = fn; },
+    // Register a renderer for a custom tab id (e.g. 'income'); BRW draws it inside its normal
+    // shell (titlebar + tab strip). fn(cid, snap) returns body HTML built from the shared xl-* classes.
+    registerSheet: function (id, fn) { _sheets[id] = fn; }
   };
 })();

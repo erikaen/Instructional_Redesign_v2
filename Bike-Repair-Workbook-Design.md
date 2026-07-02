@@ -1,9 +1,11 @@
 # Bike-Repair.xlsx — Workbook Design (locked)
 
-**Status:** Locked 2026-06-29. The reference design for the in-tutorial **Bike-Repair.xlsx**
-facsimile, as built and approved in `31-2-work-the-season.html`. Every Module 3 page that
-shows the workbook (`31-3` onward) inherits this structure, these numbers, and these rules.
-Pedagogy defers to `accounting-pedagogy`; page/style rules to `instructional-shared-styles`.
+**Status:** Locked 2026-06-29. **§5 and §6.7 patched 2026-07-01** to the built novice state
+(GENERATED +$2,570 itemized job-by-job, residual $4,430, recognition gaps visible). The reference
+design for the in-tutorial **Bike-Repair.xlsx** facsimile, as built and approved in
+`31-2-work-the-season.html`. Every Module 3 page that shows the workbook (`31-3` onward) inherits
+this structure, these numbers, and these rules. Pedagogy defers to `accounting-pedagogy`; page/style
+rules to `instructional-shared-styles`.
 
 This document locks the **opening (June 1, 2026) snapshot** — Module 2's close carried into the
 operating season. Numbers are the locked figures in
@@ -118,13 +120,29 @@ each expandable to what settled into it. The season's new reasons accumulate bel
 
 ### This season's reasons (kept in full detail — **not** closed, **not** bucketed)
 
-Recorded via the page's walk, then sorted into the familiar Module 1 piles (M3 adds a third):
+Recorded via the page's walk, then dropped into the familiar Module 1 piles (M3 adds a third). The
+GENERATED pile is **the mess** — jumbled **job by job** (each repair collected sitting next to its
+own parts used, each month's rent dropped in when paid), **not** sorted into revenue-then-expense.
+This unsorted pile is what motivates the income statement in 3.2; it must **not** be pre-bucketed.
 
-| Pile | Subtotal | Rows |
+| Pile | Subtotal | Rows (itemized, job-by-job order) |
 |---|--:|---|
 | **CONTRIBUTED** | — | *(nothing new put in this season; Contributed Capital is the carried balance above)* |
-| **GENERATED** | **+$2,650** | repairs for cash +5,000 · repairs on account +800 · parts used −1,200 · rent used −1,950 |
+| **GENERATED** | **+$2,570** | one row per event, jumbled: `Repair collected — {customer}` (+charge) · `Frame delivered — J. Smith` (+220) · `Parts used — {customer}` (−partsCost) · `Rent used — {month}` (−650 ×3). Nets: repairs collected + Smith's frame = **Sales $5,720**; parts used **−$1,200**; rent used **−$1,950** → **+$2,570**. |
 | **TAKEN OUT** | **−$600** | owner's draw −600 |
+
+**Residual close:** carried members' capital $2,460 + GENERATED $2,570 − draw $600 = **$4,430** =
+Assets $4,430 − Liabilities $0. (The card is paid off to $0; Smith's Unearned earns out to $0.)
+
+**Recognition gaps left visible in the raw data (deliberate — they seed 3.2/3.3):**
+- **Ridgeline Trail Crew** — trail-team tune finished Aug 28, **on account (uncollected)**. The novice
+  records `Parts used — Ridgeline −$75` but **no collection**, so the **$300** earned is nowhere in
+  the books. This is the **A/R** discovery of 3.2 ("revenue follows the work, not the cash").
+- **Depreciation** — none taken. Tools and the laptop are still carried at full cost; the season's
+  **$230** of wear ($200 tools + $30 laptop) never touched the reasons. This is the discovery of 3.3.
+
+So the novice books close at **$4,430**, exactly **$70** short of the true **$4,500**: +$300 uncollected
+receivable − $230 untaken depreciation. Both gaps sit in plain sight in the data, unnamed.
 
 Pairs that cancel (revealed, then crossed out during the walk; they don't move net): buy parts for
 cash, collect a billed repair, pay the rent, buy a new tool, pay off the card.
@@ -151,12 +169,17 @@ cash, collect a billed repair, pay the rent, buy a new tool, pay off the card.
    Temporary accounts, the income statement, and closing are the **discoveries** of Tutorials
    3.2–3.5. The transactions file's "Close the temporary accounts" step is answer-key bookkeeping
    for the YALEiE check workbook only — **not** a script for the HTML.
-7. **Not shown in the opening / `31-2`:** Smith's $220 advance *earning out* (revenue, no cash) is
-   Tutorial 3.4; **depreciation** ($200 tools + $30 laptop) is Tutorial 3.3. Neither appears as a
-   season event in 3.1. (This is why 3.1's visible net-movers move capital by **+$2,050** — Generated
-   +$2,650 less the −$600 draw — while the full season moves it **+$2,040**: closing members' capital
-   $4,500 − opening $2,460. The reconciliation: Smith's **+$220** earned and depreciation **−$230**,
-   surfacing in 3.4 and 3.3.)
+7. **The novice's recognition gaps (not recorded in `31-2`):** Ridgeline's completed-but-uncollected
+   **$300** (no cash, no record → the **A/R** discovery of Tutorial 3.2) and **depreciation** ($200
+   tools + $30 laptop = **$230** → Tutorial 3.3). Neither is recorded as a season event, so the
+   novice books close at members' capital **$4,430** (Assets $4,430 − Liabilities $0) — exactly **$70**
+   short of the true **$4,500**. The reconciliation: **+$300** uncollected receivable − **$230**
+   untaken depreciation = **+$70**, surfacing in 3.2 and 3.3.
+   *(Smith's $220 advance **does** earn out in `31-2`: his custom frame is finished and delivered in
+   the season, so Unearned Revenue closes to $0 and "Frame delivered — J. Smith +$220" sits in the
+   GENERATED pile. It is recorded in both the novice and the true books, so it is **not** part of the
+   $70 gap. The visible net-movers thus move capital by **+$1,970** — GENERATED +$2,570 less the −$600
+   draw — carrying opening $2,460 to the novice close $4,430.)*
 
 ---
 
