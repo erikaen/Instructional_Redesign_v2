@@ -11,8 +11,8 @@ first operating season; the articulated statement set emerges), **M4** the angel
 
 **Opens on M2's close** — no M1/M2 numbers are re-derived; the season layers on top:
 
-> Assets **$3,910** − Liabilities **$1,450** = members' capital **$2,460**
-> (cash $500; contributed $2,290 + retained $170). The owner's repair **skill is off the books.**
+> Assets **$4,710** − Liabilities **$2,250** = members' capital **$2,460**
+> (cash $1,300; contributed $2,290 + retained $170). The owner's repair **skill is off the books.**
 
 **File naming (v2).** Module 3 tutorials are `3X-Y-Title.html` = Module 3, Tutorial X, Page Y
 (parallel to M2's `21-`…`25-`). E.g. `31-1-welcome.html`.
@@ -100,11 +100,11 @@ income statement is complete.
 *Pages:* recall the metered/time cases → the laptop won't meter and isn't really time → spread it by time anyway (depreciation = a convention) → carrying value declines, book ≠ market → income statement complete.
 
 ### Tutorial 3.4 — The Cash-Flow Statement  (`34-`)
-**Profit ≠ cash.** Where the cash *actually* went: **operating** (repairs, parts, rent, the **credit-card payoff**)
+**Profit ≠ cash.** The season was plainly profitable — and the cash drawer is **lighter than the day the LLC opened** (cash $1,300 → $620, **down $680**). That felt contradiction, planted as a cliffhanger in `31-2`'s cash walk, is the tutorial's engine. Where the cash *actually* went: **operating** (repairs, parts, rent, the **credit-card payoff**)
 vs **investing** (the new tool) vs **financing** (the draw). The timing / non-cash gaps make it concrete: **Smith's
 $220 advance** (earned this season — revenue, **no new cash**, the cash arrived in M1), **depreciation** ($230,
-expense, no cash — added back), and the **credit-card payoff** ($1,230 — cash out that is **not** an expense, it
-settles an M2 liability). Net income **$2,640** vs operating cash **$1,120**.
+expense, no cash — added back), and the **credit-card payoff** ($2,030 — cash out that is **not** an expense, it
+settles an M2 liability). Net income **$2,640** vs operating cash **$320** — and total cash **fell $680**.
 *Pages:* the profit-vs-cash puzzle → the three buckets → the non-cash / non-expense items (Smith's advance, depreciation, credit-card payoff) → reconcile to the cash line.
 
 ### Tutorial 3.5 — Changes in Equities & the Articulated Set  (`35-`)
@@ -127,7 +127,7 @@ Chosen so each statement has something to chew on. Amounts **TBD** (set against 
 | Existing tools ($200) and laptop ($30) used all season → **depreciation** | 3.3 — assets used up **slow**; non-cash; tools & laptop handled separately |
 | **Smith's $220 advance** earned (M2 unearned liability) → **revenue, no cash** | profit-≠-cash (CFS) |
 | A **new tool** bought mid-season → **investing** outflow | CFS investing + a fresh depreciable asset |
-| The **credit card paid off** ($1,230, the M2 carryover) → cash out, **liability → $0** | CFS (operating); full payoff, so no interest |
+| The **credit card paid off** ($2,030, the M2 carryover) → cash out, **liability → $0** | CFS (operating); full payoff, so no interest |
 | An owner's **draw** → **financing** outflow | reduces equity; **not** an expense (SCE + CFS financing) |
 
 ---
@@ -143,7 +143,7 @@ working figures for the summer:
 | Repair revenue — cash $5,000 + on account $800 + Smith advance earned $220 | **$6,020** |
 | Expenses — parts/COGS $1,200 · rent $1,950 · depreciation $230 (tools $200 + laptop $30) | **$3,380** |
 | **Net income** | **$2,640** |
-| Cash flow — operating **+$1,120** · investing **−$400** (new tool) · financing **−$600** (draw) → net **+$120** | ending cash **$620** |
+| Cash flow — operating **+$320** · investing **−$400** (new tool) · financing **−$600** (draw) → net **−$680** | ending cash **$620** (opened at $1,300) |
 | Closing balance sheet — Assets **$4,500** − Liabilities **$0** = members' capital | **$4,500** (contributed 2,290 + retained 2,210) |
 
 **Rent treatment:** the season's rent (**$1,950 = 3 × $650**) is **paid and used this period** — routed through
@@ -151,15 +151,16 @@ Prepaid Rent as a booking convenience, then expired in full to Rent Expense, so 
 cash expense**. The **prepaid rent ($650)** is the lease's **last month** — a deposit that stays **parked** as an
 asset (consumed by pure time only when the lease ends), so it does **not** move this period.
 
-**Credit card:** the **$1,230** M2 carryover is **paid off in full**, so closing **liabilities are $0** and there is
+**Credit card:** the **$2,030** M2 carryover is **paid off in full**, so closing **liabilities are $0** and there is
 **no interest** to discuss. It's cash out that is **not** an expense (it settles a liability) — a clean operating
 outflow on the cash-flow statement.
 
 The residual moves only via **net income** (into retained) and the **draw** (out); the new-tool buy is investing;
 Smith's advance earns out (revenue, no cash). All three flow statements **articulate**: net income **$2,640**
-*exceeds* operating cash **$1,120** by the timing / non-cash items — **+$230** depreciation (non-cash), **−$300**
-receivable (earned, not collected), **−$220** Smith (earned, cash came last module), and **−$1,230** credit-card
-payoff (settles a liability). Asset breakdown: cash 620 · receivable 300 · prepaid rent 650 · parts 200 ·
+*exceeds* operating cash **$320** by the timing / non-cash items — **+$230** depreciation (non-cash), **−$300**
+receivable (earned, not collected), **−$220** Smith (earned, cash came last module), and **−$2,030** credit-card
+payoff (settles a liability). The gap is engineered to be **felt**: a profitable season whose cash goes **down** —
+profit ≠ cash as a fact of the student's own books, not a slogan. Asset breakdown: cash 620 · receivable 300 · prepaid rent 650 · parts 200 ·
 equipment net 2,730. Figures stay tunable; scale stays part-time.
 
 ---

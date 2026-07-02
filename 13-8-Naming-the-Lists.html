@@ -60,7 +60,7 @@ var THINGS_CATS = [
 ];
 var ROU_CAT = { cat:'RIGHT OF USE', items:[ {name:'Right to occupy the space — last month, prepaid',amount:650} ] };
 THINGS_CATS.concat([ROU_CAT]).forEach(function(c){ c.subtotal = c.items.reduce(function(s,i){return s+i.amount;},0); });
-var ASSETS_TOTAL = 3410, LIABILITIES_TOTAL = 1450;
+var ASSETS_TOTAL = 3410, LIABILITIES_TOTAL = 2250;
 
 var bikeRepairCashFlows = [
   { date:'May 1', desc:'Rent check — Westville Properties', amount:-1300 },
@@ -69,12 +69,10 @@ var bikeRepairCashFlows = [
   { date:'May 10', desc:'Customer payment — Venmo', amount:180 },
   { date:'May 12', desc:'Customer payment — Venmo', amount:80 },
   { date:'May 14', desc:'Customer payment — Venmo', amount:140 },
-  { date:'May 16', desc:'Card paydown — Harborline Visa', amount:-400 },
   { date:'May 19', desc:'Customer payment — Venmo', amount:130 },
   { date:'May 22', desc:'Smith deposit — frame build', amount:220 },
   { date:'May 23', desc:'Customer payment — Venmo', amount:100 },
-  { date:'May 27', desc:'Customer payment — Venmo', amount:150 },
-  { date:'May 28', desc:'Card paydown — Harborline Visa', amount:-400 }
+  { date:'May 27', desc:'Customer payment — Venmo', amount:150 }
 ];
 
 var glossaryGroups = [
@@ -143,8 +141,8 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
 function assetsSheet(){ return renderOutlineSheet(rouRevealed ? THINGS_CATS.concat([ROU_CAT]) : THINGS_CATS, 'Assets', 'TOTAL', rouRevealed ? 'RIGHT OF USE' : null); }
 function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things that belong to the repair work', 'TOTAL'); }
 function promisesSheet(){
-  var rows = [ {label:"Smith's frame — paid $220 up front, not built yet", amount:220}, {label:'Amount still owed on the credit card for the repair work', amount:1230} ];
-  var total = 1450;
+  var rows = [ {label:"Smith's frame — paid $220 up front, not built yet", amount:220}, {label:'Amount still owed on the credit card for the repair work', amount:2030} ];
+  var total = 2250;
   var header = liabilitiesNamed ? 'Liabilities' : 'Promises that belong to the repair work';
   var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+header+'</div><div class="xl-v">Amount</div></div>';
   rows.forEach(function(r,i){

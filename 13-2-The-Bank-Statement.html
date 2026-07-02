@@ -67,15 +67,13 @@ var txns = [
   { id:'t09', date:'May 12', desc:'Venmo deposit', w:0, d:80, bal:1745.00, cat:'shop', info:'Customer payment for a tune-up.' },
   { id:'t10', date:'May 14', desc:'Venmo deposit', w:0, d:140, bal:1885.00, cat:'shop', info:'Customer payment for a brake overhaul.' },
   { id:'t11', date:'May 15', desc:'Payroll deposit — employer', w:0, d:1800, bal:3685.00, cat:'personal', info:'Second full-time job paycheck of the month.' },
-  { id:'t12', date:'May 16', desc:'ACH — Harborline Visa payment', w:400, d:0, bal:3285.00, cat:'shop', info:'$400 payment to Harborline Visa. Your notes say this payment was applied to charges from setting up the rented workspace.' },
-  { id:'t13', date:'May 18', desc:'ATM cash withdrawal', w:50, d:0, bal:3235.00, cat:'personal', info:'Walking-around cash for lunch and errands.' },
-  { id:'t14', date:'May 19', desc:'Venmo deposit', w:0, d:130, bal:3365.00, cat:'shop', info:'Customer payment for chain and cassette replacement.' },
-  { id:'t15', date:'May 20', desc:'Streaming subscription', w:16, d:0, bal:3349.00, cat:'personal', info:'Streaming service for your apartment.' },
-  { id:'t16', date:'May 22', desc:'Check deposit — Smith', w:0, d:220, bal:3569.00, cat:'shop', info:"Smith's deposit on the custom frame build. Notebook says: \"deposit, frame build, 4-6 weeks.\"" },
-  { id:'t17', date:'May 23', desc:'Venmo deposit', w:0, d:100, bal:3669.00, cat:'shop', info:'Customer payment for a tune-up and minor repair.' },
-  { id:'t18', date:'May 24', desc:'Groceries — Stop & Shop', w:145, d:0, bal:3524.00, cat:'personal', info:'Groceries for the week.' },
-  { id:'t19', date:'May 27', desc:'Venmo deposit', w:0, d:150, bal:3674.00, cat:'shop', info:'Customer payment for custom wheel work and new spokes.' },
-  { id:'t20', date:'May 28', desc:'ACH — Harborline Visa payment', w:400, d:0, bal:3274.00, cat:'shop', info:'Second $400 payment to Harborline Visa. Your notes say this payment was applied to charges from setting up the rented workspace.' }
+  { id:'t13', date:'May 18', desc:'ATM cash withdrawal', w:50, d:0, bal:3635.00, cat:'personal', info:'Walking-around cash for lunch and errands.' },
+  { id:'t14', date:'May 19', desc:'Venmo deposit', w:0, d:130, bal:3765.00, cat:'shop', info:'Customer payment for chain and cassette replacement.' },
+  { id:'t15', date:'May 20', desc:'Streaming subscription', w:16, d:0, bal:3749.00, cat:'personal', info:'Streaming service for your apartment.' },
+  { id:'t16', date:'May 22', desc:'Check deposit — Smith', w:0, d:220, bal:3969.00, cat:'shop', info:"Smith's deposit on the custom frame build. Notebook says: \"deposit, frame build, 4-6 weeks.\"" },
+  { id:'t17', date:'May 23', desc:'Venmo deposit', w:0, d:100, bal:4069.00, cat:'shop', info:'Customer payment for a tune-up and minor repair.' },
+  { id:'t18', date:'May 24', desc:'Groceries — Stop & Shop', w:145, d:0, bal:3924.00, cat:'personal', info:'Groceries for the week.' },
+  { id:'t19', date:'May 27', desc:'Venmo deposit', w:0, d:150, bal:4074.00, cat:'shop', info:'Customer payment for custom wheel work and new spokes.' }
 ];
 
 var glossaryGroups = [
@@ -168,7 +166,7 @@ function sortProgress(shop, personal, unsorted, shopLabel, triggerMet, showCheck
     ? '<button class="btn-continue btn-block"'+(triggerMet?' onclick="bankAutocomplete()"':' disabled')+'>Sort the rest</button>'
     : (showCheck ? '<button class="btn-continue btn-block" onclick="checkBankSort()">Check my sort</button>' : '');
   return '<div class="sortprog" style="margin-top:20px;"><div class="sortprog-title">Sort the transactions</div>'+
-    '<p class="sortprog-hint">A shortcut to auto-sort the remaining transactions will unlock as you go. You&rsquo;re welcome to sort all 20 yourself.</p>'+
+    '<p class="sortprog-hint">A shortcut to auto-sort the remaining transactions will unlock as you go. You&rsquo;re welcome to sort all 18 yourself.</p>'+
     '<div class="sortprog-grid">'+
     '<div class="sortprog-box shop"><div class="sortprog-label">'+shopLabel+'</div><div class="sortprog-num">'+shop+'</div></div>'+
     '<div class="sortprog-box personal"><div class="sortprog-label">Personal</div><div class="sortprog-num">'+personal+'</div></div>'+
@@ -194,7 +192,7 @@ function renderBankSort(){
     html += '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Not all of these look right yet. I&rsquo;ve marked the ones that need another look. Try again.&rdquo;</div></div>';
   }
   html += renderStatement(txns, { bank:true, bankName:'ELM CITY BANK', acct:'Personal Checking · Account Ending •••• 8814',
-    topLabel:'Beginning balance (May 1)', topVal:'$2,500.00', botLabel:'Ending balance (May 31)', botVal:'$3,274.00',
+    topLabel:'Beginning balance (May 1)', topVal:'$2,500.00', botLabel:'Ending balance (May 31)', botVal:'$4,074.00',
     classObj:classifications, expandedId:expandedDescId, checked:sortChecked,
     toggleFn:'toggleBankDesc', classifyFn:'classifyBank', showHint:!hintSeen,
     catA:{id:'shop',label:'Repair'}, catB:{id:'personal',label:'Personal'},

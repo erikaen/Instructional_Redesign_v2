@@ -104,10 +104,10 @@ var CAT_BY_KEY = {}; ASSETS.forEach(function(c){ CAT_BY_KEY[c.cat]=c; });
 var ITEM_INDEX = {}; ASSETS.forEach(function(c){ c.items.forEach(function(it){ ITEM_INDEX[it.name]={ it:it, cat:c.cat }; }); });
 
 var LIABS = [
-  { label:'Credit Card', note:'what you owe on the bike-repair card', amount:1230 },
+  { label:'Credit Card', note:'what you owe on the bike-repair card', amount:2030 },
   { label:'Smith’s deposit', note:'paid $220 up front for a frame, not built yet', amount:220 }
 ];
-var LIABS_TOTAL = LIABS.reduce(function(s,l){ return s+l.amount; },0); // 1450
+var LIABS_TOTAL = LIABS.reduce(function(s,l){ return s+l.amount; },0); // 2250
 
 /* receipts (the evidence behind each item) */
 var GROUPS = {
@@ -220,7 +220,7 @@ function controls(){
   if(!act){
     return insightBox('Every thing, its reason',
       '<p>Equipment, the laptop, and the fixtures all carry their <em>why</em> now &mdash; on the card, the debit card, or brought from home. The Assets tab shows <em>what you have</em>; the Reasons tab shows <em>how each piece got here</em>.</p>') +
-      '<div class="next-phase-msg" style="margin-top:10px;">Next sub-walks &mdash; Supplies (bought &amp; used), Right of Use (paid &amp; used), Liabilities, and Cash (the 31-2 ledger, minus the $500 LLC deposit, with the $960 discovery) &mdash; come next.</div>';
+      '<div class="next-phase-msg" style="margin-top:10px;">Next sub-walks &mdash; Supplies (bought &amp; used), Right of Use (paid &amp; used), Liabilities, and Cash (the 31-2 ledger, minus the $1,300 LLC deposit, with the $160 discovery) &mdash; come next.</div>';
   }
   var items = activeItems();
   var recCount = items.filter(function(it){ return recorded[it.name]; }).length;

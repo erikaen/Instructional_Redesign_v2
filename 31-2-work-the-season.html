@@ -94,14 +94,12 @@ var cashPreJune = [
   { name:'Repair, customer paid', amt:180 },
   { name:'Repair, customer paid', amt:80 },
   { name:'Repair, customer paid', amt:140 },
-  { name:'Credit-card paydown', amt:-400 },
   { name:'Repair, customer paid', amt:130 },
   { name:'Smith&rsquo;s deposit received', amt:220 },
   { name:'Repair, customer paid', amt:100 },
   { name:'Repair, customer paid', amt:150 },
-  { name:'Credit-card paydown', amt:-400 },
-  { name:'Covered from your personal funds', amt:960 },
-  { name:'Deposited to open the LLC bank account', amt:500 }
+  { name:'Covered from your personal funds', amt:160 },
+  { name:'Deposited to open the LLC bank account', amt:1300 }
 ];
 var cashRepairs = BR_JOBS.filter(function (j) { return j.collected && j.pay.indexOf('Deposit') < 0; })
   .map(function (j) { return { name:'Repair collected &mdash; ' + j.customer, amt:j.charge }; });
@@ -114,7 +112,7 @@ var cashCosts = partsBuys.map(function (b) { return { name:'Parts bought &mdash;
   { name:'Rent paid &mdash; July', amt:-650 },
   { name:'Rent paid &mdash; August', amt:-650 },
   { name:'New repair tool', amt:-400 },
-  { name:'Credit card paid off', amt:-1230 },
+  { name:'Credit card paid off', amt:-2030 },
   { name:'Money taken out for personal use', amt:-600 }
 ]);
 var cashEvents = cashPreJune.concat(cashRepairs, cashCosts);
@@ -169,8 +167,7 @@ var SNAP = {
       { name:'Charged &mdash; hand tools', amt:300 }, { name:'Charged &mdash; air compressor', amt:180 },
       { name:'Charged &mdash; parts washer', amt:130 }, { name:'Charged &mdash; wheel-truing stand', amt:170 },
       { name:'Charged &mdash; fixtures', amt:750 }, { name:'Charged &mdash; parts (QBP order)', amt:500 },
-      { name:'Paydown', amt:-400 }, { name:'Paydown', amt:-400 },
-      { name:'Paid off in full this season', amt:-1230 }
+      { name:'Paid off in full this season', amt:-2030 }
     ]},
     { label:'Unearned Revenue', amount:0, events:[
       { name:'Smith&rsquo;s advance for a custom frame', amt:220 },
@@ -180,8 +177,8 @@ var SNAP = {
   reasons:{
     carried:[
       { label:'Contributed Capital', note:'what you put in', amount:2290, items:[
-        { name:'Cash to get the work going', amt:960 }, { name:'Laptop from home', amt:610 },
-        { name:'Gear from home', amt:220 }, { name:'Cash contributed forming the LLC', amt:500 } ] },
+        { name:'Cash to get the work going', amt:160 }, { name:'Laptop from home', amt:610 },
+        { name:'Gear from home', amt:220 }, { name:'Cash contributed forming the LLC', amt:1300 } ] },
       { label:'Retained Earnings', note:'what the work kept', amount:170, items:[
         { name:'Repairs earned', amt:1120 }, { name:'Parts used', amt:-300 }, { name:'Space used (rent)', amt:-650 } ] }
     ],
@@ -206,11 +203,11 @@ var WALK = [
     hint:'Open the <strong>Right of Use</strong> line.',
     insight:'This $650 is only the lease&rsquo;s <strong>last month</strong>, still on deposit. The <strong>$1,950</strong> of rent you actually used &mdash; June, July, August &mdash; you paid in cash and used up. It left through the Cash ledger; it isn&rsquo;t sitting here.' },
   { needTab:'assets', target:{kind:'a',key:0},
-    q:'Now <strong>Cash</strong>: <strong>$620</strong> &mdash; up only <strong>$120</strong> since June. After all those repairs? Open it.',
+    q:'Now <strong>Cash</strong>: <strong>$620</strong>. You opened the LLC&rsquo;s account with <strong>$1,300</strong> in June &mdash; the drawer is <em>down</em> <strong>$680</strong>. After the busiest summer the shop has ever had? Open it.',
     hint:'Open the <strong>Cash</strong> line.',
-    insight:'A lot of money moved &mdash; <strong>$5,500</strong> came in from repairs, and rent, parts, a new tool, the card payoff, and your own draw all went out. Only <strong>$120</strong> stuck. Busy season, thin cash.' },
+    insight:'A lot of money moved &mdash; <strong>$5,500</strong> came in from repairs. But rent, parts, a new tool, paying the card off in full, and your own draw took out <em>more</em> than the repairs brought in. A season this busy, and the records show <em>less</em> cash than the day it started. Hold on to that &mdash; it doesn&rsquo;t mean what it seems to mean.' },
   { needTab:'liabilities', target:{kind:'l',key:0},
-    q:'Switch to the <strong>Liabilities</strong> tab. <strong>Credit Card</strong> reads <strong>$0</strong> &mdash; it was $1,230 in June. Open it.',
+    q:'Switch to the <strong>Liabilities</strong> tab. <strong>Credit Card</strong> reads <strong>$0</strong> &mdash; it was $2,030 in June. Open it.',
     hint:'Click the <strong>Liabilities</strong> tab, then open <strong>Credit Card</strong>.',
     insight:'You <strong>paid it off in full</strong> during the season. That cash going out is one of the outflows you saw in the Cash ledger.' },
   { needTab:'liabilities', target:{kind:'l',key:1},
@@ -220,7 +217,7 @@ var WALK = [
   { needTab:'reasons', target:{tabSwitch:'reasons'},
     q:'None of those tabs really say <em>how the season went</em>. Switch to the <strong>Reasons</strong> tab &mdash; that&rsquo;s where you wrote down <em>why</em> the books moved.',
     hint:'Click the <strong>Reasons</strong> tab.',
-    insight:'There it is, in your familiar piles &mdash; every repair, every bit of parts used, each month&rsquo;s rent, jotted one by one. It all nets to <strong>GENERATED +$2,570</strong>, on top of the <strong>$170</strong> Retained you carried in. Nothing new <strong>CONTRIBUTED</strong>. And <strong>TAKEN OUT &minus;$600</strong>, your draw. A long list &mdash; and still no single line that says how the season went.' }
+    insight:'There it is, in your familiar piles &mdash; every repair, every bit of parts used, each month&rsquo;s rent, jotted one by one. It all nets to <strong>GENERATED +$2,570</strong>, on top of the <strong>$170</strong> Retained you carried in. Nothing new <strong>CONTRIBUTED</strong>. And <strong>TAKEN OUT &minus;$600</strong>, your draw. So the work <em>generated</em> $2,570 &mdash; while the Cash line, you just saw, went <em>down</em> $680. Both are true, and no single line explains how. A long list &mdash; and still no answer to how the season went.' }
 ];
 
 /* ===== state ===== */

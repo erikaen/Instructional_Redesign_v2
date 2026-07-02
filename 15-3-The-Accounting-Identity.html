@@ -62,13 +62,13 @@ var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.amount;},0); 
 
 var LIABILITIES_SNAPSHOT = [
   { label:"Smith's frame — paid $220 up front, not built yet", amount:220 },
-  { label:'What you owe on the bike-repair credit card', amount:1230 }
+  { label:'What you owe on the bike-repair credit card', amount:2030 }
 ];
-var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amount;},0); // 1450
-var NET = ASSETS_TOTAL - LIABILITIES_TOTAL; // 1960
+var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amount;},0); // 2250
+var NET = ASSETS_TOTAL - LIABILITIES_TOTAL; // 1160
 
 var CONTRIBUTED_ROWS = [
-  { account:'Cash',      delta:960, reason:'My personal self covered what the work drew down — I only see it now, tallying up.' },
+  { account:'Cash',      delta:160, reason:'My personal self covered what the work drew down — I only see it now, tallying up.' },
   { account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
   { account:'Equipment', delta:220, reason:'You brought gear you already owned.' }
 ];
@@ -83,9 +83,9 @@ var GENERATED_ROWS = [
   { account:'Supplies',     delta:-300, reason:'Used $300 of parts finishing jobs.' },
   { account:'Right of Use', delta:-650, reason:'Used the space for May ($650).' }
 ];
-var CONTRIBUTED_TOTAL = CONTRIBUTED_ROWS.reduce(function(s,r){return s+r.delta;},0); // 1790
+var CONTRIBUTED_TOTAL = CONTRIBUTED_ROWS.reduce(function(s,r){return s+r.delta;},0); // 990
 var GENERATED_TOTAL = GENERATED_ROWS.reduce(function(s,r){return s+r.delta;},0);     // 170
-var REASONS_TOTAL = CONTRIBUTED_TOTAL + GENERATED_TOTAL;                             // 1960
+var REASONS_TOTAL = CONTRIBUTED_TOTAL + GENERATED_TOTAL;                             // 1160
 
 var CASH_FLOWS = [
   { date:'May 1',  desc:'Rent paid in advance', amount:-1300 },
@@ -94,13 +94,11 @@ var CASH_FLOWS = [
   { date:'May 10', desc:'Repair finished — customer paid', amount:180 },
   { date:'May 12', desc:'Repair finished — customer paid', amount:80 },
   { date:'May 14', desc:'Repair finished — customer paid', amount:140 },
-  { date:'May 16', desc:'Card paydown', amount:-400 },
   { date:'May 19', desc:'Repair finished — customer paid', amount:130 },
   { date:'May 22', desc:'Smith deposit', amount:220 },
   { date:'May 23', desc:'Repair finished — customer paid', amount:100 },
   { date:'May 27', desc:'Repair finished — customer paid', amount:150 },
-  { date:'May 28', desc:'Card paydown', amount:-400 },
-  { date:'—',      desc:'From your personal self — covering what the work drew down', amount:960 }
+  { date:'—',      desc:'From your personal self — covering what the work drew down', amount:160 }
 ];
 
 var glossaryGroups = [

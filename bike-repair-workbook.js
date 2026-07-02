@@ -28,14 +28,12 @@ var BR_WB = (function () {
       { name: 'Repair, customer paid', amt: 180 },
       { name: 'Repair, customer paid', amt: 80 },
       { name: 'Repair, customer paid', amt: 140 },
-      { name: 'Credit-card paydown', amt: -400 },
       { name: 'Repair, customer paid', amt: 130 },
       { name: 'Smith&rsquo;s deposit received', amt: 220 },
       { name: 'Repair, customer paid', amt: 100 },
       { name: 'Repair, customer paid', amt: 150 },
-      { name: 'Credit-card paydown', amt: -400 },
-      { name: 'Covered from your personal funds', amt: 960 },
-      { name: 'Deposited to open the LLC bank account', amt: 500 }
+      { name: 'Covered from your personal funds', amt: 160 },
+      { name: 'Deposited to open the LLC bank account', amt: 1300 }
     ];
     var repairs = BR_JOBS.filter(function (j) { return j.collected && j.pay.indexOf('Deposit') < 0; })
       .map(function (j) { return { name: 'Repair collected &mdash; ' + j.customer, amt: j.charge }; });
@@ -45,7 +43,7 @@ var BR_WB = (function () {
       { name: 'Rent paid &mdash; July', amt: -650 },
       { name: 'Rent paid &mdash; August', amt: -650 },
       { name: 'New repair tool', amt: -400 },
-      { name: 'Credit card paid off', amt: -1230 },
+      { name: 'Credit card paid off', amt: -2030 },
       { name: 'Money taken out for personal use', amt: -600 }
     ]);
     return pre.concat(repairs, costs);
@@ -139,8 +137,7 @@ var BR_WB = (function () {
           { name: 'Charged &mdash; hand tools', amt: 300 }, { name: 'Charged &mdash; air compressor', amt: 180 },
           { name: 'Charged &mdash; parts washer', amt: 130 }, { name: 'Charged &mdash; wheel-truing stand', amt: 170 },
           { name: 'Charged &mdash; fixtures', amt: 750 }, { name: 'Charged &mdash; parts (QBP order)', amt: 500 },
-          { name: 'Paydown', amt: -400 }, { name: 'Paydown', amt: -400 },
-          { name: 'Paid off in full this season', amt: -1230 }
+          { name: 'Paid off in full this season', amt: -2030 }
         ] },
         { label: 'Unearned Revenue', amount: 0, events: [
           { name: 'Smith&rsquo;s advance for a custom frame', amt: 220 },
@@ -150,8 +147,8 @@ var BR_WB = (function () {
       reasons: {
         carried: [
           { label: 'Contributed Capital', note: 'what you put in', amount: 2290, items: [
-            { name: 'Cash to get the work going', amt: 960 }, { name: 'Laptop from home', amt: 610 },
-            { name: 'Gear from home', amt: 220 }, { name: 'Cash contributed forming the LLC', amt: 500 } ] },
+            { name: 'Cash to get the work going', amt: 160 }, { name: 'Laptop from home', amt: 610 },
+            { name: 'Gear from home', amt: 220 }, { name: 'Cash contributed forming the LLC', amt: 1300 } ] },
           { label: 'Retained Earnings', note: 'what the work kept', amount: 170, items: [
             { name: 'Repairs earned', amt: 1120 }, { name: 'Parts used', amt: -300 }, { name: 'Space used (rent)', amt: -650 } ] }
         ],

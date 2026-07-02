@@ -73,7 +73,7 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== glossary (shared across all phases of 3.1) ===== */
 var glossaryTerms = [
-  { term:"Members&rsquo; capital", def:"The residual for an LLC: Assets &minus; Liabilities. It is the definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $3,910 &minus; $1,450 = $2,460." },
+  { term:"Members&rsquo; capital", def:"The residual for an LLC: Assets &minus; Liabilities. It is the definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $4,710 &minus; $2,250 = $2,460." },
   { term:"Reason", def:"The short note you jot beside a change in the books to record <em>why</em> it happened. You started the practice in Module 1; over a whole season the Reasons pile up." },
   { term:"Balance sheet", def:"A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the residual. It says where things stand, not how they got there." }
 ];
@@ -102,12 +102,12 @@ function buildOpeningBS(){
   h+='<div style="text-align:center;font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary)">Bike Repair, LLC</div>';
   h+='<div style="text-align:center;font-size:var(--font-xs);opacity:0.65;margin-bottom:10px">Opening balance sheet &middot; June 1, 2026</div>';
   h+=bsSection('Assets');
-  [['Cash','$500'],['Right of Use','$650'],['Parts','$200'],['Tools &amp; Repair Equipment','$1,200'],['Fixtures','$750'],['Office Equipment','$610']].forEach(function(r){ h+=bsRow(r[0],r[1],{}); });
-  h+=bsRow('Total assets','$3,910',{bold:true,rule:true});
+  [['Cash','$1,300'],['Right of Use','$650'],['Parts','$200'],['Tools &amp; Repair Equipment','$1,200'],['Fixtures','$750'],['Laptop','$610']].forEach(function(r){ h+=bsRow(r[0],r[1],{}); });
+  h+=bsRow('Total assets','$4,710',{bold:true,rule:true});
   h+=bsSection('Liabilities');
-  h+=bsRow('Credit Card','$1,230',{});
+  h+=bsRow('Credit Card','$2,030',{});
   h+=bsRow('Unearned Revenue','$220',{});
-  h+=bsRow('Total liabilities','$1,450',{bold:true,rule:true});
+  h+=bsRow('Total liabilities','$2,250',{bold:true,rule:true});
   h+=bsSection('Members&rsquo; capital');
   h+=bsRow('Contributed Capital','$2,290',{});
   h+=bsRow('Retained Earnings','$170',{});

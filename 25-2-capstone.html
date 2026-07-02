@@ -82,7 +82,7 @@ function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
 function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
 
 /* [label, M1 ending, LLC opening] — a row is a diff iff M1 !== LLC */
-var assetRows = [['Cash','0','500'],['Prepaid rent','650','650'],['Parts on the shelf','200','200'],['Tools &amp; equipment','1,200','1,200'],['Fixtures','750','750'],['Laptop','610','610']];
+var assetRows = [['Cash','0','1,300'],['Prepaid rent','650','650'],['Parts on the shelf','200','200'],['Tools &amp; equipment','1,200','1,200'],['Fixtures','750','750'],['Laptop','610','610']];
 
 /* ===== state (phase-local) ===== */
 var opened = false;
@@ -116,15 +116,15 @@ function buildSheet(){
   }
   h += sectionLabel('Assets');
   assetRows.forEach(function(r){ h += bsRow(r[0], r[1], r[2], {}); });
-  h += bsRow('Assets','3,410','3,910',{bold:true,rule:true});
+  h += bsRow('Assets','3,410','4,710',{bold:true,rule:true});
   h += sectionLabel('Liabilities');
-  h += bsRow('Credit card (business)','1,230','1,230',{});
+  h += bsRow('Credit card (business)','2,030','2,030',{});
   h += bsRow('Customer advance &mdash; Smith','220','220',{});
-  h += bsRow('Liabilities','1,450','1,450',{bold:true,rule:true});
+  h += bsRow('Liabilities','2,250','2,250',{bold:true,rule:true});
   h += sectionLabel('Members&rsquo; equity');
-  h += bsRow('Members&rsquo; capital &mdash; contributed','1,790','2,290',{});
+  h += bsRow('Members&rsquo; capital &mdash; contributed','990','2,290',{});
   h += bsRow('Retained earnings','170','170',{});
-  h += bsRow('Members&rsquo; equity (A &minus; L)','1,960','2,460',{bold:true,rule:true});
+  h += bsRow('Members&rsquo; equity (A &minus; L)','1,160','2,460',{bold:true,rule:true});
   h += '</div>';
   return h;
 }
@@ -139,13 +139,13 @@ function renderCapstone(){
   }
   var html = buildSheet();
   if(!compared){
-    html += '<p style="font-size:var(--font-s);margin-top:14px">There it is &mdash; the LLC&rsquo;s own sheet: <span class="mono">A 3,910 &minus; L 1,450 = 2,460</span>. Now the real question:</p>'+
+    html += '<p style="font-size:var(--font-s);margin-top:14px">There it is &mdash; the LLC&rsquo;s own sheet: <span class="mono">A 4,710 &minus; L 2,250 = 2,460</span>. Now the real question:</p>'+
       '<p style="font-size:var(--font-s);font-weight:600;color:var(--primary);margin-top:4px;margin-bottom:10px">How much of this did <em>forming the LLC</em> actually change?</p>'+
       '<button class="btn-continue btn-block" onclick="doCompare()">Hold it against your Module 1 sheet &rarr;</button>';
   } else {
     html += '<div style="background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:8px;padding:14px 16px;margin-top:14px;color:var(--warn-text);font-size:var(--font-s);line-height:1.65">'+
-      '<p style="margin-bottom:8px"><strong>Look what moved.</strong> Two lines &mdash; Cash (<span class="mono">0 &rarr; 500</span>) and members&rsquo; capital &mdash; contributed (<span class="mono">1,790 &rarr; 2,290</span>). Both by your <strong>$500</strong>. <strong>Everything else is identical.</strong></p>'+
-      '<p>Filing the certificate, signing the agreement, contributing the business, getting the EIN, moving the card &mdash; the entire legal formation changed the recorded economics by <strong>exactly nothing</strong>. The one thing that moved your balance sheet was a decision <em>you</em> made: putting in $500. <strong>Legal form is not economic substance.</strong></p></div>';
+      '<p style="margin-bottom:8px"><strong>Look what moved.</strong> Two lines &mdash; Cash (<span class="mono">0 &rarr; 1,300</span>) and members&rsquo; capital &mdash; contributed (<span class="mono">990 &rarr; 2,290</span>). Both by your <strong>$1,300</strong>. <strong>Everything else is identical.</strong></p>'+
+      '<p>Filing the certificate, signing the agreement, contributing the business, getting the EIN, moving the card &mdash; the entire legal formation changed the recorded economics by <strong>exactly nothing</strong>. The one thing that moved your balance sheet was a decision <em>you</em> made: putting in $1,300. <strong>Legal form is not economic substance.</strong></p></div>';
     html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="key-round" class="licon"></i> The keystone, settled</div>'+
       '<p style="font-weight:700;color:var(--primary);font-size:var(--font-m);margin-bottom:6px">The accounting entity has been here since 1.1. The legal one is days old.</p>'+
       '<p>This sheet describes a boundary you drew <em>for information</em> back in Module 1 &mdash; years, in a real firm, before any legal body existed. The LLC is a wrapper around it. <strong>Accounting&#8209;entity &ne; legal&#8209;entity</strong>, made concrete: the wrapper changed who can be pursued and whose name is on the account &mdash; not what the records show.</p></div>';

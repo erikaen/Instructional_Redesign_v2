@@ -65,10 +65,8 @@ var cardTxns = [
   { id:'k07', date:'May 12', desc:'Cyclesport Supply — wheel-truing stand', amt:170, kind:'charge', cat:'repair', info:'Wheel-truing stand for bike repairs.' },
   { id:'k08', date:'May 14', desc:'Gas station', amt:48, kind:'charge', cat:'personal', info:'Filled up the car for weekend errands.' },
   { id:'k09', date:'May 15', desc:'QBP — parts order', amt:500, kind:'charge', cat:'repair', info:'Wholesale parts order — chains, pads, cables, cassettes, etc.' },
-  { id:'k10', date:'May 16', desc:'ACH payment — thank you', amt:400, kind:'payment', cat:'repair', info:'$400 payment matching the May 16 Harborline Visa withdrawal on the bank statement.' },
   { id:'k11', date:'May 18', desc:'Streaming service', amt:16, kind:'charge', cat:'personal', info:'Monthly streaming subscription for home.' },
-  { id:'k12', date:'May 22', desc:'Pharmacy', amt:26, kind:'charge', cat:'personal', info:'Prescription pickup for you.' },
-  { id:'k13', date:'May 28', desc:'ACH payment — thank you', amt:400, kind:'payment', cat:'repair', info:'Second $400 payment matching the May 28 Harborline Visa withdrawal on the bank statement.' }
+  { id:'k12', date:'May 22', desc:'Pharmacy', amt:26, kind:'charge', cat:'personal', info:'Prescription pickup for you.' }
 ];
 
 var glossaryGroups = [
@@ -162,7 +160,7 @@ function sortProgress(shop, personal, unsorted, shopLabel, triggerMet, showCheck
     ? '<button class="btn-continue btn-block"'+(triggerMet?' onclick="cardAutocomplete()"':' disabled')+'>Sort the rest</button>'
     : (showCheck ? '<button class="btn-continue btn-block" onclick="checkCardSort()">Check my sort</button>' : '');
   return '<div class="sortprog" style="margin-top:20px;"><div class="sortprog-title">Sort the transactions</div>'+
-    '<p class="sortprog-hint">A shortcut to auto-sort the remaining transactions will unlock as you go. You&rsquo;re welcome to sort all 13 yourself.</p>'+
+    '<p class="sortprog-hint">A shortcut to auto-sort the remaining transactions will unlock as you go. You&rsquo;re welcome to sort all 11 yourself.</p>'+
     '<div class="sortprog-grid">'+
     '<div class="sortprog-box shop"><div class="sortprog-label">'+shopLabel+'</div><div class="sortprog-num">'+shop+'</div></div>'+
     '<div class="sortprog-box personal"><div class="sortprog-label">Personal</div><div class="sortprog-num">'+personal+'</div></div>'+
@@ -189,7 +187,7 @@ function renderCardSort(){
     html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Not all of these look right yet. I&rsquo;ve marked the ones that need another look. Try again.&rdquo;</div></div>';
   }
   html += renderStatement(cardTxns, { bank:false, bankName:'HARBORLINE VISA', acct:'Personal Credit Card · Account Ending •••• 3902',
-    topLabel:'Beginning balance (May 1)', topVal:'$0.00', botLabel:'Ending balance (May 31)', botVal:'$1,460.00',
+    topLabel:'Beginning balance (May 1)', topVal:'$0.00', botLabel:'Ending balance (May 31)', botVal:'$2,260.00',
     classObj:cardClass, expandedId:cardExpandedId, checked:cardSortChecked,
     toggleFn:'toggleCardDesc', classifyFn:'classifyCard', showHint:!hintSeen,
     catA:{id:'repair',label:'Repair'}, catB:{id:'personal',label:'Personal'},
@@ -200,13 +198,13 @@ function renderCardSort(){
   }
 
   if(cardSortChecked && wrongIds.length===0){
-    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Good. Now we can see which rows belong to the repair work and which ones belong to your personal life. But look at the card&rsquo;s ending balance: <strong>$1,460.00</strong>. That is the <strong>total</strong> amount still owed on the card. The question now is how much of that balance belongs to the repair work.&rdquo;</div></div>';
+    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Good. Now we can see which rows belong to the repair work and which ones belong to your personal life. But look at the card&rsquo;s ending balance: <strong>$2,260.00</strong>. That is the <strong>total</strong> amount still owed on the card. The question now is how much of that balance belongs to the repair work.&rdquo;</div></div>';
     var mcqWrongFb = {
-      'a': 'Not quite. $1,460.00 is the total amount still owed on the card, but it includes $230.00 of personal spending.',
-      'c': 'Not quite. $2,030.00 is the total repair-related amount charged to the card before the two $400 payments.'
+      'a': 'Not quite. $2,260.00 is the total amount still owed on the card, but it includes $230.00 of personal spending.',
+      'c': 'Not quite. $230.00 is the personal spending on the card &mdash; the part of the balance that has nothing to do with the repair work.'
     };
     var mcqCorrect = cardMCQSubmitted && cardMCQSel==='b';
-    var mcqOpts = [{id:'a',text:'$1,460.00'},{id:'b',text:'$1,230.00'},{id:'c',text:'$2,030.00'}];
+    var mcqOpts = [{id:'a',text:'$2,260.00'},{id:'b',text:'$2,030.00'},{id:'c',text:'$230.00'}];
     var mcqOptsHtml = mcqOpts.map(function(o){
       var cls = 'mc-opt';
       if(cardMCQSubmitted){ cls += ' locked'; if(o.id===cardMCQSel) cls += (mcqCorrect ? ' correct' : ' wrong'); }
@@ -217,7 +215,7 @@ function renderCardSort(){
     var mcqFbHtml = '<div class="feedback"></div>';
     if(cardMCQSubmitted){
       mcqFbHtml = mcqCorrect
-        ? '<div class="feedback ok show">Correct. The ending balance is $1,460.00, but $230.00 came from personal spending. The amount still owed for the repair work is $1,230.00.</div>'
+        ? '<div class="feedback ok show">Correct. The ending balance is $2,260.00, but $230.00 came from personal spending. The amount still owed for the repair work is $2,030.00.</div>'
         : '<div class="feedback err show">'+mcqWrongFb[cardMCQSel]+'</div>';
     }
     var mcqBtns = cardMCQSubmitted

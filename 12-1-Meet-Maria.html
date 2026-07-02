@@ -127,7 +127,7 @@ var receipts = [
   { id:'fixtures', forItem:['pegboard','desk','shelves','display'], vendor:'Workspace Outfitters', vendorSub:'store fixtures & furnishings', receiptNum:'Invoice  #WO-20518', date:'May 5, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Work desk',amount:250},{name:'Shelving units (×2)',amount:200},{name:'Display rack',amount:180},{name:'Pegboard panel + hook set',amount:120}], total:750 },
   { id:'qbp', forItem:['chains','cables','pads','cassettes','bbs','spokes','tubes'], vendor:'QBP', vendorSub:'Quality Bicycle Products — wholesale parts distributor', receiptNum:'Invoice  #QBP-887341  ·  Ship: UPS Ground', date:'May 15, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Chains (box)',amount:100},{name:'Brake pads (box)',amount:80},{name:'Derailleur cables (box)',amount:40},{name:'Cassettes (×4)',amount:80},{name:'Bottom brackets (assorted)',amount:80},{name:'Spokes (bundle)',amount:80},{name:'Tubes (box)',amount:40}], total:500 }
 ];
-var creditCard = { issuer:'Harborline Visa', sub:'Personal card · repair and personal charges co-mingled', last4:'•••• 3902', period:'May 1 – May 31, 2026', opened:'Statement opened May 1, 2026', previousBalance:0, chargesTotal:2260, paymentsTotal:800, newBalance:1460, transactions:[
+var creditCard = { issuer:'Harborline Visa', sub:'Personal card · repair and personal charges co-mingled', last4:'•••• 3902', period:'May 1 – May 31, 2026', opened:'Statement opened May 1, 2026', previousBalance:0, chargesTotal:2260, paymentsTotal:0, newBalance:2260, transactions:[
   {date:'05/03',desc:'Stop & Shop — groceries',charge:85,payment:null},
   {date:'05/05',desc:'Workspace Outfitters — fixtures',charge:750,payment:null},
   {date:'05/05',desc:'Cyclesport Supply — hand tools',charge:300,payment:null},
@@ -137,10 +137,8 @@ var creditCard = { issuer:'Harborline Visa', sub:'Personal card · repair and pe
   {date:'05/12',desc:'Cyclesport Supply — wheel-truing stand',charge:170,payment:null},
   {date:'05/14',desc:'Gas station',charge:48,payment:null},
   {date:'05/15',desc:'QBP — parts order',charge:500,payment:null},
-  {date:'05/16',desc:'ACH payment received — thank you',charge:null,payment:400},
   {date:'05/18',desc:'Streaming service',charge:16,payment:null},
-  {date:'05/22',desc:'Pharmacy',charge:26,payment:null},
-  {date:'05/28',desc:'ACH payment received — thank you',charge:null,payment:400}
+  {date:'05/22',desc:'Pharmacy',charge:26,payment:null}
 ]};
 var glossaryGroups = [
   { module:'Module 2: Insurance and Maria', terms:[

@@ -86,28 +86,26 @@ var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.subtotal;},0)
 
 var LIABILITIES_SNAPSHOT = [
   { label:"Smith's frame — paid $220 up front, not built yet", amount:220 },
-  { label:'What you owe on the bike-repair credit card', amount:1230 }
+  { label:'What you owe on the bike-repair credit card', amount:2030 }
 ];
-var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amount;},0); // 1450
+var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amount;},0); // 2250
 
 var CASH_FLOWS = [
-  { date:'May 1',  desc:'Your own money, put in to get going', amount:960 },
+  { date:'May 1',  desc:'Your own money, put in to get going', amount:160 },
   { date:'May 1',  desc:'Rent paid in advance (Westville Properties)', amount:-1300 },
   { date:'May 3',  desc:'Park Tool stand — Cyclesport Supply', amount:-200 },
   { date:'May 7',  desc:'Repair finished — customer paid (Venmo)', amount:340 },
   { date:'May 10', desc:'Repair finished — customer paid (Venmo)', amount:180 },
   { date:'May 12', desc:'Repair finished — customer paid (Venmo)', amount:80 },
   { date:'May 14', desc:'Repair finished — customer paid (Venmo)', amount:140 },
-  { date:'May 16', desc:'Card paydown — Harborline Visa', amount:-400 },
   { date:'May 19', desc:'Repair finished — customer paid (Venmo)', amount:130 },
   { date:'May 22', desc:'Smith deposit — frame build', amount:220 },
   { date:'May 23', desc:'Repair finished — customer paid (Venmo)', amount:100 },
-  { date:'May 27', desc:'Repair finished — customer paid (Venmo)', amount:150 },
-  { date:'May 28', desc:'Card paydown — Harborline Visa', amount:-400 }
+  { date:'May 27', desc:'Repair finished — customer paid (Venmo)', amount:150 }
 ];
 
 var REASONS = [
-  { id:'r_cashin', account:'Cash',      delta:960, reason:'You put in $960 of your own money to get going.' },
+  { id:'r_cashin', account:'Cash',      delta:160, reason:'You put in $160 of your own money to get going.' },
   { id:'r_laptop', account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
   { id:'r_gear',   account:'Equipment', delta:220, reason:'You brought gear you already owned: bench grinder, headset press, shop vacuum.' },
 
@@ -142,12 +140,7 @@ var REASONS = [
   { id:'r_v7', account:'Cash', delta:150, reason:'Finished a repair — customer paid $150 (May 27).' },
 
   { id:'r_smith_a', account:'Cash',      delta:220, reason:"Smith paid $220 up front for a frame you haven't built yet." },
-  { id:'r_smith_b', account:'Owe Smith', delta:220, reason:"Smith paid $220 up front for a frame you haven't built yet." },
-
-  { id:'r_pay1_a', account:'Credit Card', delta:-400, reason:'Paid $400 down on the card (May 16).' },
-  { id:'r_pay1_b', account:'Cash',        delta:-400, reason:'Paid $400 down on the card (May 16).' },
-  { id:'r_pay2_a', account:'Credit Card', delta:-400, reason:'Paid $400 down on the card (May 28).' },
-  { id:'r_pay2_b', account:'Cash',        delta:-400, reason:'Paid $400 down on the card (May 28).' }
+  { id:'r_smith_b', account:'Owe Smith', delta:220, reason:"Smith paid $220 up front for a frame you haven't built yet." }
 ];
 
 var CORRECT_CATEGORY = {
@@ -159,7 +152,7 @@ var CORRECT_CATEGORY = {
 var soloReasonIds = Object.keys(CORRECT_CATEGORY);
 
 var NARRATION_STEPS = [
-  { anna:"Start before May even began. You put in $960 of your own money, you brought your laptop from home, and you brought some gear you already owned. Each one's a single row, and the other side of that change (reason) isn't on this spreadsheet.",
+  { anna:"Start before May even began. You put in $160 of your own money, you brought your laptop from home, and you brought some gear you already owned. Each one's a single row, and the other side of that change (reason) isn't on this spreadsheet.",
     reveal:['r_cashin','r_laptop','r_gear'] },
   { anna:"The Park Tool stand — bought for $200 in cash. Equipment went up; cash went down. Same reason on both rows.",
     reveal:['r_stand_a','r_stand_b'] },
@@ -169,8 +162,8 @@ var NARRATION_STEPS = [
     reveal:['r_partsused'] },
   { anna:"The lease — $1,300 from cash, first and last month paid in advance. Then May happened: you used the space, so one month's worth is gone. The paying is a pair; the using-up stands alone.",
     reveal:['r_rent_a','r_rent_b','r_rentused'] },
-  { anna:"Now the cash side for May. Click the Cash tab — every customer Venmo, Smith's deposit, the two card paydowns.",
-    reveal:['r_v1','r_v2','r_v3','r_v4','r_v5','r_v6','r_v7','r_smith_a','r_smith_b','r_pay1_a','r_pay1_b','r_pay2_a','r_pay2_b'], goto:'cash' },
+  { anna:"Now the cash side for May. Click the Cash tab — every customer Venmo, and Smith's deposit.",
+    reveal:['r_v1','r_v2','r_v3','r_v4','r_v5','r_v6','r_v7','r_smith_a','r_smith_b'], goto:'cash' },
   { anna:"That's the whole month. Click back to the Reasons tab and look at the full list.",
     reveal:[], goto:'reasons' },
   { anna:"Notice anything? Look closely — most reasons show up in two rows. Same event, two changes. A few stand alone. We'll come back to those.",

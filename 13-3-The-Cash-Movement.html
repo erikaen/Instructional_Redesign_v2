@@ -20,11 +20,11 @@
 
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;We&rsquo;ve pulled the repair-related rows out of your bank statement: 12 rows in total. It would be much simpler if the repair work had its own bank account, but for now, this gives us a cleaner view of the cash connected to the repair work.<br><br>Take a look at the Cash sheet below. In May, <strong>$1,340 came in</strong> and <strong>$2,300 went out</strong>, resulting in a <strong>net cash flow of &minus;$960</strong>.&rdquo;</div>
+      <div class="dialog-text">&ldquo;We&rsquo;ve pulled the repair-related rows out of your bank statement: 10 rows in total. It would be much simpler if the repair work had its own bank account, but for now, this gives us a cleaner view of the cash connected to the repair work.<br><br>Take a look at the Cash sheet below. In May, <strong>$1,340 came in</strong> and <strong>$1,500 went out</strong>, resulting in a <strong>net cash flow of &minus;$160</strong>.&rdquo;</div>
     </div>
     <div id="cashWb" style="margin-top: 20px;"></div>
     <div class="mc-card" style="margin-top: 20px;">
-      <div class="mc-q">The Cash sheet shows <strong>net cash flow of &minus;$960</strong> for May. Based on that number alone, can you tell whether the repair work was better or worse off at the end of the month?</div>
+      <div class="mc-q">The Cash sheet shows <strong>net cash flow of &minus;$160</strong> for May. Based on that number alone, can you tell whether the repair work was better or worse off at the end of the month?</div>
       <div class="mc-opts" id="cashOpts"></div>
       <div class="feedback" id="cashFb"></div>
     </div>
@@ -79,12 +79,10 @@ var bikeRepairCashFlows = [
   { date:'May 10', desc:'Customer payment — Venmo', amount:180 },
   { date:'May 12', desc:'Customer payment — Venmo', amount:80 },
   { date:'May 14', desc:'Customer payment — Venmo', amount:140 },
-  { date:'May 16', desc:'Card paydown — Harborline Visa', amount:-400 },
   { date:'May 19', desc:'Customer payment — Venmo', amount:130 },
   { date:'May 22', desc:'Smith deposit — frame build', amount:220 },
   { date:'May 23', desc:'Customer payment — Venmo', amount:100 },
-  { date:'May 27', desc:'Customer payment — Venmo', amount:150 },
-  { date:'May 28', desc:'Card paydown — Harborline Visa', amount:-400 }
+  { date:'May 27', desc:'Customer payment — Venmo', amount:150 }
 ];
 
 var glossaryGroups = [
@@ -189,7 +187,7 @@ function toggleCat(cat){ playClick(); thingsExpanded[cat] = !thingsExpanded[cat]
 
 /* ===== cash quiz ===== */
 function renderCashQuiz(){
-  var opts=[ {id:'a',text:'Yes. Since net cash flow was &minus;$960, the repair work must be worse off.'},
+  var opts=[ {id:'a',text:'Yes. Since net cash flow was &minus;$160, the repair work must be worse off.'},
     {id:'b',text:'No. Since customers paid money during May, the repair work must be doing fine.'},
     {id:'c',text:'Not from the Cash sheet alone. We need to know what the money came in for and what the money went out for.'} ];
   document.getElementById('cashOpts').innerHTML = opts.map(function(o){

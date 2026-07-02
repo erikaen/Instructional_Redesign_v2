@@ -20,15 +20,15 @@
     </div>
 
     <div class="narrative-block">
-      <p>Everything in one workbook. <strong>Cash</strong> sits on the Assets list, right where you folded it last time &mdash; click its line open and there are May&rsquo;s flows, ending with the $960 your personal self covered, the line you found running through the middle of your own wallet. The repair work&rsquo;s cash ($0 on hand) is one of its assets.</p>
+      <p>Everything in one workbook. <strong>Cash</strong> sits on the Assets list, right where you folded it last time &mdash; click its line open and there are May&rsquo;s flows, ending with the $160 your personal self covered, the line you found running through the middle of your own wallet. The repair work&rsquo;s cash ($0 on hand) is one of its assets.</p>
     </div>
     <div id="assembleWb"></div>
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;Two totals matter now. The records show <strong>Assets of $3,410</strong> and <strong>Liabilities of $1,450</strong>. The gap between them is your <strong>net</strong>. What is it?&rdquo;</div>
+      <div class="dialog-text">&ldquo;Two totals matter now. The records show <strong>Assets of $3,410</strong> and <strong>Liabilities of $2,250</strong>. The gap between them is your <strong>net</strong>. What is it?&rdquo;</div>
     </div>
     <div class="mc-card">
-      <div class="mc-q">Your net = Assets &minus; Liabilities = $3,410 &minus; $1,450 =</div>
+      <div class="mc-q">Your net = Assets &minus; Liabilities = $3,410 &minus; $2,250 =</div>
       <div class="btn-row">
         <input id="netInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Your net" onkeydown="if(event.key==='Enter'){checkNet();}">
         <button class="btn btn-primary" onclick="checkNet()">Check</button>
@@ -79,13 +79,13 @@ var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.amount;},0); 
 
 var LIABILITIES_SNAPSHOT = [
   { label:"Smith's frame — paid $220 up front, not built yet", amount:220 },
-  { label:'What you owe on the bike-repair credit card', amount:1230 }
+  { label:'What you owe on the bike-repair credit card', amount:2030 }
 ];
-var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amount;},0); // 1450
-var NET = ASSETS_TOTAL - LIABILITIES_TOTAL; // 1960
+var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amount;},0); // 2250
+var NET = ASSETS_TOTAL - LIABILITIES_TOTAL; // 1160
 
 var CONTRIBUTED_ROWS = [
-  { account:'Cash',      delta:960, reason:'My personal self covered what the work drew down — I only see it now, tallying up.' },
+  { account:'Cash',      delta:160, reason:'My personal self covered what the work drew down — I only see it now, tallying up.' },
   { account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
   { account:'Equipment', delta:220, reason:'You brought gear you already owned.' }
 ];
@@ -100,9 +100,9 @@ var GENERATED_ROWS = [
   { account:'Supplies',     delta:-300, reason:'Used $300 of parts finishing jobs.' },
   { account:'Right of Use', delta:-650, reason:'Used the space for May ($650).' }
 ];
-var CONTRIBUTED_TOTAL = CONTRIBUTED_ROWS.reduce(function(s,r){return s+r.delta;},0); // 1790
+var CONTRIBUTED_TOTAL = CONTRIBUTED_ROWS.reduce(function(s,r){return s+r.delta;},0); // 990
 var GENERATED_TOTAL = GENERATED_ROWS.reduce(function(s,r){return s+r.delta;},0);     // 170
-var REASONS_TOTAL = CONTRIBUTED_TOTAL + GENERATED_TOTAL;                             // 1960
+var REASONS_TOTAL = CONTRIBUTED_TOTAL + GENERATED_TOTAL;                             // 1160
 
 var CASH_FLOWS = [
   { date:'May 1',  desc:'Rent paid in advance', amount:-1300 },
@@ -111,13 +111,11 @@ var CASH_FLOWS = [
   { date:'May 10', desc:'Repair finished — customer paid', amount:180 },
   { date:'May 12', desc:'Repair finished — customer paid', amount:80 },
   { date:'May 14', desc:'Repair finished — customer paid', amount:140 },
-  { date:'May 16', desc:'Card paydown', amount:-400 },
   { date:'May 19', desc:'Repair finished — customer paid', amount:130 },
   { date:'May 22', desc:'Smith deposit', amount:220 },
   { date:'May 23', desc:'Repair finished — customer paid', amount:100 },
   { date:'May 27', desc:'Repair finished — customer paid', amount:150 },
-  { date:'May 28', desc:'Card paydown', amount:-400 },
-  { date:'—',      desc:'From your personal self — covering what the work drew down', amount:960 }
+  { date:'—',      desc:'From your personal self — covering what the work drew down', amount:160 }
 ];
 
 var glossaryGroups = [

@@ -1,6 +1,6 @@
 # Bike-Repair.xlsx — Workbook Design (locked)
 
-**Status:** Locked 2026-06-29. **§5 and §6.7 patched 2026-07-01** to the built novice state
+**Status:** Locked 2026-06-29. **Re-based 2026-07-02** to the revised pre-LLC setup: no May card paydowns, personal cover **$160**, LLC deposit **$1,300**, card carried **$2,030** (opening $4,710 / $2,250 / $2,460). **§5 and §6.7 patched 2026-07-01** to the built novice state
 (GENERATED +$2,570 itemized job-by-job, residual $4,430, recognition gaps visible). The reference
 design for the in-tutorial **Bike-Repair.xlsx** facsimile, as built and approved in
 `31-2-work-the-season.html`. Every Module 3 page that shows the workbook (`31-3` onward) inherits
@@ -51,7 +51,7 @@ expand too (for parallelism). This is the defining feature: totals up top, the r
 
 ---
 
-## 3. Assets tab — opening June 1 (total **$3,910**)
+## 3. Assets tab — opening June 1 (total **$4,710**)
 
 Cash folded in as a **position** (the balance), expandable to its **full ledger** — the ledger ends
 with the two contributions that built the opening balance. Every other category expands to its
@@ -59,15 +59,15 @@ items.
 
 | Line (category) | Balance | Expands to |
 |---|--:|---|
-| **Cash** | **$500** | the first-month ledger (below), netting to $500 |
+| **Cash** | **$1,300** | the first-month ledger (below), netting to $1,300 |
 | **Right of Use** | **$650** | Right to occupy the space — the lease's last month, paid in advance ($650) |
 | **Parts** | **$200** | chains 50 · brake pads 40 · derailleur cables 20 · cassettes 40 · bottom brackets 20 · spokes 20 · tubes 10 |
 | **Tools & Repair Equipment** | **$1,200** | stand 200 · air compressor 180 · parts washer 130 · wheel-truing stand 170 · cone wrench set 65 · torque wrench 95 · hex/Allen set 45 · cable cutters 40 · chain breaker 35 · tire levers 20 · bench grinder 90 · headset press 70 · shop vacuum 60 |
 | **Fixtures** | **$750** | desk 250 · shelving units 200 · display rack 180 · pegboard + hooks 120 |
 | **Office Equipment** | **$610** | Laptop 610 |
-| **Total Assets** | **$3,910** | |
+| **Total Assets** | **$4,710** | |
 
-**Cash ledger** (expands under Cash; signed flows, nets to $500). The **last two entries are
+**Cash ledger** (expands under Cash; signed flows, nets to $1,300). The **last two entries are
 locked**: the implicit personal-funds contribution, then the LLC deposit.
 
 | Entry | Amount |
@@ -75,29 +75,27 @@ locked**: the implicit personal-funds contribution, then the LLC deposit.
 | May 1 — Rent paid in advance | −$1,300 |
 | May 3 — Park Tool stand | −$200 |
 | May 7 / 10 / 12 / 14 — Repairs, customer paid | +$340 / +$180 / +$80 / +$140 |
-| May 16 — Card paydown | −$400 |
 | May 19 — Repair, customer paid | +$130 |
 | May 22 — Smith deposit | +$220 |
 | May 23 / 27 — Repairs, customer paid | +$100 / +$150 |
-| May 28 — Card paydown | −$400 |
-| **Covered from your personal funds — what the work had quietly drawn down** | **+$960** |
-| **Deposited to open the LLC's bank account** | **+$500** |
-| **Cash on hand, June 1** | **$500** |
+| **Covered from your personal funds — what the work had quietly drawn down** | **+$160** |
+| **Deposited to open the LLC's bank account** | **+$1,300** |
+| **Cash on hand, June 1** | **$1,300** |
 
 ---
 
-## 4. Liabilities tab — opening June 1 (total **$1,450**)
+## 4. Liabilities tab — opening June 1 (total **$2,250**)
 
 The card carries a charges/payments breakdown (it reconstructs M1's real history — the charges are
 the very assets across the aisle). Unearned Revenue expands to its single advance.
 
 | Line | Balance | Expands to |
 |---|--:|---|
-| **Credit Card** | **$1,230** | **Charged** (= $2,030): hand tools 300 · air compressor 180 · parts washer 130 · wheel-truing stand 170 · fixtures 750 · parts (QBP order) 500. **Paid down** (= −$800): May 16 −400 · May 28 −400. → balance $1,230 |
+| **Credit Card** | **$2,030** | **Charged** (= $2,030): hand tools 300 · air compressor 180 · parts washer 130 · wheel-truing stand 170 · fixtures 750 · parts (QBP order) 500. **Nothing paid down before June** — the whole $2,030 rides into the season. |
 | **Unearned Revenue** | **$220** | Smith — paid $220 up front for a custom frame, not yet built |
-| **Total Liabilities** | **$1,450** | |
+| **Total Liabilities** | **$2,250** | |
 
-So **A − L = $3,910 − $1,450 = $2,460** opening members' capital.
+So **A − L = $4,710 − $2,250 = $2,460** opening members' capital.
 
 ---
 
@@ -111,7 +109,7 @@ each expandable to what settled into it. The season's new reasons accumulate bel
 
 | Balance | Amount | Expands to |
 |---|--:|---|
-| **Contributed Capital** | **$2,290** | cash to get the work going 960 · laptop from home 610 · gear from home 220 · cash contributed forming the LLC 500 |
+| **Contributed Capital** | **$2,290** | cash to get the work going 160 · laptop from home 610 · gear from home 220 · cash contributed forming the LLC 1,300 |
 | **Retained Earnings** | **$170** | repairs earned 1,120 · parts used −300 · space used (rent) −650 |
 | **Members' capital, June 1** | **$2,460** | |
 
@@ -157,8 +155,8 @@ cash, collect a billed repair, pay the rent, buy a new tool, pay off the card.
    balances. Single-item lines expand too, for parallelism.
 3. **Cash = position, not a flow statement.** The Cash line shows the balance and expands to its
    *history*; it is **not** a cash-flow statement (operating/investing/financing) — that is
-   Tutorial 3.4's to build. The ledger's **last two entries are locked**: +$960 implicit
-   contribution, +$500 LLC deposit.
+   Tutorial 3.4's to build. The ledger's **last two entries are locked**: +$160 implicit
+   contribution, +$1,300 LLC deposit.
 4. **Carried balances are expandable** to the detail that settled into them — continuity made
    visible, not opaque opening numbers.
 5. **Account naming: "Right of Use"** (not "Prepaid Rent") — the Module 1 convention. The
@@ -272,8 +270,8 @@ feature is earned it stays (the Reasons tab is **continuous** after its beat).
 | **1.3 Anna and the Bank Statement** | The bank statement brings **cash** into view as its own list — **not yet folded into Assets.** |
 | **1.4 Keeping the Reasons** *(CMU team title: "Why Keep the Reasons")* | ★★ **Two beats, both here.** **(a) Cash-fold** — Cash is folded into the Assets list, decided off the insurable-property framing ("is cash a right to future benefits?" — it's not insurable, but it's still the work's). **(b) Reasons tab is *born*** — log net-movers, cross the pairs, sort into *Contributed* / *Generated* (plain). |
 | **1.5 Naming What You Built** | Names land: `A − L = Equities`; *Contributed* → **Contributed Capital**, *Generated* → **Retained Earnings**. |
-| **Module 2 (no workbook on screen)** | Off-screen events still move it: **+$500 contributed** (Contributed Capital 1,790 → **2,290**), LLC formed, bank account opened. M3 must open consistent with this. |
-| **Module 3 — 3.1 (`31-x`)** | **This locked snapshot.** Opening Assets $3,910 / Liabilities $1,450; Reasons tab carries **Contributed Capital $2,290 + Retained Earnings $170**, season's reasons accumulate (un-closed). |
+| **Module 2 (no workbook on screen)** | Off-screen events still move it: **+$1,300 contributed** (Contributed Capital 990 → **2,290**), LLC formed, bank account opened. M3 must open consistent with this. |
+| **Module 3 — 3.1 (`31-x`)** | **This locked snapshot.** Opening Assets $4,710 / Liabilities $2,250; Reasons tab carries **Contributed Capital $2,290 + Retained Earnings $170**, season's reasons accumulate (un-closed). |
 | **Module 3 — 3.2–3.5** | Discoveries build *on top of* this snapshot: income statement, depreciation, cash-flow, the articulated set. |
 
 > **★ Rebuild gap — Tutorial 1.4.** Both structural beats live here, but the **CMU team's 1.4
