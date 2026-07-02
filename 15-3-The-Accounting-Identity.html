@@ -61,8 +61,11 @@ var ASSETS_SNAPSHOT = [
 var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.amount;},0); // 3410
 
 var LIABILITIES_SNAPSHOT = [
-  { label:"Smith's frame — paid $220 up front, not built yet", amount:220 },
-  { label:'What you owe on the bike-repair credit card', amount:2030 }
+  { key:'smith', label:"Smith's frame — paid $220 up front, not built yet", amount:220, items:[
+    { name:'Check deposit, May 22 &mdash; a custom frame build, 4&ndash;6 weeks', amt:220 } ] },
+  { key:'card', label:'What you owe on the bike-repair credit card', amount:2030, items:[
+    { name:'Hand tools', amt:300 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
+    { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] }
 ];
 var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amount;},0); // 2250
 var NET = ASSETS_TOTAL - LIABILITIES_TOTAL; // 1160
@@ -138,6 +141,7 @@ function catLabel(cat){ return cat==='RIGHT OF USE' ? 'Right of Use' : (cat.char
 var excelTab = 'reasons';
 var reasonsExpanded = { contributed:false, generated:false };
 var cashOpen = false;
+var liabExpanded = {};
 var curWbContainer = null;
 var idStage = 0;
 
@@ -161,26 +165,24 @@ function assetsSheet(){
 }
 function liabilitiesSheet(){
   var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liabilities — what I owe</div><div class="xl-v">Amount</div></div>';
-  LIABILITIES_SNAPSHOT.forEach(function(l,i){
-    html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+l.label+'</div><div class="xl-v">'+d(l.amount)+'</div></div>';
+  var n = 0;
+  LIABILITIES_SNAPSHOT.forEach(function(l){
+    var open = !!liabExpanded[l.key]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleLiabCat(\''+l.key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+l.label+'</div><div class="xl-v">'+d(l.amount)+'</div></div>';
+    if(open){ l.items.forEach(function(it){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+d(it.amt)+'</div></div>'; }); }
   });
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Total Liabilities — what the records show</div><div class="xl-v">'+d(LIABILITIES_TOTAL)+'</div></div>';
   return html;
 }
 function cashSheet(){
-  var inflows = CASH_FLOWS.filter(function(f){return f.amount>0;});
-  var outflows = CASH_FLOWS.filter(function(f){return f.amount<0;});
-  var totalIn = inflows.reduce(function(s,f){return s+f.amount;},0);
-  var totalOut = outflows.reduce(function(s,f){return s+f.amount;},0);
-  var onHand = totalIn + totalOut;
-  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Repair cash — May</div></div>';
-  html += '<div class="cash-group in"><div class="cash-group-label">Cash in</div>';
-  inflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">+'+d(f.amount)+'</span></div>'; });
-  html += '<div class="cash-subtotal"><span>Total in</span><span class="cash-line-amt">'+d(totalIn)+'</span></div></div>';
-  html += '<div class="cash-group out"><div class="cash-group-label">Cash out</div>';
-  outflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">'+d(f.amount)+'</span></div>'; });
-  html += '<div class="cash-subtotal"><span>Total out</span><span class="cash-line-amt">'+d(totalOut)+'</span></div></div>';
-  html += '<div class="cash-net"><span class="cash-net-label">Cash on hand (May 31)</span><span class="cash-net-val">'+d(onHand)+'</span></div>';
+  // Cash is folded into Assets — its expanded detail is the ledger, rendered in the
+  // same xl-item idiom as every other drill-down (dates via .cash-line-date).
+  var onHand = CASH_FLOWS.reduce(function(s,f){return s+f.amount;},0);
+  var html = '';
+  CASH_FLOWS.forEach(function(f){
+    html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c"><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</div><div class="xl-v">'+sd(f.amount)+'</div></div>';
+  });
+  html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c"><strong>Cash on hand (May 31)</strong></div><div class="xl-v"><strong>'+d(onHand)+'</strong></div></div>';
   return html;
 }
 function reasonsGroup(key, title, rows, total){
@@ -219,6 +221,7 @@ function renderWorkbook(containerId){
 function setTab(id){ playClick(); excelTab = id; if(curWbContainer) renderWorkbook(curWbContainer); }
 function toggleReasonsCat(k){ playClick(); reasonsExpanded[k] = !reasonsExpanded[k]; if(curWbContainer) renderWorkbook(curWbContainer); }
 function toggleCash(){ playClick(); cashOpen = !cashOpen; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleLiabCat(key){ playClick(); liabExpanded[key] = !liabExpanded[key]; if(curWbContainer) renderWorkbook(curWbContainer); }
 
 /* ===== identity (staged reveal) ===== */
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }

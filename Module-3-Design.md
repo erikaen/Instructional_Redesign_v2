@@ -46,6 +46,10 @@ Follows `accounting-pedagogy`; the points that bite hardest here:
   to bucket the operating ones into running tallies (revenues, expenses) that total the period, then **close
   into retained earnings and reset** for the next season. *Those* are **temporary accounts**; the income
   statement is just their organized display. Name them **only after** the bucketing is felt (names-last).
+  **The Reasons list is one continuous list from May** (redesigned 2026-07-02): no carried-in balances,
+  nothing pre-settled — the pile spanning periods is what makes the period-cut, and later the reset,
+  *felt*; the **first-ever close is 3.5's discovery**. Standing pile vocabulary everywhere:
+  **CONTRIBUTED / GENERATED / WITHDRAWN**, each pile born when first used (WITHDRAWN at the season's draw).
 - **★ Assets become expenses — and *how* you allocate is a spectrum.** The income statement is the story of
   **assets consumed to earn revenue**, and the opening balance sheet conveniently carries three kinds:
   **parts/supplies** — consumption can be **metered** (count what went into repairs); **prepaid rent** — consumed
@@ -100,7 +104,7 @@ income statement is complete.
 *Pages:* recall the metered/time cases → the laptop won't meter and isn't really time → spread it by time anyway (depreciation = a convention) → carrying value declines, book ≠ market → income statement complete.
 
 ### Tutorial 3.4 — The Cash-Flow Statement  (`34-`)
-**Profit ≠ cash.** The season was plainly profitable — and the cash drawer is **lighter than the day the LLC opened** (cash $1,300 → $620, **down $680**). That felt contradiction, planted as a cliffhanger in `31-2`'s cash walk, is the tutorial's engine. Where the cash *actually* went: **operating** (repairs, parts, rent, the **credit-card payoff**)
+**Profit ≠ cash.** The season was plainly profitable — and the cash balance is **lighter than the day the LLC opened** (cash $1,300 → $620, **down $680**). That felt contradiction, planted as a cliffhanger in `31-2`'s cash walk, is the tutorial's engine. Where the cash *actually* went: **operating** (repairs, parts, rent, the **credit-card payoff**)
 vs **investing** (the new tool) vs **financing** (the draw). The timing / non-cash gaps make it concrete: **Smith's
 $220 advance** (earned this season — revenue, **no new cash**, the cash arrived in M1), **depreciation** ($230,
 expense, no cash — added back), and the **credit-card payoff** ($2,030 — cash out that is **not** an expense, it

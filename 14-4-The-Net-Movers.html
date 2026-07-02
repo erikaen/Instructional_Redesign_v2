@@ -71,13 +71,15 @@ var ASSETS_SNAPSHOT = [
 var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.subtotal;},0); // 3410
 
 var LIABILITIES_SNAPSHOT = [
-  { label:"Smith's frame — paid $220 up front, not built yet", amount:220 },
-  { label:'What you owe on the bike-repair credit card', amount:2030 }
+  { key:'smith', label:"Smith's frame — paid $220 up front, not built yet", amount:220, items:[
+    { name:'Check deposit, May 22 &mdash; a custom frame build, 4&ndash;6 weeks', amt:220 } ] },
+  { key:'card', label:'What you owe on the bike-repair credit card', amount:2030, items:[
+    { name:'Hand tools', amt:300 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
+    { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] }
 ];
 var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amount;},0); // 2250
 
 var CASH_FLOWS = [
-  { date:'May 1',  desc:'Your own money, put in to get going', amount:160 },
   { date:'May 1',  desc:'Rent paid in advance (Westville Properties)', amount:-1300 },
   { date:'May 3',  desc:'Park Tool stand — Cyclesport Supply', amount:-200 },
   { date:'May 7',  desc:'Repair finished — customer paid (Venmo)', amount:340 },
@@ -87,11 +89,12 @@ var CASH_FLOWS = [
   { date:'May 19', desc:'Repair finished — customer paid (Venmo)', amount:130 },
   { date:'May 22', desc:'Smith deposit — frame build', amount:220 },
   { date:'May 23', desc:'Repair finished — customer paid (Venmo)', amount:100 },
-  { date:'May 27', desc:'Repair finished — customer paid (Venmo)', amount:150 }
+  { date:'May 27', desc:'Repair finished — customer paid (Venmo)', amount:150 },
+  { date:'—',      desc:'From your personal self — covering what the work drew down', amount:160 }
 ];
 
 var REASONS = [
-  { id:'r_cashin', account:'Cash',      delta:160, reason:'You put in $160 of your own money to get going.' },
+  { id:'r_cashin', account:'Cash',      delta:160, reason:'My personal self covered what the work drew down — I only see it now, tallying up.' },
   { id:'r_laptop', account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
   { id:'r_gear',   account:'Equipment', delta:220, reason:'You brought gear you already owned: bench grinder, headset press, shop vacuum.' },
 
@@ -138,8 +141,8 @@ var CORRECT_CATEGORY = {
 var soloReasonIds = Object.keys(CORRECT_CATEGORY);
 
 var NARRATION_STEPS = [
-  { anna:"Start before May even began. You put in $160 of your own money, you brought your laptop from home, and you brought some gear you already owned. Each one's a single row, and the other side of that change (reason) isn't on this spreadsheet.",
-    reveal:['r_cashin','r_laptop','r_gear'] },
+  { anna:"Start before May even began. You brought your laptop from home, and some gear you already owned. Each one's a single row, and the other side of that change (reason) isn't on this spreadsheet.",
+    reveal:['r_laptop','r_gear'] },
   { anna:"The Park Tool stand — bought for $200 in cash. Equipment went up; cash went down. Same reason on both rows.",
     reveal:['r_stand_a','r_stand_b'] },
   { anna:"Hand tools, shop equipment, fixtures, parts... They are all on the card. For each one: the thing up, the card up. Two rows apiece.",
@@ -148,8 +151,8 @@ var NARRATION_STEPS = [
     reveal:['r_partsused'] },
   { anna:"The lease — $1,300 from cash, first and last month paid in advance. Then May happened: you used the space, so one month's worth is gone. The paying is a pair; the using-up stands alone.",
     reveal:['r_rent_a','r_rent_b','r_rentused'] },
-  { anna:"Now the cash side for May. Click the Cash tab — every customer Venmo, and Smith's deposit.",
-    reveal:['r_v1','r_v2','r_v3','r_v4','r_v5','r_v6','r_v7','r_smith_a','r_smith_b'], goto:'cash' },
+  { anna:"Now the cash side for May. Click the Cash tab — every customer Venmo, Smith's deposit, and the row you only found by tallying up: the $160 your personal self had quietly covered.",
+    reveal:['r_v1','r_v2','r_v3','r_v4','r_v5','r_v6','r_v7','r_smith_a','r_smith_b','r_cashin'], goto:'cash' },
   { anna:"That's the whole month. Click back to the Reasons tab and look at the full list.",
     reveal:[], goto:'reasons' },
   { anna:"Notice anything? Look closely — most reasons show up in two rows. Same event, two changes. A few stand alone. We'll come back to those.",
@@ -194,6 +197,8 @@ var phase = 'welcome';
 var step = 0;
 var activeTab = 'assets';
 var assetsExpanded = {};
+var cashExpanded = {};
+var liabExpanded = {};
 var revealed = {};
 var eliminated = {};
 var selectedReasonId = null;
@@ -221,7 +226,7 @@ function goto(p){
   if(window.lucide) lucide.createIcons();
 }
 function restart(){
-  step=0; activeTab='assets'; assetsExpanded={}; revealed={}; eliminated={};
+  step=0; activeTab='assets'; assetsExpanded={}; cashExpanded={}; liabExpanded={}; revealed={}; eliminated={};
   selectedReasonId=null; eliminateAutoActive=false; eliminateAutoDone=false; eliminateNudge=null;
   assignments={}; sortAutoActive=false; sortAutoDone=false; sortNudge=null;
   expandedSortCats={ contributed:true, earned:true };
@@ -256,8 +261,11 @@ function assetsSheet(){
 }
 function liabilitiesSheet(){
   var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liability (what I owe)</div><div class="xl-v">Amount</div></div>';
-  LIABILITIES_SNAPSHOT.forEach(function(l,i){
-    html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+l.label+'</div><div class="xl-v">'+xlDollars(l.amount)+'</div></div>';
+  var n = 0;
+  LIABILITIES_SNAPSHOT.forEach(function(l){
+    var open = !!liabExpanded[l.key]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleLiabCat(\''+l.key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+l.label+'</div><div class="xl-v">'+xlDollars(l.amount)+'</div></div>';
+    if(open){ l.items.forEach(function(it){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+xlDollars(it.amt)+'</div></div>'; }); }
   });
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL — what I owe</div><div class="xl-v">'+xlDollars(LIABILITIES_TOTAL)+'</div></div>';
   return html;
@@ -268,14 +276,15 @@ function cashSheet(){
   var totalIn = inflows.reduce(function(s,f){ return s+f.amount; },0);
   var totalOut = outflows.reduce(function(s,f){ return s+f.amount; },0);
   var net = totalIn + totalOut;
-  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Repair cash — May</div></div>';
-  html += '<div class="cash-group in"><div class="cash-group-label">Cash in</div>';
-  inflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">+'+xlDollars(f.amount)+'</span></div>'; });
-  html += '<div class="cash-subtotal"><span>Total in</span><span class="cash-line-amt">+'+xlDollars(totalIn)+'</span></div></div>';
-  html += '<div class="cash-group out"><div class="cash-group-label">Cash out</div>';
-  outflows.forEach(function(f){ html += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">'+xlDollars(f.amount)+'</span></div>'; });
-  html += '<div class="cash-subtotal"><span>Total out</span><span class="cash-line-amt">'+xlDollars(totalOut)+'</span></div></div>';
-  html += '<div class="cash-net"><span class="cash-net-label">Cash on hand (May 31)</span><span class="cash-net-val">'+xlDollars(net)+'</span></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Repair cash — May</div><div class="xl-v">Amount</div></div>';
+  var n = 0;
+  [ { key:'CASH IN', label:'Cash in', rows:inflows, subtotal:totalIn },
+    { key:'CASH OUT', label:'Cash out', rows:outflows, subtotal:totalOut } ].forEach(function(g){
+    var open = !!cashExpanded[g.key]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCashCat(\''+g.key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+g.label+'</div><div class="xl-v">'+signedDollars(g.subtotal)+'</div></div>';
+    if(open){ g.rows.forEach(function(f){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c"><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</div><div class="xl-v">'+signedDollars(f.amount)+'</div></div>'; }); }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Cash on hand (May 31)</div><div class="xl-v">'+xlDollars(net)+'</div></div>';
   return html;
 }
 function reasonsSheetWalkPairs(){
@@ -354,6 +363,8 @@ function renderWorkbook(containerId){
 }
 function setTab(id){ playClick(); activeTab = id; if(curWbContainer) renderWorkbook(curWbContainer); }
 function toggleAssetCat(cat){ playClick(); assetsExpanded[cat] = !assetsExpanded[cat]; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleCashCat(key){ playClick(); cashExpanded[key] = !cashExpanded[key]; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleLiabCat(key){ playClick(); liabExpanded[key] = !liabExpanded[key]; if(curWbContainer) renderWorkbook(curWbContainer); }
 function toggleSortCat(key){ playClick(); expandedSortCats[key] = !expandedSortCats[key]; if(curWbContainer) renderWorkbook(curWbContainer); }
 
 /* ===== reasons-walk ===== */
@@ -377,7 +388,7 @@ function renderWalk(){
   } else {
     ctrl.innerHTML =
       insightBox('Most reasons show up in two rows',
-        '<p>Same event, two changes. Buy parts on the card: parts up <em>and</em> the card up. Pay the card down: cash down <em>and</em> the card down. Smith&rsquo;s deposit: cash up <em>and</em> what you owe him up. You didn&rsquo;t plan that &mdash; it just appeared once you wrote the reasons next to the changes.</p>'+
+        '<p>Same event, two changes. Buy parts on the card: parts up <em>and</em> the card up. Buy the stand with cash: the gear up <em>and</em> cash down. Smith&rsquo;s deposit: cash up <em>and</em> what you owe him up. You didn&rsquo;t plan that &mdash; it just appeared once you wrote the reasons next to the changes.</p>'+
         '<p><strong>What if you crossed those matched pairs out?</strong></p>') +
       contBtn('Cross out the matched pairs', "goto('pairs')");
   }
@@ -436,9 +447,9 @@ function renderPairs(){
   } else if(eliminateAutoActive){
     ctrl = '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Crossing out matched pairs&hellip;</div></div>';
   } else if(eliminateAutoDone){
-    ctrl = annaBox('Look what&rsquo;s left. Just the rows with no twin on this spreadsheet &mdash; your own money put in, the gear you brought, the customer payments, the parts and the month you used up. Each of these <em>moved your net</em>. Their other side lives somewhere you haven&rsquo;t built yet.', true) +
+    ctrl = annaBox('Look what&rsquo;s left. Just the rows with no twin on this spreadsheet &mdash; the $160 your personal self quietly covered, the laptop and gear you brought, the customer payments, the parts and the month you used up. Each of these <em>moved your net</em>. Their other side lives somewhere you haven&rsquo;t built yet.', true) +
       insightBox('The crossed-out ones just shuffled',
-        '<p>Buying parts on the card, paying the card down, Smith&rsquo;s deposit &mdash; what you <em>have</em> and what you <em>owe</em> moved by the same amount, so your net didn&rsquo;t change. The reasons that are <strong>left over are the ones that moved your net</strong> &mdash; the ones worth writing down to know how you&rsquo;re doing.</p>') +
+        '<p>Buying parts on the card, the rent paid in advance, Smith&rsquo;s deposit &mdash; two lines moved by the same amount each time, so your net didn&rsquo;t change. The reasons that are <strong>left over are the ones that moved your net</strong> &mdash; the ones worth writing down to know how you&rsquo;re doing.</p>') +
       contBtn('Sort the net-movers', "goto('net-movers')");
   }
   document.getElementById('pairsControls').innerHTML = ctrl;
@@ -473,7 +484,7 @@ function renderNetMovers(){
 
   var top = '';
   if(!done){
-    top += annaBox('These net-movers split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work &mdash; your own cash, gear you already had. These net-movers are <strong>contributed</strong>. The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month the work used up. These net-movers are <strong>generated</strong>. Sort each row into the right bin by clicking on the button in each row.', true);
+    top += annaBox('These net-movers split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work &mdash; the laptop and gear from home, and the $160 your personal self quietly covered. These net-movers are <strong>contributed</strong>. The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month the work used up. These net-movers are <strong>generated</strong>. Sort each row into the right bin by clicking on the button in each row.', true);
     if(sortNudge){
       var msg = (sortNudge.attempted==='contributed')
         ? 'That one didn&rsquo;t come from you bringing something in &mdash; it came from doing the repair work. Try the other bin.'
@@ -493,7 +504,7 @@ function renderNetMovers(){
   } else if(done){
     var contributedTotal = REASONS.filter(function(r){ return assignments[r.id]==='contributed'; }).reduce(function(s,r){ return s+r.delta; },0);
     var earnedTotal = REASONS.filter(function(r){ return assignments[r.id]==='earned'; }).reduce(function(s,r){ return s+r.delta; },0);
-    ctrl = annaBox('There it is &mdash; two kinds of net-mover. What you <strong>contributed</strong>: '+signedDollars(contributedTotal)+', the cash and gear you put in yourself. And what the work <strong>generated</strong>: '+signedDollars(earnedTotal)+' &mdash; the customer work, after the parts and the month it took to do it. That figure is what the repair work produced on its own in May.', true) +
+    ctrl = annaBox('There it is &mdash; two kinds of net-mover. What you <strong>contributed</strong>: '+signedDollars(contributedTotal)+', the laptop and gear from home, and the cash your personal self covered. And what the work <strong>generated</strong>: '+signedDollars(earnedTotal)+' &mdash; the customer work, after the parts and the month it took to do it. That figure is what the repair work produced on its own in May.', true) +
       insightBox('Two ways your stake grew',
         '<p><strong>Contributed ('+signedDollars(contributedTotal)+'):</strong> you funded it &mdash; cash from the day job, gear from home. From outside the repair work.</p>'+
         '<p><strong>Generated ('+signedDollars(earnedTotal)+'):</strong> the work generated it &mdash; what customers paid, less the parts used and the month of space used up.</p>'+

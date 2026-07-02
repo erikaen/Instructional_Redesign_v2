@@ -8,9 +8,11 @@
  *   BR_WB.snapshot(opts)     -> the SNAP object for BRW.mount / BRW.update
  *       opts.withReceivable  -> add Ridgeline's $300 A/R (asset + matching reason),
  *                               books stay balanced (assets 4,430 -> 4,730)
- *       opts.flowGroups      -> show the season's reasons already regrouped into
- *                               MONEY IN / USED UP / TAKEN OUT (the 32-2 sort result),
- *                               instead of the single jumbled GENERATED pile
+ *       opts.flowGroups      -> show the SEASON's reasons regrouped into
+ *                               BROUGHT IN / USED UP tallies (the 32-2 sort result) with
+ *                               WITHDRAWN below; May's rows stay in their original piles
+ *   BR_WB.setupRows()        -> the pre-season (May + formation) reasons — the Reasons
+ *                               list is one CONTINUOUS list, never settled or reset
  *   BR_WB.generatedRows()    -> the GENERATED reasons, each tagged flow:'in'|'up'
  *   BR_WB.monthName          -> { Jun:'June', ... }
  * ========================================================================== */
@@ -61,6 +63,28 @@ var BR_WB = (function () {
     return shelf.concat(buys, used);
   }
 
+  // The pre-season reasons — May's work and the two formation contributions, exactly as
+  // first jotted. The list is CONTINUOUS: nothing is settled or reset at June 1. The piles'
+  // running subtotals ARE the equity story (CONTRIBUTED 2,290 / GENERATED 170 at June 1);
+  // the first-ever close is Tutorial 3.5's discovery, not a fait accompli.
+  function setupRows() {
+    return [
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Cash', reason: 'covered from your personal funds (May)', delta: 160 },
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Laptop', reason: 'brought from home (May)', delta: 610 },
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Equipment', reason: 'gear from home &mdash; grinder, headset press, shop vacuum (May)', delta: 220 },
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Cash', reason: 'deposited to open the LLC bank account (June 1)', delta: 1300 },
+      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 340 },
+      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 180 },
+      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 80 },
+      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 140 },
+      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 130 },
+      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 100 },
+      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 150 },
+      { kind: 'net', cat: 'generated', pre: true, flow: 'up', account: 'Parts used', reason: 'customer jobs (May)', delta: -300 },
+      { kind: 'net', cat: 'generated', pre: true, flow: 'up', account: 'Rent used', reason: 'May', delta: -650 }
+    ];
+  }
+
   // GENERATED reasons — the novice's mess, job by job. flow:'in' = money the work brought in,
   // flow:'up' = something the work used up. kind:'net' is what BRW's sorted mode reads.
   function generatedRows() {
@@ -107,26 +131,30 @@ var BR_WB = (function () {
       ] });
     }
 
+    var setup = setupRows();
     var gen = generatedRows();
     if (opts.withReceivable) gen.push(ridgelineReason);
-    // In flowGroups mode each generated reason is filed under its flow (in/up) rather than
-    // the single 'generated' pile — the state after the student has sorted them in 32-2.
+    // In flowGroups mode the SEASON's generated reasons are filed under their flow (in/up) —
+    // the state after the student sorts them in 32-2. May's rows keep their original piles:
+    // the period line the student drew stays visible in the workbook.
     var rows = opts.flowGroups
-      ? gen.map(function (r) { return { kind: 'net', cat: r.flow, flow: r.flow, account: r.account, reason: r.reason, delta: r.delta }; })
-      : gen.slice();
+      ? setup.concat(gen.map(function (r) { return { kind: 'net', cat: r.flow, flow: r.flow, account: r.account, reason: r.reason, delta: r.delta }; }))
+      : setup.concat(gen);
     rows.push(drawReason);
 
-    // Before the receivable is discovered the pile is the novice's cash frame, "MONEY IN". Once
-    // Ridgeline's earned-but-unpaid $300 joins it, "money in" is no longer true — it becomes "EARNED".
-    var inLabel = opts.withReceivable ? 'EARNED' : 'MONEY IN';
+    // Before the receivable is discovered the pile is the novice's cash frame, "BROUGHT IN". Once
+    // Ridgeline's earned-but-unpaid $300 joins it, "brought in" is no longer true — it becomes "EARNED".
+    var inLabel = opts.withReceivable ? 'EARNED' : 'BROUGHT IN';
     var inBlurb = opts.withReceivable ? 'what the work earned, before any costs (paid or not)' : 'money the work brought in';
     var groups = opts.flowGroups
-      ? [ { key: 'in', label: inLabel, blurb: inBlurb },
+      ? [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in' },
+          { key: 'generated', label: 'GENERATED &mdash; through May 31', blurb: 'the work before the season, left where it was' },
+          { key: 'in', label: inLabel, blurb: inBlurb },
           { key: 'up', label: 'USED UP', blurb: 'what the work used up' },
-          { key: 'drawn', label: 'TAKEN OUT', blurb: 'what you took for yourself' } ]
-      : [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'new money or gear you put in' },
-          { key: 'generated',   label: 'GENERATED',   blurb: 'what the work itself produced' },
-          { key: 'drawn',       label: 'TAKEN OUT',    blurb: 'what you took for yourself' } ];
+          { key: 'drawn', label: 'WITHDRAWN', blurb: 'what you took for yourself' } ]
+      : [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in' },
+          { key: 'generated',   label: 'GENERATED',   blurb: 'what the work produced' },
+          { key: 'drawn',       label: 'WITHDRAWN',   blurb: 'what you took for yourself' } ];
 
     var snap = {
       file: 'Bike-Repair.xlsx',
@@ -145,13 +173,10 @@ var BR_WB = (function () {
         ] }
       ],
       reasons: {
-        carried: [
-          { label: 'Contributed Capital', note: 'what you put in', amount: 2290, items: [
-            { name: 'Cash to get the work going', amt: 160 }, { name: 'Laptop from home', amt: 610 },
-            { name: 'Gear from home', amt: 220 }, { name: 'Cash contributed forming the LLC', amt: 1300 } ] },
-          { label: 'Retained Earnings', note: 'what the work kept', amount: 170, items: [
-            { name: 'Repairs earned', amt: 1120 }, { name: 'Parts used', amt: -300 }, { name: 'Space used (rent)', amt: -650 } ] }
-        ],
+        pilesTitle: 'The Reasons piles &mdash; May 1 to today',
+        pilesSub: opts.flowGroups
+          ? 'the season&rsquo;s rows sorted into tallies; May&rsquo;s rows left where they were'
+          : 'one continuous list &mdash; every reason since the first May jot; nothing settled, nothing reset',
         mode: 'sorted',
         groups: groups,
         rows: rows
@@ -160,5 +185,5 @@ var BR_WB = (function () {
     return snap;
   }
 
-  return { snapshot: snapshot, generatedRows: generatedRows, monthName: monthName };
+  return { snapshot: snapshot, generatedRows: generatedRows, setupRows: setupRows, monthName: monthName };
 })();

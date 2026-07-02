@@ -126,6 +126,25 @@ var partsEvents = partsComposition
   .concat(partsBuys.map(function (b) { return { name:'Parts bought &mdash; ' + b.m, amt:b.amt }; }))
   .concat(BR_JOBS.filter(function (j) { return j.partsCost > 0; }).map(function (j) { return { name:'Parts used &mdash; ' + j.customer, amt:-j.partsCost }; }));
 
+// The pre-season reasons — May's work and the formation contributions, exactly as first
+// jotted. One CONTINUOUS list: nothing was settled or reset at June 1; the piles' running
+// subtotals ARE the equity story (CONTRIBUTED 2,290 / GENERATED 170 at June 1).
+var SETUP_REASONS = [
+  { kind:'net', cat:'contributed', account:'Cash', reason:'covered from your personal funds (May)', delta:160 },
+  { kind:'net', cat:'contributed', account:'Laptop', reason:'brought from home (May)', delta:610 },
+  { kind:'net', cat:'contributed', account:'Equipment', reason:'gear from home &mdash; grinder, headset press, shop vacuum (May)', delta:220 },
+  { kind:'net', cat:'contributed', account:'Cash', reason:'deposited to open the LLC bank account (June 1)', delta:1300 },
+  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:340 },
+  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:180 },
+  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:80 },
+  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:140 },
+  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:130 },
+  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:100 },
+  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:150 },
+  { kind:'net', cat:'generated', account:'Parts used', reason:'customer jobs (May)', delta:-300 },
+  { kind:'net', cat:'generated', account:'Rent used', reason:'May', delta:-650 }
+];
+
 // GENERATED reasons — the novice's mess: job by job (each collection and its parts used together), rent when
 // paid, NOT sorted into revenue vs. expense. This is what books look like without Revenue/Expense accounts.
 var reasonRows = [];
@@ -175,20 +194,15 @@ var SNAP = {
     ]}
   ],
   reasons:{
-    carried:[
-      { label:'Contributed Capital', note:'what you put in', amount:2290, items:[
-        { name:'Cash to get the work going', amt:160 }, { name:'Laptop from home', amt:610 },
-        { name:'Gear from home', amt:220 }, { name:'Cash contributed forming the LLC', amt:1300 } ] },
-      { label:'Retained Earnings', note:'what the work kept', amount:170, items:[
-        { name:'Repairs earned', amt:1120 }, { name:'Parts used', amt:-300 }, { name:'Space used (rent)', amt:-650 } ] }
-    ],
+    pilesTitle:'The Reasons piles &mdash; May 1 to today',
+    pilesSub:'one continuous list &mdash; every reason since the first May jot; nothing settled, nothing reset',
     mode:'sorted',
     groups:[
-      { key:'contributed', label:'CONTRIBUTED', blurb:'new money or gear you put in' },
-      { key:'generated',   label:'GENERATED',   blurb:'what the work itself produced' },
-      { key:'drawn',       label:'TAKEN OUT',    blurb:'what you took for yourself' }
+      { key:'contributed', label:'CONTRIBUTED', blurb:'what you put in' },
+      { key:'generated',   label:'GENERATED',   blurb:'what the work produced' },
+      { key:'drawn',       label:'WITHDRAWN',   blurb:'what you took for yourself' }
     ],
-    rows:reasonRows
+    rows:SETUP_REASONS.concat(reasonRows)
   }
 };
 
@@ -203,7 +217,7 @@ var WALK = [
     hint:'Open the <strong>Right of Use</strong> line.',
     insight:'This $650 is only the lease&rsquo;s <strong>last month</strong>, still on deposit. The <strong>$1,950</strong> of rent you actually used &mdash; June, July, August &mdash; you paid in cash and used up. It left through the Cash ledger; it isn&rsquo;t sitting here.' },
   { needTab:'assets', target:{kind:'a',key:0},
-    q:'Now <strong>Cash</strong>: <strong>$620</strong>. You opened the LLC&rsquo;s account with <strong>$1,300</strong> in June &mdash; the drawer is <em>down</em> <strong>$680</strong>. After the busiest summer the shop has ever had? Open it.',
+    q:'Now <strong>Cash</strong>: <strong>$620</strong>. You opened the LLC&rsquo;s account with <strong>$1,300</strong> in June &mdash; it&rsquo;s <em>down</em> <strong>$680</strong>. After the busiest summer the shop has ever had? Open it.',
     hint:'Open the <strong>Cash</strong> line.',
     insight:'A lot of money moved &mdash; <strong>$5,500</strong> came in from repairs. But rent, parts, a new tool, paying the card off in full, and your own draw took out <em>more</em> than the repairs brought in. A season this busy, and the records show <em>less</em> cash than the day it started. Hold on to that &mdash; it doesn&rsquo;t mean what it seems to mean.' },
   { needTab:'liabilities', target:{kind:'l',key:0},
@@ -217,7 +231,7 @@ var WALK = [
   { needTab:'reasons', target:{tabSwitch:'reasons'},
     q:'None of those tabs really say <em>how the season went</em>. Switch to the <strong>Reasons</strong> tab &mdash; that&rsquo;s where you wrote down <em>why</em> the books moved.',
     hint:'Click the <strong>Reasons</strong> tab.',
-    insight:'There it is, in your familiar piles &mdash; every repair, every bit of parts used, each month&rsquo;s rent, jotted one by one. It all nets to <strong>GENERATED +$2,570</strong>, on top of the <strong>$170</strong> Retained you carried in. Nothing new <strong>CONTRIBUTED</strong>. And <strong>TAKEN OUT &minus;$600</strong>, your draw. So the work <em>generated</em> $2,570 &mdash; while the Cash line, you just saw, went <em>down</em> $680. Both are true, and no single line explains how. A long list &mdash; and still no answer to how the season went.' }
+    insight:'There it is &mdash; one continuous list, going back to your first May jot. <strong>CONTRIBUTED $2,290</strong>: everything you ever put in, ending with the $1,300 that opened the LLC&rsquo;s account. <strong>WITHDRAWN &minus;$600</strong>: your draw. And <strong>GENERATED +$2,740</strong> &mdash; but careful: that pile has been growing since <em>May</em>. Last spring&rsquo;s repairs sit in it right next to August&rsquo;s. Ask it &ldquo;how did the <em>season</em> go?&rdquo; and it can&rsquo;t say &mdash; you&rsquo;d have to dig the summer out row by row. And the Cash line, you just saw, went <em>down</em> $680. A long list, all of it true &mdash; and still no answer to how the season went.' }
 ];
 
 /* ===== state ===== */
@@ -237,10 +251,10 @@ function renderTalk(){
       ctrl='<div class="next-phase-msg">'+WALK[step].hint+'</div>';
     }
   } else {
-    anna=annaBox('So the books did move &mdash; members&rsquo; capital went from <strong>$2,460</strong> in June to <strong>$4,430</strong> now (Assets $4,430 &minus; Liabilities $0). Every reason is in there. But look how scattered the story is across the tabs: money in, things used up, the card, Smith, your draw. If a banker asked &ldquo;how did the shop actually <em>do</em> this summer?&rdquo;, could you answer straight from this?');
+    anna=annaBox('So the books did move &mdash; members&rsquo; capital went from <strong>$2,460</strong> in June to <strong>$4,430</strong> now (Assets $4,430 &minus; Liabilities $0). Every reason is in there. But look how scattered the story is across the tabs: money brought in, things used up, the card, Smith, your draw. Now try the one question you actually want answered: how did the shop <em>do</em> this summer? Could you answer it straight from this?');
     ctrl=insightBox('A workbook, not yet a statement',
       '<p>These three tabs show where things <strong>stand</strong> and <em>why</em> each balance moved. But they never line up, in one place, what you <strong>earned</strong> against what it <strong>cost</strong> to earn it. That comparison is the next thing to build.</p>')
-      + '<div class="next-phase-msg" style="margin-top:10px;">You read the whole season off these tabs. Next, you&rsquo;ll take that GENERATED pile and turn it into the statement that answers the banker&rsquo;s question.</div>'
+      + '<div class="next-phase-msg" style="margin-top:10px;">You read the whole season off these tabs. Next, you&rsquo;ll take that GENERATED pile and turn it into the statement that answers that question.</div>'
       + '<button class="btn-continue btn-block" onclick="nav(\'32-1-the-income-statement.html\')">Next: how the season went &rarr;</button>';
   }
   document.getElementById('anna').innerHTML=anna;

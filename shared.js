@@ -353,7 +353,7 @@ var BRW = (function () {
       html += totalRow('Members&rsquo; capital', ctot);
     }
     if (r.mode === 'sorted') {
-      html += sub('This season&rsquo;s reasons', 'sorted into your familiar piles &mdash; in full, and not folded into capital yet');
+      html += sub(r.pilesTitle || 'This season&rsquo;s reasons', r.pilesSub || 'sorted into your familiar piles &mdash; in full, and not folded into capital yet');
       var net = r.rows.filter(function (x) { return x.kind === 'net'; });
       var gex = _reg[cid].ui.g;
       (r.groups || []).forEach(function (g) {

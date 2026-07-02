@@ -42,7 +42,7 @@
       <div class="btn-row"><button class="btn-reset" onclick="sortBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>
       <div class="insight-box">
         <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i>Look at what you just did</div>
-        <p>You pulled things into that box from <em>both</em> places. The laptop and the desk came from <strong>home</strong>, the cash drawer doesn&rsquo;t repair anything, and your own commuter bike stayed out even though it was in the space. So the box isn&rsquo;t &ldquo;stuff in the space,&rdquo; and it isn&rsquo;t &ldquo;tools.&rdquo; It&rsquo;s something else. The next question names it.</p>
+        <p>You pulled things into that box from <em>both</em> places. The laptop and the desk came from <strong>home</strong> &mdash; and neither one repairs anything &mdash; while your own commuter bike stayed out even though it was in the space. So the box isn&rsquo;t &ldquo;stuff in the space,&rdquo; and it isn&rsquo;t &ldquo;tools.&rdquo; It&rsquo;s something else. The next question names it.</p>
       </div>
       <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
     </div>
@@ -99,7 +99,6 @@ var rentedSpaceItems = [
   { id:'bbs', text:'Bottom brackets', zone:'shop', info:'On the supply shelf. Assorted sizes.' },
   { id:'spokes', text:'Spokes', zone:'shop', info:'In a bin by the truing stand.' },
   { id:'tubes', text:'Tubes', zone:'shop', info:'On the supply shelf. The thing everyone needs.' },
-  { id:'drawer', text:'Cash drawer', zone:'shop', info:'A wooden box on the bench where you keep cash to make change for customers. You don’t repair anything with it.' },
   { id:'guitar', text:'Acoustic guitar', zone:'personal', info:'In the corner by the door. You play when things are slow.' },
   { id:'photos', text:'Family photos', zone:'personal', info:'Taped over the workbench. From the kid’s birthday.' },
   { id:'commuter', text:'Your commuter bike', zone:'personal', info:'Your own daily ride is up on the stand for a rear-wheel fix.' }
@@ -111,7 +110,6 @@ var homeItems = [
   { id:'books', text:'Books on the shelf', zone:'personal', info:'All novels.' },
   { id:'desk', text:'Desk', zone:'shop', intruder:true, info:'In the corner of the living room where you sit with the laptop to order parts and total up the month.' },
   { id:'laptop', text:'Laptop', zone:'shop', intruder:true, info:'On the desk. You order parts, look up manuals, and schedule repairs on it.' },
-  { id:'receipts', text:'Box of customer receipts', zone:'shop', intruder:true, info:'On the desk. Paperwork from last month’s repairs.' },
   { id:'cables', text:'Box of derailleur cables', zone:'shop', intruder:true, info:'In the entryway. UPS dropped them here instead of at the space.' }
 ];
 var allItems = rentedSpaceItems.map(function(i){ return Object.assign({loc:'space'}, i); })

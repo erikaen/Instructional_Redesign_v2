@@ -132,21 +132,25 @@ var depositAnswers = {}, depositSel = {}, currentDeposit = 0;
 var jonesResolved = false;
 
 /* ===== cash sheet panel ===== */
+var cashPanelOpen = { 'CASH IN': true };
+function togglePanelCat(key){ playClick(); cashPanelOpen[key] = !cashPanelOpen[key]; renderCashSheetPanel(); }
 function renderCashSheetPanel(){
   var inflows = bikeRepairCashFlows.filter(function(f){return f.amount>0;});
   var outflows = bikeRepairCashFlows.filter(function(f){return f.amount<0;});
   var totalIn = inflows.reduce(function(s,f){return s+f.amount;},0);
   var totalOut = outflows.reduce(function(s,f){return s+f.amount;},0);
   var net = totalIn+totalOut;
-  var cashHtml = '<div class="cash-sheet-head"><div class="cash-sheet-title">Bike-repair cash flows &mdash; May 1 &ndash; May 31, 2026</div><div class="cash-sheet-sub">Pulled from the transactions you classified as repair-related in your bank statement.</div></div>';
-  cashHtml += '<div class="cash-group in"><div class="cash-group-label">Cash in</div>';
-  inflows.forEach(function(f){ cashHtml += '<div class="cash-line" style="background:var(--success-bg);"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">+'+dollars(f.amount)+'</span></div>'; });
-  cashHtml += '<div class="cash-subtotal"><span>Total in</span><span class="cash-line-amt">'+dollars(totalIn)+'</span></div></div>';
-  cashHtml += '<div class="cash-group out"><div class="cash-group-label">Cash out</div>';
-  outflows.forEach(function(f){ cashHtml += '<div class="cash-line"><span><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</span><span class="cash-line-amt">&minus;'+dollars(Math.abs(f.amount))+'</span></div>'; });
-  cashHtml += '<div class="cash-subtotal"><span>Total out</span><span class="cash-line-amt">&minus;'+dollars(Math.abs(totalOut))+'</span></div></div>';
-  cashHtml += '<div class="cash-net"><span class="cash-net-label">NET CASH FLOW (May)</span><span class="cash-net-val">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</span></div>';
-  cashHtml += "<div class=\"cash-foot\">This is the month's <strong>flow</strong> &mdash; cash in minus cash out &mdash; not a balance.</div>";
+  function sdol(v){ return (v<0?'&minus;':'+')+dollars(Math.abs(v)); }
+  var cashHtml = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Bike-repair cash flows &mdash; May 1 &ndash; May 31, 2026</div><div class="xl-v">Amount</div></div>';
+  var n = 0;
+  [ { key:'CASH IN', label:'Cash in', rows:inflows, subtotal:totalIn, hilite:true },
+    { key:'CASH OUT', label:'Cash out', rows:outflows, subtotal:totalOut, hilite:false } ].forEach(function(g){
+    var open = !!cashPanelOpen[g.key]; n++;
+    cashHtml += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="togglePanelCat(\''+g.key+'\')" aria-expanded="'+open+'">'+(open?'&minus;':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+g.label+'</div><div class="xl-v">'+sdol(g.subtotal)+'</div></div>';
+    if(open){ g.rows.forEach(function(f){ n++; cashHtml += '<div class="xl-row xl-item"'+(g.hilite?' style="background:var(--success-bg);"':'')+'><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c"><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</div><div class="xl-v">'+sdol(f.amount)+'</div></div>'; }); }
+  });
+  cashHtml += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">NET CASH FLOW (May)</div><div class="xl-v">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</div></div>';
+  cashHtml += "<div class=\"cash-foot\">Pulled from the transactions you classified as repair-related in your bank statement. This is the month's <strong>flow</strong> &mdash; cash in minus cash out &mdash; not a balance.</div>";
   document.getElementById('depChips').innerHTML = '<div class="xlwb">'+
     '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">Cash Sheet</span></div>'+
     '<div>'+cashHtml+'</div>'+

@@ -104,8 +104,11 @@ var CAT_BY_KEY = {}; ASSETS.forEach(function(c){ CAT_BY_KEY[c.cat]=c; });
 var ITEM_INDEX = {}; ASSETS.forEach(function(c){ c.items.forEach(function(it){ ITEM_INDEX[it.name]={ it:it, cat:c.cat }; }); });
 
 var LIABS = [
-  { label:'Credit Card', note:'what you owe on the bike-repair card', amount:2030 },
-  { label:'Smith’s deposit', note:'paid $220 up front for a frame, not built yet', amount:220 }
+  { key:'card', label:'Credit Card', note:'what you owe on the bike-repair card', amount:2030, items:[
+    { name:'Hand tools', amt:300 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
+    { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] },
+  { key:'smith', label:'Smith’s deposit', note:'paid $220 up front for a frame, not built yet', amount:220, items:[
+    { name:'Check deposit, May 22 &mdash; a custom frame build, 4&ndash;6 weeks', amt:220 } ] }
 ];
 var LIABS_TOTAL = LIABS.reduce(function(s,l){ return s+l.amount; },0); // 2250
 
@@ -186,7 +189,12 @@ function assetsSheet(){
 }
 function liabilitiesSheet(){
   var html='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liability &mdash; what I owe</div><div class="xl-v">Amount</div></div>';
-  LIABS.forEach(function(l,i){ html+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+l.label+' &mdash; '+l.note+'</div><div class="xl-v">'+dol(l.amount)+'</div></div>'; });
+  var n=0;
+  LIABS.forEach(function(l){
+    var open=!!liabOpen[l.key]; n++;
+    html+='<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleLiab(\''+l.key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+l.label+' &mdash; '+l.note+'</div><div class="xl-v">'+dol(l.amount)+'</div></div>';
+    if(open){ l.items.forEach(function(it){ n++; html+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+dol(it.amt)+'</div></div>'; }); }
+  });
   html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL &mdash; what I owe</div><div class="xl-v">'+dol(LIABS_TOTAL)+'</div></div>';
   return html;
 }
@@ -304,6 +312,8 @@ function advanceCat(){
 /* ===== tabs / expand ===== */
 function setPaneTab(side,id){ playClick(); paneTab[side]=id; render(); }
 function toggleCat(cat){ playClick(); assetsOpen[cat]=!assetsOpen[cat]; render(); }
+var liabOpen = {};
+function toggleLiab(key){ playClick(); liabOpen[key]=!liabOpen[key]; render(); }
 
 /* ===== receipt modal ===== */
 function openReceipt(group){

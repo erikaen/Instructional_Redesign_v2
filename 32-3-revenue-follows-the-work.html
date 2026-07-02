@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">The Work, Not the Cash</div>
 
     <div class="narrative-block">
-      <p>You split the season&rsquo;s reasons into <strong>MONEY IN</strong> and <strong>USED UP</strong> &mdash; there they are on the Reasons tab. Before you name the piles, one honest check: is <strong>every</strong> repair you actually finished this summer sitting in MONEY IN?</p>
+      <p>You split the season&rsquo;s reasons into <strong>BROUGHT IN</strong> and <strong>USED UP</strong> &mdash; there they are on the Reasons tab. Before you name the piles, one honest check: is <strong>every</strong> repair you actually finished this summer sitting in BROUGHT IN?</p>
     </div>
 
     <div id="wb"></div>
@@ -93,19 +93,19 @@ function insightBox(label,inner){ return '<div class="insight-box"><div class="i
 function renderTalk(){
   var anna='', ctrl='';
   if(step===0){
-    anna = annaBox('You jotted a MONEY IN reason each time a customer <strong>paid</strong>. But the job log shows <strong>'+totalJobs+'</strong> repairs finished this summer, and only <strong>'+inJobs+'</strong> of them ever became a MONEY IN reason. One job you <em>did the work</em> on &mdash; and nothing landed in the pile. Find the one marked <strong>outstanding</strong>.');
+    anna = annaBox('You jotted a BROUGHT IN reason each time a customer <strong>paid</strong>. But the job log shows <strong>'+totalJobs+'</strong> repairs finished this summer, and only <strong>'+inJobs+'</strong> of them ever became a BROUGHT IN reason. One job you <em>did the work</em> on &mdash; and nothing landed in the pile. Find the one marked <strong>outstanding</strong>.');
     ctrl = '<div class="next-phase-msg">Open the job log above and spot the repair that was finished but never paid.</div>'
       + '<button class="btn-continue btn-block" onclick="setStep(1)">I see the outstanding one &rarr;</button>';
   } else if(step===1){
     anna = annaBox('There it is &mdash; <strong>'+ridge.customer+'</strong>, '+ridge.date+'. You did the whole job: '+ridge.hours+' hours, <strong>'+BRW.dol(ridge.partsCost)+'</strong> of parts off your shelf (that part you <em>did</em> jot &mdash; it&rsquo;s already in USED UP). You billed them <strong>'+BRW.dol(ridge.charge)+'</strong>, net 15. No cash came, so nothing landed in your pile. But the work is <em>done</em>. Does the shop&rsquo;s season really not count it?');
     ctrl = insightBox('It counts when the work is done, not when the cash comes',
-        '<p>You <strong>earned</strong> the '+BRW.dol(ridge.charge)+' this summer &mdash; the moment you finished the job, not the day the cash arrives. So it belongs in the pile now, even though no money came in. That&rsquo;s the catch with calling the pile &ldquo;money in&rdquo;: it&rsquo;s really what the work <strong>earned</strong>.</p>'
+        '<p>You <strong>earned</strong> the '+BRW.dol(ridge.charge)+' this summer &mdash; the moment you finished the job, not the day the cash arrives. So it belongs in the pile now, even though no money came in. That&rsquo;s the catch with calling the pile &ldquo;brought in&rdquo;: it&rsquo;s really what the work <strong>earned</strong>.</p>'
         +'<p>And there&rsquo;s a second thing: '+ridge.customer+' still <strong>owes</strong> you '+BRW.dol(ridge.charge)+'. That unpaid promise is something the shop now <strong>has</strong> &mdash; a right to be paid. A new line in Assets.</p>')
       + '<button class="btn-continue btn-block" onclick="setStep(2)">Put it on the books &rarr;</button>';
   } else {
-    anna = annaBox('There &mdash; a brand-new line in Assets: <strong>Accounts Receivable, '+BRW.dol(ridge.charge)+'</strong>, '+ridge.customer+'&rsquo;s unpaid promise. And flip to Reasons: the pile is now <strong>'+BRW.dol(allCharges)+'</strong> &mdash; but notice I renamed it. It&rsquo;s no longer <em>money in</em>, because Ridgeline&rsquo;s '+BRW.dol(ridge.charge)+' is in there with no money attached. It&rsquo;s what the work <strong>EARNED</strong>. Think about <strong>'+smith.customer+'</strong>&rsquo;s frame in that same pile at <strong>'+BRW.dol(smith.charge)+'</strong> &mdash; his cash came in <em>last</em> period as a deposit, but you built the frame <em>this</em> summer. Same rule from the other side: you earn it when the <strong>work</strong> is done, whichever way the cash runs.');
+    anna = annaBox('There &mdash; a brand-new line in Assets: <strong>Accounts Receivable, '+BRW.dol(ridge.charge)+'</strong>, '+ridge.customer+'&rsquo;s unpaid promise. And flip to Reasons: the pile is now <strong>'+BRW.dol(allCharges)+'</strong> &mdash; but notice I renamed it. It&rsquo;s no longer <em>brought in</em>, because Ridgeline&rsquo;s '+BRW.dol(ridge.charge)+' is in there with no money attached. It&rsquo;s what the work <strong>EARNED</strong>. Think about <strong>'+smith.customer+'</strong>&rsquo;s frame in that same pile at <strong>'+BRW.dol(smith.charge)+'</strong> &mdash; his cash came in <em>last</em> period as a deposit, but you built the frame <em>this</em> summer. Same rule from the other side: you earn it when the <strong>work</strong> is done, whichever way the cash runs.');
     ctrl = insightBox('The work is what counts',
-        '<p>'+ridge.customer+': work done <strong>now</strong>, cash <strong>later</strong> &mdash; earned this season (and a receivable until they pay). '+smith.customer+': cash <strong>earlier</strong>, work done <strong>now</strong> &mdash; also earned this season. Neither is timed to the cash; both are timed to the <strong>work</strong>. That&rsquo;s why the pile is <strong>EARNED</strong>, not &ldquo;money in.&rdquo; The books stay balanced: assets went up '+BRW.dol(ridge.charge)+', and so did the pile.</p>')
+        '<p>'+ridge.customer+': work done <strong>now</strong>, cash <strong>later</strong> &mdash; earned this season (and a receivable until they pay). '+smith.customer+': cash <strong>earlier</strong>, work done <strong>now</strong> &mdash; also earned this season. Neither is timed to the cash; both are timed to the <strong>work</strong>. That&rsquo;s why the pile is <strong>EARNED</strong>, not &ldquo;brought in.&rdquo; The books stay balanced: assets went up '+BRW.dol(ridge.charge)+', and so did the pile.</p>')
       + '<div class="next-phase-msg">The two piles are complete and honest now. Time to give them their real names &mdash; and lay them out as a statement.</div>'
       + '<button class="btn-continue btn-block" onclick="nav(\'32-4-name-the-income-statement.html\')">Name the piles &rarr;</button>';
   }
@@ -119,7 +119,7 @@ function setStep(n){
   if(n>step) playSuccess();
   step = n;
   if(step===2){
-    // grow the real workbook: Accounts Receivable appears in Assets, MONEY IN rises to 6,020
+    // grow the real workbook: Accounts Receivable appears in Assets, BROUGHT IN rises to 6,020
     BRW.update('wb', BR_WB.snapshot({ flowGroups:true, withReceivable:true }));
     BRW.tab('wb', 'assets');
     BRW.x('wb', 'a', 1);   // open the new Accounts Receivable line
@@ -168,7 +168,7 @@ function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeTicket(); } });
 
-/* ===== init — the workbook with the season already sorted into MONEY IN / USED UP ===== */
+/* ===== init — the workbook with the season already sorted into BROUGHT IN / USED UP ===== */
 window.devFill = function(){ setStep(2); };
 BRW.mount('wb', BR_WB.snapshot({ flowGroups:true }));
 BRW.tab('wb', 'reasons');

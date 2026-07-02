@@ -99,7 +99,7 @@ function balanceSheetHTML(){
   var liabLabel = contributed ? 'Liabilities &amp; equity' : 'Liabilities &amp; the net';
   var rcLabel = contributed ? 'Members&rsquo; capital &mdash; contributed' : '&ldquo;What you put in&rdquo;';
   var reLabel = contributed ? 'Retained earnings' : '&ldquo;What the work made&rdquo;';
-  var netLabel = contributed ? 'Members&rsquo; equity' : 'The net (have &minus; owe)';
+  var netLabel = contributed ? 'Members&rsquo; equity' : 'The difference';
   var resStyle = contributed ? ' style="background:var(--success-bg);border-radius:4px;padding:2px 6px;margin-top:4px"' : ' style="margin-top:4px"';
   var html = '<div style="text-align:center;font-weight:700;margin-bottom:2px;'+(contributed?'color:var(--primary)':'')+'">'+title+'</div>';
   html += '<div class="section-sub" style="text-align:center;margin-bottom:14px">Balance sheet &middot; June 1, 2026</div>';

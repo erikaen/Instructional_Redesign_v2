@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">Two Kinds of Reason</div>
 
     <div class="narrative-block">
-      <p>Read any reason in the GENERATED pile and it does one of just <strong>two things</strong>: it&rsquo;s money the work <strong>brought in</strong>, or it&rsquo;s something the work <strong>used up</strong>. Nothing else.</p>
+      <p>First, the period line. The question is how the shop did <em>this summer</em>, so May&rsquo;s rows stay exactly where they are &mdash; set aside, untouched. What&rsquo;s left is the season &mdash; and read any season reason and it does one of just <strong>two things</strong>: it&rsquo;s money the work <strong>brought in</strong>, or it&rsquo;s something the work <strong>used up</strong>. Nothing else.</p>
       <p>Right in the workbook: <strong>click a reason</strong> in the pile, then click the pile it belongs in. Do a few and the pattern will be clear &mdash; then you can sort the rest in one go.</p>
     </div>
 
@@ -91,7 +91,7 @@ function bucketGroup(b, label, blurb){
   return h;
 }
 function sortSheet(cid, snap){
-  var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s reasons</div><div class="cash-sheet-sub">'+(done?'sorted into two piles &mdash; money in, and used up':'click a reason, then click the pile it belongs in')+'</div></div>';
+  var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s reasons</div><div class="cash-sheet-sub">'+(done?'sorted into two piles &mdash; brought in, and used up':'click a reason, then click the pile it belongs in')+'</div></div>';
   if(!done){
     var remaining = visibleIds.map(findR).filter(function(r){ return !placed[r.id]; });
     var hiddenLeft = reasons.length - visibleIds.length;
@@ -103,7 +103,7 @@ function sortSheet(cid, snap){
     });
     if(hiddenLeft>0) h += xrow('xl-item', '', '<em>+ '+hiddenLeft+' more like these, still in the pile</em>', '');
   }
-  h += bucketGroup('in', 'MONEY IN', 'money the work brought in');
+  h += bucketGroup('in', 'BROUGHT IN', 'money the work brought in');
   h += bucketGroup('up', 'USED UP', 'what the work used up');
   return h;
 }
@@ -128,7 +128,7 @@ function placeInto(b){
   playSuccess();
   placed[r.id] = b;
   selectedId = null;
-  nudge('ok', '<i data-lucide="check" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; &mdash; '+(b==='in'?'money in.':'used up.'));
+  nudge('ok', '<i data-lucide="check" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; &mdash; '+(b==='in'?'brought in.':'used up.'));
   refresh();
 }
 function doTheRest(){

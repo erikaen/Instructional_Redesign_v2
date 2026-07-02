@@ -1,6 +1,6 @@
 # Bike-Repair.xlsx — Workbook Design (locked)
 
-**Status:** Locked 2026-06-29. **Re-based 2026-07-02** to the revised pre-LLC setup: no May card paydowns, personal cover **$160**, LLC deposit **$1,300**, card carried **$2,030** (opening $4,710 / $2,250 / $2,460). **§5 and §6.7 patched 2026-07-01** to the built novice state
+**Status:** Locked 2026-06-29. **§5 redesigned 2026-07-02** (one continuous Reasons list, no carried-in section; piles CONTRIBUTED / GENERATED / WITHDRAWN, born when first used). **Re-based 2026-07-02** to the revised pre-LLC setup: no May card paydowns, personal cover **$160**, LLC deposit **$1,300**, card carried **$2,030** (opening $4,710 / $2,250 / $2,460). **§5 and §6.7 patched 2026-07-01** to the built novice state
 (GENERATED +$2,570 itemized job-by-job, residual $4,430, recognition gaps visible). The reference
 design for the in-tutorial **Bike-Repair.xlsx** facsimile, as built and approved in
 `31-2-work-the-season.html`. Every Module 3 page that shows the workbook (`31-3` onward) inherits
@@ -24,8 +24,8 @@ grows as a page's activity runs.
 > Module 3 the workbook is already past those beats, so it opens with Cash folded in and the Reasons
 > tab present. Earlier pages must show the **pre-beat** structure.
 
-**Every line drills down.** Assets, Liabilities, and the carried-in equity balances on the Reasons
-tab all carry a `+`/`−` toggle that opens to the detail that makes up the total. Single-item lines
+**Every line drills down.** Assets, Liabilities, and the Reasons piles
+all carry a `+`/`−` toggle that opens to the detail that makes up the total. Single-item lines
 expand too (for parallelism). This is the defining feature: totals up top, the receipts underneath.
 
 ---
@@ -41,7 +41,7 @@ expand too (for parallelism). This is the defining feature: totals up top, the r
 - **Expandable category markup:** an `.xl-cat` row whose gutter holds an `.xl-toggle` button
   (`onclick="toggle…(i)"`, `+`/`−`), then `.xl-item` rows below when open. A flat line is an
   `.xl-item` with a numbered `.xl-rownum`; nested detail items leave `.xl-rownum` blank.
-- **Expand state is index-keyed** maps (`assetsExpanded`, `liabExpanded`, `carriedExpanded`),
+- **Expand state is index-keyed** maps (`assetsExpanded`, `liabExpanded`, per-pile group maps),
   toggled by `toggle…(i)` handlers that re-render the active container. Reasons piles use a
   keyed-by-group map (`reasonGroupOpen`).
 - **Formatters:** `dol(v)` → unsigned dollars with a leading `−` for negatives (balances and
@@ -99,37 +99,38 @@ So **A − L = $4,710 − $2,250 = $2,460** opening members' capital.
 
 ---
 
-## 5. Reasons tab — carried in + this season
+## 5. Reasons tab — one continuous list (never settled, never reset)
 
-The Reasons tab is **continuous** from Module 1 (Module 2 had no workbook; the last place the
-student saw it was the end of Module 1). It opens carrying the prior result as **two named balances**,
-each expandable to what settled into it. The season's new reasons accumulate below.
+**(Redesigned 2026-07-02, Rick's call.)** The Reasons tab is **one continuous list** from the
+student's first May jot to today (Module 2 had no workbook on screen). There is **no "carried in"
+section**: nothing was settled or reset at formation. The piles' running subtotals ARE the equity
+story — CONTRIBUTED $2,290 / GENERATED $170 at June 1 tie line-for-line to the opening balance
+sheet — and the **first-ever close is Tutorial 3.5's discovery**, not a fait accompli performed
+off-screen by the designer.
 
-### Carried in — members' capital, June 1 (the prior reasons, already settled)
+**The standing pile vocabulary (every Reasons tab, M1 → M3), each pile *born when first used*:**
 
-| Balance | Amount | Expands to |
+| Pile | Blurb | Matures into | Born |
+|---|---|---|---|
+| **CONTRIBUTED** | what you put in | Contributed Capital (named 1.5) | 1.4 |
+| **GENERATED** | what the work produced | Retained Earnings (named 1.5) — the pile *is* RE in embryo | 1.4 |
+| **WITHDRAWN** | what you took for yourself | Draws / distributions | M3, at the season's draw |
+
+### The piles at Aug 31 (each expandable to its rows)
+
+| Pile | Subtotal | Rows |
 |---|--:|---|
-| **Contributed Capital** | **$2,290** | cash to get the work going 160 · laptop from home 610 · gear from home 220 · cash contributed forming the LLC 1,300 |
-| **Retained Earnings** | **$170** | repairs earned 1,120 · parts used −300 · space used (rent) −650 |
-| **Members' capital, June 1** | **$2,460** | |
+| **CONTRIBUTED** | **+$2,290** | cash covered 160 (May) · laptop 610 (May) · gear 220 (May) · LLC deposit 1,300 (June 1) — nothing new in the season |
+| **GENERATED** | **+$2,740** | May's rows first (+$170: seven repairs +1,120 · parts used −300 · rent used −650), then the season's mess jumbled **job by job**: `Repair collected — {customer}` (+charge) · `Frame delivered — J. Smith` (+220) · `Parts used — {customer}` (−partsCost) · `Rent used — {month}` (−650 ×3). Season nets: Sales **$5,720** − parts **$1,200** − rent **$1,950** = **+$2,570**. **Not** sorted into revenue-then-expense. |
+| **WITHDRAWN** | **−$600** | owner's draw −600 |
 
-> Opening Retained Earnings expands to *repairs earned − what the work used up* — a quiet foreshadow
-> of the income statement and closing, **without naming either**.
+The GENERATED pile spanning May→August is **the point**: ask it "how did the *season* go?" and it
+cannot answer — the student must draw the period line by hand (32-2), feel the tedium, and come to
+*want* tallies that total a period and then reset. The lifetime pile is the permanent account
+(Retained Earnings in embryo); the period tally is the temporary account — the student holds both
+in hand before either is named.
 
-### This season's reasons (kept in full detail — **not** closed, **not** bucketed)
-
-Recorded via the page's walk, then dropped into the familiar Module 1 piles (M3 adds a third). The
-GENERATED pile is **the mess** — jumbled **job by job** (each repair collected sitting next to its
-own parts used, each month's rent dropped in when paid), **not** sorted into revenue-then-expense.
-This unsorted pile is what motivates the income statement in 3.2; it must **not** be pre-bucketed.
-
-| Pile | Subtotal | Rows (itemized, job-by-job order) |
-|---|--:|---|
-| **CONTRIBUTED** | — | *(nothing new put in this season; Contributed Capital is the carried balance above)* |
-| **GENERATED** | **+$2,570** | one row per event, jumbled: `Repair collected — {customer}` (+charge) · `Frame delivered — J. Smith` (+220) · `Parts used — {customer}` (−partsCost) · `Rent used — {month}` (−650 ×3). Nets: repairs collected + Smith's frame = **Sales $5,720**; parts used **−$1,200**; rent used **−$1,950** → **+$2,570**. |
-| **TAKEN OUT** | **−$600** | owner's draw −600 |
-
-**Residual close:** carried members' capital $2,460 + GENERATED $2,570 − draw $600 = **$4,430** =
+**Residual close:** CONTRIBUTED $2,290 + GENERATED $2,740 − WITHDRAWN $600 = **$4,430** =
 Assets $4,430 − Liabilities $0. (The card is paid off to $0; Smith's Unearned earns out to $0.)
 
 **Recognition gaps left visible in the raw data (deliberate — they seed 3.2/3.3):**
@@ -157,8 +158,8 @@ cash, collect a billed repair, pay the rent, buy a new tool, pay off the card.
    *history*; it is **not** a cash-flow statement (operating/investing/financing) — that is
    Tutorial 3.4's to build. The ledger's **last two entries are locked**: +$160 implicit
    contribution, +$1,300 LLC deposit.
-4. **Carried balances are expandable** to the detail that settled into them — continuity made
-   visible, not opaque opening numbers.
+4. **No carried balances — the list itself is the continuity.** Nothing settles or resets until
+   the student performs the first close (3.5). Pile subtotals tie to the equity lines at any date.
 5. **Account naming: "Right of Use"** (not "Prepaid Rent") — the Module 1 convention. The
    transactions answer-key `.txt` was reconciled to match. The **YALEiE check workbook** must use
    the same term. The laptop sits under an **"Office Equipment"** category.
@@ -176,8 +177,9 @@ cash, collect a billed repair, pay the rent, buy a new tool, pay off the card.
    *(Smith's $220 advance **does** earn out in `31-2`: his custom frame is finished and delivered in
    the season, so Unearned Revenue closes to $0 and "Frame delivered — J. Smith +$220" sits in the
    GENERATED pile. It is recorded in both the novice and the true books, so it is **not** part of the
-   $70 gap. The visible net-movers thus move capital by **+$1,970** — GENERATED +$2,570 less the −$600
-   draw — carrying opening $2,460 to the novice close $4,430.)*
+   $70 gap. The season's visible net-movers move capital by **+$1,970** — the season's GENERATED rows
+   +$2,570 less the −$600 WITHDRAWN draw — carrying the June-1 pile state (2,290 + 170) to the novice
+   close $4,430.)*
 
 ---
 
@@ -238,6 +240,7 @@ page sits.
 | `unearned` | what you owe Smith (his deposit) | **Unearned Revenue** | M3 (3.4 earns it out) |
 | `contributedCapital` | what you put in (*Contributed*) | **Contributed Capital** | 1.5 |
 | `retainedEarnings` | what the work generated (*Generated*) | **Retained Earnings** | 1.5 |
+| `drawn` | what you took for yourself (*Withdrawn*) | **Draws** (a distribution) | M3, at the season's draw |
 
 The current M1 pages use other plain labels (`EQUIPMENT`, `COMPUTER EQUIPMENT`, `SUPPLIES`) — migrate
 them to the keys above; pick the plain or formal label per the page's place in the arc.
@@ -271,7 +274,7 @@ feature is earned it stays (the Reasons tab is **continuous** after its beat).
 | **1.4 Keeping the Reasons** *(CMU team title: "Why Keep the Reasons")* | ★★ **Two beats, both here.** **(a) Cash-fold** — Cash is folded into the Assets list, decided off the insurable-property framing ("is cash a right to future benefits?" — it's not insurable, but it's still the work's). **(b) Reasons tab is *born*** — log net-movers, cross the pairs, sort into *Contributed* / *Generated* (plain). |
 | **1.5 Naming What You Built** | Names land: `A − L = Equities`; *Contributed* → **Contributed Capital**, *Generated* → **Retained Earnings**. |
 | **Module 2 (no workbook on screen)** | Off-screen events still move it: **+$1,300 contributed** (Contributed Capital 990 → **2,290**), LLC formed, bank account opened. M3 must open consistent with this. |
-| **Module 3 — 3.1 (`31-x`)** | **This locked snapshot.** Opening Assets $4,710 / Liabilities $2,250; Reasons tab carries **Contributed Capital $2,290 + Retained Earnings $170**, season's reasons accumulate (un-closed). |
+| **Module 3 — 3.1 (`31-x`)** | **This locked snapshot.** Opening Assets $4,710 / Liabilities $2,250; the Reasons list runs unbroken from May — piles read **CONTRIBUTED $2,290 / GENERATED $170** at June 1; the season's rows accumulate below (un-closed). |
 | **Module 3 — 3.2–3.5** | Discoveries build *on top of* this snapshot: income statement, depreciation, cash-flow, the articulated set. |
 
 > **★ Rebuild gap — Tutorial 1.4.** Both structural beats live here, but the **CMU team's 1.4

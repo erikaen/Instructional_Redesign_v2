@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">What the Season Kept</div>
 
     <div class="narrative-block">
-      <p>The income statement answers one question &mdash; how the season went. But that answer has to <strong>land</strong> somewhere in the books. Back on the Reasons tab are the two equity piles you carried in. When Net income is finished, which one does it join?</p>
+      <p>The income statement answers one question &mdash; how the season went. But that answer has to <strong>land</strong> somewhere in the books. Back on the Reasons tab, the <strong>GENERATED</strong> pile has been collecting what the work produces since May &mdash; and <strong>CONTRIBUTED</strong> holds what you put in. When Net income is finished, which pile does it feed?</p>
     </div>
 
     <div id="wb"></div>
@@ -65,10 +65,10 @@ function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 function renderTalk(){
-  document.getElementById('anna').innerHTML = annaBox('Net income joins <strong>Retained Earnings</strong> &mdash; the &ldquo;what the work kept&rdquo; pile, open there at <strong>$170</strong> &mdash; never Contributed Capital. That&rsquo;s the whole point of the split from Module 2: <strong>Contributed</strong> ($2,290) is what you and others <em>put in</em>; <strong>Retained</strong> is what the <em>work</em> generates and holds onto. A season of operations feeds the retained side only. And the books already grew this tutorial &mdash; Ridgeline&rsquo;s <strong>$300</strong> promise is now a line in Assets.');
+  document.getElementById('anna').innerHTML = annaBox('Net income feeds the <strong>GENERATED</strong> side &mdash; never CONTRIBUTED. Look at the tab: the season&rsquo;s <strong>EARNED</strong> and <strong>USED UP</strong> tallies sit right under <strong>GENERATED &mdash; through May 31</strong>, the $170 the work had produced before the summer ever started. Same pile, one more season of it. What the work generates and holds onto, season after season, has a formal name: <strong>Retained Earnings</strong>. What you put in ($2,290) is <strong>Contributed Capital</strong> &mdash; and a season of operations never touches it. That&rsquo;s the Module 2 split doing its work. And the books already grew this tutorial &mdash; Ridgeline&rsquo;s <strong>$300</strong> promise is now a line in Assets.');
   document.getElementById('controls').innerHTML =
     insightBox('The income statement explains a balance-sheet move',
-        '<p>Between June and now, members&rsquo; capital moved. The income statement says <em>how</em>: Net income is exactly what flows into <strong>Retained Earnings</strong>. (Your <strong>$600</strong> draw also came out of that pile &mdash; but that&rsquo;s you <em>taking money out</em>, a distribution, not a cost of the work. It gets its own statement later.)</p>')
+        '<p>Between June and now, members&rsquo; capital moved. The income statement says <em>how</em>: Net income is exactly what the season added to <strong>Retained Earnings</strong> &mdash; the GENERATED pile&rsquo;s formal name. (Your <strong>$600</strong> draw sits in its own pile, <strong>WITHDRAWN</strong> &mdash; taking money out is a distribution, not a cost of the work. It gets its own statement later.)</p>')
     + '<div class="next-phase-msg">You built the whole shape: Revenue, Expenses, Net income &mdash; and where it lands. Only one thing is still open: the last expense. Your tools and laptop wore out all season, and that wear isn&rsquo;t counted yet. Finish it, and Net income finally gets its number.</div>'
     + '<button class="btn-continue btn-block" onclick="nav(\'33-1-depreciation.html\')">Next: the wear you can&rsquo;t see &rarr;</button>';
   if(window.lucide) lucide.createIcons();
@@ -92,10 +92,9 @@ function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
-/* ===== init — the workbook on Reasons, the carried Retained Earnings pile opened ===== */
+/* ===== init — the workbook on Reasons: the season's tallies under the continuous piles ===== */
 BRW.mount('wb', BR_WB.snapshot({ flowGroups:true, withReceivable:true }));
 BRW.tab('wb', 'reasons');
-BRW.x('wb', 'c', 1);   // open carried Retained Earnings to show what the work kept
 renderTalk();
 </script>
   <script src="dev.js"></script>
