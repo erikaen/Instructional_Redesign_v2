@@ -58,8 +58,8 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== glossary (shared across all phases of 2.5) ===== */
 var glossaryTerms = [
-  { term:"Balance sheet", def:"A snapshot of what the entity holds and owes at one moment: Assets &minus; Liabilities = the residual (here, members&rsquo; equity)." },
-  { term:"Members&rsquo; equity", def:"The LLC&rsquo;s residual, A &minus; L. A definitional difference &mdash; never &ldquo;what&rsquo;s left for the owner.&rdquo; Split into contributed ($2,290) and retained ($170)." },
+  { term:"Balance sheet", def:"A snapshot of what the entity holds and owes at one moment: Assets &minus; Liabilities = the residual (here, Members&rsquo; Capital)." },
+  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s residual, A &minus; L. A definitional difference &mdash; never &ldquo;what&rsquo;s left for the owner.&rdquo; Split into contributed ($2,290) and retained ($170)." },
   { term:"Accounting entity", def:"The boundary your books are drawn around. It can exist with or without a legal body &mdash; and here it has existed since 1.1, long before the LLC." },
   { term:"Legal entity", def:"A creature of statute &mdash; the LLC. Days old. Distinct from the accounting entity it now wraps." }
 ];
@@ -121,10 +121,10 @@ function buildSheet(){
   h += bsRow('Credit card (business)','2,030','2,030',{});
   h += bsRow('Customer advance &mdash; Smith','220','220',{});
   h += bsRow('Liabilities','2,250','2,250',{bold:true,rule:true});
-  h += sectionLabel('Members&rsquo; equity');
+  h += sectionLabel('Members&rsquo; Capital');
   h += bsRow('Members&rsquo; capital &mdash; contributed','990','2,290',{});
   h += bsRow('Retained earnings','170','170',{});
-  h += bsRow('Members&rsquo; equity (A &minus; L)','1,160','2,460',{bold:true,rule:true});
+  h += bsRow('Members&rsquo; Capital (A &minus; L)','1,160','2,460',{bold:true,rule:true});
   h += '</div>';
   return h;
 }
@@ -138,6 +138,8 @@ function renderCapstone(){
     return;
   }
   var html = buildSheet();
+  html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="info" class="licon"></i> Why &ldquo;Members&rsquo; Capital&rdquo;?</div>'+
+    '<p><strong>Members&rsquo; Capital</strong> is just your own <strong>Reasons list</strong> &mdash; contributed and generated &mdash; relabeled. The LLC didn&rsquo;t invent a new pile; the residual is renamed because that&rsquo;s the word the Operating Agreement uses.</p></div>';
   if(!compared){
     html += '<p style="font-size:var(--font-s);margin-top:14px">There it is &mdash; the LLC&rsquo;s own sheet: <span class="mono">A 4,710 &minus; L 2,250 = 2,460</span>. Now the real question:</p>'+
       '<p style="font-size:var(--font-s);font-weight:600;color:var(--primary);margin-top:4px;margin-bottom:10px">How much of this did <em>forming the LLC</em> actually change?</p>'+

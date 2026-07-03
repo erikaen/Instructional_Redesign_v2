@@ -65,7 +65,7 @@ var BR_WB = (function () {
 
   // The pre-season reasons — May's work and the two formation contributions, exactly as
   // first jotted. The list is CONTINUOUS: nothing is settled or reset at June 1. The piles'
-  // running subtotals ARE the equity story (CONTRIBUTED 2,290 / GENERATED 170 at June 1);
+  // running subtotals ARE the residual story (CONTRIBUTED 2,290 / GENERATED 170 at June 1);
   // the first-ever close is Tutorial 3.5's discovery, not a fait accompli.
   function setupRows() {
     return [

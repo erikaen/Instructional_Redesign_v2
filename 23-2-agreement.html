@@ -70,7 +70,7 @@ var glossaryTerms = [
   { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
   { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
   { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
-  { term:"Members&rsquo; capital / Members&rsquo; equity", def:"The LLC&rsquo;s name for the residual A &minus; L. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the retained slice ($170) are kept separate." },
+  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for the residual A &minus; L. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the retained slice ($170) are kept separate." },
   { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
   { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
 ];
@@ -94,7 +94,7 @@ var expanded = ['7','9','17'];
 var docOpen = null;
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
-function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
+function llcName(){ return memberDisplay() + "âs Bike Repairs, LLC"; }
 var assetRows = [['Cash','0'],['Prepaid rent','650'],['Parts on the shelf','200'],['Tools & equipment','1,200'],['Fixtures','750'],['Laptop','610']];
 function annaFacts(){
   return {
@@ -110,7 +110,7 @@ function myFacts(){
     entity:llcName(), member:memberDisplay(), date:'June 1, 2026',
     state:'Connecticut', act:'Connecticut Uniform Limited Liability Company Act',
     purpose:'bicycle repair and maintenance', office:'142 Whalley Avenue, Unit B, New Haven, CT 06511',
-    sched:{ assets:assetRows, assetsTotal:'3,410', liabs:[['Credit-card balance (business)','2,030'],['Customer advance — Smith','220']], liabsTotal:'2,250', net:'1,160' },
+    sched:{ assets:assetRows, assetsTotal:'3,410', liabs:[['Credit-card balance (business)','2,030'],['Customer advance â Smith','220']], liabsTotal:'2,250', net:'1,160' },
     sig:{ company: signedCompany ? memberDisplay() : null, member: signedMember ? memberDisplay() : null }
   };
 }
@@ -125,7 +125,7 @@ function clauseData(f){
     ['7','Sole Member','The sole member of the Company is '+f.member+'.'],
     ['8','Management; Powers','The business and affairs of the Company are managed by the Sole Member, who may execute documents and otherwise act for and bind the Company.'],
     ['9','Capital Contributions','The Sole Member contributes the assets and liabilities of the business, at their existing book amounts, as set forth on Schedule A. Net book value contributed: $'+f.sched.net+'.'],
-    ['10','Additional Capital Contributions','No additional contributions are required of the Sole Member, though further contributions may be made at the Sole Member’s discretion.'],
+    ['10','Additional Capital Contributions','No additional contributions are required of the Sole Member, though further contributions may be made at the Sole Memberâs discretion.'],
     ['11','Allocation of Profits and Losses','All profits and losses of the Company are allocated 100% to the Sole Member.'],
     ['12','Distributions','Distributions are made to the Sole Member at such times and in such amounts as the Sole Member determines.'],
     ['13','Assignments','The Sole Member may assign its interest in the Company, in whole or in part.'],
