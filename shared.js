@@ -19,11 +19,11 @@ var GLOSSARY = [
   { term: "Accounting system", def: "A shared information system that compresses the economic complexity of an organization into structured reports that many different people can consult for different purposes." },
   { term: "Architecture", def: "The deep structure shared by accounting systems around the world: the self-balancing identity imposed at two dates to create two balance sheets, the flow statements that decompose the difference between them, and double-entry bookkeeping as the recording method. The architecture does not vary across instances." },
   { term: "Instance", def: "A specific set of rules written by a rule-making body for a particular class of organizations. US GAAP, IFRS, and governmental accounting standards are each instances of the shared architecture." },
-  { term: "Accounting identity", def: "A self-imposed balancing requirement at the center of every accounting system: Assets \u2212 Liabilities = the residual. Written this way to preserve the definitional character: the residual is a computed difference, not an independent third quantity. Not derived or discovered \u2014 chosen, because of what imposing it makes possible." },
+  { term: "Accounting identity", def: "A self-imposed balancing requirement at the center of every accounting system: Assets \u2212 Liabilities. The difference is fully determined once Assets and Liabilities are set \u2014 a computed difference, not an independent third quantity \u2014 and it has no single name; each kind of entity gives it its own, and even those names have shifted over time. Not derived or discovered \u2014 chosen, because of what imposing it makes possible." },
   { term: "Assets", def: "Present rights to economic benefits held by the entity. Not physical things \u2014 rights. A building is an asset because the entity holds the right to use, rent, or sell it. Cash is an asset because it embodies the right to acquire other things. No future benefit, no asset." },
   { term: "Liabilities", def: "Present obligations of the entity to transfer economic benefits. The entity owes something and cannot avoid the transfer. The obligation must be compelling \u2014 not optional, not merely possible." },
   { term: "Double-entry bookkeeping", def: "A recording method in which every economic event is entered in two places, maintaining the balance of the accounting identity. Evolved in medieval Italy; now used by most accounting systems worldwide." },
-  { term: "Financial statements", def: "The four output channels of the accounting system: the balance sheet, income statement, statement of changes in the residual, and statement of cash flows. The flow statements are not separate reports that happen to agree with the balance sheets \u2014 they are decompositions of the change between two balance sheets." },
+  { term: "Financial statements", def: "The four output channels of the accounting system: the balance sheet, income statement, statement of changes in Members’ capital, and statement of cash flows. The flow statements are not separate reports that happen to agree with the balance sheets \u2014 they are decompositions of the change between two balance sheets." },
   { term: "US GAAP", def: "Generally Accepted Accounting Principles. The instance of the accounting architecture written by FASB for US for-profit entities. The instance studied in this prework." },
   { term: "IFRS", def: "International Financial Reporting Standards. The instance written by the IASB for entities in most countries outside the United States." },
   { term: "FASB", def: "Financial Accounting Standards Board. The body that writes US GAAP \u2014 the accounting rules for US for-profit entities." },
@@ -33,8 +33,8 @@ var GLOSSARY = [
   { term: "Input boundary", def: "The line that determines which economic events enter the accounting system and which do not. There is too much data to include it all. What falls outside the boundary \u2014 human capital, internally generated brands, relational assets \u2014 is invisible to the system." },
   { term: "Journal entry notation", def: "The language of debits and credits used to analyze and record transactions. The first step in accounting for any transaction is to analyze it: what changed, where do the effects land, does everything still balance?" },
   { term: "Historical cost", def: "The amount recorded at the time of an arm\u2019s-length transaction \u2014 the strongest epistemic anchor for worth, because two independent parties looked at the same thing and agreed on a price." },
-  { term: "Balance sheet", def: "The financial statement that shows the accounting identity at a date: Assets \u2212 Liabilities = the residual. What the entity has recorded as resources, what it owes, and the difference. A snapshot of position, not an explanation of how the entity got there." },
-  { term: "Income statement", def: "A decomposition of the operating portion of the change in the residual between two balance sheets. Shows revenues (gross inflows of worth from the entity\u2019s activities) and expenses (resources consumed in generating those revenues). The income statement does not \u201cagree with\u201d the change in retained earnings \u2014 it is an explanation of part of that change." },
+  { term: "Balance sheet", def: "The financial statement that shows the accounting identity at a date: Assets \u2212 Liabilities. What the entity has recorded as resources, what it owes, and the difference between them. A snapshot of position, not an explanation of how the entity got there." },
+  { term: "Income statement", def: "A decomposition of the operating portion of the change in Members’ capital between two balance sheets. Shows revenues (gross inflows of worth from the entity\u2019s activities) and expenses (resources consumed in generating those revenues). The income statement does not \u201cagree with\u201d the change in retained earnings \u2014 it is an explanation of part of that change." },
   { term: "Statement of cash flows", def: "A decomposition of the change in one particular asset \u2014 cash \u2014 between two balance sheets. Groups cash movements into operating, investing, and financing categories. Under the indirect method, it begins with net income and adjusts for everything that affected income but not cash, and vice versa." },
   { term: "Revenue", def: "The gross inflows of worth resulting from an entity\u2019s activities \u2014 selling goods, providing services, earning fees. Revenue is recognized when earned, which may be before or after cash is collected." },
   { term: "Expense", def: "The resources consumed in generating revenues. Like revenue, expenses are recognized when incurred, not necessarily when cash is paid. The conventions governing when to recognize an expense are among the most consequential in the system." },
@@ -393,8 +393,8 @@ var BRW = (function () {
     var snap = e.snap, tab = e.ui.tab;
     if (!snap.tabs.some(function (t) { return t.id === tab; })) tab = e.ui.tab = snap.tabs[0].id;
     var body, label = (snap.tabs.filter(function (t) { return t.id === tab; })[0] || {}).label || '';
-    if (tab === 'assets') body = listSheet(cid, 'a', snap.assets || [], 'Assets &mdash; what I have', 'Total Assets &mdash; what the records show');
-    else if (tab === 'liabilities') body = listSheet(cid, 'l', snap.liabilities || [], 'Liabilities &mdash; what I owe', 'Total Liabilities &mdash; what the records show');
+    if (tab === 'assets') body = listSheet(cid, 'a', snap.assets || [], 'Assets', 'Total Assets &mdash; what the records show');
+    else if (tab === 'liabilities') body = listSheet(cid, 'l', snap.liabilities || [], 'Liabilities', 'Total Liabilities &mdash; what the records show');
     else if (tab === 'reasons') body = reasonsSheet(cid, snap.reasons || { rows: [] });
     else if (_sheets[tab]) body = _sheets[tab](cid, snap);
     else body = '';
@@ -414,3 +414,51 @@ var BRW = (function () {
     registerSheet: function (id, fn) { _sheets[id] = fn; }
   };
 })();
+
+/* ===== Module 1 tutorial glossary (pages 11-x .. 15-x) =====
+   Single source of truth. Progressive: a page shows only terms earned at or
+   before its own position, so the glossary never hands out a name before the
+   student earns it. Each page calls m1GlossaryOpen('<its page id>') from its
+   own openGlossary() wrapper; `earned` is the page id where the term lands. */
+var M1_GLOSSARY = [
+  { module:'Module 2: Insurance and Maria', terms:[
+    { earned:'12-1', term:'Property Policy', def:'Insurance that pays out if covered things are damaged or destroyed. Doesn&rsquo;t cover cash, or things you don&rsquo;t own (like the rented space).' },
+    { earned:'12-2', term:'Market Value', def:'What it would fetch &mdash; what a comparable one sells for today (e.g. recent used &ldquo;eBay comp&rdquo; prices); the basis used to value the pre-owned laptop. One way to arrive at an asset&rsquo;s value &mdash; a choice, not the only one.' }
+  ] },
+  { module:'Module 3: Anna and the Bank Statement', terms:[
+    { earned:'13-8', term:'Asset', def:'Something the repair work has &mdash; a present right to an economic benefit (the gear, the parts, the prepaid month, cash). &ldquo;Right to,&rdquo; not &ldquo;owns&rdquo;: a leased item is an asset.' },
+    { earned:'13-8', term:'Noncash Asset', def:'An asset that isn&rsquo;t cash: equipment, parts on the shelf, fixtures, or a future right like prepaid rent.' },
+    { earned:'13-8', term:'Liability', def:'Something the repair work owes &mdash; a present obligation to transfer an economic benefit later (the card balance; Smith&rsquo;s deposit, where what&rsquo;s owed is the work, not money).' },
+    { earned:'13-7', term:'Prepaid Rent', def:'Rent already paid for a future month; a present right (an asset) until the month is used, then it becomes a cost.' },
+    { earned:'13-4', term:'Promise', def:'Something the repair work has agreed to do or pay later. The plain word used before the term &ldquo;Liability.&rdquo;' },
+    { earned:'13-4', term:'Deposit', def:'Money paid in advance for something not yet received. For the receiver it&rsquo;s a liability &mdash; the goods, the work, or the money back is still owed &mdash; not earnings yet.' }
+  ] },
+  { module:'Module 4: Keeping the Reasons', terms:[
+    { earned:'14-1', term:'Reason', def:'The why behind a change in a Noncash Asset, Liability, or Cash. One row per side of the change; every change has two sides (the felt beginning of double-entry).' },
+    { earned:'14-2', term:'Receipt', def:'The evidence for a purchase &mdash; vendor, date, amount, and how it was paid. The clue for each reason.' },
+    { earned:'14-2', term:'Brought from home', def:'Gear you already owned and moved into the repair work &mdash; no purchase, valued by what a comparable one sells for.' },
+    { earned:'14-4', term:'Contributed', def:'Resources that came into the entity from outside its own repair work (owner cash, equipment, items from home). Formal name later: Contributed Capital.' },
+    { earned:'14-4', term:'Generated', def:'What the repair work produced, net of its costs (from running the repair work). Formal name later: Retained Earnings.' },
+    { earned:'14-2', term:'Cost of Repairs Done', def:'The value of parts/resources consumed in finished customer jobs; a reason that makes parts-on-the-shelf go down.' }
+  ] },
+  { module:'Module 5: Naming What You Built', terms:[
+    { earned:'15-3', term:'Entity', def:'A perspective you adopt by deciding what counts as &ldquo;in&rdquo; (your repair work) vs. &ldquo;out&rdquo; (your personal life), for a purpose. The line is drawn, not found.' },
+    { earned:'15-2', term:'Accounting Identity', def:'Assets &minus; Liabilities. The difference is fully determined once Assets and Liabilities are set; it has no single name &mdash; each kind of entity gives it its own, and even those names have shifted over time. An identity, not an equation; it holds by definition for every entity.' }
+  ] }
+];
+function m1PageKey(p){ var m = /^(\d+)-(\d+)/.exec(String(p||'')); return m ? (parseInt(m[1],10)*100 + parseInt(m[2],10)) : 0; }
+function m1GlossaryOpen(pageId){
+  var cur = m1PageKey(pageId);
+  var html = '';
+  M1_GLOSSARY.forEach(function(grp){
+    var earned = grp.terms.filter(function(t){ return m1PageKey(t.earned) <= cur; });
+    if(!earned.length) return;
+    html += '<div class="glossary-group"><div class="glossary-module">'+grp.module+'</div>'+earned.map(function(g){
+      return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+    }).join('')+'</div>';
+  });
+  if(!html) html = '<div class="glossary-entry"><div class="glossary-entry-def">Nothing here yet &mdash; terms land in the glossary as the lists earn their names.</div></div>';
+  document.getElementById('glossaryList').innerHTML = html;
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function m1GlossaryClose(){ document.getElementById('glossaryOverlay').classList.remove('open'); }

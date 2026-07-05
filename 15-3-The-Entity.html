@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5 — The Entity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+    </div>
+
+    <div class="narrative-block">
+      <p>Go back to Module 1. Before any of this, you did one quiet thing: you drew a line. <em>This</em> stand, <em>this</em> card, <em>this</em> slice of the bank account &mdash; part of the repair work. Your groceries, your gas, your paycheck &mdash; not. You kept asking the same question of every item: <em>is this the repair work, or is this me?</em></p>
+      <p>That line is what made the books possible. So turn the question around: <strong>what else could have a set of books of its own?</strong> For each one below, decide: could a clear edge be drawn around it, for a purpose &mdash; and its books kept?</p>
+    </div>
+    <div id="entityQuiz"></div>
+    <div id="entityClose" hidden></div>
+    <div class="next-phase-msg" id="entityDone" hidden>You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 2;
+var PHASE_TITLE = '';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+
+/* ===== entity exercise ===== */
+var CANDIDATES = [
+  { label:'Your repair work', could:true,
+    fb:'You&rsquo;ve been keeping its books for five modules. A clear edge, drawn for a purpose.' },
+  { label:'You &mdash; the person, apart from the repair work', could:true,
+    fb:'The other side of your own line. A person can have books too &mdash; the same sorting you did in Module 1, pointed the other way.' },
+  { label:'The food bank on Whalley Ave', could:true,
+    fb:'Someone can draw its edge and keep its books. No profit needed &mdash; the books don&rsquo;t care why the thing exists, only where its edge is.' },
+  { label:'The bicycle industry', could:false,
+    fb:'Where&rsquo;s the edge? Thousands of shops, makers, and riders &mdash; no one line around them all, and nobody whose purpose draws it. No edge, no books.' },
+  { label:'Smith&rsquo;s $220 deposit', could:false,
+    fb:'That&rsquo;s something that <em>happened</em> &mdash; it lands <em>in</em> a set of books (cash up, a promise up). Events get recorded; they don&rsquo;t keep records.' },
+  { label:'Last May', could:false,
+    fb:'A stretch of time. Books belong to a subject and <em>cover</em> a time &mdash; May is the month the books covered, not a thing with books of its own.' }
+];
+var answered = {};
+function renderQuiz(){
+  var html = '';
+  CANDIDATES.forEach(function(c, i){
+    var a = answered[i];
+    html += '<div class="mc-card"><div class="mc-q">'+c.label+'</div>'+
+      '<div class="btn-row">'+
+      '<button class="btn btn-outline" onclick="answerEntity('+i+',true)"'+(a!==undefined?' disabled':'')+'>Yes &mdash; it could</button>'+
+      '<button class="btn btn-outline" onclick="answerEntity('+i+',false)"'+(a!==undefined?' disabled':'')+'>No</button>'+
+      '</div>'+
+      (a!==undefined ? '<div class="feedback '+(a===c.could?'ok':'err')+' show">'+(a===c.could?'Right. ':'Not quite. ')+c.fb+'</div>' : '')+
+      '</div>';
+  });
+  document.getElementById('entityQuiz').innerHTML = html;
+}
+function answerEntity(i, val){
+  if(answered[i] !== undefined) return;
+  answered[i] = val;
+  if(val === CANDIDATES[i].could) playSuccess(); else playNope();
+  renderQuiz();
+  if(Object.keys(answered).length === CANDIDATES.length) revealEntity();
+}
+function revealEntity(){
+  var c = document.getElementById('entityClose');
+  c.hidden = false;
+  c.innerHTML =
+    '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Everything you said yes to &mdash; anything with a clear edge drawn around it, for a purpose &mdash; can be the subject of a set of books. That subject has a name: the <strong>entity</strong>. And notice: you didn&rsquo;t <em>find</em> the repair work&rsquo;s edge. You <strong>made</strong> it, by deciding what&rsquo;s in and what&rsquo;s out. The entity is a perspective you adopt for a purpose, not an object sitting in the world.&rdquo;</div></div>'+
+    '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The boundary is the work; the name follows</div><p>Draw the line in the wrong place and every number after it is answering the wrong question.</p></div>';
+  document.getElementById('entityDone').hidden = false;
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== restart ===== */
+function restart(){
+  answered = {};
+  document.getElementById('entityClose').hidden = true;
+  document.getElementById('entityClose').innerHTML = '';
+  document.getElementById('entityDone').hidden = true;
+  renderQuiz();
+  window.scrollTo(0,0);
+}
+
+/* ===== glossary ===== */
+function openGlossary(){ m1GlossaryOpen('15-3'); }
+function closeGlossary(){ m1GlossaryClose(); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+renderQuiz();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

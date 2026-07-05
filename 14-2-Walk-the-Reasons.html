@@ -54,6 +54,7 @@
   </div>
 </div>
 
+<script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -184,18 +185,18 @@ function assetsSheet(){
       html+='<div class="xl-row xl-item'+(sel?' selected':'')+'"'+click+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+tail+'</div></div>';
     });
   });
-  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL &mdash; what I have</div><div class="xl-v">'+dol(ASSETS_TOTAL)+'</div></div>';
+  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+dol(ASSETS_TOTAL)+'</div></div>';
   return html;
 }
 function liabilitiesSheet(){
-  var html='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liability &mdash; what I owe</div><div class="xl-v">Amount</div></div>';
+  var html='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liability</div><div class="xl-v">Amount</div></div>';
   var n=0;
   LIABS.forEach(function(l){
     var open=!!liabOpen[l.key]; n++;
     html+='<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleLiab(\''+l.key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+l.label+' &mdash; '+l.note+'</div><div class="xl-v">'+dol(l.amount)+'</div></div>';
     if(open){ l.items.forEach(function(it){ n++; html+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+dol(it.amt)+'</div></div>'; }); }
   });
-  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL &mdash; what I owe</div><div class="xl-v">'+dol(LIABS_TOTAL)+'</div></div>';
+  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+dol(LIABS_TOTAL)+'</div></div>';
   return html;
 }
 function reasonsSheet(){
@@ -331,18 +332,8 @@ function openReceipt(group){
 function closeReceipt(){ document.getElementById('receiptOverlay').classList.remove('open'); }
 
 /* ===== glossary ===== */
-var glossaryTerms=[
-  { term:'Reason', def:'The <em>why</em> behind a thing being on your list &mdash; how it came in. Each piece gets its own reason.' },
-  { term:'Receipt', def:'The evidence for a purchase &mdash; vendor, date, amount, and how it was paid. The clue for each reason.' },
-  { term:'Brought from home', def:'Gear you already owned and moved into the repair work &mdash; no purchase, valued by what a comparable one sells for.' }
-];
-function openGlossary(){
-  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
-    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
-  }).join('');
-  document.getElementById('glossaryOverlay').classList.add('open');
-}
-function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function openGlossary(){ m1GlossaryOpen('14-2'); }
+function closeGlossary(){ m1GlossaryClose(); }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeReceipt(); } });
 

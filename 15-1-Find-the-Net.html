@@ -20,7 +20,15 @@
     </div>
 
     <div class="narrative-block">
-      <p>Everything in one workbook. <strong>Cash</strong> sits on the Assets list, right where you folded it last time &mdash; click its line open and there are May&rsquo;s flows, ending with the $160 your personal self covered, the line you found running through the middle of your own wallet. The repair work&rsquo;s cash ($0 on hand) is one of its assets.</p>
+      <p>Five modules in, the workbook holds everything you figured out at the workbench: an <strong>Assets</strong> list, a <strong>Liabilities</strong> list, and the <strong>Reasons</strong> the net moved &mdash; sorted into the two kinds you found, what you put in and what the work made.</p>
+      <p>You&rsquo;ve been calling them by your own words. Today you put them on one page, watch how they fit together &mdash; and the names you&rsquo;ve been circling finally arrive.</p>
+    </div>
+    <div class="dialog-box anna">
+      <div class="dialog-label">ANNA</div>
+      <div class="dialog-text">&ldquo;You built the whole thing from scratch &mdash; no textbook, just the workbench and a spreadsheet. Turns out it has names. Old ones. Let&rsquo;s lay it out and earn them.&rdquo;</div>
+    </div>
+    <div class="narrative-block">
+      <p>Everything in one workbook. <strong>Cash</strong> sits on the Assets list, right where you folded it last time &mdash; click its line open and there are May&rsquo;s flows, ending with the $160 your personal self covered, the line you found running through the middle of your own wallet. Cash on hand &mdash; $0 &mdash; takes its place on the list as one more asset.</p>
     </div>
     <div id="assembleWb"></div>
     <div class="dialog-box anna">
@@ -28,9 +36,9 @@
       <div class="dialog-text">&ldquo;Two totals matter now. The records show <strong>Assets of $3,410</strong> and <strong>Liabilities of $2,250</strong>. The gap between them is your <strong>net</strong>. What is it?&rdquo;</div>
     </div>
     <div class="mc-card">
-      <div class="mc-q">Your net = Assets &minus; Liabilities = $3,410 &minus; $2,250 =</div>
+      <div class="mc-q">The net = Assets &minus; Liabilities = $3,410 &minus; $2,250 =</div>
       <div class="btn-row">
-        <input id="netInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Your net" onkeydown="if(event.key==='Enter'){checkNet();}">
+        <input id="netInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="The net" onkeydown="if(event.key==='Enter'){checkNet();}">
         <button class="btn btn-primary" onclick="checkNet()">Check</button>
       </div>
       <div class="feedback" id="netFb"></div>
@@ -51,11 +59,12 @@
   </div>
 </div>
 
+<script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
 
-var PHASE_INDEX = 1;
+var PHASE_INDEX = 0;
 var PHASE_TITLE = '';
 
 /* ===== sound ===== */
@@ -68,19 +77,26 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== data ===== */
 var ASSETS_SNAPSHOT = [
-  { cat:'EQUIPMENT', amount:1200, note:'Tools, stand, compressor, the contributed gear' },
-  { cat:'COMPUTER EQUIPMENT', amount:610, note:'Laptop' },
-  { cat:'SUPPLIES', amount:200, note:'Parts on the shelf' },
-  { cat:'FIXTURES', amount:750, note:'Desk, shelving, display, pegboard' },
-  { cat:'CASH', amount:0, note:'Repair cash on hand (May 31)' },
-  { cat:'RIGHT OF USE', amount:650, note:'The prepaid last month — a right to occupy the space' }
-];
-var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.amount;},0); // 3410
+  { cat:'EQUIPMENT', items:[
+    { name:'Park Tool repair stand', amount:200 },{ name:'Cone wrench set', amount:65 },{ name:'Torque wrench', amount:95 },
+    { name:'Hex / Allen key set', amount:45 },{ name:'Cable cutters', amount:40 },{ name:'Chain breaker', amount:35 },
+    { name:'Tire levers', amount:20 },{ name:'Air compressor', amount:180 },{ name:'Parts washer', amount:130 },
+    { name:'Wheel-truing stand', amount:170 },{ name:'Bench grinder', amount:90 },{ name:'Headset press', amount:70 },{ name:'Shop vacuum', amount:60 } ] },
+  { cat:'COMPUTER EQUIPMENT', items:[ { name:'Laptop', amount:610 } ] },
+  { cat:'SUPPLIES', items:[
+    { name:'Box of chains (on shelf)', amount:50 },{ name:'Box of brake pads (on shelf)', amount:40 },{ name:'Box of derailleur cables (on shelf)', amount:20 },
+    { name:'Cassettes (on shelf)', amount:40 },{ name:'Bottom brackets (on shelf)', amount:20 },{ name:'Spokes (on shelf)', amount:20 },{ name:'Tubes (on shelf)', amount:10 } ] },
+  { cat:'FIXTURES', items:[
+    { name:'Desk', amount:250 },{ name:'Shelving units', amount:200 },{ name:'Display rack', amount:180 },{ name:'Pegboard + hooks', amount:120 } ] },
+  { cat:'CASH', note:'Repair cash on hand (May 31)', items:[] },
+  { cat:'RIGHT OF USE', items:[ { name:'Right to occupy the space — last month, prepaid', amount:650 } ] }
+].map(function(c){ c.subtotal = c.items.reduce(function(s,i){return s+i.amount;},0); return c; });
+var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.subtotal;},0); // 3410
 
 var LIABILITIES_SNAPSHOT = [
   { key:'smith', label:"Smith's frame — paid $220 up front, not built yet", amount:220, items:[
     { name:'Check deposit, May 22 &mdash; a custom frame build, 4&ndash;6 weeks', amt:220 } ] },
-  { key:'card', label:'What you owe on the bike-repair credit card', amount:2030, items:[
+  { key:'card', label:'Still owed on the bike-repair credit card', amount:2030, items:[
     { name:'Hand tools', amt:300 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
     { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] }
 ];
@@ -121,31 +137,6 @@ var CASH_FLOWS = [
   { date:'—',      desc:'From your personal self — covering what the work drew down', amount:160 }
 ];
 
-var glossaryGroups = [
-  { module:'Module 2: Insurance and Maria', terms:[
-    { term:'Property Policy', def:'Insurance that pays out if covered things are damaged or destroyed. Doesn&rsquo;t cover cash, or things you don&rsquo;t own (like the rented space).' },
-    { term:'Market Value', def:'What it would fetch &mdash; what a comparable one sells for today (e.g. recent used &ldquo;eBay comp&rdquo; prices); the basis used to value the pre-owned laptop. One way to arrive at an asset&rsquo;s value &mdash; a choice, not the only one.' }
-  ] },
-  { module:'Module 3: Anna and the Bank Statement', terms:[
-    { term:'Asset', def:'Something you have &mdash; a present right to an economic benefit (the gear, the parts, the prepaid month, cash). &ldquo;Right to,&rdquo; not &ldquo;owns&rdquo;: a leased item is an asset.' },
-    { term:'Noncash Asset', def:'An asset that isn&rsquo;t cash: equipment, parts on the shelf, fixtures, or a future right like prepaid rent.' },
-    { term:'Liability', def:'Something you owe &mdash; a present obligation to transfer an economic benefit later (the card balance; Smith&rsquo;s deposit, where what&rsquo;s owed is the work, not money).' },
-    { term:'Prepaid Rent', def:'Rent already paid for a future month; a present right (an asset) until the month is used, then it becomes a cost.' },
-    { term:'Promise', def:'Something you&rsquo;ve agreed to do or pay later. The plain word used before the term &ldquo;Liability.&rdquo;' },
-    { term:'Deposit', def:'Money paid in advance for something not yet received. For the receiver it&rsquo;s a liability (you owe the goods/work, or the money back), not earnings yet.' }
-  ] },
-  { module:'Module 4: Keeping the Reasons', terms:[
-    { term:'Reason', def:'The why behind a change in a Noncash Asset, Liability, or Cash. One row per side of the change; every change has two sides (the felt beginning of double-entry).' },
-    { term:'Contributed', def:'Resources that came into the entity from outside its own repair work (owner cash, equipment, items from home). Formal name later: Contributed Capital.' },
-    { term:'Generated', def:'What the repair work produced, net of its costs (from running the repair work). Formal name later: Retained Earnings.' },
-    { term:'Cost of Repairs Done', def:'The value of parts/resources consumed in finished customer jobs; a reason that makes parts-on-the-shelf go down.' }
-  ] },
-  { module:'Module 5: Naming What You Built', terms:[
-    { term:'Entity', def:'A perspective you adopt by deciding what counts as &ldquo;in&rdquo; (your repair work) vs. &ldquo;out&rdquo; (your personal life), for a purpose. The line is drawn, not found.' },
-    { term:'Accounting Identity', def:'Assets &minus; Liabilities = the residual. An identity, not an equation; it holds by definition for every entity.' }
-  ] }
-];
-
 /* ===== formatters ===== */
 function d(v){ return (v<0?'−$':'$') + Math.abs(v).toLocaleString('en-US'); }
 function sd(v){ return (v>=0?'+$':'−$') + Math.abs(v).toLocaleString('en-US'); }
@@ -155,6 +146,7 @@ function catLabel(cat){ return cat==='RIGHT OF USE' ? 'Right of Use' : (cat.char
 var excelTab = 'assets';
 var reasonsExpanded = { contributed:false, generated:false };
 var cashOpen = false;
+var assetsExpanded = {};
 var liabExpanded = {};
 var curWbContainer = null;
 var netDone = false;
@@ -162,24 +154,25 @@ var netAttempts = 0;
 
 /* ===== Excel workbook ===== */
 function assetsSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Assets — what I have</div><div class="xl-v">Value</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Assets</div><div class="xl-v">Value</div></div>';
   var n=0;
   ASSETS_SNAPSHOT.forEach(function(c){
     if(c.cat==='CASH'){
       // Cash folded into Assets: an expandable line (same idiom as the Reasons groups);
       // open it to reveal May's flows via the existing cash sheet.
-      html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCash()" aria-expanded="'+cashOpen+'">'+(cashOpen?'−':'+')+'</button></div><div class="xl-rownum"></div><div class="xl-c">'+catLabel(c.cat)+' &mdash; '+c.note+'</div><div class="xl-v">'+d(c.amount)+'</div></div>';
+      html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCash()" aria-expanded="'+cashOpen+'">'+(cashOpen?'−':'+')+'</button></div><div class="xl-rownum"></div><div class="xl-c">'+catLabel(c.cat)+' &mdash; '+c.note+'</div><div class="xl-v">'+d(c.subtotal)+'</div></div>';
       if(cashOpen) html += cashSheet();
     } else {
-      n++;
-      html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+catLabel(c.cat)+' &mdash; '+c.note+'</div><div class="xl-v">'+d(c.amount)+'</div></div>';
+      var open = !!assetsExpanded[c.cat]; n++;
+      html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleAssetCat(\''+c.cat+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+catLabel(c.cat)+'</div><div class="xl-v">'+d(c.subtotal)+'</div></div>';
+      if(open){ c.items.forEach(function(it){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+d(it.amount)+'</div></div>'; }); }
     }
   });
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Total Assets — what the records show</div><div class="xl-v">'+d(ASSETS_TOTAL)+'</div></div>';
   return html;
 }
 function liabilitiesSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liabilities — what I owe</div><div class="xl-v">Amount</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liabilities</div><div class="xl-v">Amount</div></div>';
   var n = 0;
   LIABILITIES_SNAPSHOT.forEach(function(l){
     var open = !!liabExpanded[l.key]; n++;
@@ -211,7 +204,7 @@ function reasonsGroup(key, title, rows, total){
   return html;
 }
 function reasonsSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Reasons — why your net moved (two kinds)</div><div class="xl-v">Change</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Reasons — why the net moved (two kinds)</div><div class="xl-v">Change</div></div>';
   html += reasonsGroup('contributed', 'CONTRIBUTED', CONTRIBUTED_ROWS, CONTRIBUTED_TOTAL);
   html += reasonsGroup('generated', 'GENERATED', GENERATED_ROWS, GENERATED_TOTAL);
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL — the reasons</div><div class="xl-v">'+sd(REASONS_TOTAL)+'</div></div>';
@@ -237,6 +230,7 @@ function setTab(id){ playClick(); excelTab = id; if(curWbContainer) renderWorkbo
 function toggleReasonsCat(k){ playClick(); reasonsExpanded[k] = !reasonsExpanded[k]; if(curWbContainer) renderWorkbook(curWbContainer); }
 function toggleCash(){ playClick(); cashOpen = !cashOpen; if(curWbContainer) renderWorkbook(curWbContainer); }
 function toggleLiabCat(key){ playClick(); liabExpanded[key] = !liabExpanded[key]; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleAssetCat(cat){ playClick(); assetsExpanded[cat] = !assetsExpanded[cat]; if(curWbContainer) renderWorkbook(curWbContainer); }
 
 /* ===== net check ===== */
 function checkNet(){
@@ -252,7 +246,7 @@ function checkNet(){
     else {
       playNope();
       fb.className = 'feedback err show';
-      fb.innerHTML = 'Not quite &mdash; subtract what you owe from what you have. '+d(ASSETS_TOTAL)+' &minus; '+d(LIABILITIES_TOTAL)+'.';
+      fb.innerHTML = 'Not quite &mdash; subtract Liabilities from Assets: '+d(ASSETS_TOTAL)+' &minus; '+d(LIABILITIES_TOTAL)+'.';
     }
   }
 }
@@ -262,14 +256,14 @@ function revealNet(){
   var fb = document.getElementById('netFb'); fb.className = 'feedback'; fb.classList.remove('show');
   var close = document.getElementById('netClose');
   close.hidden = false;
-  close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Your net is '+d(NET)+'</div><p>What&rsquo;s left when Liabilities come out of Assets. Hold onto that number.</p></div>'+
+  close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The net is '+d(NET)+'</div><p>Assets minus Liabilities &mdash; a difference, fully determined by the two lists. Hold onto that number.</p></div>'+
     '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   if(window.lucide) lucide.createIcons();
 }
 
 /* ===== restart ===== */
 function restart(){
-  excelTab='assets'; reasonsExpanded={ contributed:false, generated:false }; cashOpen=false;
+  excelTab='assets'; reasonsExpanded={ contributed:false, generated:false }; cashOpen=false; assetsExpanded={};
   netDone=false; netAttempts=0;
   document.getElementById('netClose').hidden = true;
   var netFb = document.getElementById('netFb'); netFb.className = 'feedback'; netFb.innerHTML = '';
@@ -279,15 +273,8 @@ function restart(){
 }
 
 /* ===== glossary ===== */
-function openGlossary(){
-  document.getElementById('glossaryList').innerHTML = glossaryGroups.map(function(grp){
-    return '<div class="glossary-group"><div class="glossary-module">'+grp.module+'</div>'+grp.terms.map(function(g){
-      return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
-    }).join('')+'</div>';
-  }).join('');
-  document.getElementById('glossaryOverlay').classList.add('open');
-}
-function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function openGlossary(){ m1GlossaryOpen('15-1'); }
+function closeGlossary(){ m1GlossaryClose(); }
 
 /* ===== progress ===== */
 function renderSegProgress(){

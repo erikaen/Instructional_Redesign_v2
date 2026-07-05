@@ -35,11 +35,12 @@
   </div>
 </div>
 
+<script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
 
-var PHASE_INDEX = 2;
+var PHASE_INDEX = 1;
 var PHASE_TITLE = '';
 
 /* ===== sound ===== */
@@ -51,19 +52,26 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== data ===== */
 var ASSETS_SNAPSHOT = [
-  { cat:'EQUIPMENT', amount:1200, note:'Tools, stand, compressor, the contributed gear' },
-  { cat:'COMPUTER EQUIPMENT', amount:610, note:'Laptop' },
-  { cat:'SUPPLIES', amount:200, note:'Parts on the shelf' },
-  { cat:'FIXTURES', amount:750, note:'Desk, shelving, display, pegboard' },
-  { cat:'CASH', amount:0, note:'Repair cash on hand (May 31)' },
-  { cat:'RIGHT OF USE', amount:650, note:'The prepaid last month — a right to occupy the space' }
-];
-var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.amount;},0); // 3410
+  { cat:'EQUIPMENT', items:[
+    { name:'Park Tool repair stand', amount:200 },{ name:'Cone wrench set', amount:65 },{ name:'Torque wrench', amount:95 },
+    { name:'Hex / Allen key set', amount:45 },{ name:'Cable cutters', amount:40 },{ name:'Chain breaker', amount:35 },
+    { name:'Tire levers', amount:20 },{ name:'Air compressor', amount:180 },{ name:'Parts washer', amount:130 },
+    { name:'Wheel-truing stand', amount:170 },{ name:'Bench grinder', amount:90 },{ name:'Headset press', amount:70 },{ name:'Shop vacuum', amount:60 } ] },
+  { cat:'COMPUTER EQUIPMENT', items:[ { name:'Laptop', amount:610 } ] },
+  { cat:'SUPPLIES', items:[
+    { name:'Box of chains (on shelf)', amount:50 },{ name:'Box of brake pads (on shelf)', amount:40 },{ name:'Box of derailleur cables (on shelf)', amount:20 },
+    { name:'Cassettes (on shelf)', amount:40 },{ name:'Bottom brackets (on shelf)', amount:20 },{ name:'Spokes (on shelf)', amount:20 },{ name:'Tubes (on shelf)', amount:10 } ] },
+  { cat:'FIXTURES', items:[
+    { name:'Desk', amount:250 },{ name:'Shelving units', amount:200 },{ name:'Display rack', amount:180 },{ name:'Pegboard + hooks', amount:120 } ] },
+  { cat:'CASH', note:'Repair cash on hand (May 31)', items:[] },
+  { cat:'RIGHT OF USE', items:[ { name:'Right to occupy the space — last month, prepaid', amount:650 } ] }
+].map(function(c){ c.subtotal = c.items.reduce(function(s,i){return s+i.amount;},0); return c; });
+var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.subtotal;},0); // 3410
 
 var LIABILITIES_SNAPSHOT = [
   { key:'smith', label:"Smith's frame — paid $220 up front, not built yet", amount:220, items:[
     { name:'Check deposit, May 22 &mdash; a custom frame build, 4&ndash;6 weeks', amt:220 } ] },
-  { key:'card', label:'What you owe on the bike-repair credit card', amount:2030, items:[
+  { key:'card', label:'Still owed on the bike-repair credit card', amount:2030, items:[
     { name:'Hand tools', amt:300 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
     { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] }
 ];
@@ -104,31 +112,6 @@ var CASH_FLOWS = [
   { date:'—',      desc:'From your personal self — covering what the work drew down', amount:160 }
 ];
 
-var glossaryGroups = [
-  { module:'Module 2: Insurance and Maria', terms:[
-    { term:'Property Policy', def:'Insurance that pays out if covered things are damaged or destroyed. Doesn&rsquo;t cover cash, or things you don&rsquo;t own (like the rented space).' },
-    { term:'Market Value', def:'What it would fetch &mdash; what a comparable one sells for today (e.g. recent used &ldquo;eBay comp&rdquo; prices); the basis used to value the pre-owned laptop. One way to arrive at an asset&rsquo;s value &mdash; a choice, not the only one.' }
-  ] },
-  { module:'Module 3: Anna and the Bank Statement', terms:[
-    { term:'Asset', def:'Something you have &mdash; a present right to an economic benefit (the gear, the parts, the prepaid month, cash). &ldquo;Right to,&rdquo; not &ldquo;owns&rdquo;: a leased item is an asset.' },
-    { term:'Noncash Asset', def:'An asset that isn&rsquo;t cash: equipment, parts on the shelf, fixtures, or a future right like prepaid rent.' },
-    { term:'Liability', def:'Something you owe &mdash; a present obligation to transfer an economic benefit later (the card balance; Smith&rsquo;s deposit, where what&rsquo;s owed is the work, not money).' },
-    { term:'Prepaid Rent', def:'Rent already paid for a future month; a present right (an asset) until the month is used, then it becomes a cost.' },
-    { term:'Promise', def:'Something you&rsquo;ve agreed to do or pay later. The plain word used before the term &ldquo;Liability.&rdquo;' },
-    { term:'Deposit', def:'Money paid in advance for something not yet received. For the receiver it&rsquo;s a liability (you owe the goods/work, or the money back), not earnings yet.' }
-  ] },
-  { module:'Module 4: Keeping the Reasons', terms:[
-    { term:'Reason', def:'The why behind a change in a Noncash Asset, Liability, or Cash. One row per side of the change; every change has two sides (the felt beginning of double-entry).' },
-    { term:'Contributed', def:'Resources that came into the entity from outside its own repair work (owner cash, equipment, items from home). Formal name later: Contributed Capital.' },
-    { term:'Generated', def:'What the repair work produced, net of its costs (from running the repair work). Formal name later: Retained Earnings.' },
-    { term:'Cost of Repairs Done', def:'The value of parts/resources consumed in finished customer jobs; a reason that makes parts-on-the-shelf go down.' }
-  ] },
-  { module:'Module 5: Naming What You Built', terms:[
-    { term:'Entity', def:'A perspective you adopt by deciding what counts as &ldquo;in&rdquo; (your repair work) vs. &ldquo;out&rdquo; (your personal life), for a purpose. The line is drawn, not found.' },
-    { term:'Accounting Identity', def:'Assets &minus; Liabilities = the residual. An identity, not an equation; it holds by definition for every entity.' }
-  ] }
-];
-
 /* ===== formatters ===== */
 function d(v){ return (v<0?'−$':'$') + Math.abs(v).toLocaleString('en-US'); }
 function sd(v){ return (v>=0?'+$':'−$') + Math.abs(v).toLocaleString('en-US'); }
@@ -138,30 +121,32 @@ function catLabel(cat){ return cat==='RIGHT OF USE' ? 'Right of Use' : (cat.char
 var excelTab = 'reasons';
 var reasonsExpanded = { contributed:false, generated:false };
 var cashOpen = false;
+var assetsExpanded = {};
 var liabExpanded = {};
 var curWbContainer = null;
 var idStage = 0;
 
 /* ===== Excel workbook ===== */
 function assetsSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Assets — what I have</div><div class="xl-v">Value</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Assets</div><div class="xl-v">Value</div></div>';
   var n=0;
   ASSETS_SNAPSHOT.forEach(function(c){
     if(c.cat==='CASH'){
       // Cash folded into Assets: an expandable line (same idiom as the Reasons groups);
       // open it to reveal May's flows via the existing cash sheet.
-      html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCash()" aria-expanded="'+cashOpen+'">'+(cashOpen?'−':'+')+'</button></div><div class="xl-rownum"></div><div class="xl-c">'+catLabel(c.cat)+' &mdash; '+c.note+'</div><div class="xl-v">'+d(c.amount)+'</div></div>';
+      html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCash()" aria-expanded="'+cashOpen+'">'+(cashOpen?'−':'+')+'</button></div><div class="xl-rownum"></div><div class="xl-c">'+catLabel(c.cat)+' &mdash; '+c.note+'</div><div class="xl-v">'+d(c.subtotal)+'</div></div>';
       if(cashOpen) html += cashSheet();
     } else {
-      n++;
-      html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+catLabel(c.cat)+' &mdash; '+c.note+'</div><div class="xl-v">'+d(c.amount)+'</div></div>';
+      var open = !!assetsExpanded[c.cat]; n++;
+      html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleAssetCat(\''+c.cat+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+catLabel(c.cat)+'</div><div class="xl-v">'+d(c.subtotal)+'</div></div>';
+      if(open){ c.items.forEach(function(it){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+d(it.amount)+'</div></div>'; }); }
     }
   });
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Total Assets — what the records show</div><div class="xl-v">'+d(ASSETS_TOTAL)+'</div></div>';
   return html;
 }
 function liabilitiesSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liabilities — what I owe</div><div class="xl-v">Amount</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liabilities</div><div class="xl-v">Amount</div></div>';
   var n = 0;
   LIABILITIES_SNAPSHOT.forEach(function(l){
     var open = !!liabExpanded[l.key]; n++;
@@ -193,7 +178,7 @@ function reasonsGroup(key, title, rows, total){
   return html;
 }
 function reasonsSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Reasons — why your net moved (two kinds)</div><div class="xl-v">Change</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Reasons — why the net moved (two kinds)</div><div class="xl-v">Change</div></div>';
   html += reasonsGroup('contributed', 'CONTRIBUTED', CONTRIBUTED_ROWS, CONTRIBUTED_TOTAL);
   html += reasonsGroup('generated', 'GENERATED', GENERATED_ROWS, GENERATED_TOTAL);
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL — the reasons</div><div class="xl-v">'+sd(REASONS_TOTAL)+'</div></div>';
@@ -219,6 +204,7 @@ function setTab(id){ playClick(); excelTab = id; if(curWbContainer) renderWorkbo
 function toggleReasonsCat(k){ playClick(); reasonsExpanded[k] = !reasonsExpanded[k]; if(curWbContainer) renderWorkbook(curWbContainer); }
 function toggleCash(){ playClick(); cashOpen = !cashOpen; if(curWbContainer) renderWorkbook(curWbContainer); }
 function toggleLiabCat(key){ playClick(); liabExpanded[key] = !liabExpanded[key]; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleAssetCat(cat){ playClick(); assetsExpanded[cat] = !assetsExpanded[cat]; if(curWbContainer) renderWorkbook(curWbContainer); }
 
 /* ===== identity (staged reveal) ===== */
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
@@ -237,17 +223,17 @@ function matchDisplay(){
 function identityFormula(){
   return '<div class="eq-compare"><div class="eq-panel">'+
     '<div class="eq-panel-tag">The accounting identity</div>'+
-    '<div class="eq-panel-row"><span class="eq-term a">Assets</span><span class="eq-op">&minus;</span><span class="eq-term l">Liabilities</span><span class="eq-op">=</span><span class="eq-term e">the residual</span></div>'+
+    '<div class="eq-panel-row"><span class="eq-term a">Assets</span><span class="eq-op">&minus;</span><span class="eq-term l">Liabilities</span><span class="eq-op">=</span><span class="eq-term e">?</span></div>'+
     '<div class="eq-panel-caption">An identity, not an equation. You don&rsquo;t solve it &mdash; it holds by definition, for every entity, every time.</div>'+
     '</div></div>';
 }
 function balanceSheet(){
   return '<div class="acct-col">'+
-    '<div class="bs-header"><div class="bs-header-title">THE BALANCE SHEET</div><div class="bs-header-date">Your repair work &middot; May 31</div></div>'+
+    '<div class="bs-header"><div class="bs-header-title">THE BALANCE SHEET</div><div class="bs-header-date">The repair work &middot; May 31</div></div>'+
     '<div class="acct-line"><span>Assets</span><span class="acct-val">'+d(ASSETS_TOTAL)+'</span></div>'+
     '<div class="acct-line"><span>&minus; Liabilities</span><span class="acct-val">'+d(LIABILITIES_TOTAL)+'</span></div>'+
-    '<div class="acct-total"><span>= the residual</span><span>'+d(NET)+'</span></div>'+
-    '<div class="acct-line"><span>Contributed &mdash; what you put in</span><span class="acct-val">'+d(CONTRIBUTED_TOTAL)+'</span></div>'+
+    '<div class="acct-total"><span>= the difference</span><span>'+d(NET)+'</span></div>'+
+    '<div class="acct-line"><span>Contributed &mdash; brought in from outside</span><span class="acct-val">'+d(CONTRIBUTED_TOTAL)+'</span></div>'+
     '<div class="acct-line"><span>Generated &mdash; what the work made</span><span class="acct-val">'+d(GENERATED_TOTAL)+'</span></div>'+
     '</div>';
 }
@@ -267,22 +253,22 @@ function renderIdentity(){
   }
   html += matchDisplay();
   if(idStage===1){
-    html += insightBox('They match &mdash; and they always will', '<p>Not a coincidence you arranged. Your net just <em>is</em> what&rsquo;s left after taking what you owe out of what you have. The reasons that moved it have to add up to it. It holds <strong>by construction</strong>, every time, for any set of books.</p>');
+    html += insightBox('They match &mdash; and they always will', '<p>No coincidence &mdash; <strong>you arranged it</strong>. Back in Module 4 you decided to keep a reason exactly when a change moved the net, and to let the canceling pairs drop out. Keep books by that rule and the reasons <em>must</em> add up to the net &mdash; a choice paying off, not a fact of nature.</p>');
     html += continueBtn('Name what you just matched');
   } else if(idStage===2){
-    html += annaBox('&ldquo;That residual &mdash; have minus owe &mdash; doesn&rsquo;t have one name yet. It depends on the kind of entity. It&rsquo;s a <em>difference</em>, not a thing anyone could pocket &mdash; not the cash you&rsquo;d walk away with, just recorded Assets minus recorded Liabilities, gaps and all.&rdquo;');
+    html += annaBox('&ldquo;That number &mdash; have minus owe &mdash; doesn&rsquo;t have one name here yet, and that&rsquo;s deliberate. Different kinds of entities call it different things, and even for one kind of entity the name has changed over the years. The names are local; the difference is universal. If you&rsquo;ve heard a name for it, hold it loosely &mdash; it belongs to one kind of entity, one era. The name that belongs to <em>your</em> work arrives when the work gets its own legal standing. For now, what matters is what it <em>is</em>: a difference, not a thing anyone could pocket &mdash; just recorded Assets minus recorded Liabilities, gaps and all.&rdquo;');
     html += continueBtn('Write it down');
   } else if(idStage===3){
     html += identityFormula();
     html += balanceSheet();
-    html += insightBox('This page is the balance sheet', '<p>It&rsquo;s built <em>around</em> the identity, not assembled to satisfy one. You list Assets, take out Liabilities, and the residual falls out as the difference &mdash; split into where it came from: <strong>contributed</strong> and <strong>generated</strong>. The fact that it lines up isn&rsquo;t a result. It&rsquo;s the construction.</p>');
+    html += insightBox('This page is the balance sheet', '<p>It&rsquo;s built <em>around</em> the identity, not assembled to satisfy one. You list Assets, subtract Liabilities, and the difference follows by definition &mdash; and because you kept the reasons that moved it, you can show where it came from: <strong>contributed</strong> and <strong>generated</strong>. It lines up because you built it to.</p>');
     html += continueBtn('Now read it honestly');
   } else if(idStage===4){
     html += balanceSheet();
     html += annaBox('&ldquo;Before you trust this page, one honest thing. Everything on it earned its place with <strong>evidence</strong> &mdash; a receipt, a statement, a price you could point to. That&rsquo;s what makes it a <strong>record</strong>. And a record only holds what clears that bar.&rdquo;');
-    html += insightBox('The records show less than you have', '<p>Look at what&rsquo;s <em>not</em> on the page: your skill at the bench, the regulars who keep coming back, the name you&rsquo;re building on Whalley Ave. All real, all worth something to the work &mdash; none of it with a receipt, so none of it on the list.</p>'+
-      '<p>So read &ldquo;Assets, '+d(ASSETS_TOTAL)+'&rdquo; as <strong>what the records show</strong> &mdash; not everything the work is worth. The list shows what it can; you <strong>have</strong> more than it shows. That isn&rsquo;t a hole to plug. It&rsquo;s what a record <em>is</em>.</p>'+
-      '<p>It&rsquo;s also why the residual isn&rsquo;t your net worth: it&rsquo;s the gap between two <em>recorded</em> lists, everything they leave out baked in.</p>');
+    html += insightBox('The records show less than there is', '<p>Look at what&rsquo;s <em>not</em> on the page: your skill at the bench, the regulars who keep coming back, the name you&rsquo;re building on Whalley Ave. All real, all worth something to the work &mdash; none of it with a receipt, so none of it on the list.</p>'+
+      '<p>So read &ldquo;Assets, '+d(ASSETS_TOTAL)+'&rdquo; as <strong>what the records show</strong> &mdash; not everything the work is worth. The list shows what it can; there is <strong>more</strong> than it shows. That isn&rsquo;t a hole to plug. It&rsquo;s what a record <em>is</em>.</p>'+
+      '<p>It&rsquo;s also why the difference isn&rsquo;t a net-worth figure: it&rsquo;s the gap between two <em>recorded</em> lists, everything they leave out baked in.</p>');
     html += '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   }
   c.innerHTML = html;
@@ -297,21 +283,14 @@ function identityNext(){
 
 /* ===== restart ===== */
 function restart(){
-  idStage=0; excelTab='reasons'; reasonsExpanded={ contributed:false, generated:false }; cashOpen=false;
+  idStage=0; excelTab='reasons'; reasonsExpanded={ contributed:false, generated:false }; cashOpen=false; assetsExpanded={};
   renderIdentity();
   window.scrollTo(0,0);
 }
 
 /* ===== glossary ===== */
-function openGlossary(){
-  document.getElementById('glossaryList').innerHTML = glossaryGroups.map(function(grp){
-    return '<div class="glossary-group"><div class="glossary-module">'+grp.module+'</div>'+grp.terms.map(function(g){
-      return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
-    }).join('')+'</div>';
-  }).join('');
-  document.getElementById('glossaryOverlay').classList.add('open');
-}
-function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function openGlossary(){ m1GlossaryOpen('15-2'); }
+function closeGlossary(){ m1GlossaryClose(); }
 
 /* ===== progress ===== */
 function renderSegProgress(){

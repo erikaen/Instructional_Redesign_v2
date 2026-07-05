@@ -91,7 +91,7 @@ try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
 var movedItems = [
   { id:"legal", label:"The legal status of the repair work", changed:true, after:"Changed. A legal entity now exists: "+esc(llcName())+". It can own things, owe debts, sign contracts, and be sued in its own name." },
   { id:"ops",   label:"The tools, customers, and work today", changed:false, after:"Did not change. The tools did not move, the customers did not change, and the work in the shop is the same as before." },
-  { id:"sheet", label:"The balance sheet", changed:false, after:"Did not change. The filing creates a legal entity, but by itself it does not change the recorded assets, the recorded liabilities, or the residual in the repair-work books." }
+  { id:"sheet", label:"The balance sheet", changed:false, after:"Did not change. The filing creates a legal entity, but by itself it does not change the recorded assets, the recorded liabilities, or the difference between them in the repair-work books." }
 ];
 
 var TWO_BIRTHDAYS_HTML =
@@ -139,7 +139,7 @@ function renderWhatChanged(){
   html += '</div>';
   if(movedItems.every(function(m){ return placed[m.id]; })){
     html += '<div class="insight-box" style="margin-top:16px"><div class="insight-label"><i data-lucide="scale" class="licon"></i> Legal Change, Not an Economic Change</div>'+
-      '<p>One thing changed today: <strong>the LLC now exists as a legal entity</strong>. That matters. But the filing, by itself, did <strong>not</strong> change the balance sheet. The recorded assets, recorded liabilities, and residual are still the same. The operation is the same operation you were already tracking. What is new is its <strong>legal standing</strong>.</p></div>';
+      '<p>One thing changed today: <strong>the LLC now exists as a legal entity</strong>. That matters. But the filing, by itself, did <strong>not</strong> change the balance sheet. The recorded assets, recorded liabilities, and the difference between them are still the same. The operation is the same operation you were already tracking. What is new is its <strong>legal standing</strong>.</p></div>';
     html += TWO_BIRTHDAYS_HTML;
     html += '<p class="callout">Two different lines, drawn at different times, for different reasons. The repair work was already operating, and you were already keeping its books, before today. The legal body is new.</p>';
     html += '<button class="btn-continue btn-block" onclick="nav(\'22-5-complete.html\')">Continue &rarr;</button>';

@@ -18,7 +18,7 @@
     '12-1-Meet-Maria', '12-2-Marias-Form', '12-3-The-Read-Back', '12-4-Module-Complete',
     '13-1-Meet-Anna', '13-2-The-Bank-Statement', '13-3-The-Cash-Movement', '13-4-The-Customer-Payments', '13-5-The-Credit-Card-Statement', '13-6-The-Promises', '13-7-The-Rent-Payment', '13-8-Naming-the-Lists', '13-9-Module-Complete',
     '14-1-Why-Keep-the-Reasons', '14-2-Walk-the-Reasons', '14-3-Pairs-That-Cancel', '14-4-The-Net-Movers', '14-5-Module-Complete',
-    '15-1-Bringing-It-Together', '15-2-Find-the-Net', '15-3-The-Accounting-Identity', '15-4-The-Entity', '15-5-Double-Entry', '15-6-Module-Complete',
+    '15-1-Find-the-Net', '15-2-The-Accounting-Identity', '15-3-The-Entity', '15-4-Double-Entry', '15-5-Module-Complete',
     '21-1-welcome', '21-2-exposure', '21-3-whoSeesTwo', '21-4-twoHats', '21-5-complete',
     '22-1-welcome', '22-2-name', '22-3-file', '22-4-whatChanged', '22-5-complete',
     '23-1-welcome', '23-2-agreement', '23-3-contribution', '23-4-wall', '23-5-keystone', '23-6-complete',

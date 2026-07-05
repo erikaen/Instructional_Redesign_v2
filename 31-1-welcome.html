@@ -73,9 +73,9 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== glossary (shared across all phases of 3.1) ===== */
 var glossaryTerms = [
-  { term:"Members&rsquo; capital", def:"The residual for an LLC: Assets &minus; Liabilities. It is the definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $4,710 &minus; $2,250 = $2,460." },
+  { term:"Members&rsquo; capital", def:"The LLC&rsquo;s name for Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $4,710 &minus; $2,250 = $2,460." },
   { term:"Reason", def:"The short note you jot beside a change in the books to record <em>why</em> it happened. You started the practice in Module 1; over a whole season the Reasons pile up." },
-  { term:"Balance sheet", def:"A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the residual. It says where things stand, not how they got there." }
+  { term:"Balance sheet", def:"A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the difference between them. It says where things stand, not how they got there." }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
