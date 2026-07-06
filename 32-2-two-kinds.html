@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">Two Kinds of Reason</div>
 
     <div class="narrative-block">
-      <p>First, the period line. The question is how the shop did <em>this summer</em>, so May&rsquo;s rows stay exactly where they are &mdash; set aside, untouched. What&rsquo;s left is the season &mdash; and read any season reason and it does one of just <strong>two things</strong>: it&rsquo;s money the work <strong>brought in</strong>, or it&rsquo;s something the work <strong>used up</strong>. Nothing else.</p>
+      <p>First, the period line. The question is how the shop did <em>this summer</em>, so May&rsquo;s rows stay exactly where they are &mdash; set aside, untouched. What&rsquo;s left is the season &mdash; and read any season reason and it records one of just <strong>two things</strong>: the work <strong>delivered</strong> &mdash; a repair finished, a frame handed over &mdash; or something got <strong>used up</strong> delivering. Nothing else.</p>
       <p>Right in the workbook: <strong>click a reason</strong> in the pile, then click the pile it belongs in. Do a few and the pattern will be clear &mdash; then you can sort the rest in one go.</p>
     </div>
 
@@ -65,7 +65,7 @@ function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},9
 function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-/* ===== the GENERATED reasons, tagged flow: 'in' (brought in) | 'up' (used up) ===== */
+/* ===== the GENERATED reasons, tagged flow: 'in' (delivered) | 'up' (used up) ===== */
 var reasons = BR_WB.generatedRows();
 reasons.forEach(function (r, i) { r.id = 'g' + i; });
 function findR(id){ for(var i=0;i<reasons.length;i++) if(reasons[i].id===id) return reasons[i]; return null; }
@@ -91,7 +91,7 @@ function bucketGroup(b, label, blurb){
   return h;
 }
 function sortSheet(cid, snap){
-  var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s reasons</div><div class="cash-sheet-sub">'+(done?'sorted into two piles &mdash; brought in, and used up':'click a reason, then click the pile it belongs in')+'</div></div>';
+  var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s reasons</div><div class="cash-sheet-sub">'+(done?'sorted into two piles &mdash; delivered, and used up':'click a reason, then click the pile it belongs in')+'</div></div>';
   if(!done){
     var remaining = visibleIds.map(findR).filter(function(r){ return !placed[r.id]; });
     var hiddenLeft = reasons.length - visibleIds.length;
@@ -103,8 +103,8 @@ function sortSheet(cid, snap){
     });
     if(hiddenLeft>0) h += xrow('xl-item', '', '<em>+ '+hiddenLeft+' more like these, still in the pile</em>', '');
   }
-  h += bucketGroup('in', 'BROUGHT IN', 'money the work brought in');
-  h += bucketGroup('up', 'USED UP', 'what the work used up');
+  h += bucketGroup('in', 'DELIVERED', 'reasons the work delivered to a customer');
+  h += bucketGroup('up', 'USED UP', 'reasons things got used up');
   return h;
 }
 
@@ -121,14 +121,14 @@ function placeInto(b){
   var r = findR(selectedId);
   if(r.flow!==b){
     playNope();
-    nudge('err', '<i data-lucide="alert-triangle" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; is '+(r.flow==='in'?'money the work <strong>brought in</strong> &mdash; not something it used up.':'something the work <strong>used up</strong> &mdash; not money it brought in.'));
+    nudge('err', '<i data-lucide="alert-triangle" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; records '+(r.flow==='in'?'a <strong>delivery</strong> &mdash; work handed to a customer, not something used up.':'something being <strong>used up</strong> &mdash; not a delivery.'));
     selectedId = null; refresh();
     return;
   }
   playSuccess();
   placed[r.id] = b;
   selectedId = null;
-  nudge('ok', '<i data-lucide="check" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; &mdash; '+(b==='in'?'brought in.':'used up.'));
+  nudge('ok', '<i data-lucide="check" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; &mdash; '+(b==='in'?'delivered.':'used up.'));
   refresh();
 }
 function doTheRest(){
@@ -164,19 +164,19 @@ function renderControls(){
 function renderDone(){
   var inT=bTotal('in'), upT=bTotal('up');
   document.getElementById('sortNudge').className='feedback';
-  document.getElementById('anna').innerHTML = annaBox('There &mdash; the same reasons, no longer jumbled. One pile is every bit of money the work <strong>brought in</strong> ('+BRW.dol(inT)+'), the other is everything the work <strong>used up</strong> ('+BRW.dol(Math.abs(upT))+'). Same total as before &mdash; '+BRW.dol(inT+upT)+' &mdash; but now you can read it.');
+  document.getElementById('anna').innerHTML = annaBox('There &mdash; the same reasons, no longer jumbled. One pile holds every <strong>delivery</strong> the books caught ('+BRW.dol(inT)+'), the other everything that got <strong>used up</strong> ('+BRW.dol(Math.abs(upT))+'). Same total as before &mdash; '+BRW.dol(inT+upT)+' &mdash; but now you can read it. And look at <strong>Smith&rsquo;s frame</strong> in DELIVERED: no cash moved this season at all &mdash; his money came in <em>May</em>, as a deposit. What this summer&rsquo;s row records is the frame going out the door and the promise coming off the books. These piles aren&rsquo;t about money moving. They&rsquo;re about what the work did.');
   document.getElementById('controls').innerHTML =
     insightBox('Two piles, two totals',
-      '<p>Every operating reason sorts into one of these two. Line the <strong>brought-in</strong> total up against the <strong>used-up</strong> total and the difference is how the season went &mdash; the answer the jumbled pile could never give in one place.</p>')
-    + '<div class="next-phase-msg">Before you name these piles, one thing to check: is <strong>every</strong> repair you actually did this summer sitting in the money-in pile? Let&rsquo;s look.</div>'
-    + '<button class="btn-continue btn-block" onclick="nav(\'32-3-revenue-follows-the-work.html\')">Check the money-in pile &rarr;</button>';
+      '<p>Every season reason sorts into one of these two. Line the <strong>DELIVERED</strong> total up against the <strong>USED UP</strong> total and the difference is how the season went &mdash; the answer the jumbled pile could never give in one place.</p>')
+    + '<div class="next-phase-msg">One loose end before the piles get their names. In USED UP sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong> &mdash; and there&rsquo;s no delivery across from it in DELIVERED. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job.</div>'
+    + '<button class="btn-continue btn-block" onclick="nav(\'32-3-revenue-follows-the-work.html\')">Find Ridgeline &rarr;</button>';
   if(window.lucide) lucide.createIcons();
 }
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Brought in', def:'A reason where the work put money (or a right to money) into the shop &mdash; a repair collected, a frame delivered. The plain phrase used before the term <em>revenue</em>.' },
-  { term:'Used up', def:'A reason where the work consumed something &mdash; parts off the shelf, a month of rent lived through. The plain phrase used before the term <em>expense</em>.' }
+  { term:'Delivered', def:'A reason recording work handed to a customer &mdash; a repair finished, a frame delivered against a deposit. Not about cash: Smith&rsquo;s delivery settled a promise; cash can come before, after, or with the work. The plain word used before the term <em>revenue</em>.' },
+  { term:'Used up', def:'A reason recording why something went away &mdash; parts consumed on a job, a month of rent lived through. The plain phrase used before the term <em>expense</em>.' }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){

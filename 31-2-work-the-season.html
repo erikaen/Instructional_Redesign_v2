@@ -188,7 +188,7 @@ var SNAP = {
       { name:'Charged &mdash; fixtures', amt:750 }, { name:'Charged &mdash; parts (QBP order)', amt:500 },
       { name:'Paid off in full this season', amt:-2030 }
     ]},
-    { label:'Unearned Revenue', amount:0, events:[
+    { label:'Customer Deposit', amount:0, events:[
       { name:'Smith&rsquo;s advance for a custom frame', amt:220 },
       { name:'Built and delivered Smith&rsquo;s frame &mdash; no longer owed', amt:-220 }
     ]}
@@ -225,8 +225,8 @@ var WALK = [
     hint:'Click the <strong>Liabilities</strong> tab, then open <strong>Credit Card</strong>.',
     insight:'You <strong>paid it off in full</strong> during the season. That cash going out is one of the outflows you saw in the Cash ledger.' },
   { needTab:'liabilities', target:{kind:'l',key:1},
-    q:'<strong>Unearned Revenue</strong> is $0 as well &mdash; Smith&rsquo;s $220 is gone. Open it.',
-    hint:'Open the <strong>Unearned Revenue</strong> line.',
+    q:'<strong>Customer Deposit</strong> is $0 as well &mdash; Smith&rsquo;s $220 is gone. Open it.',
+    hint:'Open the <strong>Customer Deposit</strong> line.',
     insight:'You <strong>built and delivered Smith&rsquo;s frame</strong> this summer. You no longer owe him the work &mdash; so it&rsquo;s no longer something you owe. Doing the work turned it into earnings.' },
   { needTab:'reasons', target:{tabSwitch:'reasons'},
     q:'None of those tabs really say <em>how the season went</em>. Switch to the <strong>Reasons</strong> tab &mdash; that&rsquo;s where you wrote down <em>why</em> the books moved.',
@@ -251,9 +251,9 @@ function renderTalk(){
       ctrl='<div class="next-phase-msg">'+WALK[step].hint+'</div>';
     }
   } else {
-    anna=annaBox('So the books did move &mdash; members&rsquo; capital went from <strong>$2,460</strong> in June to <strong>$4,430</strong> now (Assets $4,430 &minus; Liabilities $0). Every reason is in there. But look how scattered the story is across the tabs: money brought in, things used up, the card, Smith, your draw. Now try the one question you actually want answered: how did the shop <em>do</em> this summer? Could you answer it straight from this?');
+    anna=annaBox('So the books did move &mdash; members&rsquo; capital went from <strong>$2,460</strong> in June to <strong>$4,430</strong> now (Assets $4,430 &minus; Liabilities $0). Every reason is in there. But look how scattered the story is across the tabs: deliveries, things used up, the card, Smith, your draw. Now try the one question you actually want answered: how did the shop <em>do</em> this summer? Could you answer it straight from this?');
     ctrl=insightBox('A workbook, not yet a statement',
-      '<p>These three tabs show where things <strong>stand</strong> and <em>why</em> each balance moved. But they never line up, in one place, what you <strong>earned</strong> against what it <strong>cost</strong> to earn it. That comparison is the next thing to build.</p>')
+      '<p>These three tabs show where things <strong>stand</strong> and <em>why</em> each balance moved. But they never line up, in one place, what the work <strong>delivered</strong> against what it <strong>used up</strong> delivering. That comparison is the next thing to build.</p>')
       + '<div class="next-phase-msg" style="margin-top:10px;">You read the whole season off these tabs. Next, you&rsquo;ll take that GENERATED pile and turn it into the statement that answers that question.</div>'
       + '<button class="btn-continue btn-block" onclick="nav(\'32-1-the-income-statement.html\')">Next: how the season went &rarr;</button>';
   }

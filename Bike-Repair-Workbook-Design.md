@@ -87,12 +87,12 @@ locked**: the implicit personal-funds contribution, then the LLC deposit.
 ## 4. Liabilities tab — opening June 1 (total **$2,250**)
 
 The card carries a charges/payments breakdown (it reconstructs M1's real history — the charges are
-the very assets across the aisle). Unearned Revenue expands to its single advance.
+the very assets across the aisle). Customer Deposit expands to its single advance.
 
 | Line | Balance | Expands to |
 |---|--:|---|
 | **Credit Card** | **$2,030** | **Charged** (= $2,030): hand tools 300 · air compressor 180 · parts washer 130 · wheel-truing stand 170 · fixtures 750 · parts (QBP order) 500. **Nothing paid down before June** — the whole $2,030 rides into the season. |
-| **Unearned Revenue** | **$220** | Smith — paid $220 up front for a custom frame, not yet built |
+| **Customer Deposit** | **$220** | Smith — paid $220 up front for a custom frame, not yet built |
 | **Total Liabilities** | **$2,250** | |
 
 So **A − L = $4,710 − $2,250 = $2,460** opening members' capital.
@@ -131,7 +131,7 @@ cannot answer — the student must draw the period line by hand (32-2), feel the
 in hand before either is named.
 
 **Residual close:** CONTRIBUTED $2,290 + GENERATED $2,740 − WITHDRAWN $600 = **$4,430** =
-Assets $4,430 − Liabilities $0. (The card is paid off to $0; Smith's Unearned earns out to $0.)
+Assets $4,430 − Liabilities $0. (The card is paid off to $0; Smith's Customer Deposit earns out to $0.)
 
 **Recognition gaps left visible in the raw data (deliberate — they seed 3.2/3.3):**
 - **Ridgeline Trail Crew** — trail-team tune finished Aug 28, **on account (uncollected)**. The novice
@@ -175,7 +175,7 @@ cash, collect a billed repair, pay the rent, buy a new tool, pay off the card.
    short of the true **$4,500**. The reconciliation: **+$300** uncollected receivable − **$230**
    untaken depreciation = **+$70**, surfacing in 3.2 and 3.3.
    *(Smith's $220 advance **does** earn out in `31-2`: his custom frame is finished and delivered in
-   the season, so Unearned Revenue closes to $0 and "Frame delivered — J. Smith +$220" sits in the
+   the season, so Customer Deposit closes to $0 and "Frame delivered — J. Smith +$220" sits in the
    GENERATED pile. It is recorded in both the novice and the true books, so it is **not** part of the
    $70 gap. The season's visible net-movers move capital by **+$1,970** — the season's GENERATED rows
    +$2,570 less the −$600 WITHDRAWN draw — carrying the June-1 pile state (2,290 + 170) to the novice
@@ -237,7 +237,7 @@ page sits.
 | `fixtures` | fixtures (desk, shelving…) | **Fixtures** | ~1.3 |
 | `officeEquip` | the laptop | **Office Equipment** | ~1.3 |
 | `creditCard` | what you owe on the card | **Credit Card** | ~1.3 |
-| `unearned` | what you owe Smith (his deposit) | **Unearned Revenue** | M3 (3.4 earns it out) |
+| `unearned` | what you owe Smith (his deposit) | **Customer Deposit** (trade name: Unearned Revenue) | M3 (3.4 earns it out) |
 | `contributedCapital` | what you put in (*Contributed*) | **Contributed Capital** | 1.5 |
 | `retainedEarnings` | what the work generated (*Generated*) | **Retained Earnings** | 1.5 |
 | `drawn` | what you took for yourself (*Withdrawn*) | **Draws** (a distribution) | M3, at the season's draw |

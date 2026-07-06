@@ -9,8 +9,18 @@
  *       opts.withReceivable  -> add Ridgeline's $300 A/R (asset + matching reason),
  *                               books stay balanced (assets 4,430 -> 4,730)
  *       opts.flowGroups      -> show the SEASON's reasons regrouped into
- *                               BROUGHT IN / USED UP tallies (the 32-2 sort result) with
+ *                               DELIVERED / USED UP tallies (the 32-2 sort result) with
  *                               WITHDRAWN below; May's rows stay in their original piles
+ *       opts.tabbed          -> the 32-4 graduation state: the season's DELIVERED / USED UP
+ *                               rows leave Reasons for their own PERIOD tabs, Revenue and
+ *                               Expenses (they exist to separate reasons by the period they
+ *                               answer for). Pages mounting a tabbed snapshot must call
+ *                               BR_WB.registerSeasonSheets() once, after shared.js loads.
+ *       opts.withDepreciation-> the 33-2 state: the season's wear recorded — two depreciation
+ *                               rows land on Expenses ($200 tools, equipment & fixtures;
+ *                               $30 laptop), the asset ledgers carry the wear split $160/$40
+ *                               (Tools 1,600 -> 1,440; Fixtures 750 -> 710; Laptop 610 -> 580);
+ *                               the "one more kind of used-up" placeholder goes away.
  *   BR_WB.setupRows()        -> the pre-season (May + formation) reasons — the Reasons
  *                               list is one CONTINUOUS list, never settled or reset
  *   BR_WB.generatedRows()    -> the GENERATED reasons, each tagged flow:'in'|'up'
@@ -85,8 +95,9 @@ var BR_WB = (function () {
     ];
   }
 
-  // GENERATED reasons — the novice's mess, job by job. flow:'in' = money the work brought in,
-  // flow:'up' = something the work used up. kind:'net' is what BRW's sorted mode reads.
+  // GENERATED reasons — the novice's mess, job by job. flow:'in' = the work delivered
+  // (a repair collected, the frame handed over), flow:'up' = something got used up
+  // delivering. kind:'net' is what BRW's sorted mode reads.
   function generatedRows() {
     var rows = [], rentPaid = {};
     BR_JOBS.forEach(function (j) {
@@ -100,7 +111,7 @@ var BR_WB = (function () {
   }
 
   // Ridgeline's discovered receivable — the revenue reason the novice never jotted (no cash came).
-  var ridgelineReason = { kind: 'net', cat: 'generated', flow: 'in', account: 'Repair earned', reason: 'Ridgeline Trail Crew &mdash; billed, net 15 (unpaid)', delta: 300 };
+  var ridgelineReason = { kind: 'net', cat: 'generated', flow: 'in', account: 'Repair delivered', reason: 'Ridgeline Trail Crew &mdash; billed, net 15 (unpaid)', delta: 300 };
   var drawReason = { kind: 'net', cat: 'drawn', account: 'Owner&rsquo;s draw', reason: 'money taken out for personal use', delta: -600 };
 
   function snapshot(opts) {
@@ -117,13 +128,13 @@ var BR_WB = (function () {
         { name: 'Hex/Allen set', amt: 45 }, { name: 'Cable cutters', amt: 40 }, { name: 'Chain breaker', amt: 35 },
         { name: 'Tire levers', amt: 20 }, { name: 'Bench grinder', amt: 90 }, { name: 'Headset press', amt: 70 },
         { name: 'Shop vacuum', amt: 60 }, { name: 'New repair tool bought this season', amt: 400 }
-      ] },
+      ].concat(opts.withDepreciation ? [ { name: 'Depreciation &mdash; Summer 2026 (the season&rsquo;s share of the cost)', amt: -160 } ] : []) },
       { label: 'Fixtures', amount: 750, events: [
         { name: 'Desk', amt: 250 }, { name: 'Shelving units', amt: 200 }, { name: 'Display rack', amt: 180 }, { name: 'Pegboard + hooks', amt: 120 }
-      ] },
+      ].concat(opts.withDepreciation ? [ { name: 'Depreciation &mdash; Summer 2026 (the season&rsquo;s share of the cost)', amt: -40 } ] : []) },
       { label: 'Laptop', amount: 610, events: [
         { name: 'Laptop (from home)', amt: 610 }
-      ] }
+      ].concat(opts.withDepreciation ? [ { name: 'Depreciation &mdash; Summer 2026 (the season&rsquo;s share of the cost)', amt: -30 } ] : []) }
     ];
     if (opts.withReceivable) {
       assets.splice(1, 0, { label: 'Accounts Receivable <span class="xl-new-tag">new</span>', note: 'Ridgeline&rsquo;s unpaid promise', amount: 300, events: [
@@ -137,20 +148,24 @@ var BR_WB = (function () {
     // In flowGroups mode the SEASON's generated reasons are filed under their flow (in/up) —
     // the state after the student sorts them in 32-2. May's rows keep their original piles:
     // the period line the student drew stays visible in the workbook.
-    var rows = opts.flowGroups
-      ? setup.concat(gen.map(function (r) { return { kind: 'net', cat: r.flow, flow: r.flow, account: r.account, reason: r.reason, delta: r.delta }; }))
-      : setup.concat(gen);
+    // In tabbed mode (the 32-4 graduation) the season's rows leave Reasons entirely —
+    // they live on their own period tabs, Revenue and Expenses.
+    var rows = opts.tabbed
+      ? setup.slice()
+      : (opts.flowGroups
+        ? setup.concat(gen.map(function (r) { return { kind: 'net', cat: r.flow, flow: r.flow, account: r.account, reason: r.reason, delta: r.delta }; }))
+        : setup.concat(gen));
     rows.push(drawReason);
 
-    // Before the receivable is discovered the pile is the novice's cash frame, "BROUGHT IN". Once
-    // Ridgeline's earned-but-unpaid $300 joins it, "brought in" is no longer true — it becomes "EARNED".
-    var inLabel = opts.withReceivable ? 'EARNED' : 'BROUGHT IN';
-    var inBlurb = opts.withReceivable ? 'what the work earned, before any costs (paid or not)' : 'money the work brought in';
-    var groups = opts.flowGroups
+    var groups = opts.tabbed
       ? [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in' },
           { key: 'generated', label: 'GENERATED &mdash; through May 31', blurb: 'the work before the season, left where it was' },
-          { key: 'in', label: inLabel, blurb: inBlurb },
-          { key: 'up', label: 'USED UP', blurb: 'what the work used up' },
+          { key: 'drawn', label: 'WITHDRAWN', blurb: 'an owner move &mdash; dated to the season, but not part of how the work did' } ]
+      : opts.flowGroups
+      ? [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in' },
+          { key: 'generated', label: 'GENERATED &mdash; through May 31', blurb: 'the work before the season, left where it was' },
+          { key: 'in', label: 'DELIVERED', blurb: 'reasons the work delivered to a customer' },
+          { key: 'up', label: 'USED UP', blurb: 'reasons things got used up' },
           { key: 'drawn', label: 'WITHDRAWN', blurb: 'what you took for yourself' } ]
       : [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in' },
           { key: 'generated',   label: 'GENERATED',   blurb: 'what the work produced' },
@@ -158,7 +173,11 @@ var BR_WB = (function () {
 
     var snap = {
       file: 'Bike-Repair.xlsx',
-      tabs: [ { id: 'assets', label: 'Assets' }, { id: 'liabilities', label: 'Liabilities' }, { id: 'reasons', label: 'Reasons' } ],
+      tabs: opts.tabbed
+        ? [ { id: 'assets', label: 'Assets' }, { id: 'liabilities', label: 'Liabilities' },
+            { id: 'revenue', label: 'Revenue' }, { id: 'expenses', label: 'Expenses' },
+            { id: 'reasons', label: 'Reasons' } ]
+        : [ { id: 'assets', label: 'Assets' }, { id: 'liabilities', label: 'Liabilities' }, { id: 'reasons', label: 'Reasons' } ],
       assets: assets,
       liabilities: [
         { label: 'Credit Card', amount: 0, events: [
@@ -167,14 +186,16 @@ var BR_WB = (function () {
           { name: 'Charged &mdash; fixtures', amt: 750 }, { name: 'Charged &mdash; parts (QBP order)', amt: 500 },
           { name: 'Paid off in full this season', amt: -2030 }
         ] },
-        { label: 'Unearned Revenue', amount: 0, events: [
+        { label: 'Customer Deposit', amount: 0, events: [
           { name: 'Smith&rsquo;s advance for a custom frame', amt: 220 },
           { name: 'Built and delivered Smith&rsquo;s frame &mdash; no longer owed', amt: -220 }
         ] }
       ],
       reasons: {
         pilesTitle: 'The Reasons piles &mdash; May 1 to today',
-        pilesSub: opts.flowGroups
+        pilesSub: opts.tabbed
+          ? 'the season&rsquo;s rows now live on their own tabs &mdash; Revenue and Expenses; they come back when the season closes'
+          : opts.flowGroups
           ? 'the season&rsquo;s rows sorted into tallies; May&rsquo;s rows left where they were'
           : 'one continuous list &mdash; every reason since the first May jot; nothing settled, nothing reset',
         mode: 'sorted',
@@ -182,8 +203,44 @@ var BR_WB = (function () {
         rows: rows
       }
     };
+    if (opts.tabbed) {
+      snap.revenueRows = gen.filter(function (r) { return r.flow === 'in'; });
+      snap.expenseRows = gen.filter(function (r) { return r.flow === 'up'; });
+      if (opts.withDepreciation) {
+        snap.expenseRows = snap.expenseRows.concat([
+          { account: 'Depreciation', reason: 'tools, equipment &amp; fixtures, Summer 2026 <span class="xl-new-tag">new</span>', delta: -200 },
+          { account: 'Depreciation', reason: 'laptop, Summer 2026 <span class="xl-new-tag">new</span>', delta: -30 }
+        ]);
+      } else {
+        snap.expensesNote = '&hellip; one more kind of used-up, still to come <span class="xl-new-tag">next tutorial</span>';
+      }
+    }
     return snap;
   }
 
-  return { snapshot: snapshot, generatedRows: generatedRows, setupRows: setupRows, monthName: monthName };
+  /* ===== the two period tabs (Revenue · Expenses) as custom BRW sheets =====
+     A period tab exists to separate reasons by the period they answer for: it fills
+     for one season, answers that season's question, then closes and starts the next
+     at zero. Pages mounting a tabbed snapshot call this once, after shared.js loads. */
+  function xr(cls, label, val) {
+    return '<div class="xl-row ' + cls + '"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">' + label + '</div><div class="xl-v">' + val + '</div></div>';
+  }
+  function seasonSheet(title, rows, note, totalLabel) {
+    var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">' + title + '</div><div class="cash-sheet-sub">a period tally &mdash; it answers for this season only, then closes</div></div>';
+    var tot = 0;
+    rows.forEach(function (r) { tot += r.delta; h += xr('xl-item', r.account + ' &mdash; ' + r.reason, BRW.signed(r.delta)); });
+    if (note) h += xr('xl-item', '<em>' + note + '</em>', '?');
+    h += xr('xl-total', totalLabel, BRW.dol(Math.abs(tot)));
+    return h;
+  }
+  function registerSeasonSheets() {
+    BRW.registerSheet('revenue', function (cid, snap) {
+      return seasonSheet('Revenue &mdash; Summer 2026', snap.revenueRows || [], null, 'Revenue &mdash; the work delivered this season');
+    });
+    BRW.registerSheet('expenses', function (cid, snap) {
+      return seasonSheet('Expenses &mdash; Summer 2026', snap.expenseRows || [], snap.expensesNote, 'Expenses &mdash; so far');
+    });
+  }
+
+  return { snapshot: snapshot, generatedRows: generatedRows, setupRows: setupRows, monthName: monthName, registerSeasonSheets: registerSeasonSheets };
 })();

@@ -81,27 +81,37 @@ snapshots and a long pile of reasons, but no clear story of *how the season went
 *Pages:* welcome → work the season (the events) → period-end snapshot vs. opening → the gap.
 
 ### Tutorial 3.2 — The Income Statement  (`32-`)
-The operating reasons pile up → it's easier to **bucket** them. Group the money-in reasons (revenue) and each
-kind of used-up reason (expenses) into tallies that total the season. Name them **temporary accounts**:
-revenue − expenses = **net income** → *why retained earnings moved.* (The income statement is the buckets,
-organized.)
-*Pages:* the pile of reasons → bucket them → name temporary accounts / the income statement → net income → retained.
+The operating reasons pile up → sort the **season's** rows into **DELIVERED** (work handed to a customer — a
+repair collected, Smith's frame against his deposit) and **USED UP** (reasons things were consumed). Never
+cash-framed (ruled 2026-07-05): Smith's delivery settles a promise — his cash came last period; and Ridgeline's
+parts sit in USED UP with *no delivery across from them* — the in-books loose end that drives the receivable
+discovery ("the pile follows the work, not the cash"). Name the piles **Revenue** and **Expenses** — then
+**graduate them to their own sheets** (locked 2026-07-05): *temporary accounts exist to separate reasons by
+the period they answer for.* The tabs fill for one season, answer its question, then close; the Reasons tab
+stays the continuous trail — and the **draw stays on it**, an owner move, not part of how the work did
+(quietly seeding draw ≠ expense for M4). GENERATED will accumulate **one row per closed period** (the close
+itself is 3.5's discovery). The income statement is read straight off the two tabs; the bottom line stays
+open pending 3.3.
+*Pages:* the pile of reasons → sort DELIVERED / USED UP → the missing delivery (A/R) → name + graduate to
+period tabs + lay out the statement → where net income lands.
 
 ### Tutorial 3.3 — Depreciation: allocation as a convention  (`33-`)
-Build from the **allocation spectrum** on the opening sheet (see the pedagogy spine). The faithful cases are easy
-to place: **parts/supplies** become expense by **metered** use, and **prepaid rent** is the **pure-time** case —
-the last-month deposit that becomes expense, in full, only when its month arrives (so it sits parked this season;
-rent paid *now* is a straight cash expense). Now the hard case: the **tools, fixtures, and laptop** were used all
-season — a real cost — but you **can't meter** their use,
-their decline **isn't really a function of time**, and **no cash left** for them this period. We spread the cost
-**straight-line over time anyway** — and name it **depreciation**, *openly a chosen convention* (allocation, not
-measurement; useful life and method are choices, with interests). Here that's **$200 on the tools & repair
-equipment** and **$30 on the laptop**, kept as **separate lines** so each can be discussed on its own. The
-**laptop** is the punchline: its eBay value
-already sits **below its cost**, so depreciating it by time is visibly a practical convention, not a faithful
-tracking — and **book ≠ market** is now in plain sight (hold the full reveal for M4). Carrying value declines; the
-income statement is complete.
-*Pages:* recall the metered/time cases → the laptop won't meter and isn't really time → spread it by time anyway (depreciation = a convention) → carrying value declines, book ≠ market → income statement complete.
+**Open on the Expenses tab the student just built (locked 2026-07-05)** and walk its rows as kinds of used-up.
+First **parts** — drill in and *watch supplies leave the shelf*, job by job (**metered** use). Then **rent** —
+the lapsing Right of Use: a month lived through per row (**time** does it; the last-month deposit stays parked
+this season). Then the missing kind: the **tools, fixtures, and laptop** did every one of those jobs — a real
+cost — but you **can't meter** their use, and their decline **isn't a simple consequence of the passage of
+time** either. Note along the way: when you analyzed May back in Module 1, you took **no depreciation at
+all**. Depreciation enters as an **allocation, openly a chosen convention** — a combination of the passage of
+time, wear and tear, and judgment (useful life and method are choices, with interests) — never a metering of
+use, never mere calendar. Here that's **$200 on the tools, equipment & fixtures** (ledger split $160/$40) and **$30 on the laptop**, kept
+as **separate lines** so each can be discussed on its own. The **laptop** is the punchline: its eBay value
+already sits **below its cost**, so depreciating it by convention is visibly practical, not a faithful
+tracking — and **book ≠ market** is now in plain sight (hold the full reveal for M4). Carrying value declines;
+the depreciation rows land on the Expenses tab; the income statement is complete.
+*Pages:* walk the Expenses tab (metered parts → time-lapsed rent) → the tools won't meter and aren't mere time
+→ allocation as a convention (May took none) → carrying value declines, book ≠ market → income statement
+complete.
 
 ### Tutorial 3.4 — The Cash-Flow Statement  (`34-`)
 **Profit ≠ cash.** The season was plainly profitable — and the cash balance is **lighter than the day the LLC opened** (cash $1,300 → $620, **down $680**). That felt contradiction, planted as a cliffhanger in `31-2`'s cash walk, is the tutorial's engine. Where the cash *actually* went: **operating** (repairs, parts, rent, the **credit-card payoff**)
@@ -129,7 +139,7 @@ Chosen so each statement has something to chew on. Amounts **TBD** (set against 
 | Repairs performed → **repair revenue** | income statement (operating in) |
 | Parts consumed, rent used → **expenses** | income statement — assets used up **fast** |
 | Existing tools ($200) and laptop ($30) used all season → **depreciation** | 3.3 — assets used up **slow**; non-cash; tools & laptop handled separately |
-| **Smith's $220 advance** earned (M2 unearned liability) → **revenue, no cash** | profit-≠-cash (CFS) |
+| **Smith's $220 advance** earned (the Customer Deposit liability) → **revenue, no cash** | profit-≠-cash (CFS) |
 | A **new tool** bought mid-season → **investing** outflow | CFS investing + a fresh depreciable asset |
 | The **credit card paid off** ($2,030, the M2 carryover) → cash out, **liability → $0** | CFS (operating); full payoff, so no interest |
 | An owner's **draw** → **financing** outflow | reduces equity; **not** an expense (SCE + CFS financing) |

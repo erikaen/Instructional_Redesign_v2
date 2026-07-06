@@ -29,9 +29,18 @@
     <!-- ===== welcome ===== -->
     <div class="phase active" id="phase-welcome">
       <div class="narrative-block">
-        <p>In Module 2 you made the repair work into a legal body: <strong>Bike Repair, LLC</strong>. The day it became formal, your books &mdash; <span class="mono">Bike-Repair.xlsx</span> &mdash; showed a single balance sheet, one snapshot of the new entity:</p>
+        <p>In Module 2 you made the repair work into a legal body: <strong id="llcInline">Bike Repairs, LLC</strong>. The day it became formal, your books &mdash; <span class="mono">Bike-Repair.xlsx</span> &mdash; showed a single balance sheet, one snapshot of the new entity:</p>
       </div>
       <div id="openingBS"></div>
+      <div class="mc-card">
+        <div class="mc-q">One check before the season starts &mdash; the frame from Module 1 should hold. <strong>Assets &minus; Liabilities</strong> = $4,710 &minus; $2,250 =</div>
+        <div class="btn-row">
+          <input id="bsInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Assets minus Liabilities" onkeydown="if(event.key==='Enter'){checkBS();}">
+          <button class="btn btn-primary" onclick="checkBS()">Check</button>
+        </div>
+        <div class="feedback" id="bsFb"></div>
+      </div>
+      <div id="bsClose" hidden></div>
       <div class="narrative-block">
         <p>Then summer came. You kept your day job and worked the shop in the evenings and on weekends &mdash; part-time, but busy. Repairs brought money <strong>in</strong>. Parts and rent got <strong>used up</strong>. You bought a new tool and took some cash out for yourself. Beside each change, you jotted a short <strong>Reason</strong>, the way you learned to back in Module 1.</p>
         <p>Now it&rsquo;s the end of August, and <strong>Anna</strong> &mdash; who set up your books when you formed the LLC &mdash; checks back in. <em>&ldquo;I set up your books,&rdquo;</em> she says. <em>&ldquo;Now let&rsquo;s read them. A season has gone by &mdash; let&rsquo;s see how the shop did.&rdquo;</em></p>
@@ -44,7 +53,7 @@
           <li>What a whole season&rsquo;s worth of Reasons is quietly pushing you toward.</li>
         </ul>
       </div>
-      <button class="btn-continue btn-block" onclick="nav('31-2-work-the-season.html')">Open Bike-Repair.xlsx &rarr;</button>
+      <button class="btn-continue btn-block" id="goBtn" hidden onclick="nav('31-2-work-the-season.html')">Open Bike-Repair.xlsx &rarr;</button>
     </div>
 
   </div>
@@ -97,16 +106,20 @@ function bsRow(label,val,opts){
   var w=opts.bold?'700':'400';
   return '<div style="display:flex;align-items:baseline;font-size:var(--font-s);padding:3px 4px;'+top+'font-weight:'+w+'"><span style="flex:1">'+label+'</span><span class="mono" style="width:84px;text-align:right">'+val+'</span></div>';
 }
+/* ===== the LLC's name — chosen by the student in 2.2, persisted to localStorage ===== */
+var memberName=''; try{ var _n=localStorage.getItem('m2Member'); if(_n) memberName=_n; }catch(e){}
+function llcName(){ return (memberName.trim()||'[Your Name]') + '’s Bike Repairs, LLC'; }
+
 function buildOpeningBS(){
   var h='<div class="section-card">';
-  h+='<div style="text-align:center;font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary)">Bike Repair, LLC</div>';
+  h+='<div style="text-align:center;font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary)">'+llcName()+'</div>';
   h+='<div style="text-align:center;font-size:var(--font-xs);opacity:0.65;margin-bottom:10px">Opening balance sheet &middot; June 1, 2026</div>';
   h+=bsSection('Assets');
   [['Cash','$1,300'],['Right of Use','$650'],['Parts','$200'],['Tools &amp; Repair Equipment','$1,200'],['Fixtures','$750'],['Laptop','$610']].forEach(function(r){ h+=bsRow(r[0],r[1],{}); });
   h+=bsRow('Total assets','$4,710',{bold:true,rule:true});
   h+=bsSection('Liabilities');
   h+=bsRow('Credit Card','$2,030',{});
-  h+=bsRow('Unearned Revenue','$220',{});
+  h+=bsRow('Customer Deposit','$220',{});
   h+=bsRow('Total liabilities','$2,250',{bold:true,rule:true});
   h+=bsSection('Members&rsquo; capital');
   h+=bsRow('Contributed Capital','$2,290',{});
@@ -116,6 +129,33 @@ function buildOpeningBS(){
   document.getElementById('openingBS').innerHTML=h;
 }
 buildOpeningBS();
+document.getElementById('llcInline').textContent = llcName();
+
+/* ===== verify the frame: Assets − Liabilities = Members' Capital ===== */
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+var bsDone=false, bsAttempts=0;
+function checkBS(){
+  if(bsDone) return;
+  var val = parseInt(String(document.getElementById('bsInput').value).replace(/[^0-9-]/g,''),10);
+  var fb = document.getElementById('bsFb');
+  if(val===2460){ playSuccess(); revealBS(); }
+  else{
+    bsAttempts++;
+    if(bsAttempts>=3){ playNope(); revealBS(); }
+    else{ playNope(); fb.className='feedback err show'; fb.innerHTML='Not quite &mdash; subtract Total liabilities from Total assets: $4,710 &minus; $2,250.'; }
+  }
+}
+function revealBS(){
+  bsDone=true;
+  document.getElementById('bsInput').disabled=true;
+  var fb=document.getElementById('bsFb'); fb.className='feedback'; fb.classList.remove('show');
+  var c=document.getElementById('bsClose'); c.hidden=false;
+  c.innerHTML='<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Assets &minus; Liabilities = Members&rsquo; Capital</div><p>$4,710 &minus; $2,250 = <strong>$2,460</strong> &mdash; exactly the <strong>Total members&rsquo; capital</strong> line. The difference you found in Module 1 now carries the LLC&rsquo;s name, and the balance sheet is built around the same identity &mdash; it holds by definition, every time.</p></div>';
+  document.getElementById('goBtn').hidden=false;
+  if(window.lucide) lucide.createIcons();
+}
+window.devFill = function(){ if(!bsDone) revealBS(); };
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 </script>

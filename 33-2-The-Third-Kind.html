@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 3.3: Depreciation &middot; The Third Kind</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 3: Depreciation</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 3</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Third Kind</div>
+
+    <div class="narrative-block">
+      <p>The wear on the tools is real used-up &mdash; the season plainly consumed a little of them &mdash; and the Expenses tab has no row for it. Before a row can exist, the season needs a <strong>number</strong>. Where would one come from?</p>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-q">How could the season put a number on the tools&rsquo; wear?</div>
+      <div class="mc-opts" id="mcOpts"></div>
+      <div class="feedback" id="mcqFb"></div>
+    </div>
+
+    <div id="wb"></div>
+    <div id="anna"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+/* ===== the choice: no meter, no lapse — a rule must be chosen ===== */
+var MCQ = [
+  { id:'a', text:'Meter it, like parts &mdash; count what left the shelf.',
+    fb:'There&rsquo;s no meter to read. Nothing left the shelf &mdash; the stand is right there, whole, doing its job. Metering needs something you can watch go, and wear isn&rsquo;t that.' },
+  { id:'b', text:'Let time lapse it, like rent &mdash; a season used is a season gone.',
+    fb:'Closer &mdash; time is part of it. But rent came priced by the month: the calendar did the whole job. The tools weren&rsquo;t bought by the season, and a stand that worked 21 jobs isn&rsquo;t the same as one that sat. Time alone doesn&rsquo;t produce the number.' },
+  { id:'c', text:'Neither works &mdash; someone has to choose a rule.', ok:true,
+    fb:'Right. No meter to read, no month that expires. If the season is to carry a share of the tools&rsquo; cost, the share has to come from a <strong>chosen rule</strong>.' }
+];
+var mcqAnswered = null, recorded = false;
+
+function renderMcq(){
+  var h='';
+  MCQ.forEach(function(o,i){
+    var cls = 'mc-opt' + (mcqAnswered===i ? (o.ok?' correct':' wrong') : '') + (mcqAnswered!==null && MCQ[mcqAnswered].ok ? ' locked' : '');
+    h += '<div class="'+cls+'" onclick="answerMcq('+i+')">'+o.text+'</div>';
+  });
+  document.getElementById('mcOpts').innerHTML = h;
+  var fb = document.getElementById('mcqFb');
+  fb.className = 'feedback'+(mcqAnswered!==null?(MCQ[mcqAnswered].ok?' ok':' err')+' show':'');
+  fb.innerHTML = mcqAnswered!==null ? MCQ[mcqAnswered].fb : '';
+}
+function answerMcq(i){
+  if(recorded || (mcqAnswered!==null && MCQ[mcqAnswered].ok)) return;
+  mcqAnswered = i;
+  if(MCQ[i].ok) playSuccess(); else playNope();
+  renderMcq(); renderTalk();
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+function renderTalk(){
+  var anna='', ctrl='';
+  if(mcqAnswered===null || !MCQ[mcqAnswered].ok){
+    document.getElementById('anna').innerHTML=''; document.getElementById('controls').innerHTML='';
+    return;
+  }
+  if(!recorded){
+    anna = annaBox('Accountants chose one. Spread the thing&rsquo;s <strong>cost</strong> over the seasons of its <strong>useful life</strong>, and charge each season its share. The share has a name: <strong>depreciation</strong>. Be clear about what it is: an <strong>allocation</strong> &mdash; a chosen convention. Not a meter reading, and not the mere passage of time &mdash; a rule standing in for a mix of time, wear and tear, and judgment. The useful life and the spreading rule are <em>choices</em>, and people argue about them. For the shop, this season&rsquo;s shares: <strong>$200</strong> on the tools, equipment &amp; fixtures, and <strong>$30</strong> on the laptop &mdash; two separate lines, so each can be argued with on its own.');
+    ctrl = '<button class="btn-continue btn-block" onclick="recordWear()">Record the wear &rarr;</button>';
+  } else {
+    anna = annaBox('There &mdash; the third kind of used-up, on the tab at last: <strong>Depreciation</strong>, $200 for the tools, equipment and fixtures, and $30 for the laptop. Expenses now read <strong>$3,380</strong>, and the placeholder is gone. And flip to Assets: the Tools &amp; Repair Equipment ledger carries <strong>&minus;$160</strong> now, Fixtures <strong>&minus;$40</strong>, the Laptop <strong>&minus;$30</strong>. The wear didn&rsquo;t just cost the season &mdash; it lowered what the records carry.');
+    ctrl = insightBox('An allocation, openly chosen',
+        '<p>The $200 isn&rsquo;t a reading of anything. It&rsquo;s the season&rsquo;s <strong>share of a cost</strong>, set by a rule someone chose &mdash; and back in May, you took none, which was also a choice. That&rsquo;s not a flaw to hide. It&rsquo;s what this number <em>is</em>.</p>')
+      + '<button class="btn-continue btn-block" onclick="nav(\'33-3-The-Bottom-Line.html\')">What the wear did to the books &rarr;</button>';
+  }
+  document.getElementById('anna').innerHTML = anna;
+  document.getElementById('controls').innerHTML = ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+
+function recordWear(){
+  playClick(); playSuccess();
+  recorded = true;
+  BRW.update('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true }));
+  BRW.tab('wb', 'expenses');
+  renderTalk();
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Depreciation', def:'A season&rsquo;s share of a long-lived thing&rsquo;s cost, charged as an expense by a chosen rule. An allocation &mdash; a convention standing in for time, wear and tear, and judgment together &mdash; not a meter reading, not mere calendar.' },
+  { term:'Allocation', def:'Splitting one cost across the periods it serves, by a rule someone chose. The rule has authors and room to argue &mdash; useful life and method are choices.' },
+  { term:'Useful life', def:'How many seasons the thing is expected to serve &mdash; a judgment, made up front, that sets each season&rsquo;s share.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init — the graduated workbook, Expenses tab, wear not yet recorded ===== */
+window.devFill = function(){ mcqAnswered=2; renderMcq(); if(!recorded) recordWear(); };
+BR_WB.registerSeasonSheets();
+BRW.mount('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true }));
+BRW.tab('wb', 'expenses');
+renderMcq(); renderTalk();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>
