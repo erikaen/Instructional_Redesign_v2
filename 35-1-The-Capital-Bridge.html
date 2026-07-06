@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 5: Closing the Season &middot; The Capital Bridge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 5: Closing the Season</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 4</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Capital Bridge</div>
+
+    <div class="narrative-block">
+      <p>One number was moving the whole time and never got its own statement: <strong>Members&rsquo; Capital</strong>. June 1 it read <strong>$2,460</strong>. Today it reads <strong>$4,500</strong>. Before laying that move out, do the arithmetic yourself.</p>
+    </div>
+
+    <div class="mc-card">
+      <div class="mc-q">Opening Members&rsquo; Capital <strong>$2,460</strong>, plus this season&rsquo;s net income <strong>$2,640</strong>, minus the owner&rsquo;s draw <strong>$600</strong> &mdash; the closing balance:</div>
+      <div class="btn-row">
+        <input id="bridgeInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Closing Members' Capital" onkeydown="if(event.key==='Enter'){checkBridge();}">
+        <button class="btn btn-primary" onclick="checkBridge()">Check</button>
+      </div>
+      <div class="feedback" id="bridgeFb"></div>
+    </div>
+
+    <div id="bridgeClose" hidden></div>
+    <div id="wb"></div>
+    <div id="anna"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+/* ===== locked numbers ===== */
+var OPEN_MC = 2460, NET_INCOME = 2640, DRAW = 600, CLOSE_MC = 4500;
+var CONTRIB = 2290, RETAINED_OPEN = 170, RETAINED_CLOSE = 2210;
+
+/* ===== check the bridge arithmetic ===== */
+var bridgeDone=false, bridgeAttempts=0;
+function checkBridge(){
+  if(bridgeDone) return;
+  var val = parseInt(String(document.getElementById('bridgeInput').value).replace(/[^0-9-]/g,''),10);
+  var fb = document.getElementById('bridgeFb');
+  if(val===CLOSE_MC){ playSuccess(); revealBridge(); }
+  else{
+    bridgeAttempts++;
+    if(bridgeAttempts>=3){ playNope(); revealBridge(); }
+    else{ playNope(); fb.className='feedback err show'; fb.innerHTML='Not quite &mdash; $2,460 + $2,640 &minus; $600.'; }
+  }
+}
+function revealBridge(){
+  bridgeDone=true;
+  document.getElementById('bridgeInput').disabled=true;
+  var fb=document.getElementById('bridgeFb'); fb.className='feedback'; fb.classList.remove('show');
+  var c=document.getElementById('bridgeClose'); c.hidden=false;
+  c.innerHTML = insightBox('The bridge holds',
+    '<p>$2,460 + $2,640 &minus; $600 = <strong>$4,500</strong> &mdash; exactly the closing Members&rsquo; Capital sitting on today&rsquo;s balance sheet. The whole move from opening to closing runs through just two things: what the season <strong>generated</strong>, and what you <strong>withdrew</strong>.</p>');
+  renderSheet();
+  document.getElementById('controls').innerHTML = ctrlAfterReveal();
+  if(window.lucide) lucide.createIcons();
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+/* ===== the rendered statement ===== */
+function xrow(cls, label, val){ return '<div class="xl-row '+cls+'"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
+function bridgeSheet(cid, snap){
+  var h = xrow('xl-head', 'Statement of Changes in Members&rsquo; Capital &middot; June&ndash;August 2026', 'Amount');
+  h += xrow('xl-item', 'Opening Members&rsquo; Capital &mdash; June 1', BRW.dol(OPEN_MC));
+  h += xrow('xl-item', '+ Net income &mdash; the season&rsquo;s work', BRW.signed(NET_INCOME));
+  h += xrow('xl-item', '&minus; Owner&rsquo;s draw', BRW.signed(-DRAW));
+  h += xrow('xl-total', '<strong>Closing Members&rsquo; Capital &mdash; August 31</strong> <span class="xl-new-tag">ties to the balance sheet</span>', BRW.dol(CLOSE_MC));
+  return h;
+}
+var snap = { file:'Bike-Repair.xlsx', tabs:[ {id:'bridge', label:'Changes in Capital'} ] };
+function renderSheet(){
+  BRW.registerSheet('bridge', bridgeSheet);
+  BRW.mount('wb', snap);
+  BRW.tab('wb', 'bridge');
+}
+
+function ctrlAfterReveal(){
+  return annaBox('Look at what didn&rsquo;t move: <strong>Contributed Capital</strong> stayed at <strong>'+BRW.dol(CONTRIB)+'</strong> all season &mdash; no new contributions came in. The whole $2,040 swing ran through the other slice: <strong>Retained</strong> went from '+BRW.dol(RETAINED_OPEN)+' up to '+BRW.dol(RETAINED_CLOSE)+' &mdash; up by the net income, down by the draw. Every dollar of the move in Members&rsquo; Capital this season &mdash; up or down &mdash; this statement can name.')
+    + insightBox('Two lines moved this bridge',
+        '<p>Net income in, the draw out. Contributed Capital sat still.</p>')
+    + '<button class="btn-continue btn-block" onclick="nav(\'35-2-The-First-Close.html\')">Where does a finished season get filed? &rarr;</button>';
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Statement of Changes in Members&rsquo; Capital', def:'The bridge between two balance sheets&rsquo; Members&rsquo; Capital lines: opening, plus net income, minus draws, equals closing. Here: $2,460 + $2,640 &minus; $600 = $4,500.' },
+  { term:'Owner&rsquo;s draw', def:'Cash the owner takes out for personal use. It reduces Members&rsquo; Capital but is not an expense &mdash; it never touches the income statement.' },
+  { term:'Retained', def:'The slice of Members&rsquo; Capital built from running the work, not from contributions. Moves with net income (up) and draws (down): $170 &rarr; $2,210 this season.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init ===== */
+window.devFill = function(){ if(!bridgeDone) revealBridge(); };
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

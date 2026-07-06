@@ -26,7 +26,9 @@
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
     '32-1-the-income-statement', '32-2-two-kinds', '32-3-revenue-follows-the-work', '32-4-name-the-income-statement', '32-5-what-the-season-kept',
-    '33-1-Two-Kinds-of-Used-Up', '33-2-The-Third-Kind', '33-3-The-Bottom-Line'
+    '33-1-Two-Kinds-of-Used-Up', '33-2-The-Third-Kind', '33-3-The-Bottom-Line',
+    '34-1-The-Cash-Puzzle', '34-2-Three-Buckets', '34-3-What-Cash-Missed', '34-4-The-Cash-Flow-Statement',
+    '35-1-The-Capital-Bridge', '35-2-The-First-Close', '35-3-The-Statements-Tie-Out', '35-4-Module-Complete'
   ];
 
   function urlDev() { return /[?&]dev(=|&|$)/.test(location.search); }

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 4: The Cash-Flow Statement &middot; Three Buckets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 4: The Cash-Flow Statement</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 4</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Three Buckets</div>
+
+    <div class="narrative-block">
+      <p>Every dollar that moved through Cash this <strong>season</strong> is a fact &mdash; the June 1 opening deposit isn&rsquo;t one of them; that happened before the season started. Sort what&rsquo;s left into three piles, by <strong>purpose</strong>: running the season day to day, buying long-lived gear, or an owner moving money. <strong>Click a row</strong>, then click the pile it belongs in.</p>
+    </div>
+
+    <div id="wb"></div>
+    <div class="feedback" id="sortNudge"></div>
+    <div id="anna"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== the SEASON's cash events only — nothing pre-June, no opening deposit ===== */
+var monthName = { Jun:'June', Jul:'July', Aug:'August' };
+var rows = [];
+// repairs collected — cash in, per BR_JOBS (collected, not deposit-paid), totals $5,500
+BR_JOBS.filter(function(j){ return j.collected && j.pay.indexOf('Deposit')<0; }).forEach(function(j){
+  rows.push({ bucket:'op', account:'Repair collected', reason:j.customer, delta:j.charge });
+});
+// parts bought — 3 rows from BR_PURCHASES, -$1,200 total
+BR_PURCHASES.forEach(function(p){
+  rows.push({ bucket:'op', account:'Parts bought', reason:monthName[p.date.slice(0,3)], delta:-p.total });
+});
+// rent -$650 x3
+['June','July','August'].forEach(function(m){
+  rows.push({ bucket:'op', account:'Rent paid', reason:m, delta:-650 });
+});
+// credit card paid off -$2,030
+rows.push({ bucket:'op', account:'Credit card paid off', reason:'settling the Module 2 balance in full', delta:-2030 });
+// new repair tool -$400
+rows.push({ bucket:'inv', account:'New repair tool', reason:'bought mid-season', delta:-400 });
+// owner's draw -$600
+rows.push({ bucket:'fin', account:'Owner&rsquo;s draw', reason:'money taken out for personal use', delta:-600 });
+
+rows.forEach(function(r,i){ r.id='c'+i; });
+function findR(id){ for(var i=0;i<rows.length;i++) if(rows[i].id===id) return rows[i]; return null; }
+var visibleIds = rows.map(function(r){ return r.id; });
+
+/* ===== state ===== */
+var placed = {}, selectedId = null, done = false, filling = false;
+var BUCKETS = [
+  { key:'op',  label:'Running the season',    blurb:'day-to-day cash in and out of doing the work' },
+  { key:'inv', label:'Long-lived gear',        blurb:'cash for things that will last beyond this season' },
+  { key:'fin', label:'Owner moves',            blurb:'cash moving between the shop and the owner, not the work' }
+];
+
+function correctIn(b){ return rows.some(function(r){ return placed[r.id]===b && r.bucket===b; }); }
+function gateMet(){ return BUCKETS.every(function(b){ return correctIn(b.key); }); }
+function bTotal(b){ return rows.filter(function(r){ return placed[r.id]===b; }).reduce(function(s,r){ return s+r.delta; }, 0); }
+
+/* ===== the interactive sort sheet, rendered inside the workbook shell ===== */
+function xrow(cls, attrs, label, val){ return '<div class="xl-row '+cls+'"'+attrs+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
+function bucketGroup(b){
+  var mine = rows.filter(function(r){ return placed[r.id]===b.key; });
+  var armed = selectedId && !done && !filling;
+  var head = b.label+' ('+mine.length+') &mdash; '+b.blurb+(armed?' <span class="xl-new-tag">click to drop here</span>':'');
+  var h = xrow('xl-cat', armed?(' onclick="placeInto(\''+b.key+'\')"'):'', head, BRW.signed(bTotal(b.key)));
+  mine.forEach(function(r){ h += xrow('xl-item', '', r.account+' &mdash; '+r.reason, BRW.signed(r.delta)); });
+  if(!mine.length && !armed) h += xrow('xl-item', '', '<em>empty</em>', '');
+  return h;
+}
+function sortSheet(cid, snap){
+  var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s cash events</div><div class="cash-sheet-sub">'+(done?'sorted into three piles, by purpose':'click a row, then click the pile it belongs in')+'</div></div>';
+  if(!done){
+    var remaining = visibleIds.map(findR).filter(function(r){ return !placed[r.id]; });
+    h += xrow('xl-cat', '', 'TO SORT ('+remaining.length+') &mdash; jumbled, in the order cash moved', '');
+    remaining.forEach(function(r){
+      var sel = selectedId===r.id;
+      var label = (sel?'<i data-lucide="hand" class="licon"></i> ':'')+r.account+' &mdash; '+r.reason+(sel?' <span class="xl-new-tag">pick a pile below &darr;</span>':'');
+      h += xrow('xl-item', ' onclick="pickReason(\''+r.id+'\')"', label, BRW.signed(r.delta));
+    });
+  }
+  BUCKETS.forEach(function(b){ h += bucketGroup(b); });
+  return h;
+}
+
+var snap = { file:'Bike-Repair.xlsx', tabs:[ {id:'sort', label:'Season Cash'} ] };
+
+/* ===== interaction ===== */
+function nudge(kind, html){ var n=document.getElementById('sortNudge'); n.className='feedback '+kind+' show'; n.innerHTML=html; if(window.lucide) lucide.createIcons(); }
+function refresh(){ BRW.update('wb', snap); renderControls(); }
+function pickReason(id){ if(done||filling) return; playClick(); selectedId = (selectedId===id)?null:id; refresh(); }
+function bucketWord(k){ return k==='op' ? 'running the season' : (k==='inv' ? 'long-lived gear' : 'an owner move'); }
+function placeInto(b){
+  if(done||filling||!selectedId) return;
+  var r = findR(selectedId);
+  if(r.bucket!==b){
+    playNope();
+    nudge('err', '<i data-lucide="alert-triangle" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; is really about <strong>'+bucketWord(r.bucket)+'</strong>, not this pile.');
+    selectedId = null; refresh();
+    return;
+  }
+  playSuccess();
+  placed[r.id] = b;
+  selectedId = null;
+  nudge('ok', '<i data-lucide="check" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; &mdash; '+bucketWord(b)+'.');
+  refresh();
+}
+function doTheRest(){
+  if(done||filling||!gateMet()) return;
+  playClick(); filling=true; selectedId=null;
+  document.getElementById('controls').innerHTML='';
+  document.getElementById('sortNudge').className='feedback';
+  setTimeout(function(){
+    rows.forEach(function(r){ placed[r.id]=r.bucket; });
+    filling=false; done=true;
+    playSuccess();
+    BRW.update('wb', snap);
+    renderDone();
+    window.scrollTo(0, document.body.scrollHeight);
+  }, 700);
+}
+
+/* ===== controls / Anna ===== */
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+function renderControls(){
+  if(done||filling) return;
+  var ctrl='';
+  if(Object.keys(placed).length>0){
+    var met=gateMet();
+    ctrl = '<div class="gate-card'+(met?' gate-armed-maria':'')+'"><div class="gate-card-title">'
+      +(met?'That&rsquo;s the pattern &mdash; every row sorts by purpose. Sort the rest the same way.':'Get at least one row correctly into <strong>each</strong> pile to unlock the rest.')
+      +'</div><button class="btn-continue btn-block" onclick="doTheRest()"'+(met?'':' disabled')+'>Sort the rest &rarr;</button></div>';
+  }
+  document.getElementById('controls').innerHTML = ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+
+var OP_TOTAL = 320, INV_TOTAL = -400, FIN_TOTAL = -600, NET_CHANGE = -680;
+
+function renderDone(){
+  document.getElementById('sortNudge').className='feedback';
+  document.getElementById('anna').innerHTML = annaBox('Three piles &mdash; and each one has a name in the house that keeps these kinds of books. Running the season, day to day: <strong>OPERATING</strong>, net <strong>'+BRW.signed(OP_TOTAL)+'</strong>. Buying the long-lived tool: <strong>INVESTING</strong>, <strong>'+BRW.signed(INV_TOTAL)+'</strong>. The owner&rsquo;s move: <strong>FINANCING</strong>, <strong>'+BRW.signed(FIN_TOTAL)+'</strong>. Add the three: '+BRW.signed(OP_TOTAL)+' '+BRW.signed(INV_TOTAL)+' '+BRW.signed(FIN_TOTAL)+' = <strong>'+BRW.signed(NET_CHANGE)+'</strong> &mdash; exactly the Cash line&rsquo;s fall, dollar for dollar.');
+  document.getElementById('controls').innerHTML =
+    insightBox('Three piles, one tie-out',
+      '<p><strong>Operating</strong> +$320 &middot; <strong>Investing</strong> &minus;$400 &middot; <strong>Financing</strong> &minus;$600. Together, &minus;$680 &mdash; the same $680 the Cash line fell, from $1,300 to $620. Nothing missing; every dollar sorted.</p>')
+    + '<div class="next-phase-msg">One thing still doesn&rsquo;t add up cleanly: Net income was <strong>+$2,640</strong>, but the OPERATING pile only nets <strong>+$320</strong>. The gap between them is the next thing to explain.</div>'
+    + '<button class="btn-continue btn-block" onclick="nav(\'34-3-What-Cash-Missed.html\')">Where the $2,320 gap comes from &rarr;</button>';
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Operating', def:'Cash in and out from running the season day to day: repairs collected, parts bought, rent paid, the credit-card payoff. Net +$320 this season.' },
+  { term:'Investing', def:'Cash spent on or received from long-lived gear the shop will use for more than one season &mdash; here, the new repair tool, &minus;$400.' },
+  { term:'Financing', def:'Cash moving between the shop and its owner or lenders, not tied to running the work &mdash; here, the owner&rsquo;s draw, &minus;$600.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init ===== */
+window.devFill = function(){ rows.forEach(function(r){ placed[r.id]=r.bucket; }); done=true; filling=false; BRW.update('wb', snap); renderDone(); };
+BRW.registerSheet('sort', sortSheet);
+BRW.mount('wb', snap);
+BRW.tab('wb', 'sort');
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

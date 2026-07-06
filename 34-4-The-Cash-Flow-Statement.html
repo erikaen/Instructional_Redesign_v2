@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 4: The Cash-Flow Statement &middot; Laying It Out</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 4: The Cash-Flow Statement</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 4 of 4</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Laying It Out</div>
+
+    <div class="narrative-block">
+      <p>Three piles, four explained gaps, one tie-out to the Cash line. Everything needed is already on the books &mdash; it just needs to be laid out in one place, the way the Income sheet was.</p>
+    </div>
+
+    <div id="wb"></div>
+    <div id="anna"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+/* ===== the completed cash-flow layout ===== */
+var NET_INCOME = 2640;
+var OP_ITEMS = [
+  { label:'Repairs collected', val: 5500 },
+  { label:'Parts bought', val: -1200 },
+  { label:'Rent paid', val: -1950 },
+  { label:'Credit-card payoff', val: -2030 }
+];
+var OP_TOTAL = 320, INV_TOTAL = -400, FIN_TOTAL = -600, NET_CHANGE = -680;
+var CASH_OPEN = 1300, CASH_END = 620;
+
+function xrow(cls, label, val){ return '<div class="xl-row '+cls+'"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
+function cashflowSheet(cid, snap){
+  var h = xrow('xl-head', 'Statement of Cash Flows &middot; June&ndash;August 2026', 'Amount');
+  h += xrow('xl-cat', '<strong>Operating</strong> &mdash; running the season', BRW.signed(OP_TOTAL));
+  OP_ITEMS.forEach(function(it){ h += xrow('xl-item', it.label, BRW.signed(it.val)); });
+  h += xrow('xl-cat', '<strong>Investing</strong> &mdash; long-lived gear', BRW.signed(INV_TOTAL));
+  h += xrow('xl-item', 'New repair tool', BRW.signed(INV_TOTAL));
+  h += xrow('xl-cat', '<strong>Financing</strong> &mdash; owner moves', BRW.signed(FIN_TOTAL));
+  h += xrow('xl-item', 'Owner&rsquo;s draw', BRW.signed(FIN_TOTAL));
+  h += xrow('xl-total', '<strong>Net change in cash</strong>', BRW.signed(NET_CHANGE));
+  h += xrow('xl-item', 'Cash, June 1', BRW.dol(CASH_OPEN));
+  h += xrow('xl-total', '<strong>Cash, August 31</strong> <span class="xl-new-tag">ties to Assets</span>', BRW.dol(CASH_END));
+  return h;
+}
+
+/* ===== state ===== */
+var step = 0;
+var snap = { file:'Bike-Repair.xlsx', tabs:[ {id:'income', label:'Income'} ] };
+function incomeSheetStub(cid, s){
+  return xrow('xl-head', 'Income Statement &middot; June&ndash;August 2026', 'Amount')
+    + xrow('xl-total', '<strong>Net income</strong>', BRW.dol(NET_INCOME));
+}
+
+function renderTalk(){
+  var anna='', ctrl='';
+  if(step===0){
+    anna = annaBox('Time to lay out the three piles you sorted &mdash; '+BRW.signed(OP_TOTAL)+', '+BRW.signed(INV_TOTAL)+', '+BRW.signed(FIN_TOTAL)+' &mdash; as a statement, the same way the Income sheet was laid out: <strong>Operating '+BRW.signed(OP_TOTAL)+'</strong> &mdash; repairs collected, parts bought, rent paid, the credit-card payoff. <strong>Investing '+BRW.signed(INV_TOTAL)+'</strong> &mdash; the new tool. <strong>Financing '+BRW.signed(FIN_TOTAL)+'</strong> &mdash; your draw. Add the three and that&rsquo;s the season&rsquo;s <strong>Net change in cash</strong>: '+BRW.signed(NET_CHANGE)+'. Start from Cash on June 1, '+BRW.dol(CASH_OPEN)+', apply that change, and you land exactly on <strong>'+BRW.dol(CASH_END)+'</strong> &mdash; the same number sitting on the Assets tab right now. And notice &mdash; it&rsquo;s the same <strong>+$320</strong> you reached the other way, walking down from Net income through Ridgeline, Smith, the wear, and the card. Two roads, one number.');
+    ctrl = '<button class="btn-continue btn-block" onclick="buildSheet()">Add it to the workbook &rarr;</button>';
+  } else {
+    anna = annaBox('This new sheet has a name: the <strong>Statement of Cash Flows</strong>. It answers a question the income statement never could &mdash; not how the season went by the work, but where the cash actually went. The workbook now produces three statements: the income statement, the statement of cash flows, and the balance sheet it always had.');
+    ctrl = insightBox('Three statements, one workbook',
+        '<p>Income statement: how the season went, by the work. Statement of cash flows: where the cash went, by purpose. Balance sheet: where things stand, this moment. Each answers a different question &mdash; and none of them is wrong for not answering the others.</p>')
+      + '<div class="next-phase-msg">One question left: what happened to Members&rsquo; Capital over the season, and where does a finished season get filed?</div>'
+      + '<button class="btn-continue btn-block" onclick="nav(\'35-1-The-Capital-Bridge.html\')">Next: close the season &rarr;</button>';
+  }
+  document.getElementById('anna').innerHTML = anna;
+  document.getElementById('controls').innerHTML = ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+
+function buildSheet(){
+  playClick(); playSuccess();
+  step = 1;
+  snap.tabs.push({ id:'cashflows', label:'Cash Flows' });
+  BRW.update('wb', snap);
+  BRW.tab('wb', 'cashflows');
+  renderTalk();
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Operating', def:'Cash from running the season day to day: repairs collected, parts bought, rent paid, the credit-card payoff. Net +$320.' },
+  { term:'Investing', def:'Cash for long-lived gear the shop will use for more than one season &mdash; the new repair tool, &minus;$400.' },
+  { term:'Financing', def:'Cash moving between the shop and its owner, not tied to running the work &mdash; the owner&rsquo;s draw, &minus;$600.' },
+  { term:'Statement of Cash Flows', def:'The statement that lays Operating, Investing, and Financing cash side by side, totals a season&rsquo;s Net change in cash, and reconciles to the Cash line on the balance sheet: $1,300 &rarr; $620.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init ===== */
+window.devFill = function(){ if(step===0) buildSheet(); };
+BRW.registerSheet('income', incomeSheetStub);
+BRW.registerSheet('cashflows', cashflowSheet);
+BRW.mount('wb', snap);
+BRW.tab('wb', 'income');
+renderTalk();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 5: Closing the Season &middot; The Statements Tie Out</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 5: Closing the Season</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 3 of 4</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Statements Tie Out</div>
+
+    <div class="narrative-block">
+      <p>Here is the closing balance sheet, August 31 &mdash; and beside it, the season&rsquo;s three flow statements. Three things moved between the two snapshots. For each one, find the statement that carries the story.</p>
+    </div>
+
+    <div id="wb"></div>
+
+    <div class="section-card">
+      <div class="card-title">Which statement explains it?</div>
+      <div id="matchArea"></div>
+    </div>
+
+    <div id="anna"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+/* ===== locked numbers ===== */
+var ASSETS=4500, LIAB=0, MC=4500, CONTRIB=2290, RETAINED=2210;
+var CASH_OPEN=1300, CASH_END=620, OP=320, INV=-400, FIN=-600;
+var NET_INCOME=2640, DRAW=600;
+
+/* ===== the closing balance sheet, rendered as its own sheet ===== */
+function xrow(cls, label, val){ return '<div class="xl-row '+cls+'"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
+function closingBSSheet(cid, snap){
+  var h = xrow('xl-head', 'Balance Sheet &middot; August 31, 2026', 'Amount');
+  h += xrow('xl-item', 'Assets', BRW.dol(ASSETS));
+  h += xrow('xl-item', 'Liabilities', BRW.dol(LIAB));
+  h += xrow('xl-cat', '<strong>Members&rsquo; Capital</strong>', BRW.dol(MC));
+  h += xrow('xl-item', 'Contributed Capital', BRW.dol(CONTRIB));
+  h += xrow('xl-item', 'Retained (170 + 2,640 &minus; 600)', BRW.dol(RETAINED));
+  h += xrow('xl-total', '<strong>Total Members&rsquo; Capital</strong>', BRW.dol(MC));
+  return h;
+}
+function incomeStub(cid, snap){
+  var h = xrow('xl-head', 'Income Statement &middot; June&ndash;August 2026', 'Amount');
+  h += xrow('xl-total', '<strong>Net income</strong>', BRW.dol(NET_INCOME));
+  return h;
+}
+function bridgeStub(cid, snap){
+  var h = xrow('xl-head', 'Statement of Changes in Members&rsquo; Capital', 'Amount');
+  h += xrow('xl-item', 'Opening Members&rsquo; Capital', BRW.dol(2460));
+  h += xrow('xl-item', '+ Net income', BRW.signed(NET_INCOME));
+  h += xrow('xl-item', '&minus; Owner&rsquo;s draw', BRW.signed(-DRAW));
+  h += xrow('xl-total', '<strong>Closing Members&rsquo; Capital</strong>', BRW.dol(MC));
+  return h;
+}
+function cashflowStub(cid, snap){
+  var h = xrow('xl-head', 'Statement of Cash Flows &middot; June&ndash;August 2026', 'Amount');
+  h += xrow('xl-item', 'Operating', BRW.signed(OP));
+  h += xrow('xl-item', 'Investing', BRW.signed(INV));
+  h += xrow('xl-item', 'Financing', BRW.signed(FIN));
+  h += xrow('xl-total', '<strong>Net change in cash</strong>', BRW.signed(OP+INV+FIN));
+  h += xrow('xl-item', 'Cash, June 1', BRW.dol(CASH_OPEN));
+  h += xrow('xl-total', '<strong>Cash, August 31</strong>', BRW.dol(CASH_END));
+  return h;
+}
+
+var snap = { file:'Bike-Repair.xlsx', tabs:[
+  {id:'balance', label:'Balance Sheet'}, {id:'income', label:'Income'},
+  {id:'bridge', label:'Changes in Capital'}, {id:'cashflows', label:'Cash Flows'}
+] };
+
+/* ===== the three matching MCQs ===== */
+var MOVES = [
+  { id:'cash', prompt:'Cash fell $680 (from $1,300 to $620).', opts:[
+      { id:'income', text:'The Income Statement', ok:false },
+      { id:'cashflow', text:'The Statement of Cash Flows', ok:true },
+      { id:'bridge', text:'The Statement of Changes in Members&rsquo; Capital', ok:false }
+    ], fbOk:'Right &mdash; the Cash-Flow Statement is the one built to explain a change in Cash: Operating +$320, Investing &minus;$400, Financing &minus;$600, net &minus;$680.',
+       fbWrong:'Not this one. This statement explains Members&rsquo; Capital, not the Cash balance itself &mdash; the change in Cash has its own statement.' },
+  { id:'mc', prompt:'Members&rsquo; Capital rose $2,040 (from $2,460 to $4,500).', opts:[
+      { id:'bridge', text:'The Statement of Changes in Members&rsquo; Capital', ok:true },
+      { id:'cashflow', text:'The Statement of Cash Flows', ok:false },
+      { id:'income', text:'The Income Statement alone', ok:false }
+    ], fbOk:'Right &mdash; the bridge statement is built exactly for this: opening $2,460 + net income $2,640 &minus; draw $600 = closing $4,500.',
+       fbWrong:'Close, but incomplete on its own &mdash; net income is only half this move. The draw also passed through, and only the bridge statement carries both.' },
+  { id:'retained', prompt:'Retained (inside Members&rsquo; Capital) reads $2,210.', opts:[
+      { id:'bridge', text:'The Statement of Changes in Members&rsquo; Capital', ok:true },
+      { id:'cashflow', text:'The Statement of Cash Flows alone', ok:false },
+      { id:'contrib', text:'Contributed Capital &mdash; new money put in', ok:false }
+    ], fbOk:'Right &mdash; $170 (carried from May) + $2,640 net income &minus; $600 draw = $2,210. Net income comes off the Income Statement and the draw is an owner move, but the Statement of Changes in Members&rsquo; Capital is where they combine into Retained&rsquo;s move.',
+       fbWrong:'Contributed Capital never moved this season &mdash; no new contributions came in. Retained is built from what the work generated and what the owner took out.' }
+];
+var answered = {};
+
+function renderMatch(){
+  var h = '';
+  MOVES.forEach(function(m, mi){
+    var locked = answered[m.id] !== undefined;
+    h += '<div class="mc-card"><div class="mc-q">'+ (mi+1) +'. '+m.prompt+'</div><div class="mc-opts">';
+    m.opts.forEach(function(o,i){
+      var cls = 'mc-opt' + (locked && answered[m.id]===i ? (o.ok?' correct':' wrong') : '') + (locked && m.opts.some(function(x,xi){return xi===answered[m.id] && x.ok;}) ? ' locked' : '');
+      h += '<div class="'+cls+'" onclick="answerMove(\''+m.id+'\','+i+')">'+o.text+'</div>';
+    });
+    h += '</div>';
+    if(locked){
+      var chosen = m.opts[answered[m.id]];
+      h += '<div class="feedback '+(chosen.ok?'ok':'err')+' show">'+(chosen.ok?m.fbOk:m.fbWrong)+'</div>';
+    }
+    h += '</div>';
+  });
+  document.getElementById('matchArea').innerHTML = h;
+  if(window.lucide) lucide.createIcons();
+}
+function answerMove(id, i){
+  var m = MOVES.filter(function(x){return x.id===id;})[0];
+  if(answered[id]!==undefined && m.opts[answered[id]].ok) return;
+  answered[id] = i;
+  if(m.opts[i].ok) playSuccess(); else playNope();
+  renderMatch();
+  maybeFinish();
+}
+function allCorrect(){
+  return MOVES.every(function(m){ return answered[m.id]!==undefined && m.opts[answered[m.id]].ok; });
+}
+function maybeFinish(){
+  if(!allCorrect()) return;
+  renderTalk(true);
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+/* ===== narration ===== */
+function renderTalk(done){
+  var anna='', ctrl='';
+  if(!done){
+    anna = annaBox('Three moves happened between the two balance sheets. For each one, pick the statement that explains it &mdash; the one that carries the story, not just the new number.');
+  } else {
+    anna = annaBox('Every one of those moves had a statement that could explain it. None of them was left as just a number that changed for no stated reason. Accountants have a name for this: <strong>articulation</strong> &mdash; the statements tie to each other. The balance sheet shows where things stand; the flow statements show how it got there. Neither stands alone.');
+    ctrl = insightBox('Articulation',
+        '<p>A balance sheet cannot show a new number without the story filed beside it. The difference never jumps from one snapshot to the next &mdash; it travels through the income statement, the statement of changes in Members&rsquo; Capital, and the statement of cash flows, in full. That is what it means for the statements to <strong>tie out</strong>.</p>')
+      + '<button class="btn-continue btn-block" onclick="nav(\'35-4-Module-Complete.html\')">Finish Module 3 &rarr;</button>';
+  }
+  document.getElementById('anna').innerHTML = anna;
+  document.getElementById('controls').innerHTML = ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Articulation', def:'The statements tie to each other: every change carried on a balance sheet travels through one of the flow statements. A balance sheet cannot show a new number without the story filed beside it.' },
+  { term:'Statement of Cash Flows', def:'Explains the change in Cash: Operating, Investing, Financing. Here: +$320, &minus;$400, &minus;$600 = &minus;$680, tying $1,300 to $620.' },
+  { term:'Statement of Changes in Members&rsquo; Capital', def:'Explains the change in Members&rsquo; Capital: opening, plus net income, minus draws, equals closing. Here: $2,460 + $2,640 &minus; $600 = $4,500.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init ===== */
+window.devFill = function(){
+  MOVES.forEach(function(m, i){
+    var okIdx=0; m.opts.forEach(function(o,oi){ if(o.ok) okIdx=oi; });
+    answered[m.id]=okIdx;
+  });
+  renderMatch();
+  renderTalk(true);
+};
+BRW.registerSheet('balance', closingBSSheet);
+BRW.registerSheet('income', incomeStub);
+BRW.registerSheet('bridge', bridgeStub);
+BRW.registerSheet('cashflows', cashflowStub);
+BRW.mount('wb', snap);
+BRW.tab('wb', 'balance');
+renderMatch();
+renderTalk(false);
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>
