@@ -178,7 +178,7 @@ function reasonsGroup(key, title, rows, total){
   return html;
 }
 function reasonsSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Reasons — why the net moved (two kinds)</div><div class="xl-v">Change</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Reasons — why the difference moved (two kinds)</div><div class="xl-v">Change</div></div>';
   html += reasonsGroup('contributed', 'CONTRIBUTED', CONTRIBUTED_ROWS, CONTRIBUTED_TOTAL);
   html += reasonsGroup('generated', 'GENERATED', GENERATED_ROWS, GENERATED_TOTAL);
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL — the reasons</div><div class="xl-v">'+sd(REASONS_TOTAL)+'</div></div>';
@@ -213,7 +213,7 @@ function continueBtn(label){ return '<button class="btn-continue btn-block" oncl
 
 function matchDisplay(){
   return '<div class="identity-bar">'+
-    '<div class="id-group"><span class="id-label">Have &minus; Owe</span><span class="id-num">'+d(NET)+'</span></div>'+
+    '<div class="id-group"><span class="id-label">Assets &minus; Liabilities</span><span class="id-num">'+d(NET)+'</span></div>'+
     '<span class="id-op">=</span>'+
     '<div class="id-group"><span class="id-label">Contributed + Generated</span><span class="id-num">'+d(CONTRIBUTED_TOTAL)+' + '+d(GENERATED_TOTAL)+'</span></div>'+
     '<span class="id-op">=</span>'+
@@ -242,7 +242,7 @@ function renderIdentity(){
   var c = document.getElementById('identityBody');
   var html = '';
   if(idStage===0){
-    html += annaBox('&ldquo;You found your net two ways waiting to happen. One: Assets minus Liabilities, '+d(NET)+'. Now the other: total the <strong>Reasons</strong> that moved your net &mdash; the contributed pile and the generated pile. Add them up.&rdquo;');
+    html += annaBox('&ldquo;You found the difference two ways waiting to happen. One: Assets minus Liabilities, '+d(NET)+'. Now the other: total the <strong>Reasons</strong> that moved it &mdash; the contributed pile and the generated pile. Add them up.&rdquo;');
     html += '<div id="identityWb"></div>';
     html += continueBtn('Total the Reasons');
     c.innerHTML = html;
@@ -253,10 +253,10 @@ function renderIdentity(){
   }
   html += matchDisplay();
   if(idStage===1){
-    html += insightBox('They match &mdash; and they always will', '<p>No coincidence &mdash; <strong>you arranged it</strong>. Back in Module 4 you decided to keep a reason exactly when a change moved the net, and to let the canceling pairs drop out. Keep books by that rule and the reasons <em>must</em> add up to the net &mdash; a choice paying off, not a fact of nature.</p>');
+    html += insightBox('They match &mdash; and they always will', '<p>No coincidence &mdash; <strong>you arranged it</strong>. Back in Module 4 you decided to keep a reason exactly when a change moved the difference, and to let the canceling pairs drop out. Keep books by that rule and the reasons <em>must</em> add up to the difference &mdash; a choice paying off, not a fact of nature.</p>');
     html += continueBtn('Name what you just matched');
   } else if(idStage===2){
-    html += annaBox('&ldquo;That number &mdash; have minus owe &mdash; doesn&rsquo;t have one name here yet, and that&rsquo;s deliberate. Different kinds of entities call it different things, and even for one kind of entity the name has changed over the years. The names are local; the difference is universal. If you&rsquo;ve heard a name for it, hold it loosely &mdash; it belongs to one kind of entity, one era. The name that belongs to <em>your</em> work arrives when the work gets its own legal standing. For now, what matters is what it <em>is</em>: a difference, not a thing anyone could pocket &mdash; just recorded Assets minus recorded Liabilities, gaps and all.&rdquo;');
+    html += annaBox('&ldquo;That number &mdash; Assets minus Liabilities &mdash; doesn&rsquo;t have one name here yet, and that&rsquo;s deliberate. Different kinds of entities call it different things, and even for one kind of entity the name has changed over the years. The names are local; the difference is universal. If you&rsquo;ve heard a name for it, hold it loosely &mdash; it belongs to one kind of entity, one era. The name that belongs to <em>your</em> work arrives when the work gets its own legal standing. For now, what matters is what it <em>is</em>: a difference, not a thing anyone could pocket &mdash; just recorded Assets minus recorded Liabilities, gaps and all.&rdquo;');
     html += continueBtn('Write it down');
   } else if(idStage===3){
     html += identityFormula();

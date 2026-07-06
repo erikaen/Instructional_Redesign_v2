@@ -21,7 +21,7 @@
     <div class="narrative-block"><p>You&rsquo;ve found two promises so far: Smith&rsquo;s custom frame and the amount still owed on your credit card for the repair work. You add a new sheet to the Excel workbook, next to <strong>Things</strong> and <strong>Cash</strong>, and call it <strong>Promises</strong>.</p></div>
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;Good. Keep these side by side. The Cash sheet shows the <strong>money that moved in and out during May</strong>. The Things sheet shows <strong>what the repair work has</strong>, and the Promises sheet shows <strong>what it still owes</strong>.&rdquo;</div>
+      <div class="dialog-text">&ldquo;Good. Keep these side by side. The Cash sheet shows the <strong>money that moved in and out during May</strong>. The Things sheet lists <strong>what&rsquo;s tied up in the repair work</strong>, and the Promises sheet lists <strong>what&rsquo;s still owed because of it</strong>.&rdquo;</div>
     </div>
     <div id="promisesWb"></div>
     <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
@@ -110,7 +110,7 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
   return html;
 }
-function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things that belong to the repair work', 'TOTAL'); }
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things tied up in the repair work', 'TOTAL'); }
 function promisesSheet(){
   var cats = [
     { key:'PROM SMITH', label:"Smith's frame — paid $220 up front, not built yet", amount:220, items:[
@@ -120,7 +120,7 @@ function promisesSheet(){
     { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] }
   ];
   var total = 2250;
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+'Promises that belong to the repair work'+'</div><div class="xl-v">Amount</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+'Promises still owed because of the repair work'+'</div><div class="xl-v">Amount</div></div>';
   var n = 0;
   cats.forEach(function(cat){
     var open = !!thingsExpanded[cat.key]; n++;

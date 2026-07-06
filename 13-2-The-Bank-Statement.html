@@ -21,7 +21,7 @@
     <div class="narrative-block"><p>You&rsquo;ve been using your personal bank account for the repair work. Last month&rsquo;s bank statement just arrived. Anna sits down at the workbench with you to look it over.</p></div>
     <div class="dialog-box anna" style="margin-top: 20px;">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;Okay, let&rsquo;s clean this up first. There&rsquo;s a lot in here that has nothing to do with your repair work, like your paycheck, apartment rent, and groceries. We have to pull out the rows that actually belong to the repair work. For each row, decide whether it belongs to the <strong>repair work</strong> or to your <strong>personal life</strong>. Click the <strong><i data-lucide="info" class="licon"></i></strong> on any row to see what it was.&rdquo;</div>
+      <div class="dialog-text">&ldquo;Okay, let&rsquo;s clean this up first. There&rsquo;s a lot in here that has nothing to do with your repair work, like your paycheck, apartment rent, and groceries. We have to pull out the rows that actually belong with the repair work. For each row, decide whether it belongs with the <strong>repair work</strong> or with your <strong>personal life</strong>. Click the <strong><i data-lucide="info" class="licon"></i></strong> on any row to see what it was.&rdquo;</div>
     </div>
     <div id="bankArea"></div>
 
@@ -171,7 +171,7 @@ function renderBankSort(){
     html += '<div class="btn-row" style="justify-content: flex-end; margin-top: 16px;"><button class="btn-reset" onclick="restart()">Reset</button></div>';
   }
   if(sortChecked && wrongIds.length===0){
-    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Good. Now we can see which rows belong to the repair work and which ones belong to your personal life. Next, let&rsquo;s pull the repair-related rows into one place and see how cash moved during May.&rdquo;</div></div>';
+    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Good. Now we can see which rows belong with the repair work and which ones belong with your personal life. Next, let&rsquo;s pull the repair-related rows into one place and see how cash moved during May.&rdquo;</div></div>';
     html += '<div class="next-phase-msg" style="margin-top: 20px;">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   }
   document.getElementById('bankArea').innerHTML = html;

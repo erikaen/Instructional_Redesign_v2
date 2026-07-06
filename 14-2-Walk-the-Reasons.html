@@ -105,7 +105,7 @@ var CAT_BY_KEY = {}; ASSETS.forEach(function(c){ CAT_BY_KEY[c.cat]=c; });
 var ITEM_INDEX = {}; ASSETS.forEach(function(c){ c.items.forEach(function(it){ ITEM_INDEX[it.name]={ it:it, cat:c.cat }; }); });
 
 var LIABS = [
-  { key:'card', label:'Credit Card', note:'what you owe on the bike-repair card', amount:2030, items:[
+  { key:'card', label:'Credit Card', note:'still owed on the bike-repair card', amount:2030, items:[
     { name:'Hand tools', amt:300 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
     { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] },
   { key:'smith', label:'Smith’s deposit', note:'paid $220 up front for a frame, not built yet', amount:220, items:[
@@ -228,7 +228,7 @@ function controls(){
   var act = activeCat();
   if(!act){
     return insightBox('Every thing, its reason',
-      '<p>Equipment, the laptop, and the fixtures all carry their <em>why</em> now &mdash; on the card, the debit card, or brought from home. The Assets tab shows <em>what you have</em>; the Reasons tab shows <em>how each piece got here</em>.</p>') +
+      '<p>Equipment, the laptop, and the fixtures all carry their <em>why</em> now &mdash; on the card, the debit card, or brought from home. The Assets tab lists <em>the pieces</em>; the Reasons tab shows <em>how each one got here</em>.</p>') +
       '<div class="next-phase-msg" style="margin-top:10px;">Next sub-walks &mdash; Supplies (bought &amp; used), Right of Use (paid &amp; used), Liabilities, and Cash (the 31-2 ledger, minus the $1,300 LLC deposit, with the $160 discovery) &mdash; come next.</div>';
   }
   var items = activeItems();

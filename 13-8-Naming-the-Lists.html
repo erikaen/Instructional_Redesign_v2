@@ -18,7 +18,7 @@
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
 
-    <div class="narrative-block"><p>You and Anna have been working through the records one piece at a time. The workbook now has three tabs: <strong>Things</strong>, <strong>Promises</strong>, and <strong>Cash</strong>. You have listed what the repair work has, what it still owes, and the money that moved in and out during May.</p><p>Now Anna says it is time to give the lists their proper names.</p></div>
+    <div class="narrative-block"><p>You and Anna have been working through the records one piece at a time. The workbook now has three tabs: <strong>Things</strong>, <strong>Promises</strong>, and <strong>Cash</strong>. You have listed what&rsquo;s tied up in the repair work, what&rsquo;s still owed because of it, and the money that moved in and out during May.</p><p>Now Anna says it is time to give the lists their proper names.</p></div>
     <div id="nameWb"></div>
     <div id="nameSteps"></div>
 
@@ -109,7 +109,7 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
   return html;
 }
 function assetsSheet(){ return renderOutlineSheet(rouRevealed ? THINGS_CATS.concat([ROU_CAT]) : THINGS_CATS, 'Assets', 'TOTAL', rouRevealed ? 'RIGHT OF USE' : null); }
-function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things that belong to the repair work', 'TOTAL'); }
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things tied up in the repair work', 'TOTAL'); }
 function promisesSheet(){
   var cats = [
     { key:'PROM SMITH', label:"Smith's frame — paid $220 up front, not built yet", amount:220, items:[
@@ -119,7 +119,7 @@ function promisesSheet(){
     { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] }
   ];
   var total = 2250;
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+(liabilitiesNamed ? 'Liabilities' : 'Promises that belong to the repair work')+'</div><div class="xl-v">Amount</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+(liabilitiesNamed ? 'Liabilities' : 'Promises still owed because of the repair work')+'</div><div class="xl-v">Amount</div></div>';
   var n = 0;
   cats.forEach(function(cat){
     var open = !!thingsExpanded[cat.key]; n++;
@@ -179,10 +179,10 @@ function renderNameSteps(){
     html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now we need to think a little bigger. Assets are not just physical objects you can see or touch. An asset is a <strong>present right to an economic benefit</strong>. Remember the $650 paid ahead for the final month of the lease? You have not used that month yet, so that right belongs on the Assets list too.&rdquo;</div></div>'+
       '<button class="btn-continue btn-block" style="margin-top:20px" onclick="revealRou()">Add the Missing Asset</button>';
   } else if(!liabilitiesNamed){
-    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;There it is. The final month&rsquo;s rent is different from the tools and supplies. You cannot touch it, but it represents a right to use the repair workspace later. That right has value, so it belongs on the Assets list.<br><br>Since it is not a physical thing, we will give it its own category: <strong>Right of Use</strong>. With that added, the Assets list now totals <strong>'+dollars(ASSETS_TOTAL)+'</strong>.<br><br>Now let&rsquo;s name the other list. The Promises sheet shows what the repair work still owes. Accountants call those <strong>Liabilities</strong>. A liability is a <strong>present obligation to transfer an economic benefit later</strong>.&rdquo;</div></div>'+
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;There it is. The final month&rsquo;s rent is different from the tools and supplies. You cannot touch it, but it represents a right to use the repair workspace later. That right has value, so it belongs on the Assets list.<br><br>Since it is not a physical thing, we will give it its own category: <strong>Right of Use</strong>. With that added, the Assets list now totals <strong>'+dollars(ASSETS_TOTAL)+'</strong>.<br><br>Now let&rsquo;s name the other list. The Promises sheet lists what&rsquo;s still owed because of the repair work. Accountants call those <strong>Liabilities</strong>. A liability is a <strong>present obligation to transfer an economic benefit later</strong>.&rdquo;</div></div>'+
       '<button class="btn-continue btn-block" style="margin-top:20px" onclick="nameLiabilities()">Rename Promises to Liabilities</button>';
   } else {
-    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now you have the two names. <strong>Assets</strong> are what the repair work has: <strong>'+dollars(ASSETS_TOTAL)+'</strong>, including the right to use the workspace later. <strong>Liabilities</strong> are what the repair work owes: <strong>'+dollars(LIABILITIES_TOTAL)+'</strong>. And now you know that an asset is a <strong>present right to an economic benefit</strong>, and a liability is a <strong>present obligation to transfer an economic benefit later</strong>.&rdquo;</div></div>'+
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now you have the two names. <strong>Assets</strong> is the proper name for the Things list &mdash; everything recorded on the repair-work side of your line: <strong>'+dollars(ASSETS_TOTAL)+'</strong>, including the right to use the workspace later. <strong>Liabilities</strong> is the name for the Promises list &mdash; everything still owed because of the repair work: <strong>'+dollars(LIABILITIES_TOTAL)+'</strong>. And now you know that an asset is a <strong>present right to an economic benefit</strong>, and a liability is a <strong>present obligation to transfer an economic benefit later</strong>.&rdquo;</div></div>'+
       '<div class="next-phase-msg" style="margin-top:20px">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   }
   document.getElementById('nameSteps').innerHTML = backHtml + html;

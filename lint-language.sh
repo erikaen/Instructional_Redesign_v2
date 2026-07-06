@@ -27,6 +27,19 @@ check 'what I (have|owe)'        'First-person workbook labels are banned: the r
 check "what(.{0,7})s left (after|when|once)" 'Leftover/possession framing for A-L is banned: it is a definitional difference, not a thing left over.'
 check 'accounting equation'      'Say "accounting identity", never "accounting equation".'
 check 'net assets'               '"Net Assets" was removed in the equity purge; do not reintroduce it in student-facing pages.'
+check 'what the repair work ha(s|d)|repair work ha(s|d) (a|an|its|the) |repair work (owns|owes|owed|holds|agreed|promised|decided)' '"the repair work" is an activity, not an actor — it cannot have, own, owe, agree, or promise. Say "tied up in / still owed because of the repair work", or make the records the subject.'
+check 'have minus owe|has minus owes|have and owe|has and owes' 'The have/owe idiom for the A-L difference is banned; say "Assets minus Liabilities" or "the difference".'
+check 'books of (its|their) own'  'Books are ABOUT a subject, not its property; say "a set of books about it".'
+check 'belongs? to the repair work' 'Ownership framing — the repair work cannot own. For sorting say "belongs with"; for lists say "tied up in", "still owed because of", or "recorded for" the repair work.'
+
+# "the net / your net / net-mover" as a name for A-L, with standard-vocab exemptions.
+net_hits=$(grep -rniE '(your|our|the) net\b|net[ -]movers?' $FILES 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)' | grep -viE 'net cash flow|net income|net 15|net-worth')
+if [ -n "$net_hits" ]; then
+  echo 'BANNED — "the net / your net / net-mover" as a name for the A-L difference is banned; say "the difference" ("net cash flow", "net income", "net 15", "net-worth" are exempt).'
+  echo "$net_hits"
+  echo
+  fail=1
+fi
 
 if [ $fail -eq 0 ]; then
   echo "lint-language: clean"

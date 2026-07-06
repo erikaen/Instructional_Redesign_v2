@@ -11,8 +11,11 @@ The difference **Assets − Liabilities has no name in these materials** until a
 entity type supplies one:
 
 - **Module 1 (11-x … 15-x):** the difference stays **unnamed**. Refer to it
-  descriptively — "the difference," "A − L," or the earned idiom "the net
-  (have minus owe)." Never christen it.
+  descriptively — "the difference," "A − L," "the difference between Assets
+  and Liabilities." Never christen it. "The net" / "your net" and every
+  "have minus owe" gloss were retired 2026-07-05 — say "the difference."
+  ("Net cash flow" on the Cash sheet, "net income" (M3+), and trade terms
+  like "net 15" are standard vocabulary and stay.)
 - **Module 2 on (2x-x, 3x-x):** its one name is **"Members' Capital"**, because
   that is the word the Operating Agreement uses. No other name.
 - **Banned in student-facing text:**
@@ -22,6 +25,8 @@ entity type supplies one:
     design vocabulary — fine in code comments and design docs, never in text a
     student sees.
   - "accounting equation" (say "accounting identity")
+  - "the net" / "your net" / "net-mover" as a name for the A − L difference,
+    and "have minus owe" in any form (retired 2026-07-05)
 - **No possession/leftover framing** for the difference: never "what's left
   after taking Liabilities out of Assets," never "what's left for the owner"
   (except as an explicitly negated quote in a glossary def). It is a
@@ -30,6 +35,23 @@ entity type supplies one:
 - **Workbook facsimile labels are entity-framed:** the records belong to the
   repair work, not the student. No "what I have / what I owe" — headers are bare
   "Assets" / "Liabilities" / "TOTAL". Watch for the same drift in prose.
+- **"The repair work" is an activity, not an actor (adopted 2026-07-05).**
+  It cannot own, owe, hold title, bear risk of loss, agree, or promise —
+  pre-LLC the only actor with legal capacity is the student. Never make it
+  the subject of a possession or agency verb ("the repair work
+  has/owns/owes/agreed/promised"). Legal moves instead:
+  - records as subject: "the Things sheet lists…," "recorded on the
+    repair-work side of the line"
+  - creditor-framed passive: "still owed on the bike-repair card,"
+    "still owed because of the repair work"
+  - prepositional attachment: "tied up in / used in / set aside for /
+    brought into the repair work"
+  - activity verbs are fine: "the repair work has grown / has run /
+    produced / generated"
+  - aboutness-possessives are fine: "the records of the repair work,"
+    "its books" — books are *about* a subject, never "books of its own"
+  - Anna's dialogue may still name the person's real property and debts
+    ("you still owe Smith the frame") — pre-LLC that is who owes.
 - The `.claude/skills/accounting-pedagogy` skill speaks instructor-to-instructor
   (it says "Equities," "residual"). **Its vocabulary must not leak into
   student-facing pages.** Use it for reasoning, not for on-page wording.
@@ -40,8 +62,8 @@ entity type supplies one:
   "your net" / "what you have" / "what you owe" as descriptions of record
   contents. Addressing the student's *actions* ("you drew the line," "you kept
   the reasons") is fine anywhere; claiming record contents as the student's
-  possessions is not. (Swept in Module 5; older modules may still have
-  instances — follow the rule for any text you touch.)
+  possessions is not. (Swept across M1–M2 on
+  2026-07-05; follow the rule for any text you touch.)
 
 **Before finishing any session that touched `*.html`, `shared.js`, or
 `bike-repair-workbook.js`, run:**

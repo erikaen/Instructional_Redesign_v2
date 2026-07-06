@@ -96,7 +96,7 @@ function balanceSheetHTML(){
   var title = contributed ? esc(llcName()) : 'The repair work &mdash; your books';
   var assets = '';
   assetRows.forEach(function(a){ assets += '<div class="acct-line"><span>'+esc(a[0])+'</span><span class="acct-val mono">'+a[1]+'</span></div>'; });
-  var liabLabel = contributed ? 'Liabilities &amp; Members&rsquo; Capital' : 'Liabilities &amp; the net';
+  var liabLabel = contributed ? 'Liabilities &amp; Members&rsquo; Capital' : 'Liabilities &amp; the difference';
   var rcLabel = contributed ? 'Members&rsquo; capital &mdash; contributed' : '&ldquo;What you put in&rdquo;';
   var reLabel = contributed ? 'Retained earnings' : '&ldquo;What the work made&rdquo;';
   var netLabel = contributed ? 'Members&rsquo; Capital' : 'The difference';

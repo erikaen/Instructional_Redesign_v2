@@ -21,7 +21,7 @@
 
     <div class="narrative-block">
       <p>Go back to Module 1. Before any of this, you did one quiet thing: you drew a line. <em>This</em> stand, <em>this</em> card, <em>this</em> slice of the bank account &mdash; part of the repair work. Your groceries, your gas, your paycheck &mdash; not. You kept asking the same question of every item: <em>is this the repair work, or is this me?</em></p>
-      <p>That line is what made the books possible. So turn the question around: <strong>what else could have a set of books of its own?</strong> For each one below, decide: could a clear edge be drawn around it, for a purpose &mdash; and its books kept?</p>
+      <p>That line is what made the books possible. So turn the question around: <strong>what else could there be a set of books about?</strong> For each one below, decide: could a clear edge be drawn around it, for a purpose &mdash; and a set of books kept about it?</p>
     </div>
     <div id="entityQuiz"></div>
     <div id="entityClose" hidden></div>
@@ -61,7 +61,7 @@ var CANDIDATES = [
   { label:'Your repair work', could:true,
     fb:'You&rsquo;ve been keeping its books for five modules. A clear edge, drawn for a purpose.' },
   { label:'You &mdash; the person, apart from the repair work', could:true,
-    fb:'The other side of your own line. A person can have books too &mdash; the same sorting you did in Module 1, pointed the other way.' },
+    fb:'The other side of your own line. There can be a set of books about a person too &mdash; the same sorting you did in Module 1, pointed the other way.' },
   { label:'The food bank on Whalley Ave', could:true,
     fb:'Someone can draw its edge and keep its books. No profit needed &mdash; the books don&rsquo;t care why the thing exists, only where its edge is.' },
   { label:'The bicycle industry', could:false,
@@ -69,7 +69,7 @@ var CANDIDATES = [
   { label:'Smith&rsquo;s $220 deposit', could:false,
     fb:'That&rsquo;s something that <em>happened</em> &mdash; it lands <em>in</em> a set of books (cash up, a promise up). Events get recorded; they don&rsquo;t keep records.' },
   { label:'Last May', could:false,
-    fb:'A stretch of time. Books belong to a subject and <em>cover</em> a time &mdash; May is the month the books covered, not a thing with books of its own.' }
+    fb:'A stretch of time. Books belong to a subject and <em>cover</em> a time &mdash; May is the month the books covered, not a thing a set of books could be about.' }
 ];
 var answered = {};
 function renderQuiz(){
@@ -78,7 +78,7 @@ function renderQuiz(){
     var a = answered[i];
     html += '<div class="mc-card"><div class="mc-q">'+c.label+'</div>'+
       '<div class="btn-row">'+
-      '<button class="btn btn-outline" onclick="answerEntity('+i+',true)"'+(a!==undefined?' disabled':'')+'>Yes &mdash; it could</button>'+
+      '<button class="btn btn-outline" onclick="answerEntity('+i+',true)"'+(a!==undefined?' disabled':'')+'>Yes &mdash; there could be</button>'+
       '<button class="btn btn-outline" onclick="answerEntity('+i+',false)"'+(a!==undefined?' disabled':'')+'>No</button>'+
       '</div>'+
       (a!==undefined ? '<div class="feedback '+(a===c.could?'ok':'err')+' show">'+(a===c.could?'Right. ':'Not quite. ')+c.fb+'</div>' : '')+

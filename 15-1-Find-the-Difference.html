@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Module 5 — Find the Net</title>
+  <title>Module 5 — Find the Difference</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -20,7 +20,7 @@
     </div>
 
     <div class="narrative-block">
-      <p>Five modules in, the workbook holds everything you figured out at the workbench: an <strong>Assets</strong> list, a <strong>Liabilities</strong> list, and the <strong>Reasons</strong> the net moved &mdash; sorted into the two kinds you found, what you put in and what the work made.</p>
+      <p>Five modules in, the workbook holds everything you figured out at the workbench: an <strong>Assets</strong> list, a <strong>Liabilities</strong> list, and the <strong>Reasons</strong> the difference moved &mdash; sorted into the two kinds you found, what you put in and what the work made.</p>
       <p>You&rsquo;ve been calling them by your own words. Today you put them on one page, watch how they fit together &mdash; and the names you&rsquo;ve been circling finally arrive.</p>
     </div>
     <div class="dialog-box anna">
@@ -33,12 +33,12 @@
     <div id="assembleWb"></div>
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;Two totals matter now. The records show <strong>Assets of $3,410</strong> and <strong>Liabilities of $2,250</strong>. The gap between them is your <strong>net</strong>. What is it?&rdquo;</div>
+      <div class="dialog-text">&ldquo;Two totals matter now. The records show <strong>Assets of $3,410</strong> and <strong>Liabilities of $2,250</strong>. What&rsquo;s the <strong>difference</strong> between them?&rdquo;</div>
     </div>
     <div class="mc-card">
-      <div class="mc-q">The net = Assets &minus; Liabilities = $3,410 &minus; $2,250 =</div>
+      <div class="mc-q">The difference = Assets &minus; Liabilities = $3,410 &minus; $2,250 =</div>
       <div class="btn-row">
-        <input id="netInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="The net" onkeydown="if(event.key==='Enter'){checkNet();}">
+        <input id="netInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="The difference" onkeydown="if(event.key==='Enter'){checkNet();}">
         <button class="btn btn-primary" onclick="checkNet()">Check</button>
       </div>
       <div class="feedback" id="netFb"></div>
@@ -204,7 +204,7 @@ function reasonsGroup(key, title, rows, total){
   return html;
 }
 function reasonsSheet(){
-  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Reasons — why the net moved (two kinds)</div><div class="xl-v">Change</div></div>';
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Reasons — why the difference moved (two kinds)</div><div class="xl-v">Change</div></div>';
   html += reasonsGroup('contributed', 'CONTRIBUTED', CONTRIBUTED_ROWS, CONTRIBUTED_TOTAL);
   html += reasonsGroup('generated', 'GENERATED', GENERATED_ROWS, GENERATED_TOTAL);
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL — the reasons</div><div class="xl-v">'+sd(REASONS_TOTAL)+'</div></div>';
@@ -256,7 +256,7 @@ function revealNet(){
   var fb = document.getElementById('netFb'); fb.className = 'feedback'; fb.classList.remove('show');
   var close = document.getElementById('netClose');
   close.hidden = false;
-  close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The net is '+d(NET)+'</div><p>Assets minus Liabilities &mdash; a difference, fully determined by the two lists. Hold onto that number.</p></div>'+
+  close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The difference is '+d(NET)+'</div><p>Assets minus Liabilities &mdash; a difference, fully determined by the two lists. Hold onto that number.</p></div>'+
     '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
   if(window.lucide) lucide.createIcons();
 }

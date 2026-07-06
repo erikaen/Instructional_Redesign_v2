@@ -30,7 +30,7 @@
     <div class="phase active" id="phase-exposure">
       <div class="dialog-box maria" style="margin-bottom:20px">
         <div class="dialog-label">MARIA</div>
-        <div class="dialog-text">&ldquo;Your property is well covered. That policy protects the tools, parts, and other things that belong to the repair work. But there&rsquo;s another issue property coverage does not solve: <strong>liability</strong>.<br><br>Suppose a bike you repaired fails on the road, and Smith, your customer, gets hurt. If Smith makes a claim, we need to ask what that claim can reach.&rdquo;</div>
+        <div class="dialog-text">&ldquo;Your property is well covered. That policy protects the tools, parts, and other things tied up in the repair work. But there&rsquo;s another issue property coverage does not solve: <strong>liability</strong>.<br><br>Suppose a bike you repaired fails on the road, and Smith, your customer, gets hurt. If Smith makes a claim, we need to ask what that claim can reach.&rdquo;</div>
       </div>
       <div id="exposureArea"></div>
     </div>
@@ -62,8 +62,8 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== glossary (shared across all phases of 2.1) ===== */
 var glossaryTerms = [
-  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the repair work&rsquo;s tools and parts." },
-  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything the repair work owns." },
+  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the tools and parts in the repair work." },
+  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything recorded for the repair work." },
   { term:"LLC", def:"Limited Liability Company &mdash; a legal form that can hold the operation and stand as a wall between a claim and your personal life. Maria names it here; you form one next." }
 ];
 function openGlossary(){
@@ -97,7 +97,7 @@ function renderExposure(){
   html += '<div class="tp-card" style="border-color:var(--error-border);background:var(--error-bg)"><div class="tp-card-label">The repair work, separated by your books</div>'+
     (bizShown
       ? '<div class="tp-card-text">'+bizItems+'</div>'
-      : '<button class="btn-continue" style="margin-top:8px;padding:6px 12px;font-size:var(--font-s)" onclick="showBiz()">Assets that belong to the repair work &darr;</button>')+
+      : '<button class="btn-continue" style="margin-top:8px;padding:6px 12px;font-size:var(--font-s)" onclick="showBiz()">Assets recorded for the repair work &darr;</button>')+
     '</div>';
   html += '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px dashed;border-radius:8px;padding:8px 10px;font-size:var(--font-xs);font-weight:700;line-height:1.3;color:var(--error-text);border-color:var(--error-border);background:transparent">&times; No legal wall yet. The claim crosses straight through.</div>';
   html += '<div class="tp-card" style="border-color:var(--error-border);background:var(--error-bg)"><div class="tp-card-label">You personally</div>'+

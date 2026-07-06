@@ -20,7 +20,7 @@
 
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;We&rsquo;ve pulled the repair-related rows out of your bank statement: 10 rows in total. It would be much simpler if the repair work had its own bank account, but for now, this gives us a cleaner view of the cash connected to the repair work.<br><br>Take a look at the Cash sheet below. In May, <strong>$1,340 came in</strong> and <strong>$1,500 went out</strong>, resulting in a <strong>net cash flow of &minus;$160</strong>.&rdquo;</div>
+      <div class="dialog-text">&ldquo;We&rsquo;ve pulled the repair-related rows out of your bank statement: 10 rows in total. It would be much simpler if there were a separate bank account just for the repair work, but for now, this gives us a cleaner view of the cash connected to the repair work.<br><br>Take a look at the Cash sheet below. In May, <strong>$1,340 came in</strong> and <strong>$1,500 went out</strong>, resulting in a <strong>net cash flow of &minus;$160</strong>.&rdquo;</div>
     </div>
     <div id="cashWb" style="margin-top: 20px;"></div>
     <div class="mc-card" style="margin-top: 20px;">
@@ -118,7 +118,7 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
   return html;
 }
-function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things that belong to the repair work', 'TOTAL'); }
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things tied up in the repair work', 'TOTAL'); }
 function cashSheet(){
   var inflows = bikeRepairCashFlows.filter(function(f){return f.amount>0;});
   var outflows = bikeRepairCashFlows.filter(function(f){return f.amount<0;});

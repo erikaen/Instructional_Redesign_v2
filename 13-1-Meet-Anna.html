@@ -31,8 +31,8 @@
       <div class="card-title">What You&rsquo;ll Discover</div>
       <ul class="bullet-list">
         <li>The bank statement mixes the repair work with personal activity, so you have to separate them first.</li>
-        <li>Cash moving in and out is not the same as what the repair work has and owes.</li>
-        <li>Some payments create promises you still owe. Some payments create things you still have.</li>
+        <li>Cash moving in and out is not the same as what&rsquo;s tied up in the repair work and what&rsquo;s still owed because of it.</li>
+        <li>Some payments leave a promise behind. Some payments leave a thing behind.</li>
       </ul>
     </div>
     <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
@@ -107,7 +107,7 @@ function renderOutlineSheet(cats, colA, totalLabel, newCat){
   html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
   return html;
 }
-function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things that belong to the repair work', 'TOTAL'); }
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things tied up in the repair work', 'TOTAL'); }
 function renderWorkbook(containerId, phaseKey){
   curWb = { container: containerId, phase: phaseKey };
   var tabs = [{id:'things',label:'Things'}];
