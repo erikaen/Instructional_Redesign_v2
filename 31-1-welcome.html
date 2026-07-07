@@ -110,7 +110,7 @@ function bsRow(label,val,opts){
 var memberName=''; try{ var _n=localStorage.getItem('m2Member'); if(_n) memberName=_n; }catch(e){}
 function llcName(){ return (memberName.trim()||'[Your Name]') + '’s Bike Repairs, LLC'; }
 
-function buildOpeningBS(){
+function buildOpeningBS(showTotal){
   var h='<div class="section-card">';
   h+='<div style="text-align:center;font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary)">'+llcName()+'</div>';
   h+='<div style="text-align:center;font-size:var(--font-xs);opacity:0.65;margin-bottom:10px">Opening balance sheet &middot; June 1, 2026</div>';
@@ -122,13 +122,13 @@ function buildOpeningBS(){
   h+=bsRow('Customer Deposit','$220',{});
   h+=bsRow('Total liabilities','$2,250',{bold:true,rule:true});
   h+=bsSection('Members&rsquo; capital');
-  h+=bsRow('Contributed Capital','$2,290',{});
-  h+=bsRow('Retained Earnings','$170',{});
-  h+=bsRow('Total members&rsquo; capital (Assets &minus; Liabilities)','$2,460',{bold:true,rule:true});
+  h+=bsRow('Contributed','$2,290',{});
+  h+=bsRow('Generated','$170',{});
+  h+=bsRow('Total members&rsquo; capital (Assets &minus; Liabilities)', showTotal?'$2,460':'?', {bold:true,rule:true});
   h+='</div>';
   document.getElementById('openingBS').innerHTML=h;
 }
-buildOpeningBS();
+buildOpeningBS(false);
 document.getElementById('llcInline').textContent = llcName();
 
 /* ===== verify the frame: Assets − Liabilities = Members' Capital ===== */
@@ -148,6 +148,7 @@ function checkBS(){
 }
 function revealBS(){
   bsDone=true;
+  buildOpeningBS(true);
   document.getElementById('bsInput').disabled=true;
   var fb=document.getElementById('bsFb'); fb.className='feedback'; fb.classList.remove('show');
   var c=document.getElementById('bsClose'); c.hidden=false;

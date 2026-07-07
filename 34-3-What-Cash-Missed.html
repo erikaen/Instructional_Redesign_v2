@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">What Cash Missed</div>
 
     <div class="narrative-block">
-      <p>Net income was <strong>$2,640</strong>. OPERATING cash was only <strong>$320</strong>. Four items sit between those two numbers &mdash; each one a place where the income statement and the cash ledger answer differently. Walk them one at a time.</p>
+      <p>Net income was <strong>$2,640</strong>. OPERATING cash was only <strong>$320</strong>. Four items sit between those two numbers &mdash; each one a place where the income statement and the Cash list answer differently. Walk them one at a time.</p>
     </div>
 
     <div id="gaptrack"></div>
@@ -71,20 +71,20 @@ var NET_INCOME = 2640, OP_CASH = 320;
 var STEPS = [
   { label:'Ridgeline &mdash; $300',
     amt:300, sign:-1,
-    q:'Start with <strong>Ridgeline Trail Crew</strong>. The income statement counts their <strong>$300</strong> as revenue this season &mdash; the work went out the door Aug 28. But no cash came with it; they were billed, net 15. The income statement counted it. The Cash ledger can&rsquo;t &mdash; there&rsquo;s nothing to count yet.',
+    q:'Start with <strong>Ridgeline Trail Crew</strong>. The income statement counts their <strong>$300</strong> as revenue this season &mdash; the work went out the door Aug 28. But no cash came with it; they were billed, net 15. The income statement counted it. The Cash list can&rsquo;t &mdash; there&rsquo;s nothing to count yet.',
     insight:'Revenue this season, cash <strong>still to come</strong>. Net income is $300 ahead of Cash on this one &mdash; the receivable.' },
   { label:'Smith &mdash; $220',
     amt:220, sign:-1,
-    q:'Now <strong>Smith&rsquo;s custom frame</strong>, $220. The income statement counts it as revenue this season too &mdash; the frame was delivered this summer. But the <strong>cash</strong> for it arrived <em>last period</em>, back in May, as a deposit. This season&rsquo;s Cash ledger has no row for it at all &mdash; that cash already came and went, on the books before this one even opened.',
+    q:'Now <strong>Smith&rsquo;s custom frame</strong>, $220. The income statement counts it as revenue this season too &mdash; the frame was delivered this summer. But the <strong>cash</strong> for it arrived <em>last period</em>, back in May, as a deposit. This season&rsquo;s Cash list has no row for it at all &mdash; that cash already came and went, on the books before this one even opened.',
     insight:'Revenue this season, cash arrived <strong>last</strong> period. Another $220 where net income and this season&rsquo;s cash disagree on timing.' },
   { label:'Depreciation &mdash; $230',
     amt:230, sign:1,
-    q:'Next, <strong>depreciation</strong>: $230 on the Expenses tab &mdash; $200 tools and fixtures, $30 laptop. It lowered net income by $230. But no cash left the shop to record it &mdash; it&rsquo;s an allocation, not a payment. Nothing for the Cash ledger to show.',
+    q:'Next, <strong>depreciation</strong>: $230 on the Expenses tab &mdash; $200 tools and fixtures, $30 laptop. It lowered net income by $230. But no cash left the shop to record it &mdash; it&rsquo;s an allocation, not a payment. Nothing for the Cash list to show.',
     insight:'An expense that is <strong>never cash</strong>. It pulled net income down $230 with no matching cash outflow &mdash; so to explain the gap, it gets added back.' },
   { label:'Card payoff &mdash; $2,030',
     amt:2030, sign:-1,
     q:'Last, the <strong>credit-card payoff</strong>: $2,030 in cash, out the door this season. But it isn&rsquo;t on the Expenses tab at all &mdash; it never touched net income. That $2,030 <em>settled</em> a debt from Module 2; the costs it originally paid for were already counted as expenses back when the tools and parts were <em>used</em>, not now, when the card got paid off.',
-    insight:'Cash out that is <strong>not</strong> an expense. $2,030 left the Cash ledger with nothing for net income to show &mdash; the biggest single piece of the gap.' }
+    insight:'Cash out that is <strong>not</strong> an expense. $2,030 left the Cash line with nothing for net income to show &mdash; the biggest single piece of the gap.' }
 ];
 var step = 0, revealed = false;
 
@@ -120,7 +120,7 @@ function renderAll(){
   } else {
     anna = annaBox('Four items, and the gap is fully explained: Net income <strong>'+BRW.dol(NET_INCOME)+'</strong>, minus Ridgeline&rsquo;s $300, minus Smith&rsquo;s $220, plus depreciation&rsquo;s $230 added back, minus the $2,030 card payoff &mdash; lands exactly on Operating cash, <strong>'+BRW.dol(OP_CASH)+'</strong>. Nothing left unexplained.');
     ctrl = insightBox('Two honest clocks',
-        '<p>The income statement times things to the <strong>work</strong> &mdash; when it was delivered or used up. The cash ledger times things to the <strong>cash</strong> &mdash; when money actually moved. Both are honest answers. They&rsquo;re just answering different questions.</p>')
+        '<p>The income statement times things to the <strong>work</strong> &mdash; when it was delivered or used up. The Cash list times things to the <strong>cash</strong> &mdash; when money actually moved. Both are honest answers. They&rsquo;re just answering different questions.</p>')
       + '<button class="btn-continue btn-block" onclick="nav(\'34-4-The-Cash-Flow-Statement.html\')">Lay it out as a statement &rarr;</button>';
   }
   document.getElementById('anna').innerHTML = anna;

@@ -59,7 +59,7 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 /* ===== glossary (shared across all phases of 2.5) ===== */
 var glossaryTerms = [
   { term:"Balance sheet", def:"A snapshot of what the entity holds and owes at one moment: Assets &minus; Liabilities = Members&rsquo; Capital, the LLC&rsquo;s name for the difference." },
-  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for A &minus; L. A definitional difference &mdash; never &ldquo;what&rsquo;s left for the owner.&rdquo; Split into contributed ($2,290) and retained ($170)." },
+  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for A &minus; L. A definitional difference &mdash; never &ldquo;what&rsquo;s left for the owner.&rdquo; Split into Contributed ($2,290) and Generated ($170)." },
   { term:"Accounting entity", def:"The boundary your books are drawn around. It can exist with or without a legal body &mdash; and here it has existed since 1.1, long before the LLC." },
   { term:"Legal entity", def:"A creature of statute &mdash; the LLC. Days old. Distinct from the accounting entity it now wraps." }
 ];
@@ -122,8 +122,8 @@ function buildSheet(){
   h += bsRow('Customer advance &mdash; Smith','220','220',{});
   h += bsRow('Liabilities','2,250','2,250',{bold:true,rule:true});
   h += sectionLabel('Members&rsquo; Capital');
-  h += bsRow('Members&rsquo; capital &mdash; contributed','990','2,290',{});
-  h += bsRow('Retained earnings','170','170',{});
+  h += bsRow('Contributed','990','2,290',{});
+  h += bsRow('Generated','170','170',{});
   h += bsRow('Members&rsquo; Capital (A &minus; L)','1,160','2,460',{bold:true,rule:true});
   h += '</div>';
   return h;
@@ -146,7 +146,7 @@ function renderCapstone(){
       '<button class="btn-continue btn-block" onclick="doCompare()">Hold it against your Module 1 sheet &rarr;</button>';
   } else {
     html += '<div style="background:var(--warn-bg);border:1px solid var(--warn-border);border-radius:8px;padding:14px 16px;margin-top:14px;color:var(--warn-text);font-size:var(--font-s);line-height:1.65">'+
-      '<p style="margin-bottom:8px"><strong>Look what moved.</strong> Two lines &mdash; Cash (<span class="mono">0 &rarr; 1,300</span>) and members&rsquo; capital &mdash; contributed (<span class="mono">990 &rarr; 2,290</span>). Both by your <strong>$1,300</strong>. <strong>Everything else is identical.</strong></p>'+
+      '<p style="margin-bottom:8px"><strong>Look what moved.</strong> Two lines &mdash; Cash (<span class="mono">0 &rarr; 1,300</span>) and Contributed (<span class="mono">990 &rarr; 2,290</span>). Both by your <strong>$1,300</strong>. <strong>Everything else is identical.</strong></p>'+
       '<p>Filing the certificate, signing the agreement, contributing the business, getting the EIN, moving the card &mdash; the entire legal formation changed the recorded economics by <strong>exactly nothing</strong>. The one thing that moved your balance sheet was a decision <em>you</em> made: putting in $1,300. <strong>Legal form is not economic substance.</strong></p></div>';
     html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="key-round" class="licon"></i> The keystone, settled</div>'+
       '<p style="font-weight:700;color:var(--primary);font-size:var(--font-m);margin-bottom:6px">The accounting entity has been here since 1.1. The legal one is days old.</p>'+

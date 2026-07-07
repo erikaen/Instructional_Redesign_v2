@@ -70,26 +70,26 @@ function insightBox(label,inner){ return '<div class="insight-box"><div class="i
 var step = 0, mcqAnswered = null;
 var MCQ = [
   { id:'a', text:'About $1,200 &mdash; it&rsquo;s inside the Parts used rows.',
-    fb:'Those rows are the <em>parts</em> &mdash; metered off the shelf, dollar by dollar. The stand, the compressor, the truing stand: still on the bench, still whole. Their wear isn&rsquo;t in there.' },
+    fb:'Those rows are the <em>parts</em> &mdash; counted off the shelf, dollar by dollar. The stand, the compressor, the truing stand: still on the bench, still whole. Their wear isn&rsquo;t in there.' },
   { id:'b', text:'$650 a month &mdash; it&rsquo;s inside Rent used.',
-    fb:'Rent bought the <em>space</em>, month by month. Nothing in those rows is about the tools.' },
+    fb:'Rent bought the right to use the <em>space</em>, month by month. Nothing in those rows is about the tools.' },
   { id:'c', text:'Nothing &mdash; there is no row for it.', ok:true,
-    fb:'Right &mdash; not a row. The tools worked all 21 jobs, wore all season, and the Expenses tab is silent. And it isn&rsquo;t a new oversight: back in May, when you first analyzed the repair work, you took nothing for wear either.' }
+    fb:'Right &mdash; not a row. The tools were used on all 21 jobs, they wore all season &mdash; and the Expenses tab is silent. And it isn&rsquo;t a new oversight: back in May, when you first analyzed the repair work, you took nothing for wear either.' }
 ];
 
 function renderTalk(){
   var anna='', ctrl='';
   if(step===0){
     anna = annaBox('Start with <strong>Parts used</strong> &mdash; row after row, job by job, <strong>$1,200</strong> for the season. This kind of used-up you can <em>watch happen</em>. Flip to Assets and open the Parts line.');
-    ctrl = '<button class="btn-continue btn-block" onclick="setStep(1)">Open the Parts ledger &rarr;</button>';
+    ctrl = '<button class="btn-continue btn-block" onclick="setStep(1)">Open the Parts line &rarr;</button>';
   } else if(step===1){
-    anna = annaBox('There&rsquo;s the shelf: the opening parts, three restocks &mdash; and then, watch, parts <em>leaving</em>, job by job, exactly as they were used. This is <strong>metered</strong> used-up: you can see each dollar go. Every &ldquo;Parts used&rdquo; row on the Expenses tab is a meter being read.');
+    anna = annaBox('There&rsquo;s the shelf: the opening parts, three restocks &mdash; and then, watch, parts <em>leaving</em>, job by job, exactly as they were used. This is use you can <strong>observe directly</strong>: you can see each dollar go. Every &ldquo;Parts used&rdquo; row on the Expenses tab records use somebody could watch happen.');
     ctrl = '<button class="btn-continue btn-block" onclick="setStep(2)">Now the rent &rarr;</button>';
   } else if(step===2){
-    anna = annaBox('Back on Expenses: <strong>Rent used</strong> &mdash; June, July, August, <strong>$650</strong> each. Nothing left a shelf this time. What got used up is a <em>month</em>: each row is a month of the workspace, lived through. <strong>Time</strong> does this using-up all by itself. (The $650 still sitting in Assets is the lease&rsquo;s last month &mdash; parked until its month arrives.)');
-    ctrl = '<button class="btn-continue btn-block" onclick="setStep(3)">One thing did every job &rarr;</button>';
+    anna = annaBox('Back on Expenses: <strong>Rent used</strong> &mdash; June, July, August, <strong>$650</strong> each. Nothing left a shelf this time. The rent bought a <strong>right to use the workspace</strong>, month by month &mdash; and each month&rsquo;s right was used up the moment its month passed. <strong>Time</strong> does this using-up all by itself. (The $650 still sitting in Assets is the lease&rsquo;s last month &mdash; a right of use parked until its month arrives.)');
+    ctrl = '<button class="btn-continue btn-block" onclick="setStep(3)">The tools were used on every job &rarr;</button>';
   } else {
-    anna = annaBox('Two kinds of used-up so far: parts you can <em>meter</em>, months that <em>lapse</em>. Now the question. The <strong>tools and repair equipment</strong> &mdash; and the laptop running the bookings &mdash; worked every one of the <strong>21 jobs</strong> this summer. What does the Expenses tab say that cost the season?');
+    anna = annaBox('Two kinds of used-up so far: parts you could <em>watch go</em>, months that <em>lapse</em>. Now the question. The <strong>tools and repair equipment</strong> &mdash; and the laptop running the bookings &mdash; were used on every one of the <strong>21 jobs</strong> this summer. What does the Expenses tab say that cost the season?');
     ctrl = renderMcq();
   }
   document.getElementById('anna').innerHTML = anna;
@@ -106,7 +106,7 @@ function renderMcq(){
   h += '</div><div class="feedback'+(mcqAnswered!==null?(MCQ[mcqAnswered].ok?' ok':' err')+' show':'')+'" id="mcqFb">'+(mcqAnswered!==null?MCQ[mcqAnswered].fb:'')+'</div></div>';
   if(mcqAnswered!==null && MCQ[mcqAnswered].ok){
     h += insightBox('Two kinds counted, one missing',
-        '<p><strong>Parts</strong>: a meter you can read. <strong>Rent</strong>: a month that lapses on its own. The wear on the tools is just as real &mdash; the season plainly used them up a little &mdash; but there&rsquo;s no meter to read and no month that expires. Putting a number on it will take something new.</p>')
+        '<p><strong>Parts</strong>: use you can observe directly. <strong>Rent</strong>: a month that lapses on its own. The wear on the tools is just as real &mdash; they were plainly used, and used up a little, during the season &mdash; but there&rsquo;s nothing to watch leave and no month that expires. Putting a number on it will take something new.</p>')
       + '<button class="btn-continue btn-block" onclick="nav(\'33-2-The-Third-Kind.html\')">Where would a number come from? &rarr;</button>';
   }
   return h;
@@ -129,7 +129,7 @@ function setStep(n){
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Metered use', def:'Used-up you can watch: each part that leaves the shelf is a dollar you can point to. &ldquo;Parts used&rdquo; is a meter being read, not a guess.' },
+  { term:'Directly observed use', def:'Used-up you can watch: each part that leaves the shelf is a dollar you can point to. &ldquo;Parts used&rdquo; records use somebody could watch happen, not a guess.' },
   { term:'Time-lapsed use', def:'Used-up done by the calendar: a month of the workspace, lived through. &ldquo;Rent used&rdquo; is one month per row; time does the work by itself.' },
   { term:'Right of Use', def:'The lease&rsquo;s last month, paid in advance and parked in Assets. It becomes used-up only when its month arrives &mdash; the pure-time case, waiting.' }
 ];
