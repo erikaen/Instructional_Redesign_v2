@@ -12,7 +12,7 @@ first operating season; the articulated statement set emerges), **M4** the angel
 **Opens on M2's close** — no M1/M2 numbers are re-derived; the season layers on top:
 
 > Assets **$4,710** − Liabilities **$2,250** = members' capital **$2,460**
-> (cash $1,300; contributed $2,290 + retained $170). The owner's repair **skill is off the books.**
+> (cash $1,300; contributed $2,290 + generated $170). The owner's repair **skill is off the books.**
 
 **File naming (v2).** Module 3 tutorials are `3X-Y-Title.html` = Module 3, Tutorial X, Page Y
 (parallel to M2's `21-`…`25-`). E.g. `31-1-welcome.html`.
@@ -44,7 +44,7 @@ Follows `accounting-pedagogy`; the points that bite hardest here:
 - **★ Reasons → temporary accounts (the heart of M3).** Keep the M1 **Reasons** practice (1.4): jot *why*
   each net-moving change happened. Over a whole season the reasons **pile up** — and it would be **easier**
   to bucket the operating ones into running tallies (revenues, expenses) that total the period, then **close
-  into retained earnings and reset** for the next season. *Those* are **temporary accounts**; the income
+  into Generated and reset** for the next season. *Those* are **temporary accounts**; the income
   statement is just their organized display. Name them **only after** the bucketing is felt (names-last).
   **The Reasons list is one continuous list from May** (redesigned 2026-07-02): no carried-in balances,
   nothing pre-settled — the pile spanning periods is what makes the period-cut, and later the reset,
@@ -61,7 +61,7 @@ Follows `accounting-pedagogy`; the points that bite hardest here:
   convention**, not a measurement of real decline (never "measurement"). The **laptop** is the star: its eBay
   (market) value already sits **below its cost**, so it's also the first quiet sighting of the **book-vs-market
   gap** M4 blows open.
-- **Operations feed the *retained* slice.** Net income closes into **retained earnings**; **contributed**
+- **Operations feed the *generated* slice.** Net income closes into **Generated**; **contributed**
   capital ($2,290) is untouched by operations — M2's split finally does work. An owner's **draw** reduces
   members' capital but is **not an expense** (a distribution), so it sorts itself *out* of the operating
   tallies and onto the equity statement.
@@ -158,7 +158,9 @@ working figures for the summer:
 | Expenses — parts/COGS $1,200 · rent $1,950 · depreciation $230 (tools $200 + laptop $30) | **$3,380** |
 | **Net income** | **$2,640** |
 | Cash flow — operating **+$320** · investing **−$400** (new tool) · financing **−$600** (draw) → net **−$680** | ending cash **$620** (opened at $1,300) |
-| Closing balance sheet — Assets **$4,500** − Liabilities **$0** = members' capital | **$4,500** (contributed 2,290 + retained 2,210) |
+| Closing balance sheet — Assets **$4,500** − Liabilities **$0** = members' capital | **$4,500** (contributed 2,290 + generated 2,210) |
+
+> **Terminology (locked 2026-07-07):** "Retained"/"Retained Earnings" is retired course-wide. The **Generated** pile keeps its name through the close; the **total** picks up the legal term **Members' Capital** at the M2 Operating Agreement (subparts stay *Contributed* / *Generated*). "Retained Earnings" (and "Contributed Capital") survive only as a wider-world GAAP literacy aside in M4. Full rationale + the OA draft→finalize→sign resequencing in **Module-2-Design.md**.
 
 **Rent treatment:** the season's rent (**$1,950 = 3 × $650**) is **paid and used this period** — routed through
 Prepaid Rent as a booking convenience, then expired in full to Rent Expense, so in substance it's a **straight
@@ -169,7 +171,7 @@ asset (consumed by pure time only when the lease ends), so it does **not** move 
 **no interest** to discuss. It's cash out that is **not** an expense (it settles a liability) — a clean operating
 outflow on the cash-flow statement.
 
-The residual moves only via **net income** (into retained) and the **draw** (out); the new-tool buy is investing;
+The residual moves only via **net income** (into Generated) and the **draw** (out); the new-tool buy is investing;
 Smith's advance earns out (revenue, no cash). All three flow statements **articulate**: net income **$2,640**
 *exceeds* operating cash **$320** by the timing / non-cash items — **+$230** depreciation (non-cash), **−$300**
 receivable (earned, not collected), **−$220** Smith (earned, cash came last module), and **−$2,030** credit-card

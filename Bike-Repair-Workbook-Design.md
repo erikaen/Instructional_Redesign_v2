@@ -113,7 +113,7 @@ off-screen by the designer.
 | Pile | Blurb | Matures into | Born |
 |---|---|---|---|
 | **CONTRIBUTED** | what you put in | Contributed Capital (named 1.5) | 1.4 |
-| **GENERATED** | what the work produced | Retained Earnings (named 1.5) — the pile *is* RE in embryo | 1.4 |
+| **GENERATED** | what the work produced | keeps its name; part of **Members' Capital** (the legal *total*, picked up at the M2 OA). GAAP synonym *Retained Earnings* = M4 literacy aside only | 1.4 |
 | **WITHDRAWN** | what you took for yourself | Draws / distributions | M3, at the season's draw |
 
 ### The piles at Aug 31 (each expandable to its rows)
@@ -127,7 +127,7 @@ off-screen by the designer.
 The GENERATED pile spanning May→August is **the point**: ask it "how did the *season* go?" and it
 cannot answer — the student must draw the period line by hand (32-2), feel the tedium, and come to
 *want* tallies that total a period and then reset. The lifetime pile is the permanent account
-(Retained Earnings in embryo); the period tally is the temporary account — the student holds both
+(the permanent Generated pile); the period tally is the temporary account — the student holds both
 in hand before either is named.
 
 **Residual close:** CONTRIBUTED $2,290 + GENERATED $2,740 − WITHDRAWN $600 = **$4,430** =
@@ -164,7 +164,7 @@ cash, collect a billed repair, pay the rent, buy a new tool, pay off the card.
    transactions answer-key `.txt` was reconciled to match. The **YALEiE check workbook** must use
    the same term. The laptop sits under an **"Office Equipment"** category.
 6. **Preserve detail; discover later.** The season's reasons are kept itemized and **un-closed** —
-   no folding into Retained Earnings, no revenue/expense buckets, no grand "season total" line.
+   no folding into the Generated close, no revenue/expense buckets, no grand "season total" line.
    Temporary accounts, the income statement, and closing are the **discoveries** of Tutorials
    3.2–3.5. The transactions file's "Close the temporary accounts" step is answer-key bookkeeping
    for the YALEiE check workbook only — **not** a script for the HTML.
@@ -238,8 +238,8 @@ page sits.
 | `officeEquip` | the laptop | **Office Equipment** | ~1.3 |
 | `creditCard` | what you owe on the card | **Credit Card** | ~1.3 |
 | `unearned` | what you owe Smith (his deposit) | **Customer Deposit** (trade name: Unearned Revenue) | M3 (3.4 earns it out) |
-| `contributedCapital` | what you put in (*Contributed*) | **Contributed Capital** | 1.5 |
-| `retainedEarnings` | what the work generated (*Generated*) | **Retained Earnings** | 1.5 |
+| `contributedCapital` | what you put in (*Contributed*) | label stays **Contributed**; part of **Members' Capital** total (M2 OA). GAAP synonym *Contributed Capital* = M4 aside. *(Data key unchanged.)* | 1.5 |
+| `retainedEarnings` | what the work generated (*Generated*) | label stays **Generated**; part of **Members' Capital** total (M2 OA). GAAP synonym *Retained Earnings* = M4 aside. *(Data key unchanged.)* | 1.5 |
 | `drawn` | what you took for yourself (*Withdrawn*) | **Draws** (a distribution) | M3, at the season's draw |
 
 The current M1 pages use other plain labels (`EQUIPMENT`, `COMPUTER EQUIPMENT`, `SUPPLIES`) — migrate
@@ -272,7 +272,7 @@ feature is earned it stays (the Reasons tab is **continuous** after its beat).
 | **1.2 Insurance and Maria** | Assets framed as **insurable property** (Maria's form). Cash is deliberately *not* on it — not insurable. |
 | **1.3 Anna and the Bank Statement** | The bank statement brings **cash** into view as its own list — **not yet folded into Assets.** |
 | **1.4 Keeping the Reasons** *(CMU team title: "Why Keep the Reasons")* | ★★ **Two beats, both here.** **(a) Cash-fold** — Cash is folded into the Assets list, decided off the insurable-property framing ("is cash a right to future benefits?" — it's not insurable, but it's still the work's). **(b) Reasons tab is *born*** — log net-movers, cross the pairs, sort into *Contributed* / *Generated* (plain). |
-| **1.5 Naming What You Built** | Names land: `A − L = Equities`; *Contributed* → **Contributed Capital**, *Generated* → **Retained Earnings**. |
+| **1.5 Naming What You Built** | The piles' worksheet names settle — *Contributed*, *Generated*. The **total (A − L) stays unnamed in M1** (named **Members' Capital** only at the M2 OA). No GAAP names land here; *Contributed Capital* / *Retained Earnings* are wider-world synonyms held for an M4 literacy aside. *(Beat's purpose likely needs revisiting — its old job of landing GAAP names is gone.)* |
 | **Module 2 (no workbook on screen)** | Off-screen events still move it: **+$1,300 contributed** (Contributed Capital 990 → **2,290**), LLC formed, bank account opened. M3 must open consistent with this. |
 | **Module 3 — 3.1 (`31-x`)** | **This locked snapshot.** Opening Assets $4,710 / Liabilities $2,250; the Reasons list runs unbroken from May — piles read **CONTRIBUTED $2,290 / GENERATED $170** at June 1; the season's rows accumulate below (un-closed). |
 | **Module 3 — 3.2–3.5** | Discoveries build *on top of* this snapshot: income statement, depreciation, cash-flow, the articulated set. |
