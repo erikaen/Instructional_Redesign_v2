@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">Three Buckets</div>
 
     <div class="narrative-block">
-      <p>Every dollar that moved through Cash this <strong>season</strong> is a fact &mdash; the June 1 opening deposit isn&rsquo;t one of them; that happened before the season started. Sort what&rsquo;s left into three piles, by <strong>purpose</strong>: running the season day to day, buying long-lived gear, or an owner moving money. <strong>Click a row</strong>, then click the pile it belongs in.</p>
+      <p>Every dollar that moved through Cash this <strong>season</strong> is a fact &mdash; they&rsquo;re all in the Cash line on the <strong>Assets</strong> tab, and they&rsquo;re laid out again on a new <strong>Season Cash</strong> tab beside the ones you know. The June 1 opening deposit isn&rsquo;t one of them; that happened before the season started. Sort them into three piles, by <strong>purpose</strong>: running the season day to day, buying long-lived gear, or an owner moving money. <strong>Click a row</strong>, then click the pile it belongs in.</p>
     </div>
 
     <div id="wb"></div>
@@ -128,7 +128,10 @@ function sortSheet(cid, snap){
   return h;
 }
 
-var snap = { file:'Bike-Repair.xlsx', tabs:[ {id:'sort', label:'Season Cash'} ] };
+/* the full workbook stays the anchor — the sort sheet is one more tab beside it */
+var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
+snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
+snap.tabs.push({ id:'sort', label:'Season Cash' });
 
 /* ===== interaction ===== */
 function nudge(kind, html){ var n=document.getElementById('sortNudge'); n.className='feedback '+kind+' show'; n.innerHTML=html; if(window.lucide) lucide.createIcons(); }
@@ -213,6 +216,8 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 
 /* ===== init ===== */
 window.devFill = function(){ rows.forEach(function(r){ placed[r.id]=r.bucket; }); done=true; filling=false; BRW.update('wb', snap); renderDone(); };
+BR_WB.registerSeasonSheets();
+BR_WB.registerStatementSheets();
 BRW.registerSheet('sort', sortSheet);
 BRW.mount('wb', snap);
 BRW.tab('wb', 'sort');

@@ -279,3 +279,78 @@ var BR_WB = (function () {
 
   return { snapshot: snapshot, generatedRows: generatedRows, setupRows: setupRows, monthName: monthName, registerSeasonSheets: registerSeasonSheets };
 })();
+
+/* ============================================================================
+ * Statement sheets — approved additions (2026-07-07).
+ * The workbook is the student's anchor: statements are ADDED as tabs beside the
+ * tabs they already know, never mounted as a replacement workbook. One canonical
+ * renderer per statement, built from the locked numbers, drawn with the shared
+ * xl-* row classes.
+ *
+ *   BR_WB.registerStatementSheets() -> registers 'income', 'cashflows', 'bridge',
+ *       'balance' as BRW custom sheets. Call once, after shared.js loads.
+ *       The income sheet shows a "complete" tag when snap.incomeNew is set
+ *       (33-3's payoff moment); later pages leave it unset.
+ *   BR_WB.statementTabs(ids)        -> tab-strip entries for the requested
+ *       statements, e.g. snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
+ * ========================================================================== */
+(function () {
+  'use strict';
+  function xr(cls, label, val) {
+    return '<div class="xl-row ' + cls + '"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">' + label + '</div><div class="xl-v">' + val + '</div></div>';
+  }
+  var STMT_LABELS = { income: 'Income', cashflows: 'Cash Flows', bridge: 'Changes in Capital', balance: 'Balance Sheet' };
+
+  BR_WB.statementTabs = function (ids) {
+    return ids.map(function (id) { return { id: id, label: STMT_LABELS[id] }; });
+  };
+
+  BR_WB.registerStatementSheets = function () {
+    BRW.registerSheet('income', function (cid, snap) {
+      var h = xr('xl-head', 'Income Statement &middot; June&ndash;August 2026', 'Amount');
+      h += xr('xl-cat', '<strong>Revenue</strong> &mdash; the work delivered this season', BRW.dol(6020));
+      h += xr('xl-item', '<strong>Expenses</strong> &mdash; used up delivering it', '');
+      h += xr('xl-item', 'Parts used', BRW.dol(1200));
+      h += xr('xl-item', 'Rent used', BRW.dol(1950));
+      h += xr('xl-item', 'Depreciation &mdash; tools, equipment &amp; fixtures', BRW.dol(200));
+      h += xr('xl-item', 'Depreciation &mdash; laptop', BRW.dol(30));
+      h += xr('xl-cat', 'Total expenses', BRW.dol(3380));
+      h += xr('xl-total', '<strong>Net income</strong> &mdash; Revenue &minus; Expenses' + (snap.incomeNew ? ' <span class="xl-new-tag">complete</span>' : ''), BRW.dol(2640));
+      return h;
+    });
+    BRW.registerSheet('cashflows', function (cid, snap) {
+      var h = xr('xl-head', 'Statement of Cash Flows &middot; June&ndash;August 2026', 'Amount');
+      h += xr('xl-cat', '<strong>Operating</strong> &mdash; running the season', BRW.signed(320));
+      h += xr('xl-item', 'Repairs collected', BRW.signed(5500));
+      h += xr('xl-item', 'Parts bought', BRW.signed(-1200));
+      h += xr('xl-item', 'Rent paid', BRW.signed(-1950));
+      h += xr('xl-item', 'Credit-card payoff', BRW.signed(-2030));
+      h += xr('xl-cat', '<strong>Investing</strong> &mdash; long-lived gear', BRW.signed(-400));
+      h += xr('xl-item', 'New repair tool', BRW.signed(-400));
+      h += xr('xl-cat', '<strong>Financing</strong> &mdash; owner moves', BRW.signed(-600));
+      h += xr('xl-item', 'Owner&rsquo;s draw', BRW.signed(-600));
+      h += xr('xl-total', '<strong>Net change in cash</strong>', BRW.signed(-680));
+      h += xr('xl-item', 'Cash, June 1', BRW.dol(1300));
+      h += xr('xl-total', '<strong>Cash, August 31</strong> <span class="xl-new-tag">ties to Assets</span>', BRW.dol(620));
+      return h;
+    });
+    BRW.registerSheet('bridge', function (cid, snap) {
+      var h = xr('xl-head', 'Statement of Changes in Members&rsquo; Capital &middot; June&ndash;August 2026', 'Amount');
+      h += xr('xl-item', 'Opening Members&rsquo; Capital &mdash; June 1', BRW.dol(2460));
+      h += xr('xl-item', '+ Net income &mdash; the season&rsquo;s work', BRW.signed(2640));
+      h += xr('xl-item', '&minus; Owner&rsquo;s draw', BRW.signed(-600));
+      h += xr('xl-total', '<strong>Closing Members&rsquo; Capital &mdash; August 31</strong> <span class="xl-new-tag">ties to the balance sheet</span>', BRW.dol(4500));
+      return h;
+    });
+    BRW.registerSheet('balance', function (cid, snap) {
+      var h = xr('xl-head', 'Balance Sheet &middot; August 31, 2026', 'Amount');
+      h += xr('xl-item', 'Assets', BRW.dol(4500));
+      h += xr('xl-item', 'Liabilities', BRW.dol(0));
+      h += xr('xl-cat', '<strong>Members&rsquo; Capital</strong>', BRW.dol(4500));
+      h += xr('xl-item', 'Contributed', BRW.dol(2290));
+      h += xr('xl-item', 'Generated (170 + 2,640 &minus; 600)', BRW.dol(2210));
+      h += xr('xl-total', '<strong>Total Members&rsquo; Capital</strong>', BRW.dol(4500));
+      return h;
+    });
+  };
+})();

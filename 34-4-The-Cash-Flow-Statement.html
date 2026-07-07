@@ -65,39 +65,14 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
-/* ===== the completed cash-flow layout ===== */
-var NET_INCOME = 2640;
-var OP_ITEMS = [
-  { label:'Repairs collected', val: 5500 },
-  { label:'Parts bought', val: -1200 },
-  { label:'Rent paid', val: -1950 },
-  { label:'Credit-card payoff', val: -2030 }
-];
+/* ===== the locked cash-flow numbers (the sheet itself is the shared renderer) ===== */
 var OP_TOTAL = 320, INV_TOTAL = -400, FIN_TOTAL = -600, NET_CHANGE = -680;
 var CASH_OPEN = 1300, CASH_END = 620;
 
-function xrow(cls, label, val){ return '<div class="xl-row '+cls+'"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
-function cashflowSheet(cid, snap){
-  var h = xrow('xl-head', 'Statement of Cash Flows &middot; June&ndash;August 2026', 'Amount');
-  h += xrow('xl-cat', '<strong>Operating</strong> &mdash; running the season', BRW.signed(OP_TOTAL));
-  OP_ITEMS.forEach(function(it){ h += xrow('xl-item', it.label, BRW.signed(it.val)); });
-  h += xrow('xl-cat', '<strong>Investing</strong> &mdash; long-lived gear', BRW.signed(INV_TOTAL));
-  h += xrow('xl-item', 'New repair tool', BRW.signed(INV_TOTAL));
-  h += xrow('xl-cat', '<strong>Financing</strong> &mdash; owner moves', BRW.signed(FIN_TOTAL));
-  h += xrow('xl-item', 'Owner&rsquo;s draw', BRW.signed(FIN_TOTAL));
-  h += xrow('xl-total', '<strong>Net change in cash</strong>', BRW.signed(NET_CHANGE));
-  h += xrow('xl-item', 'Cash, June 1', BRW.dol(CASH_OPEN));
-  h += xrow('xl-total', '<strong>Cash, August 31</strong> <span class="xl-new-tag">ties to Assets</span>', BRW.dol(CASH_END));
-  return h;
-}
-
-/* ===== state ===== */
+/* ===== state — the full workbook stays the anchor; statements are tabs beside it ===== */
 var step = 0;
-var snap = { file:'Bike-Repair.xlsx', tabs:[ {id:'income', label:'Income'} ] };
-function incomeSheetStub(cid, s){
-  return xrow('xl-head', 'Income Statement &middot; June&ndash;August 2026', 'Amount')
-    + xrow('xl-total', '<strong>Net income</strong>', BRW.dol(NET_INCOME));
-}
+var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
+snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
 
 function renderTalk(){
   var anna='', ctrl='';
@@ -119,7 +94,7 @@ function renderTalk(){
 function buildSheet(){
   playClick(); playSuccess();
   step = 1;
-  snap.tabs.push({ id:'cashflows', label:'Cash Flows' });
+  snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['cashflows']));
   BRW.update('wb', snap);
   BRW.tab('wb', 'cashflows');
   renderTalk();
@@ -146,8 +121,8 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 
 /* ===== init ===== */
 window.devFill = function(){ if(step===0) buildSheet(); };
-BRW.registerSheet('income', incomeSheetStub);
-BRW.registerSheet('cashflows', cashflowSheet);
+BR_WB.registerSeasonSheets();
+BR_WB.registerStatementSheets();
 BRW.mount('wb', snap);
 BRW.tab('wb', 'income');
 renderTalk();

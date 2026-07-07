@@ -69,19 +69,6 @@ function insightBox(label,inner){ return '<div class="insight-box"><div class="i
 var REVENUE = 6020, PARTS = 1200, RENT = 1950, DEP_TOOLS = 200, DEP_LAPTOP = 30;
 var EXPENSES = PARTS + RENT + DEP_TOOLS + DEP_LAPTOP;   // 3,380
 var NET_INCOME = REVENUE - EXPENSES;                     // 2,640
-function xrow(cls, label, val){ return '<div class="xl-row '+cls+'"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
-function incomeSheet(cid, snap){
-  var h = xrow('xl-head', 'Income Statement &middot; June&ndash;August 2026', 'Amount');
-  h += xrow('xl-cat', '<strong>Revenue</strong> &mdash; the work delivered this season', BRW.dol(REVENUE));
-  h += xrow('xl-item', '<strong>Expenses</strong> &mdash; used up delivering it', '');
-  h += xrow('xl-item', 'Parts used', BRW.dol(PARTS));
-  h += xrow('xl-item', 'Rent used', BRW.dol(RENT));
-  h += xrow('xl-item', 'Depreciation &mdash; tools, equipment &amp; fixtures', BRW.dol(DEP_TOOLS));
-  h += xrow('xl-item', 'Depreciation &mdash; laptop', BRW.dol(DEP_LAPTOP));
-  h += xrow('xl-cat', 'Total expenses', BRW.dol(EXPENSES));
-  h += xrow('xl-total', '<strong>Net income</strong> &mdash; Revenue &minus; Expenses <span class="xl-new-tag">complete</span>', BRW.dol(NET_INCOME));
-  return h;
-}
 
 /* ===== state ===== */
 var step = 0;
@@ -90,9 +77,9 @@ var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:t
 function renderTalk(){
   var anna='', ctrl='';
   if(step===0){
-    anna = annaBox('Look at the <strong>Laptop</strong> line: cost <strong>$610</strong>, this season&rsquo;s wear <strong>&minus;$30</strong> &mdash; the records carry it at <strong>$580</strong> now. That number has a name: <strong>carrying value</strong> &mdash; what&rsquo;s left of the cost after the shares taken so far. Be clear about what it is: a cost walking down a <em>chosen path</em>. The market doesn&rsquo;t walk that path. Comparable laptops on eBay fetch whatever they fetch tonight &mdash; no schedule consulted, no rule obeyed. Book and market answer different questions; don&rsquo;t expect them to agree. Hold onto that &mdash; it matters later.');
+    anna = annaBox('Look at the <strong>Laptop</strong> line: cost <strong>$610</strong>, this season&rsquo;s wear <strong>&minus;$30</strong> &mdash; the records carry it at <strong>$580</strong> now. That number has a name: <strong>carrying value</strong>, also called <strong>book value</strong> &mdash; what&rsquo;s left of the cost after the depreciation charged so far. Be clear about what it is: a cost walking down a <em>chosen path</em>. You could ask the market instead &mdash; comparable laptops fetch something on eBay tonight &mdash; and the records <em>deliberately don&rsquo;t</em>: chasing that price every season isn&rsquo;t worth the effort, and it isn&rsquo;t what depreciation is. The cost walks its chosen path; the market answers its own question. Don&rsquo;t expect book and market to agree. Hold onto that &mdash; it matters later.');
     ctrl = insightBox('Carrying value is a path, not a price',
-        '<p>Cost, minus the allocations taken so far. It tells you where the number has <em>been</em> &mdash; not what the laptop would fetch. The records show a chosen path; the market answers its own question.</p>')
+        '<p>Cost, minus the depreciation charged so far. It tells you where the number has <em>been</em> &mdash; not what the laptop would fetch. And unlike rent &mdash; where a lapsed month is simply gone &mdash; a fully depreciated tool is still on the bench, and may still be worth something. The path runs out; the thing doesn&rsquo;t.</p>')
       + '<button class="btn-continue btn-block" onclick="finishStatement()">Finish the income statement &rarr;</button>';
   } else {
     anna = annaBox('There it is &mdash; the bottom line, at last: <strong>Net income, '+BRW.dol(NET_INCOME)+'</strong>. The season delivered <strong>'+BRW.dol(REVENUE)+'</strong> and used up <strong>'+BRW.dol(EXPENSES)+'</strong> getting it done &mdash; parts, months of space, and wear. Every kind of used-up counted. Nothing left open.');
@@ -109,7 +96,8 @@ function renderTalk(){
 function finishStatement(){
   playClick(); playSuccess();
   step = 1;
-  snap.tabs.push({ id:'income', label:'Income' });
+  snap.incomeNew = true;
+  snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
   BRW.update('wb', snap);
   BRW.tab('wb', 'income');
   renderTalk();
@@ -118,8 +106,8 @@ function finishStatement(){
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Carrying value', def:'What the records show is left of a thing&rsquo;s cost: cost minus the allocations taken so far. A path the books walk down by rule &mdash; not what the thing would fetch.' },
-  { term:'Net income', def:'Revenue &minus; Expenses for the period: $6,020 &minus; $3,380 = $2,640. Complete now that every kind of used-up &mdash; metered, time-lapsed, and allocated &mdash; is counted.' },
+  { term:'Carrying value (book value)', def:'What the records show is left of a thing&rsquo;s cost: cost minus the depreciation charged so far. A path the books walk down by rule &mdash; not what the thing would fetch. The thing can outlive its path: fully depreciated, still on the bench.' },
+  { term:'Net income', def:'Revenue &minus; Expenses for the period: $6,020 &minus; $3,380 = $2,640. Complete now that every kind of used-up &mdash; directly observed, time-lapsed, and allocated &mdash; is counted.' },
   { term:'Depreciation', def:'A season&rsquo;s share of a long-lived thing&rsquo;s cost, by a chosen rule. An allocation &mdash; a convention standing in for time, wear and tear, and judgment together.' }
 ];
 function openGlossary(){
@@ -136,7 +124,7 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 /* ===== init — the workbook with the wear recorded, open on the Laptop ledger ===== */
 window.devFill = function(){ if(step===0) finishStatement(); };
 BR_WB.registerSeasonSheets();
-BRW.registerSheet('income', incomeSheet);
+BR_WB.registerStatementSheets();
 BRW.mount('wb', snap);
 BRW.tab('wb', 'assets');
 BRW.x('wb', 'a', 6);   // open the Laptop line

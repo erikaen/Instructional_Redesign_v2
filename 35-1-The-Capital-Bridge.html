@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">The Capital Bridge</div>
 
     <div class="narrative-block">
-      <p>One number was moving the whole time and never got its own statement: <strong>Members&rsquo; Capital</strong>. June 1 it read <strong>$2,460</strong>. Today it reads <strong>$4,500</strong>. Before laying that move out, do the arithmetic yourself.</p>
+      <p>One number was moving the whole time and never got its own statement: <strong>Members&rsquo; Capital</strong>. June 1 it read <strong>$2,460</strong>. Where should it stand today? Do the arithmetic yourself.</p>
     </div>
 
     <div class="mc-card">
@@ -106,27 +106,19 @@ function revealBridge(){
   window.scrollTo(0, document.body.scrollHeight);
 }
 
-/* ===== the rendered statement ===== */
-function xrow(cls, label, val){ return '<div class="xl-row '+cls+'"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
-function bridgeSheet(cid, snap){
-  var h = xrow('xl-head', 'Statement of Changes in Members&rsquo; Capital &middot; June&ndash;August 2026', 'Amount');
-  h += xrow('xl-item', 'Opening Members&rsquo; Capital &mdash; June 1', BRW.dol(OPEN_MC));
-  h += xrow('xl-item', '+ Net income &mdash; the season&rsquo;s work', BRW.signed(NET_INCOME));
-  h += xrow('xl-item', '&minus; Owner&rsquo;s draw', BRW.signed(-DRAW));
-  h += xrow('xl-total', '<strong>Closing Members&rsquo; Capital &mdash; August 31</strong> <span class="xl-new-tag">ties to the balance sheet</span>', BRW.dol(CLOSE_MC));
-  return h;
-}
-var snap = { file:'Bike-Repair.xlsx', tabs:[ {id:'bridge', label:'Changes in Capital'} ] };
+/* ===== the workbook — the anchor, mounted from the start; the bridge joins it as a tab ===== */
+var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
+snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income','cashflows']));
 function renderSheet(){
-  BRW.registerSheet('bridge', bridgeSheet);
-  BRW.mount('wb', snap);
+  snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['bridge']));
+  BRW.update('wb', snap);
   BRW.tab('wb', 'bridge');
 }
 
 function ctrlAfterReveal(){
-  return annaBox('Look at what didn&rsquo;t move: <strong>Contributed Capital</strong> stayed at <strong>'+BRW.dol(CONTRIB)+'</strong> all season &mdash; no new contributions came in. The whole $2,040 swing ran through the other slice: <strong>Retained</strong> went from '+BRW.dol(RETAINED_OPEN)+' up to '+BRW.dol(RETAINED_CLOSE)+' &mdash; up by the net income, down by the draw. Every dollar of the move in Members&rsquo; Capital this season &mdash; up or down &mdash; this statement can name.')
+  return annaBox('Look at what didn&rsquo;t move: <strong>Contributed</strong> stayed at <strong>'+BRW.dol(CONTRIB)+'</strong> all season &mdash; no new contributions came in. The whole $2,040 swing ran through the other slice: <strong>Generated</strong> went from '+BRW.dol(RETAINED_OPEN)+' up to '+BRW.dol(RETAINED_CLOSE)+' &mdash; up by the net income, down by the draw. Every dollar of the move in Members&rsquo; Capital this season &mdash; up or down &mdash; this statement can name.')
     + insightBox('Two lines moved this bridge',
-        '<p>Net income in, the draw out. Contributed Capital sat still.</p>')
+        '<p>Net income in, the draw out. Contributed sat still.</p>')
     + '<button class="btn-continue btn-block" onclick="nav(\'35-2-The-First-Close.html\')">Where does a finished season get filed? &rarr;</button>';
 }
 
@@ -134,7 +126,7 @@ function ctrlAfterReveal(){
 var glossaryTerms=[
   { term:'Statement of Changes in Members&rsquo; Capital', def:'The bridge between two balance sheets&rsquo; Members&rsquo; Capital lines: opening, plus net income, minus draws, equals closing. Here: $2,460 + $2,640 &minus; $600 = $4,500.' },
   { term:'Owner&rsquo;s draw', def:'Cash the owner takes out for personal use. It reduces Members&rsquo; Capital but is not an expense &mdash; it never touches the income statement.' },
-  { term:'Retained', def:'The slice of Members&rsquo; Capital built from running the work, not from contributions. Moves with net income (up) and draws (down): $170 &rarr; $2,210 this season.' }
+  { term:'Generated', def:'The slice of Members&rsquo; Capital built from running the work, not from contributions. Moves with net income (up) and draws (down): $170 &rarr; $2,210 this season.' }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
@@ -149,6 +141,10 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 
 /* ===== init ===== */
 window.devFill = function(){ if(!bridgeDone) revealBridge(); };
+BR_WB.registerSeasonSheets();
+BR_WB.registerStatementSheets();
+BRW.mount('wb', snap);
+BRW.tab('wb', 'reasons');
 </script>
   <script src="dev.js"></script>
 </body>

@@ -49,6 +49,7 @@
   </div>
 </div>
 
+<script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -65,7 +66,7 @@ var glossaryTerms = [
   { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
   { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
   { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
-  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the retained slice ($170) are kept separate." },
+  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the generated slice ($170) are kept separate." },
   { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
   { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
 ];
@@ -97,8 +98,8 @@ function balanceSheetHTML(){
   var assets = '';
   assetRows.forEach(function(a){ assets += '<div class="acct-line"><span>'+esc(a[0])+'</span><span class="acct-val mono">'+a[1]+'</span></div>'; });
   var liabLabel = contributed ? 'Liabilities &amp; Members&rsquo; Capital' : 'Liabilities &amp; the difference';
-  var rcLabel = contributed ? 'Members&rsquo; capital &mdash; contributed' : '&ldquo;What you put in&rdquo;';
-  var reLabel = contributed ? 'Retained earnings' : '&ldquo;What the work made&rdquo;';
+  var rcLabel = 'Contributed';
+  var reLabel = 'Generated';
   var netLabel = contributed ? 'Members&rsquo; Capital' : 'The difference';
   var resStyle = contributed ? ' style="background:var(--success-bg);border-radius:4px;padding:2px 6px;margin-top:4px"' : ' style="margin-top:4px"';
   var html = '<div style="text-align:center;font-weight:700;margin-bottom:2px;'+(contributed?'color:var(--primary)':'')+'">'+title+'</div>';
@@ -118,17 +119,22 @@ function balanceSheetHTML(){
   html += '</div>';
   return html;
 }
+/* ===== statement-as-workbook-tab prototype: the balance sheet lives IN Bike-Repair.xlsx ===== */
+var bsSnap = { file:'Bike-Repair.xlsx', tabs:[ { id:'balance', label:'Balance Sheet' } ] };
+BRW.registerSheet('balance', function(){ return '<div style="padding:10px 12px">'+balanceSheetHTML()+'</div>'; });
+
 function renderContribution(){
   var area = document.getElementById('contributionArea');
-  var html = balanceSheetHTML();
+  var html = '<div id="bsWb"></div>';
   if(!contributed){
     html += '<button class="btn-continue btn-block" style="margin-top:14px" onclick="doContribute()">Contribute the business to the LLC &rarr;</button>';
   } else {
     html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="check" class="licon"></i> Not one number changed</div>'+
-      '<p>The same balance sheet you built informally is now the <strong>Company&rsquo;s</strong> &mdash; legally contributed in. Only the <em>words</em> on the right moved: &ldquo;what you put in&rdquo; became <strong>members&rsquo; capital ($990)</strong>, &ldquo;what the work made&rdquo; became <strong>retained earnings ($170)</strong>. Same $1,160. The contributed slice and the earned slice stay separate &mdash; the history carries over intact.</p></div>'+
+      '<p>The same balance sheet you built informally is now the <strong>Company&rsquo;s</strong> &mdash; legally contributed in. Only one <em>word</em> on the right moved: &ldquo;the difference&rdquo; became <strong>Members&rsquo; Capital</strong>, the name the Operating Agreement uses. <strong>Contributed ($990)</strong> and <strong>Generated ($170)</strong> carried over untouched &mdash; same $1,160, the history intact.</p></div>'+
       '<button class="btn-continue btn-block" onclick="nav(\'23-4-wall.html\')">Now drill into &sect;17 &mdash; the wall &rarr;</button>';
   }
   area.innerHTML = html;
+  BRW.mount('bsWb', bsSnap);
   if(window.lucide) lucide.createIcons();
 }
 function doContribute(){ contributed=true; playSuccess(); renderContribution(); }

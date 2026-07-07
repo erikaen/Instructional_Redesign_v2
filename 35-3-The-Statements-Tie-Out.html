@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">The Statements Tie Out</div>
 
     <div class="narrative-block">
-      <p>Here is the closing balance sheet, August 31 &mdash; and beside it, the season&rsquo;s three flow statements. Three things moved between the two snapshots. For each one, find the statement that carries the story.</p>
+      <p>Here is the whole workbook, closed for the season &mdash; and beside the tabs you built it from, the closing balance sheet and the season&rsquo;s three flow statements. Three things moved between the two snapshots. For each one, find the statement that carries the story.</p>
     </div>
 
     <div id="wb"></div>
@@ -72,51 +72,9 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
-/* ===== locked numbers ===== */
-var ASSETS=4500, LIAB=0, MC=4500, CONTRIB=2290, RETAINED=2210;
-var CASH_OPEN=1300, CASH_END=620, OP=320, INV=-400, FIN=-600;
-var NET_INCOME=2640, DRAW=600;
-
-/* ===== the closing balance sheet, rendered as its own sheet ===== */
-function xrow(cls, label, val){ return '<div class="xl-row '+cls+'"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
-function closingBSSheet(cid, snap){
-  var h = xrow('xl-head', 'Balance Sheet &middot; August 31, 2026', 'Amount');
-  h += xrow('xl-item', 'Assets', BRW.dol(ASSETS));
-  h += xrow('xl-item', 'Liabilities', BRW.dol(LIAB));
-  h += xrow('xl-cat', '<strong>Members&rsquo; Capital</strong>', BRW.dol(MC));
-  h += xrow('xl-item', 'Contributed Capital', BRW.dol(CONTRIB));
-  h += xrow('xl-item', 'Retained (170 + 2,640 &minus; 600)', BRW.dol(RETAINED));
-  h += xrow('xl-total', '<strong>Total Members&rsquo; Capital</strong>', BRW.dol(MC));
-  return h;
-}
-function incomeStub(cid, snap){
-  var h = xrow('xl-head', 'Income Statement &middot; June&ndash;August 2026', 'Amount');
-  h += xrow('xl-total', '<strong>Net income</strong>', BRW.dol(NET_INCOME));
-  return h;
-}
-function bridgeStub(cid, snap){
-  var h = xrow('xl-head', 'Statement of Changes in Members&rsquo; Capital', 'Amount');
-  h += xrow('xl-item', 'Opening Members&rsquo; Capital', BRW.dol(2460));
-  h += xrow('xl-item', '+ Net income', BRW.signed(NET_INCOME));
-  h += xrow('xl-item', '&minus; Owner&rsquo;s draw', BRW.signed(-DRAW));
-  h += xrow('xl-total', '<strong>Closing Members&rsquo; Capital</strong>', BRW.dol(MC));
-  return h;
-}
-function cashflowStub(cid, snap){
-  var h = xrow('xl-head', 'Statement of Cash Flows &middot; June&ndash;August 2026', 'Amount');
-  h += xrow('xl-item', 'Operating', BRW.signed(OP));
-  h += xrow('xl-item', 'Investing', BRW.signed(INV));
-  h += xrow('xl-item', 'Financing', BRW.signed(FIN));
-  h += xrow('xl-total', '<strong>Net change in cash</strong>', BRW.signed(OP+INV+FIN));
-  h += xrow('xl-item', 'Cash, June 1', BRW.dol(CASH_OPEN));
-  h += xrow('xl-total', '<strong>Cash, August 31</strong>', BRW.dol(CASH_END));
-  return h;
-}
-
-var snap = { file:'Bike-Repair.xlsx', tabs:[
-  {id:'balance', label:'Balance Sheet'}, {id:'income', label:'Income'},
-  {id:'bridge', label:'Changes in Capital'}, {id:'cashflows', label:'Cash Flows'}
-] };
+/* ===== the closed workbook — the anchor — with the four statements as tabs beside it ===== */
+var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true, closed:true });
+snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income','cashflows','bridge','balance']));
 
 /* ===== the three matching MCQs ===== */
 var MOVES = [
@@ -132,12 +90,12 @@ var MOVES = [
       { id:'income', text:'The Income Statement alone', ok:false }
     ], fbOk:'Right &mdash; the bridge statement is built exactly for this: opening $2,460 + net income $2,640 &minus; draw $600 = closing $4,500.',
        fbWrong:'Close, but incomplete on its own &mdash; net income is only half this move. The draw also passed through, and only the bridge statement carries both.' },
-  { id:'retained', prompt:'Retained (inside Members&rsquo; Capital) reads $2,210.', opts:[
+  { id:'retained', prompt:'Generated (inside Members&rsquo; Capital) reads $2,210.', opts:[
       { id:'bridge', text:'The Statement of Changes in Members&rsquo; Capital', ok:true },
       { id:'cashflow', text:'The Statement of Cash Flows alone', ok:false },
-      { id:'contrib', text:'Contributed Capital &mdash; new money put in', ok:false }
-    ], fbOk:'Right &mdash; $170 (carried from May) + $2,640 net income &minus; $600 draw = $2,210. Net income comes off the Income Statement and the draw is an owner move, but the Statement of Changes in Members&rsquo; Capital is where they combine into Retained&rsquo;s move.',
-       fbWrong:'Contributed Capital never moved this season &mdash; no new contributions came in. Retained is built from what the work generated and what the owner took out.' }
+      { id:'contrib', text:'Contributed &mdash; new money put in', ok:false }
+    ], fbOk:'Right &mdash; $170 (carried from May) + $2,640 net income &minus; $600 draw = $2,210. Net income comes off the Income Statement and the draw is an owner move, but the Statement of Changes in Members&rsquo; Capital is where they combine into Generated&rsquo;s move.',
+       fbWrong:'Contributed never moved this season &mdash; no new contributions came in. Generated is built from what the work produced and what the owner took out.' }
 ];
 var answered = {};
 
@@ -219,10 +177,8 @@ window.devFill = function(){
   renderMatch();
   renderTalk(true);
 };
-BRW.registerSheet('balance', closingBSSheet);
-BRW.registerSheet('income', incomeStub);
-BRW.registerSheet('bridge', bridgeStub);
-BRW.registerSheet('cashflows', cashflowStub);
+BR_WB.registerSeasonSheets();
+BR_WB.registerStatementSheets();
 BRW.mount('wb', snap);
 BRW.tab('wb', 'balance');
 renderMatch();
