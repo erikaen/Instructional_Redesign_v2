@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activity 2.3: The Rules and the Two Signatures &middot; The Wall</title>
+  <title>Activity 2.3: The Rules &middot; The Wall</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,7 +16,7 @@
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Activity 2.3: The Rules and the Two Signatures</h1>
+        <h1>Activity 2.3: The Rules</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 4 of 6</p>
       </div>
       <div class="tut-header-actions">
@@ -85,12 +85,17 @@ function restart(){ window.location.reload(); }
 var memberName = '';
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
-function llcName(){ return memberDisplay() + "âs Bike Repairs, LLC"; }
+function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
 
 /* ===== state (phase-local) ===== */
 var claimRun = false;
+var compShown = false, youShown = false;
+var companyThings = ["Repair equipment","Computer equipment","Supplies","Fixtures"];
+var personalThings = ["Your car","Your earnings","Your savings"];
+function listHtml(arr){ return '<div style="font-size:var(--font-xs);margin-top:6px;line-height:1.7">'+arr.map(function(t){ return '<div>'+t+'</div>'; }).join('')+'</div>'; }
+function revealBtn(fn, label){ return '<button class="btn-continue" style="margin-top:8px;padding:6px 12px;font-size:var(--font-xs)" onclick="'+fn+'()">'+label+' &darr;</button>'; }
 
-/* ===== Â§17 limited-liability wall ===== */
+/* ===== §17 limited-liability wall — same figure as 21-2, plus the wall ===== */
 function renderWall(){
   var area = document.getElementById('wallArea');
   var en = esc(llcName());
@@ -102,12 +107,12 @@ function renderWall(){
   html += '<div style="border-radius:10px;padding:12px;'+compStyle+';transition:all 0.4s">'+
     '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;color:var(--primary)">The Company</div>'+
     '<div style="font-size:var(--font-s);margin-top:2px">'+en+'</div>'+
-    '<div style="font-size:var(--font-xs);margin-top:4px;color:var(--primary)">its tools, parts, fixtures, cash</div></div>';
+    (compShown ? listHtml(companyThings) : revealBtn('showComp','What the Company holds'))+'</div>';
   html += '<div style="display:flex;align-items:center;justify-content:center"><div title="the LLC &mdash; limited liability" style="width:6px;align-self:stretch;border-radius:3px;background:'+wallColor+';transition:all 0.4s"></div></div>';
   html += '<div style="border-radius:10px;padding:12px;'+youStyle+';transition:all 0.4s">'+
     '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;color:var(--primary)">You</div>'+
-    '<div style="font-size:var(--font-s);margin-top:2px">your savings, car, earnings</div>'+
-    (claimRun?'<div style="font-size:var(--font-xs);margin-top:4px;font-weight:600;color:var(--success-text)">&#10003; behind the wall &mdash; safe</div>':'')+'</div>';
+    (youShown ? listHtml(personalThings) : revealBtn('showYou','Your personal assets'))+
+    (claimRun?'<div style="font-size:var(--font-xs);margin-top:6px;font-weight:600;color:var(--success-text)">&#10003; behind the wall &mdash; safe</div>':'')+'</div>';
   html += '</div>';
   html += '<div style="text-align:center;margin:12px 0;min-height:18px">'+(claimRun?'<span style="font-size:var(--font-xs);font-weight:600;color:var(--primary)">the claim reaches the Company &mdash; and stops at the wall</span>':'')+'</div>';
   if(!claimRun){
@@ -122,6 +127,9 @@ function renderWall(){
   if(window.lucide) lucide.createIcons();
 }
 function runClaim(){ claimRun=true; playThud(); renderWall(); }
+function showComp(){ compShown=true; playClick(); renderWall(); }
+function showYou(){ youShown=true; playClick(); renderWall(); }
+window.devFill = function(){ compShown=youShown=true; if(!claimRun) runClaim(); else renderWall(); };
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 

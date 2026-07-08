@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activity 2.3: The Rules and the Two Signatures &middot; What You Put In</title>
+  <title>Activity 2.3: The Rules &middot; What You Put In</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,7 +16,7 @@
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Activity 2.3: The Rules and the Two Signatures</h1>
+        <h1>Activity 2.3: The Rules</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 3 of 6</p>
       </div>
       <div class="tut-header-actions">
@@ -29,7 +29,7 @@
     <!-- ===== contribution ===== -->
     <div class="phase active" id="phase-contribution">
       <div class="narrative-block">
-        <p>You read it in your agreement &mdash; <strong>Section 9, Capital Contributions</strong>. It says what you put into the Company. The answer is <em>everything</em>. <strong>Schedule A</strong> lists it at its existing book amounts. Move it in, and watch the totals.</p>
+        <p>You read it in your draft &mdash; <strong>Section 9, Capital Contributions</strong>. It says what you put into the Company: <em>everything</em>, at its existing book amounts. Schedule A is still blank &mdash; but the books already hold every line it will carry. Walk the tabs, move the business in, and watch the totals.</p>
       </div>
       <div class="callout" style="font-family:Georgia,'Times New Roman',serif"><strong>&sect;9.</strong> &ldquo;The Sole Member contributes the assets and liabilities of the bicycle-repair business, at their existing book amounts, as set forth on Schedule A.&rdquo;</div>
       <div id="contributionArea"></div>
@@ -49,6 +49,7 @@
   </div>
 </div>
 
+<script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -87,7 +88,7 @@ var memberName = '';
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
 function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
-var assetRows = [['Cash','0'],['Prepaid rent','650'],['Parts on the shelf','200'],['Tools & equipment','1,200'],['Fixtures','750'],['Laptop','610']];
+var assetRows = [['Cash','0'],['Right of Use','650'],['Supplies','200'],['Equipment','1,200'],['Computer equipment','610'],['Fixtures','750']];
 
 /* ===== state (phase-local) ===== */
 var contributed = false;
@@ -108,7 +109,7 @@ function balanceSheetHTML(){
   html += '<div class="acct-col"><h4>Assets</h4>'+assets+'<div class="acct-total"><span>Assets</span><span class="mono">3,410</span></div></div>';
   html += '<div class="acct-col"><h4>'+liabLabel+'</h4>'+
     '<div class="acct-line"><span>Credit card</span><span class="acct-val mono">2,030</span></div>'+
-    '<div class="acct-line"><span>Customer advance &mdash; Smith</span><span class="acct-val mono">220</span></div>'+
+    '<div class="acct-line"><span>Customer deposit &mdash; Smith</span><span class="acct-val mono">220</span></div>'+
     '<div class="acct-total" style="border-top:1px solid var(--border)"><span>Liabilities</span><span class="mono">2,250</span></div>'+
     '<div'+resStyle+'>'+
       '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">990</span></div>'+
@@ -119,25 +120,93 @@ function balanceSheetHTML(){
   html += '</div>';
   return html;
 }
-/* ===== statement-as-workbook-tab prototype: the balance sheet lives IN Bike-Repair.xlsx ===== */
-var bsSnap = { file:'Bike-Repair.xlsx', tabs:[ { id:'balance', label:'Balance Sheet' } ] };
+/* ===== the whole workbook, statement-as-tab: the balance sheet lives IN Bike-Repair.xlsx =====
+   Assets/Liabilities keep the exact look and categories of the workbook as last shown
+   at the end of Module 1 (15-2): expandable category lines, item drill-downs, the
+   dated May cash ledger. Continuity rule: every Bike-Repair depiction matches the
+   last one shown in the module sequence. */
+function m2CashEvents(postDeposit){
+  var ev = [
+    { name:'<span class="cash-line-date">May 1</span>Rent paid in advance', amt:-1300 },
+    { name:'<span class="cash-line-date">May 3</span>Park Tool stand', amt:-200 },
+    { name:'<span class="cash-line-date">May 7</span>Repair finished &mdash; customer paid', amt:340 },
+    { name:'<span class="cash-line-date">May 10</span>Repair finished &mdash; customer paid', amt:180 },
+    { name:'<span class="cash-line-date">May 12</span>Repair finished &mdash; customer paid', amt:80 },
+    { name:'<span class="cash-line-date">May 14</span>Repair finished &mdash; customer paid', amt:140 },
+    { name:'<span class="cash-line-date">May 19</span>Repair finished &mdash; customer paid', amt:130 },
+    { name:'<span class="cash-line-date">May 22</span>Smith deposit', amt:220 },
+    { name:'<span class="cash-line-date">May 23</span>Repair finished &mdash; customer paid', amt:100 },
+    { name:'<span class="cash-line-date">May 27</span>Repair finished &mdash; customer paid', amt:150 },
+    { name:'<span class="cash-line-date">&mdash;</span>From your personal self &mdash; covering what the work drew down', amt:160 }
+  ];
+  if(postDeposit) ev.push({ name:'<span class="cash-line-date">Jun 1</span>Deposited to open the Company&rsquo;s account &mdash; your contribution', amt:1300 });
+  return ev;
+}
+function m2AssetLines(postDeposit){
+  return [
+    { label:'Equipment', note:'the repair tools', amount:1200, items:[
+      {name:'Park Tool repair stand', amt:200},{name:'Cone wrench set', amt:65},{name:'Torque wrench', amt:95},
+      {name:'Hex / Allen key set', amt:45},{name:'Cable cutters', amt:40},{name:'Chain breaker', amt:35},
+      {name:'Tire levers', amt:20},{name:'Air compressor', amt:180},{name:'Parts washer', amt:130},
+      {name:'Wheel-truing stand', amt:170},{name:'Bench grinder', amt:90},{name:'Headset press', amt:70},{name:'Shop vacuum', amt:60} ] },
+    { label:'Computer equipment', note:'the laptop from home', amount:610, items:[ {name:'Laptop', amt:610} ] },
+    { label:'Supplies', note:'parts on the shelf', amount:200, items:[
+      {name:'Box of chains (on shelf)', amt:50},{name:'Box of brake pads (on shelf)', amt:40},{name:'Box of derailleur cables (on shelf)', amt:20},
+      {name:'Cassettes (on shelf)', amt:40},{name:'Bottom brackets (on shelf)', amt:20},{name:'Spokes (on shelf)', amt:20},{name:'Tubes (on shelf)', amt:10} ] },
+    { label:'Fixtures', note:'desk, shelving, rack', amount:750, items:[
+      {name:'Desk', amt:250},{name:'Shelving units', amt:200},{name:'Display rack', amt:180},{name:'Pegboard + hooks', amt:120} ] },
+    { label:'Cash', note: postDeposit ? 'the Company&rsquo;s account, seeded today' : 'repair cash on hand', events: m2CashEvents(postDeposit) },
+    { label:'Right of Use', note:'the last month, prepaid', amount:650, items:[ {name:'Right to occupy the space &mdash; last month, prepaid', amt:650} ] }
+  ];
+}
+function m2LiabLines(postCardMove){
+  return [
+    { label:'Smith&rsquo;s frame &mdash; paid $220 up front, not built yet', note:'owed as work, not money', amount:220, items:[
+      {name:'Check deposit, May 22 &mdash; a custom frame build, 4&ndash;6 weeks', amt:220} ] },
+    { label:'Still owed on the bike-repair credit card', note: postCardMove ? 'now in the Company&rsquo;s name' : 'moving to the Company&rsquo;s name in 2.4', amount:2030, items:[
+      {name:'Hand tools', amt:300},{name:'Air compressor', amt:180},{name:'Parts washer', amt:130},
+      {name:'Wheel-truing stand', amt:170},{name:'Fixtures (desk, shelving, racks)', amt:750},{name:'Parts (QBP order)', amt:500} ] }
+  ];
+}
+var bsSnap = {
+  file:'Bike-Repair.xlsx',
+  tabs:[ {id:'assets',label:'Assets'}, {id:'liabilities',label:'Liabilities'}, {id:'reasons',label:'Reasons'}, {id:'balance',label:'Balance Sheet'} ],
+  assets: m2AssetLines(false),
+  liabilities: m2LiabLines(false),
+  reasons: {
+    pilesTitle:'The Reasons piles &mdash; May 1 to today',
+    pilesSub:'one continuous list &mdash; every reason since the first May jot',
+    mode:'sorted',
+    groups:[ {key:'contributed',label:'CONTRIBUTED',blurb:'what you put in'}, {key:'generated',label:'GENERATED',blurb:'what the work produced'} ],
+    rows: BR_WB.setupRows().filter(function(r){ return r.reason.indexOf('LLC bank account') < 0; })
+  }
+};
 BRW.registerSheet('balance', function(){ return '<div style="padding:10px 12px">'+balanceSheetHTML()+'</div>'; });
 
+var step = 0;   /* 0 walk the tabs, 1 read the balance sheet, 2 contributed */
 function renderContribution(){
   var area = document.getElementById('contributionArea');
   var html = '<div id="bsWb"></div>';
-  if(!contributed){
+  if(step===0){
+    html += '<div class="dialog-box anna" style="margin-top:14px"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Start where the facts live: the books you&rsquo;ve kept since Module 1. Flip the tabs &mdash; <strong>Assets</strong>, <strong>Liabilities</strong>, <strong>Reasons</strong>. Everything &sect;9 talks about is already recorded here. The new tab on the end lays those same records out as a single statement.&rdquo;</div></div>';
+    html += '<button class="btn-continue btn-block" style="margin-top:14px" onclick="setStep(1)">Open the Balance Sheet tab &rarr;</button>';
+  } else if(step===1){
+    html += '<div class="dialog-box anna" style="margin-top:14px"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Read it slowly. Assets, <strong>$3,410</strong> &mdash; every line straight off the Assets tab, Cash still $0. Liabilities, <strong>$2,250</strong> &mdash; the card and Smith&rsquo;s frame. And the difference, <strong>$1,160</strong>, in its two piles: <strong>Contributed $990</strong> and <strong>Generated $170</strong> &mdash; the same piles the Reasons tab has kept all along. This is the business &sect;9 moves into the Company &mdash; at these amounts, no revaluation.&rdquo;</div></div>';
     html += '<button class="btn-continue btn-block" style="margin-top:14px" onclick="doContribute()">Contribute the business to the LLC &rarr;</button>';
   } else {
     html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="check" class="licon"></i> Not one number changed</div>'+
-      '<p>The same balance sheet you built informally is now the <strong>Company&rsquo;s</strong> &mdash; legally contributed in. Only one <em>word</em> on the right moved: &ldquo;the difference&rdquo; became <strong>Members&rsquo; Capital</strong>, the name the Operating Agreement uses. <strong>Contributed ($990)</strong> and <strong>Generated ($170)</strong> carried over untouched &mdash; same $1,160, the history intact.</p></div>'+
+      '<p>The same balance sheet you built informally is now the <strong>Company&rsquo;s</strong> &mdash; legally contributed in. Only one <em>word</em> on the right moved: &ldquo;the difference&rdquo; became <strong>Members&rsquo; Capital</strong>, the name the Operating Agreement uses. <strong>Contributed ($990)</strong> and <strong>Generated ($170)</strong> carried over untouched &mdash; same $1,160, the history intact.</p>'+
+      '<p><strong>Schedule A</strong> of your draft is still <strong>empty</strong> &mdash; these are the lines you&rsquo;ll enter on it yourself, once the cash is deposited and the card is moved (2.4).</p></div>'+
       '<button class="btn-continue btn-block" onclick="nav(\'23-4-wall.html\')">Now drill into &sect;17 &mdash; the wall &rarr;</button>';
   }
   area.innerHTML = html;
   BRW.mount('bsWb', bsSnap);
+  if(step>=1) BRW.tab('bsWb','balance');
   if(window.lucide) lucide.createIcons();
 }
-function doContribute(){ contributed=true; playSuccess(); renderContribution(); }
+function setStep(n){ playClick(); step=n; renderContribution(); }
+function doContribute(){ step=2; contributed=true; playSuccess(); renderContribution(); }
+window.devFill = function(){ step=2; contributed=true; renderContribution(); };
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 

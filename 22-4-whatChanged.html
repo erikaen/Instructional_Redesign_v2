@@ -94,16 +94,57 @@ var movedItems = [
   { id:"sheet", label:"The balance sheet", changed:false, after:"Did not change. The filing creates a legal entity, but by itself it does not change the recorded assets, the recorded liabilities, or the difference between them in the repair-work books." }
 ];
 
-var TWO_BIRTHDAYS_HTML =
-  '<div class="section-card" style="margin-top:16px"><div class="card-title" style="text-transform:uppercase;letter-spacing:0.04em;font-size:var(--font-xs)">Two birthdays</div>'+
-  '<div style="position:relative;height:64px;margin-top:8px">'+
-    '<div style="position:absolute;top:28px;left:0;right:0;height:2px;background:var(--border-strong)"></div>'+
-    '<div style="position:absolute;top:20px;left:8%;transform:translateX(-50%)"><div style="width:14px;height:14px;border-radius:50%;background:var(--primary);margin:0 auto"></div></div>'+
-    '<div style="position:absolute;top:44px;left:8%;transform:translateX(-50%);font-size:11px;color:var(--primary);font-weight:600;white-space:nowrap;text-align:center">Accounting Boundary<br>drawn in Module 1</div>'+
-    '<div style="position:absolute;top:20px;left:92%;transform:translateX(-50%)"><div style="width:14px;height:14px;border-radius:50%;background:var(--accent);margin:0 auto"></div></div>'+
-    '<div style="position:absolute;top:44px;left:92%;transform:translateX(-50%);font-size:11px;color:var(--accent);font-weight:600;white-space:nowrap;text-align:center">Legal Body<br>created June 1</div>'+
-    '<div style="position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:11px">&larr; Repair work already operating and recorded &rarr;</div>'+
-  '</div></div>';
+/* ===== the moving figure: separate out the bike-repair role, then formalize it =====
+   Stage 0: one undivided life. Stage 1: the role's items gather inside the dashed
+   accounting boundary (Module 1's recognition). Stage 2: a solid legal ring appears
+   around the role (the filing). Chips animate via CSS transitions on style mutation. */
+var figStage = 0;
+var FIG = [
+  { id:'figc0', t:'Groceries',           role:false, p:[[6,24],[6,20]] },
+  { id:'figc1', t:'Paycheck',            role:false, p:[[34,72],[6,40]] },
+  { id:'figc2', t:'Your car',            role:false, p:[[16,84],[6,60]] },
+  { id:'figc3', t:'Apartment rent',      role:false, p:[[42,14],[6,80]] },
+  { id:'figc4', t:'Repair stand',        role:true,  p:[[64,20],[59,26]] },
+  { id:'figc5', t:'Parts shelf',         role:true,  p:[[10,50],[59,48]] },
+  { id:'figc6', t:'Smith&rsquo;s frame', role:true,  p:[[70,76],[59,70]] },
+  { id:'figc7', t:'Booking laptop',      role:true,  p:[[45,46],[78,48]] }
+];
+function figureHtml(){
+  var h = '<div class="section-card" style="margin-top:16px"><div class="card-title" style="text-transform:uppercase;letter-spacing:0.04em;font-size:var(--font-xs)">Separating out the bike-repair role</div>';
+  h += '<div style="position:relative;height:280px;border:2px solid var(--border-strong);border-radius:12px;margin-top:10px;overflow:hidden">';
+  h += '<div id="figYouLbl" style="position:absolute;top:6px;left:10px;font-size:11px;font-weight:700;color:var(--primary)">You &mdash; one person, everything mingled</div>';
+  h += '<div id="figRole" style="position:absolute;left:54%;top:16%;width:43%;height:72%;border:2px dashed var(--primary);border-radius:12px;opacity:0;transition:opacity .9s">'
+     + '<div style="position:absolute;top:-9px;left:10px;background:var(--page-bg);padding:0 6px;font-size:10px;font-weight:700;color:var(--primary)">your bike-repair role &mdash; the boundary you drew in your books</div></div>';
+  h += '<div id="figRing" style="position:absolute;left:51.5%;top:11%;width:47%;height:82%;border:3px solid var(--accent);border-radius:14px;opacity:0;transition:opacity .9s">'
+     + '<div id="figRingLbl" style="position:absolute;bottom:-9px;right:10px;background:var(--page-bg);padding:0 6px;font-size:10px;font-weight:700;color:var(--accent)"></div></div>';
+  FIG.forEach(function(c){
+    h += '<div id="'+c.id+'" style="position:absolute;left:'+c.p[0][0]+'%;top:'+c.p[0][1]+'%;transition:left .9s ease,top .9s ease;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;border:1px solid var(--border-strong);background:var(--primary-faint);white-space:nowrap">'+c.t+'</div>';
+  });
+  h += '</div>';
+  h += '<div id="figCaption" style="font-size:var(--font-xs);margin-top:8px;opacity:0.85">Every item sits in one undivided life &mdash; exactly what the bank, the credit-card company, Smith, and the law have been seeing.</div>';
+  h += '<button class="btn-continue btn-block" id="figBtn" onclick="figAdvance()" style="margin-top:10px">Recognize the role &rarr;</button>';
+  h += '</div>';
+  return h;
+}
+function figAdvance(){
+  figStage++;
+  playClick();
+  if(figStage===1){
+    FIG.forEach(function(c){ var el=document.getElementById(c.id); if(el){ el.style.left=c.p[1][0]+'%'; el.style.top=c.p[1][1]+'%'; } });
+    document.getElementById('figRole').style.opacity='1';
+    document.getElementById('figYouLbl').innerHTML = 'You &mdash; two roles, one person';
+    document.getElementById('figCaption').innerHTML = 'This is what you did in Module 1: you <strong>recognized</strong> the bike-repair role and drew a boundary around it in your books. Real &mdash; but only in your records.';
+    document.getElementById('figBtn').innerHTML = 'File the Certificate &rarr;';
+    playSuccess();
+  } else if(figStage===2){
+    document.getElementById('figRing').style.opacity='1';
+    document.getElementById('figRingLbl').innerHTML = esc(llcName())+' &mdash; a legal body (June 1)';
+    document.getElementById('figCaption').innerHTML = 'The filing <strong>formalized</strong> the role: a separate legal person now holds it. Same items, same amounts &mdash; recognized first (Module 1), formalized today. That is the order it always happens in.';
+    document.getElementById('figBtn').hidden = true;
+    var cont=document.getElementById('figCont'); if(cont) cont.hidden = false;
+    playSuccess();
+  }
+}
 
 /* ===== state (phase-local) ===== */
 var placed = {};        /* movedItem id -> zone id, once correctly placed */
@@ -140,9 +181,9 @@ function renderWhatChanged(){
   if(movedItems.every(function(m){ return placed[m.id]; })){
     html += '<div class="insight-box" style="margin-top:16px"><div class="insight-label"><i data-lucide="scale" class="licon"></i> Legal Change, Not an Economic Change</div>'+
       '<p>One thing changed today: <strong>the LLC now exists as a legal entity</strong>. That matters. But the filing, by itself, did <strong>not</strong> change the balance sheet. The recorded assets, recorded liabilities, and the difference between them are still the same. The operation is the same operation you were already tracking. What is new is its <strong>legal standing</strong>.</p></div>';
-    html += TWO_BIRTHDAYS_HTML;
-    html += '<p class="callout">Two different lines, drawn at different times, for different reasons. The repair work was already operating, and you were already keeping its books, before today. The legal body is new.</p>';
-    html += '<button class="btn-continue btn-block" onclick="nav(\'22-5-complete.html\')">Continue &rarr;</button>';
+    html += figureHtml();
+    html += '<p class="callout">Two different lines, drawn at different times, for different reasons: first you <strong>recognized</strong> the bike-repair role (Module 1, in the books), then you <strong>formalized</strong> it (today, at the state). The repair work was already operating before today. The legal body is new.</p>';
+    html += '<button class="btn-continue btn-block" id="figCont" hidden onclick="nav(\'22-5-complete.html\')">Continue &rarr;</button>';
   }
   document.getElementById('whatChangedArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();
@@ -160,6 +201,11 @@ function onDrop(e, zone){ e.preventDefault(); e.currentTarget.classList.remove('
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 
 /* ===== init ===== */
+window.devFill = function(){
+  movedItems.forEach(function(m){ placed[m.id]=correctZone(m); });
+  renderWhatChanged();
+  figAdvance(); figAdvance();
+};
 renderWhatChanged();
 </script>
   <script src="dev.js"></script>

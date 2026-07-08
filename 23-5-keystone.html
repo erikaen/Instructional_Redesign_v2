@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activity 2.3: The Rules and the Two Signatures &middot; When Did It Become Real?</title>
+  <title>Activity 2.3: The Rules &middot; When Did It Become Real?</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,7 +16,7 @@
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Activity 2.3: The Rules and the Two Signatures</h1>
+        <h1>Activity 2.3: The Rules</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 5 of 6</p>
       </div>
       <div class="tut-header-actions">
@@ -90,25 +90,27 @@ function renderKeystone(){
   var area = document.getElementById('keystoneArea');
   var right = keystonePick==='1.1';
   var opts = [
-    ['cert','When you filed the Certificate (2.2)'],
-    ['oa','Just now, when you signed this agreement'],
-    ['1.1','Back in 1.1 &mdash; when you first drew the line in your books']
+    ['cert','When you filed the Certificate (2.2)',
+      'Not quite &mdash; that&rsquo;s the day it became a <em>legal</em> entity. But was that when it became real? Try again.'],
+    ['oa','When the Operating Agreement gets signed',
+      'No &mdash; the agreement is the Company&rsquo;s internal rulebook. It <em>governs</em> the entity; it doesn&rsquo;t create it. Legal existence came with the Certificate (2.2) &mdash; and the signing hasn&rsquo;t even happened yet. Try again.'],
+    ['1.1','Back in 1.1 &mdash; when you first drew the line in your books','']
   ];
   var html = '<div style="display:flex;flex-direction:column;gap:10px">';
   opts.forEach(function(o){
-    var id=o[0], label=o[1];
+    var id=o[0], label=o[1], fb=o[2];
     var picked = keystonePick===id;
     var isRight = id==='1.1';
     var show = keystonePick!==null;
     var st = 'background:var(--primary-faint);border:2px solid var(--border-strong)';
     if(show && picked){ st = isRight ? 'background:var(--success-bg);border:2px solid var(--success-border)' : 'background:var(--error-bg);border:2px solid var(--error-border)'; }
     html += '<button onclick="pickKeystone(\''+id+'\')"'+(right?' disabled':'')+' style="text-align:left;border-radius:10px;padding:12px;cursor:pointer;font-family:inherit;font-size:var(--font-m);color:inherit;'+st+'">'+label;
-    if(show && picked && !isRight){ html += '<span style="display:block;font-size:var(--font-xs);margin-top:4px;color:var(--error-text)">Not quite &mdash; that&rsquo;s the day it became a <em>legal</em> entity. Try again.</span>'; }
+    if(show && picked && !isRight){ html += '<span style="display:block;font-size:var(--font-xs);margin-top:4px;color:var(--error-text)">'+fb+'</span>'; }
     html += '</button>';
   });
   html += '</div>';
   if(right){
-    html += '<div class="callout" style="margin-top:14px">Right. This document gave the operation a legal body &mdash; but it <strong>did not create the entity</strong>. You&rsquo;ve kept these books, this boundary, since <strong>1.1</strong>. The <strong>accounting</strong> line came first &mdash; by months, and in a real firm, by years.</div>';
+    html += '<div class="callout" style="margin-top:14px">Right. The <strong>Certificate</strong> gave the operation a legal body, and the agreement you drafted today will govern it &mdash; but <strong>neither created the entity</strong>. You&rsquo;ve kept these books, this boundary, since <strong>1.1</strong>. The <strong>accounting</strong> line came first &mdash; by months, and in a real firm, by years.</div>';
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="key-round" class="licon"></i> The keystone</div>'+
       '<p style="font-size:var(--font-lg);font-weight:700;color:var(--primary);margin-bottom:6px">Accounting&#8209;entity &ne; legal&#8209;entity.</p>'+
       '<p>The accounting entity is a boundary you drew <em>for information</em> &mdash; it can exist with or without any legal body, and here it came first. The LLC is a legal wrapper placed around it. Getting an LLC didn&rsquo;t make the entity &ldquo;finally real&rdquo;; it was a real <em>accounting</em> entity all along.</p></div>';

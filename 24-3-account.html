@@ -17,7 +17,7 @@
     <div class="tut-header">
       <div class="tut-header-main">
         <h1>Activity 2.4: The Entity&rsquo;s Own Number</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 3 of 5</p>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 3 of 6</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -29,7 +29,7 @@
     <!-- ===== account ===== -->
     <div class="phase active" id="phase-account">
       <div class="narrative-block">
-        <p>With the EIN in hand, you can finally give the business its <strong>own</strong> accounts &mdash; and pull it out of your personal ones. Do it in three moves.</p>
+        <p>With the EIN in hand, you can finally give the business its <strong>own</strong> accounts &mdash; and pull it out of your personal ones. Do it in three moves. (Then you&rsquo;ll bring the paperwork up to date.)</p>
       </div>
       <div id="accountArea"></div>
     </div>
@@ -95,7 +95,7 @@ function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
 function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
 
 /* ===== state (phase-local) ===== */
-var step = 0;   /* 0 none, 1 acct opened, 2 $500 in, 3 card moved */
+var step = 0;   /* 0 none, 1 acct opened, 2 $1,300 in, 3 card moved */
 var docView = null;
 
 /* ===== SS-4 (for the viewer) ===== */
@@ -235,7 +235,7 @@ function acctRow(label, sub, amount, llc){
 function renderAccount(){
   var en = esc(llcName());
   var nextLabel = step===0 ? 'Open the LLC&rsquo;s bank account &rarr;'
-    : step===1 ? 'Move $500 in cash into the account &rarr;'
+    : step===1 ? 'Move $1,300 in cash into the account &rarr;'
     : step===2 ? 'Move the business card to the LLC &rarr;' : null;
   var personalCol = '<div class="section-card"><div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;opacity:0.7;margin-bottom:8px">Your personal accounts</div>'+
     acctRow('Checking &mdash; Elm City Bank', (step>=2?'personal only now':'co-mingled: business + personal'), (step>=2?'2,774':'4,074'), false)+
@@ -249,14 +249,14 @@ function renderAccount(){
   }
   var llcCol = '<div class="section-card"><div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary);margin-bottom:8px">The LLC&rsquo;s accounts</div>'+llcInner+'</div>';
   var html = '<div class="main-grid two-col" style="margin-bottom:12px">'+personalCol+llcCol+'</div>';
-  if(step===2){ html += '<div style="text-align:center;font-size:var(--font-xs);color:var(--primary);margin-bottom:10px">&uarr; your <strong>$500 cash contribution</strong> &mdash; Cash 0 &rarr; 500, members&rsquo; capital +500</div>'; }
+  if(step===2){ html += '<div style="text-align:center;font-size:var(--font-xs);color:var(--primary);margin-bottom:10px">&uarr; your <strong>$1,300 cash contribution</strong> &mdash; Cash 0 &rarr; 1,300, members&rsquo; capital +1,300</div>'; }
   if(nextLabel){
     html += '<button class="btn-continue btn-block" onclick="advanceAccount()">'+nextLabel+'</button>';
     html += docsButton();
   } else {
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Co-mingling ended</div>'+
       '<p>The LLC has its own account and card; your personal checking is personal again. The by-hand sorting you&rsquo;ve done since 1.1 is now <strong>institutional</strong> &mdash; banks, the IRS, and customers all deal with the LLC.</p></div>';
-    html += '<p class="callout">Two of those moves changed <em>nothing</em> on the books &mdash; the EIN, and the card sliding to the LLC&rsquo;s name (<span class="mono">$2,030</span> stays <span class="mono">$2,030</span>). The <strong>one real change</strong> was your <strong>$1,300</strong>: a capital contribution. Cash <span class="mono">0 &rarr; 1,300</span>; members&rsquo; capital <span class="mono">990 &rarr; 2,290</span>. You&rsquo;ll lay out the full sheet next.</p>';
+    html += '<p class="callout">Two of those moves changed <em>nothing</em> on the books &mdash; the EIN, and the card sliding to the LLC&rsquo;s name (<span class="mono">$2,030</span> stays <span class="mono">$2,030</span>). The <strong>one real change</strong> was your <strong>$1,300</strong>: a capital contribution. Cash <span class="mono">0 &rarr; 1,300</span>; members&rsquo; capital <span class="mono">990 &rarr; 2,290</span>. Next: check the paper trail &mdash; then you&rsquo;ll complete Schedule A from these books, and sign.</p>';
     html += docsButton();
     html += '<button class="btn-continue btn-block" onclick="nav(\'24-4-statements.html\')">See the statements &rarr;</button>';
   }
@@ -268,6 +268,7 @@ function advanceAccount(){
   if(step<3) step++;
   renderAccount();
 }
+window.devFill = function(){ step=3; renderAccount(); };
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeDoc(); } });
 

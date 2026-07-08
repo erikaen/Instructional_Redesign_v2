@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activity 2.3: The Rules and the Two Signatures &middot; The Operating Agreement</title>
+  <title>Activity 2.3: The Rules &middot; The Operating Agreement</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,7 +16,7 @@
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Activity 2.3: The Rules and the Two Signatures</h1>
+        <h1>Activity 2.3: The Rules</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 1 of 6</p>
       </div>
       <div class="tut-header-actions">
@@ -51,9 +51,9 @@
       <button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary);margin-bottom:14px" onclick="openDoc('anna')"><i data-lucide="file-text" class="licon"></i> Open City Cycle&rsquo;s full agreement &rarr;</button>
       <div class="dialog-box anna">
         <div class="dialog-label">ANNA</div>
-        <div class="dialog-text">&ldquo;See the shape? Same sections for every LLC. Yours just carries <em>your</em> name, <em>your</em> business, <em>your</em> numbers. Generate it and we&rsquo;ll read it together.&rdquo; <span style="font-style:normal">(You can reopen City Cycle&rsquo;s example anytime from the button above.)</span></div>
+        <div class="dialog-text">&ldquo;See the shape? Same sections for every LLC. Yours just carries <em>your</em> name, <em>your</em> business, <em>your</em> numbers. One thing to know going in: the agreement ends with <strong>Schedule A</strong> &mdash; the list of what the member contributes &mdash; and you can&rsquo;t finalize a list of what&rsquo;s contributed before the contributing is done. So yours starts as a <strong>draft</strong>. Draft it and we&rsquo;ll read it together.&rdquo; <span style="font-style:normal">(You can reopen City Cycle&rsquo;s example anytime from the button above.)</span></div>
       </div>
-      <button class="btn-continue btn-block" onclick="nav('23-2-agreement.html')">Generate my Operating Agreement &rarr;</button>
+      <button class="btn-continue btn-block" onclick="nav('23-2-agreement.html')">Draft my Operating Agreement &rarr;</button>
     </div>
 
   </div>
@@ -116,7 +116,7 @@ var expanded = ['7','9','17'];
 var docOpen = null;
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
-function llcName(){ return memberDisplay() + "âs Bike Repairs, LLC"; }
+function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
 var assetRows = [['Cash','0'],['Prepaid rent','650'],['Parts on the shelf','200'],['Tools & equipment','1,200'],['Fixtures','750'],['Laptop','610']];
 function annaFacts(){
   return {
@@ -132,7 +132,7 @@ function myFacts(){
     entity:llcName(), member:memberDisplay(), date:'June 1, 2026',
     state:'Connecticut', act:'Connecticut Uniform Limited Liability Company Act',
     purpose:'bicycle repair and maintenance', office:'142 Whalley Avenue, Unit B, New Haven, CT 06511',
-    sched:{ assets:assetRows, assetsTotal:'3,410', liabs:[['Credit-card balance (business)','2,030'],['Customer advance â Smith','220']], liabsTotal:'2,250', net:'1,160' },
+    sched:{ assets:assetRows, assetsTotal:'3,410', liabs:[['Credit-card balance (business)','2,030'],['Customer advance — Smith','220']], liabsTotal:'2,250', net:'1,160' },
     sig:{ company: signedCompany ? memberDisplay() : null, member: signedMember ? memberDisplay() : null }
   };
 }
@@ -147,7 +147,7 @@ function clauseData(f){
     ['7','Sole Member','The sole member of the Company is '+f.member+'.'],
     ['8','Management; Powers','The business and affairs of the Company are managed by the Sole Member, who may execute documents and otherwise act for and bind the Company.'],
     ['9','Capital Contributions','The Sole Member contributes the assets and liabilities of the business, at their existing book amounts, as set forth on Schedule A. Net book value contributed: $'+f.sched.net+'.'],
-    ['10','Additional Capital Contributions','No additional contributions are required of the Sole Member, though further contributions may be made at the Sole Memberâs discretion.'],
+    ['10','Additional Capital Contributions','No additional contributions are required of the Sole Member, though further contributions may be made at the Sole Member’s discretion.'],
     ['11','Allocation of Profits and Losses','All profits and losses of the Company are allocated 100% to the Sole Member.'],
     ['12','Distributions','Distributions are made to the Sole Member at such times and in such amounts as the Sole Member determines.'],
     ['13','Assignments','The Sole Member may assign its interest in the Company, in whole or in part.'],

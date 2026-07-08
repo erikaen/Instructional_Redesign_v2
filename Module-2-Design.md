@@ -45,6 +45,18 @@ identity inside the LLC. Opening total: Members' Capital 2,460 = Contributed 2,2
 
 ## Ruling 2 — The Operating Agreement: draft → finalize → sign (resequenced)
 
+> **Built 2026-07-07; REVISED 2026-07-08 per Rick's click-through.** Current shape:
+> 2.3 drafts the OA with Schedule A **empty** (blank lines, §9 "$ ____"); 23-3 mounts the
+> full workbook (Assets/Liabilities/Reasons + Balance Sheet tab) and walks it slowly before
+> the contribution; 24-3 = the three account moves ($1,300 fixed); **24-4 statements →
+> NEW 24-5 "Complete Schedule A"** — the student enters all 10 lines from the Balance Sheet
+> tab, then signs both lines there; **24-6 = merged Module-2-complete page.** Activity 2.5
+> (25-1/25-2/25-3) **deleted** — the side-by-side M1 compare retired per Rick (#11).
+> Keystone re-pointed to the Certificate. 2.1–2.2 reframed roles-first ("recognize the
+> separate roles, then formalize into separate legal entities"); 22-4 got the animated
+> role-separation figure; 21-2's Smith-claim list dropped Prepaid rent (not recoverable in
+> litigation). Documents/time-periods/activities-as-actors banned — three lint rules added.
+
 **The problem it fixes.** Today the OA's contribution (Schedule A) is "signed" at **23-3**, where
 **Cash = 0** and the balance sheet nets to only **$1,160** — a full activity *before* the $1,300
 bank deposit (24-3) that makes the contribution equal the opening balance sheet. The signature
@@ -95,16 +107,21 @@ approval-required**; a numbered additions plan goes to Rick **before** any share
 
 ---
 
-## Open items (carried, need Rick)
+## Open items
 
-1. **23-5 keystone re-point** — confirm "when did it become real?" now answers **the Certificate
-   filing** (with the OA as later-executed governance).
+1. ~~23-5 keystone re-point~~ — **confirmed & built 2026-07-07** (Certificate = legal existence;
+   1.1 remains the entity answer).
 2. **Numeric inconsistency between design docs (flagged 2026-07-07, do NOT silently fix):**
    `Bike-Repair-Workbook-Design.md` (lines 124/133) has **GENERATED $2,740 / close $4,430**,
-   while the **locked** M3 close is **Generated 2,210 / $4,500**. Season net there is $2,570 vs.
-   M3's net income $2,640. These predate the lock; needs a deliberate reconciliation pass.
-3. **Contributed Capital parallel** — this doc retires "Contributed Capital" as a working label
-   too (M4 aside), symmetric with Retained Earnings. Confirm, or keep Contributed Capital.
-4. **Statement-as-tab prototype** — awaiting green light + the shared-file additions plan.
-5. **Subpart labels everywhere** — "Contributed"/"Generated" applied to all balance sheets;
-   audit the M2/M3 pages (25-2 "Retained earnings", 31-1, 32-5, 35-1, 35-3) in the build pass.
+   while the **locked** M3 close is **Generated 2,210 / $4,500**. *Likely resolution (found
+   2026-07-07): those are the correct **pre-adjustment** figures at 31-2 — before the Ridgeline
+   $300 receivable and $230 depreciation land (2,740 = 170 + 2,570; 4,430 = 4,500 + 230 − 300).
+   The doc pass should relabel them as the intermediate snapshot, not change numbers.*
+3. ~~Contributed Capital parallel~~ — **confirmed & swept 2026-07-07**: subparts read
+   Contributed / Generated on every student-facing sheet; GAAP synonyms are the M4 aside.
+4. ~~Statement-as-tab prototype~~ — **built 2026-07-07** (23-3 balance-sheet tab; M3 pages
+   mount the full workbook with statements as tabs via `BR_WB.registerStatementSheets()`).
+5. ~~Subpart labels everywhere~~ — **swept 2026-07-07** across M2/M3 pages.
+6. **June-1 sheet naming drift (flagged, needs ruling):** M2 pages say "Prepaid rent" /
+   "Customer advance — Smith" where M3's 31-1 says "Right of Use" / the locked "Customer
+   Deposit." Left as-is pending Rick's call.

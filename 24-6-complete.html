@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Activity 2.5: The LLC's Balance Sheet &middot; Complete</title>
+  <title>Activity 2.4: The Entity's Own Number &middot; Module 2 Complete</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,15 +16,15 @@
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Activity 2.5: The LLC&rsquo;s Balance Sheet</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~8 min &middot; Phase 3 of 3</p>
+        <h1>Activity 2.4: The Entity&rsquo;s Own Number</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 6 of 6</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">Complete</div>
+    <div class="phase-title" id="phaseTitle">Module 2 Complete</div>
 
     <!-- ===== complete ===== -->
     <div class="phase active" id="phase-complete">
@@ -35,20 +35,20 @@
       <div class="section-card">
         <div class="card-title">What You Built Across Module 2</div>
         <ul class="bullet-list check">
-          <li>You felt the gap: the line you kept in your books had no legal teeth (2.1).</li>
-          <li>You gave it a legal body &mdash; a CT Certificate of Organization (2.2).</li>
-          <li>You wrote and signed the Operating Agreement, contributed the business, and named the keystone (2.3).</li>
-          <li>You gave the entity its own number, account, and card &mdash; ending the co-mingling (2.4).</li>
-          <li>And you laid out its balance sheet: forming the LLC changed nothing; your $1,300 was the only real move (2.5).</li>
+          <li>You felt the gap: you recognized your bike-repair role in your books, but the bank, the credit-card company, Smith, and the law saw one undivided you (2.1).</li>
+          <li>You formalized the role &mdash; a CT Certificate of Organization brought a legal body into existence (2.2).</li>
+          <li>You drafted the Operating Agreement, contributed to the business at book amounts, and named the keystone: accounting-entity &ne; legal-entity &mdash; Schedule A left blank until the contributing was done (2.3).</li>
+          <li>You gave the entity its own EIN, account, and card &mdash; ending the co-mingling; the entity is a counterparty in its own right, able to owe and be owed in its own name (2.4).</li>
+          <li>Then you completed Schedule A from the Company&rsquo;s books, line for line, and signed &mdash; once for the Company, once as yourself. The only move that touched the books all module was your $1,300 contribution (Cash 0 &rarr; 1,300; members&rsquo; capital 990 &rarr; 2,290).</li>
         </ul>
       </div>
       <div class="insight-box">
         <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The one idea to keep</div>
-        <p>The accounting boundary and the legal boundary are <strong>different lines, drawn for different reasons</strong>. The same machine runs all the way up: a giant company draws <strong>one</strong> accounting boundary around <strong>dozens</strong> of separate legal companies. Yours is one accounting entity that simply <strong>predates</strong> its single legal one.</p>
+        <p>The accounting boundary and the legal boundary are <strong>different lines, drawn for different reasons</strong> &mdash; you recognized the role first (Module 1, in the books), then formalized it (this module, at the state). The same machine runs all the way up: a giant company draws <strong>one</strong> accounting boundary around <strong>dozens</strong> of separate legal companies. Yours is one accounting entity that simply <strong>predates</strong> its single legal one.</p>
       </div>
       <div class="next-card">
-        <div class="next-card-label">Coming Next &mdash; Module 3: Someone Wants In</div>
-        <p>An investor has been watching what you&rsquo;ve built, and floats an idea: a <strong>second location</strong>. To put money in, they have to put a <strong>number</strong> on the whole business. That&rsquo;s where Module 3 begins.</p>
+        <div class="next-card-label">Coming Next &mdash; Module 3: The Story Between the Snapshots</div>
+        <p>Summer comes, and the shop runs a real season &mdash; repairs in, parts and rent used up, a draw taken. One balance sheet becomes two, and the question that fills the gap between them &mdash; <em>how did the shop do?</em> &mdash; turns out to need statements of its own.</p>
       </div>
       <div class="btn-row">
         <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Reset this phase</button>
@@ -79,12 +79,12 @@ function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.w
 function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-/* ===== glossary (shared across all phases of 2.5) ===== */
+/* ===== glossary (shared across all phases of 2.4) ===== */
 var glossaryTerms = [
-  { term:"Balance sheet", def:"A snapshot of what the entity holds and owes at one moment: Assets &minus; Liabilities = Members&rsquo; Capital, the LLC&rsquo;s name for the difference." },
   { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for A &minus; L. A definitional difference &mdash; never &ldquo;what&rsquo;s left for the owner.&rdquo; Split into Contributed ($2,290) and Generated ($170)." },
   { term:"Accounting entity", def:"The boundary your books are drawn around. It can exist with or without a legal body &mdash; and here it has existed since 1.1, long before the LLC." },
-  { term:"Legal entity", def:"A creature of statute &mdash; the LLC. Days old. Distinct from the accounting entity it now wraps." }
+  { term:"Legal entity", def:"A creature of statute &mdash; the LLC. Days old. Distinct from the accounting entity it now wraps." },
+  { term:"Execute (a document)", def:"To sign it and make it operative. The Operating Agreement was executed only after Schedule A was complete &mdash; because the schedule attests to facts." }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){

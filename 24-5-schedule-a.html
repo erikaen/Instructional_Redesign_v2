@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activity 2.4: The Entity's Own Number &middot; Complete Schedule A</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.4: The Entity&rsquo;s Own Number</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 5 of 6</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Complete Schedule A</div>
+
+    <!-- ===== schedule ===== -->
+    <div class="phase active" id="phase-schedule">
+      <div class="narrative-block">
+        <p>The contributing is done: the cash is in the Company&rsquo;s account, the card is in the Company&rsquo;s name. Time to complete the draft you left blank in 2.3 &mdash; from the books, line by line. <strong>Click each line on the Balance Sheet tab</strong> to enter it on Schedule A.</p>
+      </div>
+      <div id="wb"></div>
+      <div id="schedArea"></div>
+      <div id="controls"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playPen(){ tone(520,0.18,'triangle',0.12); }
+
+/* ===== glossary (shared across all phases of 2.4) ===== */
+var glossaryTerms = [
+  { term:"Schedule A", def:"The Operating Agreement&rsquo;s list of what the member contributes &mdash; assets, liabilities assumed, and the difference. You complete it from the Company&rsquo;s books, after the contributing is done." },
+  { term:"Capital contribution", def:"What an owner puts into the company. Here: the whole repair business at book amounts, plus the $1,300 cash that opened the account." },
+  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. Split into Contributed ($2,290) and Generated ($170): $2,460 on June 1." },
+  { term:"Execute (a document)", def:"To sign it and make it operative. You execute the Operating Agreement here &mdash; after Schedule A is complete, because the schedule attests to facts." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== navigation / reset ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== member name ===== */
+var memberName = '';
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
+function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
+
+/* ===== the lines to enter — the June 1 balance sheet, in the books (Module-1 labels) ===== */
+var LINES = [
+  { id:'cash',  sec:'a', label:'Cash',                              sched:'Cash',                                        amt:1300 },
+  { id:'rou',   sec:'a', label:'Right of Use',                      sched:'Right of Use',                                amt:650 },
+  { id:'supp',  sec:'a', label:'Supplies',                          sched:'Supplies',                                    amt:200 },
+  { id:'equip', sec:'a', label:'Equipment',                         sched:'Equipment',                                   amt:1200 },
+  { id:'comp',  sec:'a', label:'Computer equipment',                sched:'Computer equipment',                          amt:610 },
+  { id:'fixt',  sec:'a', label:'Fixtures',                          sched:'Fixtures',                                    amt:750 },
+  { id:'card',  sec:'l', label:'Credit card (in the Company&rsquo;s name)', sched:'Credit-card balance (assumed)',       amt:2030 },
+  { id:'smith', sec:'l', label:'Customer deposit &mdash; Smith',    sched:'Customer deposit &mdash; Smith (assumed)',    amt:220 },
+  { id:'contrib',sec:'c', label:'Contributed',                      sched:'Contributed',                                 amt:2290 },
+  { id:'gen',   sec:'c', label:'Generated',                         sched:'Generated',                                   amt:170 }
+];
+var entered = {};
+var signedCompany = false, signedMember = false;
+function allEntered(){ return LINES.every(function(l){ return entered[l.id]; }); }
+function secDone(s){ return LINES.filter(function(l){ return l.sec===s; }).every(function(l){ return entered[l.id]; }); }
+
+/* ===== the workbook — full tabs; the Balance Sheet tab is the clickable source ===== */
+function xr(cls, attrs, label, val){ return '<div class="xl-row '+cls+'"'+attrs+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
+function bsRowClickable(l){
+  var done = !!entered[l.id];
+  var tag = done ? ' <span class="xl-new-tag">entered</span>' : '';
+  var attrs = done ? '' : ' onclick="enterLine(\''+l.id+'\')" style="cursor:pointer"';
+  return xr('xl-item', attrs, l.label + tag, BRW.dol(l.amt));
+}
+function balanceSheet(cid, snap){
+  var h = xr('xl-head', '', 'Balance Sheet &middot; June 1, 2026 &mdash; click a line to enter it on Schedule A', 'Amount');
+  h += xr('xl-cat', '', '<strong>Assets</strong>', '');
+  LINES.filter(function(l){ return l.sec==='a'; }).forEach(function(l){ h += bsRowClickable(l); });
+  h += xr('xl-total', '', 'Total assets', BRW.dol(4710));
+  h += xr('xl-cat', '', '<strong>Liabilities</strong>', '');
+  LINES.filter(function(l){ return l.sec==='l'; }).forEach(function(l){ h += bsRowClickable(l); });
+  h += xr('xl-total', '', 'Total liabilities', BRW.dol(2250));
+  h += xr('xl-cat', '', '<strong>Members&rsquo; Capital</strong> (Assets &minus; Liabilities)', BRW.dol(2460));
+  LINES.filter(function(l){ return l.sec==='c'; }).forEach(function(l){ h += bsRowClickable(l); });
+  return h;
+}
+/* Assets/Liabilities tabs keep the exact end-of-Module-1 look (15-2): expandable
+   category lines, item drill-downs, the dated cash ledger — continuity rule. */
+function m2CashEvents(){
+  return [
+    { name:'<span class="cash-line-date">May 1</span>Rent paid in advance', amt:-1300 },
+    { name:'<span class="cash-line-date">May 3</span>Park Tool stand', amt:-200 },
+    { name:'<span class="cash-line-date">May 7</span>Repair finished &mdash; customer paid', amt:340 },
+    { name:'<span class="cash-line-date">May 10</span>Repair finished &mdash; customer paid', amt:180 },
+    { name:'<span class="cash-line-date">May 12</span>Repair finished &mdash; customer paid', amt:80 },
+    { name:'<span class="cash-line-date">May 14</span>Repair finished &mdash; customer paid', amt:140 },
+    { name:'<span class="cash-line-date">May 19</span>Repair finished &mdash; customer paid', amt:130 },
+    { name:'<span class="cash-line-date">May 22</span>Smith deposit', amt:220 },
+    { name:'<span class="cash-line-date">May 23</span>Repair finished &mdash; customer paid', amt:100 },
+    { name:'<span class="cash-line-date">May 27</span>Repair finished &mdash; customer paid', amt:150 },
+    { name:'<span class="cash-line-date">&mdash;</span>From your personal self &mdash; covering what the work drew down', amt:160 },
+    { name:'<span class="cash-line-date">Jun 1</span>Deposited to open the Company&rsquo;s account &mdash; your contribution', amt:1300 }
+  ];
+}
+var wbSnap = {
+  file:'Bike-Repair.xlsx',
+  tabs:[ {id:'assets',label:'Assets'}, {id:'liabilities',label:'Liabilities'}, {id:'reasons',label:'Reasons'}, {id:'balance',label:'Balance Sheet'} ],
+  assets: [
+    { label:'Equipment', note:'the repair tools', amount:1200, items:[
+      {name:'Park Tool repair stand', amt:200},{name:'Cone wrench set', amt:65},{name:'Torque wrench', amt:95},
+      {name:'Hex / Allen key set', amt:45},{name:'Cable cutters', amt:40},{name:'Chain breaker', amt:35},
+      {name:'Tire levers', amt:20},{name:'Air compressor', amt:180},{name:'Parts washer', amt:130},
+      {name:'Wheel-truing stand', amt:170},{name:'Bench grinder', amt:90},{name:'Headset press', amt:70},{name:'Shop vacuum', amt:60} ] },
+    { label:'Computer equipment', note:'the laptop from home', amount:610, items:[ {name:'Laptop', amt:610} ] },
+    { label:'Supplies', note:'parts on the shelf', amount:200, items:[
+      {name:'Box of chains (on shelf)', amt:50},{name:'Box of brake pads (on shelf)', amt:40},{name:'Box of derailleur cables (on shelf)', amt:20},
+      {name:'Cassettes (on shelf)', amt:40},{name:'Bottom brackets (on shelf)', amt:20},{name:'Spokes (on shelf)', amt:20},{name:'Tubes (on shelf)', amt:10} ] },
+    { label:'Fixtures', note:'desk, shelving, rack', amount:750, items:[
+      {name:'Desk', amt:250},{name:'Shelving units', amt:200},{name:'Display rack', amt:180},{name:'Pegboard + hooks', amt:120} ] },
+    { label:'Cash', note:'the Company&rsquo;s account, seeded today', events: m2CashEvents() },
+    { label:'Right of Use', note:'the last month, prepaid', amount:650, items:[ {name:'Right to occupy the space &mdash; last month, prepaid', amt:650} ] }
+  ],
+  liabilities: [
+    { label:'Smith&rsquo;s frame &mdash; paid $220 up front, not built yet', note:'owed as work, not money', amount:220, items:[
+      {name:'Check deposit, May 22 &mdash; a custom frame build, 4&ndash;6 weeks', amt:220} ] },
+    { label:'Still owed on the bike-repair credit card', note:'now in the Company&rsquo;s name', amount:2030, items:[
+      {name:'Hand tools', amt:300},{name:'Air compressor', amt:180},{name:'Parts washer', amt:130},
+      {name:'Wheel-truing stand', amt:170},{name:'Fixtures (desk, shelving, racks)', amt:750},{name:'Parts (QBP order)', amt:500} ] }
+  ],
+  reasons: {
+    pilesTitle:'The Reasons piles &mdash; May 1 to today',
+    pilesSub:'one continuous list &mdash; including this morning&rsquo;s $1,300 deposit',
+    mode:'sorted',
+    groups:[ {key:'contributed',label:'CONTRIBUTED',blurb:'what you put in'}, {key:'generated',label:'GENERATED',blurb:'what the work produced'} ],
+    rows: BR_WB.setupRows()
+  }
+};
+
+/* ===== Schedule A, filling in as the student enters lines ===== */
+function schedRow(l, v, opts){
+  opts = opts || {};
+  var st = 'display:flex;justify-content:space-between;'+(opts.top?'border-top:'+opts.top+';':'')+(opts.b?'font-weight:700;':'');
+  return '<div style="'+st+'"><span>'+l+'</span><span class="mono">'+v+'</span></div>';
+}
+function blankRow(){ return '<div style="border-bottom:1px solid #d8d8d8;height:22px"></div>'; }
+function scheduleHtml(){
+  var h = '<div class="doc-modal" style="margin:14px auto"><div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">';
+  h += '<div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;color:#6b6b6b;margin-bottom:2px">Schedule A &mdash; Contributed Property</div>';
+  h += allEntered()
+    ? '<div style="margin-bottom:8px"><span style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.06em;color:#15803d;border:1px solid #15803d;border-radius:6px;padding:1px 8px">COMPLETE &mdash; June 1, 2026</span></div>'
+    : '<div style="margin-bottom:8px"><span style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:1px 8px">IN PROGRESS &mdash; '+LINES.filter(function(l){return entered[l.id];}).length+' of '+LINES.length+' lines entered</span></div>';
+  h += '<div style="max-width:380px">';
+  LINES.filter(function(l){ return l.sec==='a'; }).forEach(function(l){ h += entered[l.id] ? schedRow(l.sched, l.amt.toLocaleString('en-US')) : blankRow(); });
+  h += schedRow('Total assets', secDone('a') ? '4,710' : '', {b:true,top:'1px solid #d8d8d8'});
+  LINES.filter(function(l){ return l.sec==='l'; }).forEach(function(l){ h += entered[l.id] ? schedRow(l.sched, '('+l.amt.toLocaleString('en-US')+')') : blankRow(); });
+  h += schedRow('Total liabilities assumed', secDone('l') ? '(2,250)' : '', {b:true});
+  LINES.filter(function(l){ return l.sec==='c'; }).forEach(function(l){ h += entered[l.id] ? schedRow(l.sched, l.amt.toLocaleString('en-US')) : blankRow(); });
+  h += schedRow('Members&rsquo; Capital (A &minus; L)', secDone('c') ? '2,460' : '', {b:true,top:'2px solid #374151'});
+  h += '</div>';
+  if(allEntered()){
+    h += '<div style="padding-left:10px;border-left:3px solid var(--accent);margin-top:10px;margin-bottom:8px"><span style="font-weight:700">9. Capital Contributions.</span> &hellip;as set forth on Schedule A. Net book value contributed: <strong>$2,460</strong>.</div>';
+    h += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;color:#6b6b6b;font-size:12px">&mdash; signature page &mdash;</div>';
+    h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
+    h += sigBlock('For the Company','company') + sigBlock('As an individual','member');
+    h += '</div>';
+  }
+  h += '</div></div>';
+  return h;
+}
+function sigBlock(label, which){
+  var isSigned = which==='company' ? signedCompany : signedMember;
+  var inner = isSigned
+    ? '<span style="font-family:\'Segoe Script\',\'Snell Roundhand\',\'Brush Script MT\',cursive;font-size:22px;color:#1a2b6b">'+esc(memberDisplay())+'</span>'
+    : '<button onclick="'+(which==='company'?'signCompany()':'signMember()')+'" style="background:#e8dcc8;color:#a08050;border:0;border-radius:6px;padding:4px 12px;font-weight:600;font-size:13px;cursor:pointer;font-family:Inter,sans-serif">&#9997; Sign here</button>';
+  var roleSub = which==='company' ? esc(memberDisplay())+', Managing Member' : esc(memberDisplay())+', as an individual';
+  return '<div><div style="font-size:11px;text-transform:uppercase;color:#6b6b6b">'+label+'</div>'+
+    '<div style="min-height:34px;border-bottom:1px solid #374151;display:flex;align-items:flex-end;padding-bottom:2px">'+inner+'</div>'+
+    '<div style="font-size:11px;color:#6b6b6b;margin-top:2px">'+roleSub+'</div>'+
+    '<div style="font-size:11px;color:#6b6b6b">Dated: June 1, 2026</div></div>';
+}
+
+/* ===== interaction ===== */
+function enterLine(id){
+  if(entered[id]) return;
+  entered[id] = true;
+  playClick(); playSuccess();
+  renderAll();
+}
+function signCompany(){ signedCompany=true; playPen(); if(signedMember) playSuccess(); renderAll(); }
+function signMember(){ signedMember=true; playPen(); if(signedCompany) playSuccess(); renderAll(); }
+
+function renderAll(){
+  BRW.update('wb', wbSnap);
+  BRW.tab('wb', 'balance');
+  document.getElementById('schedArea').innerHTML = scheduleHtml();
+  var ctrl = '';
+  if(allEntered() && !(signedCompany && signedMember)){
+    ctrl = '<div class="next-phase-msg">Schedule A is complete, and every line came off the Company&rsquo;s books. Nothing is left for you to fill in later &mdash; so now, and only now, you execute the agreement. Sign both lines.</div>';
+  }
+  if(signedCompany && signedMember){
+    ctrl = '<div class="insight-box"><div class="insight-label"><i data-lucide="pen-line" class="licon"></i> Two signatures, one hand</div>'+
+      '<p>Your own name, signed twice &mdash; once <strong>for the Company</strong> (as its manager), once <strong>as yourself</strong> (the Sole Member). The two roles you recognized in 2.1 are now <strong>legal and literal</strong>: the law recognizes both, on one page.</p></div>'+
+      '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> The schedule equals the sheet</div>'+
+      '<p>You didn&rsquo;t copy a finished schedule &mdash; you built it, line for line, from the Company&rsquo;s books. That is why Schedule A and the opening balance sheet agree exactly: you completed the paper from the facts, after the facts were in. Drafted in 2.3, completed and executed today.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="nav(\'24-6-complete.html\')">Finish Module 2 &rarr;</button>';
+  }
+  document.getElementById('controls').innerHTML = ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== init ===== */
+window.devFill = function(){ LINES.forEach(function(l){ entered[l.id]=true; }); signedCompany=signedMember=true; renderAll(); };
+try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
+BRW.registerSheet('balance', balanceSheet);
+BRW.mount('wb', wbSnap);
+BRW.tab('wb', 'balance');
+renderAll();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

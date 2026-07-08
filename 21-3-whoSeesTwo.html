@@ -33,7 +33,7 @@
         <p>You drew that boundary for a purpose. The records show what&rsquo;s tied up in the repair work, what&rsquo;s still owed because of it, and the reasons the difference between them changed. They are records of the repair work, not records of your whole personal life.</p>
         <p><strong>So why didn&rsquo;t Smith&rsquo;s claim stop at the repair work?</strong></p>
       </div>
-      <div class="callout" style="margin:20px 0">Drag each card into the zone where it belongs. <strong>Does this view treat the repair work as separate from you?</strong></div>
+      <div class="callout" style="margin:20px 0">Drag each card into the zone where it belongs. <strong>Does this view treat what you&rsquo;ve done in your bike-repair role as separate from the rest of your life?</strong></div>
       <div id="observerArea"></div>
     </div>
 
@@ -85,8 +85,10 @@ function restart(){ window.location.reload(); }
 var observers = [
   { id:"books", who:"Your books", sub:"Bike-Repair.xlsx", sees:"two", verdict:"Sees TWO",
     reason:"You drew this boundary in the records. You sorted co-mingled transactions by purpose and tracked what&rsquo;s tied up in the repair work, what&rsquo;s still owed because of it, and why the difference between them changed. The separation is real in the books. But so far, it is a boundary you are maintaining in your own records." },
-  { id:"bank", who:"The bank", sub:"Your card and account", sees:"one", verdict:"Sees ONE",
-    reason:"The card and the account are in your personal name. To the bank, every charge &mdash; chain lube or groceries &mdash; belongs to you." },
+  { id:"bank", who:"The bank", sub:"Your checking account", sees:"one", verdict:"Sees ONE",
+    reason:"The account is in your personal name. To the bank, every deposit and withdrawal &mdash; repair cash or paycheck &mdash; belongs to you." },
+  { id:"cardco", who:"The credit-card company", sub:"Harborline Visa", sees:"one", verdict:"Sees ONE",
+    reason:"The card is in your personal name. To Harborline, every charge &mdash; chain lube or groceries &mdash; is yours. There is no second borrower called the bike-repair role." },
   { id:"customer", who:"Smith", sub:"Your customer", sees:"one", verdict:"Sees ONE",
     reason:"Smith hired you. The receipt carries your name. From Smith&rsquo;s view, there is no separate &ldquo;repair work&rdquo; to deal with." },
   { id:"law", who:"The law", sub:"A court", sees:"one", verdict:"Sees ONE",
@@ -97,8 +99,8 @@ var observers = [
 var placed = {};        /* observerId -> zone id, once correctly placed */
 
 var zones = [
-  { id:'separate',    label:'Treats the repair work as separate from you' },
-  { id:'notseparate', label:'Does not treat the repair work as separate from you' }
+  { id:'separate',    label:'Sees your bike-repair role as separate from the rest of your life' },
+  { id:'notseparate', label:'Sees one undivided you' }
 ];
 function correctZone(o){ return o.sees==='two' ? 'separate' : 'notseparate'; }
 
@@ -129,7 +131,7 @@ function renderObservers(){
   html += '</div>';
   if(observers.every(function(o){ return placed[o.id]; })){
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="alert-triangle" class="licon"></i> Only the Books See the Boundary</div>'+
-      '<p>Only your books treat the repair work as separate from you. The bank, Smith, and the law still treat the repair work as part of you personally. The boundary you drew is real in the records, but it is <strong>informal</strong>. You maintain it yourself, and it does not have legal force. That is why Smith&rsquo;s claim does not stop at the repair-work boundary.</p></div>';
+      '<p>Only your books treat your bike-repair role as separate from the rest of your life. The bank, the credit-card company, Smith, and the law still see <strong>one undivided you</strong>. You <em>recognized</em> the role &mdash; that is what Module 1&rsquo;s boundary did &mdash; but the recognition is informal: you maintain it yourself, and it has no legal force. That is why Smith&rsquo;s claim does not stop at it.</p></div>';
     html += '<button class="btn-continue btn-block" onclick="nav(\'21-4-twoHats.html\')">Continue &rarr;</button>';
   }
   document.getElementById('observerArea').innerHTML = html;
