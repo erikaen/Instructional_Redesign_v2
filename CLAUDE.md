@@ -52,6 +52,16 @@ entity type supplies one:
     "its books" — books are *about* a subject, never "books of its own"
   - Anna's dialogue may still name the person's real property and debts
     ("you still owe Smith the frame") — pre-LLC that is who owes.
+- **Documents are not actors (adopted 2026-07-08).** An agreement, schedule,
+  certificate, or statement cannot wait, want, write, decide, or catch up.
+  Give the action to a person: "you complete the schedule after the facts are
+  in," "you sign last." ("The schedule attests to…" is standard legal drafting
+  usage and stays.)
+- **Time periods are not actors (adopted 2026-07-08).** A season, month, or
+  period cannot use things up, consume, need, deliver, add, or make. Recast
+  with a passive ("was used up during the season"), a possessive ("the
+  season's share"), or a real subject (the person, the shop post-LLC, the
+  records). Charging a share *to* a season (object position) is fine.
 - The `.claude/skills/accounting-pedagogy` skill speaks instructor-to-instructor
   (it says "Equities," "residual"). **Its vocabulary must not leak into
   student-facing pages.** Use it for reasoning, not for on-page wording.
@@ -76,6 +86,15 @@ It must print `lint-language: clean`. If it flags something you believe is
 legitimate, stop and ask Rick — do not edit the linter to make it pass.
 
 ## Other standing rules
+
+- **Bike-Repair.xlsx look-and-feel continuity (adopted 2026-07-08).** Every
+  depiction of the workbook must have the same look and feel as the **last one
+  shown in the module/tutorial sequence** — same tab set, same category labels,
+  same expandable-line idiom (category rows with toggles, item drill-downs, the
+  dated cash ledger), same totals wording. Never invent a new flat or
+  re-labeled rendering for one page. As of Module 2, the reference is the
+  end-of-Module-1 workbook (15-2): Equipment / Computer equipment / Supplies /
+  Fixtures / Cash / Right of Use.
 
 - `shared.css` and `shared.js` are **append-only**; no `shared.css` edits without
   Rick's explicit approval (see `.claude/skills/instructional-shared-styles`).
