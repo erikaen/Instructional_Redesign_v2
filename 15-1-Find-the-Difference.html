@@ -106,7 +106,9 @@ var NET = ASSETS_TOTAL - LIABILITIES_TOTAL; // 1160
 var CONTRIBUTED_ROWS = [
   { account:'Cash',      delta:160, reason:'My personal self covered what the work drew down — I only see it now, tallying up.' },
   { account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
-  { account:'Equipment', delta:220, reason:'You brought gear you already owned.' }
+  { account:'Equipment', delta:90,  reason:'Brought the bench grinder from home.' },
+  { account:'Equipment', delta:70,  reason:'Brought the headset press from home.' },
+  { account:'Equipment', delta:60,  reason:'Brought the shop vacuum from home.' }
 ];
 var GENERATED_ROWS = [
   { account:'Cash', delta:340, reason:'Finished a repair — customer paid $340.' },
@@ -116,7 +118,13 @@ var GENERATED_ROWS = [
   { account:'Cash', delta:130, reason:'Finished a repair — customer paid $130.' },
   { account:'Cash', delta:100, reason:'Finished a repair — customer paid $100.' },
   { account:'Cash', delta:150, reason:'Finished a repair — customer paid $150.' },
-  { account:'Supplies',     delta:-300, reason:'Used $300 of parts finishing jobs.' },
+  { account:'Supplies', delta:-70, reason:'Used $70 of chains finishing customer jobs.' },
+  { account:'Supplies', delta:-50, reason:'Used $50 of brake pads finishing customer jobs.' },
+  { account:'Supplies', delta:-30, reason:'Used $30 of derailleur cables finishing customer jobs.' },
+  { account:'Supplies', delta:-50, reason:'Used $50 of cassettes finishing customer jobs.' },
+  { account:'Supplies', delta:-30, reason:'Used $30 of bottom brackets finishing customer jobs.' },
+  { account:'Supplies', delta:-30, reason:'Used $30 of spokes finishing customer jobs.' },
+  { account:'Supplies', delta:-40, reason:'Used $40 of tubes finishing customer jobs.' },
   { account:'Right of Use', delta:-650, reason:'Used the space for May ($650).' }
 ];
 var CONTRIBUTED_TOTAL = CONTRIBUTED_ROWS.reduce(function(s,r){return s+r.delta;},0); // 990

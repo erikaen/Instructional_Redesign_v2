@@ -81,7 +81,9 @@ var NET = ASSETS_TOTAL - LIABILITIES_TOTAL; // 1160
 var CONTRIBUTED_ROWS = [
   { account:'Cash',      delta:160, reason:'My personal self covered what the work drew down — I only see it now, tallying up.' },
   { account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
-  { account:'Equipment', delta:220, reason:'You brought gear you already owned.' }
+  { account:'Equipment', delta:90,  reason:'Brought the bench grinder from home.' },
+  { account:'Equipment', delta:70,  reason:'Brought the headset press from home.' },
+  { account:'Equipment', delta:60,  reason:'Brought the shop vacuum from home.' }
 ];
 var GENERATED_ROWS = [
   { account:'Cash', delta:340, reason:'Finished a repair — customer paid $340.' },
@@ -91,7 +93,13 @@ var GENERATED_ROWS = [
   { account:'Cash', delta:130, reason:'Finished a repair — customer paid $130.' },
   { account:'Cash', delta:100, reason:'Finished a repair — customer paid $100.' },
   { account:'Cash', delta:150, reason:'Finished a repair — customer paid $150.' },
-  { account:'Supplies',     delta:-300, reason:'Used $300 of parts finishing jobs.' },
+  { account:'Supplies', delta:-70, reason:'Used $70 of chains finishing customer jobs.' },
+  { account:'Supplies', delta:-50, reason:'Used $50 of brake pads finishing customer jobs.' },
+  { account:'Supplies', delta:-30, reason:'Used $30 of derailleur cables finishing customer jobs.' },
+  { account:'Supplies', delta:-50, reason:'Used $50 of cassettes finishing customer jobs.' },
+  { account:'Supplies', delta:-30, reason:'Used $30 of bottom brackets finishing customer jobs.' },
+  { account:'Supplies', delta:-30, reason:'Used $30 of spokes finishing customer jobs.' },
+  { account:'Supplies', delta:-40, reason:'Used $40 of tubes finishing customer jobs.' },
   { account:'Right of Use', delta:-650, reason:'Used the space for May ($650).' }
 ];
 var CONTRIBUTED_TOTAL = CONTRIBUTED_ROWS.reduce(function(s,r){return s+r.delta;},0); // 990
@@ -253,10 +261,15 @@ function renderIdentity(){
   }
   html += matchDisplay();
   if(idStage===1){
-    html += insightBox('They match &mdash; and they always will', '<p>No coincidence &mdash; <strong>you arranged it</strong>. Back in Module 4 you decided to keep a reason exactly when a change moved the difference, and to let the canceling pairs drop out. Keep books by that rule and the reasons <em>must</em> add up to the difference &mdash; a choice paying off, not a fact of nature.</p>');
+    html += insightBox('They match &mdash; and they always will', '<p>No coincidence &mdash; <strong>you arranged it</strong>. Back in Module 4, every change got a match or a reason: a match explained itself right there on the Assets and Liabilities sheets, and never needed a row here. A reason was the ones with no match &mdash; and every one of those got written down. Keep books by that rule and the reasons <em>must</em> add up to the difference &mdash; a choice paying off, not a fact of nature.</p>');
     html += continueBtn('Name what you just matched');
   } else if(idStage===2){
-    html += annaBox('&ldquo;That number &mdash; Assets minus Liabilities &mdash; doesn&rsquo;t have one name here yet, and that&rsquo;s deliberate. Different kinds of entities call it different things, and even for one kind of entity the name has changed over the years. The names are local; the difference is universal. If you&rsquo;ve heard a name for it, hold it loosely &mdash; it belongs to one kind of entity, one era. The name that belongs to <em>your</em> work arrives when the work gets its own legal standing. For now, what matters is what it <em>is</em>: a difference, not a thing anyone could pocket &mdash; just recorded Assets minus recorded Liabilities, gaps and all.&rdquo;');
+    html += annaBox('&ldquo;That number &mdash; Assets minus Liabilities &mdash; doesn&rsquo;t have one name here yet, and that&rsquo;s deliberate. Different kinds of entities call it different things, and even for one kind of entity the name has changed over the years. The names are local; the difference is universal. If you&rsquo;ve heard a name for it, hold it loosely &mdash; it belongs to one kind of entity, one era. That name arrives once you form your work into a legal entity of its own. For now, what matters is what it <em>is</em>: a difference, not a thing anyone could pocket &mdash; just recorded Assets minus recorded Liabilities, gaps and all.&rdquo;');
+    html += '<div class="rabbit-hole"><button class="rabbit-hole-trigger" onclick="toggleRabbitHole(this)"><span class="rh-icon"><i data-lucide="compass" class="licon"></i></span><span>Already know some accounting? Read this.</span><span class="rh-chevron">&rsaquo;</span></button><div class="rabbit-hole-body">'+
+      '<p>If you&rsquo;ve taken an accounting class before, you already have a word in your head for this difference. That word isn&rsquo;t being kept from you &mdash; it&rsquo;s being withheld on purpose, for now.</p>'+
+      '<p>Here&rsquo;s why: Assets and Liabilities have stayed remarkably stable terms across the whole history of accounting. The difference between them hasn&rsquo;t. Luca Pacioli, writing down double-entry in 1494, called it <em>capitale</em> &mdash; capital. American accounting theory a few centuries later called it <em>proprietorship</em>. Modern for-profit accounting has its own word for it. Nonprofit accounting, describing the very same kind of difference, uses a different word entirely. One relationship, several names across history, none of them universal.</p>'+
+      '<p>That pattern is the tell: a term that keeps getting renamed isn&rsquo;t naming an independent thing &mdash; it&rsquo;s naming whatever is left over once two stable things, Assets and Liabilities, are defined. So if you already have a name for this sitting in your head, hold it loosely for now. Nothing here contradicts it. But nothing here needs it yet, either &mdash; keep an open mind, and more about naming this difference will be revealed as you work through the rest of this prework.</p>'+
+    '</div></div>';
     html += continueBtn('Write it down');
   } else if(idStage===3){
     html += identityFormula();
