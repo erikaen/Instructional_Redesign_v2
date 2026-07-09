@@ -24,7 +24,7 @@
     </div>
     <div id="cashWb" style="margin-top: 20px;"></div>
     <div class="mc-card" style="margin-top: 20px;">
-      <div class="mc-q">The Cash sheet shows <strong>net cash flow of &minus;$160</strong> for May. Based on that number alone, can you tell whether the repair work was better or worse off at the end of the month?</div>
+      <div class="mc-q">The Cash sheet shows <strong>net cash flow of &minus;$160</strong> for May. Based on that number alone, can you tell whether May was a good month or a bad month for the repair work?</div>
       <div class="mc-opts" id="cashOpts"></div>
       <div class="feedback" id="cashFb"></div>
     </div>
@@ -159,8 +159,8 @@ function toggleCat(cat){ playClick(); thingsExpanded[cat] = !thingsExpanded[cat]
 
 /* ===== cash quiz ===== */
 function renderCashQuiz(){
-  var opts=[ {id:'a',text:'Yes. Since net cash flow was &minus;$160, the repair work must be worse off.'},
-    {id:'b',text:'No. Since customers paid money during May, the repair work must be doing fine.'},
+  var opts=[ {id:'a',text:'Yes. Since net cash flow was &minus;$160, May must have been a bad month for the repair work.'},
+    {id:'b',text:'No. Since customers paid money during May, it must have been a good month for the repair work.'},
     {id:'c',text:'Not from the Cash sheet alone. We need to know what the money came in for and what the money went out for.'} ];
   document.getElementById('cashOpts').innerHTML = opts.map(function(o){
     return '<div class="mc-opt" data-id="'+o.id+'" onclick="selectCash(\''+o.id+'\')"><div class="mc-letter">'+o.id.toUpperCase()+'</div><div>'+o.text+'</div></div>';
@@ -192,8 +192,8 @@ function submitCash(){
     el.classList.add('wrong');
     fb.className='feedback err show';
     fb.innerHTML = cashSel==='a'
-      ? 'Careful. A negative cash flow does not automatically mean the repair work is worse off. Some of the cash that went out bought things you still have, like the repair stand, fixtures, and parts on the shelf. To know what happened, we need to look at what each cash outflow was for.'
-      : 'Not quite. Customer payments came in, but that does not automatically mean the repair work is better off. Some cash can come with strings attached. Smith&rsquo;s $220, for example, was a deposit for work you still have to do. To know what happened, we need to look at what each cash inflow was for.';
+      ? 'Careful. A negative cash flow does not automatically mean May was a bad month for the repair work. Some of the cash that went out bought things you still have, like the repair stand, fixtures, and parts on the shelf. To know what happened, we need to look at what each cash outflow was for.'
+      : 'Not quite. Customer payments came in, but that does not automatically mean May was a good month for the repair work. Some cash can come with strings attached. Smith&rsquo;s $220, for example, was a deposit for work you still have to do. To know what happened, we need to look at what each cash inflow was for.';
   }
 }
 function resetCash(){
