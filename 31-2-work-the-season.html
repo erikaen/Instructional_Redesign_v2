@@ -32,13 +32,9 @@
 
     <div id="wb"></div>
 
-    <button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every repair this summer</button>
-    <button class="btn-hint btn-block" onclick="openPartsOrders()"><i data-lucide="package" class="licon"></i> Open the parts orders &mdash; supplier invoices</button>
-    <button class="btn-hint btn-block" onclick="openBankStatements()"><i data-lucide="landmark" class="licon"></i> Open the bank statements &mdash; LLC checking</button>
-    <button class="btn-hint btn-block" onclick="openCardStatements()"><i data-lucide="credit-card" class="licon"></i> Open the credit card statements</button>
-
     <div id="anna"></div>
     <div id="controls"></div>
+    <div id="evidence"></div>
 
   </div>
 </div>
@@ -69,6 +65,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-bank-statements.js"></script>
 <script src="bike-repair-card-statements.js"></script>
+<script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -82,129 +79,25 @@ function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},9
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== the Aug-31 snapshot — same three-tab workbook, a season later =====
-   Every line carries its FULL history: drilling a line shows every entry since the
-   recordkeeping began, with a running balance (no dates yet). Only what the novice
-   witnessed — cash moving, parts used, Smith's frame delivered. No receivable, no depreciation. */
+   Mounts the SAME workbook every later Module 3 page uses (BR_WB.snapshot() with no
+   options reproduces this page's original state exactly). Every line carries its FULL
+   history: drilling a line shows every entry since the recordkeeping began. */
+var SNAP = BR_WB.snapshot();
 
-// Cash — the complete ledger, first entry to today: pre-LLC activity → the founding → the season.
-var cashPreJune = [
-  { name:'Rent paid in advance (the lease)', amt:-1300 },
-  { name:'Park Tool repair stand', amt:-200 },
-  { name:'Repair, customer paid', amt:340 },
-  { name:'Repair, customer paid', amt:180 },
-  { name:'Repair, customer paid', amt:80 },
-  { name:'Repair, customer paid', amt:140 },
-  { name:'Repair, customer paid', amt:130 },
-  { name:'Smith&rsquo;s deposit received', amt:220 },
-  { name:'Repair, customer paid', amt:100 },
-  { name:'Repair, customer paid', amt:150 },
-  { name:'Covered from your personal funds', amt:160 },
-  { name:'Deposited to open the LLC bank account', amt:1300 }
-];
-var cashRepairs = BR_JOBS.filter(function (j) { return j.collected && j.pay.indexOf('Deposit') < 0; })
-  .map(function (j) { return { name:'Repair collected &mdash; ' + j.customer, amt:j.charge }; });
-// The season's parts restock comes from the supplier orders (source docs, BR_PURCHASES).
-// Same buys feed Cash out and the Parts asset in.
-var monthName = { Jun:'June', Jul:'July', Aug:'August' };
-var partsBuys = BR_PURCHASES.map(function (p) { return { m:monthName[p.date.slice(0, 3)], amt:p.total, id:p.id }; });
-var cashCosts = partsBuys.map(function (b) { return { name:'Parts bought &mdash; ' + b.m, amt:-b.amt }; }).concat([
-  { name:'Rent paid &mdash; June', amt:-650 },
-  { name:'Rent paid &mdash; July', amt:-650 },
-  { name:'Rent paid &mdash; August', amt:-650 },
-  { name:'New repair tool', amt:-400 },
-  { name:'Credit card paid off', amt:-2030 },
-  { name:'Money taken out for personal use', amt:-600 }
-]);
-var cashEvents = cashPreJune.concat(cashRepairs, cashCosts);
-
-// Parts asset ledger — opening shelf, the three restocks, then each job's parts used (per-job detail).
-var partsComposition = [
-  { name:'Chains', amt:50 }, { name:'Brake pads', amt:40 }, { name:'Derailleur cables', amt:20 },
-  { name:'Cassettes', amt:40 }, { name:'Bottom brackets', amt:20 }, { name:'Spokes', amt:20 }, { name:'Tubes', amt:10 }
-];
-var partsEvents = partsComposition
-  .concat(partsBuys.map(function (b) { return { name:'Parts bought &mdash; ' + b.m, amt:b.amt }; }))
-  .concat(BR_JOBS.filter(function (j) { return j.partsCost > 0; }).map(function (j) { return { name:'Parts used &mdash; ' + j.customer, amt:-j.partsCost }; }));
-
-// The pre-season reasons — May's work and the formation contributions, exactly as first
-// jotted. One CONTINUOUS list: nothing was settled or reset at June 1; the piles' running
-// subtotals ARE the residual story (CONTRIBUTED 2,290 / GENERATED 170 at June 1).
-var SETUP_REASONS = [
-  { kind:'net', cat:'contributed', account:'Cash', reason:'covered from your personal funds (May)', delta:160 },
-  { kind:'net', cat:'contributed', account:'Laptop', reason:'brought from home (May)', delta:610 },
-  { kind:'net', cat:'contributed', account:'Equipment', reason:'gear from home &mdash; grinder, headset press, shop vacuum (May)', delta:220 },
-  { kind:'net', cat:'contributed', account:'Cash', reason:'deposited to open the LLC bank account (June 1)', delta:1300 },
-  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:340 },
-  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:180 },
-  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:80 },
-  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:140 },
-  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:130 },
-  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:100 },
-  { kind:'net', cat:'generated', account:'Repair collected', reason:'customer paid (May)', delta:150 },
-  { kind:'net', cat:'generated', account:'Parts used', reason:'customer jobs (May)', delta:-300 },
-  { kind:'net', cat:'generated', account:'Rent used', reason:'May', delta:-650 }
-];
-
-// GENERATED reasons — the novice's mess: job by job (each collection and its parts used together), rent when
-// paid, NOT sorted into revenue vs. expense. This is what books look like without Revenue/Expense accounts.
-var reasonRows = [];
-var rentPaid = {};
-BR_JOBS.forEach(function (j) {
-  var m = j.date.slice(0, 3);
-  if (!rentPaid[m]) { reasonRows.push({ kind:'net', cat:'generated', account:'Rent used', reason:monthName[m], delta:-650 }); rentPaid[m] = true; }
-  if (j.pay.indexOf('Deposit') >= 0) reasonRows.push({ kind:'net', cat:'generated', account:'Frame delivered', reason:j.customer, delta:j.charge });
-  else if (j.collected) reasonRows.push({ kind:'net', cat:'generated', account:'Repair collected', reason:j.customer, delta:j.charge });
-  if (j.partsCost > 0) reasonRows.push({ kind:'net', cat:'generated', account:'Parts used', reason:j.customer, delta:-j.partsCost });
-});
-reasonRows.push({ kind:'net', cat:'drawn', account:'Owner&rsquo;s draw', reason:'money taken out for personal use', delta:-600 });
-
-var SNAP = {
-  file:'Bike-Repair.xlsx',
-  tabs:[ {id:'assets',label:'Assets'}, {id:'liabilities',label:'Liabilities'}, {id:'reasons',label:'Reasons'} ],
-  assets:[
-    { label:'Cash', amount:620, events:cashEvents },
-    { label:'Right of Use', amount:650, events:[
-      { name:'Last month&rsquo;s rent, paid in advance (on deposit)', amt:650 }
-    ]},
-    { label:'Parts', amount:200, events:partsEvents },
-    { label:'Tools &amp; Repair Equipment', amount:1600, events:[
-      { name:'Repair stand', amt:200 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
-      { name:'Wheel-truing stand', amt:170 }, { name:'Cone wrench set', amt:65 }, { name:'Torque wrench', amt:95 },
-      { name:'Hex/Allen set', amt:45 }, { name:'Cable cutters', amt:40 }, { name:'Chain breaker', amt:35 },
-      { name:'Tire levers', amt:20 }, { name:'Bench grinder', amt:90 }, { name:'Headset press', amt:70 },
-      { name:'Shop vacuum', amt:60 }, { name:'New repair tool bought this season', amt:400 }
-    ]},
-    { label:'Fixtures', amount:750, events:[
-      { name:'Desk', amt:250 }, { name:'Shelving units', amt:200 }, { name:'Display rack', amt:180 }, { name:'Pegboard + hooks', amt:120 }
-    ]},
-    { label:'Laptop', amount:610, events:[
-      { name:'Laptop (from home)', amt:610 }
-    ]}
-  ],
-  liabilities:[
-    { label:'Credit Card', amount:0, events:[
-      { name:'Charged &mdash; hand tools', amt:300 }, { name:'Charged &mdash; air compressor', amt:180 },
-      { name:'Charged &mdash; parts washer', amt:130 }, { name:'Charged &mdash; wheel-truing stand', amt:170 },
-      { name:'Charged &mdash; fixtures', amt:750 }, { name:'Charged &mdash; parts (QBP order)', amt:500 },
-      { name:'Paid off in full this season', amt:-2030 }
-    ]},
-    { label:'Customer Deposit', amount:0, events:[
-      { name:'Smith&rsquo;s advance for a custom frame', amt:220 },
-      { name:'Built and delivered Smith&rsquo;s frame &mdash; no longer owed', amt:-220 }
-    ]}
-  ],
-  reasons:{
-    pilesTitle:'The Reasons piles &mdash; May 1 to today',
-    pilesSub:'one continuous list &mdash; every reason since the first May jot; nothing settled, nothing reset',
-    mode:'sorted',
-    groups:[
-      { key:'contributed', label:'CONTRIBUTED', blurb:'what you put in' },
-      { key:'generated',   label:'GENERATED',   blurb:'what the work produced' },
-      { key:'drawn',       label:'WITHDRAWN',   blurb:'what you took for yourself' }
-    ],
-    rows:SETUP_REASONS.concat(reasonRows)
-  }
-};
+// Thread a "See the evidence" hint onto the Parts line's item-level events — one per
+// supplier invoice, right after the items that invoice covers (same idiom as 14-2's
+// receipts: the match lives at the transaction, evidence sits beside what it backs up).
+(function attachPartsEvidence() {
+  var partsLine = SNAP.assets.filter(function (a) { return a.label === 'Parts'; })[0];
+  var shelfCount = 7, cursor = shelfCount;
+  var events = partsLine.events.slice(0, shelfCount);
+  BR_PURCHASES.forEach(function (p) {
+    events = events.concat(partsLine.events.slice(cursor, cursor + p.items.length));
+    cursor += p.items.length;
+    events.push({ kind:'note', amt:0, name:'<button class="btn-hint" onclick="openPartsOrders(\'' + p.id + '\')"><i data-lucide="receipt" class="licon"></i> See invoice ' + p.id + ' &mdash; ' + p.supplier + ', ' + p.date + '</button>' });
+  });
+  partsLine.events = events.concat(partsLine.events.slice(cursor));
+})();
 
 /* ===== Anna's guided drill-down walk (targets line opens / tab switches in the workbook) ===== */
 var WALK = [
@@ -241,7 +134,7 @@ var step=0, stepDone=false;
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function renderTalk(){
-  var anna='', ctrl='';
+  var anna='', ctrl='', evidence='';
   if(step<WALK.length){
     anna=annaBox(WALK[step].q);
     if(stepDone){
@@ -256,9 +149,17 @@ function renderTalk(){
       '<p>These three tabs show where things <strong>stand</strong> and <em>why</em> each balance moved. But they never line up, in one place, what the work <strong>delivered</strong> against what it <strong>used up</strong> delivering. That comparison is the next thing to build &mdash; and because &ldquo;how did the shop do?&rdquo; splits into two questions, it will take more than one statement to answer it whole.</p>')
       + '<div class="next-phase-msg" style="margin-top:10px;">You read the whole season off these tabs. Next, you&rsquo;ll take that GENERATED pile and turn it into the statement that answers that question.</div>'
       + '<button class="btn-continue btn-block" onclick="nav(\'32-1-the-income-statement.html\')">Next: how the season went &rarr;</button>';
+    evidence='<div class="section-card"><div class="card-title">Where these numbers came from</div>'
+      + '<p>None of this is invented. Every line you just walked traces back to something you could hold &mdash; a repair ticket, a supplier invoice, a bank or credit-card statement. Open any of them below to check a number against its source.</p>'
+      + '<button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every repair this summer</button>'
+      + '<button class="btn-hint btn-block" onclick="openPartsOrders()"><i data-lucide="package" class="licon"></i> Open the parts orders &mdash; supplier invoices</button>'
+      + '<button class="btn-hint btn-block" onclick="openBankStatements()"><i data-lucide="landmark" class="licon"></i> Open the bank statements &mdash; LLC checking</button>'
+      + '<button class="btn-hint btn-block" onclick="openCardStatements()"><i data-lucide="credit-card" class="licon"></i> Open the credit card statements</button>'
+      + '</div>';
   }
   document.getElementById('anna').innerHTML=anna;
   document.getElementById('controls').innerHTML=ctrl;
+  document.getElementById('evidence').innerHTML=evidence;
   if(window.lucide) lucide.createIcons();
 }
 
@@ -293,17 +194,18 @@ function openJobLog(){
   document.getElementById('ticketOverlay').classList.add('open');
   if(window.lucide) lucide.createIcons();
 }
-function openPartsOrders(){
+function openPartsOrders(poId){
   playClick();
-  document.getElementById('ticketTitle').innerHTML='Parts orders &middot; supplier invoices';
+  var list = poId ? BR_PURCHASES.filter(function(p){ return p.id===poId; }) : BR_PURCHASES;
+  document.getElementById('ticketTitle').innerHTML = poId ? 'Parts order &middot; '+poId : 'Parts orders &middot; supplier invoices';
   var total=0;
-  var rows=BR_PURCHASES.map(function(p){
+  var rows=list.map(function(p){
     total+=p.total;
     var items=p.items.map(function(it){ return it.name+' $'+it.cost.toLocaleString('en-US'); }).join(' &middot; ');
     return '<div class="glossary-entry"><div class="glossary-entry-term" style="font-size:var(--font-s)">'+p.date+' &middot; '+p.supplier+' <span class="stmt-tag repair">'+p.id+'</span> &middot; <strong>$'+p.total.toLocaleString('en-US')+'</strong></div>'
       +'<div class="glossary-entry-def">'+items+'</div></div>';
   }).join('');
-  rows+='<div class="glossary-entry"><div class="glossary-entry-def"><strong>'+BR_PURCHASES.length+' orders</strong> &middot; total parts bought $'+total.toLocaleString('en-US')+'</div></div>';
+  rows+='<div class="glossary-entry"><div class="glossary-entry-def"><strong>'+list.length+' order'+(list.length===1?'':'s')+'</strong> &middot; total parts bought $'+total.toLocaleString('en-US')+'</div></div>';
   document.getElementById('ticketBody').innerHTML=rows;
   document.getElementById('ticketOverlay').classList.add('open');
   if(window.lucide) lucide.createIcons();

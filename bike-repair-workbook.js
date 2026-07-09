@@ -69,13 +69,19 @@ var BR_WB = (function () {
     return pre.concat(repairs, costs);
   }
 
-  // Parts asset ledger — opening shelf, the three restocks, then each job's parts used.
+  // Parts asset ledger — opening shelf, then the three restocks item by item (matching
+  // the same PO that hit Cash as one payment &mdash; the match lives at the transaction,
+  // same as Fixtures back in Module 1), then each job's parts used.
   function partsEvents() {
     var shelf = [
       { name: 'Chains', amt: 50 }, { name: 'Brake pads', amt: 40 }, { name: 'Derailleur cables', amt: 20 },
       { name: 'Cassettes', amt: 40 }, { name: 'Bottom brackets', amt: 20 }, { name: 'Spokes', amt: 20 }, { name: 'Tubes', amt: 10 }
     ];
-    var buys = BR_PURCHASES.map(function (p) { return { name: 'Parts bought &mdash; ' + monthName[p.date.slice(0, 3)], amt: p.total }; });
+    var buys = [];
+    BR_PURCHASES.forEach(function (p) {
+      var m = monthName[p.date.slice(0, 3)];
+      p.items.forEach(function (it) { buys.push({ name: it.name + ' (' + m + ')', amt: it.cost }); });
+    });
     var used = BR_JOBS.filter(function (j) { return j.partsCost > 0; })
       .map(function (j) { return { name: 'Parts used &mdash; ' + j.customer, amt: -j.partsCost }; });
     return shelf.concat(buys, used);
