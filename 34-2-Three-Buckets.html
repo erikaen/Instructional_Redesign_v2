@@ -92,6 +92,7 @@ var visibleIds = rows.map(function(r){ return r.id; });
 
 /* ===== state ===== */
 var placed = {}, selectedId = null, done = false, filling = false;
+var bucketOpen = { op:true, inv:true, fin:true };
 var BUCKETS = [
   { key:'op',  label:'Running the season',    blurb:'day-to-day cash in and out of doing the work' },
   { key:'inv', label:'Long-lived gear',        blurb:'cash for things that will last beyond this season' },
@@ -108,11 +109,19 @@ function bucketGroup(b){
   var mine = rows.filter(function(r){ return placed[r.id]===b.key; });
   var armed = selectedId && !done && !filling;
   var head = b.label+' ('+mine.length+') &mdash; '+b.blurb+(armed?' <span class="xl-new-tag">click to drop here</span>':'');
-  var h = xrow('xl-cat', armed?(' onclick="placeInto(\''+b.key+'\')"'):'', head, BRW.signed(bTotal(b.key)));
-  mine.forEach(function(r){ h += xrow('xl-item', '', r.account+' &mdash; '+r.reason, BRW.signed(r.delta)); });
-  if(!mine.length && !armed) h += xrow('xl-item', '', '<em>empty</em>', '');
+  var open = !done || bucketOpen[b.key];
+  var gutter = done
+    ? '<button class="xl-toggle" onclick="toggleBucket(\''+b.key+'\')" aria-expanded="'+open+'">'+(open?'&minus;':'+')+'</button>'
+    : '';
+  var h = '<div class="xl-row xl-cat"'+(armed?' onclick="placeInto(\''+b.key+'\')" style="cursor:pointer;"':'')+'>'
+    +'<div class="xl-gutter">'+gutter+'</div><div class="xl-rownum"></div><div class="xl-c">'+head+'</div><div class="xl-v">'+BRW.signed(bTotal(b.key))+'</div></div>';
+  if(open){
+    mine.forEach(function(r){ h += xrow('xl-item', '', r.account+' &mdash; '+r.reason, BRW.signed(r.delta)); });
+    if(!mine.length && !armed) h += xrow('xl-item', '', '<em>empty</em>', '');
+  }
   return h;
 }
+function toggleBucket(k){ playClick(); bucketOpen[k] = !bucketOpen[k]; BRW.update('wb', snap); }
 function sortSheet(cid, snap){
   var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s cash events</div><div class="cash-sheet-sub">'+(done?'sorted into three piles, by purpose':'click a row, then click the pile it belongs in')+'</div></div>';
   if(!done){

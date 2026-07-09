@@ -79,7 +79,7 @@ var MCQ = [
 var mcqAnswered = null;
 
 function renderMcq(){
-  var h = '<div class="mc-card"><div class="mc-q">Which of these is the honest read of what just happened?</div><div class="mc-opts">';
+  var h = '<div class="mc-card"><div class="mc-q">Cash fell from '+BRW.dol(CASH_OPEN)+' to '+BRW.dol(CASH_NOW)+' this season &mdash; down '+BRW.dol(CASH_FALL)+' &mdash; even though the Income sheet already shows a '+BRW.dol(NET_INCOME)+' profit. What&rsquo;s the honest read of that?</div><div class="mc-opts">';
   MCQ.forEach(function(o,i){
     var cls = 'mc-opt' + (mcqAnswered===i ? (o.ok?' correct':' wrong') : '') + (mcqAnswered!==null && MCQ[mcqAnswered].ok ? ' locked' : '');
     h += '<div class="'+cls+'" onclick="answerMcq('+i+')">'+o.text+'</div>';
