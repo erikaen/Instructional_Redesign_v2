@@ -2211,6 +2211,11 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .dialog-label { font-family: Inter, sans-serif; font-size: var(--font-xs); font-weight: 700; letter-spacing: 0.6px; color: var(--primary); margin-bottom: 6px; }
 .dialog-box.anna .dialog-label { color: var(--primary); }
 .dialog-box.you .dialog-label { color: #888; }
+/* Freddie — the M4 angel investor (approved addition 2026-07-09). Dark mode inherits:
+   the .dialog-box dark background applies to all variants and --accent is redefined
+   in the dark block, so no new dark rules are needed. */
+.dialog-box.freddie { border-color: var(--accent); }
+.dialog-box.freddie .dialog-label { color: var(--accent); }
 .dialog-text { font-size: var(--font-m); font-style: italic; color: #374151; line-height: 1.65; }
 .dialog-prefix { font-style: normal; color: #888; }
 

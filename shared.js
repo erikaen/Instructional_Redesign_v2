@@ -411,7 +411,12 @@ var BRW = (function () {
     setHook: function (fn) { _hook = fn; },
     // Register a renderer for a custom tab id (e.g. 'income'); BRW draws it inside its normal
     // shell (titlebar + tab strip). fn(cid, snap) returns body HTML built from the shared xl-* classes.
-    registerSheet: function (id, fn) { _sheets[id] = fn; }
+    registerSheet: function (id, fn) { _sheets[id] = fn; },
+    // Return a registered custom sheet's body HTML without the workbook shell, so a page can
+    // show a canonical statement as a free-standing panel (approved addition 2026-07-09; the
+    // statement renderers ignore cid, so passing null is safe). Single source of truth: pages
+    // must call this rather than hand-copying statement rows.
+    sheetHTML: function (id, snap) { return _sheets[id] ? _sheets[id](null, snap) : ''; }
   };
 })();
 
