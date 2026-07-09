@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 1.4: Keeping the Reasons &middot; Walk the Reasons</title>
+  <title>Tutorial 1.4: Keeping the Reasons &middot; Walk the Changes</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -14,14 +14,17 @@
   <div class="prework-wrap">
 
     <div class="phase-title-row">
-      <div class="phase-title" id="phaseTitle">Walk the Reasons</div>
+      <div class="phase-title" id="phaseTitle">Walk the Changes</div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
       <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <div id="walkAnna"></div>
 
-    <!-- two windows of the same workbook: Assets | Reasons -->
+    <!-- the rule + the running score -->
+    <div id="ruleStrip"></div>
+
+    <!-- two windows of the same workbook: Assets/Liabilities | Reasons -->
     <div class="main-grid two-col" style="margin-bottom:12px;">
       <div id="paneLeft"></div>
       <div id="paneRight"></div>
@@ -72,48 +75,89 @@ function dol(v){ return (v<0?'−$':'$')+Math.abs(v).toLocaleString('en-US'); }
 function signed(v){ var cls=v>=0?'stmt-dep':'stmt-with'; return '<span class="'+cls+'">'+(v>=0?'+':'−')+'$'+Math.abs(v).toLocaleString('en-US')+'</span>'; }
 function catLabel(cat){ return cat==='RIGHT OF USE' ? 'Right of Use' : (cat.charAt(0)+cat.slice(1).toLowerCase()); }
 
-/* ===== Assets snapshot (Module 1 plain labels; cash folded in at the 1.4 beat) =====
-   Walk categories carry item-level detail with each item's source + receipt group. */
-var ASSETS = [
-  { cat:'EQUIPMENT', amount:1200, items:[
-      { name:'Park Tool repair stand', amt:200, source:'cash', group:'g_stand' },
-      { name:'Cone wrench set', amt:65, source:'card', group:'g_tools' },
-      { name:'Torque wrench', amt:95, source:'card', group:'g_tools' },
-      { name:'Hex / Allen key set', amt:45, source:'card', group:'g_tools' },
-      { name:'Cable cutters', amt:40, source:'card', group:'g_tools' },
-      { name:'Chain breaker', amt:35, source:'card', group:'g_tools' },
-      { name:'Tire levers', amt:20, source:'card', group:'g_tools' },
-      { name:'Air compressor', amt:180, source:'card', group:'g_compressor' },
-      { name:'Parts washer', amt:130, source:'card', group:'g_washer' },
-      { name:'Wheel-truing stand', amt:170, source:'card', group:'g_truing' },
-      { name:'Bench grinder', amt:90, source:'home', group:'g_gear' },
-      { name:'Headset press', amt:70, source:'home', group:'g_gear' },
-      { name:'Shop vacuum', amt:60, source:'home', group:'g_gear' } ] },
-  { cat:'COMPUTER EQUIPMENT', amount:610, items:[
-      { name:'Laptop', amt:610, source:'home', group:'g_laptop' } ] },
-  { cat:'SUPPLIES', amount:200, items:[ { name:'Parts on the shelf', amt:200 } ] },
-  { cat:'FIXTURES', amount:750, items:[
-      { name:'Desk', amt:250, source:'card', group:'g_fixtures' },
-      { name:'Shelving units', amt:200, source:'card', group:'g_fixtures' },
-      { name:'Display rack', amt:180, source:'card', group:'g_fixtures' },
-      { name:'Pegboard + hooks', amt:120, source:'card', group:'g_fixtures' } ] },
-  { cat:'RIGHT OF USE', amount:650, items:[ { name:'The lease’s last month, prepaid', amt:650 } ] },
-  { cat:'CASH', amount:0, items:[ { name:'Repair cash on hand (May 31)', amt:0 } ] }
-];
-var ASSETS_TOTAL = ASSETS.reduce(function(s,c){ return s+c.amount; },0); // 3410
-var CAT_BY_KEY = {}; ASSETS.forEach(function(c){ CAT_BY_KEY[c.cat]=c; });
-var ITEM_INDEX = {}; ASSETS.forEach(function(c){ c.items.forEach(function(it){ ITEM_INDEX[it.name]={ it:it, cat:c.cat }; }); });
+/* ============================================================================
+   THE RULE this page teaches (Rick, 2026-07-08):
+   Every change in an Asset or a Liability gets either a MATCH or a REASON.
+   A match is the other line that moved with it, same transaction — the pair
+   explains itself, and Assets − Liabilities does not move (Asset up +
+   Liability up, or one Asset up + another Asset down). A change with NO match
+   moved the difference — its why lives outside the sheets, so it gets written
+   on the Reasons tab. The reasons alone carry every move in the difference.
+   ========================================================================== */
 
-var LIABS = [
-  { key:'card', label:'Credit Card', note:'still owed on the bike-repair card', amount:2030, items:[
-    { name:'Hand tools', amt:300 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
-    { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] },
-  { key:'smith', label:'Smith’s deposit', note:'paid $220 up front for a frame, not built yet', amount:220, items:[
-    { name:'Check deposit, May 22 &mdash; a custom frame build, 4&ndash;6 weeks', amt:220 } ] }
+/* ===== every May change in an Asset or a Liability =====
+   side: 'a'|'l'; cat: pane grouping; delta: signed; ans: what else moved
+   ('card'|'cash'|'promise'|'none'); pair: transaction id shared with the
+   counterpart line(s); group: receipt evidence; reason: the jot when ans none. */
+var CHANGES = [
+  /* EQUIPMENT */
+  { id:'stand',   cat:'EQUIPMENT', side:'a', label:'Park Tool repair stand', delta:200,  ans:'cash', pair:'p_stand', group:'g_stand' },
+  { id:'wrench',  cat:'EQUIPMENT', side:'a', label:'Cone wrench set',        delta:65,   ans:'card', pair:'p_tools', group:'g_tools' },
+  { id:'torque',  cat:'EQUIPMENT', side:'a', label:'Torque wrench',          delta:95,   ans:'card', pair:'p_tools', group:'g_tools' },
+  { id:'hex',     cat:'EQUIPMENT', side:'a', label:'Hex / Allen key set',    delta:45,   ans:'card', pair:'p_tools', group:'g_tools' },
+  { id:'cutters', cat:'EQUIPMENT', side:'a', label:'Cable cutters',          delta:40,   ans:'card', pair:'p_tools', group:'g_tools' },
+  { id:'breaker', cat:'EQUIPMENT', side:'a', label:'Chain breaker',          delta:35,   ans:'card', pair:'p_tools', group:'g_tools' },
+  { id:'levers',  cat:'EQUIPMENT', side:'a', label:'Tire levers',            delta:20,   ans:'card', pair:'p_tools', group:'g_tools' },
+  { id:'compr',   cat:'EQUIPMENT', side:'a', label:'Air compressor',         delta:180,  ans:'card', pair:'p_compr', group:'g_compressor' },
+  { id:'washer',  cat:'EQUIPMENT', side:'a', label:'Parts washer',           delta:130,  ans:'card', pair:'p_washer', group:'g_washer' },
+  { id:'truing',  cat:'EQUIPMENT', side:'a', label:'Wheel-truing stand',     delta:170,  ans:'card', pair:'p_truing', group:'g_truing' },
+  { id:'grinder', cat:'EQUIPMENT', side:'a', label:'Bench grinder',          delta:90,   ans:'none', group:'g_gear', reason:'Brought the bench grinder from home.' },
+  { id:'press',   cat:'EQUIPMENT', side:'a', label:'Headset press',          delta:70,   ans:'none', group:'g_gear', reason:'Brought the headset press from home.' },
+  { id:'vacuum',  cat:'EQUIPMENT', side:'a', label:'Shop vacuum',            delta:60,   ans:'none', group:'g_gear', reason:'Brought the shop vacuum from home.' },
+  /* COMPUTER EQUIPMENT */
+  { id:'laptop',  cat:'COMPUTER EQUIPMENT', side:'a', label:'Laptop', delta:610, ans:'none', group:'g_laptop', reason:'Brought the laptop from home.' },
+  /* FIXTURES — four lines, ONE card charge */
+  { id:'desk',    cat:'FIXTURES', side:'a', label:'Desk',            delta:250, ans:'card', pair:'p_fixt', group:'g_fixtures' },
+  { id:'shelving',cat:'FIXTURES', side:'a', label:'Shelving units',  delta:200, ans:'card', pair:'p_fixt', group:'g_fixtures' },
+  { id:'rack',    cat:'FIXTURES', side:'a', label:'Display rack',    delta:180, ans:'card', pair:'p_fixt', group:'g_fixtures' },
+  { id:'pegboard',cat:'FIXTURES', side:'a', label:'Pegboard + hooks',delta:120, ans:'card', pair:'p_fixt', group:'g_fixtures' },
+  /* SUPPLIES — bought AND used, item by item (bought − used = the shelf, line for line) */
+  { id:'bChains', cat:'SUPPLIES', side:'a', label:'Chains bought (QBP order)',            delta:120, ans:'card', pair:'p_parts', group:'g_parts' },
+  { id:'bPads',   cat:'SUPPLIES', side:'a', label:'Brake pads bought (QBP order)',        delta:90,  ans:'card', pair:'p_parts', group:'g_parts' },
+  { id:'bCables', cat:'SUPPLIES', side:'a', label:'Derailleur cables bought (QBP order)', delta:50,  ans:'card', pair:'p_parts', group:'g_parts' },
+  { id:'bCass',   cat:'SUPPLIES', side:'a', label:'Cassettes bought (QBP order)',         delta:90,  ans:'card', pair:'p_parts', group:'g_parts' },
+  { id:'bBB',     cat:'SUPPLIES', side:'a', label:'Bottom brackets bought (QBP order)',   delta:50,  ans:'card', pair:'p_parts', group:'g_parts' },
+  { id:'bSpokes', cat:'SUPPLIES', side:'a', label:'Spokes bought (QBP order)',            delta:50,  ans:'card', pair:'p_parts', group:'g_parts' },
+  { id:'bTubes',  cat:'SUPPLIES', side:'a', label:'Tubes bought (QBP order)',             delta:50,  ans:'card', pair:'p_parts', group:'g_parts' },
+  { id:'uChains', cat:'SUPPLIES', side:'a', label:'Chains used on customer jobs',            delta:-70, ans:'none', reason:'Used $70 of chains finishing customer jobs.' },
+  { id:'uPads',   cat:'SUPPLIES', side:'a', label:'Brake pads used on customer jobs',        delta:-50, ans:'none', reason:'Used $50 of brake pads finishing customer jobs.' },
+  { id:'uCables', cat:'SUPPLIES', side:'a', label:'Derailleur cables used on customer jobs', delta:-30, ans:'none', reason:'Used $30 of derailleur cables finishing customer jobs.' },
+  { id:'uCass',   cat:'SUPPLIES', side:'a', label:'Cassettes used on customer jobs',         delta:-50, ans:'none', reason:'Used $50 of cassettes finishing customer jobs.' },
+  { id:'uBB',     cat:'SUPPLIES', side:'a', label:'Bottom brackets used on customer jobs',   delta:-30, ans:'none', reason:'Used $30 of bottom brackets finishing customer jobs.' },
+  { id:'uSpokes', cat:'SUPPLIES', side:'a', label:'Spokes used on customer jobs',            delta:-30, ans:'none', reason:'Used $30 of spokes finishing customer jobs.' },
+  { id:'uTubes',  cat:'SUPPLIES', side:'a', label:'Tubes used on customer jobs',             delta:-40, ans:'none', reason:'Used $40 of tubes finishing customer jobs.' },
+  /* RIGHT OF USE — paid AND used */
+  { id:'rouPay',  cat:'RIGHT OF USE', side:'a', label:'Rent paid in advance &mdash; two months&rsquo; right to the space', delta:1300, ans:'cash', pair:'p_rou', group:'g_rent' },
+  { id:'rouUse',  cat:'RIGHT OF USE', side:'a', label:'May&rsquo;s month, used', delta:-650, ans:'none', reason:'Used the workspace for May.' },
+  /* LIABILITIES — Smith's deposit (the card's rows are matched from the asset side) */
+  { id:'smith',   cat:'SMITH', side:'l', label:'Smith&rsquo;s deposit &mdash; a frame owed, not built yet', delta:220, ans:'cash', pair:'p_smith', group:'g_smith' },
+  /* CASH — the ledger; most rows matched from the other side already */
+  { id:'cRent',   cat:'CASH', side:'a', label:'<span class="cash-line-date">May 1</span>Rent paid in advance', delta:-1300, ans:'cash', pair:'p_rou' },
+  { id:'cStand',  cat:'CASH', side:'a', label:'<span class="cash-line-date">May 3</span>Park Tool stand', delta:-200, ans:'cash', pair:'p_stand' },
+  { id:'rep1',    cat:'CASH', side:'a', label:'<span class="cash-line-date">May 7</span>Repair finished &mdash; customer paid', delta:340, ans:'none', reason:'Finished a repair &mdash; customer paid $340.' },
+  { id:'rep2',    cat:'CASH', side:'a', label:'<span class="cash-line-date">May 10</span>Repair finished &mdash; customer paid', delta:180, ans:'none', reason:'Finished a repair &mdash; customer paid $180.' },
+  { id:'rep3',    cat:'CASH', side:'a', label:'<span class="cash-line-date">May 12</span>Repair finished &mdash; customer paid', delta:80,  ans:'none', reason:'Finished a repair &mdash; customer paid $80.' },
+  { id:'rep4',    cat:'CASH', side:'a', label:'<span class="cash-line-date">May 14</span>Repair finished &mdash; customer paid', delta:140, ans:'none', reason:'Finished a repair &mdash; customer paid $140.' },
+  { id:'rep5',    cat:'CASH', side:'a', label:'<span class="cash-line-date">May 19</span>Repair finished &mdash; customer paid', delta:130, ans:'none', reason:'Finished a repair &mdash; customer paid $130.' },
+  { id:'cSmith',  cat:'CASH', side:'a', label:'<span class="cash-line-date">May 22</span>Smith&rsquo;s deposit received', delta:220, ans:'cash', pair:'p_smith' },
+  { id:'rep6',    cat:'CASH', side:'a', label:'<span class="cash-line-date">May 23</span>Repair finished &mdash; customer paid', delta:100, ans:'none', reason:'Finished a repair &mdash; customer paid $100.' },
+  { id:'rep7',    cat:'CASH', side:'a', label:'<span class="cash-line-date">May 27</span>Repair finished &mdash; customer paid', delta:150, ans:'none', reason:'Finished a repair &mdash; customer paid $150.' },
+  /* hidden until the tally discovery */
+  { id:'cover',   cat:'CASH', side:'a', label:'<span class="cash-line-date">&mdash;</span>From your personal self &mdash; covering what the work drew down', delta:160, ans:'none', hidden:true, reason:'Covered $160 from your personal self &mdash; found only by tallying.' }
 ];
-var LIABS_TOTAL = LIABS.reduce(function(s,l){ return s+l.amount; },0); // 2250
+var BY_ID={}; CHANGES.forEach(function(c){ BY_ID[c.id]=c; });
 
-/* receipts (the evidence behind each item) */
+/* the credit card's own rows — each is the OTHER LINE of purchases walked on the asset side */
+var CARD_ROWS = [
+  { label:'Hand tools (one charge, six tools)', amt:300, pair:'p_tools' },
+  { label:'Air compressor', amt:180, pair:'p_compr' },
+  { label:'Parts washer', amt:130, pair:'p_washer' },
+  { label:'Wheel-truing stand', amt:170, pair:'p_truing' },
+  { label:'Fixtures (desk, shelving, rack, pegboard)', amt:750, pair:'p_fixt' },
+  { label:'Parts (QBP order)', amt:500, pair:'p_parts' }
+];
+
+/* receipts (the evidence behind each transaction) */
 var GROUPS = {
   g_stand: { kind:'receipt', vendor:'Cyclesport Supply', meta:'Sales Receipt #SR-4471 · May 3, 2026', paid:'Personal debit card •••• 6620', total:200, items:[{name:'Park Tool PRS-25 Repair Stand', amt:200}] },
   g_tools: { kind:'receipt', vendor:'Cyclesport Supply', meta:'Sales Receipt #SR-4488 · May 5, 2026', paid:'Harborline Visa •••• 3902', total:300, items:[{name:'Cone wrench set', amt:65},{name:'Torque wrench', amt:95},{name:'Hex / Allen key set', amt:45},{name:'Cable cutters', amt:40},{name:'Chain breaker', amt:35},{name:'Tire levers', amt:20}] },
@@ -122,92 +166,136 @@ var GROUPS = {
   g_truing: { kind:'receipt', vendor:'Cyclesport Supply', meta:'Sales Receipt #SR-4502 · May 12, 2026', paid:'Harborline Visa •••• 3902', total:170, items:[{name:'Wheel-truing stand — shop grade', amt:170}] },
   g_gear: { kind:'ebay', vendor:'eBay — comparable sold listings', meta:'Pre-owned · valued by market comp', paid:'Brought from home — no purchase', total:220, items:[{name:'Bench grinder', amt:90},{name:'Headset press', amt:70},{name:'Shop vacuum', amt:60}] },
   g_laptop: { kind:'ebay', vendor:'eBay — comparable sold listings', meta:'Pre-owned · valued by market comp', paid:'Brought from home — no purchase', total:610, items:[{name:'Laptop (used)', amt:610}] },
-  g_fixtures: { kind:'receipt', vendor:'Workspace Outfitters', meta:'Invoice #WO-20518 · May 5, 2026', paid:'Harborline Visa •••• 3902', total:750, items:[{name:'Work desk', amt:250},{name:'Shelving units (×2)', amt:200},{name:'Display rack', amt:180},{name:'Pegboard + hooks', amt:120}] }
+  g_fixtures: { kind:'receipt', vendor:'Workspace Outfitters', meta:'Invoice #WO-20518 · May 5, 2026 — ONE charge', paid:'Harborline Visa •••• 3902', total:750, items:[{name:'Work desk', amt:250},{name:'Shelving units (×2)', amt:200},{name:'Display rack', amt:180},{name:'Pegboard + hooks', amt:120}] },
+  g_parts: { kind:'receipt', vendor:'QBP — Quality Bicycle Products', meta:'Invoice #QBP-88413 · May 6, 2026 — ONE charge', paid:'Harborline Visa •••• 3902', total:500, items:[{name:'Chains', amt:120},{name:'Brake pads', amt:90},{name:'Derailleur cables', amt:50},{name:'Cassettes', amt:90},{name:'Bottom brackets', amt:50},{name:'Spokes', amt:50},{name:'Tubes', amt:50}] },
+  g_rent: { kind:'receipt', vendor:'Landlord — 142 Whalley Avenue, Unit B', meta:'Rent receipt · May 1, 2026', paid:'Personal debit card •••• 6620', total:1300, items:[{name:'May — right to use the space', amt:650},{name:'Final month — paid in advance', amt:650}] },
+  g_smith: { kind:'receipt', vendor:'Smith — check deposit', meta:'May 22, 2026 · custom frame build, 4–6 weeks', paid:'Check, deposited', total:220, items:[{name:'Deposit received up front', amt:220}] }
 };
-var SOURCE_LABEL = { card:'On the card', cash:'Paid cash (debit)', home:'Brought from home' };
 
-/* per-item reason text (each piece goes in on its own) */
-function itemReasonText(it){
-  var nm = it.name.toLowerCase();
-  if(it.source==='card') return 'Bought the '+nm+' for '+dol(it.amt)+' on the card.';
-  if(it.source==='cash') return 'Bought the '+nm+' for '+dol(it.amt)+' (debit — straight from the bank).';
-  return 'Brought the '+nm+' from home ('+dol(it.amt)+').';
-}
-
-/* ===== the walk: a sequence of categories (acquisition categories built so far) ===== */
-var WALK_CATS = ['EQUIPMENT','COMPUTER EQUIPMENT','FIXTURES'];
-var CAT_ANNA = {
-  'EQUIPMENT':"There&rsquo;s your new <strong>Reasons</strong> tab &mdash; I opened it in a <em>second window</em>, side by side, so a reason always sits next to the change it explains. Go down your <strong>Equipment</strong> list and record each piece, one at a time: click an item and say <em>how it came in</em>. The receipt is the clue.",
-  'COMPUTER EQUIPMENT':"Next, your <strong>computer</strong> &mdash; just the laptop. Same gesture: click it and say how it came in.",
-  'FIXTURES':"Now <strong>Fixtures</strong> &mdash; the desk, shelving, display, pegboard. Record each one the same way: how did it come in?"
-};
-var CAT_DONE_NOTE = {
-  'EQUIPMENT':"<strong>Equipment</strong> &mdash; thirteen items, thirteen reasons. Every line carries its <em>why</em>.",
-  'COMPUTER EQUIPMENT':"The <strong>laptop</strong> &mdash; brought from home, valued by what a used one sells for.",
-  'FIXTURES':"<strong>Fixtures</strong> &mdash; all four bought together on the card."
-};
+/* ===== the walk: beats in story order; Cash comes last (the tally discovery) ===== */
+var BEATS = [
+  { key:'EQUIPMENT', tab:'assets',
+    anna:'There&rsquo;s your new <strong>Reasons</strong> tab, open in a second window. Here&rsquo;s the discipline: for every change on these sheets, ask <strong>what else moved?</strong> Go down <strong>Equipment</strong>, item by item &mdash; click one and answer. The receipt is the clue. If something moved with it, say what. If nothing did &mdash; that&rsquo;s the kind we have to write down.',
+    done:'<strong>Equipment</strong>: ten changes had a match &mdash; the card, or Cash &mdash; and Assets &minus; Liabilities never moved. Three had <strong>no match</strong>: the gear from home. Those three are on the Reasons tab now, because nothing on these sheets explains them.' },
+  { key:'COMPUTER EQUIPMENT', tab:'assets',
+    anna:'Next, the <strong>laptop</strong>. Same question: when it came in, what else moved?',
+    done:'The <strong>laptop</strong> &mdash; no match anywhere on the sheets. The difference between Assets and Liabilities moved by $610, and only the Reasons tab says why.' },
+  { key:'FIXTURES', tab:'assets',
+    anna:'Now <strong>Fixtures</strong> &mdash; desk, shelving, rack, pegboard. Watch what they all point at.',
+    done:'Four asset lines &mdash; and <strong>one</strong> line on the card: a single $750 charge, invoice WO-20518. Matches live at the <em>transaction</em>: four things can share one match. Nothing to write down; the pair explains itself.' },
+  { key:'SUPPLIES', tab:'assets',
+    anna:'<strong>Supplies</strong> moved all month &mdash; parts came <em>in</em> from one QBP order, and parts left the shelf as jobs got done. Item by item, same question: what else moved?',
+    done:'Every part <em>bought</em> matched the card &mdash; seven kinds of parts, <strong>one</strong> $500 charge; the difference never moved. Every part <em>used</em> matched <strong>nothing</strong>: $300 left the shelf with no other line moving. The difference went <em>down</em> $300 &mdash; the first moves downward, each written with its why.' },
+  { key:'RIGHT OF USE', tab:'assets',
+    anna:'<strong>Right of Use</strong> &mdash; the rent story. Two changes again: the right was <em>paid for</em>, and May&rsquo;s month got <em>used</em>.',
+    done:'Paying $1,300 bought a right &mdash; one Asset up, Cash down: matched, difference unmoved. But May&rsquo;s month, once used, matched nothing: the difference moved down $650. Money moving is one thing; the difference moving is another.' },
+  { key:'SMITH', tab:'liabilities',
+    anna:'Flip to <strong>Liabilities</strong>. The card&rsquo;s rows you&rsquo;ve already met &mdash; every charge there is the <em>match</em> of something you walked on the Assets side. That leaves <strong>Smith&rsquo;s deposit</strong>: a promise went up $220. What else moved?',
+    done:'Cash up $220, a promise up $220 &mdash; matched; the difference never moved. And note what&rsquo;s coming: the day you hand Smith the frame, this promise drops to <strong>zero</strong> &mdash; and <em>nothing will move with it</em>. No match. That change will need a <strong>reason</strong>. Same rule, every time, for every Asset and every Liability.' },
+  { key:'CASH', tab:'assets',
+    anna:'Last: open <strong>Cash</strong> itself. Most of its rows you&rsquo;ve already matched from the other side &mdash; see the check marks. What&rsquo;s left is the money that came <em>in</em>. Same question, row by row: what else moved?',
+    done:'' }
+];
+var ORDERED_KEYS = BEATS.map(function(b){ return b.key; });
 
 /* ===== state ===== */
 var TABS = [{id:'assets',label:'Assets'},{id:'liabilities',label:'Liabilities'},{id:'reasons',label:'Reasons',isNew:true}];
 var paneTab = { left:'assets', right:'reasons' };
-var catIndex = 0;
+var beatIndex = 0;
 var assetsOpen = { EQUIPMENT:true };
-var recorded = {};        // item name -> source
-var reasonsCreated = [];  // item names, in recorded order
-var activeItem = null;
+var explained = {};       // change id -> 'match'|'reason'
+var matchedPairs = {};    // pair id -> true
+var reasonsCreated = [];  // change ids in recorded order
+var activeChange = null;
 var attempts = {};
-var nudge = null;
+var lastFlash = null;
 var autoActive = false;
+var coverFound = false;
+var tallyPhase = false;   // cash rows done, discovery pending
 
-function activeCat(){ return catIndex < WALK_CATS.length ? WALK_CATS[catIndex] : null; }
-function activeItems(){ var k=activeCat(); return k ? CAT_BY_KEY[k].items : []; }
-function catDone(catKey){ return CAT_BY_KEY[catKey].items.every(function(it){ return recorded[it.name]; }); }
+function beat(){ return beatIndex < BEATS.length ? BEATS[beatIndex] : null; }
+function beatChanges(k){ return CHANGES.filter(function(c){ return c.cat===k && !c.hidden; }); }
+function beatDone(k){ return beatChanges(k).every(function(c){ return explained[c.id]; }); }
+function reasonsTotal(){ return reasonsCreated.reduce(function(s,id){ return s+BY_ID[id].delta; },0); }
+function matchedCount(){ return Object.keys(explained).filter(function(id){ return explained[id]==='match'; }).length; }
 
 /* ===== shared builders ===== */
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
+/* ===== the rule strip ===== */
+function ruleStrip(){
+  var rt = reasonsTotal();
+  return '<div class="callout" style="display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;margin-bottom:12px">'+
+    '<span><strong>The rule:</strong> every change gets a <strong>match</strong> or a <strong>reason</strong>.</span>'+
+    '<span>Matched: <strong>'+matchedCount()+'</strong> <span style="opacity:.75">(Assets &minus; Liabilities didn&rsquo;t move)</span></span>'+
+    '<span>Reasons: <strong>'+reasonsCreated.length+'</strong> &mdash; the difference moved '+signed(rt)+'</span>'+
+  '</div>';
+}
+
 /* ===== sheets ===== */
+function changeState(c){
+  if(!explained[c.id]) return null;
+  return explained[c.id];
+}
 function assetsSheet(){
-  var act = activeCat();
+  var b = beat();
+  var act = b && b.tab==='assets' ? b.key : null;
+  var CATS = ['EQUIPMENT','COMPUTER EQUIPMENT','SUPPLIES','FIXTURES','RIGHT OF USE','CASH'];
   var html='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Asset</div><div class="xl-v">Value</div></div>';
-  ASSETS.forEach(function(c,i){
-    var open=!!assetsOpen[c.cat];
-    var done = WALK_CATS.indexOf(c.cat)>=0 && catDone(c.cat);
-    var lbl = catLabel(c.cat) + (done?' <span class="stmt-dep">&#10003;</span>':'');
-    html+='<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\''+c.cat+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+lbl+'</div><div class="xl-v">'+dol(c.amount)+'</div></div>';
-    if(open) c.items.forEach(function(it){
-      var canClick = (c.cat===act) && it.source && !recorded[it.name] && !autoActive;
-      var sel = (activeItem===it.name);
-      var click = canClick ? ' onclick="clickItem(\''+it.name.replace(/'/g,"\\'")+'\')" style="cursor:pointer;"' : '';
-      var rec = recorded[it.name];
-      var tail = rec ? '<span class="stmt-dep">&#10003; '+SOURCE_LABEL[rec]+'</span>' : dol(it.amt);
-      html+='<div class="xl-row xl-item'+(sel?' selected':'')+'"'+click+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+tail+'</div></div>';
+  CATS.forEach(function(cat,i){
+    var rows = CHANGES.filter(function(c){ return c.cat===cat && (!c.hidden || coverFound); });
+    var amount = rows.reduce(function(s,c){ return s+c.delta; },0);
+    var open=!!assetsOpen[cat];
+    var done = ORDERED_KEYS.indexOf(cat)>=0 && beatDone(cat) && (cat!=='CASH' || coverFound);
+    var lbl = catLabel(cat) + (done?' <span class="stmt-dep">&#10003;</span>':'');
+    html+='<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\''+cat+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+lbl+'</div><div class="xl-v">'+dol(amount)+'</div></div>';
+    if(open) rows.forEach(function(c){
+      var st = changeState(c);
+      var canClick = (cat===act) && !st && !autoActive;
+      var sel = (activeChange===c.id);
+      var click = canClick ? ' onclick="clickChange(\''+c.id+'\')" style="cursor:pointer;"' : '';
+      var tail;
+      if(st==='match') tail = '<span class="stmt-dep">&#10003; matched</span>';
+      else if(st==='reason') tail = '<span class="stmt-dep">&#10003; reason</span>';
+      else tail = signed(c.delta);
+      html+='<div class="xl-row xl-item'+(sel?' selected':'')+'"'+click+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+c.label+'</div><div class="xl-v">'+tail+'</div></div>';
     });
   });
-  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+dol(ASSETS_TOTAL)+'</div></div>';
+  var total = 3410;
+  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+dol(total)+'</div></div>';
   return html;
 }
 function liabilitiesSheet(){
+  var b = beat();
   var html='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liability</div><div class="xl-v">Amount</div></div>';
-  var n=0;
-  LIABS.forEach(function(l){
-    var open=!!liabOpen[l.key]; n++;
-    html+='<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleLiab(\''+l.key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+l.label+' &mdash; '+l.note+'</div><div class="xl-v">'+dol(l.amount)+'</div></div>';
-    if(open){ l.items.forEach(function(it){ n++; html+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+dol(it.amt)+'</div></div>'; }); }
+  /* the card: every row is the other line of an asset-side transaction */
+  var cardOpen = !!assetsOpen['CARD'];
+  html+='<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\'CARD\')" aria-expanded="'+cardOpen+'">'+(cardOpen?'−':'+')+'</button></div><div class="xl-rownum">1</div><div class="xl-c">Credit Card &mdash; still owed on the bike-repair card</div><div class="xl-v">'+dol(2030)+'</div></div>';
+  if(cardOpen) CARD_ROWS.forEach(function(r){
+    var m = matchedPairs[r.pair];
+    html+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r.label+'</div><div class="xl-v">'+(m?'<span class="stmt-dep">&#10003; the match</span>':signed(r.amt))+'</div></div>';
   });
-  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+dol(LIABS_TOTAL)+'</div></div>';
+  /* Smith */
+  var smith = BY_ID['smith'];
+  var st = changeState(smith);
+  var canClick = b && b.key==='SMITH' && !st && !autoActive;
+  var click = canClick ? ' onclick="clickChange(\'smith\')" style="cursor:pointer;"' : '';
+  var sel = activeChange==='smith';
+  html+='<div class="xl-row xl-cat'+(sel?' selected':'')+'"'+click+'><div class="xl-gutter"></div><div class="xl-rownum">2</div><div class="xl-c">'+smith.label+'</div><div class="xl-v">'+(st?'<span class="stmt-dep">&#10003; matched</span>':dol(220))+'</div></div>';
+  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+dol(2250)+'</div></div>';
   return html;
 }
 function reasonsSheet(){
-  var html='<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons &mdash; why each thing is here</div><div class="cash-sheet-sub">'+(reasonsCreated.length===0?'Click an item on the left &mdash; its reason lands here.':reasonsCreated.length+' so far')+'</div></div>';
-  if(reasonsCreated.length===0){ html+='<div class="bs-empty-msg">No reasons yet.</div>'; return html; }
+  var html='<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons &mdash; the changes with no match</div><div class="cash-sheet-sub">'+(reasonsCreated.length===0?'Changes that move Assets &minus; Liabilities land here.':reasonsCreated.length+' so far &mdash; each one moved the difference')+'</div></div>';
+  if(reasonsCreated.length===0){ html+='<div class="bs-empty-msg">No reasons yet &mdash; every change so far had a match.</div>'; return html; }
   html+='<div class="cash-group">';
-  reasonsCreated.forEach(function(name){
-    var rec=ITEM_INDEX[name]; var it=rec.it;
-    html+='<div class="cash-line"><span>'+itemReasonText(it)+' <span class="stmt-tag">'+catLabel(rec.cat)+'</span></span><span class="cash-line-amt">'+signed(it.amt)+'</span></div>';
+  reasonsCreated.forEach(function(id){
+    var c=BY_ID[id];
+    html+='<div class="cash-line"><span>'+c.reason+' <span class="stmt-tag">'+catLabel(c.cat==='SMITH'?'LIABILITIES':c.cat)+'</span></span><span class="cash-line-amt">'+signed(c.delta)+'</span></div>';
   });
   html+='</div>';
+  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">The difference has moved</div><div class="xl-v">'+signed(reasonsTotal())+'</div></div>';
   return html;
 }
 
@@ -223,52 +311,110 @@ function renderPane(side){
     '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
 }
 
+/* ===== the flash: what the last answer did to the difference ===== */
+function flashHtml(){
+  if(!lastFlash) return '';
+  return '<div class="sort-msg '+(lastFlash.kind==='reason'?'warn':'')+'" style="margin-bottom:10px">'+lastFlash.text+'</div>';
+}
+function flashFor(c, matchTag){
+  if(c.ans==='card') return c.label.replace(/<[^>]*>/g,'')+' '+signed(Math.abs(c.delta))+' &middot; <strong>Credit Card up with it</strong> &mdash; an Asset up and a Liability up, same transaction. Assets &minus; Liabilities didn&rsquo;t move.';
+  if(c.ans==='cash'){
+    if(c.side==='l') return 'A promise up $220 &middot; <strong>Cash up $220</strong> &mdash; an Asset and a Liability up together. Assets &minus; Liabilities didn&rsquo;t move.';
+    if(c.cat==='CASH') return 'This row is the <strong>match</strong> of a change you already walked. Nothing new moved.';
+    return c.label.replace(/<[^>]*>/g,'')+' '+signed(c.delta)+' &middot; <strong>Cash '+signed(-c.delta)+'</strong> &mdash; one Asset up, another Asset down. Assets &minus; Liabilities didn&rsquo;t move.';
+  }
+  return c.label.replace(/<[^>]*>/g,'')+' '+signed(c.delta)+' &mdash; <strong>no match anywhere</strong>. The difference itself moved '+signed(c.delta)+'. Written on the Reasons tab.';
+}
+
 /* ===== controls ===== */
 function controls(){
-  var act = activeCat();
-  if(!act){
-    return insightBox('Every thing, its reason',
-      '<p>Equipment, the laptop, and the fixtures all carry their <em>why</em> now &mdash; on the card, the debit card, or brought from home. The Assets tab lists <em>the pieces</em>; the Reasons tab shows <em>how each one got here</em>.</p>') +
-      '<div class="next-phase-msg" style="margin-top:10px;">Next sub-walks &mdash; Supplies (bought &amp; used), Right of Use (paid &amp; used), Liabilities, and Cash (the 31-2 list, minus the $1,300 LLC deposit, with the $160 discovery) &mdash; come next.</div>';
-  }
-  var items = activeItems();
-  var recCount = items.filter(function(it){ return recorded[it.name]; }).length;
-  var allRec = recCount===items.length;
-  var trigger = recCount>=2 && !allRec && !activeItem && !autoActive;
+  var b = beat();
+  if(!b){ return finishedControls(); }
+  var changes = beatChanges(b.key);
+  var recCount = changes.filter(function(c){ return explained[c.id]; }).length;
+  var allRec = recCount===changes.length;
+  var hasM = changes.some(function(c){ return explained[c.id]==='match'; });
+  var hasR = changes.some(function(c){ return explained[c.id]==='reason'; });
+  var mixed = changes.some(function(c){ return c.ans==='none'; }) && changes.some(function(c){ return c.ans!=='none'; });
+  var trigger = !allRec && !activeChange && !autoActive && recCount>=3 && (!mixed || (hasM && hasR));
 
   if(allRec){
-    var nextLbl = catIndex<WALK_CATS.length-1 ? catLabel(WALK_CATS[catIndex+1]) : null;
-    var btn = nextLbl ? '<button class="btn-continue btn-block" onclick="advanceCat()">Next &mdash; '+nextLbl+' &rarr;</button>' : '<button class="btn-continue btn-block" onclick="advanceCat()">Finish the walk &rarr;</button>';
-    return insightBox('Done: '+catLabel(act), '<p>'+CAT_DONE_NOTE[act]+'</p>') + btn;
+    if(b.key==='CASH'){ return coverFound ? flashHtml()+finishedControls() : flashHtml()+tallyControls(); }
+    var nextLbl = beatIndex<BEATS.length-1 ? catLabel(BEATS[beatIndex+1].key==='SMITH'?'LIABILITIES':BEATS[beatIndex+1].key) : null;
+    var btn = nextLbl ? '<button class="btn-continue btn-block" onclick="advanceBeat()">Next &mdash; '+nextLbl+' &rarr;</button>' : '';
+    var note = b.key==='SMITH'
+      ? insightBox('Same rule, forward in time', '<p>'+b.done+'</p>')
+      : (b.done ? insightBox('Done: '+catLabel(b.key==='SMITH'?'LIABILITIES':b.key), '<p>'+b.done+'</p>') : '');
+    return flashHtml() + note + btn;
   }
-  if(activeItem && !autoActive){
-    var it = items.filter(function(x){return x.name===activeItem;})[0];
-    var att = attempts[activeItem]||0;
-    var h='<div class="section-card"><div class="card-title">How did <span class="mono">'+it.name+'</span> ('+dol(it.amt)+') come in?</div>'+
+  if(activeChange && !autoActive){
+    var c = BY_ID[activeChange];
+    var att = attempts[activeChange]||0;
+    var h='<div class="section-card"><div class="card-title">'+(c.delta>=0?'':'&minus;')+'<span class="mono">'+c.label.replace(/<[^>]*>/g,'')+'</span> ('+signed(c.delta)+') &mdash; what <em>else</em> moved?</div>'+
       '<div class="classify-row">'+
-        '<button class="classify-btn" onclick="answer(\'card\')">On the card</button>'+
-        '<button class="classify-btn" onclick="answer(\'cash\')">Paid cash (debit)</button>'+
-        '<button class="classify-btn" onclick="answer(\'home\')">Brought from home</button>'+
-        '<button class="btn-hint" onclick="openReceipt(\''+it.group+'\')"><i data-lucide="receipt" class="licon"></i> See the receipt</button>'+
+        '<button class="classify-btn" onclick="answer(\'card\')">The Credit Card &mdash; by the same amount</button>'+
+        '<button class="classify-btn" onclick="answer(\'cash\')">Cash &mdash; by the same amount</button>'+
+        '<button class="classify-btn" onclick="answer(\'promise\')">A promise &mdash; by the same amount</button>'+
+        '<button class="classify-btn" onclick="answer(\'none\')">Nothing else moved &mdash; write a reason</button>'+
+        (c.group?'<button class="btn-hint" onclick="openReceipt(\''+c.group+'\')"><i data-lucide="receipt" class="licon"></i> See the evidence</button>':'')+
       '</div>';
-    if(nudge && nudge.item===activeItem && att<3){
-      h+='<div class="sort-msg warn">&ldquo;Hint '+att+'/2: '+(att===1?'open the receipt &mdash; it shows how this one was paid.':'a Visa charge means the card; a debit means cash; an eBay value with no receipt means you brought it from home.')+'&rdquo;</div>';
+    if(nudgeItem===activeChange && att<3){
+      h+='<div class="sort-msg warn">&ldquo;Hint '+att+'/2: '+(att===1?'open the evidence &mdash; it shows what moved with this one.':'a Visa charge means the card moved; a debit or check means Cash moved; no purchase at all means nothing else moved.')+'&rdquo;</div>';
     }
     h+='</div>';
-    return h;
+    return flashHtml()+h;
   }
-  if(autoActive){ return '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Recording the rest&hellip;</div></div>'; }
+  if(autoActive){ return '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Walking the rest&hellip;</div></div>'; }
   if(trigger){
-    return '<div class="gate-armed"><p><strong>You&rsquo;ve got the rhythm.</strong> Record the rest of '+catLabel(act)+' the same way?</p><button class="btn-continue btn-block" onclick="recordRest()">Record the rest &rarr;</button></div>';
+    return flashHtml()+'<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Walk the rest of '+catLabel(b.key==='SMITH'?'LIABILITIES':b.key)+' the same way?</p><button class="btn-continue btn-block" onclick="recordRest()">Walk the rest &rarr;</button></div>';
   }
-  if(recCount>0){ return '<p class="prose" style="text-align:center;font-style:italic;opacity:.7;">Click the next item to record its reason.</p>'; }
-  return '<p class="prose" style="text-align:center;font-style:italic;opacity:.7;">Click an item in '+catLabel(act)+' to record its reason.</p>';
+  var where = b.key==='SMITH' ? 'Smith&rsquo;s deposit' : catLabel(b.key);
+  return flashHtml()+'<p class="prose" style="text-align:center;font-style:italic;opacity:.7;">Click a change in '+where+' to walk it.</p>';
+}
+
+/* ===== the Cash tally discovery ===== */
+function tallyControls(){
+  var h = insightBox('The ledger doesn&rsquo;t reach the sheet',
+    '<p>Every row is explained &mdash; and they sum to <strong>&minus;$160</strong>. But the Cash line reads <strong>$0</strong>: the account never went negative. $160 arrived with no receipt and no row. Where did it come from?</p>');
+  h += '<div class="section-card"><div class="classify-row" style="flex-direction:column;align-items:stretch">'+
+    '<button class="classify-btn" onclick="tallyAnswer(\'a\')">A customer must have paid $160 that never got written down</button>'+
+    '<button class="classify-btn" onclick="tallyAnswer(\'b\')">The card must have covered it</button>'+
+    '<button class="classify-btn" onclick="tallyAnswer(\'c\')">It came from outside the repair work &mdash; you covered it yourself, without noticing</button>'+
+  '</div><div id="tallyFb"></div></div>';
+  return h;
+}
+function tallyAnswer(id){
+  var fb = document.getElementById('tallyFb');
+  if(id==='c'){
+    playSuccess();
+    coverFound = true;
+    var c = BY_ID['cover'];
+    explained[c.id]='reason'; reasonsCreated.push(c.id);
+    lastFlash = { kind:'reason', text:'From your personal self +$160 &mdash; <strong>no match</strong>: it came from outside the repair work. The last reason. Found only by tallying.' };
+    render();
+  } else {
+    playNope();
+    fb.innerHTML = '<div class="sort-msg warn">'+(id==='a'
+      ? '&ldquo;Every customer payment has a row &mdash; and a reason already. Look at where the money would have to come <em>from</em>.&rdquo;'
+      : '&ldquo;The card&rsquo;s charges are all on the Liabilities tab, and every one is matched. This $160 wasn&rsquo;t borrowed.&rdquo;')+'</div>';
+  }
+}
+
+/* ===== the close ===== */
+function finishedControls(){
+  return insightBox('The reasons are the record of the difference',
+      '<p>Every change in an Asset or a Liability got a <strong>match or a reason</strong>. The matched pairs explained themselves &mdash; an Asset up with a Liability up, or one Asset up and another down &mdash; and <strong>Assets &minus; Liabilities never moved</strong>. The changes with <strong>no match</strong> are the ones that moved it &mdash; and every one of them is written on the Reasons tab, with its why.</p>')+
+    insightBox('Two kinds, coming up',
+      '<p>Read the Reasons tab once more. Some of these you <em>put in</em> from outside. The rest came from <em>doing the work</em>. That split is next.</p>')+
+    '<div class="next-phase-msg">Click <strong>Next</strong> to sort them.</div>';
 }
 
 /* ===== render ===== */
 function render(){
-  var act = activeCat();
-  document.getElementById('walkAnna').innerHTML = act ? annaBox(CAT_ANNA[act]) : '';
+  var b = beat();
+  var closing = !b || (b.key==='CASH' && coverFound);
+  document.getElementById('walkAnna').innerHTML = closing ? annaBox('Every change explained. Look at what the walk left behind.') : annaBox(b.anna);
+  document.getElementById('ruleStrip').innerHTML = ruleStrip();
   document.getElementById('paneLeft').innerHTML = renderPane('left');
   document.getElementById('paneRight').innerHTML = renderPane('right');
   document.getElementById('walkControls').innerHTML = controls();
@@ -276,36 +422,59 @@ function render(){
 }
 
 /* ===== gesture ===== */
-function clickItem(name){ if(recorded[name]||autoActive) return; playClick(); paneTab.left='assets'; activeItem=name; nudge=null; render(); }
-function recordItem(name, source){ recorded[name]=source; if(reasonsCreated.indexOf(name)<0) reasonsCreated.push(name); }
-function answer(source){
-  if(!activeItem||autoActive) return;
-  var it = activeItems().filter(function(x){return x.name===activeItem;})[0];
-  if(source===it.source){ playSuccess(); recordItem(activeItem, source); activeItem=null; nudge=null; }
-  else {
-    var n=(attempts[activeItem]||0)+1; attempts[activeItem]=n; playNope();
-    if(n>=3){ recordItem(activeItem, it.source); activeItem=null; nudge=null; }
-    else nudge={item:activeItem, source:source};
+var nudgeItem = null;
+function clickChange(id){
+  if(explained[id]||autoActive) return;
+  playClick();
+  var c = BY_ID[id];
+  paneTab.left = (c.side==='l') ? 'liabilities' : 'assets';
+  activeChange=id; nudgeItem=null; render();
+}
+function recordChange(c){
+  if(c.ans==='none'){ explained[c.id]='reason'; if(reasonsCreated.indexOf(c.id)<0) reasonsCreated.push(c.id); }
+  else { explained[c.id]='match'; if(c.pair){ matchedPairs[c.pair]=true; CHANGES.forEach(function(x){ if(x.pair===c.pair) explained[x.id]='match'; }); } }
+}
+function answer(a){
+  if(!activeChange||autoActive) return;
+  var c = BY_ID[activeChange];
+  var correct = (a===c.ans) || (c.side==='l' && c.ans==='cash' && a==='cash');
+  if(correct){
+    playSuccess();
+    lastFlash = { kind: c.ans==='none'?'reason':'match', text: flashFor(c) };
+    recordChange(c);
+    activeChange=null; nudgeItem=null;
+  } else {
+    var n=(attempts[activeChange]||0)+1; attempts[activeChange]=n; playNope();
+    if(n>=3){ lastFlash={ kind:c.ans==='none'?'reason':'match', text: flashFor(c) }; recordChange(c); activeChange=null; nudgeItem=null; }
+    else nudgeItem=activeChange;
   }
   render();
 }
 function recordRest(){
-  if(autoActive) return; playClick(); autoActive=true; activeItem=null; nudge=null; render();
-  var remaining = activeItems().filter(function(it){ return !recorded[it.name]; });
-  remaining.forEach(function(it,i){
+  if(autoActive) return; playClick(); autoActive=true; activeChange=null; nudgeItem=null; render();
+  var remaining = beatChanges(beat().key).filter(function(c){ return !explained[c.id]; });
+  remaining.forEach(function(c,i){
     setTimeout(function(){
-      recordItem(it.name, it.source);
+      recordChange(c);
+      lastFlash=null;
       if(i===remaining.length-1) setTimeout(function(){ autoActive=false; playSuccess(); render(); }, 220);
       else render();
     }, i*150);
   });
 }
-function advanceCat(){
+function advanceBeat(){
   playClick();
-  if(activeCat()) assetsOpen[activeCat()]=false;
-  catIndex++;
-  if(activeCat()) assetsOpen[activeCat()]=true;
-  activeItem=null; nudge=null; autoActive=false;
+  var b = beat();
+  if(b && b.tab==='assets') assetsOpen[b.key]=false;
+  beatIndex++;
+  b = beat();
+  lastFlash=null;
+  if(b){
+    if(b.tab==='assets'){ paneTab.left='assets'; assetsOpen[b.key]=true; }
+    else { paneTab.left='liabilities'; assetsOpen['CARD']=true; }
+    if(b.key==='CASH'){ assetsOpen['CASH']=true; }
+  }
+  activeChange=null; nudgeItem=null; autoActive=false;
   window.scrollTo(0,0);
   render();
 }
@@ -313,8 +482,6 @@ function advanceCat(){
 /* ===== tabs / expand ===== */
 function setPaneTab(side,id){ playClick(); paneTab[side]=id; render(); }
 function toggleCat(cat){ playClick(); assetsOpen[cat]=!assetsOpen[cat]; render(); }
-var liabOpen = {};
-function toggleLiab(key){ playClick(); liabOpen[key]=!liabOpen[key]; render(); }
 
 /* ===== receipt modal ===== */
 function openReceipt(group){
@@ -338,6 +505,13 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeReceipt(); } });
 
 /* ===== init ===== */
+window.devFill = function(){
+  CHANGES.forEach(function(c){ if(!c.hidden) recordChange(c); });
+  coverFound = true;
+  var cov = BY_ID['cover']; explained[cov.id]='reason'; if(reasonsCreated.indexOf('cover')<0) reasonsCreated.push('cover');
+  beatIndex = BEATS.length; lastFlash=null; activeChange=null; autoActive=false;
+  render();
+};
 render();
 </script>
   <script src="dev.js"></script>

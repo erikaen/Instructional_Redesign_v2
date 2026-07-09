@@ -97,7 +97,9 @@ var CASH_FLOWS = [
 var REASONS = [
   { id:'r_cashin', account:'Cash',      delta:160, reason:'My personal self covered what the work drew down — I only see it now, tallying up.' },
   { id:'r_laptop', account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
-  { id:'r_gear',   account:'Equipment', delta:220, reason:'You brought gear you already owned: bench grinder, headset press, shop vacuum.' },
+  { id:'r_grind',  account:'Equipment', delta:90, reason:'Brought the bench grinder from home.' },
+  { id:'r_press',  account:'Equipment', delta:70, reason:'Brought the headset press from home.' },
+  { id:'r_vac',    account:'Equipment', delta:60, reason:'Brought the shop vacuum from home.' },
 
   { id:'r_stand_a', account:'Equipment', delta:200, reason:'You bought the Park Tool stand for $200 (cash).' },
   { id:'r_stand_b', account:'Cash',      delta:-200, reason:'You bought the Park Tool stand for $200 (cash).' },
@@ -114,7 +116,13 @@ var REASONS = [
   { id:'r_parts_a', account:'Supplies',    delta:500, reason:'Bought $500 of parts on the card.' },
   { id:'r_parts_b', account:'Credit Card', delta:500, reason:'Bought $500 of parts on the card.' },
 
-  { id:'r_partsused', account:'Supplies', delta:-300, reason:'Used $300 of parts finishing customer jobs.' },
+  { id:'r_uchains', account:'Supplies', delta:-70, reason:'Used $70 of chains finishing customer jobs.' },
+  { id:'r_upads',   account:'Supplies', delta:-50, reason:'Used $50 of brake pads finishing customer jobs.' },
+  { id:'r_ucables', account:'Supplies', delta:-30, reason:'Used $30 of derailleur cables finishing customer jobs.' },
+  { id:'r_ucass',   account:'Supplies', delta:-50, reason:'Used $50 of cassettes finishing customer jobs.' },
+  { id:'r_ubb',     account:'Supplies', delta:-30, reason:'Used $30 of bottom brackets finishing customer jobs.' },
+  { id:'r_uspokes', account:'Supplies', delta:-30, reason:'Used $30 of spokes finishing customer jobs.' },
+  { id:'r_utubes',  account:'Supplies', delta:-40, reason:'Used $40 of tubes finishing customer jobs.' },
 
   { id:'r_rent_a', account:'Right of Use', delta:1300, reason:'Paid $1,300 of rent in advance (first + last month).' },
   { id:'r_rent_b', account:'Cash',         delta:-1300, reason:'Paid $1,300 of rent in advance (first + last month).' },
@@ -134,8 +142,8 @@ var REASONS = [
 ];
 
 var CORRECT_CATEGORY = {
-  r_cashin:'contributed', r_laptop:'contributed', r_gear:'contributed',
-  r_partsused:'earned', r_rentused:'earned',
+  r_cashin:'contributed', r_laptop:'contributed', r_grind:'contributed', r_press:'contributed', r_vac:'contributed',
+  r_uchains:'earned', r_upads:'earned', r_ucables:'earned', r_ucass:'earned', r_ubb:'earned', r_uspokes:'earned', r_utubes:'earned', r_rentused:'earned',
   r_v1:'earned', r_v2:'earned', r_v3:'earned', r_v4:'earned',
   r_v5:'earned', r_v6:'earned', r_v7:'earned'
 };
@@ -143,13 +151,13 @@ var soloReasonIds = Object.keys(CORRECT_CATEGORY);
 
 var NARRATION_STEPS = [
   { anna:"Start before May even began. You brought your laptop from home, and some gear you already owned. Each one's a single row, and the other side of that change (reason) isn't on this spreadsheet.",
-    reveal:['r_laptop','r_gear'] },
+    reveal:['r_laptop','r_grind','r_press','r_vac'] },
   { anna:"The Park Tool stand — bought for $200 in cash. Equipment went up; cash went down. Same reason on both rows.",
     reveal:['r_stand_a','r_stand_b'] },
   { anna:"Hand tools, shop equipment, fixtures, parts... They are all on the card. For each one: the thing up, the card up. Two rows apiece.",
     reveal:['r_tools_a','r_tools_b','r_equip_a','r_equip_b','r_fix_a','r_fix_b','r_parts_a','r_parts_b'] },
   { anna:"Then about $300 of those parts went into customer jobs — used up. One row; the other side isn't here.",
-    reveal:['r_partsused'] },
+    reveal:['r_uchains','r_upads','r_ucables','r_ucass','r_ubb','r_uspokes','r_utubes'] },
   { anna:"The lease — $1,300 from cash, first and last month paid in advance. Then May happened: you used the space, so one month's worth is gone. The paying is a pair; the using-up stands alone.",
     reveal:['r_rent_a','r_rent_b','r_rentused'] },
   { anna:"Now the cash side for May. Click the Cash tab — every customer Venmo, Smith's deposit, and the row you only found by tallying up: the $160 your personal self had quietly covered.",
@@ -423,7 +431,7 @@ function renderPairs(){
     ctrl = annaBox('Look what&rsquo;s left. Just the rows with no twin on this spreadsheet &mdash; the $160 your personal self quietly covered, the laptop and gear you brought, the customer payments, the parts and the month you used up. Each of these <em>moved the difference</em>. Their other side lives somewhere you haven&rsquo;t built yet.', true) +
       insightBox('The crossed-out ones just shuffled',
         '<p>Buying parts on the card, the rent paid in advance, Smith&rsquo;s deposit &mdash; two lines moved by the same amount each time, so the difference didn&rsquo;t change. The reasons that are <strong>left over are the ones that moved the difference</strong> &mdash; the ones worth writing down to know how the repair work is doing.</p>') +
-      contBtn('Sort the leftover reasons', "goto('movers')");
+      contBtn('Sort the reasons', "goto('movers')");
   }
   document.getElementById('pairsControls').innerHTML = ctrl;
   if(window.lucide) lucide.createIcons();
@@ -457,7 +465,7 @@ function renderMovers(){
 
   var top = '';
   if(!done){
-    top += annaBox('These leftover reasons split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work &mdash; the laptop and gear from home, and the $160 your personal self quietly covered. These are <strong>contributed</strong>. The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month the work used up. These are <strong>generated</strong>. Sort each row into the right bin by clicking on the button in each row.', true);
+    top += annaBox('The reasons on your tab &mdash; the changes with <strong>no match</strong> &mdash; split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work: the laptop and gear from home, and the $160 your personal self quietly covered. These are <strong>contributed</strong>. The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month of workspace used up along the way. These are <strong>generated</strong>. Sort each row into the right bin by clicking on the button in each row.', true);
     if(sortNudge){
       var msg = (sortNudge.attempted==='contributed')
         ? 'That one didn&rsquo;t come from you bringing something in &mdash; it came from doing the repair work. Try the other bin.'
@@ -477,7 +485,7 @@ function renderMovers(){
   } else if(done){
     var contributedTotal = REASONS.filter(function(r){ return assignments[r.id]==='contributed'; }).reduce(function(s,r){ return s+r.delta; },0);
     var earnedTotal = REASONS.filter(function(r){ return assignments[r.id]==='earned'; }).reduce(function(s,r){ return s+r.delta; },0);
-    ctrl = annaBox('There it is &mdash; two kinds of leftover reason. What you <strong>contributed</strong>: '+signedDollars(contributedTotal)+', the laptop and gear from home, and the cash your personal self covered. And what the work <strong>generated</strong>: '+signedDollars(earnedTotal)+' &mdash; the customer work, after the parts and the month it took to do it. That figure is what the repair work produced on its own in May.', true) +
+    ctrl = annaBox('There it is &mdash; the reasons, sorted into their two kinds. What you <strong>contributed</strong>: '+signedDollars(contributedTotal)+', the laptop and gear from home, and the cash your personal self covered. And what the work <strong>generated</strong>: '+signedDollars(earnedTotal)+' &mdash; the customer work, after the parts and the month it took to do it. That figure is what the repair work produced on its own in May.', true) +
       insightBox('Two ways the difference grew',
         '<p><strong>Contributed ('+signedDollars(contributedTotal)+'):</strong> you funded it &mdash; cash from the day job, gear from home. From outside the repair work.</p>'+
         '<p><strong>Generated ('+signedDollars(earnedTotal)+'):</strong> the work generated it &mdash; what customers paid, less the parts used and the month of space used up.</p>'+

@@ -434,7 +434,8 @@ var M1_GLOSSARY = [
     { earned:'13-4', term:'Deposit', def:'Money paid in advance for something not yet received. For the receiver it&rsquo;s a liability &mdash; the goods, the work, or the money back is still owed &mdash; not earnings yet.' }
   ] },
   { module:'Module 4: Keeping the Reasons', terms:[
-    { earned:'14-1', term:'Reason', def:'The why behind a change in a Noncash Asset, Liability, or Cash. One row per side of the change; every change has two sides (the felt beginning of double-entry).' },
+    { earned:'14-1', term:'Reason', def:'The why you write down for a change in an Asset or a Liability that has <em>no match</em> &mdash; nothing else moved with it. The reasons are the changes that move the difference between Assets and Liabilities.' },
+    { earned:'14-2', term:'Match', def:'The other line that moved with a change &mdash; same transaction, same amount: an Asset with a Liability, or one Asset with another. A matched pair explains itself, and the difference between Assets and Liabilities does not move. Every change gets either a match or a reason.' },
     { earned:'14-2', term:'Receipt', def:'The evidence for a purchase &mdash; vendor, date, amount, and how it was paid. The clue for each reason.' },
     { earned:'14-2', term:'Brought from home', def:'Gear you already owned and moved into the repair work &mdash; no purchase, valued by what a comparable one sells for.' },
     { earned:'14-4', term:'Contributed', def:'Resources put into the repair work from outside it (the cash you covered, the laptop and gear from home).' },
