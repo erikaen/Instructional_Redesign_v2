@@ -1199,3 +1199,16 @@ var BR_WB = (function () {
   };
 })();
 
+
+/* ===== Segmented step progress (added 2026-07-10) =====
+   Renders a "k of n" meta row plus one pill per step into #elId.
+   Pages call it from their render function on every state change. */
+function renderStepProgress(elId, at, total, label) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  var h = '<div class="progress-meta"><span>' + (label || 'Progress') + '</span><span>' + at + ' of ' + total + '</span></div>';
+  h += '<div class="progress-segs">';
+  for (var i = 0; i < total; i++) h += '<div class="progress-seg' + (i < at ? ' done' : '') + '"></div>';
+  h += '</div>';
+  el.innerHTML = h;
+}

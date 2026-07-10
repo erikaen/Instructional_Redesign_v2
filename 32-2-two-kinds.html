@@ -25,6 +25,8 @@
     </div>
     <div class="phase-title" id="phaseTitle">Two Kinds of Reason</div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>First, the period line. The question is how the shop did <em>this summer</em>, so May&rsquo;s rows stay exactly where they are &mdash; set aside, untouched. What&rsquo;s left is the season &mdash; and read any season reason and it records one of just <strong>two things</strong>: the work <strong>delivered</strong> &mdash; a repair finished, a frame handed over &mdash; or something got <strong>used up</strong> delivering. Nothing else.</p>
       <p>Right in the workbook: <strong>click a reason</strong> in the pile, then click the pile it belongs in. Do a few and the pattern will be clear &mdash; then you can sort the rest in one go.</p>
@@ -148,6 +150,7 @@ function doTheRest(){
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function renderControls(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', done ? 2 : 1, 2);
   if(done||filling) return;
   var ctrl='';
   if(Object.keys(placed).length>0){
@@ -160,6 +163,7 @@ function renderControls(){
   if(window.lucide) lucide.createIcons();
 }
 function renderDone(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', 2, 2);
   var inT=bTotal('in'), upT=bTotal('up');
   document.getElementById('sortNudge').className='feedback';
   document.getElementById('anna').innerHTML = annaBox('There &mdash; the same reasons, no longer jumbled. One pile holds every <strong>delivery</strong> the books caught ('+BRW.dol(inT)+'), the other everything that got <strong>used up</strong> ('+BRW.dol(Math.abs(upT))+'). Same total as before &mdash; '+BRW.dol(inT+upT)+' &mdash; but now you can read it. And look at <strong>Smith&rsquo;s frame</strong> in DELIVERED: no cash moved this season at all &mdash; his money came in <em>May</em>, as a deposit. What this summer&rsquo;s row records is the frame going out the door and the promise coming off the books. These piles aren&rsquo;t about money moving. They&rsquo;re about what the work did.');
@@ -201,6 +205,7 @@ window.devFill = function(){ reasons.forEach(function(r){ placed[r.id]=r.flow; }
 BRW.registerSheet('sort', sortSheet);
 BRW.mount('wb', snap);
 BRW.tab('wb', 'sort');
+if (window.renderStepProgress) renderStepProgress('stepProg', 1, 2);
 </script>
   <script src="dev.js"></script>
 </body>

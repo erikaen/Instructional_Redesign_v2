@@ -25,6 +25,8 @@
     </div>
     <div class="phase-title" id="phaseTitle">The Third Kind</div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>The wear on the tools is real used-up &mdash; a little of them was plainly used up during the season &mdash; and the Expenses tab has no row for it. Before a row can exist, someone has to put a <strong>number</strong> on it. Where would one come from?</p>
     </div>
@@ -114,6 +116,7 @@ function resetMcq(){
 }
 
 function renderTalk(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', recorded ? 2 : 1, 2);
   var anna='', ctrl='';
   if(!mcqSubmitted || !MCQ[mcqSel].ok){
     document.getElementById('anna').innerHTML=''; document.getElementById('controls').innerHTML='';

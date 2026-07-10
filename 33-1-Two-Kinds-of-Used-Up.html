@@ -25,6 +25,8 @@
     </div>
     <div class="phase-title" id="phaseTitle">Two Kinds of Used-Up</div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>The income statement is still open &mdash; Anna held the bottom line because one kind of used-up is missing. To see what&rsquo;s missing, first read what&rsquo;s there. The <strong>Expenses</strong> tab holds the season&rsquo;s used-up rows. Walk them.</p>
     </div>
@@ -74,6 +76,7 @@ var MCQ = [
 ];
 
 function renderTalk(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', step + 1, 4);
   var anna='', ctrl='';
   if(step===0){
     anna = annaBox('Start with <strong>Parts used</strong> &mdash; row after row, job by job, <strong>$1,200</strong> for the season. This kind of used-up you can <em>watch happen</em>. Flip to Assets and open the Parts line.');

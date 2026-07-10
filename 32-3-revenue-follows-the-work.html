@@ -25,6 +25,8 @@
     </div>
     <div class="phase-title" id="phaseTitle">The Work, Not the Cash</div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>You sorted the season into <strong>DELIVERED</strong> and <strong>USED UP</strong> &mdash; and left one loose end. In USED UP sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong>, with no delivery across from it. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job. The job log will say what happened.</p>
     </div>
@@ -87,6 +89,7 @@ function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 function renderTalk(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', step + 1, 3);
   var anna='', ctrl='';
   if(step===0){
     anna = annaBox('DELIVERED should hold <strong>every</strong> job the work handed over. But the job log shows <strong>'+totalJobs+'</strong> repairs finished this summer, and only <strong>'+inJobs+'</strong> of them ever got a row in the pile. The missing one is the job whose parts you already jotted. Find it &mdash; it&rsquo;s marked <strong>outstanding</strong>.');

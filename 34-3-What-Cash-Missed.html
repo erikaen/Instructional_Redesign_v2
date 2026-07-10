@@ -25,6 +25,8 @@
     </div>
     <div class="phase-title" id="phaseTitle">What Cash Missed</div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>Net income was <strong>$2,640</strong>. OPERATING cash was only <strong>$320</strong>. Four items sit between those two numbers &mdash; each one a place where the income statement and the Cash list answer differently. Walk them one at a time.</p>
     </div>
@@ -101,6 +103,7 @@ function trackHtml(){
 }
 
 function renderAll(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', Math.min(step + 1, STEPS.length + 1), STEPS.length + 1);
   document.getElementById('gaptrack').innerHTML = trackHtml();
   var anna='', ctrl='';
   if(step < STEPS.length){

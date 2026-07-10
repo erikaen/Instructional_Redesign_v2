@@ -25,6 +25,8 @@
     </div>
     <div class="phase-title" id="phaseTitle">The First Close</div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>The season is answered &mdash; net income $2,640, the bridge to $4,500 laid out. But next season will bring its own question: <em>how did next season go?</em> For that question to have a clean answer, Revenue and Expenses need to start empty. That was the whole reason they got their own tabs in the first place &mdash; each one answers for <em>its</em> period, then makes room for the next.</p>
     </div>
@@ -66,6 +68,7 @@ var step = 0;   // 0 = pre-close, 1 = closed
 var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
 
 function renderTalk(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', step + 1, 2);
   var anna='', ctrl='';
   if(step===0){
     anna = annaBox('Flip to Revenue, then Expenses &mdash; both still full of this season&rsquo;s rows. And flip to Reasons: May&rsquo;s rows are <em>still sitting there too</em>, from the very first tutorial of this module &mdash; nothing about them has ever been settled. One gesture files a finished period. It doesn&rsquo;t just apply to Summer &mdash; it applies to May as well, which has been waiting since Module 1 <em>to</em> get filed. Ready?');

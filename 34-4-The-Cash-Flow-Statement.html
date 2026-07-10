@@ -25,6 +25,8 @@
     </div>
     <div class="phase-title" id="phaseTitle">Laying It Out</div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>Three piles, four explained gaps, one tie-out to the Cash line. Everything needed is already on the books &mdash; it just needs to be laid out in one place, the way the Income sheet was.</p>
     </div>
@@ -71,6 +73,7 @@ var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:t
 snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
 
 function renderTalk(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', step + 1, 2);
   var anna='', ctrl='';
   if(step===0){
     anna = annaBox('Time to lay out the three piles you sorted &mdash; '+BRW.signed(OP_TOTAL)+', '+BRW.signed(INV_TOTAL)+', '+BRW.signed(FIN_TOTAL)+' &mdash; as a statement, the same way the Income sheet was laid out: <strong>Operating '+BRW.signed(OP_TOTAL)+'</strong> &mdash; repairs collected, parts bought, rent paid, the credit-card payoff. <strong>Investing '+BRW.signed(INV_TOTAL)+'</strong> &mdash; the new tool. <strong>Financing '+BRW.signed(FIN_TOTAL)+'</strong> &mdash; your draw. Add the three and that&rsquo;s the season&rsquo;s <strong>Net change in cash</strong>: '+BRW.signed(NET_CHANGE)+'. Start from Cash on June 1, '+BRW.dol(CASH_OPEN)+', apply that change, and you land exactly on <strong>'+BRW.dol(CASH_END)+'</strong> &mdash; the same number sitting on the Assets tab right now. And notice &mdash; it&rsquo;s the same <strong>+$320</strong> you reached the other way, walking down from Net income through Ridgeline, Smith, the wear, and the card. Two roads, one number.');

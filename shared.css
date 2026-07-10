@@ -2892,3 +2892,14 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 @media (prefers-color-scheme: dark) {
   .phase-title, .complete-title, .glossary-module { color: #f4f4f5; }
 }
+
+/* ===== Segmented step progress (approved 2026-07-10) =====
+   One pill per step of an in-page walk; .done pills are filled.
+   Rendered by renderStepProgress() in shared.js. */
+.progress-segs { display: flex; gap: 10px; margin-bottom: 8px; }
+.progress-seg { flex: 1; height: 9px; background: var(--border-strong); border-radius: 5px; transition: background 0.3s ease; }
+.progress-seg.done { background: var(--primary); }
+@media (prefers-color-scheme: dark) {
+  .progress-seg { background: #4a4858; }
+  .progress-seg.done { background: var(--primary); }
+}

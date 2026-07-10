@@ -25,6 +25,8 @@
     </div>
     <div class="phase-title" id="phaseTitle">Three Buckets</div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>Every dollar that moved through Cash this <strong>season</strong> is a fact &mdash; they&rsquo;re all in the Cash line on the <strong>Assets</strong> tab, and they&rsquo;re laid out again on a new <strong>Season Cash</strong> tab beside the ones you know. The June 1 opening deposit isn&rsquo;t one of them; that happened before the season started. Sort them into three piles, by <strong>purpose</strong>: running the season day to day, buying long-lived gear, or an owner moving money. <strong>Click a row</strong>, then click the pile it belongs in.</p>
     </div>
@@ -179,6 +181,7 @@ function doTheRest(){
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function renderControls(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', done ? 2 : 1, 2);
   if(done||filling) return;
   var ctrl='';
   if(Object.keys(placed).length>0){
@@ -194,6 +197,7 @@ function renderControls(){
 var OP_TOTAL = 320, INV_TOTAL = -400, FIN_TOTAL = -600, NET_CHANGE = -680;
 
 function renderDone(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', 2, 2);
   document.getElementById('sortNudge').className='feedback';
   document.getElementById('anna').innerHTML = annaBox('Three piles &mdash; and each one has a name in the house that keeps these kinds of books. Running the season, day to day: <strong>OPERATING</strong>, net <strong>'+BRW.signed(OP_TOTAL)+'</strong>. Buying the long-lived tool: <strong>INVESTING</strong>, <strong>'+BRW.signed(INV_TOTAL)+'</strong>. The owner&rsquo;s move: <strong>FINANCING</strong>, <strong>'+BRW.signed(FIN_TOTAL)+'</strong>. Add the three: '+BRW.signed(OP_TOTAL)+' '+BRW.signed(INV_TOTAL)+' '+BRW.signed(FIN_TOTAL)+' = <strong>'+BRW.signed(NET_CHANGE)+'</strong> &mdash; exactly the Cash line&rsquo;s fall, dollar for dollar.');
   document.getElementById('controls').innerHTML =
@@ -237,6 +241,7 @@ BR_WB.registerStatementSheets();
 BRW.registerSheet('sort', sortSheet);
 BRW.mount('wb', snap);
 BRW.tab('wb', 'sort');
+if (window.renderStepProgress) renderStepProgress('stepProg', 1, 2);
 </script>
   <script src="dev.js"></script>
 </body>

@@ -25,6 +25,8 @@
     </div>
     <div class="phase-title" id="phaseTitle">The Bottom Line</div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>The Expenses tab is complete. Before the bottom line, one look at what the wear did to the <em>other</em> side of the books.</p>
     </div>
@@ -71,6 +73,7 @@ var step = 0;
 var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
 
 function renderTalk(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', step + 1, 2);
   var anna='', ctrl='';
   if(step===0){
     anna = annaBox('Look at the <strong>Laptop</strong> line: cost <strong>$610</strong>, this season&rsquo;s wear <strong>&minus;$30</strong> &mdash; the records carry it at <strong>$580</strong> now. That number has a name: <strong>carrying value</strong>, also called <strong>book value</strong> &mdash; what&rsquo;s left of the cost after the depreciation charged so far. Be clear about what it is: a cost walking down a <em>chosen path</em>. You could ask the market instead &mdash; comparable laptops fetch something on eBay tonight &mdash; and the records <em>deliberately don&rsquo;t</em>: chasing that price every season isn&rsquo;t worth the effort, and it isn&rsquo;t what depreciation is. The cost walks its chosen path; the market answers its own question. Don&rsquo;t expect book and market to agree. Hold onto that &mdash; it matters later.');

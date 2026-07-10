@@ -25,8 +25,7 @@
     </div>
     <div class="phase-title" id="phaseTitle">Read the Books</div>
 
-    <div class="progress-meta"><span>Anna&rsquo;s walk</span><span id="walkCount"></span></div>
-    <div class="progress-track"><div class="progress-bar-fill" id="walkFill"></div></div>
+    <div id="stepProg"></div>
 
     <div class="narrative-block">
       <p>Here is <span class="mono">Bike-Repair.xlsx</span> as you kept it through the summer &mdash; the same three tabs from Module 1: <strong>Assets</strong>, <strong>Liabilities</strong>, <strong>Reasons</strong>. A whole season later, you jotted a <strong>Reason</strong> beside each change, the way you learned to.</p>
@@ -131,10 +130,7 @@ var step=0, stepDone=false;
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function renderTalk(){
-  var walkTotal = WALK.length + 1;                       // 6 questions + the closing view
-  var walkAt = Math.min(step + 1, walkTotal);            // each Next click advances one step
-  document.getElementById('walkCount').textContent = walkAt + ' of ' + walkTotal;
-  document.getElementById('walkFill').style.width = (walkAt / walkTotal * 100) + '%';
+  if (window.renderStepProgress) renderStepProgress('stepProg', Math.min(step + 1, WALK.length + 1), WALK.length + 1, 'Anna&rsquo;s walk');
   var anna='', ctrl='', evidence='';
   if(step<WALK.length){
     anna=annaBox(WALK[step].q);
