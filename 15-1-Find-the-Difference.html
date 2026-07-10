@@ -264,8 +264,7 @@ function revealNet(){
   var fb = document.getElementById('netFb'); fb.className = 'feedback'; fb.classList.remove('show');
   var close = document.getElementById('netClose');
   close.hidden = false;
-  close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The difference is '+d(NET)+'</div><p>Assets minus Liabilities &mdash; a difference, fully determined by the two lists. Hold onto that number.</p></div>'+
-    '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
+  close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The difference is '+d(NET)+'</div><p>Assets minus Liabilities &mdash; a difference, fully determined by the two lists. Hold onto that number.</p></div>';
   if(window.lucide) lucide.createIcons();
 }
 

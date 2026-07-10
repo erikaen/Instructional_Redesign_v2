@@ -192,9 +192,6 @@ function renderCardSort(){
       ? '<div class="btn-row" style="margin-top:14px;"><button class="btn-reset" onclick="resetCardMCQ()" style="margin-left:auto;">Reset</button></div>'
       : '<div class="btn-row" style="margin-top:14px;"><button class="btn-continue" onclick="submitCardMCQ()"'+(cardMCQSel?'':' disabled')+'>Submit</button></div>';
     html += '<div class="mc-card" style="margin-top:20px;"><div class="mc-q">How much of the ending balance is still owed specifically because of the <strong>repair work</strong>?</div><div class="mc-opts">'+mcqOptsHtml+'</div>'+mcqFbHtml+mcqBtns+'</div>';
-    if(mcqCorrect){
-      html += '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
-    }
   }
   document.getElementById('cardArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();

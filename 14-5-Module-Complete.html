@@ -518,7 +518,7 @@ function closeGlossary(){ m1GlossaryClose(); }
 function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
 var __origContBtn = contBtn;
 contBtn = function(label, onclick){
-  if(onclick && onclick.indexOf('goto(') >= 0) return '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
+  if(onclick && onclick.indexOf('goto(') >= 0) return '';
   return __origContBtn(label, onclick);
 };
 function restart(){ window.location.reload(); }
