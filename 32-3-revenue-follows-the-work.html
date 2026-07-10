@@ -97,23 +97,30 @@ function renderTalk(){
     ctrl = insightBox('It counts when the work is delivered, not when the cash comes',
         '<p>DELIVERED never meant &ldquo;cash arrived&rdquo; &mdash; it records the work going out the door, and Ridgeline&rsquo;s did, on Aug 28. The row belongs in the pile now; the cash follows on its own schedule.</p>'
         +'<p>And there&rsquo;s a second thing: '+ridge.customer+' still <strong>owes</strong> '+BRW.dol(ridge.charge)+'. That unpaid promise is something the shop now holds &mdash; a right to be paid. A new line in Assets.</p>')
-      + '<button class="btn-continue btn-block" onclick="setStep(2)">Put it on the books &rarr;</button>';
+      + '<div class="btn-row">'+backBtn(0)+'<button class="btn-continue" style="margin-left:auto;" onclick="setStep(2)">Put it on the books &rarr;</button></div>';
   } else {
     anna = annaBox('There &mdash; a brand-new line in Assets: <strong>Accounts Receivable, '+BRW.dol(ridge.charge)+'</strong>, '+ridge.customer+'&rsquo;s unpaid promise. And flip to Reasons: DELIVERED now reads <strong>'+BRW.dol(allCharges)+'</strong> &mdash; complete. Every job in the log has its row in the pile. Now think about <strong>'+smith.customer+'</strong>&rsquo;s frame, in that same pile at <strong>'+BRW.dol(smith.charge)+'</strong> &mdash; his cash came in <em>last</em> period as a deposit, but the frame went out the door <em>this</em> summer. '+ridge.customer+': work now, cash later. '+smith.customer+': cash earlier, work now. Neither row is timed to the cash. Both are timed to the <strong>work</strong>.');
     ctrl = insightBox('The work is what counts',
         '<p>'+ridge.customer+': work done <strong>now</strong>, cash <strong>later</strong> &mdash; in the pile now (and a receivable until they pay). '+smith.customer+': cash <strong>earlier</strong>, work done <strong>now</strong> &mdash; in the pile now too. The pile follows the <strong>work</strong>, whichever way the cash runs. And the books stay balanced: assets went up '+BRW.dol(ridge.charge)+', and so did the pile.</p>')
       + '<div class="next-phase-msg">The two piles are complete and honest now. Time to give them their real names &mdash; and their own sheets.</div>'
-      + '<button class="btn-continue btn-block" onclick="nav(\'32-4-name-the-income-statement.html\')">Name the piles &rarr;</button>';
+      + '<div class="btn-row">'+backBtn(1)+'<button class="btn-continue" style="margin-left:auto;" onclick="nav(\'32-4-name-the-income-statement.html\')">Name the piles &rarr;</button></div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
   if(window.lucide) lucide.createIcons();
 }
 
+function backBtn(n){ return '<button class="btn-reset" onclick="setStep('+n+')"><i data-lucide="arrow-left" class="licon"></i> Back</button>'; }
 function setStep(n){
   playClick();
   if(n>step) playSuccess();
+  var fwd = n > step;
   step = n;
+  if(!fwd && step<2){
+    // stepping back from the booked state: restore the pre-receivable workbook
+    BRW.update('wb', BR_WB.snapshot({ flowGroups:true }));
+    BRW.tab('wb', 'reasons');
+  }
   if(step===2){
     // grow the real workbook: Accounts Receivable appears in Assets, DELIVERED rises to 6,020
     BRW.update('wb', BR_WB.snapshot({ flowGroups:true, withReceivable:true }));

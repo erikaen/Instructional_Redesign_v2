@@ -158,8 +158,10 @@ function placeInto(b){
   nudge('ok', '<i data-lucide="check" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; &mdash; '+bucketWord(b)+'.');
   refresh();
 }
+var placedBeforeFill = null;
 function doTheRest(){
   if(done||filling||!gateMet()) return;
+  placedBeforeFill = {}; for(var k in placed) placedBeforeFill[k] = placed[k];   // remember the hand-sorted state
   playClick(); filling=true; selectedId=null;
   document.getElementById('controls').innerHTML='';
   document.getElementById('sortNudge').className='feedback';
@@ -198,8 +200,17 @@ function renderDone(){
     insightBox('Three piles, one tie-out',
       '<p><strong>Operating</strong> +$320 &middot; <strong>Investing</strong> &minus;$400 &middot; <strong>Financing</strong> &minus;$600. Together, &minus;$680 &mdash; the same $680 the Cash line fell, from $1,300 to $620. Nothing missing; every dollar sorted.</p>')
     + '<div class="next-phase-msg">One thing still doesn&rsquo;t add up cleanly: Net income was <strong>+$2,640</strong>, but the OPERATING pile only nets <strong>+$320</strong>. The gap between them is the next thing to explain.</div>'
-    + '<button class="btn-continue btn-block" onclick="nav(\'34-3-What-Cash-Missed.html\')">Where the $2,320 gap comes from &rarr;</button>';
+    + '<div class="btn-row"><button class="btn-reset" onclick="unSort()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto;" onclick="nav(\'34-3-What-Cash-Missed.html\')">Where the $2,320 gap comes from &rarr;</button></div>';
   if(window.lucide) lucide.createIcons();
+}
+function unSort(){
+  playClick();
+  placed = placedBeforeFill || {};
+  placedBeforeFill = null;
+  done = false; filling = false; selectedId = null;
+  document.getElementById('anna').innerHTML = '';
+  document.getElementById('sortNudge').className = 'feedback';
+  refresh();
 }
 
 /* ===== glossary / nav ===== */

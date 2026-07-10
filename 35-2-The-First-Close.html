@@ -74,7 +74,7 @@ function renderTalk(){
     anna = annaBox('Look what happened. Revenue and Expenses are <strong>empty</strong> &mdash; closed into GENERATED, ready for next season at $0. And on the Reasons tab, GENERATED no longer lists every May row one by one, or every summer row one by one. It holds two lines: <strong>&ldquo;May (pre-LLC) +$170&rdquo;</strong> and <strong>&ldquo;Summer 2026 +$2,640&rdquo;</strong> &mdash; an archive of finished periods, one row per close. WITHDRAWN didn&rsquo;t move; the draw was never part of how the work did.');
     ctrl = insightBox('Closing is filing a finished period',
         '<p>Nothing about this is a ritual. A period tab exists to answer one question &mdash; how did <em>this</em> stretch go &mdash; and once it has, its answer gets filed as a single row and the tab clears for the next stretch to ask its own question. &ldquo;Temporary&rdquo; never meant fragile. It meant <em>period-scoped</em>: built to answer once, then reset.</p>')
-      + '<button class="btn-continue btn-block" onclick="nav(\'35-3-The-Statements-Tie-Out.html\')">See it all tie together &rarr;</button>';
+      + '<div class="btn-row"><button class="btn-reset" onclick="unClose()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto;" onclick="nav(\'35-3-The-Statements-Tie-Out.html\')">See it all tie together &rarr;</button></div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
@@ -89,6 +89,14 @@ function doClose(){
   BRW.tab('wb', 'reasons');
   renderTalk();
   window.scrollTo(0, document.body.scrollHeight);
+}
+function unClose(){
+  playClick();
+  step = 0;
+  snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });   // re-open the period
+  BRW.update('wb', snap);
+  BRW.tab('wb', 'reasons');
+  renderTalk();
 }
 
 /* ===== glossary / nav ===== */

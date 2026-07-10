@@ -82,7 +82,7 @@ function renderTalk(){
     ctrl = insightBox('How the season went &mdash; answered',
         '<p>One statement, read straight off the two period tabs: Revenue '+BRW.dol(REVENUE)+' &minus; Expenses '+BRW.dol(EXPENSES)+' = <strong>Net income '+BRW.dol(NET_INCOME)+'</strong>. This is the answer the jumbled pile couldn&rsquo;t give &mdash; and it&rsquo;s complete now.</p>')
       + '<div class="next-phase-msg">One loose thread, though. A '+BRW.dol(NET_INCOME)+' season &mdash; and the Cash line reads <strong>$620</strong>, down from <strong>$1,300</strong> on opening day. Profitable, and poorer in cash. Both true. The next tutorial pulls that apart.</div>'
-      + '<button class="btn-continue btn-block" onclick="nav(\'34-1-The-Cash-Puzzle.html\')">Next: profit vs. cash &rarr;</button>';
+      + '<div class="btn-row"><button class="btn-reset" onclick="unFinish()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto;" onclick="nav(\'34-1-The-Cash-Puzzle.html\')">Next: profit vs. cash &rarr;</button></div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
@@ -98,6 +98,14 @@ function finishStatement(){
   BRW.tab('wb', 'income');
   renderTalk();
   window.scrollTo(0, document.body.scrollHeight);
+}
+function unFinish(){
+  playClick();
+  step = 0;
+  snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });   // statement tab back off
+  BRW.update('wb', snap);
+  BRW.tab('wb', 'assets');
+  renderTalk();
 }
 
 /* ===== glossary / nav ===== */

@@ -127,8 +127,10 @@ function placeInto(b){
   nudge('ok', '<i data-lucide="check" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; &mdash; '+(b==='in'?'delivered.':'used up.'));
   refresh();
 }
+var placedBeforeFill = null;
 function doTheRest(){
   if(done||filling||!gateMet()) return;
+  placedBeforeFill = {}; for(var k in placed) placedBeforeFill[k] = placed[k];   // remember the hand-sorted state
   playClick(); filling=true; selectedId=null;
   document.getElementById('controls').innerHTML='';
   document.getElementById('sortNudge').className='feedback';
@@ -165,8 +167,17 @@ function renderDone(){
     insightBox('Two piles, two totals',
       '<p>Every season reason sorts into one of these two. Line the <strong>DELIVERED</strong> total up against the <strong>USED UP</strong> total and the difference is how the season went &mdash; the answer the jumbled pile could never give in one place.</p>')
     + '<div class="next-phase-msg">One loose end before the piles get their names. In USED UP sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong> &mdash; and there&rsquo;s no delivery across from it in DELIVERED. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job.</div>'
-    + '<button class="btn-continue btn-block" onclick="nav(\'32-3-revenue-follows-the-work.html\')">Find Ridgeline &rarr;</button>';
+    + '<div class="btn-row"><button class="btn-reset" onclick="unSort()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto;" onclick="nav(\'32-3-revenue-follows-the-work.html\')">Find Ridgeline &rarr;</button></div>';
   if(window.lucide) lucide.createIcons();
+}
+function unSort(){
+  playClick();
+  placed = placedBeforeFill || {};
+  placedBeforeFill = null;
+  done = false; filling = false; selectedId = null;
+  document.getElementById('anna').innerHTML = '';
+  document.getElementById('sortNudge').className = 'feedback';
+  refresh();
 }
 
 /* ===== glossary / nav ===== */

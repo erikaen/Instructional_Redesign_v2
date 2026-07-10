@@ -80,10 +80,10 @@ function renderTalk(){
     ctrl = '<button class="btn-continue btn-block" onclick="setStep(1)">Open the Parts line in the Assets tab &rarr;</button>';
   } else if(step===1){
     anna = annaBox('There&rsquo;s the shelf: the opening parts, three restocks &mdash; and then, watch, parts <em>leaving</em>, job by job, exactly as they were used. This is use you can <strong>observe directly</strong>: you can see each dollar go. Every &ldquo;Parts used&rdquo; row on the Expenses tab records use somebody could watch happen.');
-    ctrl = '<button class="btn-continue btn-block" onclick="setStep(2)">Now the rent &rarr;</button>';
+    ctrl = '<div class="btn-row">'+backBtn(0)+'<button class="btn-continue" style="margin-left:auto;" onclick="setStep(2)">Now the rent &rarr;</button></div>';
   } else if(step===2){
     anna = annaBox('Back on Expenses: <strong>Rent used</strong> &mdash; June, July, August, <strong>$650</strong> each. Nothing left a shelf this time. The rent bought a <strong>right to use the workspace</strong>, month by month &mdash; and each month&rsquo;s right was used up the moment its month passed. <strong>Time</strong> does this using-up all by itself. (The $650 still sitting in Assets is the lease&rsquo;s last month &mdash; a right of use parked until its month arrives.)');
-    ctrl = '<button class="btn-continue btn-block" onclick="setStep(3)">The tools were used on every job &rarr;</button>';
+    ctrl = '<div class="btn-row">'+backBtn(1)+'<button class="btn-continue" style="margin-left:auto;" onclick="setStep(3)">The tools were used on every job &rarr;</button></div>';
   } else {
     anna = annaBox('Two kinds of used-up so far: parts you could <em>watch go</em>, months that <em>lapse</em>. Now the question. The <strong>tools and repair equipment</strong> &mdash; and the laptop running the bookings &mdash; were used on every one of the <strong>21 jobs</strong> this summer. What does the Expenses tab say that cost the season?');
     ctrl = renderMcq();
@@ -101,7 +101,7 @@ function renderMcq(){
     h += '<div class="'+cls+'" onclick="selectMcq('+i+')"><div class="mc-letter">'+String.fromCharCode(65+i)+'</div><div>'+o.text+'</div></div>';
   });
   h += '</div><div class="feedback'+(mcqSubmitted?(correct?' ok':' err')+' show':'')+'" id="mcqFb">'+(mcqSubmitted?MCQ[mcqSel].fb:'')+'</div></div>';
-  h += '<div class="btn-row">'+(mcqSubmitted
+  h += '<div class="btn-row">'+backBtn(2)+(mcqSubmitted
       ? '<button class="btn-reset" onclick="resetMcq()" style="margin-left:auto;">Reset</button>'
       : '<button class="btn-continue" onclick="submitMcq()"'+(mcqSel===null?' disabled':'')+'>Submit</button>')+'</div>';
   if(correct){
@@ -127,10 +127,13 @@ function resetMcq(){
   mcqSel = null; mcqSubmitted = false;
   renderTalk();
 }
+function backBtn(n){ return '<button class="btn-reset" onclick="setStep('+n+')"><i data-lucide="arrow-left" class="licon"></i> Back</button>'; }
 function setStep(n){
   playClick(); if(n>step) playSuccess();
+  var fwd = n > step;
   step = n;
-  if(step===1){ BRW.tab('wb','assets'); BRW.x('wb','a',3); }   // open the Parts ledger
+  if(step===0){ BRW.tab('wb','expenses'); }
+  if(step===1){ BRW.tab('wb','assets'); if(fwd) BRW.x('wb','a',3); }   // open the Parts ledger (BRW.x toggles — forward only)
   if(step===2){ BRW.tab('wb','expenses'); }
   renderTalk();
   window.scrollTo(0, document.body.scrollHeight);

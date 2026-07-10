@@ -25,6 +25,9 @@
     </div>
     <div class="phase-title" id="phaseTitle">Read the Books</div>
 
+    <div class="progress-meta"><span>Anna&rsquo;s walk</span><span id="walkCount"></span></div>
+    <div class="progress-track"><div class="progress-bar-fill" id="walkFill"></div></div>
+
     <div class="narrative-block">
       <p>Here is <span class="mono">Bike-Repair.xlsx</span> as you kept it through the summer &mdash; the same three tabs from Module 1: <strong>Assets</strong>, <strong>Liabilities</strong>, <strong>Reasons</strong>. A whole season later, you jotted a <strong>Reason</strong> beside each change, the way you learned to.</p>
       <p>Anna leans in to read it with you. Every line opens &mdash; click the <strong>+</strong> to see what happened behind the number.</p>
@@ -128,21 +131,26 @@ var step=0, stepDone=false;
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function renderTalk(){
+  var walkTotal = WALK.length + 1;                       // 6 questions + the closing view
+  var walkAt = Math.min(step + 1, walkTotal);            // each Next click advances one step
+  document.getElementById('walkCount').textContent = walkAt + ' of ' + walkTotal;
+  document.getElementById('walkFill').style.width = (walkAt / walkTotal * 100) + '%';
   var anna='', ctrl='', evidence='';
   if(step<WALK.length){
     anna=annaBox(WALK[step].q);
     if(stepDone){
       ctrl=insightBox(step<WALK.length-1?'What the line was hiding':'The season, in your own piles','<p>'+WALK[step].insight+'</p>')
-        + '<button class="btn-continue btn-block" onclick="nextStep()">'+(step<WALK.length-1?'Next question &rarr;':'So what&rsquo;s missing? &rarr;')+'</button>';
+        + '<div class="btn-row">'+(step>0?backBtnHtml():'')+'<button class="btn-continue" style="margin-left:auto;" onclick="nextStep()">'+(step<WALK.length-1?'Next question &rarr;':'So what&rsquo;s missing? &rarr;')+'</button></div>';
     } else {
-      ctrl='<div class="next-phase-msg">'+WALK[step].hint+'</div>';
+      ctrl='<div class="next-phase-msg">'+WALK[step].hint+'</div>'
+        + (step>0?'<div class="btn-row">'+backBtnHtml()+'</div>':'');
     }
   } else {
     anna=annaBox('So the books did move &mdash; members&rsquo; capital went from <strong>$2,460</strong> in June to <strong>$4,430</strong> now (Assets $4,430 &minus; Liabilities $0). Every reason is in there. But look how scattered the story is across the tabs: deliveries, things used up, the card, Smith, your draw. Now try the one question you actually want answered: how did the shop <em>do</em> this summer? Careful &mdash; that question is slipperier than it sounds. It could mean &ldquo;did the work deliver more than it used up?&rdquo; It could mean &ldquo;is there more money in the bank than in June?&rdquo; You just watched those two point in different directions. Could you answer either one straight from this?');
     ctrl=insightBox('A workbook, not yet a statement',
       '<p>These three tabs show where things <strong>stand</strong> and <em>why</em> each balance moved. But they never line up, in one place, what the work <strong>delivered</strong> against what it <strong>used up</strong> delivering. That comparison is the next thing to build &mdash; and because &ldquo;how did the shop do?&rdquo; splits into two questions, it will take more than one statement to answer it whole.</p>')
       + '<div class="next-phase-msg" style="margin-top:10px;">You read the whole season off these tabs. Next, you&rsquo;ll take that GENERATED pile and turn it into the statement that answers that question.</div>'
-      + '<button class="btn-continue btn-block" onclick="nav(\'32-1-the-income-statement.html\')">Next: how the season went &rarr;</button>';
+      + '<div class="btn-row">'+backBtnHtml()+'<button class="btn-continue" style="margin-left:auto;" onclick="nav(\'32-1-the-income-statement.html\')">Next: how the season went &rarr;</button></div>';
     evidence='<div class="section-card"><div class="card-title">Where these numbers came from</div>'
       + '<p>None of this is invented. Every line you just walked traces back to something you could hold &mdash; a repair ticket, a supplier invoice, a bank or credit-card statement. Open any of them below to check a number against its source.</p>'
       + '<button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every repair this summer</button>'
@@ -166,6 +174,8 @@ function onBRW(type, cid, a, b){
   if(hit){ stepDone=true; playSuccess(); renderTalk(); }
 }
 function nextStep(){ playClick(); step++; stepDone=false; renderTalk(); }
+function backBtnHtml(){ return '<button class="btn-reset" onclick="prevStep()"><i data-lucide="arrow-left" class="licon"></i> Back</button>'; }
+function prevStep(){ playClick(); if(step===0) return; step = Math.min(step, WALK.length) - 1; stepDone = true; renderTalk(); }
 
 /* ===== job log ===== */
 function payTag(j){

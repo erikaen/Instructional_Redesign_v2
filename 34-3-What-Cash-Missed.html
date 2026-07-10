@@ -107,17 +107,19 @@ function renderAll(){
     var s = STEPS[step];
     if(!revealed){
       anna = annaBox(s.q);
-      ctrl = '<button class="btn-continue btn-block" onclick="reveal()">See what it does to the gap &rarr;</button>';
+      ctrl = (step>0
+        ? '<div class="btn-row">'+backBtnHtml()+'<button class="btn-continue" style="margin-left:auto;" onclick="reveal()">See what it does to the gap &rarr;</button></div>'
+        : '<button class="btn-continue btn-block" onclick="reveal()">See what it does to the gap &rarr;</button>');
     } else {
       anna = annaBox(s.q);
       ctrl = insightBox(s.label, '<p>'+s.insight+'</p>')
-        + '<button class="btn-continue btn-block" onclick="advance()">'+(step<STEPS.length-1?'Next item &rarr;':'State the lesson &rarr;')+'</button>';
+        + '<div class="btn-row">'+backBtnHtml()+'<button class="btn-continue" style="margin-left:auto;" onclick="advance()">'+(step<STEPS.length-1?'Next item &rarr;':'State the lesson &rarr;')+'</button></div>';
     }
   } else {
     anna = annaBox('Four items, and the gap is fully explained: Net income <strong>'+BRW.dol(NET_INCOME)+'</strong>, minus Ridgeline&rsquo;s $300, minus Smith&rsquo;s $220, plus depreciation&rsquo;s $230 added back, minus the $2,030 card payoff &mdash; lands exactly on Operating cash, <strong>'+BRW.dol(OP_CASH)+'</strong>. Nothing left unexplained.');
     ctrl = insightBox('Two honest clocks',
         '<p>The income statement times things to the <strong>work</strong> &mdash; when it was delivered or used up. The Cash list times things to the <strong>cash</strong> &mdash; when money actually moved. Both are honest answers. They&rsquo;re just answering different questions.</p>')
-      + '<button class="btn-continue btn-block" onclick="nav(\'34-4-The-Cash-Flow-Statement.html\')">Lay it out as a statement &rarr;</button>';
+      + '<div class="btn-row">'+backBtnHtml()+'<button class="btn-continue" style="margin-left:auto;" onclick="nav(\'34-4-The-Cash-Flow-Statement.html\')">Lay it out as a statement &rarr;</button></div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
@@ -125,6 +127,14 @@ function renderAll(){
 }
 function reveal(){ playClick(); playSuccess(); revealed = true; renderAll(); window.scrollTo(0, document.body.scrollHeight); }
 function advance(){ playClick(); step++; revealed = false; renderAll(); window.scrollTo(0, document.body.scrollHeight); }
+function backBtnHtml(){ return '<button class="btn-reset" onclick="prevView()"><i data-lucide="arrow-left" class="licon"></i> Back</button>'; }
+function prevView(){
+  playClick();
+  if(step>=STEPS.length){ step = STEPS.length-1; revealed = true; }
+  else if(revealed){ revealed = false; }
+  else if(step>0){ step--; revealed = true; }
+  renderAll();
+}
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[

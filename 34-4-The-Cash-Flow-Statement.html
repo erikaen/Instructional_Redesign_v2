@@ -80,7 +80,7 @@ function renderTalk(){
     ctrl = insightBox('Three statements, one workbook',
         '<p>Income statement: how the season went, by the work. Statement of cash flows: where the cash went, by purpose. Balance sheet: where things stand, this moment. Each answers a different question &mdash; and none of them is wrong for not answering the others.</p>')
       + '<div class="next-phase-msg">One question left: what happened to Members&rsquo; Capital over the season, and where does a finished season get filed?</div>'
-      + '<button class="btn-continue btn-block" onclick="nav(\'35-1-The-Capital-Bridge.html\')">Next: close the season &rarr;</button>';
+      + '<div class="btn-row"><button class="btn-reset" onclick="unBuild()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto;" onclick="nav(\'35-1-The-Capital-Bridge.html\')">Next: close the season &rarr;</button></div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
@@ -95,6 +95,15 @@ function buildSheet(){
   BRW.tab('wb', 'cashflows');
   renderTalk();
   window.scrollTo(0, document.body.scrollHeight);
+}
+function unBuild(){
+  playClick();
+  step = 0;
+  snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });   // cash-flow sheet back off
+  snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
+  BRW.update('wb', snap);
+  BRW.tab('wb', 'income');
+  renderTalk();
 }
 
 /* ===== glossary / nav ===== */
