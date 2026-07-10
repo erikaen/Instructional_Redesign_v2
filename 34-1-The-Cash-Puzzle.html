@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 4: The Cash-Flow Statement &middot; The Cash Puzzle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 4: The Cash-Flow Statement</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 4</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Cash Puzzle</div>
+
+    <div class="narrative-block">
+      <p>The income statement is complete: a profitable season. But there&rsquo;s a loose thread Anna wouldn&rsquo;t let go of. Flip to <strong>Assets</strong> and look at <strong>Cash</strong> &mdash; already open below.</p>
+    </div>
+
+    <div id="wb"></div>
+    <div id="anna"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+/* ===== the contradiction: both true, at once ===== */
+var NET_INCOME = 2640, CASH_OPEN = 1300, CASH_NOW = 620, CASH_FALL = CASH_OPEN - CASH_NOW; // 680
+var MCQ = [
+  { id:'a', text:'One of the two numbers must be wrong &mdash; profit or cash, not both.',
+    fb:'Neither is wrong. Net income $2,640 is a correct read of the Income sheet; Cash $620 is a correct read of the Assets tab. They can both be right and still look like they disagree &mdash; because they&rsquo;re answering different questions.' },
+  { id:'b', text:'Someone must have taken the missing $680 &mdash; a theft or an error to track down.',
+    fb:'Nothing is missing and nothing was taken. Every dollar that left is already sitting in the records, named, dated, and accounted for. The gap isn&rsquo;t a hole to fill &mdash; it&rsquo;s a difference to explain.' },
+  { id:'c', text:'Both are true: the season was profitable, and it still ended with less cash than it started &mdash; they&rsquo;re not answering the same question.', ok:true,
+    fb:'Right. Net income $2,640 and Cash down $680 are both exactly what the records show. Nothing is broken. The season was <strong>profitable</strong> <em>and</em> it spent more cash than it took in &mdash; profit is not cash. They&rsquo;re two different questions, and the records answer both honestly.' }
+];
+var mcqSel = null, mcqSubmitted = false;
+
+function renderMcq(){
+  var correct = mcqSubmitted && MCQ[mcqSel].ok;
+  var h = '<div class="mc-card"><div class="mc-q">Cash fell from '+BRW.dol(CASH_OPEN)+' to '+BRW.dol(CASH_NOW)+' this season &mdash; down '+BRW.dol(CASH_FALL)+' &mdash; even though the Income sheet already shows a '+BRW.dol(NET_INCOME)+' profit. What&rsquo;s the honest read of that?</div><div class="mc-opts">';
+  MCQ.forEach(function(o,i){
+    var cls = 'mc-opt' + (!mcqSubmitted && mcqSel===i ? ' selected' : '') + (mcqSubmitted && mcqSel===i ? (o.ok?' correct':' wrong') : '') + (mcqSubmitted ? ' locked' : '');
+    h += '<div class="'+cls+'" onclick="selectMcq('+i+')"><div class="mc-letter">'+String.fromCharCode(65+i)+'</div><div>'+o.text+'</div></div>';
+  });
+  h += '</div><div class="feedback'+(mcqSubmitted?(correct?' ok':' err')+' show':'')+'" id="mcqFb">'+(mcqSubmitted?MCQ[mcqSel].fb:'')+'</div></div>';
+  h += '<div class="btn-row">'+(mcqSubmitted
+      ? '<button class="btn-reset" onclick="resetMcq()" style="margin-left:auto;">Reset</button>'
+      : '<button class="btn-continue" onclick="submitMcq()"'+(mcqSel===null?' disabled':'')+'>Submit</button>')+'</div>';
+  return h;
+}
+function selectMcq(i){
+  if(mcqSubmitted) return;
+  mcqSel = i;
+  renderAll();
+}
+function submitMcq(){
+  if(mcqSel===null || mcqSubmitted) return;
+  mcqSubmitted = true;
+  if(MCQ[mcqSel].ok) playSuccess(); else playNope();
+  renderAll();
+  window.scrollTo(0, document.body.scrollHeight);
+}
+function resetMcq(){
+  mcqSel = null; mcqSubmitted = false;
+  renderAll();
+}
+
+function renderAll(){
+  document.getElementById('controls').innerHTML = renderMcq();
+  var anna = '', ctrl2 = '';
+  if(mcqSubmitted && MCQ[mcqSel].ok){
+    anna = annaBox('The Income sheet says <strong>Net income '+BRW.dol(NET_INCOME)+'</strong> &mdash; a genuinely profitable summer. And the Cash line reads <strong>'+BRW.dol(CASH_NOW)+'</strong>, down from <strong>'+BRW.dol(CASH_OPEN)+'</strong> on June 1 &mdash; down <strong>'+BRW.dol(CASH_FALL)+'</strong> over that same profitable season. Both readings, straight off the books you already built. Neither one is the mistake.');
+    ctrl2 = insightBox('Two honest answers to two different questions',
+        '<p>Profitable, <em>and</em> poorer in cash. Not an error. Not a theft. &ldquo;How did the shop do?&rdquo; turns out to be two questions, not one: cash misses things, and net income misses different things. That&rsquo;s why there are two statements &mdash; each answers honestly for its own question.</p>')
+      + '<div class="next-phase-msg">The answer isn&rsquo;t hiding. It&rsquo;s written in the Cash line itself &mdash; every row in it is a fact. The next step is sorting those facts.</div>'
+      + '<button class="btn-continue btn-block" onclick="nav(\'34-2-Three-Buckets.html\')">Sort the cash &rarr;</button>';
+  }
+  document.getElementById('anna').innerHTML = anna;
+  document.getElementById('controls').innerHTML += ctrl2;
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Net income', def:'Revenue &minus; Expenses for the period: $6,020 &minus; $3,380 = $2,640. A complete, correct read of the Income sheet &mdash; and not the same question as &ldquo;how much cash do we have.&rdquo;' },
+  { term:'Cash', def:'What the Assets tab shows the shop actually holds in the bank right now: $620, down from $1,300 on June 1. A correct read of a different line &mdash; not a contradiction of net income.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init — the graduated workbook, Assets tab, Cash line open ===== */
+window.devFill = function(){ mcqSel=2; mcqSubmitted=true; renderAll(); };
+BR_WB.registerSeasonSheets();
+BRW.mount('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true }));
+BRW.tab('wb', 'assets');
+BRW.x('wb', 'a', 0);
+renderAll();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

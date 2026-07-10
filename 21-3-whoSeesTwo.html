@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="page">
-  <div class="prework-wrap m2-roomy">
+  <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
@@ -29,11 +29,11 @@
     <!-- ===== whoSeesTwo ===== -->
     <div class="phase active" id="phase-whoSeesTwo">
       <div class="narrative-block">
-        <p>Something doesn&rsquo;t add up. In your books, the repair work already has its own boundary.</p>
-        <p>You drew that boundary for a purpose. The records show what the repair work has, what it owes, and the reasons its residual changed. They are records of the repair work, not records of your whole personal life.</p>
+        <p>Something doesn&rsquo;t add up. In your books, there&rsquo;s already a boundary around the repair work.</p>
+        <p>You drew that boundary for a purpose. The records show what&rsquo;s tied up in the repair work, what&rsquo;s still owed because of it, and the reasons the difference between them changed. They are records of the repair work, not records of your whole personal life.</p>
         <p><strong>So why didn&rsquo;t Smith&rsquo;s claim stop at the repair work?</strong></p>
       </div>
-      <div class="callout" style="margin:20px 0">Drag each card into the zone where it belongs. <strong>Does this view treat the repair work as separate from you?</strong></div>
+      <div class="callout" style="margin:20px 0">Drag each card into the zone where it belongs. <strong>Does this view treat what you&rsquo;ve done in your bike-repair role as separate from the rest of your life?</strong></div>
       <div id="observerArea"></div>
     </div>
 
@@ -65,8 +65,8 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== glossary (shared across all phases of 2.1) ===== */
 var glossaryTerms = [
-  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the repair work&rsquo;s tools and parts." },
-  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything the repair work owns." },
+  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the tools and parts in the repair work." },
+  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything recorded for the repair work." },
   { term:"LLC", def:"Limited Liability Company &mdash; a legal form that can hold the operation and stand as a wall between a claim and your personal life. Maria names it here; you form one next." }
 ];
 function openGlossary(){
@@ -84,9 +84,11 @@ function restart(){ window.location.reload(); }
 /* ===== data ===== */
 var observers = [
   { id:"books", who:"Your books", sub:"Bike-Repair.xlsx", sees:"two", verdict:"Sees TWO",
-    reason:"You drew this boundary in the records. You sorted co-mingled transactions by purpose and tracked what the repair work has, what it owes, and why its residual changed. The separation is real in the books. But so far, it is a boundary you are maintaining in your own records." },
-  { id:"bank", who:"The bank", sub:"Your card and account", sees:"one", verdict:"Sees ONE",
-    reason:"The card and the account are in your personal name. To the bank, every charge &mdash; chain lube or groceries &mdash; belongs to you." },
+    reason:"You drew this boundary in the records. You sorted co-mingled transactions by purpose and tracked what&rsquo;s tied up in the repair work, what&rsquo;s still owed because of it, and why the difference between them changed. The separation is real in the books. But so far, it is a boundary you are maintaining in your own records." },
+  { id:"bank", who:"The bank", sub:"Your checking account", sees:"one", verdict:"Sees ONE",
+    reason:"The account is in your personal name. To the bank, every deposit and withdrawal &mdash; repair cash or paycheck &mdash; belongs to you." },
+  { id:"cardco", who:"The credit-card company", sub:"Harborline Visa", sees:"one", verdict:"Sees ONE",
+    reason:"The card is in your personal name. To Harborline, every charge &mdash; chain lube or groceries &mdash; is yours. There is no second borrower called the bike-repair role." },
   { id:"customer", who:"Smith", sub:"Your customer", sees:"one", verdict:"Sees ONE",
     reason:"Smith hired you. The receipt carries your name. From Smith&rsquo;s view, there is no separate &ldquo;repair work&rdquo; to deal with." },
   { id:"law", who:"The law", sub:"A court", sees:"one", verdict:"Sees ONE",
@@ -97,8 +99,8 @@ var observers = [
 var placed = {};        /* observerId -> zone id, once correctly placed */
 
 var zones = [
-  { id:'separate',    label:'Treats the repair work as separate from you' },
-  { id:'notseparate', label:'Does not treat the repair work as separate from you' }
+  { id:'separate',    label:'Sees your bike-repair role as separate from the rest of your life' },
+  { id:'notseparate', label:'Sees one undivided you' }
 ];
 function correctZone(o){ return o.sees==='two' ? 'separate' : 'notseparate'; }
 
@@ -129,7 +131,7 @@ function renderObservers(){
   html += '</div>';
   if(observers.every(function(o){ return placed[o.id]; })){
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="alert-triangle" class="licon"></i> Only the Books See the Boundary</div>'+
-      '<p>Only your books treat the repair work as separate from you. The bank, Smith, and the law still treat the repair work as part of you personally. The boundary you drew is real in the records, but it is <strong>informal</strong>. You maintain it yourself, and it does not have legal force. That is why Smith&rsquo;s claim does not stop at the repair-work boundary.</p></div>';
+      '<p>Only your books treat your bike-repair role as separate from the rest of your life. The bank, the credit-card company, Smith, and the law still see <strong>one undivided you</strong>. You <em>recognized</em> the role &mdash; that is what Module 1&rsquo;s boundary did &mdash; but the recognition is informal: you maintain it yourself, and it has no legal force. That is why Smith&rsquo;s claim does not stop at it.</p></div>';
     html += '<button class="btn-continue btn-block" onclick="nav(\'21-4-twoHats.html\')">Continue &rarr;</button>';
   }
   document.getElementById('observerArea').innerHTML = html;
@@ -150,5 +152,6 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlos
 /* ===== init ===== */
 renderObservers();
 </script>
+  <script src="dev.js"></script>
 </body>
 </html>

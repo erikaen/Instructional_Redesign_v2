@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5 — Module Complete</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <div class="complete-head">
+      <div class="trophy-badge"><i data-lucide="trophy"></i></div>
+      <div class="complete-title">Module 5 complete &mdash; and the build with it</div>
+    </div>
+    <div class="section-card">
+      <div class="card-title">The names you earned</div>
+      <ul class="bullet-list check">
+        <li>You drew a boundary for a purpose &mdash; that&rsquo;s the <strong>entity</strong>. You made it; you didn&rsquo;t find it.</li>
+        <li>Recorded Assets minus recorded Liabilities is a <strong>definitional difference</strong> &mdash; not a pile of cash, and not a net-worth figure: the records leave real things out.</li>
+        <li><strong>A &minus; L</strong> is the <strong>accounting identity</strong> &mdash; it holds by construction, and the page that lays it out is the <strong>balance sheet</strong>.</li>
+        <li>The difference grows two ways &mdash; <strong>contributed</strong> and <strong>generated</strong> &mdash; what to call it depends on the kind of entity, a later story.</li>
+        <li>Every change has two sides: <strong>double-entry</strong>, how every number on every statement gets there.</li>
+      </ul>
+    </div>
+    <div class="insight-box">
+      <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> You invented the system. Now you have its names.</div>
+      <p>Identify the entity. List its Assets and Liabilities. The difference follows by construction &mdash; the accounting identity, on a balance sheet, maintained by double-entry. Pacioli wrote it down in 1494. You worked it out at the workbench in May.</p>
+    </div>
+    <div class="next-card">
+      <div class="next-card-label">Coming Next</div>
+      <p>Module 5 closes the build here. From here, you&rsquo;ll put these tools to work reading what other people prepared &mdash; and face the decisions that come with choosing a form for the work.</p>
+    </div>
+    <div class="next-phase-msg">You&rsquo;ve finished this module &mdash; click <strong>Next -&gt;</strong> to continue.</div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 4;
+var PHASE_TITLE = '';
+
+/* ===== glossary ===== */
+function openGlossary(){ m1GlossaryOpen('15-5'); }
+function closeGlossary(){ m1GlossaryClose(); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

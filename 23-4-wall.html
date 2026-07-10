@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3: The Rules and the Two Signatures &middot; The Wall</title>
+  <title>Activity 2.3: The Rules &middot; The Wall</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
 </head>
 <body>
 <div class="page">
-  <div class="prework-wrap m2-roomy">
+  <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 3: The Rules and the Two Signatures</h1>
+        <h1>Activity 2.3: The Rules</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 4 of 6</p>
       </div>
       <div class="tut-header-actions">
@@ -29,10 +29,9 @@
     <!-- ===== wall ===== -->
     <div class="phase active" id="phase-wall">
       <div class="narrative-block">
-        <p>Now read <strong>Section 17, Liability of the Sole Member</strong>. This is the wall Maria was pointing toward. If the Company has a debt or obligation, the Sole Member is <strong>not</strong> personally responsible for it just because they own the Company.</p>
-        <p>Imagine the same kind of customer claim happens now, after the repair work has been contributed to the LLC.</p>
+        <p>And <strong>Section 17, Liability of the Sole Member</strong>: the Company&rsquo;s debts are the <strong>Company&rsquo;s</strong>, not yours. Remember Smith&rsquo;s claim from 2.1 &mdash; the one that came after your savings, your car, even your earnings? Send it again, now that the wall exists.</p>
       </div>
-      <div class="callout" style="font-family:Georgia,'Times New Roman',serif;margin-bottom:20px"><strong>&sect;17.</strong> &ldquo;The Sole Member is not personally liable for the debts or obligations of the Company.&rdquo;</div>
+      <div class="callout" style="font-family:Georgia,'Times New Roman',serif"><strong>&sect;17.</strong> &ldquo;The Sole Member is not personally liable for the debts or obligations of the Company.&rdquo;</div>
       <div id="wallArea"></div>
     </div>
 
@@ -66,7 +65,7 @@ var glossaryTerms = [
   { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
   { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
   { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
-  { term:"Members&rsquo; capital / Members&rsquo; equity", def:"The LLC&rsquo;s name for the residual A &minus; L. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($1,790) and the retained slice ($170) are kept separate." },
+  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the generated slice ($170) are kept separate." },
   { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
   { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
 ];
@@ -88,46 +87,49 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').rep
 function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
 function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
 
-/* ===== data (same lists as 21-2) ===== */
-var businessThings = ['Repair equipment','Computer equipment','Supplies','Fixtures','Prepaid rent'];
-var personalThings = ['Your car','Your earnings','Your savings'];
-
 /* ===== state (phase-local) ===== */
 var claimRun = false;
+var compShown = false, youShown = false;
+var companyThings = ["Repair equipment","Computer equipment","Supplies","Fixtures"];
+var personalThings = ["Your car","Your earnings","Your savings"];
+function listHtml(arr){ return '<div style="font-size:var(--font-xs);margin-top:6px;line-height:1.7">'+arr.map(function(t){ return '<div>'+t+'</div>'; }).join('')+'</div>'; }
+function revealBtn(fn, label){ return '<button class="btn-continue" style="margin-top:8px;padding:6px 12px;font-size:var(--font-xs)" onclick="'+fn+'()">'+label+' &darr;</button>'; }
 
-/* ===== §17 limited-liability wall ===== */
+/* ===== §17 limited-liability wall — same figure as 21-2, plus the wall ===== */
 function renderWall(){
   var area = document.getElementById('wallArea');
   var en = esc(llcName());
-  var neutral = 'border-color:var(--border-strong);background:var(--primary-faint)';
-  var compStyle = claimRun ? 'border-color:var(--error-border);background:var(--error-bg)' : neutral;
-  var youStyle = claimRun ? 'border-color:var(--success-border);background:var(--success-bg)' : neutral;
-  var wallBorder = claimRun ? 'var(--primary)' : 'var(--border-strong)';
-  var wallMsg = claimRun ? '&#10003; The claim stops at the wall.' : 'The LLC&rsquo;s wall now stands here.';
-  var bizItems = businessThings.map(function(t){ return '<div>'+t+'</div>'; }).join('');
-  var youItems = personalThings.map(function(t){ return '<div>'+t+'</div>'; }).join('');
-
-  var html = '<div class="twoplaces" style="margin-bottom:20px"><div class="twoplaces-title">See where the new customer claim reaches now.</div>';
-  html += '<div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch">';
-  html += '<div class="tp-card" style="'+compStyle+';transition:all 0.4s"><div class="tp-card-label">'+en+'</div>'+
-    '<div class="tp-card-text">'+bizItems+'</div></div>';
-  html += '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:2px solid;border-radius:8px;padding:8px 10px;font-size:var(--font-xs);font-weight:700;line-height:1.3;color:var(--primary);background:transparent;transition:all 0.4s;border-color:'+wallBorder+'">'+wallMsg+'</div>';
-  html += '<div class="tp-card" style="'+youStyle+';transition:all 0.4s"><div class="tp-card-label">You personally</div>'+
-    '<div class="tp-card-text">'+youItems+
-    (claimRun?'<br><span style="font-weight:600;color:var(--success-text)">&#10003; Safe</span>':'')+'</div></div>';
+  var compStyle = claimRun ? 'background:var(--error-bg);border:2px solid var(--error-border)' : 'background:var(--primary-faint);border:2px solid var(--border-strong)';
+  var youStyle = claimRun ? 'background:var(--success-bg);border:2px solid var(--success-border)' : 'background:var(--primary-faint);border:2px solid var(--border-strong)';
+  var wallColor = claimRun ? 'var(--primary)' : 'var(--border-strong)';
+  var html = '<div class="section-card">';
+  html += '<div style="display:grid;grid-template-columns:1fr 26px 1fr;gap:0;align-items:stretch">';
+  html += '<div style="border-radius:10px;padding:12px;'+compStyle+';transition:all 0.4s">'+
+    '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;color:var(--primary)">The Company</div>'+
+    '<div style="font-size:var(--font-s);margin-top:2px">'+en+'</div>'+
+    (compShown ? listHtml(companyThings) : revealBtn('showComp','What the Company holds'))+'</div>';
+  html += '<div style="display:flex;align-items:center;justify-content:center"><div title="the LLC &mdash; limited liability" style="width:6px;align-self:stretch;border-radius:3px;background:'+wallColor+';transition:all 0.4s"></div></div>';
+  html += '<div style="border-radius:10px;padding:12px;'+youStyle+';transition:all 0.4s">'+
+    '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;color:var(--primary)">You</div>'+
+    (youShown ? listHtml(personalThings) : revealBtn('showYou','Your personal assets'))+
+    (claimRun?'<div style="font-size:var(--font-xs);margin-top:6px;font-weight:600;color:var(--success-text)">&#10003; behind the wall &mdash; safe</div>':'')+'</div>';
   html += '</div>';
-  html += '</div>';
+  html += '<div style="text-align:center;margin:12px 0;min-height:18px">'+(claimRun?'<span style="font-size:var(--font-xs);font-weight:600;color:var(--primary)">the claim reaches the Company &mdash; and stops at the wall</span>':'')+'</div>';
   if(!claimRun){
-    html += '<button class="btn-continue btn-block" style="background:var(--error-bg);color:var(--error-text);border:1.5px solid var(--error-border)" onclick="runClaim()">Send a new customer claim</button>';
+    html += '<button class="btn-continue btn-block" style="background:var(--error-bg);color:var(--error-text);border:1.5px solid var(--error-border)" onclick="runClaim()">Send Smith&rsquo;s claim again &rarr;</button>';
   } else {
-    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="shield" class="licon"></i> The Wall</div>'+
-      '<p>This is the legal wall Maria wanted. <strong>Limited liability</strong> changes <strong>who is responsible for the Company&rsquo;s debts and obligations</strong>. It does not change the balance sheet: the same assets, liabilities, and equity are still recorded.<br><br>What changed is <strong>exposure</strong>. The Company can be pursued for Company obligations, but you are not personally responsible just because you are the Sole Member.</p></div>'+
-      '<button class="btn-continue btn-block" onclick="nav(\'23-5-keystone.html\')">Continue &rarr;</button>';
+    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="shield" class="licon"></i> The wall</div>'+
+      '<p>This is the wall Maria wanted. <strong>Limited liability</strong> is a <em>legal</em> fact &mdash; it changes <strong>who can be pursued</strong>, not what the records show. The balance sheet didn&rsquo;t move; the exposure did.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="nav(\'23-5-keystone.html\')">One last thing &rarr;</button>';
   }
+  html += '</div>';
   area.innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
 function runClaim(){ claimRun=true; playThud(); renderWall(); }
+function showComp(){ compShown=true; playClick(); renderWall(); }
+function showYou(){ youShown=true; playClick(); renderWall(); }
+window.devFill = function(){ compShown=youShown=true; if(!claimRun) runClaim(); else renderWall(); };
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 
@@ -135,5 +137,6 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlos
 try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
 renderWall();
 </script>
+  <script src="dev.js"></script>
 </body>
 </html>

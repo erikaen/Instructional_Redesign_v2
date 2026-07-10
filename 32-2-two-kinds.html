@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 3.2: The Income Statement &middot; Two Kinds of Reason</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 2: The Income Statement</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Two Kinds of Reason</div>
+
+    <div class="narrative-block">
+      <p>First, the period line. The question is how the shop did <em>this summer</em>, so May&rsquo;s rows stay exactly where they are &mdash; set aside, untouched. What&rsquo;s left is the season &mdash; and read any season reason and it records one of just <strong>two things</strong>: the work <strong>delivered</strong> &mdash; a repair finished, a frame handed over &mdash; or something got <strong>used up</strong> delivering. Nothing else.</p>
+      <p>Right in the workbook: <strong>click a reason</strong> in the pile, then click the pile it belongs in. Do a few and the pattern will be clear &mdash; then you can sort the rest in one go.</p>
+    </div>
+
+    <div id="wb"></div>
+    <div class="feedback" id="sortNudge"></div>
+    <div id="anna"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== the GENERATED reasons, tagged flow: 'in' (delivered) | 'up' (used up) ===== */
+var reasons = BR_WB.generatedRows();
+reasons.forEach(function (r, i) { r.id = 'g' + i; });
+function findR(id){ for(var i=0;i<reasons.length;i++) if(reasons[i].id===id) return reasons[i]; return null; }
+var visibleIds = reasons.slice(0, 9).map(function (r) { return r.id; });
+
+/* ===== state ===== */
+var placed = {}, selectedId = null, done = false, filling = false;
+
+function correctIn(b){ return reasons.some(function(r){ return placed[r.id]===b && r.flow===b; }); }
+function gateMet(){ return correctIn('in') && correctIn('up'); }
+function bTotal(b){ return reasons.filter(function(r){ return placed[r.id]===b; }).reduce(function(s,r){ return s+r.delta; }, 0); }
+function bCount(b){ return reasons.filter(function(r){ return placed[r.id]===b; }).length; }
+
+/* ===== the interactive "Reasons" sheet, rendered inside the workbook shell ===== */
+function xrow(cls, attrs, label, val){ return '<div class="xl-row '+cls+'"'+attrs+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
+function bucketGroup(b, label, blurb){
+  var mine = reasons.filter(function(r){ return placed[r.id]===b; });
+  var armed = selectedId && !done && !filling;
+  var head = label+' ('+mine.length+') &mdash; '+blurb+(armed?' <span class="xl-new-tag">click to drop here</span>':'');
+  var h = xrow('xl-cat', armed?(' onclick="placeInto(\''+b+'\')"'):'', head, BRW.signed(bTotal(b)));
+  mine.forEach(function(r){ h += xrow('xl-item', '', r.account+' &mdash; '+r.reason, BRW.signed(r.delta)); });
+  if(!mine.length && !armed) h += xrow('xl-item', '', '<em>empty</em>', '');
+  return h;
+}
+function sortSheet(cid, snap){
+  var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s reasons</div><div class="cash-sheet-sub">'+(done?'sorted into two piles &mdash; delivered, and used up':'click a reason, then click the pile it belongs in')+'</div></div>';
+  if(!done){
+    var remaining = visibleIds.map(findR).filter(function(r){ return !placed[r.id]; });
+    var hiddenLeft = reasons.length - visibleIds.length;
+    h += xrow('xl-cat', '', 'TO SORT ('+(remaining.length+hiddenLeft)+') &mdash; jumbled, job by job', '');
+    remaining.forEach(function(r){
+      var sel = selectedId===r.id;
+      var label = (sel?'<i data-lucide="hand" class="licon"></i> ':'')+r.account+' &mdash; '+r.reason+(sel?' <span class="xl-new-tag">pick a pile below &darr;</span>':'');
+      h += xrow('xl-item', ' onclick="pickReason(\''+r.id+'\')"', label, BRW.signed(r.delta));
+    });
+    if(hiddenLeft>0) h += xrow('xl-item', '', '<em>+ '+hiddenLeft+' more like these, still in the pile</em>', '');
+  }
+  h += bucketGroup('in', 'DELIVERED', 'reasons the work delivered to a customer');
+  h += bucketGroup('up', 'USED UP', 'reasons things got used up');
+  return h;
+}
+
+/* ===== workbook state — the Reasons tab is our interactive sort sheet ===== */
+var snap = BR_WB.snapshot();
+snap.tabs = snap.tabs.map(function(t){ return t.id==='reasons' ? { id:'sort', label:'Reasons' } : t; });
+
+/* ===== interaction ===== */
+function nudge(kind, html){ var n=document.getElementById('sortNudge'); n.className='feedback '+kind+' show'; n.innerHTML=html; if(window.lucide) lucide.createIcons(); }
+function refresh(){ BRW.update('wb', snap); renderControls(); }
+function pickReason(id){ if(done||filling) return; playClick(); selectedId = (selectedId===id)?null:id; refresh(); }
+function placeInto(b){
+  if(done||filling||!selectedId) return;
+  var r = findR(selectedId);
+  if(r.flow!==b){
+    playNope();
+    nudge('err', '<i data-lucide="alert-triangle" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; records '+(r.flow==='in'?'a <strong>delivery</strong> &mdash; work handed to a customer, not something used up.':'something being <strong>used up</strong> &mdash; not a delivery.'));
+    selectedId = null; refresh();
+    return;
+  }
+  playSuccess();
+  placed[r.id] = b;
+  selectedId = null;
+  nudge('ok', '<i data-lucide="check" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; &mdash; '+(b==='in'?'delivered.':'used up.'));
+  refresh();
+}
+function doTheRest(){
+  if(done||filling||!gateMet()) return;
+  playClick(); filling=true; selectedId=null;
+  document.getElementById('controls').innerHTML='';
+  document.getElementById('sortNudge').className='feedback';
+  setTimeout(function(){
+    reasons.forEach(function(r){ placed[r.id]=r.flow; });
+    filling=false; done=true;
+    playSuccess();
+    BRW.update('wb', snap);
+    renderDone();
+    window.scrollTo(0, document.body.scrollHeight);
+  }, 700);
+}
+
+/* ===== controls / Anna ===== */
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+function renderControls(){
+  if(done||filling) return;
+  var ctrl='';
+  if(Object.keys(placed).length>0){
+    var met=gateMet();
+    ctrl = '<div class="gate-card'+(met?' gate-armed-maria':'')+'"><div class="gate-card-title">'
+      +(met?'That&rsquo;s the whole trick &mdash; every reason is one kind or the other. Sort the rest the same way.':'Get at least one reason correctly into <strong>each</strong> pile to unlock the rest.')
+      +'</div><button class="btn-continue btn-block" onclick="doTheRest()"'+(met?'':' disabled')+'>Sort the rest &rarr;</button></div>';
+  }
+  document.getElementById('controls').innerHTML = ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+function renderDone(){
+  var inT=bTotal('in'), upT=bTotal('up');
+  document.getElementById('sortNudge').className='feedback';
+  document.getElementById('anna').innerHTML = annaBox('There &mdash; the same reasons, no longer jumbled. One pile holds every <strong>delivery</strong> the books caught ('+BRW.dol(inT)+'), the other everything that got <strong>used up</strong> ('+BRW.dol(Math.abs(upT))+'). Same total as before &mdash; '+BRW.dol(inT+upT)+' &mdash; but now you can read it. And look at <strong>Smith&rsquo;s frame</strong> in DELIVERED: no cash moved this season at all &mdash; his money came in <em>May</em>, as a deposit. What this summer&rsquo;s row records is the frame going out the door and the promise coming off the books. These piles aren&rsquo;t about money moving. They&rsquo;re about what the work did.');
+  document.getElementById('controls').innerHTML =
+    insightBox('Two piles, two totals',
+      '<p>Every season reason sorts into one of these two. Line the <strong>DELIVERED</strong> total up against the <strong>USED UP</strong> total and the difference is how the season went &mdash; the answer the jumbled pile could never give in one place.</p>')
+    + '<div class="next-phase-msg">One loose end before the piles get their names. In USED UP sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong> &mdash; and there&rsquo;s no delivery across from it in DELIVERED. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job.</div>'
+    + '<button class="btn-continue btn-block" onclick="nav(\'32-3-revenue-follows-the-work.html\')">Find Ridgeline &rarr;</button>';
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Delivered', def:'A reason recording work handed to a customer &mdash; a repair finished, a frame delivered against a deposit. Not about cash: Smith&rsquo;s delivery settled a promise; cash can come before, after, or with the work. The plain word used before the term <em>revenue</em>.' },
+  { term:'Used up', def:'A reason recording why something went away &mdash; parts consumed on a job, a month of rent lived through. The plain phrase used before the term <em>expense</em>.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init ===== */
+window.devFill = function(){ reasons.forEach(function(r){ placed[r.id]=r.flow; }); done=true; filling=false; BRW.update('wb', snap); renderDone(); };
+BRW.registerSheet('sort', sortSheet);
+BRW.mount('wb', snap);
+BRW.tab('wb', 'sort');
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

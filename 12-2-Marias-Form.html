@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 2 — Maria&rsquo;s Form</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <!-- ===== Phase: form ===== -->
+    <div class="phase active" id="phase-form">
+      <div class="narrative-block" id="narrativeBlock">
+        <p>Maria&rsquo;s form has four sections: Equipment, Computer Equipment, Supplies, Fixtures. <strong>Drag</strong> each item from your list into the correct section.</p>
+      </div>
+
+      <div class="gate-armed" id="selectedHint" hidden></div>
+
+      <div class="ins-layout">
+        <div class="things-sidebar">
+          <div class="things-sidebar-label"><i data-lucide="pin" class="licon"></i> YOUR THINGS LIST</div>
+          <div class="things-sidebar-sub">(repair-related, from 1.1)</div>
+          <div class="sidebar-items" id="sidebarItems"></div>
+          <div class="sidebar-more" id="sidebarMore"></div>
+          <div class="feedback" id="formNudge"></div>
+        </div>
+        <div class="ins-form">
+          <div class="ins-form-head">
+            <div class="ins-form-title">INSURABLE PROPERTY</div>
+            <div class="ins-form-sub">Citizens Mutual Insurance &middot; Coverage Estimate</div>
+          </div>
+          <div class="ins-form-body">
+            <div id="insSections"></div>
+            <div class="ins-total"><span>TOTAL INSURABLE PROPERTY</span><span class="mono" id="insTotal">$0</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row" id="formActions" style="margin-bottom: 20px;"></div>
+
+      <div id="transitionNudge" hidden></div>
+
+      <div class="dialog-box maria" id="laptopNudge" hidden>
+        <div class="dialog-label">MARIA</div>
+        <div class="dialog-text"><span class="dialog-prefix">(looking over)</span>&ldquo;That laptop&rsquo;s got no receipt &mdash; you&rsquo;ve had it for years. For something used, we put down what it would <strong>sell for now</strong>. Tap <em>eBay comp</em> next to it, look at a few comparable ones, and write down a fair number.&rdquo;</div>
+      </div>
+
+      <div class="system-banner" id="systemBanner" hidden>
+        <div class="system-banner-title"><i data-lucide="settings" class="licon"></i> A few hours later&hellip;</div>
+        <div class="system-banner-sub">You worked down the rest of the list the same way &mdash; receipts read across, the shelf counted.</div>
+      </div>
+
+      <div class="gate-card" id="gateCard">
+        <div class="gate-card-title">Drag at least one item for each section to unlock the rest:</div>
+        <ul class="gate-list" id="gateList"></ul>
+        <button class="btn-continue btn-block" id="doRestBtn" onclick="doTheRest()" disabled>Do the rest &rarr;</button>
+      </div>
+
+      <div id="formDoneBlock" hidden>
+        <div class="dialog-box maria">
+          <div class="dialog-label">MARIA</div>
+          <div class="dialog-text"><span class="dialog-prefix">(quietly)</span>&ldquo;And notice the supplies! you <strong>bought $500</strong> of parts, but only <strong>$200</strong> is still on the shelf to insure. The rest went into jobs. That gap comes back soon.&rdquo;</div>
+        </div>
+        <div class="insight-box">
+          <div class="insight-label"><i data-lucide="check" class="licon"></i> Every line came from somewhere</div>
+          <p>Every line has a <strong>number</strong>. And you can see <em>where each one came from</em>: a <strong>receipt</strong> for what you bought, an <strong>eBay comp</strong> for the gear you&rsquo;d owned a while, and a <strong>shelf count</strong> for the supplies.</p>
+        </div>
+        <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<!-- ===== Document popup ===== -->
+<div class="doc-overlay" id="docOverlay" onclick="if(event.target===this) closeDoc()">
+  <div class="doc-modal" id="docModal"></div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var items = [
+  { id:'stand', name:'Park Tool repair stand', category:'equipment', cost:200, sourced:'receipt' },
+  { id:'conewr', name:'Cone wrench set', category:'equipment', cost:65, sourced:'receipt' },
+  { id:'torque', name:'Torque wrench', category:'equipment', cost:95, sourced:'receipt' },
+  { id:'hex', name:'Hex / Allen key set', category:'equipment', cost:45, sourced:'receipt' },
+  { id:'cutters', name:'Cable cutters', category:'equipment', cost:40, sourced:'receipt' },
+  { id:'breaker', name:'Chain breaker', category:'equipment', cost:35, sourced:'receipt' },
+  { id:'levers', name:'Tire levers', category:'equipment', cost:20, sourced:'receipt' },
+  { id:'compressor', name:'Air compressor', category:'equipment', cost:180, sourced:'credit-card' },
+  { id:'washer', name:'Parts washer', category:'equipment', cost:130, sourced:'credit-card' },
+  { id:'truing', name:'Wheel-truing stand', category:'equipment', cost:170, sourced:'credit-card' },
+  { id:'grinder', name:'Bench grinder', category:'equipment', cost:90, sourced:'estimate' },
+  { id:'headset', name:'Headset press', category:'equipment', cost:70, sourced:'estimate' },
+  { id:'vacuum', name:'Shop vacuum', category:'equipment', cost:60, sourced:'estimate' },
+  { id:'laptop', name:'Laptop', category:'computer', cost:610, sourced:'estimate' },
+  { id:'desk', name:'Desk', category:'fixtures', cost:250, sourced:'receipt' },
+  { id:'shelves', name:'Shelving units', category:'fixtures', cost:200, sourced:'receipt' },
+  { id:'display', name:'Display rack', category:'fixtures', cost:180, sourced:'receipt' },
+  { id:'pegboard', name:'Pegboard + hooks', category:'fixtures', cost:120, sourced:'receipt' },
+  { id:'chains', name:'Box of chains', category:'supplies', cost:50, sourced:'receipt', paidAmount:100, countLeft:'½ box left' },
+  { id:'pads', name:'Box of brake pads', category:'supplies', cost:40, sourced:'receipt', paidAmount:80, countLeft:'½ box left' },
+  { id:'cables', name:'Box of derailleur cables', category:'supplies', cost:20, sourced:'receipt', paidAmount:40, countLeft:'½ box left' },
+  { id:'cassettes', name:'Cassettes', category:'supplies', cost:40, sourced:'receipt', paidAmount:80, countLeft:'½ left' },
+  { id:'bbs', name:'Bottom brackets', category:'supplies', cost:20, sourced:'receipt', paidAmount:80, countLeft:'¼ left' },
+  { id:'spokes', name:'Spokes', category:'supplies', cost:20, sourced:'receipt', paidAmount:80, countLeft:'¼ left' },
+  { id:'tubes', name:'Tubes', category:'supplies', cost:10, sourced:'receipt', paidAmount:40, countLeft:'¼ left' },
+];
+function findItem(id){ return items.find(function(i){ return i.id===id; }); }
+var visibleIds = ['stand','compressor','laptop','chains','pegboard','desk'];
+var categoryDefs = [
+  { id:'equipment', label:'EQUIPMENT', sub:'durable tools and gear' },
+  { id:'computer', label:'COMPUTER EQUIPMENT', sub:'computers and devices' },
+  { id:'supplies', label:'SUPPLIES', sub:'parts and consumables' },
+  { id:'fixtures', label:'FIXTURES', sub:'drawers, storage, built-ins' }
+];
+function miscatNudge(item){
+  if(item.category==='equipment') return item.name + ' is Equipment — a durable tool, not parts you use up and not a storage piece.';
+  if(item.category==='computer') return item.name + ' is Computer Equipment — a computer or device, kept separate from your hand tools.';
+  if(item.category==='supplies') return item.name + ' is Supplies — something you go through on jobs, not a tool you keep.';
+  return item.name + ' is Fixtures — storage or built-ins, not a tool and not parts.';
+}
+var ebayComps = [520,610,585,640,515];
+var receipts = [
+  { id:'parktool', forItem:['stand'], vendor:'Cyclesport Supply', vendorSub:'professional bike tools & equipment', receiptNum:'Sales Receipt  #SR-4471', date:'May 3, 2026', paidWith:'Personal debit card', paidLast4:'•••• 6620', paidNote:'Not charged to the bike-repair credit card — paid from personal funds.', lineItems:[{name:'Park Tool PRS-25 Team Issue Repair Stand', amount:200}], total:200 },
+  { id:'tools', forItem:['conewr'], vendor:'Cyclesport Supply', vendorSub:'professional bike tools & equipment', receiptNum:'Sales Receipt  #SR-4488', date:'May 5, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Cone wrench set',amount:65},{name:'Torque wrench',amount:95},{name:'Hex / Allen key set',amount:45},{name:'Cable cutters',amount:40},{name:'Chain breaker',amount:35},{name:'Tire levers (set)',amount:20}], total:300 },
+  { id:'fixtures', forItem:['pegboard','desk','shelves','display'], vendor:'Workspace Outfitters', vendorSub:'store fixtures & furnishings', receiptNum:'Invoice  #WO-20518', date:'May 5, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Work desk',amount:250},{name:'Shelving units (×2)',amount:200},{name:'Display rack',amount:180},{name:'Pegboard panel + hook set',amount:120}], total:750 },
+  { id:'qbp', forItem:['chains','cables','pads','cassettes','bbs','spokes','tubes'], vendor:'QBP', vendorSub:'Quality Bicycle Products — wholesale parts distributor', receiptNum:'Invoice  #QBP-887341  ·  Ship: UPS Ground', date:'May 15, 2026', paidWith:'Bike-Repair Visa', paidLast4:'•••• 3902', lineItems:[{name:'Chains (box)',amount:100},{name:'Brake pads (box)',amount:80},{name:'Derailleur cables (box)',amount:40},{name:'Cassettes (×4)',amount:80},{name:'Bottom brackets (assorted)',amount:80},{name:'Spokes (bundle)',amount:80},{name:'Tubes (box)',amount:40}], total:500 }
+];
+var creditCard = { issuer:'Harborline Visa', sub:'Personal card · repair and personal charges co-mingled', last4:'•••• 3902', period:'May 1 – May 31, 2026', opened:'Statement opened May 1, 2026', previousBalance:0, chargesTotal:2260, paymentsTotal:0, newBalance:2260, transactions:[
+  {date:'05/03',desc:'Stop & Shop — groceries',charge:85,payment:null},
+  {date:'05/05',desc:'Workspace Outfitters — fixtures',charge:750,payment:null},
+  {date:'05/05',desc:'Cyclesport Supply — hand tools',charge:300,payment:null},
+  {date:'05/08',desc:'Compressor Depot — air compressor',charge:180,payment:null},
+  {date:'05/09',desc:'Restaurant — dinner',charge:55,payment:null},
+  {date:'05/10',desc:'Industrial Supply — parts washer',charge:130,payment:null},
+  {date:'05/12',desc:'Cyclesport Supply — wheel-truing stand',charge:170,payment:null},
+  {date:'05/14',desc:'Gas station',charge:48,payment:null},
+  {date:'05/15',desc:'QBP — parts order',charge:500,payment:null},
+  {date:'05/18',desc:'Streaming service',charge:16,payment:null},
+  {date:'05/22',desc:'Pharmacy',charge:26,payment:null}
+]};
+function fmt(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+/* ===== state ===== */
+var phaseOrder = ['welcome','form','maria-readback','complete'];
+var placements = {};
+var values = {};
+var paidValues = {};
+var selectedId = null;
+var formDone = false, formFilling = false;
+var formPhase = 'categorize'; // 'categorize' | 'valuate'
+var shelfCounted = false; // supplies: the on-shelf value can't be entered until the shelf is counted
+var placementsSnapshot = {}, valuesSnapshot = {}, paidValuesSnapshot = {}; // captured right before "Do the rest"
+var placeable = items.filter(function(i){ return i.category!=='none'; });
+
+/* ===== correctness ===== */
+function isValCorrect(id){ var it=findItem(id); return it && Number(values[id])===it.cost; }
+function isValWrong(id){ var v=Number(values[id]); return v>0 && !isValCorrect(id); }
+function isPaidCorrect(id){ var it=findItem(id); return it && it.paidAmount!=null && Number(paidValues[id])===it.paidAmount; }
+function isPaidWrong(id){ var v=Number(paidValues[id]); return v>0 && !isPaidCorrect(id); }
+function catHandValued(catId){
+  var placed = placeable.filter(function(i){ return placements[i.id]===catId; });
+  if(catId==='supplies') return placed.some(function(i){ return isValCorrect(i.id) && isPaidCorrect(i.id); });
+  return placed.some(function(i){ return isValCorrect(i.id); });
+}
+function formTriggerMet(){ return categoryDefs.every(function(c){ return catHandValued(c.id); }); }
+function subtotalForCat(catId){
+  return placeable.filter(function(i){ return placements[i.id]===catId; })
+    .reduce(function(s,i){ return s + (Number(values[i.id])||0); }, 0);
+}
+function totalInsurable(){ return categoryDefs.reduce(function(s,c){ return s + subtotalForCat(c.id); }, 0); }
+
+/* ===== phase nav ===== */
+function goto(p){
+  playClick();
+  phaseOrder.forEach(function(ph){ document.getElementById('phase-'+ph).classList.toggle('active', ph===p); });
+  var pct = Math.round((phaseOrder.indexOf(p)/(phaseOrder.length-1))*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  window.scrollTo(0,0);
+  if(p==='form') renderForm();
+  if(p==='maria-readback') renderReadback();
+}
+function restart(){
+  placements={}; values={}; paidValues={}; selectedId=null; formDone=false; formFilling=false; formPhase='categorize';
+  document.getElementById('formNudge').className='feedback';
+  document.getElementById('laptopNudge').hidden=true;
+  document.getElementById('systemBanner').hidden=true;
+  document.getElementById('gateCard').hidden=false;
+  document.getElementById('formDoneBlock').hidden=true;
+  goto('form');
+}
+
+/* ===== form render ===== */
+function renderSidebar(){
+  var remaining = visibleIds.map(findItem).filter(function(i){ return !placements[i.id]; });
+  var box = document.getElementById('sidebarItems');
+  if(formDone){
+    box.innerHTML = '';
+    document.getElementById('sidebarMore').hidden=true;
+    var note = document.getElementById('formNudge');
+    note.className = 'feedback';
+    note.innerHTML = '';
+    return;
+  }
+  box.innerHTML = remaining.map(function(i){
+    return '<div class="sidebar-item" draggable="true" '+
+      'ondragstart="onDragStart(event,\''+i.id+'\')" ondragend="this.classList.remove(\'dragging\')">'+i.name+'</div>';
+  }).join('');
+  var hidden = items.length - visibleIds.length;
+  var more = document.getElementById('sidebarMore');
+  more.hidden = hidden<=0; more.textContent = '+ '+hidden+' more on the full list';
+}
+function valueCell(item){
+  // In categorize phase, don't show value inputs
+  if(formPhase==='categorize') return '';
+
+  var isLaptop = item.id==='laptop';
+  var isMachine = item.sourced==='estimate' && !isLaptop;
+  if(formDone || isMachine){
+    return '<span class="ins-val-static mono">'+fmt(Number(values[item.id])||0)+'</span>';
+  }
+  var cls = isValCorrect(item.id)?' ok':(isValWrong(item.id)?' wrong':'');
+  return '<span class="ins-val-wrap"><span class="ins-dollar mono">$</span>'+
+    '<input type="text" inputmode="numeric" class="ins-val mono'+cls+'" id="val-'+item.id+'" value="'+(values[item.id]||'')+'" placeholder="?" '+
+    'oninput="onValueInput(\''+item.id+'\', this)" onkeydown="if(event.key===\'Enter\')this.blur()"></span>';
+}
+function evidenceCell(item){
+  // In categorize phase, don't show evidence buttons
+  if(formPhase==='categorize') return '';
+
+  var isLaptop = item.id==='laptop';
+  var isMachine = item.sourced==='estimate' && !isLaptop;
+  if(isLaptop) return '<button class="ins-ev" onclick="openEbay()" title="Look up comparable used prices">eBay comp</button>';
+  if(isMachine) return '<span class="ins-ev static">eBay comp</span>';
+  var label = item.sourced==='credit-card'?'card':'receipt';
+  return '<button class="ins-ev" onclick="openDoc(\''+item.id+'\')" title="Show the document">'+label+'</button>';
+}
+function renderItemRow(item){
+  return '<div class="ins-row"><span class="ins-row-name">'+item.name+'</span>'+evidenceCell(item)+valueCell(item)+'</div>';
+}
+function renderSupplyRow(item){
+  // In categorize phase, only show the item name
+  if(formPhase==='categorize'){
+    return '<div class="ins-row"><span class="ins-row-name">'+item.name+'</span></div>';
+  }
+
+  var paidCell, shelfCell;
+  if(formDone){
+    paidCell = '<span class="ins-val-static mono">'+fmt(Number(paidValues[item.id])||0)+'</span>';
+    shelfCell = '<span class="ins-val-static mono">'+fmt(Number(values[item.id])||0)+'</span>';
+  } else {
+    var pcls = isPaidCorrect(item.id)?' ok':(isPaidWrong(item.id)?' wrong':'');
+    paidCell = '<span class="ins-val-wrap"><span class="ins-dollar mono">$</span><input type="text" inputmode="numeric" class="ins-val narrow mono'+pcls+'" id="paid-'+item.id+'" value="'+(paidValues[item.id]||'')+'" placeholder="?" oninput="onPaidInput(\''+item.id+'\', this)" onkeydown="if(event.key===\'Enter\')this.blur()"></span>';
+    var scls = isValCorrect(item.id)?' ok':(isValWrong(item.id)?' wrong':'');
+    if(!shelfCounted){
+      // locked until the student opens the parts receipt and counts the shelf
+      shelfCell = '<span class="ins-val-wrap"><span class="ins-dollar mono">$</span><input type="text" class="ins-val narrow mono" placeholder="count first" disabled></span>';
+    } else {
+      shelfCell = '<span class="ins-val-wrap"><span class="ins-dollar mono">$</span><input type="text" inputmode="numeric" class="ins-val narrow mono'+scls+'" id="val-'+item.id+'" value="'+(values[item.id]||'')+'" placeholder="?" oninput="onValueInput(\''+item.id+'\', this)" onkeydown="if(event.key===\'Enter\')this.blur()"></span>';
+    }
+  }
+  return '<div class="ins-row"><span class="ins-row-name">'+item.name+'</span>'+paidCell+shelfCell+'</div>';
+}
+function renderForm(){
+  renderSidebar();
+  var hint = document.getElementById('selectedHint');
+  if(selectedId && !formDone && !formFilling){
+    hint.hidden=false;
+    hint.innerHTML = 'Selected <strong>'+findItem(selectedId).name+'</strong> &mdash; click the section it belongs in. (Or just drag it.)';
+  } else { hint.hidden=true; }
+
+  var html = '';
+  categoryDefs.forEach(function(cat){
+    var placed = placeable.filter(function(i){ return placements[i.id]===cat.id; });
+    var isSupplies = cat.id==='supplies';
+    var zoneCls = 'ins-dropzone' + (placed.length?' filled':'') + ((selectedId && !formDone && !formFilling)?' armed':'');
+    var inner = '';
+    if(placed.length===0){
+      inner = '<div class="ins-dropzone-empty">'+((selectedId && !formDone && !formFilling)?('click to place "'+findItem(selectedId).name+'" here'):'drop items here')+'</div>';
+    } else {
+      if(isSupplies && formPhase==='valuate'){
+        inner += '<div class="ins-colhead"><span class="ins-row-name">Item</span><button class="ins-ev" onclick="openDoc(\'chains\')" title="QBP receipt">paid (receipt)</button><button class="ins-ev" onclick="openShelfCount()" title="Handwritten shelf count — Doc 13">on shelf now</button></div>';
+      }
+      inner += placed.map(function(i){ return isSupplies?renderSupplyRow(i):renderItemRow(i); }).join('');
+    }
+    var subtotal = (placed.length && formPhase==='valuate')?'<div class="ins-subtotal">'+cat.label+' subtotal: '+fmt(subtotalForCat(cat.id))+'</div>':'';
+    html += '<div class="ins-section"><div class="ins-section-label">'+cat.label+'</div><div class="ins-section-sub">'+cat.sub+'</div>'+
+      '<div class="'+zoneCls+'" data-cat="'+cat.id+'" ondragover="event.preventDefault()" ondrop="onDropSection(event,\''+cat.id+'\')">'+inner+'</div>'+
+      subtotal+'</div>';
+  });
+  document.getElementById('insSections').innerHTML = html;
+
+  // Show/hide totals and gate based on form phase
+  if(formPhase==='categorize'){
+    document.getElementById('insTotal').textContent = '';
+    document.getElementById('gateCard').hidden = true;
+    // Show Maria's nudge prompting transition
+    showMariaTransitionNudge();
+  } else {
+    document.getElementById('insTotal').textContent = fmt(totalInsurable());
+    document.getElementById('gateCard').hidden = formDone || formFilling;
+    updateGate();
+  }
+  renderFormActions();
+}
+function updateTotalsOnly(){
+  categoryDefs.forEach(function(cat){
+    var zone = document.querySelector('.ins-dropzone[data-cat="'+cat.id+'"]');
+    if(!zone) return;
+    var sub = zone.parentElement.querySelector('.ins-subtotal');
+    if(sub) sub.textContent = cat.label+' subtotal: '+fmt(subtotalForCat(cat.id));
+  });
+  document.getElementById('insTotal').textContent = fmt(totalInsurable());
+}
+function updateGate(){
+  var list = document.getElementById('gateList');
+  list.innerHTML = categoryDefs.map(function(cat){
+    return '<li><span>'+(catHandValued(cat.id)?'<i data-lucide="check" class="licon"></i>':'·')+'</span><span>'+cat.label+''+'</span></li>';
+  }).join('');
+  if (window.lucide) lucide.createIcons();
+  var met = formTriggerMet();
+  var btn = document.getElementById('doRestBtn');
+  btn.disabled = !met;
+  var gate = document.getElementById('gateCard');
+  gate.classList.toggle('gate-armed-maria', met);
+  gate.querySelector('.gate-card-title').textContent = met
+    ? 'The pattern’s clear — you’ve valued one item in every section. Finish the rest the same way.'
+    : 'Correctly group and identify dollar value(s) for at least one item in each section to unlock the rest:';
+  document.getElementById('laptopNudge').hidden = !(placements['laptop']==='computer' && !isValCorrect('laptop') && !formDone);
+  renderFormActions();
+}
+function showMariaTransitionNudge(){
+  // Check if all items have been placed in at least one category
+  var allPlaced = categoryDefs.every(function(cat){
+    return placeable.filter(function(i){ return placements[i.id]===cat.id; }).length > 0;
+  });
+
+  var nudge = document.getElementById('transitionNudge');
+  if(allPlaced){
+    nudge.hidden = false;
+    nudge.innerHTML = '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;Good &mdash; everything&rsquo;s sorted by type. But here&rsquo;s the thing: if something happens to your shop, we don&rsquo;t bring you a new desk. We pay you what that desk is worth, so you can replace it yourself. To write a policy, I need a dollar amount on each item. Let&rsquo;s put numbers on them.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" onclick="transitionToValuePhase()">Add dollar values &rarr;</button>';
+    if (window.lucide) lucide.createIcons();
+  } else {
+    nudge.hidden = true;
+    nudge.innerHTML = '';
+  }
+}
+function transitionToValuePhase(){
+  playClick();
+  formPhase = 'valuate';
+  var nudge = document.getElementById('transitionNudge');
+  nudge.hidden = true;
+  nudge.innerHTML = '';
+  // Update narrative for valuate phase
+  document.getElementById('narrativeBlock').innerHTML = '<p>Now add a dollar amount to each item. Click to open the receipt or use the eBay comp for used gear. Once the pattern is clear for all four sections, you can finish the rest in one go.</p>';
+  renderForm();
+}
+
+/* ===== input handlers ===== */
+function onValueInput(id, el){
+  el.value = el.value.replace(/[^0-9]/g,''); values[id] = el.value;
+  el.classList.toggle('ok', isValCorrect(id)); el.classList.toggle('wrong', isValWrong(id));
+  updateTotalsOnly(); updateGate();
+}
+function onPaidInput(id, el){
+  el.value = el.value.replace(/[^0-9]/g,''); paidValues[id] = el.value;
+  el.classList.toggle('ok', isPaidCorrect(id)); el.classList.toggle('wrong', isPaidWrong(id));
+  updateGate();
+}
+
+/* ===== placement ===== */
+function toggleSelect(id){ if(formDone||formFilling) return; selectedId = (selectedId===id)?null:id; renderForm(); }
+function onDragStart(e,id){ if(formDone||formFilling) return; selectedId=null; e.dataTransfer.setData('text/plain',id); e.currentTarget.classList.add('dragging'); }
+function onDropSection(e,catId){ e.preventDefault(); var id=e.dataTransfer.getData('text/plain'); if(id) placeItem(id,catId); }
+function onSectionClick(catId){ if(formDone||formFilling||!selectedId) return; placeItem(selectedId,catId); selectedId=null; }
+function placeItem(id, catId){
+  var item = findItem(id); if(!item) return;
+  var nudge = document.getElementById('formNudge');
+  if(item.category!==catId){
+    playNope();
+    nudge.className = 'feedback err show';
+    nudge.innerHTML = '✗ '+miscatNudge(item);
+  } else {
+    playSuccess();
+    placements[item.id]=catId;
+    var catLabel = categoryDefs.filter(function(c){ return c.id===catId; })[0].label;
+    nudge.className = 'feedback ok show';
+    nudge.innerHTML = '✓ '+item.name+' — correctly grouped as '+catLabel+'.';
+    renderForm();
+  }
+}
+
+/* ===== do the rest ===== */
+function doTheRest(){
+  if(formDone||formFilling||!formTriggerMet()) return;
+  playClick();
+  placementsSnapshot = Object.assign({}, placements);
+  valuesSnapshot = Object.assign({}, values);
+  paidValuesSnapshot = Object.assign({}, paidValues);
+  formFilling=true;
+  selectedId=null;
+  document.getElementById('gateCard').hidden=true;
+  document.getElementById('formNudge').className='feedback';
+  document.getElementById('laptopNudge').hidden=true;
+  document.getElementById('systemBanner').hidden=false;
+  setTimeout(function(){
+    placeable.forEach(function(item){
+      placements[item.id]=item.category;
+      values[item.id]=String(item.cost);
+      if(item.paidAmount!=null) paidValues[item.id]=String(item.paidAmount);
+    });
+    formFilling=false; formDone=true;
+    playSuccess();
+    document.getElementById('systemBanner').hidden=true;
+    renderForm();
+    document.getElementById('formDoneBlock').hidden=false;
+  }, 1300);
+}
+
+/* ===== readback (stub — not used in this phase) ===== */
+function renderReadback(){}
+
+/* ===== document popups ===== */
+function openDoc(id){
+  var item = findItem(id);
+  var modal = document.getElementById('docModal');
+  modal.className = 'doc-modal';
+  if(item.sourced==='credit-card'){
+    modal.innerHTML = creditCardHTML(creditCard);
+  } else {
+    var r = receipts.find(function(rr){ return rr.forItem.indexOf(id)!==-1; });
+    if(!r) return;
+    modal.innerHTML = receiptHTML(r);
+  }
+  document.getElementById('docOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function openEbay(){
+  var modal = document.getElementById('docModal');
+  modal.className = 'doc-modal narrow';
+  modal.innerHTML = '<span class="doc-badge">eBay — sold listings</span><button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>'+
+    '<div class="ebay-title">Used laptop — “like yours”, good condition</div>'+
+    '<p class="ebay-sub">Recent sold prices for comparable used laptops:</p>'+
+    '<div class="ebay-chips">'+ebayComps.map(function(p){ return '<span class="ebay-chip">'+fmt(p)+'</span>'; }).join('')+'</div>'+
+    '<p class="ebay-foot">They cluster around <strong>$610</strong>. Close this and put that on the form.</p>';
+  document.getElementById('docOverlay').classList.add('open');
+}
+function openShelfCount(){
+  var firstCount = !shelfCounted;
+  shelfCounted = true;
+  var modal = document.getElementById('docModal');
+  modal.className = 'doc-modal';
+  modal.innerHTML = shelfCountHTML();
+  document.getElementById('docOverlay').classList.add('open');
+  if(firstCount) playSuccess();
+  renderForm(); // unlock the on-shelf inputs now that the shelf has been counted
+}
+function closeDoc(){ document.getElementById('docOverlay').classList.remove('open'); }
+function shelfCountHTML(){
+  // Document 13 — the handwritten parts shelf count (quantities only, no prices).
+  var shelf = [
+    ['Chains','½ box'], ['Brake pads','½ box'], ['Derailleur cables','½ box'],
+    ['Cassettes','2 left'], ['Bottom brackets','¼ box'], ['Spokes','¼ bundle'], ['Tubes','¼ box']
+  ];
+  var rows = shelf.map(function(s){ return '<tr><td>'+s[0]+'</td><td class="num">'+s[1]+'</td></tr>'; }).join('');
+  return '<span class="doc-badge">Shelf count · Doc 13</span><button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>'+
+    '<div class="doc-vendor">Parts shelf count<span class="doc-vendor-sub">· handwritten, end of May</span></div>'+
+    '<div class="doc-meta"><span>Parts left on shelf</span><span>5/31</span></div>'+
+    '<table class="doc-table"><thead><tr><th>Part</th><th class="num">On shelf</th></tr></thead><tbody>'+rows+'</tbody></table>'+
+    '<p class="doc-note">Quantities only &mdash; no prices. You walked the shelf on May 31 and jotted how much of each part was left. The dollar value gets worked out later against the QBP invoice (Doc 5): <strong>$500</strong> of parts came in, <strong>$200</strong> is still on the shelf.</p>';
+}
+function receiptHTML(r){
+  var rows = r.lineItems.map(function(li){ return '<tr><td>'+li.name+'</td><td class="num">'+fmt(li.amount)+'</td></tr>'; }).join('');
+  var html = '<span class="doc-badge">Receipt</span><button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>'+
+    '<div class="doc-vendor">'+r.vendor+'<span class="doc-vendor-sub">· '+r.vendorSub+'</span></div>'+
+    '<div class="doc-meta"><span>'+r.receiptNum+'</span><span>'+r.date+'</span></div>'+
+    '<table class="doc-table"><thead><tr><th>Item</th><th class="num">Amount</th></tr></thead><tbody>'+rows+
+    '<tr class="total"><td>Total</td><td class="num">'+fmt(r.total)+'</td></tr></tbody></table>'+
+    '<div class="doc-paid"><span><strong>Paid:</strong> '+r.paidWith+'</span><span class="muted">'+r.paidLast4+'</span></div>'+
+    (r.paidNote?'<p class="doc-note">'+r.paidNote+'</p>':'');
+  // The parts invoice is what came IN, for whole boxes. Maria wants what's still on the shelf — so count it.
+  if(r.id==='qbp'){
+    html += '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;That&rsquo;s what you <strong>paid</strong> &mdash; for whole boxes. But I don&rsquo;t insure what you bought; I insure what&rsquo;s <strong>still on the shelf</strong> after a season of repairs. How much is left? You&rsquo;ll have to count.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" onclick="openShelfCount()"><i data-lucide="clipboard-list" class="licon"></i> Count the shelf &rarr;</button>';
+  }
+  return html;
+}
+function creditCardHTML(c){
+  var rows = c.transactions.map(function(t){
+    return '<tr><td class="num">'+t.date+'</td><td>'+t.desc+'</td><td class="num">'+(t.charge!=null?fmt(t.charge):'—')+'</td><td class="num">'+(t.payment!=null?fmt(t.payment):'—')+'</td></tr>';
+  }).join('');
+  var cells = [['Previous balance',fmt(c.previousBalance),false],['Charges',fmt(c.chargesTotal),false],['Payments',fmt(c.paymentsTotal),false],['New balance',fmt(c.newBalance),true]]
+    .map(function(cell){ return '<div class="doc-cc-cell'+(cell[2]?' hl':'')+'"><div class="doc-cc-cell-k">'+cell[0]+'</div><div class="doc-cc-cell-v">'+cell[1]+'</div></div>'; }).join('');
+  return '<span class="doc-badge">Credit card statement</span><button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>'+
+    '<div class="doc-cc-head"><div><div class="doc-cc-issuer">'+c.issuer+'</div><div class="doc-cc-sub">'+c.sub+'</div></div>'+
+    '<div class="doc-cc-period"><div><strong>Statement period:</strong></div><div>'+c.period+'</div><div class="muted">Account '+c.last4+'</div><div class="muted">'+c.opened+'</div></div></div>'+
+    '<div class="doc-cc-cells">'+cells+'</div>'+
+    '<table class="doc-table"><thead><tr><th>Date</th><th>Description</th><th class="num">Charges</th><th class="num">Payments</th></tr></thead><tbody>'+rows+
+    '<tr class="total"><td></td><td>Totals</td><td class="num">'+fmt(c.chargesTotal)+'</td><td class="num">'+fmt(c.paymentsTotal)+'</td></tr></tbody></table>';
+}
+
+/* ===== glossary ===== */
+function openGlossary(){ m1GlossaryOpen('12-2'); }
+function closeGlossary(){ m1GlossaryClose(); }
+
+/* ===== standalone-phase overrides ===== */
+function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
+function restart(){ window.location.reload(); }
+
+/* ===== reset / back (page-aware) ===== */
+function resetForm(){
+  if(formPhase === 'categorize'){
+    restart(); // page 1: reload so the list can be sorted again
+    return;
+  }
+  // page 2 or 3: go back to the original (un-filled) valuate form
+  playClick();
+  if(formDone){ placements = Object.assign({}, placementsSnapshot); } // drop the "Do the rest" auto-placements, restore your own sorting
+  values = {}; paidValues = {};
+  formDone = false; formFilling = false;
+  document.getElementById('systemBanner').hidden = true;
+  document.getElementById('formDoneBlock').hidden = true;
+  document.getElementById('laptopNudge').hidden = true;
+  renderForm();
+}
+function backToCategorize(){
+  // page 2 -> page 1: keep the sorting, drop the value inputs
+  playClick();
+  formPhase = 'categorize';
+  document.getElementById('narrativeBlock').innerHTML = '<p>Maria&rsquo;s form has four sections: Equipment, Computer Equipment, Supplies, Fixtures. <strong>Drag</strong> each item from your list into the correct section.</p>';
+  document.getElementById('laptopNudge').hidden = true;
+  renderForm();
+}
+function backToValuate(){
+  // page 3 -> page 2 with the record you had before "Do the rest"
+  playClick();
+  placements = Object.assign({}, placementsSnapshot);
+  values = Object.assign({}, valuesSnapshot);
+  paidValues = Object.assign({}, paidValuesSnapshot);
+  formDone = false; formFilling = false;
+  document.getElementById('systemBanner').hidden = true;
+  document.getElementById('formDoneBlock').hidden = true;
+  renderForm();
+}
+function renderFormActions(){
+  var el = document.getElementById('formActions');
+  if(!el) return;
+  var back = '', reset = '';
+  if(formPhase === 'categorize'){
+    // page 1: Reset appears at the same time as the "Add dollar values" button (every section has an item)
+    var addValuesShown = categoryDefs.every(function(cat){ return placeable.filter(function(i){ return placements[i.id]===cat.id; }).length > 0; });
+    if(addValuesShown) reset = '<button class="btn-reset" onclick="resetForm()">Reset</button>';
+  } else if(formDone){
+    // page 3: Back only (no Reset)
+    back = '<button class="btn-reset" onclick="backToValuate()"><i data-lucide="arrow-left" class="licon"></i> Back</button>';
+  } else {
+    // page 2: Back always; Reset appears once "Do the rest" lights up (gate met)
+    back = '<button class="btn-reset" onclick="backToCategorize()"><i data-lucide="arrow-left" class="licon"></i> Back</button>';
+    if(formTriggerMet()) reset = '<button class="btn-reset" onclick="resetForm()">Reset</button>';
+  }
+  el.style.justifyContent = (back && reset) ? 'space-between' : (back ? 'flex-start' : 'flex-end');
+  el.innerHTML = back + reset;
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== segmented progress ===== */
+var PHASE_INDEX = 1;
+var PHASE_TITLE = '';
+function renderSegProgress(){
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+window.devFill = function(){
+  formPhase='valuate'; shelfCounted=true;
+  placeable.forEach(function(it){ placements[it.id]=it.category; values[it.id]=String(it.cost); if(it.paidAmount!=null) paidValues[it.id]=String(it.paidAmount); });
+  formDone=true; formFilling=false;
+  var sb=document.getElementById('systemBanner'); if(sb) sb.hidden=true;
+  renderForm();
+  var fdb=document.getElementById('formDoneBlock'); if(fdb) fdb.hidden=false;
+};
+renderSegProgress();
+renderForm();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

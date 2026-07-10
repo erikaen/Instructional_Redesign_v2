@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1: The Statement Map &middot; Three Paths and the Map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1: The Statement Map</h1>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~8 min &middot; Page 2 of 2</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Three Paths and the Map</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+
+/* ===== balance-sheet data (verbatim June 1 / Aug 31 line items, look-continuity with 41-1) ===== */
+var OPENING_SECTIONS = [
+  { sec:'Assets', rows:[
+      { id:'cash',   label:'Cash',                        val:'$1,300' },
+      { id:'rou',    label:'Right of Use',                 val:'$650'   },
+      { id:'parts',  label:'Parts',                        val:'$200'   },
+      { id:'tre',    label:'Tools &amp; Repair Equipment', val:'$1,200' },
+      { id:'fix',    label:'Fixtures',                     val:'$750'   },
+      { id:'laptop', label:'Laptop',                       val:'$610'   }
+    ], total:{ id:'ta', label:'Total Assets', val:'$4,710' } },
+  { sec:'Liabilities', rows:[
+      { id:'cc',  label:'Credit Card',       val:'$2,030' },
+      { id:'dep', label:'Customer Deposit',  val:'$220'   }
+    ], total:{ id:'tl', label:'Total Liabilities', val:'$2,250' } },
+  { sec:'Members&rsquo; Capital', rows:[
+      { id:'contrib', label:'Contributed', val:'$2,290' },
+      { id:'gen',     label:'Generated',   val:'$170'   }
+    ], total:{ id:'mc', label:'Total Members&rsquo; Capital', val:'$2,460' } }
+];
+var CLOSING_SECTIONS = [
+  { sec:'Assets', rows:[
+      { id:'cash',   label:'Cash',                        val:'$620'   },
+      { id:'ar',     label:'Accounts Receivable',          val:'$300'   },
+      { id:'rou',    label:'Right of Use',                 val:'$650'   },
+      { id:'parts',  label:'Parts',                        val:'$200'   },
+      { id:'tre',    label:'Tools &amp; Repair Equipment', val:'$1,440' },
+      { id:'fix',    label:'Fixtures',                     val:'$710'   },
+      { id:'laptop', label:'Laptop',                       val:'$580'   }
+    ], total:{ id:'ta', label:'Total Assets', val:'$4,500' } },
+  { sec:'Liabilities', rows:[
+      { id:'cc',  label:'Credit Card',       val:'$0' },
+      { id:'dep', label:'Customer Deposit',  val:'$0' }
+    ], total:{ id:'tl', label:'Total Liabilities', val:'$0' } },
+  { sec:'Members&rsquo; Capital', rows:[
+      { id:'contrib', label:'Contributed', val:'$2,290' },
+      { id:'gen',     label:'Generated',   val:'$2,210' }
+    ], total:{ id:'mc', label:'Total Members&rsquo; Capital', val:'$4,500' } }
+];
+
+/* renderCol: unfaded === null means no fading at all; otherwise an array of
+   data-bs ids to keep at full opacity (06's fade idiom: acct-fade-40 on lines/
+   totals, acct-fade-50 on section headings). */
+function renderCol(title, date, sections, unfaded){
+  var fade = !!unfaded;
+  var h = '<div class="acct-col">';
+  h += '<div class="bs-header"><div class="bs-header-title">'+title+'</div><div class="bs-header-date">'+date+'</div></div>';
+  sections.forEach(function(sec){
+    h += '<h4'+(fade ? ' class="acct-fade-50"' : '')+'>'+sec.sec+'</h4>';
+    sec.rows.forEach(function(r){
+      var cls = 'acct-line' + (fade && unfaded.indexOf(r.id)===-1 ? ' acct-fade-40' : '');
+      h += '<div class="'+cls+'" data-bs="'+r.id+'"><span>'+r.label+'</span><span class="acct-val">'+r.val+'</span></div>';
+    });
+    var tcls = 'acct-total' + (fade && unfaded.indexOf(sec.total.id)===-1 ? ' acct-fade-40' : '');
+    h += '<div class="'+tcls+'" data-bs="'+sec.total.id+'"><span>'+sec.total.label+'</span><span>'+sec.total.val+'</span></div>';
+  });
+  h += '</div>';
+  return h;
+}
+
+var IDENTITY_HTML =
+  '<div class="dual-identity-bar">'
+  + '<div class="dib-side"><span class="dib-tag">Opening &mdash; June 1</span><div class="dib-eq">'
+    + '<div class="dib-group"><span class="dib-label">Assets</span><span class="dib-val">$4,710</span></div>'
+    + '<span class="dib-op">&minus;</span>'
+    + '<div class="dib-group"><span class="dib-label">Liabilities</span><span class="dib-val">$2,250</span></div>'
+    + '<span class="dib-op">=</span>'
+    + '<div class="dib-group"><span class="dib-label">Members&rsquo; Capital</span><span class="dib-val">$2,460</span></div>'
+  + '</div></div>'
+  + '<div class="dib-divider"></div>'
+  + '<div class="dib-side"><span class="dib-tag">Closing &mdash; August 31</span><div class="dib-eq">'
+    + '<div class="dib-group"><span class="dib-label">Assets</span><span class="dib-val">$4,500</span></div>'
+    + '<span class="dib-op">&minus;</span>'
+    + '<div class="dib-group"><span class="dib-label">Liabilities</span><span class="dib-val">$0</span></div>'
+    + '<span class="dib-op">=</span>'
+    + '<div class="dib-group"><span class="dib-label">Members&rsquo; Capital</span><span class="dib-val">$4,500</span></div>'
+  + '</div></div>'
+  + '</div>';
+
+/* ===== step state ===== */
+var step = 0;              // 0 the two sheets, 1 Cash path, 2 MC path, 3 Net income path, 4 the whole map
+var TOTAL_STEPS = 5;
+var incomeOpen = false;    // display toggle for the nested Income Statement
+var incomeSeen = false;    // sticky gate: has the student opened it at least once
+
+var UNFADED = { 0:null, 1:['cash','ta'], 2:['contrib','gen','mc'], 3:['contrib','gen','mc'], 4:null };
+
+/* wires the bridge panel's Net income row: locates it by its rendered text,
+   adds the pointer-cursor class the engine's rows already support (sce-ni-clickable,
+   the same idiom used for the SCE Net Income row pattern), and attaches a click
+   handler. No engine HTML source is touched — this only decorates the mounted DOM. */
+function wireBridgeRow(containerId, clickable){
+  var container = document.getElementById(containerId);
+  if(!container) return;
+  var rows = container.querySelectorAll('.xl-row.xl-item');
+  rows.forEach(function(row){
+    var c = row.querySelector('.xl-c');
+    if(!c || c.textContent.indexOf('Net income') === -1) return;
+    if(!clickable) return;
+    row.classList.add('sce-ni-clickable');
+    if(incomeOpen) row.classList.add('sce-ni-open');
+    row.setAttribute('role','button');
+    row.setAttribute('tabindex','0');
+    row.setAttribute('aria-expanded', incomeOpen ? 'true':'false');
+    var icon = document.createElement('span');
+    icon.className = 'sce-expand-icon' + (incomeSeen ? '' : ' hint-pulse');
+    icon.innerHTML = '<i data-lucide="' + (incomeOpen ? 'chevron-up' : 'chevron-down') + '" class="licon"></i>';
+    c.appendChild(icon);
+    row.onclick = function(){ toggleIncome(); };
+    row.onkeydown = function(e){ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggleIncome(); } };
+  });
+}
+
+function nestedIncomeHTML(){
+  if(!incomeOpen) return '';
+  return '<div class="sce-is-nested">'
+    + '<p class="sce-is-intro">The Income Statement gives more detail about this Net income amount: Revenue $6,020 minus Expenses $3,380.</p>'
+    + '<div class="sce-is-panel"><div class="sce-is-title">Income Statement</div>' + BRW.sheetHTML('income', {}) + '</div>'
+    + '</div>';
+}
+
+function toggleIncome(){
+  playClick();
+  incomeOpen = !incomeOpen;
+  if(incomeOpen) incomeSeen = true;
+  render();
+}
+
+/* ===== render ===== */
+function render(){
+  renderBeats();
+  renderGrid();
+  renderTail();
+  renderControls();
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderBeats(){
+  var h = '';
+  if(step === 0){
+    h += '<div class="narrative-block"><p>Here are the two snapshots Freddie just received &mdash; June 1 and August 31. Three numbers carry the season&rsquo;s whole story: <strong>Cash</strong>, <strong>Members&rsquo; Capital</strong>, and the <strong>Net income</strong> figure inside Members&rsquo; Capital&rsquo;s story. Follow them one at a time, then see the whole picture at once.</p></div>';
+    h += freddieBox('Alright &mdash; walk me through it. Start wherever makes sense.');
+  } else if(step === 1){
+    h += freddieBox('Start with Cash. It fell $680 &mdash; walk me through it.');
+    h += '<div class="narrative-block"><p>Cash fell from <strong>$1,300</strong> to <strong>$620</strong> &mdash; down <strong>$680</strong>. The <strong>Statement of Cash Flows</strong> carries that one line&rsquo;s story: Operating <strong>+$320</strong>, Investing <strong>&minus;$400</strong>, Financing <strong>&minus;$600</strong>.</p></div>';
+  } else if(step === 2){
+    h += freddieBox('Now Members&rsquo; Capital. It rose $2,040 &mdash; where did that come from?');
+    h += '<div class="narrative-block"><p>Members&rsquo; Capital rose from <strong>$2,460</strong> to <strong>$4,500</strong>. The <strong>Statement of Changes in Members&rsquo; Capital</strong> carries that story: opening $2,460, plus net income $2,640, minus the owner&rsquo;s draw $600, equals closing $4,500. Contributed never moved &mdash; the whole path ran through Generated, $170 to $2,210.</p></div>';
+  } else if(step === 3){
+    h += freddieBox('Net income&rsquo;s the biggest line in that bridge. Show me what&rsquo;s behind it.');
+    h += '<div class="narrative-block"><p>Click the <strong>Net income</strong> line below to open the <strong>Income Statement</strong> behind it.</p></div>';
+  } else if(step === 4){
+    h += '<div class="narrative-block"><p>This is what Module 3 called <strong>articulation</strong> &mdash; now laid out as one picture. The accounting identity fixes the two snapshots; the other statements carry the story of the change between them.</p></div>';
+  }
+  document.getElementById('beats').innerHTML = h;
+}
+
+function renderGrid(){
+  var unfaded = UNFADED[step];
+  var openCol = renderCol('Opening Balance Sheet', 'June 1, 2026', OPENING_SECTIONS, unfaded);
+  var closeCol = renderCol('Closing Balance Sheet', 'August 31, 2026', CLOSING_SECTIONS, unfaded);
+
+  var center = '<div>';
+  if(step === 0){
+    center += '<div class="center-card"><div class="stage-card-title">The Question</div><div class="stage-text"><p class="activity-desc">Two snapshots. The identity holds at both dates &mdash; but standing alone, they don&rsquo;t say how one became the other.</p></div></div>';
+  } else if(step === 1){
+    center += '<div class="xlsx" id="cashPanel">' + BRW.sheetHTML('cashflows', {}) + '</div>';
+  } else if(step === 2){
+    center += '<div class="xlsx" id="bridgePanel">' + BRW.sheetHTML('bridge', {}) + '</div>';
+  } else if(step === 3){
+    center += '<div class="xlsx" id="bridgePanel">' + BRW.sheetHTML('bridge', {}) + nestedIncomeHTML() + '</div>';
+    if(incomeOpen){
+      center += '<p class="stage-text"><span class="activity-desc">In actual financial reporting these are two distinct statements: the Income Statement details the Net income line that appears in the Statement of Changes in Members&rsquo; Capital.</span></p>';
+    }
+  } else if(step === 4){
+    center += '<p class="card-title">Statement of Cash Flows</p>'
+      + '<div class="xlsx" id="cashPanelFinal">' + BRW.sheetHTML('cashflows', {}) + '</div>'
+      + '<p class="panel-footnote">Explains the Cash line: $1,300 &rarr; $620.</p>'
+      + '<p class="card-title">Statement of Changes in Members&rsquo; Capital</p>'
+      + '<div class="xlsx" id="bridgePanelFinal">' + BRW.sheetHTML('bridge', {}) + nestedIncomeHTML() + '</div>'
+      + '<p class="panel-footnote">Explains Members&rsquo; Capital ($2,460 &rarr; $4,500) and, nested inside it, Net income ($2,640).</p>';
+  }
+  center += '</div>';
+
+  var h = '<div class="main-grid"><div>' + openCol + '</div>' + center + '<div>' + closeCol + '</div></div>' + IDENTITY_HTML;
+  document.getElementById('mainGrid').innerHTML = h;
+
+  if(step === 3) wireBridgeRow('bridgePanel', true);
+  if(step === 4) wireBridgeRow('bridgePanelFinal', false);
+}
+
+function renderTail(){
+  var h = '';
+  if(step === 4){
+    h += '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The rest of the map</div>'
+      + '<p>Every other line that moved has its story in these same statements too. The Credit Card fell to $0 &mdash; a bill that got paid, an Operating line on the cash-flow statement. The Customer Deposit fell to $0 &mdash; Smith&rsquo;s frame was delivered, inside Revenue. Accounts Receivable appeared &mdash; work finished, not yet collected, inside Revenue.</p></div>';
+    h += freddieBox('Now I see where things stand &mdash; and how they got there.');
+    h += annaBox('That&rsquo;s the whole set, tied together. What Freddie does with the picture is next.');
+    h += '<div class="next-card"><div class="next-card-label">Coming Next</div><p>Freddie has the whole map now &mdash; two snapshots, and the statements that carry the story between them. Module 4 continues from here.</p></div>';
+  }
+  document.getElementById('tail').innerHTML = h;
+}
+
+function renderControls(){
+  var backDisabled = false;
+  var nextDisabled = (step === 3 && !incomeSeen);
+  var c = '<div class="nav-buttons">';
+  c += '<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(step < TOTAL_STEPS - 1){
+    c += '<button class="btn-next"' + (nextDisabled ? ' disabled' : '') + ' onclick="advance()">Next &rarr;</button>';
+  }
+  c += '</div>';
+  document.getElementById('controls').innerHTML = c;
+}
+
+function advance(){
+  if(step === 3 && !incomeSeen) return;
+  playClick();
+  step = Math.min(step + 1, TOTAL_STEPS - 1);
+  if(step === 4) incomeOpen = true; // the whole map always shows the Income Statement nested open
+  render();
+  window.scrollTo(0, 0);
+}
+function back(){
+  playClick();
+  if(step === 0){ nav('41-1-The-Investor-Asks.html'); return; }
+  step = Math.max(step - 1, 0);
+  render();
+  window.scrollTo(0, 0);
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Articulation', def:'The statements tie to each other: every change carried on a balance sheet travels through one of the flow statements. A balance sheet cannot show a new number without the story filed beside it.' },
+  { term:'Statement of Cash Flows', def:'Explains the change in Cash: Operating, Investing, Financing. Here: +$320, &minus;$400, &minus;$600 = &minus;$680, tying $1,300 to $620.' },
+  { term:'Statement of Changes in Members&rsquo; Capital', def:'Explains the change in Members&rsquo; Capital: opening, plus net income, minus draws, equals closing. Here: $2,460 + $2,640 &minus; $600 = $4,500.' },
+  { term:'Income Statement', def:'Revenue minus Expenses for the season. Here: $6,020 &minus; $3,380 = $2,640 net income &mdash; the same figure that enters the Statement of Changes in Members&rsquo; Capital.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init ===== */
+window.devFill = function(){
+  step = TOTAL_STEPS - 1;
+  incomeOpen = true;
+  incomeSeen = true;
+  render();
+};
+BR_WB.registerStatementSheets();
+render();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

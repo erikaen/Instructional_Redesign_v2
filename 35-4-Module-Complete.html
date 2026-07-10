@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 &mdash; Module Complete</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 5: Closing the Season</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 4 of 4</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Module Complete</div>
+
+    <div class="complete-head">
+      <div class="trophy-badge"><i data-lucide="trophy"></i></div>
+      <div class="complete-title">Module 3 complete</div>
+    </div>
+    <div class="section-card">
+      <div class="card-title">What You Discovered</div>
+      <ul class="bullet-list check">
+        <li>A season ran between two balance sheets, and Members&rsquo; Capital moved &mdash; but the two snapshots alone couldn&rsquo;t say <em>how</em>. That gap was the reason the connecting statements existed at all.</li>
+        <li>Sorting the Reasons pile into <strong>DELIVERED</strong> and <strong>USED UP</strong> produced the <strong>Income Statement</strong>: Revenue $6,020 minus Expenses, following the work &mdash; not the cash. Ridgeline&rsquo;s unpaid $300 stayed counted as revenue because the work was delivered, which is what surfaced the receivable.</li>
+        <li>Parts wear off a shelf you can watch (directly observed), and rent lapses with the calendar (time-lapsed) &mdash; but the tools, fixtures, and laptop do neither. <strong>Depreciation</strong> put a number on their wear anyway: an openly chosen allocation, $200 on tools &amp; fixtures and $30 on the laptop, completing Expenses at $3,380 and net income at $2,640.</li>
+        <li>A profitable season still left less cash than opening day &mdash; $1,300 down to $620. The <strong>Statement of Cash Flows</strong> explained the gap: Operating +$320, Investing &minus;$400 (the new tool), Financing &minus;$600 (the draw), reconciling net income to what the Cash line actually shows.</li>
+        <li>Members&rsquo; Capital bridged from $2,460 to $4,500 through exactly two things: net income and the owner&rsquo;s draw. Contributed never moved &mdash; no new money came in.</li>
+        <li>You performed the season&rsquo;s <strong>first close</strong>: Revenue and Expenses emptied into GENERATED as one period row, and May&rsquo;s long-open rows &mdash; waiting since Module 1 &mdash; filed the same way. Closing wasn&rsquo;t a ritual; it was filing a finished period so the next one can start clean.</li>
+        <li>Laid side by side, the balance sheet and the three flow statements <strong>tied out</strong> &mdash; every change in Members&rsquo; Capital traveled through a statement. Accountants call this <strong>articulation</strong>.</li>
+      </ul>
+    </div>
+    <div class="insight-box">
+      <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
+      <p style="margin-bottom:10px">A balance sheet is a photograph. On its own, it can only say where things stand &mdash; never how they got there. The four statements together are what let the records tell the whole story: two snapshots, and the connecting movie between them, each frame accounted for.</p>
+      <p>Nothing in that story ever needed an outside investor to justify it. The shop ran a season, kept its own books, and closed them &mdash; entirely on its own.</p>
+    </div>
+    <div class="next-card">
+      <div class="next-card-label">Coming Next</div>
+      <p>These statements are complete, and they tie out &mdash; but they were built for the shop&rsquo;s own use. Suppose someone <strong>outside</strong> wanted to read them: would they see the whole picture? The skill at the bench that makes every repair possible, the name on Whalley Ave that keeps customers coming back &mdash; both plainly real, and neither appears anywhere in these four statements. What that leaves out, and what it means for someone deciding whether to invest, is next.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary ===== */
+var glossaryTerms=[
+  { term:'Articulation', def:'The statements tie to each other: every change carried on a balance sheet travels through one of the flow statements. Named only after the season&rsquo;s statements were felt to tie out.' },
+  { term:'Close', def:'Filing a finished period&rsquo;s Revenue and Expenses into GENERATED as one row, then emptying both tabs so the next period starts at $0.' },
+  { term:'Statement of Changes in Members&rsquo; Capital', def:'The bridge between two balance sheets&rsquo; Members&rsquo; Capital lines: opening, plus net income, minus draws, equals closing.' },
+  { term:'Statement of Cash Flows', def:'Explains the change in Cash across Operating, Investing, and Financing activity.' },
+  { term:'Depreciation', def:'A season&rsquo;s share of a long-lived thing&rsquo;s cost, charged as an expense by a chosen rule &mdash; an allocation, not a meter reading.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

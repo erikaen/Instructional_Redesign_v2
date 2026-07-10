@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 1: The Statement Map &middot; The Investor Asks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1: The Statement Map</h1>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~5 min &middot; Page 1 of 2</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Investor Asks</div>
+
+    <div id="beats"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+
+/* ===== step state ===== */
+var step = 0; // 0: scene+ask, 1: hand-over, 2: the two sheets, 3: closing beat
+var TOTAL_STEPS = 4;
+
+/* ===== the two balance sheets (verbatim markup, June 1 / Aug 31) ===== */
+var BS_HTML =
+  '<div class="main-grid two-col">'
+  + '<div class="acct-col">'
+    + '<div class="bs-header"><div class="bs-header-title">Opening Balance Sheet</div><div class="bs-header-date">June 1, 2026</div></div>'
+    + '<h4>Assets</h4>'
+    + '<div class="acct-line" data-bs="cash"><span>Cash</span><span class="acct-val">$1,300</span></div>'
+    + '<div class="acct-line" data-bs="rou"><span>Right of Use</span><span class="acct-val">$650</span></div>'
+    + '<div class="acct-line" data-bs="parts"><span>Parts</span><span class="acct-val">$200</span></div>'
+    + '<div class="acct-line" data-bs="tre"><span>Tools &amp; Repair Equipment</span><span class="acct-val">$1,200</span></div>'
+    + '<div class="acct-line" data-bs="fix"><span>Fixtures</span><span class="acct-val">$750</span></div>'
+    + '<div class="acct-line" data-bs="laptop"><span>Laptop</span><span class="acct-val">$610</span></div>'
+    + '<div class="acct-total" data-bs="ta"><span>Total Assets</span><span>$4,710</span></div>'
+    + '<h4>Liabilities</h4>'
+    + '<div class="acct-line" data-bs="cc"><span>Credit Card</span><span class="acct-val">$2,030</span></div>'
+    + '<div class="acct-line" data-bs="dep"><span>Customer Deposit</span><span class="acct-val">$220</span></div>'
+    + '<div class="acct-total" data-bs="tl"><span>Total Liabilities</span><span>$2,250</span></div>'
+    + '<h4>Members&rsquo; Capital</h4>'
+    + '<div class="acct-line" data-bs="contrib"><span>Contributed</span><span class="acct-val">$2,290</span></div>'
+    + '<div class="acct-line" data-bs="gen"><span>Generated</span><span class="acct-val">$170</span></div>'
+    + '<div class="acct-total" data-bs="mc"><span>Total Members&rsquo; Capital</span><span>$2,460</span></div>'
+  + '</div>'
+  + '<div class="acct-col">'
+    + '<div class="bs-header"><div class="bs-header-title">Closing Balance Sheet</div><div class="bs-header-date">August 31, 2026</div></div>'
+    + '<h4>Assets</h4>'
+    + '<div class="acct-line" data-bs="cash"><span>Cash</span><span class="acct-val">$620</span></div>'
+    + '<div class="acct-line" data-bs="ar"><span>Accounts Receivable</span><span class="acct-val">$300</span></div>'
+    + '<div class="acct-line" data-bs="rou"><span>Right of Use</span><span class="acct-val">$650</span></div>'
+    + '<div class="acct-line" data-bs="parts"><span>Parts</span><span class="acct-val">$200</span></div>'
+    + '<div class="acct-line" data-bs="tre"><span>Tools &amp; Repair Equipment</span><span class="acct-val">$1,440</span></div>'
+    + '<div class="acct-line" data-bs="fix"><span>Fixtures</span><span class="acct-val">$710</span></div>'
+    + '<div class="acct-line" data-bs="laptop"><span>Laptop</span><span class="acct-val">$580</span></div>'
+    + '<div class="acct-total" data-bs="ta"><span>Total Assets</span><span>$4,500</span></div>'
+    + '<h4>Liabilities</h4>'
+    + '<div class="acct-line" data-bs="cc"><span>Credit Card</span><span class="acct-val">$0</span></div>'
+    + '<div class="acct-line" data-bs="dep"><span>Customer Deposit</span><span class="acct-val">$0</span></div>'
+    + '<div class="acct-total" data-bs="tl"><span>Total Liabilities</span><span>$0</span></div>'
+    + '<h4>Members&rsquo; Capital</h4>'
+    + '<div class="acct-line" data-bs="contrib"><span>Contributed</span><span class="acct-val">$2,290</span></div>'
+    + '<div class="acct-line" data-bs="gen"><span>Generated</span><span class="acct-val">$2,210</span></div>'
+    + '<div class="acct-total" data-bs="mc"><span>Total Members&rsquo; Capital</span><span>$4,500</span></div>'
+  + '</div>'
+  + '</div>';
+
+var IDENTITY_HTML =
+  '<div class="dual-identity-bar">'
+  + '<div class="dib-side"><span class="dib-tag">Opening &mdash; June 1</span><div class="dib-eq">'
+    + '<div class="dib-group"><span class="dib-label">Assets</span><span class="dib-val">$4,710</span></div>'
+    + '<span class="dib-op">&minus;</span>'
+    + '<div class="dib-group"><span class="dib-label">Liabilities</span><span class="dib-val">$2,250</span></div>'
+    + '<span class="dib-op">=</span>'
+    + '<div class="dib-group"><span class="dib-label">Members&rsquo; Capital</span><span class="dib-val">$2,460</span></div>'
+  + '</div></div>'
+  + '<div class="dib-divider"></div>'
+  + '<div class="dib-side"><span class="dib-tag">Closing &mdash; August 31</span><div class="dib-eq">'
+    + '<div class="dib-group"><span class="dib-label">Assets</span><span class="dib-val">$4,500</span></div>'
+    + '<span class="dib-op">&minus;</span>'
+    + '<div class="dib-group"><span class="dib-label">Liabilities</span><span class="dib-val">$0</span></div>'
+    + '<span class="dib-op">=</span>'
+    + '<div class="dib-group"><span class="dib-label">Members&rsquo; Capital</span><span class="dib-val">$4,500</span></div>'
+  + '</div></div>'
+  + '</div>';
+
+/* ===== render ===== */
+function renderBeats(){
+  var h = '';
+
+  h += annaBox('Season&rsquo;s closed, books are clean &mdash; and someone&rsquo;s been paying attention. Freddie stopped by the shop this week.');
+  h += freddieBox('I&rsquo;ve been watching this place all summer. Impressed by the season you put together. I&rsquo;m thinking about putting some money in to help it grow &mdash; but before we talk about any of that, I&rsquo;d like to see the financial statements.');
+
+  if(step >= 1){
+    h += '<div class="narrative-block"><p>Freddie doesn&rsquo;t get the workbook. He doesn&rsquo;t see the Reasons tab, the parts shelf, or the dated cash ledger &mdash; none of the drill-downs built over the last three modules. An outside reader receives only the statement set: the reporting format, not the books behind it.</p></div>';
+  }
+
+  if(step >= 2){
+    h += '<div class="section-card"><div class="card-title">The statements Freddie receives</div>' + BS_HTML + IDENTITY_HTML + '</div>';
+  }
+
+  if(step >= 3){
+    h += '<div class="narrative-block"><p>The two snapshots differ. Cash fell. A line appeared that wasn&rsquo;t on the June sheet, and both liability lines fell to zero. Members&rsquo; Capital rose. But two snapshots, standing alone, don&rsquo;t say how or why any of that happened &mdash; they only say where things stand at each date.</p></div>';
+    h += freddieBox('This tells me where things stand, June to August. It doesn&rsquo;t tell me how it got there. Walk me through it.');
+  }
+
+  document.getElementById('beats').innerHTML = h;
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderControls(){
+  var c = '';
+  if(step < TOTAL_STEPS - 1){
+    c = '<button class="btn-continue btn-block" onclick="advance()">Continue &rarr;</button>';
+  } else {
+    c = '<button class="btn-continue btn-block" onclick="nav(\'41-2-The-Statement-Map.html\')">Walk Freddie through it &rarr;</button>';
+  }
+  document.getElementById('controls').innerHTML = c;
+  if(window.lucide) lucide.createIcons();
+}
+
+function advance(){
+  playClick();
+  step++;
+  if(step >= TOTAL_STEPS) step = TOTAL_STEPS - 1;
+  renderBeats();
+  renderControls();
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Balance sheet', def:'A snapshot of Assets, Liabilities, and Members&rsquo; Capital at one point in time &mdash; here, June 1 and August 31, 2026.' },
+  { term:'Accounting identity', def:'Assets minus Liabilities equals Members&rsquo; Capital. Holds at every date &mdash; here, at both June 1 ($4,710 &minus; $2,250 = $2,460) and August 31 ($4,500 &minus; $0 = $4,500).' },
+  { term:'Members&rsquo; Capital', def:'The name the Operating Agreement gives the difference between Assets and Liabilities. Two parts: Contributed (money put in) and Generated (built up from the work, after draws).' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init ===== */
+window.devFill = function(){
+  step = TOTAL_STEPS - 1;
+  renderBeats();
+  renderControls();
+};
+renderBeats();
+renderControls();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

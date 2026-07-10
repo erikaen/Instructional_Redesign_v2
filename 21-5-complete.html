@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="page">
-  <div class="prework-wrap m2-roomy">
+  <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
@@ -33,17 +33,17 @@
         <div class="complete-title">The line you drew isn&rsquo;t the only line</div>
       </div>
       <div class="section-card">
-        <div class="card-title">What You Discovered</div>
+        <div class="card-title">What you discovered</div>
         <ul class="bullet-list check">
           <li>The boundary you have kept in your books is real, but informal. It does not have legal force.</li>
-          <li>Your books treat the repair work as separate from you. The bank, the customer, and the law do not.</li>
+          <li>Your books treat your bike-repair role as separate from the rest of your life. The bank, the credit-card company, the customer, and the law see one undivided you.</li>
           <li>A liability policy can help pay a claim, but it does not create a legal boundary between the repair work and your personal life.</li>
           <li>To create that second boundary, you need a different kind of line: a legal one. One common form for that line is an LLC.</li>
         </ul>
       </div>
       <div class="insight-box">
         <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
-        <p>You already drew one boundary: <strong>an accounting boundary in your books</strong>. That boundary lets you keep track of what the repair work has, what it owes, and why its residual changed. But it is still a boundary in the records.<br><br>What you do not have yet is a <strong>second boundary beside it: a legal one</strong>. The two boundaries are drawn for different reasons, and they do different jobs. Next, you will draw the legal one.</p>
+        <p>You already drew one boundary: <strong>an accounting boundary in your books</strong>. That boundary lets you keep track of what&rsquo;s tied up in the repair work, what&rsquo;s still owed because of it, and why the difference between them changed. But it is still a boundary in the records.<br><br>What you do not have yet is a <strong>second boundary beside it: a legal one</strong>. The two boundaries are drawn for different reasons, and they do different jobs. Next, you will draw the legal one.</p>
       </div>
       <div class="next-card">
         <div class="next-card-label">Coming Next</div>
@@ -77,8 +77,8 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== glossary (shared across all phases of 2.1) ===== */
 var glossaryTerms = [
-  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the repair work&rsquo;s tools and parts." },
-  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything the repair work owns." },
+  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the tools and parts in the repair work." },
+  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything recorded for the repair work." },
   { term:"LLC", def:"Limited Liability Company &mdash; a legal form that can hold the operation and stand as a wall between a claim and your personal life. Maria names it here; you form one next." }
 ];
 function openGlossary(){
@@ -95,5 +95,6 @@ function restart(){ window.location.reload(); }
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 </script>
+  <script src="dev.js"></script>
 </body>
 </html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 — Name the Lists</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <div class="narrative-block"><p>You and Anna have been working through the records one piece at a time. The workbook now has three tabs: <strong>Things</strong>, <strong>Promises</strong>, and <strong>Cash</strong>. You have listed what&rsquo;s tied up in the repair work, what&rsquo;s still owed because of it, and the money that moved in and out during May.</p><p>Now Anna says it is time to give the lists their proper names.</p></div>
+    <div id="nameWb"></div>
+    <div id="nameSteps"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_TITLE = '';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var THINGS_CATS = [
+  { cat:'EQUIPMENT', items:[
+    {name:'Park Tool repair stand',amount:200},{name:'Cone wrench set',amount:65},{name:'Torque wrench',amount:95},{name:'Hex / Allen key set',amount:45},{name:'Cable cutters',amount:40},{name:'Chain breaker',amount:35},{name:'Tire levers',amount:20},{name:'Air compressor',amount:180},{name:'Parts washer',amount:130},{name:'Wheel-truing stand',amount:170},{name:'Bench grinder',amount:90},{name:'Headset press',amount:70},{name:'Shop vacuum',amount:60} ] },
+  { cat:'COMPUTER EQUIPMENT', items:[ {name:'Laptop',amount:610} ] },
+  { cat:'SUPPLIES', items:[ {name:'Box of chains (on shelf)',amount:50},{name:'Box of brake pads (on shelf)',amount:40},{name:'Box of derailleur cables (on shelf)',amount:20},{name:'Cassettes (on shelf)',amount:40},{name:'Bottom brackets (on shelf)',amount:20},{name:'Spokes (on shelf)',amount:20},{name:'Tubes (on shelf)',amount:10} ] },
+  { cat:'FIXTURES', items:[ {name:'Desk',amount:250},{name:'Shelving units',amount:200},{name:'Display rack',amount:180},{name:'Pegboard + hooks',amount:120} ] }
+];
+var ROU_CAT = { cat:'RIGHT OF USE', items:[ {name:'Right to occupy the space — last month, prepaid',amount:650} ] };
+THINGS_CATS.concat([ROU_CAT]).forEach(function(c){ c.subtotal = c.items.reduce(function(s,i){return s+i.amount;},0); });
+var ASSETS_TOTAL = 3410, LIABILITIES_TOTAL = 2250;
+
+var bikeRepairCashFlows = [
+  { date:'May 1', desc:'Rent check — Westville Properties', amount:-1300 },
+  { date:'May 3', desc:'Park Tool stand — Cyclesport Supply', amount:-200 },
+  { date:'May 7', desc:'Customer payment — Venmo', amount:340 },
+  { date:'May 10', desc:'Customer payment — Venmo', amount:180 },
+  { date:'May 12', desc:'Customer payment — Venmo', amount:80 },
+  { date:'May 14', desc:'Customer payment — Venmo', amount:140 },
+  { date:'May 19', desc:'Customer payment — Venmo', amount:130 },
+  { date:'May 22', desc:'Smith deposit — frame build', amount:220 },
+  { date:'May 23', desc:'Customer payment — Venmo', amount:100 },
+  { date:'May 27', desc:'Customer payment — Venmo', amount:150 }
+];
+
+function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+/* ===== state ===== */
+var excelTab = 'things', thingsExpanded = {};
+var assetsNamed = false, rouRevealed = false, liabilitiesNamed = false;
+var curWb = null;
+
+/* ===== Excel workbook ===== */
+function renderOutlineSheet(cats, colA, totalLabel, newCat){
+  var total = cats.reduce(function(s,c){return s+c.subtotal;},0);
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+colA+'</div><div class="xl-v">Value</div></div>';
+  var n = 0;
+  cats.forEach(function(cat){
+    var label = cat.cat==='RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0)+cat.cat.slice(1).toLowerCase());
+    var open = !!thingsExpanded[cat.cat];
+    var isNew = cat.cat===newCat;
+    n++;
+    html += '<div class="xl-row xl-cat'+(isNew?' new':'')+'">'+
+      '<div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\''+cat.cat+'\')" aria-expanded="'+open+'">'+(open?'&minus;':'+')+'</button></div>'+
+      '<div class="xl-rownum">'+n+'</div>'+
+      '<div class="xl-c">'+label+(isNew?'<span class="xl-new-tag">new</span>':'')+'</div>'+
+      '<div class="xl-v">'+dollars(cat.subtotal)+'</div></div>';
+    if(open){
+      cat.items.forEach(function(it){ n++;
+        html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+dollars(it.amount)+'</div></div>';
+      });
+    }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
+  return html;
+}
+function assetsSheet(){ return renderOutlineSheet(rouRevealed ? THINGS_CATS.concat([ROU_CAT]) : THINGS_CATS, 'Assets', 'TOTAL', rouRevealed ? 'RIGHT OF USE' : null); }
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things tied up in the repair work', 'TOTAL'); }
+function promisesSheet(){
+  var cats = [
+    { key:'PROM SMITH', label:"Smith's frame — paid $220 up front, not built yet", amount:220, items:[
+      { name:'Check deposit, May 22 &mdash; a custom frame build, 4&ndash;6 weeks', amt:220 } ] },
+    { key:'PROM CARD', label:'Amount still owed on the credit card for the repair work', amount:2030, items:[
+      { name:'Hand tools', amt:300 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
+    { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] }
+  ];
+  var total = 2250;
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+(liabilitiesNamed ? 'Liabilities' : 'Promises still owed because of the repair work')+'</div><div class="xl-v">Amount</div></div>';
+  var n = 0;
+  cats.forEach(function(cat){
+    var open = !!thingsExpanded[cat.key]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\''+cat.key+'\')" aria-expanded="'+open+'">'+(open?'&minus;':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+cat.label+'</div><div class="xl-v">'+dollars(cat.amount)+'</div></div>';
+    if(open){ cat.items.forEach(function(it){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+dollars(it.amt)+'</div></div>'; }); }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+dollars(total)+'</div></div>';
+  return html;
+}
+function cashSheet(){
+  var inflows = bikeRepairCashFlows.filter(function(f){return f.amount>0;});
+  var outflows = bikeRepairCashFlows.filter(function(f){return f.amount<0;});
+  var totalIn = inflows.reduce(function(s,f){return s+f.amount;},0);
+  var totalOut = outflows.reduce(function(s,f){return s+f.amount;},0);
+  var net = totalIn+totalOut;
+  function sdol(v){ return (v<0?'&minus;':'+')+dollars(Math.abs(v)); }
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Bike-repair cash flows — May 1 &ndash; May 31, 2026</div><div class="xl-v">Amount</div></div>';
+  var n = 0;
+  [ { key:'CASH IN', label:'Cash in', rows:inflows, subtotal:totalIn },
+    { key:'CASH OUT', label:'Cash out', rows:outflows, subtotal:totalOut } ].forEach(function(g){
+    var open = !!thingsExpanded[g.key]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\''+g.key+'\')" aria-expanded="'+open+'">'+(open?'&minus;':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+g.label+'</div><div class="xl-v">'+sdol(g.subtotal)+'</div></div>';
+    if(open){ g.rows.forEach(function(f){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c"><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</div><div class="xl-v">'+sdol(f.amount)+'</div></div>'; }); }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">NET CASH FLOW (May)</div><div class="xl-v">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</div></div>';
+  html += "<div class=\"cash-foot\">Pulled from the transactions you classified as repair-related in your bank statement. This is the month's <strong>flow</strong> — cash in minus cash out — not a balance.</div>";
+  return html;
+}
+function renderWorkbook(containerId, phaseKey){
+  curWb = { container: containerId, phase: phaseKey };
+  var tabs=[{id:'things',label:assetsNamed?'Assets':'Things'},{id:'promises',label:liabilitiesNamed?'Liabilities':'Promises'},{id:'cash',label:'Cash'}];
+  if(!tabs.some(function(t){return t.id===excelTab;})) excelTab = tabs[0].id;
+  var body;
+  if(excelTab==='cash') body = cashSheet();
+  else if(excelTab==='promises') body = promisesSheet();
+  else body = (phaseKey==='name' && assetsNamed) ? assetsSheet() : thingsSheet();
+  var activeLabel = tabs.find(function(t){return t.id===excelTab;}).label;
+  var tabsHtml = tabs.map(function(t){ return '<button class="xlwb-tab'+(t.id===excelTab?' active':'')+'" onclick="setTab(\''+t.id+'\')">'+t.label+'</button>'; }).join('');
+  var html = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' Sheet</span></div>'+
+    '<div>'+body+'</div>'+
+    '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
+  document.getElementById(containerId).innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function setTab(tabId){ playClick(); excelTab = tabId; if(curWb) renderWorkbook(curWb.container, curWb.phase); }
+function toggleCat(cat){ playClick(); thingsExpanded[cat] = !thingsExpanded[cat]; if(curWb) renderWorkbook(curWb.container, curWb.phase); }
+
+/* ===== name-it ===== */
+function renderNameSteps(){
+  var backHtml = assetsNamed ? '<div class="btn-row" style="margin-bottom:16px;"><button class="btn-reset" onclick="nameBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>' : '';
+  var html='';
+  if(!assetsNamed){
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Let&rsquo;s start with the Things sheet. It lists everything you have that is related to the repair work, with a dollar value for each. Accountants call this list <strong>Assets</strong>.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" style="margin-top:20px" onclick="nameAssets()">Rename Things to Assets</button>';
+  } else if(!rouRevealed){
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now we need to think a little bigger. Assets are not just physical objects you can see or touch. An asset is a <strong>present right to an economic benefit</strong>. Remember the $650 paid ahead for the final month of the lease? You have not used that month yet, so that right belongs on the Assets list too.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" style="margin-top:20px" onclick="revealRou()">Add the Missing Asset</button>';
+  } else if(!liabilitiesNamed){
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;There it is. The final month&rsquo;s rent is different from the tools and supplies. You cannot touch it, but it represents a right to use the repair workspace later. That right has value, so it belongs on the Assets list.<br><br>Since it is not a physical thing, we will give it its own category: <strong>Right of Use</strong>. With that added, the Assets list now totals <strong>'+dollars(ASSETS_TOTAL)+'</strong>.<br><br>Now let&rsquo;s name the other list. The Promises sheet lists what&rsquo;s still owed because of the repair work. Accountants call those <strong>Liabilities</strong>. A liability is a <strong>present obligation to transfer an economic benefit later</strong>.&rdquo;</div></div>'+
+      '<button class="btn-continue btn-block" style="margin-top:20px" onclick="nameLiabilities()">Rename Promises to Liabilities</button>';
+  } else {
+    html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Now you have the two names. <strong>Assets</strong> is the proper name for the Things list &mdash; everything recorded on the repair-work side of your line: <strong>'+dollars(ASSETS_TOTAL)+'</strong>, including the right to use the workspace later. <strong>Liabilities</strong> is the name for the Promises list &mdash; everything still owed because of the repair work: <strong>'+dollars(LIABILITIES_TOTAL)+'</strong>. And now you know that an asset is a <strong>present right to an economic benefit</strong>, and a liability is a <strong>present obligation to transfer an economic benefit later</strong>.&rdquo;</div></div>'+
+      '<div class="next-phase-msg" style="margin-top:20px">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
+  }
+  document.getElementById('nameSteps').innerHTML = backHtml + html;
+  if(window.lucide) lucide.createIcons();
+}
+function nameAssets(){ playClick(); assetsNamed=true; excelTab='things'; renderWorkbook('nameWb','name'); renderNameSteps(); }
+function revealRou(){ playClick(); rouRevealed=true; thingsExpanded['RIGHT OF USE']=true; excelTab='things'; renderWorkbook('nameWb','name'); renderNameSteps(); }
+function nameLiabilities(){ playClick(); liabilitiesNamed=true; excelTab='promises'; renderWorkbook('nameWb','name'); renderNameSteps(); }
+function nameBack(){
+  playClick();
+  if(liabilitiesNamed){ liabilitiesNamed=false; }
+  else if(rouRevealed){ rouRevealed=false; }
+  else if(assetsNamed){ assetsNamed=false; }
+  else return;
+  excelTab='things';
+  renderWorkbook('nameWb','name'); renderNameSteps();
+}
+
+/* ===== restart ===== */
+function restart(){
+  excelTab='things'; thingsExpanded={}; assetsNamed=false; rouRevealed=false; liabilitiesNamed=false;
+  renderWorkbook('nameWb','name'); renderNameSteps(); scrollTo(0,0);
+}
+
+/* ===== glossary ===== */
+function openGlossary(){ m1GlossaryOpen('13-8'); }
+function closeGlossary(){ m1GlossaryClose(); }
+
+/* ===== init ===== */
+document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+renderWorkbook('nameWb','name');
+renderNameSteps();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

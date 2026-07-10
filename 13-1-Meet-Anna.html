@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 — Meet Anna</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <div class="narrative-block">
+      <p>A few days after Maria, the insurance agent, came by, your friend Anna stops in. Anna kept the books at City Cycle for years, and she still does her own brake jobs.</p>
+      <p>Since Maria&rsquo;s visit, you took the <strong>Insurable Property</strong> list you prepared for her and entered it into your Excel workbook as a <strong>Things</strong> list. Each item has a dollar value and is grouped by category. You can collapse a category to one line or expand it to see the items inside. This is what you pull up to show Anna.</p>
+    </div>
+    <div id="welcomeWb"></div>
+    <div class="dialog-box anna">
+      <div class="dialog-label">ANNA</div>
+      <div class="dialog-text">&ldquo;Nice! You actually put dollar values on everything. That&rsquo;s more than most people do. But this list is still only part of the picture. Where&rsquo;s the cash? We need to look at the money moving through your bank account.&rdquo;</div>
+    </div>
+    <div class="section-card">
+      <div class="card-title">What You&rsquo;ll Discover</div>
+      <ul class="bullet-list">
+        <li>The bank statement mixes the repair work with personal activity, so you have to separate them first.</li>
+        <li>Cash moving in and out is not the same as what&rsquo;s tied up in the repair work and what&rsquo;s still owed because of it.</li>
+        <li>Some payments leave a promise behind. Some payments leave a thing behind.</li>
+      </ul>
+    </div>
+    <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_TITLE = '';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var THINGS_CATS = [
+  { cat:'EQUIPMENT', items:[
+    {name:'Park Tool repair stand',amount:200},{name:'Cone wrench set',amount:65},{name:'Torque wrench',amount:95},{name:'Hex / Allen key set',amount:45},{name:'Cable cutters',amount:40},{name:'Chain breaker',amount:35},{name:'Tire levers',amount:20},{name:'Air compressor',amount:180},{name:'Parts washer',amount:130},{name:'Wheel-truing stand',amount:170},{name:'Bench grinder',amount:90},{name:'Headset press',amount:70},{name:'Shop vacuum',amount:60} ] },
+  { cat:'COMPUTER EQUIPMENT', items:[ {name:'Laptop',amount:610} ] },
+  { cat:'SUPPLIES', items:[ {name:'Box of chains (on shelf)',amount:50},{name:'Box of brake pads (on shelf)',amount:40},{name:'Box of derailleur cables (on shelf)',amount:20},{name:'Cassettes (on shelf)',amount:40},{name:'Bottom brackets (on shelf)',amount:20},{name:'Spokes (on shelf)',amount:20},{name:'Tubes (on shelf)',amount:10} ] },
+  { cat:'FIXTURES', items:[ {name:'Desk',amount:250},{name:'Shelving units',amount:200},{name:'Display rack',amount:180},{name:'Pegboard + hooks',amount:120} ] }
+];
+THINGS_CATS.forEach(function(c){ c.subtotal = c.items.reduce(function(s,i){return s+i.amount;},0); });
+
+function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+/* ===== state ===== */
+var excelTab = 'things', thingsExpanded = {};
+var curWb = null;
+
+/* ===== Excel workbook ===== */
+function renderOutlineSheet(cats, colA, totalLabel, newCat){
+  var total = cats.reduce(function(s,c){return s+c.subtotal;},0);
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+colA+'</div><div class="xl-v">Value</div></div>';
+  var n = 0;
+  cats.forEach(function(cat){
+    var label = cat.cat==='RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0)+cat.cat.slice(1).toLowerCase());
+    var open = !!thingsExpanded[cat.cat];
+    var isNew = cat.cat===newCat;
+    n++;
+    html += '<div class="xl-row xl-cat'+(isNew?' new':'')+'">'+
+      '<div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\''+cat.cat+'\')" aria-expanded="'+open+'">'+(open?'&minus;':'+')+'</button></div>'+
+      '<div class="xl-rownum">'+n+'</div>'+
+      '<div class="xl-c">'+label+(isNew?'<span class="xl-new-tag">new</span>':'')+'</div>'+
+      '<div class="xl-v">'+dollars(cat.subtotal)+'</div></div>';
+    if(open){
+      cat.items.forEach(function(it){ n++;
+        html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+dollars(it.amount)+'</div></div>';
+      });
+    }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
+  return html;
+}
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things tied up in the repair work', 'TOTAL'); }
+function renderWorkbook(containerId, phaseKey){
+  curWb = { container: containerId, phase: phaseKey };
+  var tabs = [{id:'things',label:'Things'}];
+  if(!tabs.some(function(t){return t.id===excelTab;})) excelTab = tabs[0].id;
+  var body = thingsSheet();
+  var activeLabel = tabs.find(function(t){return t.id===excelTab;}).label;
+  var tabsHtml = tabs.map(function(t){ return '<button class="xlwb-tab'+(t.id===excelTab?' active':'')+'" onclick="setTab(\''+t.id+'\')">'+t.label+'</button>'; }).join('');
+  var html = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' Sheet</span></div>'+
+    '<div>'+body+'</div>'+
+    '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
+  document.getElementById(containerId).innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function setTab(tabId){ playClick(); excelTab = tabId; if(curWb) renderWorkbook(curWb.container, curWb.phase); }
+function toggleCat(cat){ playClick(); thingsExpanded[cat] = !thingsExpanded[cat]; if(curWb) renderWorkbook(curWb.container, curWb.phase); }
+
+/* ===== glossary ===== */
+function openGlossary(){ m1GlossaryOpen('13-1'); }
+function closeGlossary(){ m1GlossaryClose(); }
+
+/* ===== init ===== */
+document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+renderWorkbook('welcomeWb','welcome');
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

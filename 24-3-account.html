@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 4: The Entity's Own Number &middot; Opening the Account</title>
+  <title>Activity 2.4: The Entity's Own Number &middot; Opening the Account</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
 </head>
 <body>
 <div class="page">
-  <div class="prework-wrap m2-roomy">
+  <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 4: The Entity&rsquo;s Own Number</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 3 of 5</p>
+        <h1>Activity 2.4: The Entity&rsquo;s Own Number</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 3 of 6</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -29,7 +29,7 @@
     <!-- ===== account ===== -->
     <div class="phase active" id="phase-account">
       <div class="narrative-block">
-        <p>With the EIN in hand, you can finally give the business its <strong>own</strong> accounts. Do it in three moves.</p>
+        <p>With the EIN in hand, you can finally give the business its <strong>own</strong> accounts &mdash; and pull it out of your personal ones. Do it in three moves. (Then you&rsquo;ll bring the paperwork up to date.)</p>
       </div>
       <div id="accountArea"></div>
     </div>
@@ -72,7 +72,7 @@ function playMove(){ tone(440,0.12,'sine',0.12); setTimeout(function(){tone(680,
 var glossaryTerms = [
   { term:"EIN", def:"Employer Identification Number &mdash; the entity&rsquo;s own tax ID with the IRS, like a Social Security number for a business. The bank needs it to open an account in the LLC&rsquo;s name." },
   { term:"Co-mingling", def:"Running business and personal money through the same account, so they have to be sorted apart by hand. Opening the LLC&rsquo;s own account ends it." },
-  { term:"Capital contribution", def:"Money (or property) an owner puts into the company. Your $500 in cash is one: it raises the LLC&rsquo;s cash and its member&rsquo;s capital by $500." },
+  { term:"Capital contribution", def:"Money (or property) an owner puts into the company. Your $1,300 in cash is one: it raises the LLC&rsquo;s cash and its members&rsquo; capital by $1,300." },
   { term:"Disregarded entity", def:"For federal income tax, a single-member LLC is &ldquo;looked through&rdquo; to its owner &mdash; even though it holds its own EIN for every other purpose. Different lines drawn for different purposes." },
   { term:"Counterparty", def:"The other party to a transaction or contract. With its own EIN and accounts, the LLC is a counterparty in its own right &mdash; it deals with banks, customers, and the IRS in its own name, and can owe and be owed (even sue and be sued) as itself, not as you." }
 ];
@@ -95,7 +95,7 @@ function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
 function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
 
 /* ===== state (phase-local) ===== */
-var step = 0;   /* 0 none, 1 acct opened, 2 $500 in, 3 card moved */
+var step = 0;   /* 0 none, 1 acct opened, 2 $1,300 in, 3 card moved */
 var docView = null;
 
 /* ===== SS-4 (for the viewer) ===== */
@@ -119,7 +119,7 @@ function ss4RowsHtml(){
 }
 function ss4DocInner(){
   return '<div style="font-family:Georgia,\'Times New Roman\',serif">'+
-    '<div style="text-align:center;font-weight:700;font-size:15px;color:#374151">Form SS-4 (Application for EIN)</div>'+
+    '<div style="text-align:center;font-weight:700;font-size:15px;color:#374151">FORM SS-4 &mdash; APPLICATION FOR EIN</div>'+
     '<div style="text-align:center;font-size:12px;color:#6b6b6b;margin-bottom:12px">Filed June 1, 2026 &middot; EIN 88-3729104</div>'+
     '<div style="border-top:1px solid #d8d8d8">'+ss4RowsHtml()+'</div></div>';
 }
@@ -142,6 +142,7 @@ function stmtInner(cfg){
   }).join('');
   var note = cfg.note ? '<div style="margin-top:12px;border-radius:8px;padding:10px 12px;background:#f6f6f4;border:1px dashed #d8d8d8;font-size:12px;color:#444">'+cfg.note+'</div>' : '';
   return '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">'+
+    '<div style="font-weight:700;font-size:15px;margin-bottom:8px">'+cfg.heading+'</div>'+
     '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:8px">'+
       '<div><div style="font-size:16px;font-weight:700;color:var(--primary)">'+cfg.bank+'</div>'+who+'</div>'+
       '<div style="border:1px solid #d8d8d8;border-radius:6px;padding:6px 10px;font-size:12px">'+box+'</div>'+
@@ -153,50 +154,50 @@ function stmtInner(cfg){
 function stmtConfigs(en){
   return {
     ss4:null,
-    llcbank:{ heading:"Bank Statement #1 (The LLC&rsquo;s Own Account)", bank:"Elm City Bank",
-      who:[ en+" &middot; Business Checking &middot; &bull;&bull;&bull;&bull; 2050", "EIN 88-3729104" ],
-      box:["Period: June 1&ndash;30, 2026","Beginning: $0.00","Ending: $500.00"],
+    llcbank:{ heading:"Bank Statement #1 &mdash; the entity&rsquo;s own account", bank:"Elm City Bank",
+      who:[ en+" &middot; Business checking &middot; &bull;&bull;&bull;&bull; 2050", "EIN 88-3729104" ],
+      box:["Period: June 1&ndash;30, 2026","Beginning: $0.00","Ending: $1,300.00"],
       head:["Date","Description","Dep.","W/d","Balance"],
       rows:[ { cells:["06/01","Account opened","&mdash;","&mdash;","0.00"] },
-        { cells:["06/01","Opening deposit &mdash; member capital contribution",{v:"500.00",tone:"pos"},"&mdash;","500.00"] },
-        { cells:["","Ending balance","500.00","&mdash;","500.00"], total:true } ],
-      note:"The LLC&rsquo;s first bank account is now open in the Company&rsquo;s name, using its EIN. The $500 opening deposit is a cash contribution: Cash increases by $500, and the equity side increases by $500." },
-    llccard:{ heading:"Card Statement #1 (The LLC&rsquo;s Own Card)", bank:"Harborline Visa",
-      who:[ en+" &middot; Business Card &middot; &bull;&bull;&bull;&bull; 4180" ],
-      box:["Period: June 1&ndash;30, 2026","Previous: $0.00","New balance: $1,230.00"],
+        { cells:["06/01","Opening deposit &mdash; member capital contribution",{v:"1,300.00",tone:"pos"},"&mdash;","1,300.00"] },
+        { cells:["","Ending balance","1,300.00","&mdash;","1,300.00"], total:true } ],
+      note:"The entity&rsquo;s first bank account &mdash; its <em>own</em> name and EIN. The <strong>$1,300 opening deposit is your capital contribution</strong> (Cash 0&rarr;1,300; members&rsquo; capital +1,300). The business&rsquo;s money runs through this account now." },
+    llccard:{ heading:"Card Statement #1 &mdash; the entity&rsquo;s own card", bank:"Harborline Visa",
+      who:[ en+" &middot; Business card &middot; &bull;&bull;&bull;&bull; 4180" ],
+      box:["Period: June 1&ndash;30, 2026","Previous: $0.00","New balance: $2,030.00"],
       head:["Date","Description","Amount"],
-      rows:[ { cells:["06/01","Balance transfer &mdash; business charges from personal card (&bull;&bull;&bull;&bull; 3902)","1,230.00"] },
-        { cells:["","New balance","1,230.00"], total:true } ],
-      note:"The $1,230 business credit-card balance is now on the LLC&rsquo;s own card. This is the same credit-card liability already recorded for the business; the amount stays $1,230. The $230 personal portion stays on your personal card." },
-    perbank:{ heading:"Personal Checking (After the Split)", bank:"Elm City Bank",
-      who:[ "Personal Checking &middot; &bull;&bull;&bull;&bull; 8814" ],
-      box:["Period: June 1&ndash;30, 2026","Beginning: $3,274.00","Ending: $2,774.00"],
+      rows:[ { cells:["06/01","Balance transfer &mdash; business charges from personal card (&bull;&bull;&bull;&bull; 3902)","2,030.00"] },
+        { cells:["","New balance","2,030.00"], total:true } ],
+      note:"The business charges that rode your personal card, now on the LLC&rsquo;s <em>own</em> card. The <strong>$2,030 was transferred over</strong> &mdash; the same balance the LLC assumed at formation, now in the Company&rsquo;s name. The $230 personal portion stayed on your card." },
+    perbank:{ heading:"Personal checking &mdash; after the split", bank:"Elm City Bank",
+      who:[ "Personal checking &middot; &bull;&bull;&bull;&bull; 8814" ],
+      box:["Period: June 1&ndash;30, 2026","Beginning: $4,074.00","Ending: $2,774.00"],
       head:["Date","Description","Dep.","W/d","Balance"],
-      rows:[ { cells:["06/01","Transfer to "+en+" &mdash; business account","&mdash;",{v:"500.00",tone:"neg"},"2,774.00"] },
-        { cells:["","Ending balance","&mdash;","500.00","2,774.00"], total:true } ],
-      note:"Your personal checking account after the split. The $500 moved into the LLC&rsquo;s bank account as a cash contribution. Going forward, business cash should run through the LLC account." },
-    percard:{ heading:"Personal Card (After the Split)", bank:"Harborline Visa",
-      who:[ "Personal Card &middot; &bull;&bull;&bull;&bull; 3902" ],
-      box:["Period: June 1&ndash;30, 2026","Previous: $1,460.00","New balance: $230.00"],
+      rows:[ { cells:["06/01","Transfer to "+en+" &mdash; business account","&mdash;",{v:"1,300.00",tone:"neg"},"2,774.00"] },
+        { cells:["","Ending balance","&mdash;","1,300.00","2,774.00"], total:true } ],
+      note:"Your personal checking, after the split &mdash; the <strong>$1,300 you moved out seeded the LLC&rsquo;s account</strong>. Personal only from here." },
+    percard:{ heading:"Personal card &mdash; after the split", bank:"Harborline Visa",
+      who:[ "Personal card &middot; &bull;&bull;&bull;&bull; 3902" ],
+      box:["Period: June 1&ndash;30, 2026","Previous: $2,260.00","New balance: $230.00"],
       head:["Date","Description","Amount"],
-      rows:[ { cells:["06/01","Balance transfer &mdash; business charges to "+en+" card",{v:"(1,230.00)",tone:"neg"}] },
+      rows:[ { cells:["06/01","Balance transfer &mdash; business charges to "+en+" card",{v:"(2,030.00)",tone:"neg"}] },
         { cells:["","New balance (personal)","230.00"], total:true } ],
-      note:"Your personal card after the split. The $1,230 business credit-card balance is now on the LLC card; the $230 remaining balance is personal. Going forward, business card charges should run through the LLC card." }
+      note:"Your personal card, after the split. The <strong>$2,030 business charges moved to the LLC card</strong>; the <strong>$230</strong> left was always personal. <strong>Co-mingling, ended.</strong>" }
   };
 }
 
 /* ===== source-document viewer ===== */
 function getAcctDocs(en){
   return [
-    { id:'ss4',     label:'Form SS-4 (EIN Application)',                  sub: en },
-    { id:'llcbank', label:'Checking Account Statement (Business)', sub:'Opening Deposit $500' },
-    { id:'llccard', label:'Credit Card Statement (Business)',     sub:'Balance $1,230' },
-    { id:'perbank', label:'Checking Account Statement (Personal)',          sub:'Ending $2,774' },
-    { id:'percard', label:'Credit Card Statement (Personal)',              sub:'Balance $230' }
+    { id:'ss4',     label:'Form SS-4 &mdash; EIN application',            sub: en },
+    { id:'llcbank', label:'Bank statement #1 &mdash; the LLC&rsquo;s checking', sub:'opening deposit $1,300' },
+    { id:'llccard', label:'Card statement #1 &mdash; the LLC&rsquo;s card',     sub:'balance $2,030' },
+    { id:'perbank', label:'Personal checking &mdash; after the split',     sub:'ending $2,774' },
+    { id:'percard', label:'Personal card &mdash; after the split',         sub:'balance $230' }
   ];
 }
 function docsButton(){
-  return '<button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary);margin-top:20px" onclick="openDocs()"><i data-lucide="file-text" class="licon"></i> Source documents</button>';
+  return '<button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary);margin-top:12px" onclick="openDocs()"><i data-lucide="file-text" class="licon"></i> Source documents</button>';
 }
 function openDocs(){ docView='list'; renderDocBody(); document.getElementById('docOverlay').classList.add('open'); if(window.lucide) lucide.createIcons(); }
 function selectDoc(id){ docView=id; renderDocBody(); }
@@ -213,85 +214,51 @@ function renderDocBody(){
     }).join('');
     body = '<div style="font-weight:700;color:var(--primary);margin-bottom:12px;font-family:Inter,sans-serif"><i data-lucide="file-text" class="licon"></i> Source documents</div>'+items;
   } else {
+    var cur = getAcctDocs(en).find(function(d){ return d.id===docView; });
     var doc = (docView==='ss4') ? ss4DocInner() : stmtInner(stmtConfigs(en)[docView]);
-    body = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><button onclick="backDocs()" style="border:0;background:transparent;color:var(--primary);cursor:pointer;font-family:inherit;font-size:var(--font-s)">&larr; Documents</button></div>'+doc;
+    body = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><button onclick="backDocs()" style="border:0;background:transparent;color:var(--primary);cursor:pointer;font-family:inherit;font-size:var(--font-s)">&larr; Documents</button>'+
+      '<span style="font-weight:700;color:var(--primary);font-family:Inter,sans-serif">'+(cur?cur.label:'')+'</span></div>'+doc;
   }
   document.getElementById('docBody').innerHTML = body;
   if(window.lucide) lucide.createIcons();
 }
 
 /* ===== account: three moves ===== */
-function acctRow(label, sub, amount, llc, changed, prev){
-  var border = changed ? 'var(--accent)' : (llc ? 'var(--primary)' : 'var(--border-strong)');
-  var bw = changed ? '2px' : '1px';
-  var bg = changed ? 'var(--warn-bg)' : (llc ? 'var(--primary-faint)' : 'transparent');
-  var amtBlock = '';
-  if(amount!=null){
-    var prevLine = (changed && prev!=null && prev!==amount)
-      ? '<div style="font-size:var(--font-xs);opacity:0.65;margin-top:1px">was <span class="mono">'+prev+'</span></div>'
-      : '';
-    amtBlock = '<div style="text-align:right"><span class="mono" style="font-size:var(--font-s)">'+amount+'</span>'+prevLine+'</div>';
-  }
+function acctRow(label, sub, amount, llc){
+  var border = llc ? 'var(--primary)' : 'var(--border-strong)';
+  var bg = llc ? 'var(--primary-faint)' : 'transparent';
+  var amt = (amount!=null) ? '<span class="mono" style="font-size:var(--font-s)">'+amount+'</span>' : '';
   var subHtml = sub ? '<div style="font-size:var(--font-xs);opacity:0.7;margin-top:2px">'+sub+'</div>' : '';
-  var flag = changed ? ' <span style="font-size:var(--font-xs);font-weight:700;color:var(--accent)">Updated</span>' : '';
-  return '<div style="border:'+bw+' solid '+border+';background:'+bg+';border-radius:8px;padding:8px 10px;margin-bottom:8px">'+
-    '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px"><span style="font-size:var(--font-s);font-weight:600">'+label+flag+'</span>'+amtBlock+'</div>'+subHtml+'</div>';
+  return '<div style="border:1px solid '+border+';background:'+bg+';border-radius:8px;padding:8px 10px;margin-bottom:8px">'+
+    '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:var(--font-s);font-weight:600">'+label+'</span>'+amt+'</div>'+subHtml+'</div>';
 }
 function renderAccount(){
   var en = esc(llcName());
-
-  /* ----- three-step progress tracker (pending / current / complete) ----- */
-  var stepLabels = ['Open LLC bank account','Add $500 cash contribution','Move business card balance'];
-  var tracker = '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px">';
-  stepLabels.forEach(function(label, idx){
-    var n = idx+1, cls, txt;
-    if(step>=n){ cls='tag-pill tag-cfs'; txt='&#10003; Step '+n+': '+label; }
-    else if(step===n-1){ cls='tag-pill tag-is'; txt='&#9656; Step '+n+': '+label; }
-    else { cls='tag-pill soon'; txt='Step '+n+': '+label; }
-    tracker += '<span class="'+cls+'" style="flex:1 1 150px;text-align:center;padding:6px 10px;line-height:1.35">'+txt+'</span>';
-  });
-  tracker += '</div>';
-
-  /* ----- two-column comparison ----- */
+  var nextLabel = step===0 ? 'Open the LLC&rsquo;s bank account &rarr;'
+    : step===1 ? 'Move $1,300 in cash into the account &rarr;'
+    : step===2 ? 'Move the business card to the LLC &rarr;' : null;
   var personalCol = '<div class="section-card"><div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;opacity:0.7;margin-bottom:8px">Your personal accounts</div>'+
-    acctRow('Personal Checking Account &mdash; Elm City Bank', (step>=2?'Personal Only':'Co-mingled: Business + Personal'), (step>=2?'2,774':'3,274'), false, step===2, '3,274')+
-    acctRow('Personal Card &mdash; Harborline Visa', (step>=3?'Personal Only':'Co-mingled: Business + Personal'), (step>=3?'230':'1,460'), false, step===3, '1,460')+
+    acctRow('Checking &mdash; Elm City Bank', (step>=2?'personal only now':'co-mingled: business + personal'), (step>=2?'2,774':'4,074'), false)+
+    acctRow('Personal card', (step>=3?'personal only now':'co-mingled: business + personal'), null, false)+
     '</div>';
   var llcInner;
   if(step>=1){
-    llcInner = acctRow('Business Checking Account &mdash; Elm City Bank', en, (step>=2?'500':'0'), true, (step===1||step===2), '0')+
-      (step>=3 ? acctRow('Business Card &mdash; Harborline Visa', en, '1,230', true, true) : '');
+    llcInner = acctRow('Bank account', en, (step>=2?'1,300':'0'), true) + (step>=3 ? acctRow('Business card', en, '2,030', true) : '');
   } else {
-    llcInner = '<div style="font-size:var(--font-xs);font-style:italic;opacity:0.7">None Yet</div>';
+    llcInner = '<div style="font-size:var(--font-xs);font-style:italic;opacity:0.7">none yet</div>';
   }
   var llcCol = '<div class="section-card"><div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary);margin-bottom:8px">The LLC&rsquo;s accounts</div>'+llcInner+'</div>';
-  var nextLabel = step===0 ? 'Open account in the LLC&rsquo;s name &rarr;'
-    : step===1 ? 'Move $500 into the LLC account &rarr;'
-    : step===2 ? 'Put business card balance on the LLC card &rarr;' : null;
-
-  /* ----- per-step instruction callout (under the tracker, above the action button) ----- */
-  var instruction =
-    step===0 ? 'First, open a checking account in the LLC&rsquo;s name. This gives the business a place for its own cash.'
-    : step===1 ? 'The LLC now has a bank account in its own name.<br><br>Next, move <strong>$500</strong> of your personal cash into the LLC&rsquo;s account. This is a <strong>cash contribution</strong>. It is the only new economic event in this sequence: the LLC&rsquo;s cash increases by $500, and the equity side increases by $500.'
-    : step===2 ? 'Finally, put the existing $1,230 business credit-card balance on the LLC&rsquo;s card. <strong>This does not create a new charge.</strong> It moves the already-recorded business credit-card balance out of your personal card and onto the LLC card. The $230 personal balance stays on your personal card.'
-    : '';
-
-  var html = tracker;
-
+  var html = '<div class="main-grid two-col" style="margin-bottom:12px">'+personalCol+llcCol+'</div>';
+  if(step===2){ html += '<div style="text-align:center;font-size:var(--font-xs);color:var(--primary);margin-bottom:10px">&uarr; your <strong>$1,300 cash contribution</strong> &mdash; Cash 0 &rarr; 1,300, members&rsquo; capital +1,300</div>'; }
   if(nextLabel){
-    /* instruction callout, then the action button, then the comparison */
-    html += '<p class="callout" style="margin-bottom:20px">'+instruction+'</p>';
     html += '<button class="btn-continue btn-block" onclick="advanceAccount()">'+nextLabel+'</button>';
-    html += '<div class="main-grid two-col" style="margin-top:20px">'+personalCol+llcCol+'</div>';
     html += docsButton();
   } else {
-    html += '<div class="main-grid two-col" style="margin-bottom:20px">'+personalCol+llcCol+'</div>';
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Co-mingling ended</div>'+
-      '<p>The LLC now has its own bank account and card. Going forward, the business&rsquo;s money and charges no longer have to run through your personal accounts.</p></div>';
-    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="calculator" class="licon"></i> Only one new amount</div>'+
-      '<p>Opening the account created a place for LLC cash. Moving the business credit-card balance changed where the already-recorded <span class="mono">$1,230</span> credit-card liability is carried. The one new amount was the $500 cash contribution: Cash increases by $500, and the equity side increases by $500.</p></div>';
+      '<p>The LLC has its own account and card; your personal checking is personal again. The by-hand sorting you&rsquo;ve done since 1.1 is now <strong>institutional</strong> &mdash; banks, the IRS, and customers all deal with the LLC.</p></div>';
+    html += '<p class="callout">Two of those moves changed <em>nothing</em> on the books &mdash; the EIN, and the card sliding to the LLC&rsquo;s name (<span class="mono">$2,030</span> stays <span class="mono">$2,030</span>). The <strong>one real change</strong> was your <strong>$1,300</strong>: a capital contribution. Cash <span class="mono">0 &rarr; 1,300</span>; members&rsquo; capital <span class="mono">990 &rarr; 2,290</span>. Next: check the paper trail &mdash; then you&rsquo;ll complete Schedule A from these books, and sign.</p>';
     html += docsButton();
-    html += '<button class="btn-continue btn-block" style="margin-top:20px" onclick="nav(\'24-4-statements.html\')">Continue &rarr;</button>';
+    html += '<button class="btn-continue btn-block" onclick="nav(\'24-4-statements.html\')">See the statements &rarr;</button>';
   }
   document.getElementById('accountArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();
@@ -301,6 +268,7 @@ function advanceAccount(){
   if(step<3) step++;
   renderAccount();
 }
+window.devFill = function(){ step=3; renderAccount(); };
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeDoc(); } });
 
@@ -308,5 +276,6 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
 renderAccount();
 </script>
+  <script src="dev.js"></script>
 </body>
 </html>

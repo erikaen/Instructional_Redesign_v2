@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5 — Find the Difference</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+    </div>
+
+    <div class="narrative-block">
+      <p>Five modules in, the workbook holds everything you figured out at the workbench: an <strong>Assets</strong> list, a <strong>Liabilities</strong> list, and the <strong>Reasons</strong> the difference moved &mdash; sorted into the two kinds you found, what you put in and what the work made.</p>
+      <p>You&rsquo;ve been calling them by your own words. Today you put them on one page, watch how they fit together &mdash; and the names you&rsquo;ve been circling finally arrive.</p>
+    </div>
+    <div class="dialog-box anna">
+      <div class="dialog-label">ANNA</div>
+      <div class="dialog-text">&ldquo;You built the whole thing from scratch &mdash; no textbook, just the workbench and a spreadsheet. Turns out it has names. Old ones. Let&rsquo;s lay it out and earn them.&rdquo;</div>
+    </div>
+    <div class="narrative-block">
+      <p>Everything in one workbook. <strong>Cash</strong> sits on the Assets list, right where you folded it last time &mdash; click its line open and there are May&rsquo;s flows, ending with the $160 your personal self covered, the line you found running through the middle of your own wallet. Cash on hand &mdash; $0 &mdash; takes its place on the list as one more asset.</p>
+    </div>
+    <div id="assembleWb"></div>
+    <div class="dialog-box anna">
+      <div class="dialog-label">ANNA</div>
+      <div class="dialog-text">&ldquo;Two totals matter now. The records show <strong>Assets of $3,410</strong> and <strong>Liabilities of $2,250</strong>. What&rsquo;s the <strong>difference</strong> between them?&rdquo;</div>
+    </div>
+    <div class="mc-card">
+      <div class="mc-q">The difference = Assets &minus; Liabilities = $3,410 &minus; $2,250 =</div>
+      <div class="btn-row">
+        <input id="netInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="The difference" onkeydown="if(event.key==='Enter'){checkNet();}">
+        <button class="btn btn-primary" onclick="checkNet()">Check</button>
+      </div>
+      <div class="feedback" id="netFb"></div>
+    </div>
+    <div id="netClose" hidden></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 0;
+var PHASE_TITLE = '';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var ASSETS_SNAPSHOT = [
+  { cat:'EQUIPMENT', items:[
+    { name:'Park Tool repair stand', amount:200 },{ name:'Cone wrench set', amount:65 },{ name:'Torque wrench', amount:95 },
+    { name:'Hex / Allen key set', amount:45 },{ name:'Cable cutters', amount:40 },{ name:'Chain breaker', amount:35 },
+    { name:'Tire levers', amount:20 },{ name:'Air compressor', amount:180 },{ name:'Parts washer', amount:130 },
+    { name:'Wheel-truing stand', amount:170 },{ name:'Bench grinder', amount:90 },{ name:'Headset press', amount:70 },{ name:'Shop vacuum', amount:60 } ] },
+  { cat:'COMPUTER EQUIPMENT', items:[ { name:'Laptop', amount:610 } ] },
+  { cat:'SUPPLIES', items:[
+    { name:'Box of chains (on shelf)', amount:50 },{ name:'Box of brake pads (on shelf)', amount:40 },{ name:'Box of derailleur cables (on shelf)', amount:20 },
+    { name:'Cassettes (on shelf)', amount:40 },{ name:'Bottom brackets (on shelf)', amount:20 },{ name:'Spokes (on shelf)', amount:20 },{ name:'Tubes (on shelf)', amount:10 } ] },
+  { cat:'FIXTURES', items:[
+    { name:'Desk', amount:250 },{ name:'Shelving units', amount:200 },{ name:'Display rack', amount:180 },{ name:'Pegboard + hooks', amount:120 } ] },
+  { cat:'CASH', note:'Repair cash on hand (May 31)', items:[] },
+  { cat:'RIGHT OF USE', items:[ { name:'Right to occupy the space — last month, prepaid', amount:650 } ] }
+].map(function(c){ c.subtotal = c.items.reduce(function(s,i){return s+i.amount;},0); return c; });
+var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.subtotal;},0); // 3410
+
+var LIABILITIES_SNAPSHOT = [
+  { key:'smith', label:"Smith's frame — paid $220 up front, not built yet", amount:220, items:[
+    { name:'Check deposit, May 22 &mdash; a custom frame build, 4&ndash;6 weeks', amt:220 } ] },
+  { key:'card', label:'Still owed on the bike-repair credit card', amount:2030, items:[
+    { name:'Hand tools', amt:300 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
+    { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] }
+];
+var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amount;},0); // 2250
+var NET = ASSETS_TOTAL - LIABILITIES_TOTAL; // 1160
+
+var CONTRIBUTED_ROWS = [
+  { account:'Cash',      delta:160, reason:'My personal self covered what the work drew down — I only see it now, tallying up.' },
+  { account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
+  { account:'Equipment', delta:90,  reason:'Brought the bench grinder from home.' },
+  { account:'Equipment', delta:70,  reason:'Brought the headset press from home.' },
+  { account:'Equipment', delta:60,  reason:'Brought the shop vacuum from home.' }
+];
+var GENERATED_ROWS = [
+  { account:'Cash', delta:340, reason:'Finished a repair — customer paid $340.' },
+  { account:'Cash', delta:180, reason:'Finished a repair — customer paid $180.' },
+  { account:'Cash', delta:80,  reason:'Finished a repair — customer paid $80.' },
+  { account:'Cash', delta:140, reason:'Finished a repair — customer paid $140.' },
+  { account:'Cash', delta:130, reason:'Finished a repair — customer paid $130.' },
+  { account:'Cash', delta:100, reason:'Finished a repair — customer paid $100.' },
+  { account:'Cash', delta:150, reason:'Finished a repair — customer paid $150.' },
+  { account:'Supplies', delta:-70, reason:'Used $70 of chains finishing customer jobs.' },
+  { account:'Supplies', delta:-50, reason:'Used $50 of brake pads finishing customer jobs.' },
+  { account:'Supplies', delta:-30, reason:'Used $30 of derailleur cables finishing customer jobs.' },
+  { account:'Supplies', delta:-50, reason:'Used $50 of cassettes finishing customer jobs.' },
+  { account:'Supplies', delta:-30, reason:'Used $30 of bottom brackets finishing customer jobs.' },
+  { account:'Supplies', delta:-30, reason:'Used $30 of spokes finishing customer jobs.' },
+  { account:'Supplies', delta:-40, reason:'Used $40 of tubes finishing customer jobs.' },
+  { account:'Right of Use', delta:-650, reason:'Used the space for May ($650).' }
+];
+var CONTRIBUTED_TOTAL = CONTRIBUTED_ROWS.reduce(function(s,r){return s+r.delta;},0); // 990
+var GENERATED_TOTAL = GENERATED_ROWS.reduce(function(s,r){return s+r.delta;},0);     // 170
+var REASONS_TOTAL = CONTRIBUTED_TOTAL + GENERATED_TOTAL;                             // 1160
+
+var CASH_FLOWS = [
+  { date:'May 1',  desc:'Rent paid in advance', amount:-1300 },
+  { date:'May 3',  desc:'Park Tool stand', amount:-200 },
+  { date:'May 7',  desc:'Repair finished — customer paid', amount:340 },
+  { date:'May 10', desc:'Repair finished — customer paid', amount:180 },
+  { date:'May 12', desc:'Repair finished — customer paid', amount:80 },
+  { date:'May 14', desc:'Repair finished — customer paid', amount:140 },
+  { date:'May 19', desc:'Repair finished — customer paid', amount:130 },
+  { date:'May 22', desc:'Smith deposit', amount:220 },
+  { date:'May 23', desc:'Repair finished — customer paid', amount:100 },
+  { date:'May 27', desc:'Repair finished — customer paid', amount:150 },
+  { date:'—',      desc:'From your personal self — covering what the work drew down', amount:160 }
+];
+
+/* ===== formatters ===== */
+function d(v){ return (v<0?'−$':'$') + Math.abs(v).toLocaleString('en-US'); }
+function sd(v){ return (v>=0?'+$':'−$') + Math.abs(v).toLocaleString('en-US'); }
+function catLabel(cat){ return cat==='RIGHT OF USE' ? 'Right of Use' : (cat.charAt(0)+cat.slice(1).toLowerCase()); }
+
+/* ===== state ===== */
+var excelTab = 'assets';
+var reasonsExpanded = { contributed:false, generated:false };
+var cashOpen = false;
+var assetsExpanded = {};
+var liabExpanded = {};
+var curWbContainer = null;
+var netDone = false;
+var netAttempts = 0;
+
+/* ===== Excel workbook ===== */
+function assetsSheet(){
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Assets</div><div class="xl-v">Value</div></div>';
+  var n=0;
+  ASSETS_SNAPSHOT.forEach(function(c){
+    if(c.cat==='CASH'){
+      // Cash folded into Assets: an expandable line (same idiom as the Reasons groups);
+      // open it to reveal May's flows via the existing cash sheet.
+      html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCash()" aria-expanded="'+cashOpen+'">'+(cashOpen?'−':'+')+'</button></div><div class="xl-rownum"></div><div class="xl-c">'+catLabel(c.cat)+' &mdash; '+c.note+'</div><div class="xl-v">'+d(c.subtotal)+'</div></div>';
+      if(cashOpen) html += cashSheet();
+    } else {
+      var open = !!assetsExpanded[c.cat]; n++;
+      html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleAssetCat(\''+c.cat+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+catLabel(c.cat)+'</div><div class="xl-v">'+d(c.subtotal)+'</div></div>';
+      if(open){ c.items.forEach(function(it){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+d(it.amount)+'</div></div>'; }); }
+    }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Total Assets — what the records show</div><div class="xl-v">'+d(ASSETS_TOTAL)+'</div></div>';
+  return html;
+}
+function liabilitiesSheet(){
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liabilities</div><div class="xl-v">Amount</div></div>';
+  var n = 0;
+  LIABILITIES_SNAPSHOT.forEach(function(l){
+    var open = !!liabExpanded[l.key]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleLiabCat(\''+l.key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+l.label+'</div><div class="xl-v">'+d(l.amount)+'</div></div>';
+    if(open){ l.items.forEach(function(it){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+d(it.amt)+'</div></div>'; }); }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Total Liabilities — what the records show</div><div class="xl-v">'+d(LIABILITIES_TOTAL)+'</div></div>';
+  return html;
+}
+function cashSheet(){
+  // Cash is folded into Assets — its expanded detail is the ledger, rendered in the
+  // same xl-item idiom as every other drill-down (dates via .cash-line-date).
+  var onHand = CASH_FLOWS.reduce(function(s,f){return s+f.amount;},0);
+  var html = '';
+  CASH_FLOWS.forEach(function(f){
+    html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c"><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</div><div class="xl-v">'+sd(f.amount)+'</div></div>';
+  });
+  html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c"><strong>Cash on hand (May 31)</strong></div><div class="xl-v"><strong>'+d(onHand)+'</strong></div></div>';
+  return html;
+}
+function reasonsGroup(key, title, rows, total){
+  var open = reasonsExpanded[key];
+  var html = '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleReasonsCat(\''+key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum"></div><div class="xl-c">'+title+' ('+rows.length+')</div><div class="xl-v">'+sd(total)+'</div></div>';
+  if(open){
+    rows.forEach(function(r){
+      html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r.account+' &mdash; '+r.reason+'</div><div class="xl-v">'+sd(r.delta)+'</div></div>';
+    });
+  }
+  return html;
+}
+function reasonsSheet(){
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Reasons — why the difference moved (two kinds)</div><div class="xl-v">Change</div></div>';
+  html += reasonsGroup('contributed', 'CONTRIBUTED', CONTRIBUTED_ROWS, CONTRIBUTED_TOTAL);
+  html += reasonsGroup('generated', 'GENERATED', GENERATED_ROWS, GENERATED_TOTAL);
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL — the reasons</div><div class="xl-v">'+sd(REASONS_TOTAL)+'</div></div>';
+  return html;
+}
+function renderWorkbook(containerId){
+  curWbContainer = containerId;
+  var tabs = [{id:'assets',label:'Assets'},{id:'liabilities',label:'Liabilities'},{id:'reasons',label:'Reasons'}];
+  var body;
+  if(excelTab==='assets') body = assetsSheet();
+  else if(excelTab==='liabilities') body = liabilitiesSheet();
+  else body = reasonsSheet();
+  var activeLabel = tabs.find(function(t){return t.id===excelTab;}).label;
+  var tabsHtml = tabs.map(function(t){ return '<button class="xlwb-tab'+(t.id===excelTab?' active':'')+'" onclick="setTab(\''+t.id+'\')">'+t.label+'</button>'; }).join('');
+  var html = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' sheet</span></div>'+
+    '<div>'+body+'</div>'+
+    '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
+  document.getElementById(containerId).innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function setTab(id){ playClick(); excelTab = id; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleReasonsCat(k){ playClick(); reasonsExpanded[k] = !reasonsExpanded[k]; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleCash(){ playClick(); cashOpen = !cashOpen; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleLiabCat(key){ playClick(); liabExpanded[key] = !liabExpanded[key]; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleAssetCat(cat){ playClick(); assetsExpanded[cat] = !assetsExpanded[cat]; if(curWbContainer) renderWorkbook(curWbContainer); }
+
+/* ===== net check ===== */
+function checkNet(){
+  if(netDone) return;
+  var raw = document.getElementById('netInput').value;
+  var val = parseInt(String(raw).replace(/[^0-9-]/g,''), 10);
+  var fb = document.getElementById('netFb');
+  if(val === NET){
+    playSuccess(); revealNet();
+  } else {
+    netAttempts++;
+    if(netAttempts >= 3){ playNope(); revealNet(); }
+    else {
+      playNope();
+      fb.className = 'feedback err show';
+      fb.innerHTML = 'Not quite &mdash; subtract Liabilities from Assets: '+d(ASSETS_TOTAL)+' &minus; '+d(LIABILITIES_TOTAL)+'.';
+    }
+  }
+}
+function revealNet(){
+  netDone = true;
+  document.getElementById('netInput').disabled = true;
+  var fb = document.getElementById('netFb'); fb.className = 'feedback'; fb.classList.remove('show');
+  var close = document.getElementById('netClose');
+  close.hidden = false;
+  close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The difference is '+d(NET)+'</div><p>Assets minus Liabilities &mdash; a difference, fully determined by the two lists. Hold onto that number.</p></div>'+
+    '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== restart ===== */
+function restart(){
+  excelTab='assets'; reasonsExpanded={ contributed:false, generated:false }; cashOpen=false; assetsExpanded={};
+  netDone=false; netAttempts=0;
+  document.getElementById('netClose').hidden = true;
+  var netFb = document.getElementById('netFb'); netFb.className = 'feedback'; netFb.innerHTML = '';
+  var netInput = document.getElementById('netInput'); netInput.value = ''; netInput.disabled = false;
+  renderWorkbook('assembleWb');
+  window.scrollTo(0,0);
+}
+
+/* ===== glossary ===== */
+function openGlossary(){ m1GlossaryOpen('15-1'); }
+function closeGlossary(){ m1GlossaryClose(); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+excelTab = 'assets';
+renderWorkbook('assembleWb');
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

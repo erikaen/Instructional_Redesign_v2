@@ -42,6 +42,17 @@ Replacements:
 
 When a student uses "measurement," gently reframe without being pedantic. Explain the multi-dimensional nature of economic reality being reduced to numbers — don't just enforce vocabulary. Acknowledge that "measurement" is widely used in practice, then explain why these materials avoid it.
 
+### Depreciation and allocation are not approximations of a "true cost"
+
+When teaching why depreciation isn't computed by looking up a resale/market value (e.g., "what would this tool fetch on eBay today"), do not frame the rejection as "that method answers a different question than the *real* cost this period's use imposed." That framing concedes there's a true cost-of-use-this-period sitting out there, and only the market-lookup method fails to find it. There is no such quantity. Depreciation is a **rule-based allocation** of a known historical cost across a chosen useful life and spreading pattern — it does not estimate, approximate, or converge on anything. The number it produces isn't a better guess than the market figure; it's the answer to an entirely different question ("how should this known cost be spread across periods?" vs. "what would this asset fetch today?"), and neither is trying to reveal a hidden fact about what the period's use "really cost."
+
+| Don't say | Say instead |
+|---|---|
+| Market value answers a different question than what the asset's use really cost this period | Market value and cost allocation are different projects. One asks what the asset would fetch; the other asks how to spread a known cost across chosen periods. Neither approximates a "true cost of this period's use" — there isn't one to approximate. |
+| Depreciation gets closer to the real economic cost than a market lookup would | Depreciation doesn't get closer to anything measurable. It's a chosen rule (useful life × spreading pattern) applied to a known historical cost — a convention, not an estimate. |
+
+This is the same family of error as "Never explain exclusions as measurement failure" below, applied specifically to depreciation and other allocations: don't imply a discoverable true number exists just because a convention produces a number.
+
 ### Never use "accounting equation"
 
 Always say **accounting identity**, never "accounting equation." The identity is a framework for recording, organizing, and reporting financial information — not a formula to memorize.

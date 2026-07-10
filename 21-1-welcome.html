@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="page">
-  <div class="prework-wrap m2-roomy">
+  <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
@@ -29,14 +29,14 @@
     <!-- ===== welcome ===== -->
     <div class="phase active" id="phase-welcome">
       <div class="narrative-block">
-        <p>The repair work has grown. You have more gear, more customers, and more cash moving through the operation than when you started. Since the first week, your books &mdash; <span class="mono">Bike-Repair.xlsx</span> &mdash; have helped you keep the repair work separate from your personal life.</p>
+        <p>The repair work has grown. You have more gear, more customers, and more cash moving through the operation than when you started. Since the first week, your books &mdash; <span class="mono">Bike-Repair.xlsx</span> &mdash; have helped you keep what you do in your <strong>bike-repair role</strong> separate from the rest of your life.</p>
         <p>Then <strong>Maria</strong>, your insurance agent, calls back with a different concern. This time, she is not asking about your tools and parts. She is asking what happens if a customer gets hurt and decides to hold you personally responsible.</p>
       </div>
       <div class="section-card">
-        <div class="card-title">What You&rsquo;ll Discover</div>
+        <div class="card-title">What you&rsquo;ll discover</div>
         <ul class="bullet-list">
           <li>What Maria is really warning you about, and why an insurance policy alone won&rsquo;t solve it.</li>
-          <li>Who, besides you, actually treats the repair work as separate from you personally.</li>
+          <li>Who, besides you, actually treats your bike-repair role as separate from the rest of your life.</li>
           <li>What it would take to make that separation more than something you maintain by hand.</li>
         </ul>
       </div>
@@ -69,8 +69,8 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== glossary (shared across all phases of 2.1) ===== */
 var glossaryTerms = [
-  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the repair work&rsquo;s tools and parts." },
-  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything the repair work owns." },
+  { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the tools and parts in the repair work." },
+  { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything recorded for the repair work." },
   { term:"LLC", def:"Limited Liability Company &mdash; a legal form that can hold the operation and stand as a wall between a claim and your personal life. Maria names it here; you form one next." }
 ];
 function openGlossary(){
@@ -87,5 +87,6 @@ function restart(){ window.location.reload(); }
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 </script>
+  <script src="dev.js"></script>
 </body>
 </html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 3.3: Depreciation &middot; Two Kinds of Used-Up</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 3: Depreciation</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 3</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Two Kinds of Used-Up</div>
+
+    <div class="narrative-block">
+      <p>The income statement is still open &mdash; Anna held the bottom line because one kind of used-up is missing. To see what&rsquo;s missing, first read what&rsquo;s there. The <strong>Expenses</strong> tab holds the season&rsquo;s used-up rows. Walk them.</p>
+    </div>
+
+    <div id="wb"></div>
+    <div id="anna"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+/* ===== the walk: metered parts -> time-lapsed rent -> the silent third ===== */
+var step = 0, mcqSel = null, mcqSubmitted = false;
+var MCQ = [
+  { id:'a', text:'About $1,200 &mdash; it&rsquo;s inside the Parts used rows.',
+    fb:'Those rows are the <em>parts</em> &mdash; counted off the shelf, dollar by dollar. The stand, the compressor, the truing stand: still on the bench, still whole. Their wear isn&rsquo;t in there.' },
+  { id:'b', text:'$650 a month &mdash; it&rsquo;s inside Rent used.',
+    fb:'Rent bought the right to use the <em>space</em>, month by month. Nothing in those rows is about the tools.' },
+  { id:'c', text:'Nothing &mdash; there is no row for it.', ok:true,
+    fb:'Right &mdash; not a row. The tools were used on all 21 jobs, they wore all season &mdash; and the Expenses tab is silent. And it isn&rsquo;t a new oversight: back in May, when you first analyzed the repair work, you took nothing for wear either.' }
+];
+
+function renderTalk(){
+  var anna='', ctrl='';
+  if(step===0){
+    anna = annaBox('Start with <strong>Parts used</strong> &mdash; row after row, job by job, <strong>$1,200</strong> for the season. This kind of used-up you can <em>watch happen</em>. Flip to Assets and open the Parts line.');
+    ctrl = '<button class="btn-continue btn-block" onclick="setStep(1)">Open the Parts line in the Assets tab &rarr;</button>';
+  } else if(step===1){
+    anna = annaBox('There&rsquo;s the shelf: the opening parts, three restocks &mdash; and then, watch, parts <em>leaving</em>, job by job, exactly as they were used. This is use you can <strong>observe directly</strong>: you can see each dollar go. Every &ldquo;Parts used&rdquo; row on the Expenses tab records use somebody could watch happen.');
+    ctrl = '<button class="btn-continue btn-block" onclick="setStep(2)">Now the rent &rarr;</button>';
+  } else if(step===2){
+    anna = annaBox('Back on Expenses: <strong>Rent used</strong> &mdash; June, July, August, <strong>$650</strong> each. Nothing left a shelf this time. The rent bought a <strong>right to use the workspace</strong>, month by month &mdash; and each month&rsquo;s right was used up the moment its month passed. <strong>Time</strong> does this using-up all by itself. (The $650 still sitting in Assets is the lease&rsquo;s last month &mdash; a right of use parked until its month arrives.)');
+    ctrl = '<button class="btn-continue btn-block" onclick="setStep(3)">The tools were used on every job &rarr;</button>';
+  } else {
+    anna = annaBox('Two kinds of used-up so far: parts you could <em>watch go</em>, months that <em>lapse</em>. Now the question. The <strong>tools and repair equipment</strong> &mdash; and the laptop running the bookings &mdash; were used on every one of the <strong>21 jobs</strong> this summer. What does the Expenses tab say that cost the season?');
+    ctrl = renderMcq();
+  }
+  document.getElementById('anna').innerHTML = anna;
+  document.getElementById('controls').innerHTML = ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderMcq(){
+  var correct = mcqSubmitted && MCQ[mcqSel].ok;
+  var h = '<div class="mc-card"><div class="mc-opts">';
+  MCQ.forEach(function(o,i){
+    var cls = 'mc-opt' + (!mcqSubmitted && mcqSel===i ? ' selected' : '') + (mcqSubmitted && mcqSel===i ? (o.ok?' correct':' wrong') : '') + (mcqSubmitted ? ' locked' : '');
+    h += '<div class="'+cls+'" onclick="selectMcq('+i+')"><div class="mc-letter">'+String.fromCharCode(65+i)+'</div><div>'+o.text+'</div></div>';
+  });
+  h += '</div><div class="feedback'+(mcqSubmitted?(correct?' ok':' err')+' show':'')+'" id="mcqFb">'+(mcqSubmitted?MCQ[mcqSel].fb:'')+'</div></div>';
+  h += '<div class="btn-row">'+(mcqSubmitted
+      ? '<button class="btn-reset" onclick="resetMcq()" style="margin-left:auto;">Reset</button>'
+      : '<button class="btn-continue" onclick="submitMcq()"'+(mcqSel===null?' disabled':'')+'>Submit</button>')+'</div>';
+  if(correct){
+    h += insightBox('Two kinds counted, one missing',
+        '<p><strong>Parts</strong>: use you can observe directly. <strong>Rent</strong>: a month that lapses on its own. The wear on the tools is just as real &mdash; they were plainly used, and used up a little, during the season &mdash; but there&rsquo;s nothing to watch leave and no month that expires. Putting a number on it will take something new.</p>')
+      + '<button class="btn-continue btn-block" onclick="nav(\'33-2-The-Third-Kind.html\')">Where would a number come from? &rarr;</button>';
+  }
+  return h;
+}
+function selectMcq(i){
+  if(mcqSubmitted) return;
+  mcqSel = i;
+  renderTalk();
+}
+function submitMcq(){
+  if(mcqSel===null || mcqSubmitted) return;
+  mcqSubmitted = true;
+  if(MCQ[mcqSel].ok) playSuccess(); else playNope();
+  renderTalk();
+  window.scrollTo(0, document.body.scrollHeight);
+}
+function resetMcq(){
+  mcqSel = null; mcqSubmitted = false;
+  renderTalk();
+}
+function setStep(n){
+  playClick(); if(n>step) playSuccess();
+  step = n;
+  if(step===1){ BRW.tab('wb','assets'); BRW.x('wb','a',3); }   // open the Parts ledger
+  if(step===2){ BRW.tab('wb','expenses'); }
+  renderTalk();
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Directly observed use', def:'Used-up you can watch: each part that leaves the shelf is a dollar you can point to. &ldquo;Parts used&rdquo; records use somebody could watch happen, not a guess.' },
+  { term:'Time-lapsed use', def:'Used-up done by the calendar: a month of the workspace, lived through. &ldquo;Rent used&rdquo; is one month per row; time does the work by itself.' },
+  { term:'Right of Use', def:'The lease&rsquo;s last month, paid in advance and parked in Assets. It becomes used-up only when its month arrives &mdash; the pure-time case, waiting.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init — the graduated workbook, open on the Expenses tab ===== */
+window.devFill = function(){ step=3; mcqSel=2; mcqSubmitted=true; BRW.tab('wb','expenses'); renderTalk(); };
+BR_WB.registerSeasonSheets();
+BRW.mount('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true }));
+BRW.tab('wb', 'expenses');
+renderTalk();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

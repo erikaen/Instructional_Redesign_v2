@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 1 — Sort Your Things</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <div class="narrative-block">
+      <p>Your items are in two places: the <strong>rented space</strong> where you do your repair work, and your <strong>home</strong>. You open a spreadsheet and start with a tab called <strong>Things</strong>.</p>
+      <p class="scenario-card-text">Tap or drag into the <strong>Things</strong> tab only the items that belong with <em>the repair work</em>. Leave everything else where it is. Select <i data-lucide="info" class="licon"></i> if you&rsquo;re not sure what an item is.</p>
+    </div>
+    <div class="loc-stack">
+      <div class="loc-panel"><div class="loc-panel-label">At the rented space</div><div id="locSpace" class="loc-cols"></div></div>
+      <div class="loc-panel"><div class="loc-panel-label">At home</div><div id="locHome" class="loc-cols"></div></div>
+    </div>
+    <div class="xlsx" id="xlsx" ondragover="event.preventDefault(); this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="onDropBox(event)">
+      <div class="xlsx-titlebar"><span><i data-lucide="file-spreadsheet" class="licon"></i> Bike-Repair.xlsx</span></div>
+      <div class="xlsx-grid" id="xlsxGrid"></div>
+      <div class="xlsx-tabs"><div class="xlsx-tab">Things</div><div class="xlsx-tab-add"><i data-lucide="plus" class="licon"></i></div></div>
+    </div>
+    <div id="sortLive">
+      <div class="sort-msg" id="sortMsg"></div>
+      <div class="btn-row" style="justify-content: space-between;">
+        <button class="btn-continue" id="sortAction" onclick="doTheRest()" disabled>Sort the rest &rarr;</button>
+        <button class="btn-reset" id="sortReset" onclick="restart()" style="display:none;">Reset</button>
+      </div>
+    </div>
+    <div id="sortDoneBlock" hidden>
+      <div class="btn-row"><button class="btn-reset" onclick="sortBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>
+      <div class="insight-box">
+        <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i>Look at what you just did</div>
+        <p>You pulled things into that box from <em>both</em> places. The laptop and the desk came from <strong>home</strong> &mdash; and neither one repairs anything &mdash; while your own commuter bike stayed out even though it was in the space. So the box isn&rsquo;t &ldquo;stuff in the space,&rdquo; and it isn&rsquo;t &ldquo;tools.&rdquo; It&rsquo;s something else. The next question names it.</p>
+      </div>
+      <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 2;
+var PHASE_TITLE = '';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac() { if (!audioCtx) { try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e){} } return audioCtx; }
+function tone(f, d, t, v) { var c = ac(); if(!c) return; var o = c.createOscillator(), g = c.createGain(); o.type = t||'sine'; o.frequency.value = f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05, c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, c.currentTime + d); o.start(); o.stop(c.currentTime + d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){ tone(784,0.16); },110); }
+function playPlace(){ tone(440,0.06,'sine',0.04); }
+
+/* ===== data ===== */
+var rentedSpaceItems = [
+  { id:'stand', text:'Park Tool repair stand', zone:'shop', info:'Anchored to the workbench. Every repair starts here.' },
+  { id:'compressor', text:'Air compressor', zone:'shop', info:'In the back corner. Runs the impact tools and seats tires.' },
+  { id:'washer', text:'Parts washer', zone:'shop', info:'By the back door. A solvent bath for greasy parts.' },
+  { id:'truing', text:'Wheel-truing stand', zone:'shop', info:'On a side bench. Holds a wheel so you can tweak the spokes true.' },
+  { id:'grinder', text:'Bench grinder', zone:'shop', info:'On a side bench. For sharpening and small metal work.' },
+  { id:'headset', text:'Headset press', zone:'shop', info:'On the workbench. For pressing in bearing cups.' },
+  { id:'vacuum', text:'Shop vacuum', zone:'shop', info:'Under the bench. For metal shavings and shop dust.' },
+  { id:'conewr', text:'Cone wrench set', zone:'shop', info:'On the pegboard. For hub cones.' },
+  { id:'torque', text:'Torque wrench', zone:'shop', info:'In the tool drawer. For careful bolt tightening.' },
+  { id:'hexset', text:'Hex / Allen key set', zone:'shop', info:'In the tool drawer. For pretty much every bike bolt.' },
+  { id:'cutters', text:'Cable cutters', zone:'shop', info:'On the pegboard. For trimming brake and shift cables.' },
+  { id:'breaker', text:'Chain breaker', zone:'shop', info:'In the tool drawer. For installing and removing chains.' },
+  { id:'levers', text:'Tire levers', zone:'shop', info:'In the tool drawer. For prying tires off rims.' },
+  { id:'shelves', text:'Shelving units', zone:'shop', info:'Along the back wall. Holds the parts stock.' },
+  { id:'display', text:'Display rack', zone:'shop', info:'By the front door. Tubes and small items.' },
+  { id:'pegboard', text:'Pegboard + hooks', zone:'shop', info:'Over the workbench. Keeps the hand tools in reach.' },
+  { id:'chains', text:'Box of chains', zone:'shop', info:'On the supply shelf. Various speeds.' },
+  { id:'pads', text:'Box of brake pads', zone:'shop', info:'On the supply shelf. Rim and disc.' },
+  { id:'cassettes', text:'Cassettes', zone:'shop', info:'On the supply shelf. A few common ratios.' },
+  { id:'bbs', text:'Bottom brackets', zone:'shop', info:'On the supply shelf. Assorted sizes.' },
+  { id:'spokes', text:'Spokes', zone:'shop', info:'In a bin by the truing stand.' },
+  { id:'tubes', text:'Tubes', zone:'shop', info:'On the supply shelf. The thing everyone needs.' },
+  { id:'guitar', text:'Acoustic guitar', zone:'personal', info:'In the corner by the door. You play when things are slow.' },
+  { id:'photos', text:'Family photos', zone:'personal', info:'Taped over the workbench. From the kid’s birthday.' },
+  { id:'commuter', text:'Your commuter bike', zone:'personal', info:'Your own daily ride is up on the stand for a rear-wheel fix.' }
+];
+var homeItems = [
+  { id:'couch', text:'Couch', zone:'personal', info:'In the living room. Where you collapse at night.' },
+  { id:'coffee', text:'Coffee maker', zone:'personal', info:'On the kitchen counter.' },
+  { id:'tv', text:'TV', zone:'personal', info:'In the living room. For unwinding.' },
+  { id:'books', text:'Books on the shelf', zone:'personal', info:'All novels.' },
+  { id:'desk', text:'Desk', zone:'shop', intruder:true, info:'In the corner of the living room where you sit with the laptop to order parts and total up the month.' },
+  { id:'laptop', text:'Laptop', zone:'shop', intruder:true, info:'On the desk. You order parts, look up manuals, and schedule repairs on it.' },
+  { id:'cables', text:'Box of derailleur cables', zone:'shop', intruder:true, info:'In the entryway. UPS dropped them here instead of at the space.' }
+];
+var allItems = rentedSpaceItems.map(function(i){ return Object.assign({loc:'space'}, i); })
+  .concat(homeItems.map(function(i){ return Object.assign({loc:'home'}, i); }));
+function findItem(id){ return allItems.find(function(i){ return i.id === id; }); }
+var shopIds = allItems.filter(function(i){ return i.zone === 'shop'; }).map(function(i){ return i.id; });
+var homeIntruderIds = homeItems.filter(function(i){ return i.intruder; }).map(function(i){ return i.id; });
+
+/* ===== state ===== */
+var placed = {};
+var sortDone = false;
+var expandedId = null;
+var placedSnapshot = null;
+
+/* ===== sort ===== */
+function renderItemChip(item) {
+  return '<div class="item-chip hoverinfo">' +
+    '<div class="item-chip-row" draggable="' + (!sortDone) + '" ondragstart="onDragStart(event,\'' + item.id + '\')" ondragend="this.classList.remove(\'dragging\')">' +
+      '<button class="item-chip-name" onclick="placeItem(\'' + item.id + '\')" title="Add to the repair-work box">' + item.text + '</button>' +
+      '<button class="item-chip-info-btn" type="button" title="What is this?" aria-label="More info"><i data-lucide="info" class="licon"></i></button>' +
+    '</div>' +
+    '<div class="item-chip-info">' + item.info + '</div></div>';
+}
+function renderPanel(elId, items) {
+  var remaining = items.filter(function(i){ return !placed[i.id]; });
+  var html = remaining.length ? remaining.map(renderItemChip).join('') : '<div class="loc-empty">(nothing left here)</div>';
+  document.getElementById(elId).innerHTML = html;
+}
+function renderXlsx() {
+  var ids = Object.keys(placed);
+  var rows = '<div class="xlsx-row"><div class="xlsx-corner"></div><div class="xlsx-colhead">Things related to your repair work</div></div>';
+  var n = Math.max(6, ids.length + 1);
+  for (var r = 0; r < n; r++) {
+    var id = ids[r];
+    var item = id ? findItem(id) : null;
+    var cell = item
+      ? '<span>' + item.text + '</span>' + (!sortDone ? '<button class="xlsx-cell-remove" onclick="removeItem(\'' + id + '\')" aria-label="Remove ' + item.text + '">&times;</button>' : '')
+      : '&nbsp;';
+    rows += '<div class="xlsx-row"><div class="xlsx-rownum">' + (r + 1) + '</div><div class="xlsx-cell">' + cell + '</div></div>';
+  }
+  document.getElementById('xlsxGrid').innerHTML = rows;
+}
+function renderSort() {
+  renderPanel('locSpace', rentedSpaceItems);
+  renderPanel('locHome', homeItems);
+  renderXlsx();
+  updateSortFeedback();
+  if (window.lucide) lucide.createIcons();
+}
+function placeItem(id) { if (sortDone) return; playPlace(); placed[id] = true; renderSort(); }
+function removeItem(id) { if (sortDone) return; playPlace(); delete placed[id]; renderSort(); }
+function onDragStart(e, id) { if (sortDone) return; e.dataTransfer.setData('text/plain', id); e.currentTarget.classList.add('dragging'); }
+function onDropBox(e) {
+  e.preventDefault();
+  document.getElementById('xlsx').classList.remove('drag-over');
+  var id = e.dataTransfer.getData('text/plain');
+  if (id) placeItem(id);
+}
+function updateSortFeedback() {
+  var ids = Object.keys(placed);
+  var personalInBox = ids.filter(function(id){ return findItem(id).zone === 'personal'; });
+  var placedShopCount = shopIds.filter(function(id){ return placed[id]; }).length;
+  var intrudersFound = homeIntruderIds.filter(function(id){ return placed[id]; }).length;
+  var ready = personalInBox.length === 0 && intrudersFound >= 2 && placedShopCount >= 5;
+
+  var msg = document.getElementById('sortMsg');
+  var tone = 'info', text = '';
+  if (personalInBox.length) { tone = 'warn'; text = '<i data-lucide="alert-triangle" class="licon"></i> “' + findItem(personalInBox[0]).text + '” is in the tab, but it’s yours. Not part of the repair work. Take it back out.'; }
+  else if (placedShopCount < 5) { text = 'Keep going. Move the repair-related items into the tab.'; }
+  else if (intrudersFound < 2) { text = 'Some of the repair work is hiding at home, not in the space. (What about the laptop?)'; }
+  else { tone = 'ok'; text = '<i data-lucide="check" class="licon"></i> You’ve got the idea! You found the work-stuff at home and left your own things out. “Sort the rest” will file the remaining repair things for you.'; }
+  msg.className = 'sort-msg' + (tone === 'warn' ? ' warn' : tone === 'ok' ? ' ok' : '');
+  msg.innerHTML = text;
+
+  var btn = document.getElementById('sortAction');
+  btn.disabled = !ready;
+  btn.textContent = shopIds.some(function(id){ return !placed[id]; }) ? 'Sort the rest →' : 'Done →';
+  var rst = document.getElementById('sortReset');
+  if (rst) rst.style.display = ready ? '' : 'none';
+}
+function doTheRest() {
+  if (sortDone) return;
+  placedSnapshot = Object.assign({}, placed);
+  shopIds.forEach(function(id){ placed[id] = true; });
+  sortDone = true;
+  playSuccess();
+  renderSort();
+  document.getElementById('sortLive').hidden = true;
+  document.getElementById('sortDoneBlock').hidden = false;
+}
+function sortBack() {
+  placed = placedSnapshot ? Object.assign({}, placedSnapshot) : {};
+  sortDone = false;
+  document.getElementById('sortDoneBlock').hidden = true;
+  document.getElementById('sortLive').hidden = false;
+  renderSort();
+  window.scrollTo(0, 0);
+}
+
+/* ===== restart ===== */
+function restart() {
+  placed = {}; sortDone = false; expandedId = null;
+  document.getElementById('sortLive').hidden = false;
+  document.getElementById('sortDoneBlock').hidden = true;
+  renderSort();
+  window.scrollTo(0, 0);
+}
+
+/* ===== glossary ===== */
+function openGlossary(){ m1GlossaryOpen('11-3'); }
+function closeGlossary(){ m1GlossaryClose(); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+renderSort();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

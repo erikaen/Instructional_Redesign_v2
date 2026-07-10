@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3: The Rules and the Two Signatures &middot; Complete</title>
+  <title>Activity 2.3: The Rules &middot; Complete</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
 </head>
 <body>
 <div class="page">
-  <div class="prework-wrap m2-roomy">
+  <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 3: The Rules and the Two Signatures</h1>
+        <h1>Activity 2.3: The Rules</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 6 of 6</p>
       </div>
       <div class="tut-header-actions">
@@ -30,25 +30,28 @@
     <div class="phase active" id="phase-complete">
       <div class="complete-head">
         <div class="trophy-badge"><i data-lucide="key-round"></i></div>
-        <div class="complete-title">Rules, Roles, and a Formal Starting Point</div>
+        <div class="complete-title">Accounting-entity &ne; legal-entity</div>
       </div>
       <div class="section-card">
-        <div class="card-title">What You Discovered</div>
+        <div class="card-title">What You Worked Out</div>
         <ul class="bullet-list check">
-          <li>You reviewed an Operating Agreement and then generated one for your own LLC.</li>
-          <li>The agreement named the Sole Member and gave the LLC rules for operating.</li>
-          <li>You signed twice: once for the Company and once as yourself. The same person can act in two different roles.</li>
-          <li>The existing repair business was contributed into the Company at its existing book amounts. The LLC starts with Member&rsquo;s Capital of $1,960.</li>
-          <li>Limited liability changes legal exposure: the Company&rsquo;s obligations do not automatically become your personal obligations just because you are the Sole Member.</li>
+          <li>You wrote your own Operating Agreement &mdash; City Cycle&rsquo;s (the one Anna set up) was only an example.</li>
+          <li>It stays a <strong>draft</strong> for now &mdash; Schedule A attests to what&rsquo;s contributed, and the contributing isn&rsquo;t finished. You complete the schedule, then sign, at the end of the module.</li>
+          <li>The whole business was contributed in at book carryover &mdash; not one number changed; &ldquo;the difference&rdquo; became Members&rsquo; Capital (Contributed $990 + Generated $170 = $1,160).</li>
+          <li>Limited liability put a wall between the Company&rsquo;s debts and your personal life &mdash; who can be pursued, not what the records show.</li>
+          <li>And the keystone: the accounting entity (since 1.1) is not the legal entity (days old). A legal body was wrapped around a boundary that already existed.</li>
         </ul>
       </div>
       <div class="insight-box">
-        <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The Deeper Point</div>
-        <p>The Operating Agreement did not create new values. It organized the legal structure around the business: who owns it, who can act for it, what was contributed, and what limited liability means.<br><br><strong>From here, the LLC has a clean formal starting point</strong>. The next step is to make that separation visible to the outside world with the LLC&rsquo;s own number, bank account, and card.</p>
+        <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
+        <p>The same machine runs all the way up. A giant company draws <strong>one</strong> accounting boundary around <strong>dozens</strong> of separate legal companies; you drew one around an operation that, for now, has a single legal body younger than itself. The accounting line and the legal line are <strong>different lines, drawn for different reasons</strong> &mdash; and they rarely coincide.</p>
       </div>
       <div class="next-card">
-        <div class="next-card-label">Coming Next</div>
-        <p>The LLC now needs its own identity in the outside world: an EIN, its own bank account, and its own card. That is how the separation becomes easier to maintain in practice.</p>
+        <div class="next-card-label">Coming Next &mdash; 2.4: The Entity&rsquo;s Own Number, and Stopping the Co-mingling</div>
+        <p>The Company needs its own identity to the outside world &mdash; an EIN, its own bank account and card. The separation you&rsquo;ve drawn by hand since 1.1 finally goes institutional &mdash; and with the cash in and the card moved, you&rsquo;ll complete Schedule A from the Company&rsquo;s books, and sign.</p>
+      </div>
+      <div class="btn-row">
+        <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Reset this phase</button>
       </div>
     </div>
 
@@ -81,7 +84,7 @@ var glossaryTerms = [
   { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
   { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
   { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
-  { term:"Members&rsquo; capital / Members&rsquo; equity", def:"The LLC&rsquo;s name for the residual A &minus; L. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($1,790) and the retained slice ($170) are kept separate." },
+  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the generated slice ($170) are kept separate." },
   { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
   { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
 ];
@@ -99,5 +102,6 @@ function restart(){ window.location.reload(); }
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 </script>
+  <script src="dev.js"></script>
 </body>
 </html>

@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3: The Rules and the Two Signatures &middot; When Did It Become Real?</title>
+  <title>Activity 2.3: The Rules &middot; When Did It Become Real?</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
 </head>
 <body>
 <div class="page">
-  <div class="prework-wrap m2-roomy">
+  <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 3: The Rules and the Two Signatures</h1>
+        <h1>Activity 2.3: The Rules</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 5 of 6</p>
       </div>
       <div class="tut-header-actions">
@@ -29,20 +29,10 @@
     <!-- ===== keystone ===== -->
     <div class="phase active" id="phase-keystone">
       <div class="narrative-block">
-        <p>You have now seen the key pieces of the Operating Agreement: who the Sole Member is, what the Sole Member contributes, and what limited liability changes.</p>
-        <p style="margin-top:8px;font-weight:600;color:var(--primary)">So what did this agreement actually do?</p>
+        <p>A legal body. Rules. Your business inside it. A wall. It really feels like the repair work <em>became real</em> today. So, a question worth sitting with:</p>
+        <p style="margin-top:8px;font-weight:600;color:var(--primary)">When did this entity actually become real?</p>
       </div>
-      <div class="mc-card">
-        <div class="mc-q">What did the Operating Agreement and contribution mainly do?</div>
-        <div class="mc-opts" id="ksOpts"></div>
-        <div class="feedback" id="ksFeedback"></div>
-        <div class="btn-row" id="ksSubmitRow"><button class="btn-continue" id="ksSubmit" onclick="submitKeystone()" disabled>Submit</button></div>
-      </div>
-      <div id="ksDone" hidden>
-        <div class="insight-box"><div class="insight-label"><i data-lucide="key-round" class="licon"></i> What the Agreement Did</div>
-          <p>The Operating Agreement did not create new values. It organized the LLC: who owns it, who can act for it, what was contributed, and what limited liability means. The existing bike repair business is now shown as contributed to the Company at its existing book amounts. <strong>From here, the LLC has a clean formal starting point for its own records going forward.</strong></p></div>
-        <button class="btn-continue btn-block" onclick="nav('23-6-complete.html')">Continue &rarr;</button>
-      </div>
+      <div id="keystoneArea"></div>
     </div>
 
   </div>
@@ -76,7 +66,7 @@ var glossaryTerms = [
   { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
   { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
   { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
-  { term:"Members&rsquo; capital / Members&rsquo; equity", def:"The LLC&rsquo;s name for the residual A &minus; L. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($1,790) and the retained slice ($170) are kept separate." },
+  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the generated slice ($170) are kept separate." },
   { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
   { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
 ];
@@ -93,53 +83,47 @@ function nav(url){ playClick(); window.location.href = url; }
 function restart(){ window.location.reload(); }
 
 /* ===== state (phase-local) ===== */
-var ksOptions = [
-  { id:'a', text:'They changed the recorded amounts for assets and liabilities.', fb:'Not quite. The assets and liabilities were carried in at existing book amounts. The numbers were not revalued.' },
-  { id:'b', text:'They gave the LLC rules and showed the existing business as contributed to the Company.', fb:'Correct. The agreement gives the LLC rules, and the existing business is shown as contributed to the Company at its existing book amounts.' },
-  { id:'c', text:'They erased the repair work&rsquo;s earlier records and started everything from zero.', fb:'Not quite. The LLC has a new formal starting point, but it does not start from nothing. The existing repair business is brought into the Company at the same recorded amounts.' }
-];
-var KS_CORRECT = 'b';
-var ksSel = null, ksSubmitted = false;
+var keystonePick = null;
 
-/* ===== keystone MCQ (shared .mc-card component; submit + retry until correct) ===== */
+/* ===== keystone: the question ===== */
 function renderKeystone(){
-  document.getElementById('ksOpts').innerHTML = ksOptions.map(function(o){
-    return '<div class="mc-opt" data-id="'+o.id+'" onclick="selectKeystone(\''+o.id+'\')"><div class="mc-letter">'+o.id.toUpperCase()+'</div><div>'+o.text+'</div></div>';
-  }).join('');
-}
-function selectKeystone(id){
-  if(ksSubmitted) return;
-  ksSel = id;
-  document.querySelectorAll('#ksOpts .mc-opt').forEach(function(el){
-    el.classList.toggle('selected', el.getAttribute('data-id')===id);
-    el.classList.remove('wrong');
+  var area = document.getElementById('keystoneArea');
+  var right = keystonePick==='1.1';
+  var opts = [
+    ['cert','When you filed the Certificate (2.2)',
+      'Not quite &mdash; that&rsquo;s the day it became a <em>legal</em> entity. But was that when it became real? Try again.'],
+    ['oa','When the Operating Agreement gets signed',
+      'No &mdash; the agreement is the Company&rsquo;s internal rulebook. It <em>governs</em> the entity; it doesn&rsquo;t create it. Legal existence came with the Certificate (2.2) &mdash; and the signing hasn&rsquo;t even happened yet. Try again.'],
+    ['1.1','Back in 1.1 &mdash; when you first drew the line in your books','']
+  ];
+  var html = '<div style="display:flex;flex-direction:column;gap:10px">';
+  opts.forEach(function(o){
+    var id=o[0], label=o[1], fb=o[2];
+    var picked = keystonePick===id;
+    var isRight = id==='1.1';
+    var show = keystonePick!==null;
+    var st = 'background:var(--primary-faint);border:2px solid var(--border-strong)';
+    if(show && picked){ st = isRight ? 'background:var(--success-bg);border:2px solid var(--success-border)' : 'background:var(--error-bg);border:2px solid var(--error-border)'; }
+    html += '<button onclick="pickKeystone(\''+id+'\')"'+(right?' disabled':'')+' style="text-align:left;border-radius:10px;padding:12px;cursor:pointer;font-family:inherit;font-size:var(--font-m);color:inherit;'+st+'">'+label;
+    if(show && picked && !isRight){ html += '<span style="display:block;font-size:var(--font-xs);margin-top:4px;color:var(--error-text)">'+fb+'</span>'; }
+    html += '</button>';
   });
-  document.getElementById('ksSubmit').disabled = false;
-  document.getElementById('ksFeedback').classList.remove('show');
-}
-function submitKeystone(){
-  if(ksSel===null || ksSubmitted) return;
-  var fb = document.getElementById('ksFeedback');
-  var opt = ksOptions.filter(function(o){ return o.id===ksSel; })[0];
-  if(ksSel===KS_CORRECT){
-    playSuccess();
-    ksSubmitted = true;
-    document.querySelectorAll('#ksOpts .mc-opt').forEach(function(el){
-      if(el.getAttribute('data-id')===KS_CORRECT) el.classList.add('correct');
-      el.classList.add('locked');
-    });
-    fb.className = 'feedback ok show';
-    fb.innerHTML = opt.fb;
-    document.getElementById('ksSubmitRow').hidden = true;
-    document.getElementById('ksDone').hidden = false;
-    if(window.lucide) lucide.createIcons();
-  } else {
-    playNope();
-    var wrongEl = document.querySelector('#ksOpts .mc-opt[data-id="'+ksSel+'"]');
-    if(wrongEl) wrongEl.classList.add('wrong');
-    fb.className = 'feedback err show';
-    fb.innerHTML = opt.fb;
+  html += '</div>';
+  if(right){
+    html += '<div class="callout" style="margin-top:14px">Right. The <strong>Certificate</strong> gave the operation a legal body, and the agreement you drafted today will govern it &mdash; but <strong>neither created the entity</strong>. You&rsquo;ve kept these books, this boundary, since <strong>1.1</strong>. The <strong>accounting</strong> line came first &mdash; by months, and in a real firm, by years.</div>';
+    html += '<div class="insight-box"><div class="insight-label"><i data-lucide="key-round" class="licon"></i> The keystone</div>'+
+      '<p style="font-size:var(--font-lg);font-weight:700;color:var(--primary);margin-bottom:6px">Accounting&#8209;entity &ne; legal&#8209;entity.</p>'+
+      '<p>The accounting entity is a boundary you drew <em>for information</em> &mdash; it can exist with or without any legal body, and here it came first. The LLC is a legal wrapper placed around it. Getting an LLC didn&rsquo;t make the entity &ldquo;finally real&rdquo;; it was a real <em>accounting</em> entity all along.</p></div>';
+    html += '<button class="btn-continue btn-block" onclick="nav(\'23-6-complete.html\')">Finish up &rarr;</button>';
   }
+  area.innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function pickKeystone(id){
+  if(keystonePick==='1.1') return;
+  keystonePick = id;
+  if(id==='1.1') playSuccess(); else playNope();
+  renderKeystone();
 }
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
@@ -147,5 +131,6 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlos
 /* ===== init ===== */
 renderKeystone();
 </script>
+  <script src="dev.js"></script>
 </body>
 </html>

@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 4: The Entity's Own Number &middot; Form SS-4</title>
+  <title>Activity 2.4: The Entity's Own Number &middot; Form SS-4</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
 </head>
 <body>
 <div class="page">
-  <div class="prework-wrap m2-roomy">
+  <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 4: The Entity&rsquo;s Own Number</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 2 of 5</p>
+        <h1>Activity 2.4: The Entity&rsquo;s Own Number</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 2 of 6</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -45,6 +45,14 @@
   </div>
 </div>
 
+<!-- ===== Source-document viewer overlay ===== -->
+<div class="doc-overlay" id="docOverlay" style="align-items:flex-start" onclick="if(event.target===this) closeDoc()">
+  <div class="doc-modal" id="docModal" style="max-width:640px;margin:32px auto">
+    <button class="doc-close" aria-label="Close" onclick="closeDoc()">&times;</button>
+    <div id="docBody"></div>
+  </div>
+</div>
+
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -60,7 +68,7 @@ function playStamp(){ tone(180,0.25,'triangle',0.3); }
 var glossaryTerms = [
   { term:"EIN", def:"Employer Identification Number &mdash; the entity&rsquo;s own tax ID with the IRS, like a Social Security number for a business. The bank needs it to open an account in the LLC&rsquo;s name." },
   { term:"Co-mingling", def:"Running business and personal money through the same account, so they have to be sorted apart by hand. Opening the LLC&rsquo;s own account ends it." },
-  { term:"Capital contribution", def:"Money (or property) an owner puts into the company. Your $500 in cash is one: it raises the LLC&rsquo;s cash and its members&rsquo; capital by $500." },
+  { term:"Capital contribution", def:"Money (or property) an owner puts into the company. Your $1,300 in cash is one: it raises the LLC&rsquo;s cash and its members&rsquo; capital by $1,300." },
   { term:"Disregarded entity", def:"For federal income tax, a single-member LLC is &ldquo;looked through&rdquo; to its owner &mdash; even though it holds its own EIN for every other purpose. Different lines drawn for different purposes." },
   { term:"Counterparty", def:"The other party to a transaction or contract. With its own EIN and accounts, the LLC is a counterparty in its own right &mdash; it deals with banks, customers, and the IRS in its own name, and can owe and be owed (even sue and be sued) as itself, not as you." }
 ];
@@ -84,6 +92,7 @@ function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
 
 /* ===== state (phase-local) ===== */
 var einFiled = false;
+var docView = null;
 
 /* ===== Form SS-4 ===== */
 function ss4Lines(){
@@ -106,34 +115,143 @@ function ss4RowsHtml(){
 }
 function ss4Form(stamped){
   var stamp = stamped ? '<div style="position:absolute;top:16px;right:16px;border:3px solid #15803d;color:#15803d;border-radius:8px;padding:3px 10px;font-weight:800;font-size:12px;letter-spacing:0.04em;transform:rotate(-8deg)">EIN&nbsp;88-3729104</div>' : '';
-  return '<div class="doc-modal" style="margin:0 auto 20px;font-family:Inter,sans-serif">'+stamp+
+  return '<div class="doc-modal" style="margin:0 auto 14px;font-family:Inter,sans-serif">'+stamp+
     '<div style="display:flex;align-items:flex-end;justify-content:space-between;border-bottom:2px solid #374151;padding-bottom:6px;margin-bottom:10px">'+
       '<div><span style="font-size:11px;color:#6b6b6b">Form</span><div style="font-size:26px;font-weight:800;color:#374151;line-height:1">SS-4</div></div>'+
       '<div style="font-size:13px;font-weight:700;color:#374151;text-align:right">Application for Employer<br>Identification Number</div>'+
     '</div>'+
     '<div style="font-size:13px;border-top:1px solid #d8d8d8">'+ss4RowsHtml()+'</div></div>';
 }
+function ss4DocInner(){
+  return '<div style="font-family:Georgia,\'Times New Roman\',serif">'+
+    '<div style="text-align:center;font-weight:700;font-size:15px;color:#374151">FORM SS-4 &mdash; APPLICATION FOR EIN</div>'+
+    '<div style="text-align:center;font-size:12px;color:#6b6b6b;margin-bottom:12px">Filed June 1, 2026 &middot; EIN 88-3729104</div>'+
+    '<div style="border-top:1px solid #d8d8d8">'+ss4RowsHtml()+'</div></div>';
+}
+
+/* ===== statement facsimiles (for the viewer) ===== */
+function stmtInner(cfg){
+  var who = cfg.who.map(function(l){ return '<div style="font-size:11px;color:#6b6b6b">'+l+'</div>'; }).join('');
+  var box = cfg.box.map(function(b){ return '<div>'+b+'</div>'; }).join('');
+  var head = cfg.head.map(function(h,i){ return '<th style="text-align:'+(i<=1?'left':'right')+';padding:4px 6px;color:#6b6b6b;font-weight:600">'+h+'</th>'; }).join('');
+  var rows = cfg.rows.map(function(r){
+    var tds = r.cells.map(function(c,ci){
+      var v = (c && c.v!==undefined) ? c.v : c;
+      var tone = c && c.tone;
+      var col = tone==='pos' ? '#15803d' : (tone==='neg' ? '#b91c1c' : '#374151');
+      var cls = (ci===0 || ci>1) ? 'mono' : '';
+      return '<td class="'+cls+'" style="text-align:'+(ci<=1?'left':'right')+';padding:4px 6px;color:'+col+'">'+v+'</td>';
+    }).join('');
+    var trStyle = 'border-bottom:1px solid #d8d8d8;'+(r.total?'font-weight:700;border-top:2px solid #374151':'');
+    return '<tr style="'+trStyle+'">'+tds+'</tr>';
+  }).join('');
+  var note = cfg.note ? '<div style="margin-top:12px;border-radius:8px;padding:10px 12px;background:#f6f6f4;border:1px dashed #d8d8d8;font-size:12px;color:#444">'+cfg.note+'</div>' : '';
+  return '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">'+
+    '<div style="font-weight:700;font-size:15px;margin-bottom:8px">'+cfg.heading+'</div>'+
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:8px">'+
+      '<div><div style="font-size:16px;font-weight:700;color:var(--primary)">'+cfg.bank+'</div>'+who+'</div>'+
+      '<div style="border:1px solid #d8d8d8;border-radius:6px;padding:6px 10px;font-size:12px">'+box+'</div>'+
+    '</div>'+
+    '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px"><tbody>'+
+      '<tr style="border-bottom:1px solid #d8d8d8">'+head+'</tr>'+rows+
+    '</tbody></table></div>'+note+'</div>';
+}
+function stmtConfigs(en){
+  return {
+    ss4:null,
+    llcbank:{ heading:"Bank Statement #1 &mdash; the entity&rsquo;s own account", bank:"Elm City Bank",
+      who:[ en+" &middot; Business checking &middot; &bull;&bull;&bull;&bull; 2050", "EIN 88-3729104" ],
+      box:["Period: June 1&ndash;30, 2026","Beginning: $0.00","Ending: $1,300.00"],
+      head:["Date","Description","Dep.","W/d","Balance"],
+      rows:[ { cells:["06/01","Account opened","&mdash;","&mdash;","0.00"] },
+        { cells:["06/01","Opening deposit &mdash; member capital contribution",{v:"1,300.00",tone:"pos"},"&mdash;","1,300.00"] },
+        { cells:["","Ending balance","1,300.00","&mdash;","1,300.00"], total:true } ],
+      note:"The entity&rsquo;s first bank account &mdash; its <em>own</em> name and EIN. The <strong>$1,300 opening deposit is your capital contribution</strong> (Cash 0&rarr;1,300; members&rsquo; capital +1,300). The business&rsquo;s money runs through this account now." },
+    llccard:{ heading:"Card Statement #1 &mdash; the entity&rsquo;s own card", bank:"Harborline Visa",
+      who:[ en+" &middot; Business card &middot; &bull;&bull;&bull;&bull; 4180" ],
+      box:["Period: June 1&ndash;30, 2026","Previous: $0.00","New balance: $2,030.00"],
+      head:["Date","Description","Amount"],
+      rows:[ { cells:["06/01","Balance transfer &mdash; business charges from personal card (&bull;&bull;&bull;&bull; 3902)","2,030.00"] },
+        { cells:["","New balance","2,030.00"], total:true } ],
+      note:"The business charges that rode your personal card, now on the LLC&rsquo;s <em>own</em> card. The <strong>$2,030 was transferred over</strong> &mdash; the same balance the LLC assumed at formation, now in the Company&rsquo;s name. The $230 personal portion stayed on your card." },
+    perbank:{ heading:"Personal checking &mdash; after the split", bank:"Elm City Bank",
+      who:[ "Personal checking &middot; &bull;&bull;&bull;&bull; 8814" ],
+      box:["Period: June 1&ndash;30, 2026","Beginning: $4,074.00","Ending: $2,774.00"],
+      head:["Date","Description","Dep.","W/d","Balance"],
+      rows:[ { cells:["06/01","Transfer to "+en+" &mdash; business account","&mdash;",{v:"1,300.00",tone:"neg"},"2,774.00"] },
+        { cells:["","Ending balance","&mdash;","1,300.00","2,774.00"], total:true } ],
+      note:"Your personal checking, after the split &mdash; the <strong>$1,300 you moved out seeded the LLC&rsquo;s account</strong>. Personal only from here." },
+    percard:{ heading:"Personal card &mdash; after the split", bank:"Harborline Visa",
+      who:[ "Personal card &middot; &bull;&bull;&bull;&bull; 3902" ],
+      box:["Period: June 1&ndash;30, 2026","Previous: $2,260.00","New balance: $230.00"],
+      head:["Date","Description","Amount"],
+      rows:[ { cells:["06/01","Balance transfer &mdash; business charges to "+en+" card",{v:"(2,030.00)",tone:"neg"}] },
+        { cells:["","New balance (personal)","230.00"], total:true } ],
+      note:"Your personal card, after the split. The <strong>$2,030 business charges moved to the LLC card</strong>; the <strong>$230</strong> left was always personal. <strong>Co-mingling, ended.</strong>" }
+  };
+}
+
+/* ===== source-document viewer ===== */
+function getAcctDocs(en){
+  return [
+    { id:'ss4',     label:'Form SS-4 &mdash; EIN application',            sub: en },
+    { id:'llcbank', label:'Bank statement #1 &mdash; the LLC&rsquo;s checking', sub:'opening deposit $1,300' },
+    { id:'llccard', label:'Card statement #1 &mdash; the LLC&rsquo;s card',     sub:'balance $2,030' },
+    { id:'perbank', label:'Personal checking &mdash; after the split',     sub:'ending $2,774' },
+    { id:'percard', label:'Personal card &mdash; after the split',         sub:'balance $230' }
+  ];
+}
+function docsButton(){
+  return '<button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary);margin-top:12px" onclick="openDocs()"><i data-lucide="file-text" class="licon"></i> Source documents</button>';
+}
+function openDocs(){ docView='list'; renderDocBody(); document.getElementById('docOverlay').classList.add('open'); if(window.lucide) lucide.createIcons(); }
+function selectDoc(id){ docView=id; renderDocBody(); }
+function backDocs(){ docView='list'; renderDocBody(); }
+function closeDoc(){ docView=null; document.getElementById('docOverlay').classList.remove('open'); }
+function renderDocBody(){
+  var en = esc(llcName());
+  var body;
+  if(docView==='list'){
+    var items = getAcctDocs(en).map(function(d){
+      return '<button onclick="selectDoc(\''+d.id+'\')" style="display:block;width:100%;text-align:left;border:1px solid var(--border-strong);background:var(--primary-faint);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;font-family:inherit;color:inherit">'+
+        '<div style="font-weight:600;color:var(--primary)">'+d.label+'</div>'+
+        '<div style="font-size:var(--font-xs);opacity:0.7">'+d.sub+'</div></button>';
+    }).join('');
+    body = '<div style="font-weight:700;color:var(--primary);margin-bottom:12px;font-family:Inter,sans-serif"><i data-lucide="file-text" class="licon"></i> Source documents</div>'+items;
+  } else {
+    var cur = getAcctDocs(en).find(function(d){ return d.id===docView; });
+    var doc = (docView==='ss4') ? ss4DocInner() : stmtInner(stmtConfigs(en)[docView]);
+    body = '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px"><button onclick="backDocs()" style="border:0;background:transparent;color:var(--primary);cursor:pointer;font-family:inherit;font-size:var(--font-s)">&larr; Documents</button>'+
+      '<span style="font-weight:700;color:var(--primary);font-family:Inter,sans-serif">'+(cur?cur.label:'')+'</span></div>'+doc;
+  }
+  document.getElementById('docBody').innerHTML = body;
+  if(window.lucide) lucide.createIcons();
+}
+
 /* ===== ein phase ===== */
 function renderEin(){
-  var html = '<div class="narrative-block"><p>To get the EIN, you file one IRS form: <strong>Form SS-4</strong>. Review it, then file.</p></div>';
+  var html = '<p style="font-size:var(--font-s);margin-bottom:12px">To get the EIN, you file one IRS form &mdash; <strong>Form SS-4</strong>. Review it, then file.</p>';
   html += ss4Form(einFiled);
   if(!einFiled){
-    html += '<button class="btn-continue btn-block" onclick="fileEin()">File Form SS-4 with the IRS</button>';
+    html += '<button class="btn-continue btn-block" onclick="fileEin()">File Form SS-4 with the IRS &rarr;</button>';
   } else {
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="badge-check" class="licon"></i> EIN issued</div>'+
-      '<p>The IRS issues an EIN for '+esc(llcName())+': <span class="mono">EIN 88-3729104</span>, filed June 1, 2026. Now the LLC has an identifying number the bank can use. You no longer need to use your Social Security number to open accounts for the business.</p></div>';
-    html += '<button class="btn-continue btn-block" onclick="nav(\'24-3-account.html\')">Continue &rarr;</button>';
+      '<p>The IRS issues <strong>'+esc(llcName())+'</strong> its own number &mdash; <span class="mono">EIN 88-3729104</span>, filed June 1, 2026. The entity now has an identity to the outside world, separate from your personal one.</p></div>';
+    html += '<p class="callout"><strong>One small irony (an aside, not the lesson):</strong> line 9a reads &ldquo;disregarded entity&rdquo; &mdash; for <em>income tax</em> the IRS looks back <em>through</em> the LLC to you, even though it now holds its own number for everything else. Different lines, drawn for different purposes.</p>';
+    html += docsButton();
+    html += '<button class="btn-continue btn-block" onclick="nav(\'24-3-account.html\')">Now open the account &rarr;</button>';
   }
   document.getElementById('einArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
 function fileEin(){ einFiled=true; playStamp(); renderEin(); }
 
-document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeDoc(); } });
 
 /* ===== init ===== */
 try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
 renderEin();
 </script>
+  <script src="dev.js"></script>
 </body>
 </html>

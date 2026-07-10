@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 3.2: The Income Statement &middot; The Pile</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 2: The Income Statement</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Pile</div>
+
+    <div class="narrative-block">
+      <p>Here is <span class="mono">Bike-Repair.xlsx</span> again, right where you left it &mdash; the same three tabs. The one place the story actually lives is the <strong>Reasons</strong> tab, in the <strong>GENERATED</strong> pile &mdash; one continuous list, growing since your first jot back in May.</p>
+      <p>Open it up. Every repair, every bit of parts used, each month&rsquo;s rent &mdash; jotted job by job, in the order things happened. May&rsquo;s spring work sits at the top; the whole summer piles in after it.</p>
+    </div>
+
+    <div id="wb"></div>
+
+    <button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every repair this summer</button>
+
+    <div id="anna"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Job-log modal ===== -->
+<div class="glossary-overlay" id="ticketOverlay" onclick="if(event.target===this) closeTicket()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="receipt" class="licon"></i> <span id="ticketTitle">Job log &middot; June&ndash;August 2026</span></div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeTicket()">&times;</button>
+    </div>
+    <div class="glossary-list" id="ticketBody"></div>
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== the workbook — the real Bike-Repair.xlsx, opened on the Reasons tab ===== */
+var SNAP = BR_WB.snapshot();
+var genTotal = BR_WB.generatedRows().reduce(function(s,r){ return s+r.delta; }, 0);
+
+/* ===== Anna ===== */
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+function renderTalk(){
+  document.getElementById('anna').innerHTML = annaBox('Start with the pile&rsquo;s own line: <strong>GENERATED +$'+(genTotal+170).toLocaleString('en-US')+'</strong>. Is that how the shop did <em>this summer</em>? It can&rsquo;t be &mdash; the pile has been growing since <strong>May</strong>; last spring&rsquo;s repairs sit in it right next to August&rsquo;s. You&rsquo;d have to fish the season out row by row before the question even starts. And even then, read it top to bottom: a repair collected, then parts going out, then a month&rsquo;s rent, then another repair. Ask it &ldquo;what did the work deliver this summer, and what got used up delivering?&rdquo; &mdash; you couldn&rsquo;t point to a line. There isn&rsquo;t one.');
+  document.getElementById('controls').innerHTML = insightBox('A true list, but not yet an answer',
+      '<p>Nothing in the pile is wrong. But it has <strong>two troubles</strong> at once. It <strong>never resets</strong> &mdash; May&rsquo;s reasons and August&rsquo;s share one pile, so no line in it belongs to &ldquo;this season.&rdquo; And it&rsquo;s <strong>jumbled</strong> &mdash; what the work delivered and what got used up are scattered through it, job by job, instead of totaled in one place.</p>')
+    + '<div class="next-phase-msg">Look closely and every season reason is really one of just <strong>two kinds</strong>. Next: set May&rsquo;s rows aside &mdash; the question is about the <em>summer</em> &mdash; then sort the season, right here in the workbook.</div>'
+    + '<button class="btn-continue btn-block" onclick="nav(\'32-2-two-kinds.html\')">Sort the pile &rarr;</button>';
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== job log ===== */
+function payTag(j){
+  if(j.collected && j.pay.indexOf('account')>=0) return '<span class="stmt-tag repair">on account &middot; collected</span>';
+  if(!j.collected) return '<span class="stmt-tag personal">on account &middot; outstanding</span>';
+  if(j.pay.indexOf('Deposit')>=0) return '<span class="stmt-tag personal">deposit applied</span>';
+  return '<span class="stmt-tag repair">paid</span>';
+}
+function openJobLog(){
+  playClick();
+  document.getElementById('ticketTitle').innerHTML='Job log &middot; June&ndash;August 2026';
+  var charged=0, parts=0, hours=0;
+  var rows=BR_JOBS.map(function(j){
+    charged+=j.charge; parts+=j.partsCost; hours+=j.hours;
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+j.date+' &middot; '+j.work+' '+payTag(j)+'</div>'
+      +'<div class="glossary-entry-def"><span class="mono">'+j.id+'</span> &middot; '+j.customer+' &middot; '+j.hours+' hrs &middot; parts used $'+j.partsCost.toLocaleString('en-US')+' &middot; charged <strong>$'+j.charge.toLocaleString('en-US')+'</strong></div></div>';
+  }).join('');
+  rows+='<div class="glossary-entry"><div class="glossary-entry-def"><strong>'+BR_JOBS.length+' jobs</strong> &middot; '+hours+' hrs of labor &middot; charged $'+charged.toLocaleString('en-US')+' &middot; parts used $'+parts.toLocaleString('en-US')+'</div></div>';
+  document.getElementById('ticketBody').innerHTML=rows;
+  document.getElementById('ticketOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeTicket(){ document.getElementById('ticketOverlay').classList.remove('open'); }
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Reasons pile', def:'The running list on the Reasons tab where you jot <em>why</em> each balance moved. Kept job by job, in the order things happened &mdash; a true record, but not organized to answer &ldquo;how did the season go?&rdquo;' },
+  { term:'GENERATED', def:'The pile of reasons that came from the repair work itself &mdash; deliveries and things used up, all mixed together, accumulating since May and never reset. (Your draw is a different pile: WITHDRAWN.)' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeTicket(); } });
+
+/* ===== init — mount the real workbook, open it on the Reasons pile ===== */
+BRW.mount('wb', SNAP);
+BRW.tab('wb', 'reasons');
+renderTalk();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

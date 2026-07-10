@@ -4,19 +4,19 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3: The Rules and the Two Signatures &middot; The Two Signatures</title>
+  <title>Activity 2.3: The Rules &middot; Drafting the Agreement</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
 </head>
 <body>
 <div class="page">
-  <div class="prework-wrap m2-roomy">
+  <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 3: The Rules and the Two Signatures</h1>
+        <h1>Activity 2.3: The Rules</h1>
         <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 2 of 6</p>
       </div>
       <div class="tut-header-actions">
@@ -24,7 +24,7 @@
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">The Two Signatures</div>
+    <div class="phase-title" id="phaseTitle">Drafting the Agreement</div>
 
     <!-- ===== agreement ===== -->
     <div class="phase active" id="phase-agreement">
@@ -70,7 +70,7 @@ var glossaryTerms = [
   { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
   { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
   { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
-  { term:"Members&rsquo; capital / Members&rsquo; equity", def:"The LLC&rsquo;s name for the residual A &minus; L. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($1,790) and the retained slice ($170) are kept separate." },
+  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the generated slice ($170) are kept separate." },
   { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
   { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
 ];
@@ -110,7 +110,8 @@ function myFacts(){
     entity:llcName(), member:memberDisplay(), date:'June 1, 2026',
     state:'Connecticut', act:'Connecticut Uniform Limited Liability Company Act',
     purpose:'bicycle repair and maintenance', office:'142 Whalley Avenue, Unit B, New Haven, CT 06511',
-    sched:{ assets:assetRows, assetsTotal:'3,410', liabs:[['Credit-card balance (business)','1,230'],['Customer advance — Smith','220']], liabsTotal:'1,450', net:'1,960' },
+    sched:{ assets:assetRows, assetsTotal:'3,410', liabs:[['Credit-card balance (business)','2,030'],['Customer advance — Smith','220']], liabsTotal:'2,250', net:'1,160' },
+    draft:true,
     sig:{ company: signedCompany ? memberDisplay() : null, member: signedMember ? memberDisplay() : null }
   };
 }
@@ -124,7 +125,7 @@ function clauseData(f){
     ['6','Term','The Company began upon the filing of its Certificate of Organization and continues until dissolved in accordance with this Agreement.'],
     ['7','Sole Member','The sole member of the Company is '+f.member+'.'],
     ['8','Management; Powers','The business and affairs of the Company are managed by the Sole Member, who may execute documents and otherwise act for and bind the Company.'],
-    ['9','Capital Contributions','The Sole Member contributes the assets and liabilities of the business, at their existing book amounts, as set forth on Schedule A. Net book value contributed: $'+f.sched.net+'.'],
+    ['9','Capital Contributions','The Sole Member contributes the assets and liabilities of the business, at their existing book amounts, as set forth on Schedule A. Net book value contributed: '+(f.draft ? '$ ____ (Schedule A to be completed)' : '$'+f.sched.net)+'.'],
     ['10','Additional Capital Contributions','No additional contributions are required of the Sole Member, though further contributions may be made at the Sole Member’s discretion.'],
     ['11','Allocation of Profits and Losses','All profits and losses of the Company are allocated 100% to the Sole Member.'],
     ['12','Distributions','Distributions are made to the Sole Member at such times and in such amounts as the Sole Member determines.'],
@@ -156,11 +157,12 @@ function sigBlock(label, f, which, interactive){
     '<div style="font-size:11px;color:#6b6b6b;margin-top:2px">'+roleSub+'</div>'+
     '<div style="font-size:11px;color:#6b6b6b">Dated: '+esc(f.date)+'</div></div>';
 }
-function buildAgreement(f, interactive){
+function buildAgreement(f, interactive, draft){
   var marks = ['7','9','17'];
   var html = '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">';
   html += '<div style="text-align:center;font-weight:700;font-size:16px;letter-spacing:0.04em">OPERATING AGREEMENT</div>';
   html += '<div style="text-align:center;font-weight:700;font-size:13px;color:var(--primary);margin-bottom:10px">OF '+esc(f.entity.toUpperCase())+'</div>';
+  if(draft) html += '<div style="text-align:center;margin-bottom:10px"><span style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:2px 10px">DRAFT &mdash; UNSIGNED</span></div>';
   html += '<p style="text-align:justify;margin-bottom:8px">This Operating Agreement of '+esc(f.entity)+', dated '+esc(f.date)+', is entered into by '+esc(f.member)+' (the &ldquo;Sole Member&rdquo;) and '+esc(f.entity)+' (the &ldquo;Company&rdquo;).</p>';
   html += '<p style="font-size:11px;color:#6b6b6b;font-family:Inter,sans-serif;margin-bottom:8px">All nineteen sections are here &mdash; tap any heading to expand it.</p>';
   clauseData(f).forEach(function(c){
@@ -171,24 +173,33 @@ function buildAgreement(f, interactive){
     html += '<div onclick="toggleClause(\''+n+'\')" style="cursor:pointer;display:flex;align-items:baseline;gap:6px">';
     html += '<span style="color:#6b6b6b;font-size:11px">'+(open?'&#9662;':'&#9656;')+'</span>';
     html += '<span style="font-weight:700">'+n+'. '+esc(title)+'.</span>';
-    if(star) html += '<span style="font-size:11px;font-weight:700;color:var(--accent)">&#9733;</span>';
+    if(star) html += '<span style="font-size:11px;font-weight:700;color:var(--accent)">&#9733; watch this</span>';
     html += '</div>';
     if(open) html += '<div style="padding-left:18px;padding-top:2px;padding-bottom:3px">'+esc(body)+'</div>';
     html += '</div>';
   });
   html += '<div style="margin-top:12px;margin-bottom:4px;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;color:#6b6b6b">Schedule A &mdash; Contributed Property</div>';
-  html += '<div style="max-width:380px">';
-  f.sched.assets.forEach(function(a){ html += '<div style="display:flex;justify-content:space-between"><span>'+esc(a[0])+'</span><span class="mono">'+a[1]+'</span></div>'; });
-  html += '<div style="display:flex;justify-content:space-between;font-weight:600;border-top:1px solid #d8d8d8"><span>Total assets</span><span class="mono">'+f.sched.assetsTotal+'</span></div>';
-  f.sched.liabs.forEach(function(l){ html += '<div style="display:flex;justify-content:space-between"><span>'+esc(l[0])+'</span><span class="mono">('+l[1]+')</span></div>'; });
-  html += '<div style="display:flex;justify-content:space-between;font-weight:600"><span>Total liabilities assumed</span><span class="mono">('+f.sched.liabsTotal+')</span></div>';
-  html += '<div style="display:flex;justify-content:space-between;font-weight:700;border-top:2px solid #374151"><span>Net contribution (members&rsquo; capital)</span><span class="mono">'+f.sched.net+'</span></div>';
-  html += '</div>';
+  if(draft){
+    html += '<div style="max-width:380px">';
+    for(var bi=0; bi<4; bi++){ html += '<div style="border-bottom:1px solid #d8d8d8;height:22px"></div>'; }
+    html += '<div style="display:flex;justify-content:space-between;font-weight:700;border-top:2px solid #374151;margin-top:6px"><span>Net contribution (members&rsquo; capital)</span><span class="mono">$ ____</span></div>';
+    html += '</div>';
+    html += '<div style="font-size:11px;font-family:Inter,sans-serif;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:6px 10px;margin-top:8px;max-width:380px">DRAFT &mdash; you can&rsquo;t complete this schedule yet. The cash isn&rsquo;t deposited and the card is still in your name; both happen in 2.4. You complete the schedule from the Company&rsquo;s books after that &mdash; and you sign only after the schedule is complete.</div>';
+  } else {
+    html += '<div style="max-width:380px">';
+    f.sched.assets.forEach(function(a){ html += '<div style="display:flex;justify-content:space-between"><span>'+esc(a[0])+'</span><span class="mono">'+a[1]+'</span></div>'; });
+    html += '<div style="display:flex;justify-content:space-between;font-weight:600;border-top:1px solid #d8d8d8"><span>Total assets</span><span class="mono">'+f.sched.assetsTotal+'</span></div>';
+    f.sched.liabs.forEach(function(l){ html += '<div style="display:flex;justify-content:space-between"><span>'+esc(l[0])+'</span><span class="mono">('+l[1]+')</span></div>'; });
+    html += '<div style="display:flex;justify-content:space-between;font-weight:600"><span>Total liabilities assumed</span><span class="mono">('+f.sched.liabsTotal+')</span></div>';
+    html += '<div style="display:flex;justify-content:space-between;font-weight:700;border-top:2px solid #374151"><span>Net contribution (members&rsquo; capital)</span><span class="mono">'+f.sched.net+'</span></div>';
+    html += '</div>';
+  }
   html += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;color:#6b6b6b;font-size:12px">&mdash; signature page &mdash;</div>';
   html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
   html += sigBlock('For the Company', f, 'company', interactive);
   html += sigBlock('As an individual', f, 'member', interactive);
   html += '</div>';
+  if(draft) html += '<div style="text-align:center;font-size:11px;font-family:Inter,sans-serif;color:#6b6b6b;margin-top:8px">Unsigned &mdash; you sign both lines at the end of Module 2, once you&rsquo;ve completed Schedule A.</div>';
   html += '</div>';
   return html;
 }
@@ -200,7 +211,7 @@ function toggleClause(n){
 }
 function renderDocBody(){
   var f = docOpen==='anna' ? annaFacts() : myFacts();
-  var title = docOpen==='anna' ? "City Cycle&rsquo;s Operating Agreement (Anna&rsquo;s Example)" : "Your Operating Agreement";
+  var title = docOpen==='anna' ? "City Cycle&rsquo;s Operating Agreement &middot; Anna&rsquo;s example" : "Your Operating Agreement";
   document.getElementById('docBody').innerHTML =
     '<div style="font-weight:700;color:var(--primary);margin-bottom:12px;font-family:Inter,sans-serif">'+title+'</div>'+
     buildAgreement(f, false);
@@ -221,25 +232,23 @@ function renderAgreement(){
   var area = document.getElementById('agreementArea');
   if(!generated){
     area.innerHTML =
-      '<div class="narrative-block"><p>Everything the agreement needs, you already have: <strong>your name, the LLC&rsquo;s name, and the facts about the repair work</strong>.</p><p>Before you sign, confirm who the member is. Then generate the agreement.</p></div>'+
+      '<div class="narrative-block"><p>Almost everything the agreement needs, you already have: <strong>your name</strong>, your LLC&rsquo;s name, and the business you&rsquo;ll put in. What it doesn&rsquo;t have yet are final numbers &mdash; those come when the contributing is done.</p><p>Confirm the member&rsquo;s name, then draft it.</p></div>'+
       '<div class="section-card">'+
-        '<label for="mnInput" style="display:block;font-size:var(--font-s);font-weight:600;margin-bottom:8px">The member (You)</label>'+
+        '<label for="mnInput" style="display:block;font-size:var(--font-s);font-weight:600;margin-bottom:8px">The member (you)</label>'+
         '<input id="mnInput" type="text" placeholder="Type your name&hellip;" oninput="onAgreementNameInput()" onkeydown="if(event.key===\'Enter\'){generateAgreement();}" autocomplete="off" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid var(--border-strong);border-radius:8px;font-size:16px;font-family:inherit;background:transparent;color:inherit;outline:none">'+
         '<div style="font-size:var(--font-xs);margin-top:10px">Your LLC: <strong style="color:var(--primary)" id="agEntityPreview"></strong></div>'+
       '</div>'+
-      '<button class="btn-continue btn-block" onclick="generateAgreement()">Generate my Operating Agreement &rarr;</button>';
+      '<button class="btn-continue btn-block" onclick="generateAgreement()">Draft my Operating Agreement &rarr;</button>';
     var inp = document.getElementById('mnInput'); if(inp) inp.value = memberName;
     document.getElementById('agEntityPreview').textContent = llcName();
     return;
   }
-  var html = '<div class="narrative-block"><p>Here&rsquo;s your Operating Agreement: the full document, including Schedule A and the signature page. Read the <span style="color:var(--accent);font-weight:600">&#9733; marked</span> sections, then sign in both places at the bottom.</p></div>';
-  html += '<div class="doc-modal" style="margin:0 auto 20px">'+buildAgreement(myFacts(), true)+'</div>';
-  html += '<button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary)" onclick="openDoc(\'anna\')"><i data-lucide="file-text" class="licon"></i> View Anna&rsquo;s example</button>';
-  if(signedCompany && signedMember){
-    html += '<div class="insight-box" style="margin-top:20px"><div class="insight-label"><i data-lucide="pen-line" class="licon"></i> Two signatures, one hand</div>'+
-      '<p>You signed your name twice: once <strong>for the Company</strong>, and once <strong>as the Sole Member</strong>.<br><br>That does not mean there are two human people. It means the same person is acting in two different roles. In one signature, you act for the LLC. In the other, you act as the individual owner.<br><br>The &ldquo;two hats&rdquo; are now written into the legal document.</p></div>';
-    html += '<button class="btn-continue btn-block" onclick="nav(\'23-3-contribution.html\')">Next: &sect;9 (What goes into the company) &rarr;</button>';
-  }
+  var html = '<p style="font-size:var(--font-s);margin-bottom:12px">Here&rsquo;s <strong>your</strong> Operating Agreement &mdash; the whole document, as a <strong>draft</strong>. Read the <span style="color:var(--accent);font-weight:600">&#9733; marked</span> sections &mdash; and notice what you have to leave blank.</p>';
+  html += '<div class="doc-modal" style="margin:0 auto 14px">'+buildAgreement(myFacts(), false, true)+'</div>';
+  html += '<button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary)" onclick="openDoc(\'anna\')"><i data-lucide="file-text" class="licon"></i> View Anna&rsquo;s example &rarr;</button>';
+  html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="file-clock" class="licon"></i> A draft, on purpose</div>'+
+    '<p>The agreement is complete except the part <em>you</em> can&rsquo;t honestly fill in yet. <strong>Schedule A</strong> attests to what the member contributes &mdash; and the contributing isn&rsquo;t done: the cash isn&rsquo;t deposited, and the card is still in your name. You complete the schedule after the facts are in, and you sign after that. Paper comes last.</p></div>';
+  html += '<button class="btn-continue btn-block" onclick="nav(\'23-3-contribution.html\')">Now drill into &sect;9 &mdash; what you put in &rarr;</button>';
   area.innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
@@ -254,14 +263,13 @@ function generateAgreement(){
   playSuccess();
   renderAgreement();
 }
-function signCompany(){ signedCompany=true; playPen(); renderAgreement(); if(docOpen==='mine') renderDocBody(); }
-function signMember(){ signedMember=true; playPen(); renderAgreement(); if(docOpen==='mine') renderDocBody(); }
-
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeDoc(); } });
 
 /* ===== init ===== */
+window.devFill = function(){ if(!generated){ if(!memberName.trim()) memberName='Alex Chen'; generated=true; renderAgreement(); } };
 try{ var n = localStorage.getItem('m2Member'); if(n) memberName = n; }catch(e){}
 renderAgreement();
 </script>
+  <script src="dev.js"></script>
 </body>
 </html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 3.1: Run the Season &middot; A Season Goes By</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <!-- ===== Header ===== -->
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 1: Run the Season</h1>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 5</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">A Season Goes By</div>
+
+    <!-- ===== welcome ===== -->
+    <div class="phase active" id="phase-welcome">
+      <div class="narrative-block">
+        <p>In Module 2 you made the repair work into a legal body: <strong id="llcInline">Bike Repairs, LLC</strong>. The day it became formal, your books &mdash; <span class="mono">Bike-Repair.xlsx</span> &mdash; showed a single balance sheet, one snapshot of the new entity:</p>
+      </div>
+      <div id="openingBS"></div>
+      <div class="mc-card">
+        <div class="mc-q">One check before the season starts &mdash; the frame from Module 1 should hold. <strong>Assets &minus; Liabilities</strong> = $4,710 &minus; $2,250 =</div>
+        <div class="btn-row">
+          <input id="bsInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Assets minus Liabilities" onkeydown="if(event.key==='Enter'){checkBS();}">
+          <button class="btn btn-primary" onclick="checkBS()">Check</button>
+        </div>
+        <div class="feedback" id="bsFb"></div>
+      </div>
+      <div id="bsClose" hidden></div>
+      <div class="narrative-block">
+        <p>Then summer came. You kept your day job and worked the shop in the evenings and on weekends &mdash; part-time, but busy. Repairs brought money <strong>in</strong>. Parts and rent got <strong>used up</strong>. You bought a new tool and took some cash out for yourself. Beside each change, you jotted a short <strong>Reason</strong>, the way you learned to back in Module 1.</p>
+        <p>Now it&rsquo;s the end of August, and <strong>Anna</strong> &mdash; who set up your books when you formed the LLC &mdash; checks back in. <em>&ldquo;I set up your books,&rdquo;</em> she says. <em>&ldquo;Now let&rsquo;s read them. A season has gone by &mdash; let&rsquo;s see how the shop did.&rdquo;</em></p>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What you&rsquo;ll discover</div>
+        <ul class="bullet-list">
+          <li>How the shop&rsquo;s numbers looked after a full summer of repairs &mdash; and how that compares to the day you opened.</li>
+          <li>Why a single fresh snapshot, on its own, leaves the most important question unanswered.</li>
+          <li>What a whole season&rsquo;s worth of Reasons is quietly pushing you toward.</li>
+        </ul>
+      </div>
+      <button class="btn-continue btn-block" id="goBtn" hidden onclick="nav('31-2-work-the-season.html')">Open Bike-Repair.xlsx &rarr;</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== glossary (shared across all phases of 3.1) ===== */
+var glossaryTerms = [
+  { term:"Members&rsquo; capital", def:"The LLC&rsquo;s name for Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $4,710 &minus; $2,250 = $2,460." },
+  { term:"Reason", def:"The short note you jot beside a change in the books to record <em>why</em> it happened. You started the practice in Module 1; over a whole season the Reasons pile up." },
+  { term:"Balance sheet", def:"A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the difference between them. It says where things stand, not how they got there." }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== cross-phase navigation (each phase is its own file) ===== */
+function nav(url){ playClick(); window.location.href = url; }
+function restart(){ window.location.reload(); }
+
+/* ===== the opening balance sheet (June 1) — the full statement, every line.
+   Same shared markup as 15-2 / 41-1: .acct-col + .bs-header + .acct-line/.acct-total ===== */
+function bsRow(label,val){ return '<div class="acct-line"><span>'+label+'</span><span class="acct-val">'+val+'</span></div>'; }
+function bsTotal(label,val){ return '<div class="acct-total"><span>'+label+'</span><span>'+val+'</span></div>'; }
+/* ===== the LLC's name — chosen by the student in 2.2, persisted to localStorage ===== */
+var memberName=''; try{ var _n=localStorage.getItem('m2Member'); if(_n) memberName=_n; }catch(e){}
+function llcName(){ return (memberName.trim()||'[Your Name]') + '’s Bike Repairs, LLC'; }
+
+function buildOpeningBS(showTotal){
+  var h='<div class="acct-col">';
+  h+='<div class="bs-header"><div class="bs-header-title">'+llcName()+'</div><div class="bs-header-date">Opening balance sheet &middot; June 1, 2026</div></div>';
+  h+='<h4>Assets</h4>';
+  [['Cash','$1,300'],['Right of Use','$650'],['Parts','$200'],['Tools &amp; Repair Equipment','$1,200'],['Fixtures','$750'],['Laptop','$610']].forEach(function(r){ h+=bsRow(r[0],r[1]); });
+  h+=bsTotal('Total assets','$4,710');
+  h+='<h4>Liabilities</h4>';
+  h+=bsRow('Credit Card','$2,030');
+  h+=bsRow('Customer Deposit','$220');
+  h+=bsTotal('Total liabilities','$2,250');
+  h+='<h4>Members&rsquo; capital</h4>';
+  h+=bsRow('Contributed','$2,290');
+  h+=bsRow('Generated','$170');
+  h+=bsTotal('Total members&rsquo; capital (Assets &minus; Liabilities)', showTotal?'$2,460':'?');
+  h+='</div>';
+  document.getElementById('openingBS').innerHTML=h;
+}
+buildOpeningBS(false);
+document.getElementById('llcInline').textContent = llcName();
+
+/* ===== verify the frame: Assets − Liabilities = Members' Capital ===== */
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+var bsDone=false, bsAttempts=0;
+function checkBS(){
+  if(bsDone) return;
+  var val = parseInt(String(document.getElementById('bsInput').value).replace(/[^0-9-]/g,''),10);
+  var fb = document.getElementById('bsFb');
+  if(val===2460){ playSuccess(); revealBS(); }
+  else{
+    bsAttempts++;
+    if(bsAttempts>=3){ playNope(); revealBS(); }
+    else{ playNope(); fb.className='feedback err show'; fb.innerHTML='Not quite &mdash; subtract Total liabilities from Total assets: $4,710 &minus; $2,250.'; }
+  }
+}
+function revealBS(){
+  bsDone=true;
+  buildOpeningBS(true);
+  document.getElementById('bsInput').disabled=true;
+  var fb=document.getElementById('bsFb'); fb.className='feedback'; fb.classList.remove('show');
+  var c=document.getElementById('bsClose'); c.hidden=false;
+  c.innerHTML='<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Assets &minus; Liabilities = Members&rsquo; Capital</div><p>$4,710 &minus; $2,250 = <strong>$2,460</strong> &mdash; exactly the <strong>Total members&rsquo; capital</strong> line. The difference you found in Module 1 now carries the LLC&rsquo;s name, and the balance sheet is built around the same identity &mdash; it holds by definition, every time.</p></div>';
+  document.getElementById('goBtn').hidden=false;
+  if(window.lucide) lucide.createIcons();
+}
+window.devFill = function(){ if(!bsDone) revealBS(); };
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

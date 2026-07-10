@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 — The Cash Movement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <div class="dialog-box anna">
+      <div class="dialog-label">ANNA</div>
+      <div class="dialog-text">&ldquo;We&rsquo;ve pulled the repair-related rows out of your bank statement: 10 rows in total. It would be much simpler if there were a separate bank account just for the repair work, but for now, this gives us a cleaner view of the cash connected to the repair work.<br><br>Take a look at the Cash sheet below. In May, <strong>$1,340 came in</strong> and <strong>$1,500 went out</strong>, resulting in a <strong>net cash flow of &minus;$160</strong>.&rdquo;</div>
+    </div>
+    <div id="cashWb"></div>
+    <div class="mc-card">
+      <div class="mc-q">The Cash sheet shows <strong>net cash flow of &minus;$160</strong> for May. Based on that number alone, can you tell whether May was a good month or a bad month for the repair work?</div>
+      <div class="mc-opts" id="cashOpts"></div>
+      <div class="feedback" id="cashFb"></div>
+    </div>
+    <div class="btn-row" id="cashBtnRow" style="margin-top: 20px;"><button class="btn-continue" id="cashSubmit" onclick="submitCash()" disabled>Submit</button><button class="btn-reset" id="cashReset" onclick="resetCash()" style="display:none; margin-left:auto;">Reset</button></div>
+    <div id="cashClose" hidden>
+      <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 2;
+var PHASE_TITLE = '';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var THINGS_CATS = [
+  { cat:'EQUIPMENT', items:[
+    {name:'Park Tool repair stand',amount:200},{name:'Cone wrench set',amount:65},{name:'Torque wrench',amount:95},{name:'Hex / Allen key set',amount:45},{name:'Cable cutters',amount:40},{name:'Chain breaker',amount:35},{name:'Tire levers',amount:20},{name:'Air compressor',amount:180},{name:'Parts washer',amount:130},{name:'Wheel-truing stand',amount:170},{name:'Bench grinder',amount:90},{name:'Headset press',amount:70},{name:'Shop vacuum',amount:60} ] },
+  { cat:'COMPUTER EQUIPMENT', items:[ {name:'Laptop',amount:610} ] },
+  { cat:'SUPPLIES', items:[ {name:'Box of chains (on shelf)',amount:50},{name:'Box of brake pads (on shelf)',amount:40},{name:'Box of derailleur cables (on shelf)',amount:20},{name:'Cassettes (on shelf)',amount:40},{name:'Bottom brackets (on shelf)',amount:20},{name:'Spokes (on shelf)',amount:20},{name:'Tubes (on shelf)',amount:10} ] },
+  { cat:'FIXTURES', items:[ {name:'Desk',amount:250},{name:'Shelving units',amount:200},{name:'Display rack',amount:180},{name:'Pegboard + hooks',amount:120} ] }
+];
+THINGS_CATS.forEach(function(c){ c.subtotal = c.items.reduce(function(s,i){return s+i.amount;},0); });
+
+var bikeRepairCashFlows = [
+  { date:'May 1', desc:'Rent check — Westville Properties', amount:-1300 },
+  { date:'May 3', desc:'Park Tool stand — Cyclesport Supply', amount:-200 },
+  { date:'May 7', desc:'Customer payment — Venmo', amount:340 },
+  { date:'May 10', desc:'Customer payment — Venmo', amount:180 },
+  { date:'May 12', desc:'Customer payment — Venmo', amount:80 },
+  { date:'May 14', desc:'Customer payment — Venmo', amount:140 },
+  { date:'May 19', desc:'Customer payment — Venmo', amount:130 },
+  { date:'May 22', desc:'Smith deposit — frame build', amount:220 },
+  { date:'May 23', desc:'Customer payment — Venmo', amount:100 },
+  { date:'May 27', desc:'Customer payment — Venmo', amount:150 }
+];
+
+function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+/* ===== state ===== */
+var cashSel = null, cashSubmitted = false;
+var excelTab = 'cash', thingsExpanded = {};
+var curWb = null;
+
+/* ===== Excel workbook ===== */
+function renderOutlineSheet(cats, colA, totalLabel, newCat){
+  var total = cats.reduce(function(s,c){return s+c.subtotal;},0);
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+colA+'</div><div class="xl-v">Value</div></div>';
+  var n = 0;
+  cats.forEach(function(cat){
+    var label = cat.cat==='RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0)+cat.cat.slice(1).toLowerCase());
+    var open = !!thingsExpanded[cat.cat];
+    var isNew = cat.cat===newCat;
+    n++;
+    html += '<div class="xl-row xl-cat'+(isNew?' new':'')+'">'+
+      '<div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\''+cat.cat+'\')" aria-expanded="'+open+'">'+(open?'&minus;':'+')+'</button></div>'+
+      '<div class="xl-rownum">'+n+'</div>'+
+      '<div class="xl-c">'+label+(isNew?'<span class="xl-new-tag">new</span>':'')+'</div>'+
+      '<div class="xl-v">'+dollars(cat.subtotal)+'</div></div>';
+    if(open){
+      cat.items.forEach(function(it){ n++;
+        html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+dollars(it.amount)+'</div></div>';
+      });
+    }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+totalLabel+'</div><div class="xl-v">'+dollars(total)+'</div></div>';
+  return html;
+}
+function thingsSheet(){ return renderOutlineSheet(THINGS_CATS, 'Things tied up in the repair work', 'TOTAL'); }
+function cashSheet(){
+  var inflows = bikeRepairCashFlows.filter(function(f){return f.amount>0;});
+  var outflows = bikeRepairCashFlows.filter(function(f){return f.amount<0;});
+  var totalIn = inflows.reduce(function(s,f){return s+f.amount;},0);
+  var totalOut = outflows.reduce(function(s,f){return s+f.amount;},0);
+  var net = totalIn+totalOut;
+  function sdol(v){ return (v<0?'&minus;':'+')+dollars(Math.abs(v)); }
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Bike-repair cash flows — May 1 &ndash; May 31, 2026</div><div class="xl-v">Amount</div></div>';
+  var n = 0;
+  [ { key:'CASH IN', label:'Cash in', rows:inflows, subtotal:totalIn },
+    { key:'CASH OUT', label:'Cash out', rows:outflows, subtotal:totalOut } ].forEach(function(g){
+    var open = !!thingsExpanded[g.key]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\''+g.key+'\')" aria-expanded="'+open+'">'+(open?'&minus;':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+g.label+'</div><div class="xl-v">'+sdol(g.subtotal)+'</div></div>';
+    if(open){ g.rows.forEach(function(f){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c"><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</div><div class="xl-v">'+sdol(f.amount)+'</div></div>'; }); }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">NET CASH FLOW (May)</div><div class="xl-v">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</div></div>';
+  html += "<div class=\"cash-foot\">Pulled from the transactions you classified as repair-related in your bank statement. This is the month’s <strong>flow</strong> — cash in minus cash out — not a balance.</div>";
+  return html;
+}
+function renderWorkbook(containerId, phaseKey){
+  curWb = { container: containerId, phase: phaseKey };
+  var tabs = [{id:'things',label:'Things'},{id:'cash',label:'Cash'}];
+  if(!tabs.some(function(t){return t.id===excelTab;})) excelTab = tabs[0].id;
+  var body;
+  if(excelTab==='cash') body = cashSheet();
+  else body = thingsSheet();
+  var activeLabel = tabs.find(function(t){return t.id===excelTab;}).label;
+  var tabsHtml = tabs.map(function(t){ return '<button class="xlwb-tab'+(t.id===excelTab?' active':'')+'" onclick="setTab(\''+t.id+'\')">'+t.label+'</button>'; }).join('');
+  var html = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' Sheet</span></div>'+
+    '<div>'+body+'</div>'+
+    '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
+  document.getElementById(containerId).innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function setTab(tabId){ playClick(); excelTab = tabId; if(curWb) renderWorkbook(curWb.container, curWb.phase); }
+function toggleCat(cat){ playClick(); thingsExpanded[cat] = !thingsExpanded[cat]; if(curWb) renderWorkbook(curWb.container, curWb.phase); }
+
+/* ===== cash quiz ===== */
+function renderCashQuiz(){
+  var opts=[ {id:'a',text:'Yes. Since net cash flow was &minus;$160, May must have been a bad month for the repair work.'},
+    {id:'b',text:'No. Since customers paid money during May, it must have been a good month for the repair work.'},
+    {id:'c',text:'Not from the Cash sheet alone. We need to know what the money came in for and what the money went out for.'} ];
+  document.getElementById('cashOpts').innerHTML = opts.map(function(o){
+    return '<div class="mc-opt" data-id="'+o.id+'" onclick="selectCash(\''+o.id+'\')"><div class="mc-letter">'+o.id.toUpperCase()+'</div><div>'+o.text+'</div></div>';
+  }).join('');
+}
+function selectCash(id){
+  if(cashSubmitted) return;
+  cashSel = id;
+  document.querySelectorAll('#cashOpts .mc-opt').forEach(function(el){ el.classList.toggle('selected', el.getAttribute('data-id')===id); });
+  document.getElementById('cashSubmit').disabled = false;
+  document.getElementById('cashFb').classList.remove('show');
+}
+function submitCash(){
+  if(cashSel===null || cashSubmitted) return;
+  var fb = document.getElementById('cashFb');
+  cashSubmitted = true;
+  document.querySelectorAll('#cashOpts .mc-opt').forEach(function(el){ el.classList.add('locked'); });
+  document.getElementById('cashSubmit').style.display='none';
+  document.getElementById('cashReset').style.display='';
+  var el = document.querySelector('#cashOpts .mc-opt[data-id="'+cashSel+'"]');
+  if(cashSel==='c'){
+    playSuccess();
+    el.classList.add('correct');
+    fb.className='feedback ok show';
+    fb.innerHTML='Right. Cash isn&rsquo;t the whole story. Some of what went out bought you things you still have. Some of what came in came with strings attached. The Cash sheet alone can&rsquo;t tell us what happened. We have to go through it line by line. Let&rsquo;s start with the money coming in.';
+    document.getElementById('cashClose').hidden=false;
+  } else {
+    playNope();
+    el.classList.add('wrong');
+    fb.className='feedback err show';
+    fb.innerHTML = cashSel==='a'
+      ? 'Careful. A negative cash flow does not automatically mean May was a bad month for the repair work. Some of the cash that went out bought things you still have, like the repair stand, fixtures, and parts on the shelf. To know what happened, we need to look at what each cash outflow was for.'
+      : 'Not quite. Customer payments came in, but that does not automatically mean May was a good month for the repair work. Some cash can come with strings attached. Smith&rsquo;s $220, for example, was a deposit for work you still have to do. To know what happened, we need to look at what each cash inflow was for.';
+  }
+}
+function resetCash(){
+  cashSel=null; cashSubmitted=false;
+  document.getElementById('cashReset').style.display='none';
+  document.getElementById('cashSubmit').style.display='';
+  document.getElementById('cashSubmit').disabled=true;
+  document.getElementById('cashClose').hidden=true;
+  document.getElementById('cashFb').classList.remove('show');
+  renderCashQuiz();
+}
+
+/* ===== glossary ===== */
+function openGlossary(){ m1GlossaryOpen('13-3'); }
+function closeGlossary(){ m1GlossaryClose(); }
+
+/* ===== init ===== */
+document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+renderWorkbook('cashWb','cash');
+renderCashQuiz();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

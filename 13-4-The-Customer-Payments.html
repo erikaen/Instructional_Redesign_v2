@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 — The Customer Payments</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <div class="narrative-block"><p>The Cash sheet shows eight customer deposits during May, but it does not tell you what each customer paid for.</p></div>
+    <div id="depChips"></div>
+    <div class="dialog-box anna" style="margin-bottom:0;">
+      <div class="dialog-label">ANNA</div>
+      <div class="dialog-text">&ldquo;To figure out what each customer paid for, we need to check the receipts.&rdquo;</div>
+    </div>
+    <button class="reveal-doc-btn" id="showReceiptsBtn" onclick="showReceipts()"><i data-lucide="receipt" class="licon"></i> Pull out the customer receipts</button>
+    <div id="depWrap" hidden>
+      <div id="depList"></div>
+    </div>
+    <div id="depositsClose" hidden></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 3;
+var PHASE_TITLE = '';
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data ===== */
+var deposits = [
+  { id:'d1', date:'May 7', amount:340, receiptNum:'#001', payment:'Venmo', lineItems:[{name:'Brake job',amount:120},{name:'Tune-up',amount:80},{name:'Tire mounting (×2)',amount:140}], note:null, correct:'done',
+    annaSays:{ done:"Correct. The receipt lists completed repairs: a brake job, a tune-up, and two tire mountings. Those jobs were already finished, so this payment is for work done.", tocome:"Not quite. This receipt lists completed repairs: a brake job, a tune-up, and two tire mountings. The customer paid for work that was already done." } },
+  { id:'d2', date:'May 10', amount:180, receiptNum:'#002', payment:'Venmo', lineItems:[{name:'Mixed walk-in work',amount:180}], note:'<strong>Note:</strong> No itemization.', correct:'done',
+    annaSays:{ done:"Correct. This receipt is less specific, but it still points to work done. It says &ldquo;walk-ins&rdquo; and does not mention a deposit or future work.", tocome:"Not quite. This receipt is less specific, but it says &ldquo;walk-ins&rdquo; and does not mention a deposit, future work, or balance due." } },
+  { id:'d3', date:'May 12', amount:80, receiptNum:'#003', payment:'Venmo', lineItems:[{name:'Tune-up',amount:80}], note:null, correct:'done',
+    annaSays:{ done:"Correct. The receipt lists a tune-up, which is completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a tune-up. That is completed repair work, not work still to come." } },
+  { id:'d4', date:'May 14', amount:140, receiptNum:'#004', payment:'Venmo', lineItems:[{name:'Brake overhaul',amount:140}], note:null, correct:'done',
+    annaSays:{ done:"Correct. The receipt lists a brake overhaul, which is completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a brake overhaul. That work was already completed, so this payment is for work done." } },
+  { id:'d5', date:'May 19', amount:130, receiptNum:'#005', payment:'Venmo', lineItems:[{name:'Chain and cassette replacement',amount:130}], note:null, correct:'done',
+    annaSays:{ done:"Correct. The receipt lists a chain and cassette replacement, which is completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a chain and cassette replacement. That is completed repair work, not a payment for future work." } },
+  { id:'d6', date:'May 22', amount:220, receiptNum:'#006', payment:'Check', lineItems:[{name:'Deposit toward custom frame build',amount:220}], note:'<strong>Note:</strong> Paid in full upfront. Frame to be built and delivered on July 3.', correct:'tocome',
+    annaSays:{ done:"Not quite. The receipt says &ldquo;deposit,&rdquo; and the balance is due on delivery. Smith has not received the frame yet, so this is not payment for completed work. It is work to come.", tocome:"Correct. This receipt says &ldquo;deposit,&rdquo; and the balance is due when the frame is delivered. Smith paid you now, but you still owe him the custom frame. This payment is for work to come." } },
+  { id:'d7', date:'May 23', amount:100, receiptNum:'#007', payment:'Venmo', lineItems:[{name:'Tune-up and minor repair',amount:100}], note:null, correct:'done',
+    annaSays:{ done:"Correct. The receipt lists a tune-up and a minor repair, which are completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists a tune-up and a minor repair. Those jobs were already completed, so this payment is for work done." } },
+  { id:'d8', date:'May 27', amount:150, receiptNum:'#008', payment:'Venmo', lineItems:[{name:'Custom wheel work and new spokes',amount:150}], note:null, correct:'done',
+    annaSays:{ done:"Correct. The receipt lists custom wheel work and new spokes, which are completed repair work. This payment is for work done.", tocome:"Not quite. The receipt lists custom wheel work and new spokes. That work was already completed, so this payment is for work done." } }
+];
+var optionLabels = { done:'Work done', tocome:'Work to come' };
+
+function fmt(n){ return Number(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function dollars(n){ return '$' + Number(n).toLocaleString('en-US'); }
+
+var bikeRepairCashFlows = [
+  { date:'May 1', desc:'Rent check &mdash; Westville Properties', amount:-1300 },
+  { date:'May 3', desc:'Park Tool stand &mdash; Cyclesport Supply', amount:-200 },
+  { date:'May 7', desc:'Customer payment &mdash; Venmo', amount:340 },
+  { date:'May 10', desc:'Customer payment &mdash; Venmo', amount:180 },
+  { date:'May 12', desc:'Customer payment &mdash; Venmo', amount:80 },
+  { date:'May 14', desc:'Customer payment &mdash; Venmo', amount:140 },
+  { date:'May 19', desc:'Customer payment &mdash; Venmo', amount:130 },
+  { date:'May 22', desc:'Smith deposit &mdash; frame build', amount:220 },
+  { date:'May 23', desc:'Customer payment &mdash; Venmo', amount:100 },
+  { date:'May 27', desc:'Customer payment &mdash; Venmo', amount:150 }
+];
+
+/* ===== state ===== */
+var depositAnswers = {}, depositSel = {}, currentDeposit = 0;
+var jonesResolved = false;
+
+/* ===== cash sheet panel ===== */
+var cashPanelOpen = { 'CASH IN': true };
+function togglePanelCat(key){ playClick(); cashPanelOpen[key] = !cashPanelOpen[key]; renderCashSheetPanel(); }
+function renderCashSheetPanel(){
+  var inflows = bikeRepairCashFlows.filter(function(f){return f.amount>0;});
+  var outflows = bikeRepairCashFlows.filter(function(f){return f.amount<0;});
+  var totalIn = inflows.reduce(function(s,f){return s+f.amount;},0);
+  var totalOut = outflows.reduce(function(s,f){return s+f.amount;},0);
+  var net = totalIn+totalOut;
+  function sdol(v){ return (v<0?'&minus;':'+')+dollars(Math.abs(v)); }
+  var cashHtml = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Bike-repair cash flows &mdash; May 1 &ndash; May 31, 2026</div><div class="xl-v">Amount</div></div>';
+  var n = 0;
+  [ { key:'CASH IN', label:'Cash in', rows:inflows, subtotal:totalIn, hilite:true },
+    { key:'CASH OUT', label:'Cash out', rows:outflows, subtotal:totalOut, hilite:false } ].forEach(function(g){
+    var open = !!cashPanelOpen[g.key]; n++;
+    cashHtml += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="togglePanelCat(\''+g.key+'\')" aria-expanded="'+open+'">'+(open?'&minus;':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+g.label+'</div><div class="xl-v">'+sdol(g.subtotal)+'</div></div>';
+    if(open){ g.rows.forEach(function(f){ n++; cashHtml += '<div class="xl-row xl-item"'+(g.hilite?' style="background:var(--success-bg);"':'')+'><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c"><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</div><div class="xl-v">'+sdol(f.amount)+'</div></div>'; }); }
+  });
+  cashHtml += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">NET CASH FLOW (May)</div><div class="xl-v">'+(net<0?'&minus;':'+')+dollars(Math.abs(net))+'</div></div>';
+  cashHtml += "<div class=\"cash-foot\">Pulled from the transactions you classified as repair-related in your bank statement. This is the month's <strong>flow</strong> &mdash; cash in minus cash out &mdash; not a balance.</div>";
+  document.getElementById('depChips').innerHTML = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">Cash Sheet</span></div>'+
+    '<div>'+cashHtml+'</div>'+
+    '</div>';
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== deposits ===== */
+function showReceipts(){ playClick(); document.getElementById('showReceiptsBtn').style.display='none'; document.getElementById('depWrap').hidden=false; renderDeposits(); }
+function renderDeposits(){
+  if(document.getElementById('depWrap').hidden) return;
+  var d = deposits[currentDeposit];
+  var submitted = depositAnswers[d.id]!==undefined;
+  var ans = depositAnswers[d.id];
+  var sel = depositSel[d.id];
+  var correct = submitted && ans===d.correct;
+  var rows = d.lineItems.map(function(li){ return '<tr><td>'+li.name+'</td><td class="num">$'+li.amount+'.00</td></tr>'; }).join('');
+  var choices = ['done','tocome'].map(function(ch){
+    var c='dep-choice';
+    if(submitted){ if(ch===ans) c += (correct ? ' correct' : ' wrong'); }
+    else if(sel===ch){ c += ' sel'; }
+    var click = submitted ? '' : ' onclick="selectDeposit(\''+d.id+'\',\''+ch+'\')"';
+    return '<button class="'+c+'"'+click+(submitted?' disabled':'')+'>'+optionLabels[ch]+'</button>';
+  }).join('');
+  var fb='';
+  if(submitted){
+    var errStyle = correct ? '' : ' style="background:var(--error-bg); border-color:var(--error-border); color:var(--error-text);"';
+    fb = '<div class="dep-fb '+(correct?'ok':'err')+'"'+errStyle+'>'+d.annaSays[ans]+'</div>';
+  }
+
+  var isFirst = currentDeposit===0;
+  var isLast = currentDeposit===deposits.length-1;
+  var backBtn = isFirst ? '' : '<button class="btn-continue" onclick="prevDeposit()">&larr; Back</button>';
+  var submitBtn = submitted ? '' : '<button class="btn-continue" onclick="submitDeposit(\''+d.id+'\')"'+(sel?'':' disabled')+'>Submit</button>';
+  var resetBtn = submitted ? '<button class="btn-reset" onclick="resetDeposit(\''+d.id+'\')">Reset</button>' : '';
+  var nextBtn = isLast ? '' : '<button class="btn-continue" onclick="nextDeposit()"'+(correct?'':' disabled')+'>Next &rarr;</button>';
+  var nav = '<div style="display:flex; justify-content:space-between; gap:8px; margin-top:14px;"><div style="display:flex; gap:8px;">'+backBtn+submitBtn+'</div><div style="display:flex; gap:8px;">'+resetBtn+nextBtn+'</div></div>';
+
+  var html = '<div class="dep-card">'+
+    '<div class="section-tag">Receipt '+(currentDeposit+1)+' of '+deposits.length+'</div>'+
+    '<div class="dep-receipt"><div class="dep-receipt-head"><span class="dep-receipt-label">Customer receipt '+d.receiptNum+'</span><span class="dep-receipt-meta">'+d.date+', 2026 &middot; '+d.payment+'</span></div>'+
+    '<table class="dep-receipt-table"><tbody>'+rows+'<tr class="total"><td>Total</td><td class="num">$'+d.amount+'.00</td></tr></tbody></table>'+
+    (d.note?'<div class="dep-receipt-note">'+d.note+'</div>':'')+'</div>'+
+    '<div class="dep-choices" style="grid-template-columns: repeat(2, 1fr);">'+choices+'</div>'+fb+nav+'</div>';
+
+  document.getElementById('depList').innerHTML = html;
+  var allCorrect = deposits.every(function(x){return depositAnswers[x.id]===x.correct;});
+  var closeEl = document.getElementById('depositsClose');
+  closeEl.hidden = !allCorrect;
+  if(allCorrect && !closeEl.innerHTML.trim()) renderDepositsClose();
+  if(window.lucide) lucide.createIcons();
+}
+function selectDeposit(id, ch){
+  if(depositAnswers[id]!==undefined) return; // already submitted; reset to change
+  depositSel[id]=ch;
+  renderDeposits();
+}
+function submitDeposit(id){
+  if(depositAnswers[id]!==undefined) return;
+  var ch = depositSel[id];
+  if(!ch) return;
+  var d = deposits.find(function(x){return x.id===id;});
+  depositAnswers[id]=ch;
+  if(ch===d.correct) playSuccess(); else playNope();
+  renderDeposits();
+}
+function resetDeposit(id){
+  delete depositAnswers[id];
+  delete depositSel[id];
+  renderDeposits();
+}
+function nextDeposit(){
+  var d = deposits[currentDeposit];
+  if(depositAnswers[d.id]!==d.correct) return;
+  if(currentDeposit < deposits.length-1){ currentDeposit++; playClick(); renderDeposits(); }
+}
+function prevDeposit(){
+  if(currentDeposit > 0){ currentDeposit--; playClick(); renderDeposits(); }
+}
+function renderDepositsClose(){
+  var html =
+    '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;So you found two kinds of customer payments. Seven of them were for work you had already finished. That money is yours to keep. Smith&rsquo;s check is the odd one out. He paid you $220 now, but you still owe him the custom frame.<br><br>That means Smith&rsquo;s payment belongs in <strong>two places</strong>. You have the cash, but you also have a promise to keep. Your priced <strong>Things</strong> list doesn&rsquo;t show promises like that, so you need a second list: <strong>promises you still owe</strong>. Start it with Smith&rsquo;s $220.&rdquo;</div>'+
+    '<div class="promises-born" style="margin-top:14px;"><div class="promises-born-head">Promises</div><div class="promises-born-body"><div class="promises-line"><span>Smith&rsquo;s frame &mdash; paid $220 up front, not built yet</span><span class="mono">$220</span></div></div></div>'+
+    '</div>'+
+    '<div class="next-phase-msg" style="margin-top:20px;">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
+  document.getElementById('depositsClose').innerHTML = html;
+}
+function answerJones(choice){
+  if(jonesResolved) return;
+  var fb = document.getElementById('jonesFb');
+  var offEl = document.querySelector('#jonesOpts .mc-opt[data-j="off"]');
+  var onEl = document.querySelector('#jonesOpts .mc-opt[data-j="on"]');
+  document.querySelectorAll('#jonesOpts .mc-opt').forEach(function(el){ el.classList.remove('wrong'); });
+  if(choice==='off'){
+    playSuccess(); jonesResolved=true;
+    offEl.classList.add('correct');
+    document.querySelectorAll('#jonesOpts .mc-opt').forEach(function(el){ el.classList.add('locked'); });
+    fb.className='feedback ok show';
+    fb.innerHTML = 'Correct. Jones stays off the Promises list for now. Smith paid upfront, so you have his cash and still owe him the frame. Jones only talked about it, so nothing has happened yet that needs to be recorded.';
+    var insightEl = document.getElementById('jonesInsight');
+    insightEl.className = 'insight-box';
+    insightEl.innerHTML = '<div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Not just cash</div><p>This does <strong>not</strong> mean cash always has to change hands for something to be recorded. What matters is whether something has happened that changes what&rsquo;s tied up in the repair work or still owed because of it. Smith&rsquo;s upfront payment created an obligation to deliver the frame. Jones only talked about a possible frame, so there is no obligation to record yet.</p>';
+    insightEl.hidden = false;
+    document.getElementById('jonesClose').hidden=false;
+    if(window.lucide) lucide.createIcons();
+  } else {
+    playNope(); onEl.classList.add('wrong');
+    fb.className='feedback err show';
+    fb.innerHTML = 'Not quite. Saying you will build the frame is not enough by itself. Smith&rsquo;s frame went on the list because something happened that created a real obligation: Smith paid upfront, and you still owe him the frame. Jones hasn&rsquo;t done anything that makes this something to record yet.';
+  }
+}
+
+/* ===== restart ===== */
+function restart(){
+  depositAnswers={}; depositSel={}; currentDeposit=0; jonesResolved=false;
+  document.getElementById('depWrap').hidden=true;
+  var dc=document.getElementById('depositsClose'); dc.hidden=true; dc.innerHTML='';
+  document.getElementById('showReceiptsBtn').style.display='';
+  renderDeposits(); scrollTo(0,0);
+}
+
+/* ===== glossary ===== */
+function openGlossary(){ m1GlossaryOpen('13-4'); }
+function closeGlossary(){ m1GlossaryClose(); }
+
+/* ===== init ===== */
+document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+renderCashSheetPanel();
+renderDeposits();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 4 — Why Keep the Reasons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <!-- ===== welcome ===== -->
+    <div class="phase active" id="phase-welcome">
+      <div class="narrative-block">
+        <p>Anna&rsquo;s back, coffee in hand. By now your workbook has two lists that earned their names in your last sit-down: <strong>Assets</strong> and <strong>Liabilities</strong>. You pull them up.</p>
+        <p>But something nags at you. These lists keep <em>changing</em>: parts bought, repairs finished, rent paid ahead...The numbers tell you <em>what</em> the total is now. They never tell you <em>why</em> it moved.</p>
+      </div>
+      <div id="wbWelcome"></div>
+      <div class="dialog-box anna">
+        <div class="dialog-label">ANNA</div>
+        <div class="dialog-text">&ldquo;Right! A list of totals is a snapshot. It can&rsquo;t tell you how you got here.&rdquo; She taps the screen. &ldquo;Try this: every time a number on one of these lists changes, jot down the <em>reason</em> next to it. Give it its own tab.&rdquo;</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You&rsquo;ll Discover</div>
+        <ul class="bullet-list">
+          <li>The amount tells you what moved; only the reason tells you what <em>happened</em>.</li>
+          <li>Once you ask &ldquo;what else moved?&rdquo;, a pattern shows up on its own: most changes come with a <em>match</em>.</li>
+          <li>The changes with <em>no match</em> are the ones that move the <em>difference</em> between Assets and Liabilities &mdash; and those sort into two plain kinds.</li>
+        </ul>
+      </div>
+      <div class="next-phase-msg">You’ve finished this section — click <strong>Next -&gt;</strong> to continue.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx = null;
+function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== data — carried from 1.3 (tie to the manifest) ===== */
+var ASSETS_SNAPSHOT = [
+  { cat:'EQUIPMENT', items:[
+    { name:'Park Tool repair stand', amount:200 },{ name:'Cone wrench set', amount:65 },{ name:'Torque wrench', amount:95 },
+    { name:'Hex / Allen key set', amount:45 },{ name:'Cable cutters', amount:40 },{ name:'Chain breaker', amount:35 },
+    { name:'Tire levers', amount:20 },{ name:'Air compressor', amount:180 },{ name:'Parts washer', amount:130 },
+    { name:'Wheel-truing stand', amount:170 },{ name:'Bench grinder', amount:90 },{ name:'Headset press', amount:70 },{ name:'Shop vacuum', amount:60 } ] },
+  { cat:'COMPUTER EQUIPMENT', items:[ { name:'Laptop', amount:610 } ] },
+  { cat:'SUPPLIES', items:[
+    { name:'Box of chains (on shelf)', amount:50 },{ name:'Box of brake pads (on shelf)', amount:40 },{ name:'Box of derailleur cables (on shelf)', amount:20 },
+    { name:'Cassettes (on shelf)', amount:40 },{ name:'Bottom brackets (on shelf)', amount:20 },{ name:'Spokes (on shelf)', amount:20 },{ name:'Tubes (on shelf)', amount:10 } ] },
+  { cat:'FIXTURES', items:[
+    { name:'Desk', amount:250 },{ name:'Shelving units', amount:200 },{ name:'Display rack', amount:180 },{ name:'Pegboard + hooks', amount:120 } ] },
+  { cat:'CASH', items:[ { name:'Repair cash on hand (May 31)', amount:0 } ] },
+  { cat:'RIGHT OF USE', items:[ { name:'Right to occupy the space — last month, prepaid', amount:650 } ] }
+].map(function(c){ c.subtotal = c.items.reduce(function(s,i){return s+i.amount;},0); return c; });
+var ASSETS_TOTAL = ASSETS_SNAPSHOT.reduce(function(s,c){return s+c.subtotal;},0); // 3410
+
+var LIABILITIES_SNAPSHOT = [
+  { key:'smith', label:"Smith's frame — paid $220 up front, not built yet", amount:220, items:[
+    { name:'Check deposit, May 22 &mdash; a custom frame build, 4&ndash;6 weeks', amt:220 } ] },
+  { key:'card', label:'Still owed on the bike-repair credit card', amount:2030, items:[
+    { name:'Hand tools', amt:300 }, { name:'Air compressor', amt:180 }, { name:'Parts washer', amt:130 },
+    { name:'Wheel-truing stand', amt:170 }, { name:'Fixtures (desk, shelving, racks)', amt:750 }, { name:'Parts (QBP order)', amt:500 } ] }
+];
+var LIABILITIES_TOTAL = LIABILITIES_SNAPSHOT.reduce(function(s,l){return s+l.amount;},0); // 2250
+
+var CASH_FLOWS = [
+  { date:'May 1',  desc:'Rent paid in advance (Westville Properties)', amount:-1300 },
+  { date:'May 3',  desc:'Park Tool stand — Cyclesport Supply', amount:-200 },
+  { date:'May 7',  desc:'Repair finished — customer paid (Venmo)', amount:340 },
+  { date:'May 10', desc:'Repair finished — customer paid (Venmo)', amount:180 },
+  { date:'May 12', desc:'Repair finished — customer paid (Venmo)', amount:80 },
+  { date:'May 14', desc:'Repair finished — customer paid (Venmo)', amount:140 },
+  { date:'May 19', desc:'Repair finished — customer paid (Venmo)', amount:130 },
+  { date:'May 22', desc:'Smith deposit — frame build', amount:220 },
+  { date:'May 23', desc:'Repair finished — customer paid (Venmo)', amount:100 },
+  { date:'May 27', desc:'Repair finished — customer paid (Venmo)', amount:150 }
+];
+
+var REASONS = [
+  { id:'r_cashin', account:'Cash',      delta:160, reason:'My personal self covered what the work drew down — I only see it now, tallying up.' },
+  { id:'r_laptop', account:'Laptop',    delta:610, reason:'You brought your laptop from home.' },
+  { id:'r_grind',  account:'Equipment', delta:90, reason:'Brought the bench grinder from home.' },
+  { id:'r_press',  account:'Equipment', delta:70, reason:'Brought the headset press from home.' },
+  { id:'r_vac',    account:'Equipment', delta:60, reason:'Brought the shop vacuum from home.' },
+
+  { id:'r_stand_a', account:'Equipment', delta:200, reason:'You bought the Park Tool stand for $200 (cash).' },
+  { id:'r_stand_b', account:'Cash',      delta:-200, reason:'You bought the Park Tool stand for $200 (cash).' },
+
+  { id:'r_tools_a', account:'Equipment',   delta:300, reason:'Bought $300 of hand tools on the card.' },
+  { id:'r_tools_b', account:'Credit Card', delta:300, reason:'Bought $300 of hand tools on the card.' },
+
+  { id:'r_equip_a', account:'Equipment',   delta:480, reason:'Bought $480 of shop equipment on the card (compressor, parts washer, truing stand).' },
+  { id:'r_equip_b', account:'Credit Card', delta:480, reason:'Bought $480 of shop equipment on the card (compressor, parts washer, truing stand).' },
+
+  { id:'r_fix_a', account:'Fixtures',    delta:750, reason:'Bought $750 of fixtures on the card.' },
+  { id:'r_fix_b', account:'Credit Card', delta:750, reason:'Bought $750 of fixtures on the card.' },
+
+  { id:'r_parts_a', account:'Supplies',    delta:500, reason:'Bought $500 of parts on the card.' },
+  { id:'r_parts_b', account:'Credit Card', delta:500, reason:'Bought $500 of parts on the card.' },
+
+  { id:'r_uchains', account:'Supplies', delta:-70, reason:'Used $70 of chains finishing customer jobs.' },
+  { id:'r_upads',   account:'Supplies', delta:-50, reason:'Used $50 of brake pads finishing customer jobs.' },
+  { id:'r_ucables', account:'Supplies', delta:-30, reason:'Used $30 of derailleur cables finishing customer jobs.' },
+  { id:'r_ucass',   account:'Supplies', delta:-50, reason:'Used $50 of cassettes finishing customer jobs.' },
+  { id:'r_ubb',     account:'Supplies', delta:-30, reason:'Used $30 of bottom brackets finishing customer jobs.' },
+  { id:'r_uspokes', account:'Supplies', delta:-30, reason:'Used $30 of spokes finishing customer jobs.' },
+  { id:'r_utubes',  account:'Supplies', delta:-40, reason:'Used $40 of tubes finishing customer jobs.' },
+
+  { id:'r_rent_a', account:'Right of Use', delta:1300, reason:'Paid $1,300 of rent in advance (first + last month).' },
+  { id:'r_rent_b', account:'Cash',         delta:-1300, reason:'Paid $1,300 of rent in advance (first + last month).' },
+
+  { id:'r_rentused', account:'Right of Use', delta:-650, reason:'Used the space for May ($650 — the first month).' },
+
+  { id:'r_v1', account:'Cash', delta:340, reason:'Finished a repair — customer paid $340 (May 7).' },
+  { id:'r_v2', account:'Cash', delta:180, reason:'Finished a repair — customer paid $180 (May 10).' },
+  { id:'r_v3', account:'Cash', delta:80,  reason:'Finished a repair — customer paid $80 (May 12).' },
+  { id:'r_v4', account:'Cash', delta:140, reason:'Finished a repair — customer paid $140 (May 14).' },
+  { id:'r_v5', account:'Cash', delta:130, reason:'Finished a repair — customer paid $130 (May 19).' },
+  { id:'r_v6', account:'Cash', delta:100, reason:'Finished a repair — customer paid $100 (May 23).' },
+  { id:'r_v7', account:'Cash', delta:150, reason:'Finished a repair — customer paid $150 (May 27).' },
+
+  { id:'r_smith_a', account:'Cash',      delta:220, reason:"Smith paid $220 up front for a frame you haven't built yet." },
+  { id:'r_smith_b', account:'Owe Smith', delta:220, reason:"Smith paid $220 up front for a frame you haven't built yet." }
+];
+
+var CORRECT_CATEGORY = {
+  r_cashin:'contributed', r_laptop:'contributed', r_grind:'contributed', r_press:'contributed', r_vac:'contributed',
+  r_uchains:'earned', r_upads:'earned', r_ucables:'earned', r_ucass:'earned', r_ubb:'earned', r_uspokes:'earned', r_utubes:'earned', r_rentused:'earned',
+  r_v1:'earned', r_v2:'earned', r_v3:'earned', r_v4:'earned',
+  r_v5:'earned', r_v6:'earned', r_v7:'earned'
+};
+var soloReasonIds = Object.keys(CORRECT_CATEGORY);
+
+var NARRATION_STEPS = [
+  { anna:"Start before May even began. You brought your laptop from home, and some gear you already owned. Each one's a single row, and the other side of that change (reason) isn't on this spreadsheet.",
+    reveal:['r_laptop','r_grind','r_press','r_vac'] },
+  { anna:"The Park Tool stand — bought for $200 in cash. Equipment went up; cash went down. Same reason on both rows.",
+    reveal:['r_stand_a','r_stand_b'] },
+  { anna:"Hand tools, shop equipment, fixtures, parts... They are all on the card. For each one: the thing up, the card up. Two rows apiece.",
+    reveal:['r_tools_a','r_tools_b','r_equip_a','r_equip_b','r_fix_a','r_fix_b','r_parts_a','r_parts_b'] },
+  { anna:"Then about $300 of those parts went into customer jobs — used up. One row; the other side isn't here.",
+    reveal:['r_uchains','r_upads','r_ucables','r_ucass','r_ubb','r_uspokes','r_utubes'] },
+  { anna:"The lease — $1,300 from cash, first and last month paid in advance. Then May happened: you used the space, so one month's worth is gone. The paying is a pair; the using-up stands alone.",
+    reveal:['r_rent_a','r_rent_b','r_rentused'] },
+  { anna:"Now the cash side for May. Click the Cash tab — every customer Venmo, and Smith's deposit.",
+    reveal:['r_v1','r_v2','r_v3','r_v4','r_v5','r_v6','r_v7','r_smith_a','r_smith_b'], goto:'cash' },
+  { anna:"That's the whole month. Click back to the Reasons tab and look at the full list.",
+    reveal:[], goto:'reasons' },
+  { anna:"Notice anything? Look closely — most reasons show up in two rows. Same event, two changes. A few stand alone. We'll come back to those.",
+    reveal:[], finish:true }
+];
+
+/* ===== formatters ===== */
+function xlDollars(v){ return (v<0?'−$':'$') + Math.abs(v).toLocaleString('en-US'); }
+function signedDollars(v){ var cls = v>=0 ? 'stmt-dep' : 'stmt-with'; return '<span class="'+cls+'">' + (v>=0?'+':'−') + '$' + Math.abs(v).toLocaleString('en-US') + '</span>'; }
+
+/* ===== state ===== */
+var phaseOrder = ['welcome','reasons-walk','pairs','movers','complete'];
+var phase = 'welcome';
+var step = 0;
+var activeTab = 'assets';
+var assetsExpanded = {};
+var cashExpanded = {};
+var liabExpanded = {};
+var revealed = {};
+var eliminated = {};
+var selectedReasonId = null;
+var eliminateAutoActive = false, eliminateAutoDone = false, eliminateNudge = null;
+var assignments = {};
+var sortAutoActive = false, sortAutoDone = false, sortNudge = null;
+var expandedSortCats = { contributed:true, earned:true };
+var curWbContainer = null;
+
+/* ===== phase nav + progress ===== */
+function goto(p){
+  playClick();
+  phase = p;
+  if(p==='pairs'){ REASONS.forEach(function(r){ revealed[r.id]=true; }); selectedReasonId=null; }
+  if(p==='movers'){ REASONS.forEach(function(r){ revealed[r.id]=true; }); eliminateAllPairs(); eliminateAutoDone=true; }
+  phaseOrder.forEach(function(ph){ document.getElementById('phase-'+ph).classList.toggle('active', ph===p); });
+  var pct = Math.round((phaseOrder.indexOf(p)/(phaseOrder.length-1))*100);
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progPct').textContent = pct+'%';
+  window.scrollTo(0,0);
+  if(p==='welcome'){ activeTab='assets'; renderWorkbook('wbWelcome'); }
+  if(p==='reasons-walk'){ activeTab='reasons'; renderWalk(); }
+  if(p==='pairs'){ activeTab='reasons'; renderPairs(); }
+  if(p==='movers'){ activeTab='reasons'; renderMovers(); }
+  if(window.lucide) lucide.createIcons();
+}
+function restart(){
+  step=0; activeTab='assets'; assetsExpanded={}; cashExpanded={}; liabExpanded={}; revealed={}; eliminated={};
+  selectedReasonId=null; eliminateAutoActive=false; eliminateAutoDone=false; eliminateNudge=null;
+  assignments={}; sortAutoActive=false; sortAutoDone=false; sortNudge=null;
+  expandedSortCats={ contributed:true, earned:true };
+  goto('welcome');
+}
+
+/* ===== shared builders ===== */
+function annaBox(inner, quoted){
+  var text = quoted ? '&ldquo;'+inner+'&rdquo;' : inner;
+  return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+text+'</div></div>';
+}
+function insightBox(label, inner){
+  return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>';
+}
+function contBtn(label, onclick){ return '<button class="btn-continue btn-block" onclick="'+onclick+'">'+label+' &rarr;</button>'; }
+function warnMsg(text){ return '<div class="sort-msg warn">'+text+'</div>'; }
+
+/* ===== Excel workbook ===== */
+function assetsSheet(){
+  var cats = ASSETS_SNAPSHOT.filter(function(c){ return c.cat!=='CASH'; });
+  var total = cats.reduce(function(s,c){ return s+c.subtotal; },0);
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Asset</div><div class="xl-v">Value</div></div>';
+  var n=0;
+  cats.forEach(function(cat){
+    var label = cat.cat==='RIGHT OF USE' ? 'Right of Use' : (cat.cat.charAt(0)+cat.cat.slice(1).toLowerCase());
+    var open = !!assetsExpanded[cat.cat]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleAssetCat(\''+cat.cat+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+label+'</div><div class="xl-v">'+xlDollars(cat.subtotal)+'</div></div>';
+    if(open){ cat.items.forEach(function(it){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+xlDollars(it.amount)+'</div></div>'; }); }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+xlDollars(total)+'</div></div>';
+  return html;
+}
+function liabilitiesSheet(){
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liability</div><div class="xl-v">Amount</div></div>';
+  var n = 0;
+  LIABILITIES_SNAPSHOT.forEach(function(l){
+    var open = !!liabExpanded[l.key]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleLiabCat(\''+l.key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+l.label+'</div><div class="xl-v">'+xlDollars(l.amount)+'</div></div>';
+    if(open){ l.items.forEach(function(it){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+it.name+'</div><div class="xl-v">'+xlDollars(it.amt)+'</div></div>'; }); }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+xlDollars(LIABILITIES_TOTAL)+'</div></div>';
+  return html;
+}
+function cashSheet(){
+  var inflows = CASH_FLOWS.filter(function(f){ return f.amount>0; });
+  var outflows = CASH_FLOWS.filter(function(f){ return f.amount<0; });
+  var totalIn = inflows.reduce(function(s,f){ return s+f.amount; },0);
+  var totalOut = outflows.reduce(function(s,f){ return s+f.amount; },0);
+  var net = totalIn + totalOut;
+  var html = '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Repair cash — May</div><div class="xl-v">Amount</div></div>';
+  var n = 0;
+  [ { key:'CASH IN', label:'Cash in', rows:inflows, subtotal:totalIn },
+    { key:'CASH OUT', label:'Cash out', rows:outflows, subtotal:totalOut } ].forEach(function(g){
+    var open = !!cashExpanded[g.key]; n++;
+    html += '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCashCat(\''+g.key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+n+'</div><div class="xl-c">'+g.label+'</div><div class="xl-v">'+signedDollars(g.subtotal)+'</div></div>';
+    if(open){ g.rows.forEach(function(f){ n++; html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum">'+n+'</div><div class="xl-c"><span class="cash-line-date">'+f.date+'</span>'+f.desc+'</div><div class="xl-v">'+signedDollars(f.amount)+'</div></div>'; }); }
+  });
+  html += '<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Cash on hand (May 31)</div><div class="xl-v">'+xlDollars(net)+'</div></div>';
+  return html;
+}
+function reasonsSheetWalkPairs(){
+  var revealedRows = REASONS.filter(function(r){ return revealed[r.id]; });
+  var visible = revealedRows.filter(function(r){ return !eliminated[r.id]; });
+  var sub;
+  if(revealedRows.length===0) sub = 'Empty for now. Walk through the month to fill it in.';
+  else if(phase==='pairs'){ var ep = Object.keys(eliminated).length/2; sub = visible.length+' '+(visible.length===1?'row':'rows')+' left ('+ep+' '+(ep===1?'pair':'pairs')+' crossed out).'; }
+  else sub = revealedRows.length+' '+(revealedRows.length===1?'row':'rows')+' so far.';
+  var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons — one row per change</div><div class="cash-sheet-sub">'+sub+'</div></div>';
+  if(revealedRows.length===0){ html += '<div class="bs-empty-msg">No reasons recorded yet.</div>'; return html; }
+  if(visible.length===0){ html += '<div class="bs-empty-msg">All paired rows crossed out.</div>'; return html; }
+  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Account &amp; reason</div><div class="xl-v">Δ</div></div>';
+  var clickable = (phase==='pairs' && !eliminateAutoActive && !eliminateAutoDone);
+  visible.forEach(function(r){
+    var sel = (selectedReasonId===r.id) ? ' selected' : '';
+    var onclick = clickable ? ' onclick="handleReasonClick(\''+r.id+'\')"' : '';
+    html += '<div class="xl-row xl-item'+sel+'"'+onclick+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r.account+' &mdash; '+r.reason+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div></div>';
+  });
+  return html;
+}
+function sortBody(){
+  var solos = REASONS.filter(function(r){ return soloReasonIds.indexOf(r.id)>=0; });
+  var unassigned = solos.filter(function(r){ return !assignments[r.id]; });
+  var contributed = solos.filter(function(r){ return assignments[r.id]==='contributed'; });
+  var earned = solos.filter(function(r){ return assignments[r.id]==='earned'; });
+  var cTotal = contributed.reduce(function(s,r){ return s+r.delta; },0);
+  var eTotal = earned.reduce(function(s,r){ return s+r.delta; },0);
+  var html = '';
+  if(unassigned.length>0){
+    html += '<div class="cash-sheet-head"><div class="cash-sheet-title">To sort ('+unassigned.length+' '+(unassigned.length===1?'row':'rows')+')</div></div>';
+    html += '<div class="cash-group">';
+    unassigned.forEach(function(r){
+      html += '<div class="dep-card">'+
+        '<div class="dep-card-head"><div><div class="dep-card-meta">'+r.account+' &middot; '+signedDollars(r.delta)+'</div><div class="dep-card-title">'+r.reason+'</div></div></div>'+
+        '<div class="classify-row"><span class="classify-label">Sort:</span>'+
+          '<button class="classify-btn" onclick="assignRow(\''+r.id+'\',\'contributed\')">&rarr; Contributed</button>'+
+          '<button class="classify-btn" onclick="assignRow(\''+r.id+'\',\'earned\')">&rarr; Generated</button>'+
+        '</div></div>';
+    });
+    html += '</div>';
+  }
+  html += sortSection('CONTRIBUTED','contributed',contributed,cTotal);
+  html += sortSection('GENERATED','earned',earned,eTotal);
+  return html;
+}
+function sortSection(title, key, rows, total){
+  var open = expandedSortCats[key];
+  var html = '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleSortCat(\''+key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum"></div><div class="xl-c">'+title+' ('+rows.length+')</div><div class="xl-v">'+signedDollars(total)+'</div></div>';
+  if(open){
+    if(rows.length===0) html += '<div class="bs-empty-msg">(empty so far)</div>';
+    else rows.forEach(function(r){ html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r.account+' &mdash; '+r.reason+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div></div>'; });
+  }
+  return html;
+}
+function renderWorkbook(containerId){
+  curWbContainer = containerId;
+  var allTabs = [{id:'assets',label:'Assets'},{id:'liabilities',label:'Liabilities'},{id:'cash',label:'Cash'},{id:'reasons',label:'Reasons',isNew:true}];
+  var tabs = (phase==='welcome') ? allTabs.filter(function(t){ return t.id!=='reasons'; }) : allTabs;
+  if(!tabs.some(function(t){ return t.id===activeTab; })) activeTab = tabs[0].id;
+  var body;
+  if(activeTab==='assets') body = assetsSheet();
+  else if(activeTab==='liabilities') body = liabilitiesSheet();
+  else if(activeTab==='cash') body = cashSheet();
+  else body = (phase==='movers') ? sortBody() : reasonsSheetWalkPairs();
+  var activeLabel = tabs.find(function(t){ return t.id===activeTab; }).label;
+  var tabsHtml = tabs.map(function(t){ return '<button class="xlwb-tab'+(t.id===activeTab?' active':'')+'" onclick="setTab(\''+t.id+'\')">'+t.label+(t.isNew?' <span class="xl-new-tag">new</span>':'')+'</button>'; }).join('');
+  var html = '<div class="xlwb">'+
+    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' sheet</span></div>'+
+    '<div>'+body+'</div>'+
+    '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
+  document.getElementById(containerId).innerHTML = html;
+  if(window.lucide) lucide.createIcons();
+}
+function setTab(id){ playClick(); activeTab = id; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleAssetCat(cat){ playClick(); assetsExpanded[cat] = !assetsExpanded[cat]; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleCashCat(key){ playClick(); cashExpanded[key] = !cashExpanded[key]; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleLiabCat(key){ playClick(); liabExpanded[key] = !liabExpanded[key]; if(curWbContainer) renderWorkbook(curWbContainer); }
+function toggleSortCat(key){ playClick(); expandedSortCats[key] = !expandedSortCats[key]; if(curWbContainer) renderWorkbook(curWbContainer); }
+
+/* ===== reasons-walk ===== */
+function advanceNarration(){
+  if(step >= NARRATION_STEPS.length-1) return;
+  playClick();
+  var s = NARRATION_STEPS[step];
+  if(s.reveal && s.reveal.length) s.reveal.forEach(function(id){ revealed[id]=true; });
+  if(s.goto) activeTab = s.goto;
+  step++;
+  window.scrollTo(0,0);
+  renderWalk();
+}
+function renderWalk(){
+  var s = NARRATION_STEPS[step];
+  document.getElementById('walkAnna').innerHTML = annaBox(s.anna, false);
+  renderWorkbook('wbWalk');
+  var ctrl = document.getElementById('walkControls');
+  if(!s.finish){
+    ctrl.innerHTML = contBtn(step===0 ? 'Start walking the month' : 'Next', 'advanceNarration()');
+  } else {
+    ctrl.innerHTML =
+      insightBox('Most reasons show up in two rows',
+        '<p>Same event, two changes. Buy parts on the card: parts up <em>and</em> the card up. Buy the stand with cash: the gear up <em>and</em> cash down. Smith&rsquo;s deposit: cash up <em>and</em> what you owe him up. You didn&rsquo;t plan that &mdash; it just appeared once you wrote the reasons next to the changes.</p>'+
+        '<p><strong>What if you crossed those matched pairs out?</strong></p>') +
+      contBtn('Cross out the matched pairs', "goto('pairs')");
+  }
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== pairs ===== */
+function handleReasonClick(id){
+  if(phase!=='pairs' || eliminated[id]) return;
+  if(eliminateAutoActive || eliminateAutoDone) return;
+  if(selectedReasonId===id){ selectedReasonId=null; renderPairs(); return; }
+  if(selectedReasonId===null){ playClick(); selectedReasonId=id; eliminateNudge=null; renderPairs(); return; }
+  var a = REASONS.find(function(r){ return r.id===selectedReasonId; });
+  var b = REASONS.find(function(r){ return r.id===id; });
+  if(a && b && a.reason===b.reason){
+    playSuccess(); eliminated[a.id]=true; eliminated[b.id]=true; selectedReasonId=null; eliminateNudge=null;
+  } else {
+    playNope(); eliminateNudge='no-match'; selectedReasonId=null;
+  }
+  renderPairs();
+}
+function eliminateAllPairs(){
+  var byReason = {};
+  REASONS.filter(function(r){ return revealed[r.id] && !eliminated[r.id]; }).forEach(function(r){ (byReason[r.reason] = byReason[r.reason] || []).push(r.id); });
+  Object.keys(byReason).forEach(function(k){ if(byReason[k].length===2) byReason[k].forEach(function(id){ eliminated[id]=true; }); });
+}
+function eliminateAutocomplete(){
+  if(eliminateAutoActive || eliminateAutoDone) return;
+  playClick(); eliminateAutoActive=true; selectedReasonId=null; eliminateNudge=null;
+  renderPairs();
+  setTimeout(function(){
+    eliminateAllPairs();
+    eliminateAutoActive=false; eliminateAutoDone=true; playSuccess(); renderPairs();
+  }, 700);
+}
+function renderPairs(){
+  var top = '';
+  if(!eliminateAutoDone){
+    top += annaBox('Many rows have a twin &mdash; same reason, two different accounts. Click one row, then click its twin. If the reasons match, both cross out. Those two changes move <em>together</em> &mdash; Assets and Liabilities shift by the same amount, so the difference between them doesn&rsquo;t budge.', true);
+    if(eliminateNudge==='no-match') top += warnMsg('&ldquo;Those two reasons aren&rsquo;t the same. Look for rows whose reason text matches exactly.&rdquo;');
+  }
+  document.getElementById('pairsTop').innerHTML = top;
+
+  renderWorkbook('wbPairs');
+
+  var eliminatedPairsCount = Object.keys(eliminated).length/2;
+  var visible = REASONS.filter(function(r){ return revealed[r.id] && !eliminated[r.id]; });
+  var counts = {};
+  visible.forEach(function(r){ counts[r.reason] = (counts[r.reason]||0)+1; });
+  var remainingPairsCount = Object.keys(counts).filter(function(k){ return counts[k]===2; }).length;
+  var triggerMet = eliminatedPairsCount>=2 && remainingPairsCount>0 && !eliminateAutoActive && !eliminateAutoDone;
+
+  var ctrl = '';
+  if(triggerMet){
+    ctrl = '<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Cross out the rest of the matched pairs?</p><button class="btn-continue btn-block" onclick="eliminateAutocomplete()">Cross out the rest &rarr;</button></div>';
+  } else if(eliminateAutoActive){
+    ctrl = '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Crossing out matched pairs&hellip;</div></div>';
+  } else if(eliminateAutoDone){
+    ctrl = annaBox('Look what&rsquo;s left. Just the rows with no twin on this spreadsheet &mdash; the $160 your personal self quietly covered, the laptop and gear you brought, the customer payments, the parts and the month you used up. Each of these <em>moved the difference</em>. Their other side lives somewhere you haven&rsquo;t built yet.', true) +
+      insightBox('The crossed-out ones just shuffled',
+        '<p>Buying parts on the card, the rent paid in advance, Smith&rsquo;s deposit &mdash; two lines moved by the same amount each time, so the difference didn&rsquo;t change. The reasons that are <strong>left over are the ones that moved the difference</strong> &mdash; the ones worth writing down to know how the repair work is doing.</p>') +
+      contBtn('Sort the reasons', "goto('movers')");
+  }
+  document.getElementById('pairsControls').innerHTML = ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== movers ===== */
+function assignRow(id, category){
+  if(phase!=='movers' || sortAutoActive || sortAutoDone) return;
+  if(assignments[id]) return;
+  if(CORRECT_CATEGORY[id]===category){
+    playSuccess(); assignments[id]=category; sortNudge=null;
+  } else {
+    playNope(); sortNudge = { rowId:id, attempted:category };
+  }
+  renderMovers();
+}
+function sortAutocomplete(){
+  if(sortAutoActive || sortAutoDone) return;
+  playClick(); sortAutoActive=true; sortNudge=null;
+  renderMovers();
+  setTimeout(function(){
+    soloReasonIds.forEach(function(id){ if(!assignments[id]) assignments[id]=CORRECT_CATEGORY[id]; });
+    sortAutoActive=false; sortAutoDone=true; playSuccess(); renderMovers();
+  }, 700);
+}
+function renderMovers(){
+  var correctlyAssigned = Object.keys(assignments).filter(function(id){ return CORRECT_CATEGORY[id]===assignments[id]; }).length;
+  var allSorted = correctlyAssigned===soloReasonIds.length;
+  var done = sortAutoDone || allSorted;
+  var triggerMet = correctlyAssigned>=2 && !allSorted && !sortAutoActive && !sortAutoDone;
+
+  var top = '';
+  if(!done){
+    top += annaBox('The reasons on your tab &mdash; the changes with no match &mdash; split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work &mdash; the laptop and gear from home, and the $160 your personal self quietly covered. The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month the work used up. Drop each row into the right bin.', true);
+    if(sortNudge){
+      var msg = (sortNudge.attempted==='contributed')
+        ? 'That one didn&rsquo;t come from you bringing something in &mdash; it came from doing the repair work. Try the other bin.'
+        : 'That one didn&rsquo;t come from doing repair work &mdash; you brought it in from outside. Try the other bin.';
+      top += warnMsg('&ldquo;'+msg+'&rdquo;');
+    }
+  }
+  document.getElementById('nmTop').innerHTML = top;
+
+  renderWorkbook('wbNM');
+
+  var ctrl = '';
+  if(triggerMet){
+    ctrl = '<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Sort the rest?</p><button class="btn-continue btn-block" onclick="sortAutocomplete()">Sort the rest &rarr;</button></div>';
+  } else if(sortAutoActive){
+    ctrl = '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Sorting the rest&hellip;</div></div>';
+  } else if(done){
+    var contributedTotal = REASONS.filter(function(r){ return assignments[r.id]==='contributed'; }).reduce(function(s,r){ return s+r.delta; },0);
+    var earnedTotal = REASONS.filter(function(r){ return assignments[r.id]==='earned'; }).reduce(function(s,r){ return s+r.delta; },0);
+    ctrl = annaBox('There it is &mdash; the reasons, sorted into their two kinds. What you <strong>contributed</strong>: '+signedDollars(contributedTotal)+', the laptop and gear from home, and the cash your personal self covered. And what the work <strong>generated</strong>: '+signedDollars(earnedTotal)+' &mdash; the customer work, after the parts and the month it took to do it. That figure is what the repair work produced on its own in May.', true) +
+      insightBox('Two ways the difference grew',
+        '<p><strong>Contributed ('+signedDollars(contributedTotal)+'):</strong> you funded it &mdash; cash from the day job, gear from home. From outside the repair work.</p>'+
+        '<p><strong>Generated ('+signedDollars(earnedTotal)+'):</strong> the work generated it &mdash; what customers paid, less the parts used and the month of space used up.</p>'+
+        '<p>You haven&rsquo;t named the thing these add up to yet, or seen where their other sides live. That&rsquo;s next.</p>') +
+      contBtn('Finish up', "goto('complete')");
+  }
+  document.getElementById('nmControls').innerHTML = ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+
+/* ===== glossary ===== */
+function openGlossary(){ m1GlossaryOpen('14-1'); }
+function closeGlossary(){ m1GlossaryClose(); }
+
+/* ===== standalone-phase overrides ===== */
+function goto(){ /* cross-phase navigation disabled — this file is standalone */ }
+var __origContBtn = contBtn;
+contBtn = function(label, onclick){
+  if(onclick && onclick.indexOf('goto(') >= 0) return '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
+  return __origContBtn(label, onclick);
+};
+function restart(){ window.location.reload(); }
+
+/* ===== segmented progress ===== */
+var PHASE_INDEX = 0;
+var PHASE_TITLE = '';
+function renderSegProgress(){
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+renderSegProgress();
+
+/* ===== init ===== */
+phase='welcome'; activeTab='assets'; renderWorkbook('wbWelcome');
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

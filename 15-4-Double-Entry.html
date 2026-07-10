@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 5 — Double-Entry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    </div>
+
+    <div class="narrative-block">
+      <p>Step back from the workbench for a second. None of what you built is new.</p>
+    </div>
+    <div class="section-card">
+      <p><strong>~3000 BCE.</strong> Scribes in Mesopotamia pressed wedge marks into clay: so much grain in the storehouse, so many sheep, who owes what at harvest. A list of things and a list of promises &mdash; your Assets and Liabilities tabs, five thousand years early. That half is ancient.</p>
+      <p><strong>1494.</strong> A Franciscan friar, Luca Pacioli, writes down a method Italian merchants had used for two centuries: every change gets recorded on <em>two</em> sides. The pairing you stumbled into in your Reasons tab &mdash; where each change had a partner &mdash; is exactly it.</p>
+    </div>
+    <div class="dialog-box anna">
+      <div class="dialog-label">ANNA</div>
+      <div class="dialog-text">&ldquo;That pairing has a name: <strong>double-entry</strong>. Two sides to every change &mdash; no exceptions, not even the reasons. When Equipment went up and the Card went up with it, you saw both sides right there on the sheets: a match. When the laptop came in with nothing on the Card or in Cash to match it, it still had two sides &mdash; you just wrote the second one on the Reasons tab, because it belonged somewhere your sheets don&rsquo;t have a name for yet. A match and a reason aren&rsquo;t two different rules. They&rsquo;re the same rule &mdash; every change gets a match or a reason &mdash; told twice, depending on where the second side landed. And it&rsquo;s not a relic &mdash; <em>every</em> number on <em>every</em> financial statement produced today still gets there by double-entry. The identity and the balance sheet you built by hand are the same ones the largest companies in the world produce.&rdquo;</div>
+    </div>
+    <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var PHASE_INDEX = 3;
+var PHASE_TITLE = '';
+
+/* ===== glossary ===== */
+function openGlossary(){ m1GlossaryOpen('15-4'); }
+function closeGlossary(){ m1GlossaryClose(); }
+
+/* ===== progress ===== */
+function renderSegProgress(){
+  document.getElementById('phaseTitle').textContent = PHASE_TITLE;
+}
+
+/* ===== init ===== */
+renderSegProgress();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>
