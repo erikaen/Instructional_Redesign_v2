@@ -19,7 +19,7 @@
     </div>
 
     <div class="narrative-block"><p>You&rsquo;ve been using your personal bank account for the repair work. Last month&rsquo;s bank statement just arrived. Anna sits down at the workbench with you to look it over.</p></div>
-    <div class="dialog-box anna" style="margin-top: 20px;">
+    <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
       <div class="dialog-text">&ldquo;Okay, let&rsquo;s clean this up first. There&rsquo;s a lot in here that has nothing to do with your repair work, like your paycheck, apartment rent, and groceries. We have to pull out the rows that actually belong with the repair work. For each row, decide whether it belongs with the <strong>repair work</strong> or with your <strong>personal life</strong>. Click the <strong><i data-lucide="info" class="licon"></i></strong> on any row to see what it was.&rdquo;</div>
     </div>
@@ -86,9 +86,9 @@ var classifications = {}, expandedDescId = null, sortChecked = false, sortAutoDo
 /* ===== generic statement ===== */
 function renderStatement(rows, opts){
   var grid = opts.bank ? 'stmt-grid-bank' : 'stmt-grid-card';
-  var html = '<div class="stmt" style="margin-top:20px;">';
+  var html = '<div class="stmt">';
   html += '<div class="stmt-head"><div><div class="stmt-bank">'+opts.bankName+'</div><div class="stmt-acct">'+opts.acct+'</div></div>'+
-    '<div style=""><div class="stmt-period-label">Statement Period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
+    '<div><div class="stmt-period-label">Statement Period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
   html += '<div class="stmt-balrow"><span>'+opts.topLabel+'</span><span class="stmt-num">'+opts.topVal+'</span></div>';
   if(opts.bank){
     html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Withdrawal</span><span class="stmt-num">Deposit</span><span class="stmt-num">Balance</span><span></span></div>';
@@ -102,7 +102,7 @@ function renderStatement(rows, opts){
     var open = opts.expandedId === tx.id;
     var tag = '';
     if(cls){ var lbl = cls==='shop'?'Repair':cls.charAt(0).toUpperCase()+cls.slice(1); tag = '<span class="stmt-tag '+cls+'">'+lbl+'</span>'; }
-    if(wrong) tag += '<span style="color:#dc2626;font-weight:600;font-size:0.85em;margin-left:4px;">Try Again</span>';
+    if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
     if(opts.checked && cls && !wrong) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
     html += '<div class="stmt-row '+grid+(i%2?' alt':'')+'">'+
       '<div class="stmt-stripe '+stripeCls+'"></div>'+

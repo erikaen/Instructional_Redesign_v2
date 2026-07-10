@@ -19,7 +19,7 @@
     </div>
 
     <div class="narrative-block"><p>You open your personal credit card statement for May and compare it with the Excel workbook you&rsquo;ve been building.</p></div>
-    <div class="dialog-box anna" style="margin-top:20px;">
+    <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
       <div class="dialog-text"><p>&ldquo;Smith&rsquo;s deposit gave you one kind of promise: you received cash before doing the work, so you still owe him the custom frame. Now let&rsquo;s look for a different kind of promise: money you still owe because you used the credit card to buy things.</p><br><p>Your credit card statement has repair-related activity mixed with personal spending. Some lines are <strong>charges</strong>, which <strong>increase</strong> what you owe. Other lines are <strong>payments</strong>, which <strong>reduce</strong> what you owe.</p><br><p>Let&rsquo;s sort the credit card statement the same way we sorted the bank statement. For each row, decide whether it belongs with the <strong>repair work</strong> or with your <strong>personal life</strong>. Click the <strong><i data-lucide="info" class="licon"></i></strong> on any row to see what it was.&rdquo;</p></div>
     </div>
@@ -80,9 +80,9 @@ var cardMCQSel = null, cardMCQSubmitted = false;
 /* ===== generic statement ===== */
 function renderStatement(rows, opts){
   var grid = opts.bank ? 'stmt-grid-bank' : 'stmt-grid-card';
-  var html = '<div class="stmt" style="margin-top:20px;">';
+  var html = '<div class="stmt">';
   html += '<div class="stmt-head"><div><div class="stmt-bank">'+opts.bankName+'</div><div class="stmt-acct">'+opts.acct+'</div></div>'+
-    '<div style=""><div class="stmt-period-label">Statement Period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
+    '<div><div class="stmt-period-label">Statement Period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
   html += '<div class="stmt-balrow"><span>'+opts.topLabel+'</span><span class="stmt-num">'+opts.topVal+'</span></div>';
   if(opts.bank){
     html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Withdrawal</span><span class="stmt-num">Deposit</span><span class="stmt-num">Balance</span><span></span></div>';
@@ -96,7 +96,7 @@ function renderStatement(rows, opts){
     var open = opts.expandedId === tx.id;
     var tag = '';
     if(cls){ var lbl = cls.charAt(0).toUpperCase()+cls.slice(1); tag = '<span class="stmt-tag '+cls+'">'+lbl+'</span>'; }
-    if(wrong) tag += '<span style="color:#dc2626;font-weight:600;font-size:0.85em;margin-left:4px;">Try Again</span>';
+    if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
     if(opts.checked && cls && !wrong) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
     html += '<div class="stmt-row '+grid+(i%2?' alt':'')+'">'+
       '<div class="stmt-stripe '+stripeCls+'"></div>'+

@@ -19,16 +19,16 @@
     </div>
 
     <div class="narrative-block"><p>The Cash sheet shows eight customer deposits during May, but it does not tell you what each customer paid for.</p></div>
-    <div id="depChips" style="margin-top: 20px;"></div>
-    <div class="dialog-box anna" style="margin-top:20px; margin-bottom:0;">
+    <div id="depChips"></div>
+    <div class="dialog-box anna" style="margin-bottom:0;">
       <div class="dialog-label">ANNA</div>
       <div class="dialog-text">&ldquo;To figure out what each customer paid for, we need to check the receipts.&rdquo;</div>
     </div>
-    <button class="reveal-doc-btn" id="showReceiptsBtn" onclick="showReceipts()" style="margin-top:20px;"><i data-lucide="receipt" class="licon"></i> Pull out the customer receipts</button>
-    <div id="depWrap" hidden style="margin-top:20px;">
+    <button class="reveal-doc-btn" id="showReceiptsBtn" onclick="showReceipts()"><i data-lucide="receipt" class="licon"></i> Pull out the customer receipts</button>
+    <div id="depWrap" hidden>
       <div id="depList"></div>
     </div>
-    <div id="depositsClose" hidden style="margin-top:20px;"></div>
+    <div id="depositsClose" hidden></div>
 
   </div>
 </div>
@@ -160,7 +160,7 @@ function renderDeposits(){
   var nav = '<div style="display:flex; justify-content:space-between; gap:8px; margin-top:14px;"><div style="display:flex; gap:8px;">'+backBtn+submitBtn+'</div><div style="display:flex; gap:8px;">'+resetBtn+nextBtn+'</div></div>';
 
   var html = '<div class="dep-card">'+
-    '<div style="font-size:var(--font-xs); text-transform:uppercase; letter-spacing:0.5px; color:#888; font-weight:700; margin-bottom:10px;">Receipt '+(currentDeposit+1)+' of '+deposits.length+'</div>'+
+    '<div class="section-tag">Receipt '+(currentDeposit+1)+' of '+deposits.length+'</div>'+
     '<div class="dep-receipt"><div class="dep-receipt-head"><span class="dep-receipt-label">Customer receipt '+d.receiptNum+'</span><span class="dep-receipt-meta">'+d.date+', 2026 &middot; '+d.payment+'</span></div>'+
     '<table class="dep-receipt-table"><tbody>'+rows+'<tr class="total"><td>Total</td><td class="num">$'+d.amount+'.00</td></tr></tbody></table>'+
     (d.note?'<div class="dep-receipt-note">'+d.note+'</div>':'')+'</div>'+

@@ -30,7 +30,7 @@
       <div class="dialog-label">ANNA</div>
       <div class="dialog-text">&ldquo;$1,300 sounds high for one month&rsquo;s rent around here. The bank statement tells us the money went to Westville Properties, but it doesn&rsquo;t tell us what the payment covered. Do you still have the lease agreement?&rdquo;</div>
     </div>
-    <button class="reveal-doc-btn" id="showLeaseBtn" onclick="showLease()" style="margin-top:20px; margin-bottom:0"><i data-lucide="file-text" class="licon"></i> Pull out the lease agreement</button>
+    <button class="reveal-doc-btn" id="showLeaseBtn" onclick="showLease()" style="margin-bottom:0"><i data-lucide="file-text" class="licon"></i> Pull out the lease agreement</button>
     <div id="leaseWrap" hidden></div>
 
   </div>
@@ -77,7 +77,7 @@ function showLease(){
   wrap.hidden=false;
   wrap.innerHTML =
     '<div class="lease"><div class="lease-head"><div><div class="lease-name">WESTVILLE PROPERTIES LLC</div><div class="lease-sub">Commercial Lease Agreement</div></div>'+
-      '<div style=""><div class="lease-dated-label">Dated</div><div class="lease-dated">May 1, 2026</div></div></div>'+
+      '<div><div class="lease-dated-label">Dated</div><div class="lease-dated">May 1, 2026</div></div></div>'+
     '<div class="lease-terms"><p><strong>Premises.</strong> Ground-floor commercial unit (~600 sq ft) at 142 Whalley Avenue, Unit B, for use as a bicycle repair workspace.</p>'+
       '<p><strong>Term.</strong> Month-to-month, commencing May 1, 2026.</p>'+
       '<p><strong>Rent.</strong> $650.00 per month, due on the first of each month.</p>'+
@@ -130,8 +130,8 @@ function submitRent(){
     fb.className='feedback ok show';
     fb.innerHTML='Correct. The bank statement showed one $1,300 payment. The lease agreement shows that $650 was for May, and $650 was paid ahead for the final month of the lease.';
     var close=document.getElementById('rentClose'); close.hidden=false;
-    close.innerHTML = '<div class="insight-box" style="margin-top:20px"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Something You Still Have</div><p>The bank statement only showed $1,300 going out. The lease agreement shows something more: $650 of that payment was for May, and the other $650 is still useful after May. It represents a <strong>present right to use the workspace in the future</strong>.</p></div>'+
-      '<div class="next-phase-msg" style="margin-top:20px">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
+    close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Something You Still Have</div><p>The bank statement only showed $1,300 going out. The lease agreement shows something more: $650 of that payment was for May, and the other $650 is still useful after May. It represents a <strong>present right to use the workspace in the future</strong>.</p></div>'+
+      '<div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>';
     if(window.lucide) lucide.createIcons();
   } else {
     playNope();
