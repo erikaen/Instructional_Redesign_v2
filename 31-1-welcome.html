@@ -98,33 +98,28 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 function nav(url){ playClick(); window.location.href = url; }
 function restart(){ window.location.reload(); }
 
-/* ===== the opening balance sheet (June 1) — the full statement, every line ===== */
-function bsSection(t){ return '<div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary);margin:10px 0 2px">'+t+'</div>'; }
-function bsRow(label,val,opts){
-  opts=opts||{};
-  var top=opts.rule?'border-top:2px solid var(--border-strong);margin-top:2px;':'';
-  var w=opts.bold?'700':'400';
-  return '<div style="display:flex;align-items:baseline;font-size:var(--font-s);padding:3px 4px;'+top+'font-weight:'+w+'"><span style="flex:1">'+label+'</span><span class="mono" style="width:84px;text-align:right">'+val+'</span></div>';
-}
+/* ===== the opening balance sheet (June 1) — the full statement, every line.
+   Same shared markup as 15-2 / 41-1: .acct-col + .bs-header + .acct-line/.acct-total ===== */
+function bsRow(label,val){ return '<div class="acct-line"><span>'+label+'</span><span class="acct-val">'+val+'</span></div>'; }
+function bsTotal(label,val){ return '<div class="acct-total"><span>'+label+'</span><span>'+val+'</span></div>'; }
 /* ===== the LLC's name — chosen by the student in 2.2, persisted to localStorage ===== */
 var memberName=''; try{ var _n=localStorage.getItem('m2Member'); if(_n) memberName=_n; }catch(e){}
 function llcName(){ return (memberName.trim()||'[Your Name]') + '’s Bike Repairs, LLC'; }
 
 function buildOpeningBS(showTotal){
-  var h='<div class="section-card">';
-  h+='<div style="text-align:center;font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary)">'+llcName()+'</div>';
-  h+='<div style="text-align:center;font-size:var(--font-xs);opacity:0.65;margin-bottom:10px">Opening balance sheet &middot; June 1, 2026</div>';
-  h+=bsSection('Assets');
-  [['Cash','$1,300'],['Right of Use','$650'],['Parts','$200'],['Tools &amp; Repair Equipment','$1,200'],['Fixtures','$750'],['Laptop','$610']].forEach(function(r){ h+=bsRow(r[0],r[1],{}); });
-  h+=bsRow('Total assets','$4,710',{bold:true,rule:true});
-  h+=bsSection('Liabilities');
-  h+=bsRow('Credit Card','$2,030',{});
-  h+=bsRow('Customer Deposit','$220',{});
-  h+=bsRow('Total liabilities','$2,250',{bold:true,rule:true});
-  h+=bsSection('Members&rsquo; capital');
-  h+=bsRow('Contributed','$2,290',{});
-  h+=bsRow('Generated','$170',{});
-  h+=bsRow('Total members&rsquo; capital (Assets &minus; Liabilities)', showTotal?'$2,460':'?', {bold:true,rule:true});
+  var h='<div class="acct-col">';
+  h+='<div class="bs-header"><div class="bs-header-title">'+llcName()+'</div><div class="bs-header-date">Opening balance sheet &middot; June 1, 2026</div></div>';
+  h+='<h4>Assets</h4>';
+  [['Cash','$1,300'],['Right of Use','$650'],['Parts','$200'],['Tools &amp; Repair Equipment','$1,200'],['Fixtures','$750'],['Laptop','$610']].forEach(function(r){ h+=bsRow(r[0],r[1]); });
+  h+=bsTotal('Total assets','$4,710');
+  h+='<h4>Liabilities</h4>';
+  h+=bsRow('Credit Card','$2,030');
+  h+=bsRow('Customer Deposit','$220');
+  h+=bsTotal('Total liabilities','$2,250');
+  h+='<h4>Members&rsquo; capital</h4>';
+  h+=bsRow('Contributed','$2,290');
+  h+=bsRow('Generated','$170');
+  h+=bsTotal('Total members&rsquo; capital (Assets &minus; Liabilities)', showTotal?'$2,460':'?');
   h+='</div>';
   document.getElementById('openingBS').innerHTML=h;
 }

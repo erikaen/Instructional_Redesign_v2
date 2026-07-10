@@ -76,29 +76,42 @@ var MCQ = [
   { id:'c', text:'Both are true: the season was profitable, and it still ended with less cash than it started &mdash; they&rsquo;re not answering the same question.', ok:true,
     fb:'Right. Net income $2,640 and Cash down $680 are both exactly what the records show. Nothing is broken. The season was <strong>profitable</strong> <em>and</em> it spent more cash than it took in &mdash; profit is not cash. They&rsquo;re two different questions, and the records answer both honestly.' }
 ];
-var mcqAnswered = null;
+var mcqSel = null, mcqSubmitted = false;
 
 function renderMcq(){
+  var correct = mcqSubmitted && MCQ[mcqSel].ok;
   var h = '<div class="mc-card"><div class="mc-q">Cash fell from '+BRW.dol(CASH_OPEN)+' to '+BRW.dol(CASH_NOW)+' this season &mdash; down '+BRW.dol(CASH_FALL)+' &mdash; even though the Income sheet already shows a '+BRW.dol(NET_INCOME)+' profit. What&rsquo;s the honest read of that?</div><div class="mc-opts">';
   MCQ.forEach(function(o,i){
-    var cls = 'mc-opt' + (mcqAnswered===i ? (o.ok?' correct':' wrong') : '') + (mcqAnswered!==null && MCQ[mcqAnswered].ok ? ' locked' : '');
-    h += '<div class="'+cls+'" onclick="answerMcq('+i+')">'+o.text+'</div>';
+    var cls = 'mc-opt' + (!mcqSubmitted && mcqSel===i ? ' selected' : '') + (mcqSubmitted && mcqSel===i ? (o.ok?' correct':' wrong') : '') + (mcqSubmitted ? ' locked' : '');
+    h += '<div class="'+cls+'" onclick="selectMcq('+i+')"><div class="mc-letter">'+String.fromCharCode(65+i)+'</div><div>'+o.text+'</div></div>';
   });
-  h += '</div><div class="feedback'+(mcqAnswered!==null?(MCQ[mcqAnswered].ok?' ok':' err')+' show':'')+'" id="mcqFb">'+(mcqAnswered!==null?MCQ[mcqAnswered].fb:'')+'</div></div>';
+  h += '</div><div class="feedback'+(mcqSubmitted?(correct?' ok':' err')+' show':'')+'" id="mcqFb">'+(mcqSubmitted?MCQ[mcqSel].fb:'')+'</div></div>';
+  h += '<div class="btn-row">'+(mcqSubmitted
+      ? '<button class="btn-reset" onclick="resetMcq()" style="margin-left:auto;">Reset</button>'
+      : '<button class="btn-continue" onclick="submitMcq()"'+(mcqSel===null?' disabled':'')+'>Submit</button>')+'</div>';
   return h;
 }
-function answerMcq(i){
-  if(mcqAnswered!==null && MCQ[mcqAnswered].ok) return;
-  mcqAnswered = i;
-  if(MCQ[i].ok) playSuccess(); else playNope();
+function selectMcq(i){
+  if(mcqSubmitted) return;
+  mcqSel = i;
+  renderAll();
+}
+function submitMcq(){
+  if(mcqSel===null || mcqSubmitted) return;
+  mcqSubmitted = true;
+  if(MCQ[mcqSel].ok) playSuccess(); else playNope();
   renderAll();
   window.scrollTo(0, document.body.scrollHeight);
+}
+function resetMcq(){
+  mcqSel = null; mcqSubmitted = false;
+  renderAll();
 }
 
 function renderAll(){
   document.getElementById('controls').innerHTML = renderMcq();
   var anna = '', ctrl2 = '';
-  if(mcqAnswered!==null && MCQ[mcqAnswered].ok){
+  if(mcqSubmitted && MCQ[mcqSel].ok){
     anna = annaBox('The Income sheet says <strong>Net income '+BRW.dol(NET_INCOME)+'</strong> &mdash; a genuinely profitable summer. And the Cash line reads <strong>'+BRW.dol(CASH_NOW)+'</strong>, down from <strong>'+BRW.dol(CASH_OPEN)+'</strong> on June 1 &mdash; down <strong>'+BRW.dol(CASH_FALL)+'</strong> over that same profitable season. Both readings, straight off the books you already built. Neither one is the mistake.');
     ctrl2 = insightBox('Two honest answers to two different questions',
         '<p>Profitable, <em>and</em> poorer in cash. Not an error. Not a theft. &ldquo;How did the shop do?&rdquo; turns out to be two questions, not one: cash misses things, and net income misses different things. That&rsquo;s why there are two statements &mdash; each answers honestly for its own question.</p>')
@@ -127,7 +140,7 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
 /* ===== init — the graduated workbook, Assets tab, Cash line open ===== */
-window.devFill = function(){ mcqAnswered=2; renderAll(); };
+window.devFill = function(){ mcqSel=2; mcqSubmitted=true; renderAll(); };
 BR_WB.registerSeasonSheets();
 BRW.mount('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true }));
 BRW.tab('wb', 'assets');

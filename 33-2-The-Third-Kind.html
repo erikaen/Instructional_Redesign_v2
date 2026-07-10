@@ -34,6 +34,7 @@
       <div class="mc-opts" id="mcOpts"></div>
       <div class="feedback" id="mcqFb"></div>
     </div>
+    <div class="btn-row" id="mcqBtnRow"></div>
 
     <div id="wb"></div>
     <div id="anna"></div>
@@ -83,30 +84,43 @@ var MCQ = [
   { id:'c', text:'None of those works &mdash; someone has to choose a rule.', ok:true,
     fb:'Right. Nothing to watch go, no month that expires, and market prices answer a different question. If the season is to carry a share of the tools&rsquo; cost, the share has to come from a <strong>chosen rule</strong>.' }
 ];
-var mcqAnswered = null, recorded = false;
+var mcqSel = null, mcqSubmitted = false, recorded = false;
 
 function renderMcq(){
   var h='';
   MCQ.forEach(function(o,i){
-    var cls = 'mc-opt' + (mcqAnswered===i ? (o.ok?' correct':' wrong') : '') + (mcqAnswered!==null && MCQ[mcqAnswered].ok ? ' locked' : '');
-    h += '<div class="'+cls+'" onclick="answerMcq('+i+')">'+o.text+'</div>';
+    var cls = 'mc-opt' + (!mcqSubmitted && mcqSel===i ? ' selected' : '') + (mcqSubmitted && mcqSel===i ? (o.ok?' correct':' wrong') : '') + (mcqSubmitted ? ' locked' : '');
+    h += '<div class="'+cls+'" onclick="selectMcq('+i+')"><div class="mc-letter">'+String.fromCharCode(65+i)+'</div><div>'+o.text+'</div></div>';
   });
   document.getElementById('mcOpts').innerHTML = h;
   var fb = document.getElementById('mcqFb');
-  fb.className = 'feedback'+(mcqAnswered!==null?(MCQ[mcqAnswered].ok?' ok':' err')+' show':'');
-  fb.innerHTML = mcqAnswered!==null ? MCQ[mcqAnswered].fb : '';
+  fb.className = 'feedback'+(mcqSubmitted?(MCQ[mcqSel].ok?' ok':' err')+' show':'');
+  fb.innerHTML = mcqSubmitted ? MCQ[mcqSel].fb : '';
+  document.getElementById('mcqBtnRow').innerHTML = !mcqSubmitted
+    ? '<button class="btn-continue" onclick="submitMcq()"'+(mcqSel===null?' disabled':'')+'>Submit</button>'
+    : (recorded ? '' : '<button class="btn-reset" onclick="resetMcq()" style="margin-left:auto;">Reset</button>');
 }
-function answerMcq(i){
-  if(recorded || (mcqAnswered!==null && MCQ[mcqAnswered].ok)) return;
-  mcqAnswered = i;
-  if(MCQ[i].ok) playSuccess(); else playNope();
+function selectMcq(i){
+  if(mcqSubmitted) return;
+  mcqSel = i;
+  renderMcq();
+}
+function submitMcq(){
+  if(mcqSel===null || mcqSubmitted) return;
+  mcqSubmitted = true;
+  if(MCQ[mcqSel].ok) playSuccess(); else playNope();
   renderMcq(); renderTalk();
   window.scrollTo(0, document.body.scrollHeight);
+}
+function resetMcq(){
+  if(recorded) return;
+  mcqSel = null; mcqSubmitted = false;
+  renderMcq(); renderTalk();
 }
 
 function renderTalk(){
   var anna='', ctrl='';
-  if(mcqAnswered===null || !MCQ[mcqAnswered].ok){
+  if(!mcqSubmitted || !MCQ[mcqSel].ok){
     document.getElementById('anna').innerHTML=''; document.getElementById('controls').innerHTML='';
     return;
   }
@@ -129,7 +143,7 @@ function recordWear(){
   recorded = true;
   BRW.update('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true }));
   BRW.tab('wb', 'expenses');
-  renderTalk();
+  renderMcq(); renderTalk();
   window.scrollTo(0, document.body.scrollHeight);
 }
 
@@ -151,7 +165,7 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
 /* ===== init — the graduated workbook, Expenses tab, wear not yet recorded ===== */
-window.devFill = function(){ mcqAnswered=3; renderMcq(); if(!recorded) recordWear(); };
+window.devFill = function(){ mcqSel=3; mcqSubmitted=true; renderMcq(); if(!recorded) recordWear(); };
 BR_WB.registerSeasonSheets();
 BRW.mount('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true }));
 BRW.tab('wb', 'expenses');

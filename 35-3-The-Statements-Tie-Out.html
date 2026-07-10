@@ -97,34 +97,48 @@ var MOVES = [
     ], fbOk:'Right &mdash; $170 (carried from May) + $2,640 net income &minus; $600 draw = $2,210. Net income comes off the Income Statement and the draw is an owner move, but the Statement of Changes in Members&rsquo; Capital is where they combine into Generated&rsquo;s move.',
        fbWrong:'Contributed never moved this season &mdash; no new contributions came in. Generated is built from what the work produced and what the owner took out.' }
 ];
-var answered = {};
+var sel = {}, answered = {};
 
 function renderMatch(){
   var h = '';
   MOVES.forEach(function(m, mi){
     var locked = answered[m.id] !== undefined;
+    var chosen = locked ? m.opts[answered[m.id]] : null;
     h += '<div class="mc-card"><div class="mc-q">'+ (mi+1) +'. '+m.prompt+'</div><div class="mc-opts">';
     m.opts.forEach(function(o,i){
-      var cls = 'mc-opt' + (locked && answered[m.id]===i ? (o.ok?' correct':' wrong') : '') + (locked && m.opts.some(function(x,xi){return xi===answered[m.id] && x.ok;}) ? ' locked' : '');
-      h += '<div class="'+cls+'" onclick="answerMove(\''+m.id+'\','+i+')">'+o.text+'</div>';
+      var cls = 'mc-opt' + (!locked && sel[m.id]===i ? ' selected' : '') + (locked && answered[m.id]===i ? (o.ok?' correct':' wrong') : '') + (locked ? ' locked' : '');
+      h += '<div class="'+cls+'" onclick="selectMove(\''+m.id+'\','+i+')"><div class="mc-letter">'+String.fromCharCode(65+i)+'</div><div>'+o.text+'</div></div>';
     });
     h += '</div>';
     if(locked){
-      var chosen = m.opts[answered[m.id]];
       h += '<div class="feedback '+(chosen.ok?'ok':'err')+' show">'+(chosen.ok?m.fbOk:m.fbWrong)+'</div>';
     }
     h += '</div>';
+    h += '<div class="btn-row">'+(locked
+        ? (chosen.ok ? '' : '<button class="btn-reset" onclick="resetMove(\''+m.id+'\')" style="margin-left:auto;">Reset</button>')
+        : '<button class="btn-continue" onclick="submitMove(\''+m.id+'\')"'+(sel[m.id]===undefined?' disabled':'')+'>Submit</button>')+'</div>';
   });
   document.getElementById('matchArea').innerHTML = h;
   if(window.lucide) lucide.createIcons();
 }
-function answerMove(id, i){
+function selectMove(id, i){
+  if(answered[id]!==undefined) return;
+  sel[id] = i;
+  renderMatch();
+}
+function submitMove(id){
   var m = MOVES.filter(function(x){return x.id===id;})[0];
-  if(answered[id]!==undefined && m.opts[answered[id]].ok) return;
-  answered[id] = i;
-  if(m.opts[i].ok) playSuccess(); else playNope();
+  if(sel[id]===undefined || answered[id]!==undefined) return;
+  answered[id] = sel[id];
+  if(m.opts[answered[id]].ok) playSuccess(); else playNope();
   renderMatch();
   maybeFinish();
+}
+function resetMove(id){
+  var m = MOVES.filter(function(x){return x.id===id;})[0];
+  if(answered[id]!==undefined && m.opts[answered[id]].ok) return;
+  delete answered[id]; delete sel[id];
+  renderMatch();
 }
 function allCorrect(){
   return MOVES.every(function(m){ return answered[m.id]!==undefined && m.opts[answered[m.id]].ok; });

@@ -67,7 +67,7 @@ function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 /* ===== the walk: metered parts -> time-lapsed rent -> the silent third ===== */
-var step = 0, mcqAnswered = null;
+var step = 0, mcqSel = null, mcqSubmitted = false;
 var MCQ = [
   { id:'a', text:'About $1,200 &mdash; it&rsquo;s inside the Parts used rows.',
     fb:'Those rows are the <em>parts</em> &mdash; counted off the shelf, dollar by dollar. The stand, the compressor, the truing stand: still on the bench, still whole. Their wear isn&rsquo;t in there.' },
@@ -98,25 +98,38 @@ function renderTalk(){
 }
 
 function renderMcq(){
+  var correct = mcqSubmitted && MCQ[mcqSel].ok;
   var h = '<div class="mc-card"><div class="mc-opts">';
   MCQ.forEach(function(o,i){
-    var cls = 'mc-opt' + (mcqAnswered===i ? (o.ok?' correct':' wrong') : '') + (mcqAnswered!==null && MCQ[mcqAnswered].ok ? ' locked' : '');
-    h += '<div class="'+cls+'" onclick="answerMcq('+i+')">'+o.text+'</div>';
+    var cls = 'mc-opt' + (!mcqSubmitted && mcqSel===i ? ' selected' : '') + (mcqSubmitted && mcqSel===i ? (o.ok?' correct':' wrong') : '') + (mcqSubmitted ? ' locked' : '');
+    h += '<div class="'+cls+'" onclick="selectMcq('+i+')"><div class="mc-letter">'+String.fromCharCode(65+i)+'</div><div>'+o.text+'</div></div>';
   });
-  h += '</div><div class="feedback'+(mcqAnswered!==null?(MCQ[mcqAnswered].ok?' ok':' err')+' show':'')+'" id="mcqFb">'+(mcqAnswered!==null?MCQ[mcqAnswered].fb:'')+'</div></div>';
-  if(mcqAnswered!==null && MCQ[mcqAnswered].ok){
+  h += '</div><div class="feedback'+(mcqSubmitted?(correct?' ok':' err')+' show':'')+'" id="mcqFb">'+(mcqSubmitted?MCQ[mcqSel].fb:'')+'</div></div>';
+  h += '<div class="btn-row">'+(mcqSubmitted
+      ? '<button class="btn-reset" onclick="resetMcq()" style="margin-left:auto;">Reset</button>'
+      : '<button class="btn-continue" onclick="submitMcq()"'+(mcqSel===null?' disabled':'')+'>Submit</button>')+'</div>';
+  if(correct){
     h += insightBox('Two kinds counted, one missing',
         '<p><strong>Parts</strong>: use you can observe directly. <strong>Rent</strong>: a month that lapses on its own. The wear on the tools is just as real &mdash; they were plainly used, and used up a little, during the season &mdash; but there&rsquo;s nothing to watch leave and no month that expires. Putting a number on it will take something new.</p>')
       + '<button class="btn-continue btn-block" onclick="nav(\'33-2-The-Third-Kind.html\')">Where would a number come from? &rarr;</button>';
   }
   return h;
 }
-function answerMcq(i){
-  if(mcqAnswered!==null && MCQ[mcqAnswered].ok) return;
-  mcqAnswered = i;
-  if(MCQ[i].ok) playSuccess(); else playNope();
+function selectMcq(i){
+  if(mcqSubmitted) return;
+  mcqSel = i;
+  renderTalk();
+}
+function submitMcq(){
+  if(mcqSel===null || mcqSubmitted) return;
+  mcqSubmitted = true;
+  if(MCQ[mcqSel].ok) playSuccess(); else playNope();
   renderTalk();
   window.scrollTo(0, document.body.scrollHeight);
+}
+function resetMcq(){
+  mcqSel = null; mcqSubmitted = false;
+  renderTalk();
 }
 function setStep(n){
   playClick(); if(n>step) playSuccess();
@@ -145,7 +158,7 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
 /* ===== init — the graduated workbook, open on the Expenses tab ===== */
-window.devFill = function(){ step=3; mcqAnswered=2; BRW.tab('wb','expenses'); renderTalk(); };
+window.devFill = function(){ step=3; mcqSel=2; mcqSubmitted=true; BRW.tab('wb','expenses'); renderTalk(); };
 BR_WB.registerSeasonSheets();
 BRW.mount('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true }));
 BRW.tab('wb', 'expenses');
