@@ -1244,13 +1244,14 @@ function initPageNav() {
   if (i < 0) return;
   var wrap = document.querySelector('.prework-wrap');
   if (!wrap || wrap.querySelector('[data-page-nav]')) return;
-  var prev = i > 0 ? PAGE_NAV_ORDER[i - 1] : 'index.html';
+  var prev = i > 0 ? PAGE_NAV_ORDER[i - 1] : null;
   var next = (i < PAGE_NAV_ORDER.length - 1 && PAGE_NAV_OWN_NEXT.indexOf(file) < 0) ? PAGE_NAV_ORDER[i + 1] : null;
+  if (!prev && !next) return;
   var row = document.createElement('div');
   row.className = 'btn-row';
   row.setAttribute('data-page-nav', '');
   row.innerHTML =
-    '<button class="btn-reset" onclick="location.href=\'' + prev + '\'">&larr; Back</button>' +
+    (prev ? '<button class="btn-reset" onclick="location.href=\'' + prev + '\'">&larr; Back</button>' : '') +
     (next ? '<button class="btn-continue" style="margin-left:auto;" onclick="location.href=\'' + next + '\'">Next &rarr;</button>' : '');
   wrap.appendChild(row);
 }
