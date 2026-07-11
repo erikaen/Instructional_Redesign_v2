@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 2: Owner and Employee &middot; The Missing Wage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 2: Owner and Employee</h1>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~6 min &middot; Page 1 of 2</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Missing Wage</div>
+
+    <div id="beats"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function youBox(inner){ return '<div class="dialog-box you"><div class="dialog-label">YOU</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+
+/* ===== step state ===== */
+var step = 0; // 0: the hunt, 1: the draw objection + MCQ, 2: the two hats
+var TOTAL_STEPS = 3;
+var sheetsRegistered = false;
+var huntAnswered = false;
+var huntWrong = {};       // ids of expense lines already tried
+var huntFb = '';          // current hunt feedback (rendered from state so re-renders keep it)
+var mcqAnswered = false;
+
+var HUNT_OPTS = [
+  { id:'parts',   label:'Parts used &mdash; $1,200',                               fb:'That paid for the parts on the shelf &mdash; not the person at the bench.' },
+  { id:'rent',    label:'Rent used &mdash; $1,950',                                fb:'That paid for the space &mdash; not the person at the bench.' },
+  { id:'depgear', label:'Depreciation &mdash; tools, equipment &amp; fixtures &mdash; $200', fb:'That is the gear&rsquo;s season share &mdash; not the person at the bench.' },
+  { id:'deplap',  label:'Depreciation &mdash; laptop &mdash; $30',                 fb:'That is the laptop&rsquo;s season share &mdash; not the person at the bench.' },
+  { id:'none',    label:'There is no such line.',                                   fb:'Right. The shop&rsquo;s biggest input &mdash; the bench work itself &mdash; cost the shop nothing all season. There is no expense line for the owner&rsquo;s labor.', correct:true }
+];
+
+var MCQ_OPTS = [
+  { id:'unchanged', label:'$2,640 &mdash; unchanged', fb:'Correct. A draw of any size never touches income. The draw sits on the Statement of Changes in Members&rsquo; Capital, never in Expenses &mdash; so a draw cannot be pay for work. It is an owner taking some of what is already the owner&rsquo;s.', correct:true },
+  { id:'2040',      label:'$2,040',                   fb:'Not quite. A $1,200 draw would lower closing Members&rsquo; Capital by another $600 &mdash; not net income. A draw is not an expense; it never enters the income statement.' },
+  { id:'1440',      label:'$1,440',                    fb:'Not quite. A draw is money taken by the owner, not a cost of doing the work. It never appears on the income statement, so it cannot change net income.' }
+];
+
+function ensureSheets(){
+  if(!sheetsRegistered){ BR_WB.registerStatementSheets(); sheetsRegistered = true; }
+}
+
+/* ===== hunt ===== */
+function huntHTML(){
+  var h = '<div class="mc-card">';
+  h += '<div class="mc-q">Click the expense line that paid for the owner&rsquo;s work at the bench this season.</div>';
+  h += '<div class="mc-opts" id="huntOpts">';
+  var letter = 0;
+  HUNT_OPTS.forEach(function(o){
+    var cls = 'mc-opt';
+    var dead = huntAnswered || huntWrong[o.id];
+    if(huntAnswered && o.correct) cls += ' correct';
+    if(huntWrong[o.id]) cls += ' wrong';
+    if(dead) cls += ' locked';
+    h += '<div class="'+cls+'" data-hunt="'+o.id+'"'+(dead?'':' onclick="huntClick(\''+o.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+letter)+'</span><span>'+o.label+'</span></div>';
+    letter++;
+  });
+  h += '</div>';
+  if(huntFb){
+    h += '<div class="feedback '+(huntAnswered?'ok':'err')+' show">'+huntFb+'</div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+function huntClick(id){
+  if(huntAnswered) return;
+  var o = HUNT_OPTS.filter(function(x){return x.id===id;})[0];
+  if(!o || huntWrong[o.id]) return;
+
+  if(o.correct){
+    huntAnswered = true;
+    huntFb = o.fb;
+    playSuccess();
+  } else {
+    huntWrong[o.id] = true;
+    huntFb = o.fb;
+    playNope();
+  }
+  renderBeats();
+  renderControls();
+}
+
+/* ===== MCQ ===== */
+function mcqHTML(){
+  var h = '<div class="mc-card">';
+  h += '<div class="mc-q">If the owner had drawn $1,200 instead of $600, what would the season&rsquo;s net income have been?</div>';
+  h += '<div class="mc-opts" id="mcqOpts">';
+  MCQ_OPTS.forEach(function(o, i){
+    var cls = 'mc-opt';
+    if(mcqAnswered){ cls += ' locked'; if(o.correct) cls += ' correct'; }
+    h += '<div class="'+cls+'" data-mcq="'+o.id+'"'+(mcqAnswered?'':' onclick="mcqClick(\''+o.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+i)+'</span><span>'+o.label+'</span></div>';
+  });
+  h += '</div>';
+  if(mcqAnswered){
+    var correct = MCQ_OPTS.filter(function(o){return o.correct;})[0];
+    h += '<div class="feedback ok show">'+correct.fb+'</div>';
+  } else {
+    h += '<div class="feedback" id="mcqFb"></div>';
+  }
+  h += '</div>';
+  return h;
+}
+
+function mcqClick(id){
+  if(mcqAnswered) return;
+  var o = MCQ_OPTS.filter(function(x){return x.id===id;})[0];
+  if(!o) return;
+  var optEl = document.querySelector('[data-mcq="'+id+'"]');
+  var fbEl = document.getElementById('mcqFb');
+  if(!optEl || !fbEl) return;
+
+  if(o.correct){
+    mcqAnswered = true;
+    document.querySelectorAll('#mcqOpts .mc-opt').forEach(function(el){ el.classList.add('locked'); el.removeAttribute('onclick'); });
+    optEl.classList.add('correct');
+    fbEl.className = 'feedback ok show';
+    fbEl.innerHTML = o.fb;
+    playSuccess();
+    renderControls();
+  } else {
+    optEl.classList.add('wrong','locked');
+    optEl.removeAttribute('onclick');
+    fbEl.className = 'feedback err show';
+    fbEl.innerHTML = o.fb;
+    playNope();
+  }
+}
+
+/* ===== render ===== */
+function renderBeats(){
+  ensureSheets();
+  var h = '';
+
+  /* Beat 1 — the question and the hunt */
+  h += freddieBox('The season generated $2,640 of net income. Who did the repairs?');
+  h += '<div class="narrative-block"><p>The owner did &mdash; every repair, all summer, at the bench.</p></div>';
+  h += freddieBox('So what did the shop pay for that work? Show me the line.');
+  h += '<div class="section-card"><div class="card-title">Income Statement</div><div class="xlsx">' + BRW.sheetHTML('income', {}) + '</div></div>';
+  h += huntHTML();
+
+  /* Beat 2 — the draw objection + MCQ */
+  if(step >= 1){
+    h += youBox('But I took $600 out.');
+    h += '<div class="narrative-block"><p>The draw sits on the Statement of Changes in Members&rsquo; Capital &mdash; never in Expenses. That is exactly where Module 3 left it.</p></div>';
+    h += '<div class="section-card"><div class="card-title">Statement of Changes in Members&rsquo; Capital</div><div class="xlsx">' + BRW.sheetHTML('bridge', {}) + '</div></div>';
+    h += mcqHTML();
+  }
+
+  /* Beat 3 — the two hats */
+  if(step >= 2){
+    h += '<div class="narrative-block"><p>One person wore two hats this season. At the bench, an employee; on the Operating Agreement, an owner. Only the owner hat was paid &mdash; the draw. The bench work itself cost the shop nothing.</p></div>';
+    h += annaBox('A ramped-up, full-time shop must pay the bench like any other cost &mdash; a salary, an expense of the shop. Same person, two roles, two treatments.');
+    h += freddieBox('I have a proposal about exactly that.');
+  }
+
+  document.getElementById('beats').innerHTML = h;
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderControls(){
+  var c = '';
+  if(step === 0){
+    c = '<button class="btn-continue btn-block"' + (huntAnswered ? '' : ' disabled') + ' onclick="advance()">Continue &rarr;</button>';
+  } else if(step === 1){
+    c = '<button class="btn-continue btn-block"' + (mcqAnswered ? '' : ' disabled') + ' onclick="advance()">Continue &rarr;</button>';
+  } else {
+    c = '<button class="btn-continue btn-block" onclick="nav(\'42-2-Freddies-Napkin.html\')">Hear Freddie&rsquo;s proposal &rarr;</button>';
+  }
+  document.getElementById('controls').innerHTML = c;
+  if(window.lucide) lucide.createIcons();
+}
+
+function advance(){
+  if(step === 0 && !huntAnswered) return;
+  if(step === 1 && !mcqAnswered) return;
+  playClick();
+  step = Math.min(step + 1, TOTAL_STEPS - 1);
+  renderBeats();
+  renderControls();
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Salary / Wages', def:'Pay for work &mdash; an expense of the shop. Recognized when the work is done, not necessarily when cash changes hands.' },
+  { term:'Draw', def:'An owner move &mdash; money taken by the owner. Never an expense; it never touches net income. A draw of any size leaves the income statement unchanged.' },
+  { term:'Two roles', def:'The same person can be an employee at the bench and an owner on the Operating Agreement. The records treat the two differently: a salary is an expense; a draw is not.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init ===== */
+window.devFill = function(){
+  huntAnswered = true;
+  mcqAnswered = true;
+  step = TOTAL_STEPS - 1;
+  renderBeats();
+  renderControls();
+};
+renderBeats();
+renderControls();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

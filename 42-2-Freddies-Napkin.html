@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tutorial 2: Owner and Employee &middot; Freddie&rsquo;s Napkin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Tutorial 2: Owner and Employee</h1>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~6 min &middot; Page 2 of 2</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Freddie&rsquo;s Napkin</div>
+
+    <div id="beats"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA<\/div><div class="dialog-text">&ldquo;'+inner+'&rdquo;<\/div><\/div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE<\/div><div class="dialog-text">&ldquo;'+inner+'&rdquo;<\/div><\/div>'; }
+
+var step = 0;
+var TOTAL_STEPS = 4;
+var napkinLines = 0;
+var tries = 0;
+var profitOK = false;
+var feedback = '';
+
+var NAPKIN_ROWS = [
+  { label:'Revenue', val:'$10,000' },
+  { label:'Parts', val:'&minus;$2,000' },
+  { label:'Rent', val:'&minus;$650' },
+  { label:'Salary', val:'&minus;$2,000' },
+  { label:'Replacement tools &amp; equipment', val:'&minus;$350' }
+];
+
+function renderNapkin(){
+  var h = '<div class="napkin">';
+  h += '<div class="napkin-title">FREDDIE&rsquo;S BACK-OF-THE-ENVELOPE &mdash; PER MONTH<\/div>';
+  for(var i=0; i<napkinLines; i++){
+    h += '<div class="napkin-line"><span>'+NAPKIN_ROWS[i].label+'<\/span><span class="napkin-val">'+NAPKIN_ROWS[i].val+'<\/span><\/div>';
+  }
+  if(napkinLines >= NAPKIN_ROWS.length && !profitOK){
+    h += '<div class="napkin-total"><span>Profit<\/span><input class="calc-input" id="profitInput" inputmode="numeric" autocomplete="off" aria-label="Profit"><\/div>';
+  }
+  if(profitOK){
+    h += '<div class="napkin-total"><span>Profit<\/span><span class="napkin-val">$5,000<\/span><\/div>';
+    h += '<div class="napkin-note">an expectation, not a record<\/div>';
+  }
+  h += '<\/div>';
+  if(napkinLines >= 2 && !profitOK){
+    h += freddieBox('Parts ran about a fifth of revenue during the season. I&rsquo;m using that same rough share here.');
+  }
+  if(napkinLines >= 5 && !profitOK){
+    h += freddieBox('Gear wears out and gets replaced. On a napkin I just carry that as cash going out.');
+  }
+  if(napkinLines >= NAPKIN_ROWS.length && !profitOK){
+    h += '<div class="narrative-block"><p>Type Freddie&rsquo;s bottom line for a month like this.<\/p><\/div>';
+    h += '<button class="btn-continue" onclick="checkProfit()">Check<\/button>';
+    if(feedback){
+      h += '<div class="feedback err show">'+feedback+'<\/div>';
+    }
+  }
+  return h;
+}
+
+function renderBeats(){
+  var h = '';
+
+  if(step === 0){
+    h += freddieBox('If I come in, the bench gets paid properly. Salary of $2,000 a month to the repair person, as an employee. That is an expense of the shop, like rent or parts.');
+    h += annaBox('Same two hats. One person can be an owner under the Operating Agreement and an employee at the bench. Freddie is putting a number on the employee hat.');
+  }
+
+  if(step === 1){
+    h += freddieBox('Suppose the ramped-up shop does $10,000 of repair work a month. Let me sketch it.');
+    h += renderNapkin();
+  }
+
+  if(step === 2){
+    h += renderNapkin();
+    h += freddieBox('I&rsquo;m not changing last season after the fact. The statements record what happened, and no salary happened. This napkin is an expectation. Nothing on it is a recorded number, and nothing in the season&rsquo;s statements was a promise about any of it. If the ramp-up never comes, the napkin is worth nothing.');
+    h += annaBox('Use the statements for the past. Use the napkin for a future guess. Keep those two jobs separate.');
+  }
+
+  if(step === 3){
+    h += freddieBox('Months like that would be worth sharing. On what terms?');
+    h += '<div class="next-card"><div class="next-card-label">Coming Next<\/div><p>Freddie has to decide what he is buying and what the deal looks like. That is where Module 4 goes next.<\/p><\/div>';
+  }
+
+  document.getElementById('beats').innerHTML = h;
+  if(step === 1 && napkinLines >= NAPKIN_ROWS.length && !profitOK){
+    var input = document.getElementById('profitInput');
+    if(input){
+      input.focus();
+      input.addEventListener('keydown', function(e){ if(e.key==='Enter'){ checkProfit(); } });
+    }
+  }
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderControls(){
+  var c = '<div class="nav-buttons">';
+  c += '<button class="btn-back" onclick="back()">&larr; Back<\/button>';
+  if(step < TOTAL_STEPS - 1){
+    var disabled = (step === 1 && napkinLines >= NAPKIN_ROWS.length && !profitOK);
+    c += '<button class="btn-next"' + (disabled ? ' disabled' : '') + ' onclick="advance()">Continue &rarr;<\/button>';
+  }
+  c += '<\/div>';
+  document.getElementById('controls').innerHTML = c;
+  if(window.lucide) lucide.createIcons();
+}
+
+function render(){
+  renderBeats();
+  renderControls();
+}
+
+function advance(){
+  if(step === 0){
+    playClick();
+    step = 1;
+    napkinLines = 1; // the napkin never renders empty — Revenue appears with it
+    render();
+    window.scrollTo(0, 0);
+    return;
+  }
+  if(step === 1 && napkinLines < NAPKIN_ROWS.length){
+    playClick();
+    napkinLines++;
+    render();
+    window.scrollTo(0, document.body.scrollHeight);
+    return;
+  }
+  if(step === 1 && !profitOK) return;
+  playClick();
+  step = Math.min(step + 1, TOTAL_STEPS - 1);
+  render();
+  window.scrollTo(0, 0);
+}
+
+function back(){
+  playClick();
+  if(step === 0){ nav('42-1-The-Missing-Wage.html'); return; }
+  if(step === 1 && napkinLines > 1 && !profitOK){
+    napkinLines--;
+    feedback = '';
+    tries = 0;
+    render();
+    window.scrollTo(0, 0);
+    return;
+  }
+  step = Math.max(step - 1, 0);
+  render();
+  window.scrollTo(0, 0);
+}
+
+function checkProfit(){
+  var input = document.getElementById('profitInput');
+  if(!input) return;
+  var raw = input.value || '';
+  var cleaned = raw.replace(/[$,\s]/g, '');
+  if(cleaned !== '' && !isNaN(cleaned) && parseFloat(cleaned) === 5000){
+    profitOK = true;
+    feedback = '';
+    playSuccess();
+    render();
+    window.scrollTo(0, document.body.scrollHeight);
+    return;
+  }
+  tries++;
+  playNope();
+  feedback = tries >= 2
+    ? 'Try again: 10,000 &minus; 2,000 &minus; 650 &minus; 2,000 &minus; 350.'
+    : 'Try again. Start with 10,000 and subtract the four costs.';
+  render();
+}
+
+var glossaryTerms=[
+  { term:'Salary/Wages', def:'Pay for work. When the shop pays a repair person as an employee, it is an expense of the shop.' },
+  { term:'Draw', def:'An owner move &mdash; money taken by the owner. Never an expense; it never touches net income.' },
+  { term:'Expectation vs record', def:'A napkin sketch of the future is not a statement. Statements record what happened.' },
+  { term:'Replacement tools &amp; equipment', def:'An investor&rsquo;s cash sketch of gear wearing out and being replaced.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'<\/div><div class="glossary-entry-def">'+g.def+'<\/div><\/div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+window.devFill = function(){
+  step = TOTAL_STEPS - 1;
+  napkinLines = NAPKIN_ROWS.length;
+  profitOK = true;
+  feedback = '';
+  render();
+};
+if(window.BR_WB && BR_WB.registerStatementSheets) BR_WB.registerStatementSheets();
+render();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>
