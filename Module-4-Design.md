@@ -166,6 +166,61 @@ an **expense** where the draw was a distribution. *Same person, two roles, two t
 payoff of M3's "a draw is not an expense," extending M2's person-vs-operation split to
 **owner vs employee**. Going on payroll finally puts a number on the labor that built the shop.
 
+**Ruled 2026-07-09: NO recast of the past season.** The closed season's statements are never
+re-priced with a hypothetical salary. The salary treatment is entirely **prospective** — going
+forward, salary is an expense — because **the deal rests on expectations about the future**, not
+on last season. The forward-looking beat is Freddie's own back-of-envelope: *what if the
+ramped-up shop does $10,000 of revenue a month?* (napkin locked; see Outside capital below).
+
+#### Tutorial 4.2 — stage plan (approved 2026-07-09: click-hunt, the one MCQ, and the
+student-computed napkin bottom line all confirmed by Rick)
+
+**One idea:** the same hands wear two hats. Pay for the bench work is an **expense** of the
+shop; a draw is an **owner move** that no amount of would change the season's income. The deal
+will pay each hat separately — and what the salaried future could earn is an expectation, not
+a record.
+
+**What stays OUT of 4.2:** the $20,000, the 70/30 split, and the human-capital theme — those
+are 4.3/4.4's discoveries. 4.2 ends with the napkin's $5,000/month hanging in the air.
+
+**Page cut: two pages.**
+
+*`42-1` — the missing wage (draw vs salary).*
+1. Freddie, reading the Income Statement off the map: the season generated $2,640 — "Who did
+   the repairs? … What did the shop pay for that work?" The student is invited to **click the
+   expense line that covers the summer's labor** on the real Expenses view (workbook engine,
+   33-1's click-the-line idiom). Every expense click answers no — that's parts / rent / the
+   gear's season share. **Ruled 2026-07-10 (Rick, click-through): all five options shown
+   upfront, including "There is no such line"** — no delayed reveal (supersedes the draft's
+   affordance-appears-after-a-miss). **Felt absence:** the shop's biggest input cost the shop
+   nothing.
+2. "But I took $600 out." The bridge statement beside the Income Statement, draw highlighted:
+   the draw sat in WITHDRAWN and on the bridge — never in Expenses (M3 taught this; now it
+   does its work). Check question (the one MCQ of the page): *if the owner had drawn $1,200
+   instead of $600, what would net income have been?* → **$2,640, unchanged.** A draw of any
+   size never touches income — so a draw cannot be pay for work.
+3. Name the two hats: at the bench, an **employee**; on the Operating Agreement, an **owner**.
+   Part-time, one person wore both and only the owner hat was paid. A ramped-up, full-time
+   shop must pay the bench like any other cost — a **salary, an expense**. Same person, two
+   roles, two treatments.
+
+*`42-2` — the napkin (expectations are not records).*
+4. Freddie's proposal in dialogue: salary $2,000/month for the bench. Then his question:
+   *what if the ramped-up shop does $10,000 a month?* The napkin builds line by line
+   (revenue − parts 20% − rent − salary − replacement tools & equipment), and the **student
+   computes the bottom line** ($5,000) themselves — typed entry, house calc-input idiom.
+5. The guard rail, in Freddie's voice: he has no interest in re-pricing last season — the
+   statements record what happened, and no salary happened. The napkin is an **expectation**;
+   nothing on it is a recorded number; the season's statements never promised any of it.
+   Close on the hook: months like that would be worth sharing — *on what terms?* (4.3/4.4.)
+
+**Interaction notes:** the napkin is visually distinct from the workbook idiom (never xl-rows;
+plain card — treatment through the usual shared-styles approval). Glossary: Salary/Wages (pay
+for work — an expense), Draw (an owner move — never an expense), plus carry-forward defs.
+Page files: `42-1-The-Missing-Wage.html`, `42-2-Freddies-Napkin.html` (Rick's veto open on the
+latter — trivial to rename before build). Building 42-1 also gives 41-2's frontier next-card
+its Continue button, resolving the dead-end flag from the 4.1 student walkthrough.
+
 ### The most important asset isn't recorded (book vs market, writ large)
 
 What the investor is actually buying — the skill at the bench, the name on Whalley Ave, the
@@ -175,20 +230,56 @@ minus book Members' Capital ($4,500) *is* the gap. Frame per the pedagogy skill:
 a **feature of the recognition convention** (an evidence test, drawn by people with interests),
 never "we can't measure it" — and the gap is **path dependence**, not "the books are out of date."
 
-### Outside capital
+### Outside capital — deal structure (ruled 2026-07-09)
 
-What it means for Contributed / Generated when outside money comes in; pricing; the deal.
-**Investor numbers are deferred** — set in conversation with Rick, anchored so the arithmetic
-stays part-time-scale readable.
+- **Freddie contributes $20,000 to the shop** (a contribution into the LLC, not a purchase of
+  the owner's stake). Post-contribution books: Cash $620 + $20,000 = $20,620; total assets
+  $24,500; Contributed $2,290 + $20,000 = $22,290; Generated $2,210 unchanged.
+- **The Operating Agreement is redone off-stage** — a line of narration, no on-page OA scene.
+- **Profit split (revised 2026-07-09, supersedes the initial 50-50):** the repair person draws
+  a **salary of $2,000/month** as an employee; after salary, profits split **70/30
+  owner/Freddie** — sized so Freddie takes about $1,500/month on the napkin scenario below.
+- **They ramp up activity and expect revenue growth** — Freddie invests in what the shop
+  becomes, not in the season the statements record.
+- **The emphasis (Rick, verbatim intent):** the biggest asset of the shop from Freddie's point
+  of view is the **human capital of the repair person — not on the balance sheet.** Freddie
+  walks the balance sheet's asset list, line by line, thinking about what each item is and
+  concluding the thing he's actually buying appears nowhere on it.
+- Note the deal terms themselves do the module's teaching: the salary separates the two roles
+  (4.2's payoff), and $20,000-for-30%-of-a-$4,500-book-business prices the unrecorded asset
+  (4.3's payoff). How the play-out is staged across 4.2–4.4 is under discussion.
 
-### The wider world's words (GAAP-literacy aside — vehicle ruled out; existence open)
+**Freddie's napkin (locked 2026-07-09)** — the forward-looking back-of-envelope, per month,
+explicitly an expectation and never a statement (not rendered in the workbook idiom):
 
-"Retained Earnings," "Contributed Capital," and the outside world's name for the A−L difference
-were slated to survive **only** as an M4 aside (locked 2026-07-07, see Module-2-Design.md).
-**Ruled 2026-07-09: the investor is NOT the vehicle** — the investor speaks the course's
-vocabulary throughout. Whether the aside still happens somewhere in M4 (and in what form), or is
-dropped entirely, is an open question. Note 15-2's "already know some accounting?" rabbit-hole
-already treats the name's historical instability without writing the banned words.
+| | |
+|---|--:|
+| Revenue | $10,000 |
+| Parts (~20% of revenue — the season's own ratio, $1,200/$6,020) | −$2,000 |
+| Rent | −$650 |
+| Salary | −$2,000 |
+| Replacement tools & equipment | −$350 |
+| **Profit** | **$5,000** |
+
+Split: **$3,500 owner / $1,500 Freddie** (70/30 after salary). Freddie's $20,000 comes back in
+about 13 such months. The replacement-tools line carries gear costs as cash, an investor's
+framing — acknowledge in passing that a napkin is not a statement (nothing on it is a recorded
+number; the season's statements never promised any of it).
+
+**Implied price of what's not on the books ≈ $42,000 (locked 2026-07-09, supersedes $15,500):**
+$20,000 buys 30% ⇒ the whole business is priced ≈ $66,700 ⇒ the owner's 70% ≈ $46,700, backed
+by $4,500 of book ⇒ the unrecorded assets — overwhelmingly the repair person's human capital —
+are implicitly priced around **$42,000, roughly nine times everything on the balance sheet.**
+Discoverable from the deal's own arithmetic; never pre-told.
+
+### The wider world's words — DROPPED (ruled 2026-07-09)
+
+The GAAP-literacy aside is **dropped from the course entirely.** "Retained Earnings,"
+"Contributed Capital," and the outside world's name for the A−L difference appear **nowhere**
+in any module — this supersedes the 2026-07-07 plan (Module-2-Design.md) that had them
+surviving as an M4 aside. The course's names are Members' Capital / Contributed / Generated,
+full stop. 15-2's "already know some accounting?" rabbit-hole (which treats the name's
+historical instability without writing the banned words) is the only nod the course gives.
 
 ---
 
@@ -218,13 +309,20 @@ clean before any session ends.
 
 ## Open questions
 
-1. **Module arc** — is it 4.1 map → 4.2 owner/employee → 4.3 unrecorded asset & book-vs-market →
-   4.4 outside capital/pricing, or a different cut? Tutorial and page counts TBD.
-2. **Investor numbers** — the price, the stake, the deal mechanics (deferred; Rick conversation).
-3. **Does the GAAP-vocabulary aside still happen at all** (the investor as vehicle is ruled out;
-   the 2026-07-07 lock had "Retained Earnings"/"Contributed Capital" surviving only as an M4
-   aside — dropped, or relocated?).
+1. **Module arc** — proposed: 4.2 owner/employee (prospective salary + Freddie's $10k/month
+   napkin) → 4.3 Freddie walks the asset list / the human-capital reveal → 4.4 the deal, the
+   signing, the post-contribution balance sheet, module ends. Tutorial and page counts TBD.
+2. **The $10k/month illustration's parameters** — expense assumptions for Freddie's
+   back-of-envelope (parts share, rent, salary $2,000; anything else?) — to be locked with Rick.
 
 *Resolved 2026-07-09:* investor = **Freddie**, speaking character, course vocabulary; 4.1 =
 **two pages** (`41-1` the ask, `41-2` the walk); closing equipment lines = **carrying amounts
-only**, no depreciation sub-note.
+only**, no depreciation sub-note. Deal structure: **$20,000 contribution** into the LLC; OA
+redone off-stage; **salary $2,000/month**, then **profits 70/30 owner/Freddie**; **no recast of
+the past season** (prospective only; the deal rests on future expectations); **Freddie's napkin
+locked** (10,000 − 2,000 parts − 650 rent − 2,000 salary − 350 replacement tools & equipment =
+5,000/month; split 3,500/1,500; ~13-month payback); **module ends at the signing** (post-deal:
+Cash $20,620 · Assets $24,500 · Contributed $22,290 · Generated $2,210 — and no human-capital
+line); **implied price of what's not on the books ≈ $42,000** (locked: $20,000 for 30% prices
+the whole ≈ $66,700; the owner's 70% ≈ $46,700 against $4,500 of book — the unrecorded assets
+dwarf the recorded ones ~9:1); **GAAP vocabulary dropped from the course entirely**.
