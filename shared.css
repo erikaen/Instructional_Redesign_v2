@@ -2892,3 +2892,24 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 @media (prefers-color-scheme: dark) {
   .phase-title, .complete-title, .glossary-module { color: #f4f4f5; }
 }
+
+/* ===================================================================
+   MODULE 4.2 — Freddie's napkin (approved additions 2026-07-10)
+   Scratch figures, deliberately NOT the workbook idiom: dashed border,
+   mono numerals, a permanent "expectation, not a record" footer.
+   Used by 42-2-Freddies-Napkin.html (and 4.4 if the napkin returns).
+   =================================================================== */
+.napkin { border: 2px dashed var(--border-strong); border-radius: 10px; padding: 18px 22px; max-width: 420px; margin: 16px auto; background: var(--page-bg); }
+.napkin-title { font-family: Inter, sans-serif; font-size: var(--font-xs); font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+.napkin-line { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; font-size: var(--font-m); color: #374151; }
+.napkin-line .napkin-val { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.napkin-total { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0 2px; margin-top: 6px; border-top: 2px solid var(--border-strong); font-size: var(--font-m); font-weight: 700; color: #1f2937; }
+.napkin-total .napkin-val { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.napkin-note { margin-top: 10px; font-size: var(--font-s); font-style: italic; color: #888; }
+@media (prefers-color-scheme: dark) {
+  .napkin { border-color: var(--border-strong); background: #26242e; }
+  .napkin-title { color: #8a8898; }
+  .napkin-line { color: #c9c6d4; }
+  .napkin-total { color: #eeebf5; border-top-color: var(--border-strong); }
+  .napkin-note { color: #8a8898; }
+}
