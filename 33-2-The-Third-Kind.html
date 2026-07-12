@@ -16,7 +16,7 @@
     <div class="tut-header">
       <div class="tut-header-main">
         <h1>Tutorial 3: Depreciation</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 3</p>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 4</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -141,7 +141,10 @@ function renderTalk(){
 function recordWear(){
   playClick(); playSuccess();
   recorded = true;
-  BRW.update('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true }));
+  var snap2 = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
+  snap2.tabs.push(BR_WB.balanceTab(['jun1']));
+  BR_WB.tagTabKinds(snap2);
+  BRW.update('wb', snap2);
   BRW.tab('wb', 'expenses');
   renderMcq(); renderTalk();
   window.scrollTo(0, document.body.scrollHeight);
@@ -167,7 +170,10 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 /* ===== init — the graduated workbook, Expenses tab, wear not yet recorded ===== */
 window.devFill = function(){ mcqSel=3; mcqSubmitted=true; renderMcq(); if(!recorded) recordWear(); };
 BR_WB.registerSeasonSheets();
-BRW.mount('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true }));
+var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true });
+snap.tabs.push(BR_WB.balanceTab(['jun1']));
+BR_WB.tagTabKinds(snap);
+BRW.mount('wb', snap);
 BRW.tab('wb', 'expenses');
 renderMcq(); renderTalk();
 </script>

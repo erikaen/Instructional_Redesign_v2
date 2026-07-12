@@ -16,7 +16,7 @@
     <div class="tut-header">
       <div class="tut-header-main">
         <h1>Tutorial 3: Depreciation</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 3</p>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 4</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -160,7 +160,10 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 /* ===== init — the graduated workbook, open on the Expenses tab ===== */
 window.devFill = function(){ step=3; mcqSel=2; mcqSubmitted=true; BRW.tab('wb','expenses'); renderTalk(); };
 BR_WB.registerSeasonSheets();
-BRW.mount('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true }));
+var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true });
+snap.tabs.push(BR_WB.balanceTab(['jun1']));
+BR_WB.tagTabKinds(snap);
+BRW.mount('wb', snap);
 BRW.tab('wb', 'expenses');
 renderTalk();
 </script>

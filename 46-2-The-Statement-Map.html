@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 1: The Statement Map &middot; Three Paths and the Map</title>
+  <title>Tutorial 6: The Statements Tie Out &middot; Three Paths and the Map</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -15,7 +15,7 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 1: The Statement Map</h1>
+        <h1>Tutorial 6: The Statements Tie Out</h1>
         <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~8 min &middot; Page 2 of 2</p>
       </div>
       <div class="tut-header-actions">
@@ -201,19 +201,19 @@ function render(){
 function renderBeats(){
   var h = '';
   if(step === 0){
-    h += '<div class="narrative-block"><p>Here are the two snapshots Freddie just received &mdash; June 1 and August 31. Three numbers carry the season&rsquo;s whole story: <strong>Cash</strong>, <strong>Members&rsquo; Capital</strong>, and the <strong>Net income</strong> figure inside Members&rsquo; Capital&rsquo;s story. Follow them one at a time, then see the whole picture at once.</p></div>';
-    h += freddieBox('Alright &mdash; walk me through it. Start wherever makes sense.');
+    h += '<div class="narrative-block"><p>Here are the two balance-sheet snapshots again &mdash; June 1 and August 31. The set Freddie asked for has been built around them. Three numbers carry the season&rsquo;s whole story: <strong>Cash</strong>, <strong>Members&rsquo; Capital</strong>, and the <strong>Net income</strong> figure inside Members&rsquo; Capital&rsquo;s story. Follow them one at a time, then see the whole picture at once.</p></div>';
+    h += freddieBox('I have seen each statement. Walk me through how the set fits.');
   } else if(step === 1){
-    h += freddieBox('Start with Cash. It fell $680 &mdash; walk me through it.');
+    h += freddieBox('Start with Cash. I saw it fell $680 &mdash; walk me through that path.');
     h += '<div class="narrative-block"><p>Cash fell from <strong>$1,300</strong> to <strong>$620</strong> &mdash; down <strong>$680</strong>. The <strong>Statement of Cash Flows</strong> carries that one line&rsquo;s story: Operating <strong>+$320</strong>, Investing <strong>&minus;$400</strong>, Financing <strong>&minus;$600</strong>.</p></div>';
   } else if(step === 2){
-    h += freddieBox('Now Members&rsquo; Capital. It rose $2,040 &mdash; where did that come from?');
+    h += freddieBox('Now Members&rsquo; Capital. I saw it rose $2,040 &mdash; show me the path.');
     h += '<div class="narrative-block"><p>Members&rsquo; Capital rose from <strong>$2,460</strong> to <strong>$4,500</strong>. The <strong>Statement of Changes in Members&rsquo; Capital</strong> carries that story: opening $2,460, plus net income $2,640, minus the owner&rsquo;s draw $600, equals closing $4,500. Contributed never moved &mdash; the whole path ran through Generated, $170 to $2,210.</p></div>';
   } else if(step === 3){
-    h += freddieBox('Net income&rsquo;s the biggest line in that bridge. Show me what&rsquo;s behind it.');
+    h += freddieBox('Net income&rsquo;s the biggest line in that bridge. I remember that one &mdash; show me what&rsquo;s behind it.');
     h += '<div class="narrative-block"><p>Click the <strong>Net income</strong> line below to open the <strong>Income Statement</strong> behind it.</p></div>';
   } else if(step === 4){
-    h += '<div class="narrative-block"><p>This is what Module 3 called <strong>articulation</strong> &mdash; now laid out as one picture. The accounting identity fixes the two snapshots; the other statements carry the story of the change between them.</p></div>';
+    h += '<div class="narrative-block"><p>That is the word Anna just gave it: <strong>articulation</strong> &mdash; now laid out as one picture. The two snapshots follow the accounting identity; the other statements carry the story of the change between them.</p></div>';
   }
   document.getElementById('beats').innerHTML = h;
 }
@@ -259,8 +259,8 @@ function renderTail(){
       + '<p>Every other line that moved has its story in these same statements too. The Credit Card fell to $0 &mdash; a bill that got paid, an Operating line on the cash-flow statement. The Customer Deposit fell to $0 &mdash; Smith&rsquo;s frame was delivered, inside Revenue. Accounts Receivable appeared &mdash; work finished, not yet collected, inside Revenue.</p></div>';
     h += freddieBox('Now I see where things stand &mdash; and how they got there.');
     h += annaBox('That&rsquo;s the whole set, tied together. What Freddie does with the picture is next.');
-    h += '<div class="next-card"><div class="next-card-label">Coming Next</div><p>Freddie has the whole map now &mdash; two snapshots, and the statements that carry the story between them. His first question about it is waiting.</p></div>';
-    h += '<button class="btn-continue btn-block" onclick="nav(\'42-1-The-Missing-Wage.html\')">Continue to Tutorial 2 &rarr;</button>';
+    h += '<div class="next-card"><div class="next-card-label">Coming Next</div><p>Freddie has read the whole set and seen how it ties together. Now he talks terms.</p></div>';
+    h += "<button class=\"btn-continue btn-block\" onclick=\"nav('47-1-Freddies-Napkin.html')\">Continue &rarr;</button>";
   }
   document.getElementById('tail').innerHTML = h;
 }
@@ -287,7 +287,7 @@ function advance(){
 }
 function back(){
   playClick();
-  if(step === 0){ nav('41-1-The-Investor-Asks.html'); return; }
+  if(step === 0){ nav('46-1-The-Statements-Tie-Out.html'); return; }
   step = Math.max(step - 1, 0);
   render();
   window.scrollTo(0, 0);

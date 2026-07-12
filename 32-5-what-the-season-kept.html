@@ -94,7 +94,10 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 
 /* ===== init — the graduated workbook: the period tabs beside the continuous piles ===== */
 BR_WB.registerSeasonSheets();
-BRW.mount('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true }));
+var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true });
+snap.tabs.push(BR_WB.balanceTab(['jun1']));
+BR_WB.tagTabKinds(snap);
+BRW.mount('wb', snap);
 BRW.tab('wb', 'reasons');
 renderTalk();
 </script>

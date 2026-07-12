@@ -79,6 +79,8 @@ function incomeSheet(cid, snap){
 
 /* ===== workbook state ===== */
 var snap = BR_WB.snapshot({ flowGroups:true, withReceivable:true });
+snap.tabs.push(BR_WB.balanceTab(['jun1']));
+BR_WB.tagTabKinds(snap);
 var step = 0;   // 0 = name the piles · 1 = graduated to their own tabs · 2 = the statement laid out
 
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
@@ -112,6 +114,8 @@ function graduate(){
   playClick(); playSuccess();
   step = 1;
   snap = BR_WB.snapshot({ tabbed:true, withReceivable:true });   // the season's rows move to their own period tabs
+  snap.tabs.push(BR_WB.balanceTab(['jun1']));
+  BR_WB.tagTabKinds(snap);
   BRW.update('wb', snap);
   BRW.tab('wb', 'revenue');
   renderTalk();
@@ -121,6 +125,7 @@ function layItOut(){
   playClick(); playSuccess();
   step = 2;
   snap.tabs.push({ id:'income', label:'Income' });   // the workbook grows one more sheet
+  BR_WB.tagTabKinds(snap);
   BRW.update('wb', snap);
   BRW.tab('wb', 'income');
   renderTalk();

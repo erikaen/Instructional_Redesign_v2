@@ -16,7 +16,7 @@
     <div class="tut-header">
       <div class="tut-header-main">
         <h1>Tutorial 4: The Cash-Flow Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 4</p>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~10 min &middot; Page 1 of 3</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -25,8 +25,10 @@
     </div>
     <div class="phase-title" id="phaseTitle">The Cash Puzzle</div>
 
+    <div id="freddie"></div>
+
     <div class="narrative-block">
-      <p>The income statement is complete: a profitable season. But there&rsquo;s a loose thread Anna wouldn&rsquo;t let go of. Flip to <strong>Assets</strong> and look at <strong>Cash</strong> &mdash; already open below.</p>
+      <p>The income statement is complete: a profitable season. But there&rsquo;s a loose thread worth pulling. Flip to <strong>Assets</strong> and look at <strong>Cash</strong> &mdash; already open below.</p>
     </div>
 
     <div id="wb"></div>
@@ -64,6 +66,7 @@ function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 /* ===== the contradiction: both true, at once ===== */
@@ -74,7 +77,7 @@ var MCQ = [
   { id:'b', text:'Someone must have taken the missing $680 &mdash; a theft or an error to track down.',
     fb:'Nothing is missing and nothing was taken. Every dollar that left is already sitting in the records, named, dated, and accounted for. The gap isn&rsquo;t a hole to fill &mdash; it&rsquo;s a difference to explain.' },
   { id:'c', text:'Both are true: the season was profitable, and it still ended with less cash than it started &mdash; they&rsquo;re not answering the same question.', ok:true,
-    fb:'Right. Net income $2,640 and Cash down $680 are both exactly what the records show. Nothing is broken. The season was <strong>profitable</strong> <em>and</em> it spent more cash than it took in &mdash; profit is not cash. They&rsquo;re two different questions, and the records answer both honestly.' }
+    fb:'Right. Net income $2,640 and Cash down $680 are both exactly what the records show. Nothing is broken. The season was <strong>profitable</strong> <em>and</em> more cash went out than came in &mdash; profit is not cash. They&rsquo;re two different questions, and the records answer both honestly.' }
 ];
 var mcqSel = null, mcqSubmitted = false;
 
@@ -116,7 +119,7 @@ function renderAll(){
     ctrl2 = insightBox('Two honest answers to two different questions',
         '<p>Profitable, <em>and</em> poorer in cash. Not an error. Not a theft. &ldquo;How did the shop do?&rdquo; turns out to be two questions, not one: cash misses things, and net income misses different things. That&rsquo;s why there are two statements &mdash; each answers honestly for its own question.</p>')
       + '<div class="next-phase-msg">The answer isn&rsquo;t hiding. It&rsquo;s written in the Cash line itself &mdash; every row in it is a fact. The next step is sorting those facts.</div>'
-      + '<button class="btn-continue btn-block" onclick="nav(\'34-2-Three-Buckets.html\')">Sort the cash &rarr;</button>';
+      + '<button class="btn-continue btn-block" onclick="nav(\'44-2-Three-Buckets.html\')">Sort the cash &rarr;</button>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML += ctrl2;
@@ -142,10 +145,15 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 /* ===== init — the graduated workbook, Assets tab, Cash line open ===== */
 window.devFill = function(){ mcqSel=2; mcqSubmitted=true; renderAll(); };
 BR_WB.registerSeasonSheets();
-BRW.mount('wb', BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true }));
+var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true, closed:true });
+snap.tabs.push(BR_WB.balanceTab(['jun1','aug31']));
+BR_WB.tagTabKinds(snap);
+BRW.mount('wb', snap);
 BRW.tab('wb', 'assets');
 BRW.x('wb', 'a', 0);
+document.getElementById('freddie').innerHTML = freddieBox('Net income was '+BRW.dol(NET_INCOME)+' &mdash; a profitable season. But the Cash line reads '+BRW.dol(CASH_NOW)+', down from '+BRW.dol(CASH_OPEN)+' when the account opened. Where did the cash go?');
 renderAll();
+if(window.lucide) lucide.createIcons();
 </script>
   <script src="dev.js"></script>
 </body>

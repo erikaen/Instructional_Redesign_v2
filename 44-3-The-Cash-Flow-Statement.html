@@ -16,7 +16,7 @@
     <div class="tut-header">
       <div class="tut-header-main">
         <h1>Tutorial 4: The Cash-Flow Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 4 of 4</p>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~10 min &middot; Page 3 of 3</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">Laying It Out</div>
 
     <div class="narrative-block">
-      <p>Three piles, four explained gaps, one tie-out to the Cash line. Everything needed is already on the books &mdash; it just needs to be laid out in one place, the way the Income sheet was.</p>
+      <p>Three piles, one tie-out to the Cash line, and a question left standing between net income and operating cash. Everything needed is already on the books &mdash; it just needs to be laid out in one place, the way the Income sheet was.</p>
     </div>
 
     <div id="wb"></div>
@@ -63,28 +63,31 @@ function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},9
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 /* ===== the locked cash-flow numbers (the sheet itself is the shared renderer) ===== */
 var OP_TOTAL = 320, INV_TOTAL = -400, FIN_TOTAL = -600, NET_CHANGE = -680;
-var CASH_OPEN = 1300, CASH_END = 620;
+var CASH_OPEN = 1300, CASH_END = 620, NET_INCOME = 2640;
 
 /* ===== state — the full workbook stays the anchor; statements are tabs beside it ===== */
 var step = 0;
-var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
+var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true, closed:true });
 snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
+snap.tabs.push(BR_WB.balanceTab(['jun1','aug31']));
+BR_WB.tagTabKinds(snap);
 
 function renderTalk(){
   var anna='', ctrl='';
   if(step===0){
-    anna = annaBox('Time to lay out the three piles you sorted &mdash; '+BRW.signed(OP_TOTAL)+', '+BRW.signed(INV_TOTAL)+', '+BRW.signed(FIN_TOTAL)+' &mdash; as a statement, the same way the Income sheet was laid out: <strong>Operating '+BRW.signed(OP_TOTAL)+'</strong> &mdash; repairs collected, parts bought, rent paid, the credit-card payoff. <strong>Investing '+BRW.signed(INV_TOTAL)+'</strong> &mdash; the new tool. <strong>Financing '+BRW.signed(FIN_TOTAL)+'</strong> &mdash; your draw. Add the three and that&rsquo;s the season&rsquo;s <strong>Net change in cash</strong>: '+BRW.signed(NET_CHANGE)+'. Start from Cash on June 1, '+BRW.dol(CASH_OPEN)+', apply that change, and you land exactly on <strong>'+BRW.dol(CASH_END)+'</strong> &mdash; the same number sitting on the Assets tab right now. And notice &mdash; it&rsquo;s the same <strong>+$320</strong> you reached the other way, walking down from Net income through Ridgeline, Smith, the wear, and the card. Two roads, one number.');
+    anna = annaBox('Time to lay out the three piles you sorted &mdash; '+BRW.signed(OP_TOTAL)+', '+BRW.signed(INV_TOTAL)+', '+BRW.signed(FIN_TOTAL)+' &mdash; as a statement, the same way the Income sheet was laid out: <strong>Operating '+BRW.signed(OP_TOTAL)+'</strong> &mdash; repairs collected, parts bought, rent paid, the credit-card payoff. <strong>Investing '+BRW.signed(INV_TOTAL)+'</strong> &mdash; the new tool. <strong>Financing '+BRW.signed(FIN_TOTAL)+'</strong> &mdash; your draw. Add the three and that&rsquo;s the season&rsquo;s <strong>Net change in cash</strong>: '+BRW.signed(NET_CHANGE)+'. Start from Cash on June 1, '+BRW.dol(CASH_OPEN)+', apply that change, and you land exactly on <strong>'+BRW.dol(CASH_END)+'</strong> &mdash; the same number sitting on the Assets tab right now. And notice &mdash; the statement&rsquo;s Operating line says '+BRW.signed(OP_TOTAL)+', while the income statement says '+BRW.dol(NET_INCOME)+'. Two numbers, both about running the shop, answering differently. Hold that.');
     ctrl = '<button class="btn-continue btn-block" onclick="buildSheet()">Add it to the workbook &rarr;</button>';
   } else {
-    anna = annaBox('This new sheet has a name: the <strong>Statement of Cash Flows</strong>. It answers a question the income statement never could &mdash; not how the season went by the work, but where the cash actually went. The workbook now produces three statements: the income statement, the statement of cash flows, and the balance sheet it always had.');
+    anna = annaBox('This new sheet has a name: the <strong>Statement of Cash Flows</strong>. It answers a question the income statement never could &mdash; not how the season went by the work, but where the cash actually went. The workbook now produces four statements: the income statement, the statement of changes in Members&rsquo; Capital, the statement of cash flows, and the balance sheet it always had.');
     ctrl = insightBox('Three statements, one workbook',
         '<p>Income statement: how the season went, by the work. Statement of cash flows: where the cash went, by purpose. Balance sheet: where things stand, this moment. Each answers a different question &mdash; and none of them is wrong for not answering the others.</p>')
-      + '<div class="next-phase-msg">One question left: what happened to Members&rsquo; Capital over the season, and where does a finished season get filed?</div>'
-      + '<button class="btn-continue btn-block" onclick="nav(\'35-1-The-Capital-Bridge.html\')">Next: close the season &rarr;</button>';
+      + freddieBox('The income statement says '+BRW.dol(NET_INCOME)+'. The cash statement says '+BRW.signed(OP_TOTAL)+' for the same running of the shop. Walk me from one to the other.')
+      + "<button class=\"btn-continue btn-block\" onclick=\"nav('45-1-What-Cash-Missed.html')\">Walk from $2,640 to $320 &rarr;</button>";
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
@@ -95,6 +98,7 @@ function buildSheet(){
   playClick(); playSuccess();
   step = 1;
   snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['cashflows']));
+  BR_WB.tagTabKinds(snap);
   BRW.update('wb', snap);
   BRW.tab('wb', 'cashflows');
   renderTalk();

@@ -16,7 +16,7 @@
     <div class="tut-header">
       <div class="tut-header-main">
         <h1>Tutorial 3: Depreciation</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 3 of 3</p>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 3 of 4</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -73,6 +73,8 @@ var NET_INCOME = REVENUE - EXPENSES;                     // 2,640
 /* ===== state ===== */
 var step = 0;
 var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
+snap.tabs.push(BR_WB.balanceTab(['jun1']));
+BR_WB.tagTabKinds(snap);
 
 function renderTalk(){
   var anna='', ctrl='';
@@ -85,8 +87,8 @@ function renderTalk(){
     anna = annaBox('There it is &mdash; the bottom line, at last: <strong>Net income, '+BRW.dol(NET_INCOME)+'</strong>. The shop delivered <strong>'+BRW.dol(REVENUE)+'</strong> of work this season and used up <strong>'+BRW.dol(EXPENSES)+'</strong> getting it done &mdash; parts, months of space, and wear. Every kind of used-up counted. Nothing left open.');
     ctrl = insightBox('How the season went &mdash; answered',
         '<p>One statement, read straight off the two period tabs: Revenue '+BRW.dol(REVENUE)+' &minus; Expenses '+BRW.dol(EXPENSES)+' = <strong>Net income '+BRW.dol(NET_INCOME)+'</strong>. This is the answer the jumbled pile couldn&rsquo;t give &mdash; and it&rsquo;s complete now.</p>')
-      + '<div class="next-phase-msg">One loose thread, though. A '+BRW.dol(NET_INCOME)+' season &mdash; and the Cash line reads <strong>$620</strong>, down from <strong>$1,300</strong> on opening day. Profitable, and poorer in cash. Both true. The next tutorial pulls that apart.</div>'
-      + '<button class="btn-continue btn-block" onclick="nav(\'34-1-The-Cash-Puzzle.html\')">Next: profit vs. cash &rarr;</button>';
+      + '<div class="next-phase-msg">One loose thread, though. A '+BRW.dol(NET_INCOME)+' season &mdash; and the Cash line reads <strong>$620</strong>, down from <strong>$1,300</strong> on opening day. Profitable, and poorer in cash. Both true. Hold on to that thread &mdash; it stays open past the end of this module.</div>'
+      + "<button class=\"btn-continue btn-block\" onclick=\"nav('33-4-Module-Complete.html')\">Finish Module 3 &rarr;</button>";
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
@@ -98,6 +100,7 @@ function finishStatement(){
   step = 1;
   snap.incomeNew = true;
   snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
+  BR_WB.tagTabKinds(snap);
   BRW.update('wb', snap);
   BRW.tab('wb', 'income');
   renderTalk();

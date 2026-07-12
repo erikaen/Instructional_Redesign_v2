@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 5: Closing the Season &middot; The Capital Bridge</title>
+  <title>Tutorial 3: The Change in Members&rsquo; Capital &middot; The Capital Bridge</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -15,8 +15,8 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 5: Closing the Season</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 4</p>
+        <h1>Tutorial 3: The Change in Members&rsquo; Capital</h1>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~10 min &middot; Page 1 of 2</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -25,12 +25,14 @@
     </div>
     <div class="phase-title" id="phaseTitle">The Capital Bridge</div>
 
+    <div id="opener"></div>
+
     <div class="narrative-block">
-      <p>One number was moving the whole time and never got its own statement: <strong>Members&rsquo; Capital</strong>. June 1 it read <strong>$2,460</strong>. Where should it stand today? Do the arithmetic yourself.</p>
+      <p>Freddie is holding today&rsquo;s balance sheet, where Members&rsquo; Capital already reads <strong>$4,500</strong>. He can see the closing number &mdash; what he&rsquo;s asking for is the <strong>walk</strong> from $2,460 to it. Type the closing number to lay the last stone of that walk.</p>
     </div>
 
     <div class="mc-card">
-      <div class="mc-q">Opening Members&rsquo; Capital <strong>$2,460</strong>, plus this season&rsquo;s net income <strong>$2,640</strong>, minus the owner&rsquo;s draw <strong>$600</strong> &mdash; the closing balance:</div>
+      <div class="mc-q">The walk from <strong>$2,460</strong>: plus this season&rsquo;s net income <strong>$2,640</strong>, minus the owner&rsquo;s draw <strong>$600</strong> &mdash; type the closing balance:</div>
       <div class="btn-row">
         <input id="bridgeInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Closing Members' Capital" onkeydown="if(event.key==='Enter'){checkBridge();}">
         <button class="btn btn-primary" onclick="checkBridge()">Check</button>
@@ -74,11 +76,20 @@ function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 /* ===== locked numbers ===== */
 var OPEN_MC = 2460, NET_INCOME = 2640, DRAW = 600, CLOSE_MC = 4500;
 var CONTRIB = 2290, RETAINED_OPEN = 170, RETAINED_CLOSE = 2210;
+
+/* ===== the opening dialog — Freddie restates the request, Anna points to the walk ===== */
+function renderOpener(){
+  document.getElementById('opener').innerHTML =
+      freddieBox('The sheets say Members&rsquo; Capital went from $2,460 to $4,500 &mdash; walk me from one to the other. And the $600 that left the shop without being an expense &mdash; show me where it sits.')
+    + annaBox('You&rsquo;re holding the closing number already &mdash; the balance sheet shows Members&rsquo; Capital at $4,500. What&rsquo;s missing is the walk from $2,460 to it. Two moves carry you across; build that bridge and the $600 has its seat.');
+  if(window.lucide) lucide.createIcons();
+}
 
 /* ===== check the bridge arithmetic ===== */
 var bridgeDone=false, bridgeAttempts=0;
@@ -99,7 +110,7 @@ function revealBridge(){
   var fb=document.getElementById('bridgeFb'); fb.className='feedback'; fb.classList.remove('show');
   var c=document.getElementById('bridgeClose'); c.hidden=false;
   c.innerHTML = insightBox('The bridge holds',
-    '<p>$2,460 + $2,640 &minus; $600 = <strong>$4,500</strong> &mdash; exactly the closing Members&rsquo; Capital sitting on today&rsquo;s balance sheet. The whole move from opening to closing runs through just two things: what the season <strong>generated</strong>, and what you <strong>withdrew</strong>.</p>');
+    '<p>$2,460 + $2,640 &minus; $600 = <strong>$4,500</strong> &mdash; exactly the closing Members&rsquo; Capital sitting on today&rsquo;s balance sheet. The whole move from opening to closing runs through just two things: what the shop <strong>generated</strong> this season, and what you <strong>withdrew</strong>.</p>');
   renderSheet();
   document.getElementById('controls').innerHTML = ctrlAfterReveal();
   if(window.lucide) lucide.createIcons();
@@ -108,9 +119,12 @@ function revealBridge(){
 
 /* ===== the workbook — the anchor, mounted from the start; the bridge joins it as a tab ===== */
 var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
-snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income','cashflows']));
+snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
+snap.tabs.push(BR_WB.balanceTab(['jun1','aug31']));
+BR_WB.tagTabKinds(snap);
 function renderSheet(){
   snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['bridge']));
+  BR_WB.tagTabKinds(snap);
   BRW.update('wb', snap);
   BRW.tab('wb', 'bridge');
 }
@@ -119,7 +133,7 @@ function ctrlAfterReveal(){
   return annaBox('Look at what didn&rsquo;t move: <strong>Contributed</strong> stayed at <strong>'+BRW.dol(CONTRIB)+'</strong> all season &mdash; no new contributions came in. The whole $2,040 swing ran through the other slice: <strong>Generated</strong> went from '+BRW.dol(RETAINED_OPEN)+' up to '+BRW.dol(RETAINED_CLOSE)+' &mdash; up by the net income, down by the draw. Every dollar of the move in Members&rsquo; Capital this season &mdash; up or down &mdash; this statement can name.')
     + insightBox('Two lines moved this bridge',
         '<p>Net income in, the draw out. Contributed sat still.</p>')
-    + '<button class="btn-continue btn-block" onclick="nav(\'35-2-The-First-Close.html\')">Where does a finished season get filed? &rarr;</button>';
+    + "<button class=\"btn-continue btn-block\" onclick=\"nav('43-2-The-First-Close.html')\">Where does a finished season get filed? &rarr;</button>";
 }
 
 /* ===== glossary / nav ===== */
@@ -145,6 +159,7 @@ BR_WB.registerSeasonSheets();
 BR_WB.registerStatementSheets();
 BRW.mount('wb', snap);
 BRW.tab('wb', 'reasons');
+renderOpener();
 </script>
   <script src="dev.js"></script>
 </body>

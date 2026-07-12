@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 4: The Cash-Flow Statement &middot; What Cash Missed</title>
+  <title>Tutorial 5: What Cash Missed</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -15,8 +15,8 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 4: The Cash-Flow Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 3 of 4</p>
+        <h1>Tutorial 5: What Cash Missed</h1>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~10 min &middot; Page 1 of 1</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -26,7 +26,8 @@
     <div class="phase-title" id="phaseTitle">What Cash Missed</div>
 
     <div class="narrative-block">
-      <p>Net income was <strong>$2,640</strong>. OPERATING cash was only <strong>$320</strong>. Four items sit between those two numbers &mdash; each one a place where the income statement and the Cash list answer differently. Walk them one at a time.</p>
+      <div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;The income statement says <strong>$2,640</strong>. The cash statement&rsquo;s operating line says <strong>$320</strong> &mdash; for the same running of the shop. Walk me from one to the other.&rdquo;</div></div>
+      <p>Two statements now sit on the table for the same season: the income statement showing <strong>$2,640</strong> of net income, and the cash statement showing <strong>$320</strong> of operating cash. Four items sit between those two numbers &mdash; each one a place where the two answer differently. Walk them one at a time.</p>
     </div>
 
     <div id="gaptrack"></div>
@@ -63,6 +64,7 @@ function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},9
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 var NET_INCOME = 2640, OP_CASH = 320;
@@ -83,7 +85,7 @@ var STEPS = [
     insight:'An expense that is <strong>never cash</strong>. It pulled net income down $230 with no matching cash outflow &mdash; so to explain the gap, it gets added back.' },
   { label:'Card payoff &mdash; $2,030',
     amt:2030, sign:-1,
-    q:'Last, the <strong>credit-card payoff</strong>: $2,030 in cash, out the door this season. But it isn&rsquo;t on the Expenses tab at all &mdash; it never touched net income. That $2,030 <em>settled</em> a debt from Module 2; the costs it originally paid for were already counted as expenses back when the tools and parts were <em>used</em>, not now, when the card got paid off.',
+    q:'Last, the <strong>credit-card payoff</strong>: $2,030 in cash, out the door this season. But it isn&rsquo;t on the Expenses tab at all &mdash; it never touched net income. That $2,030 <em>settled</em> an old card debt; the costs it originally paid for were already counted as expenses back when the tools and parts were <em>used</em>, not now, when the card got paid off.',
     insight:'Cash out that is <strong>not</strong> an expense. $2,030 left the Cash line with nothing for net income to show &mdash; the biggest single piece of the gap.' }
 ];
 var step = 0, revealed = false;
@@ -121,7 +123,9 @@ function renderAll(){
     anna = annaBox('Four items, and the gap is fully explained: Net income <strong>'+BRW.dol(NET_INCOME)+'</strong>, minus Ridgeline&rsquo;s $300, minus Smith&rsquo;s $220, plus depreciation&rsquo;s $230 added back, minus the $2,030 card payoff &mdash; lands exactly on Operating cash, <strong>'+BRW.dol(OP_CASH)+'</strong>. Nothing left unexplained.');
     ctrl = insightBox('Two honest clocks',
         '<p>The income statement times things to the <strong>work</strong> &mdash; when it was delivered or used up. The Cash list times things to the <strong>cash</strong> &mdash; when money actually moved. Both are honest answers. They&rsquo;re just answering different questions.</p>')
-      + '<button class="btn-continue btn-block" onclick="nav(\'34-4-The-Cash-Flow-Statement.html\')">Lay it out as a statement &rarr;</button>';
+      + freddieBox('Good. Same shop, two clocks &mdash; I can see that now.')
+      + '<div class="narrative-block"><p>Every statement now sits on the table &mdash; the income statement, the cash statement, and the balance sheet underneath both. The last thing to see is whether they hang together as one picture.</p></div>'
+      + "<button class=\"btn-continue btn-block\" onclick=\"nav('46-1-The-Statements-Tie-Out.html')\">See them hang together &rarr;</button>";
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;

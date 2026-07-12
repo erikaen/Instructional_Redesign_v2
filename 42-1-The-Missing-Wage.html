@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 2: Owner and Employee &middot; The Missing Wage</title>
+  <title>Tutorial 2: The Missing Wage</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -15,8 +15,8 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 2: Owner and Employee</h1>
-        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~6 min &middot; Page 1 of 2</p>
+        <h1>Tutorial 2: The Missing Wage</h1>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~6 min &middot; Page 1 of 1</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -80,7 +80,7 @@ var HUNT_OPTS = [
 ];
 
 var MCQ_OPTS = [
-  { id:'unchanged', label:'$2,640 &mdash; unchanged', fb:'Correct. A draw of any size never touches income. The draw sits on the Statement of Changes in Members&rsquo; Capital, never in Expenses &mdash; so a draw cannot be pay for work. It is an owner taking some of what is already the owner&rsquo;s.', correct:true },
+  { id:'unchanged', label:'$2,640 &mdash; unchanged', fb:'Correct. A draw of any size never touches income. The draw reduces Members&rsquo; Capital directly, never Expenses &mdash; so a draw cannot be pay for work. It is an owner taking some of what is already the owner&rsquo;s.', correct:true },
   { id:'2040',      label:'$2,040',                   fb:'Not quite. A $1,200 draw would lower closing Members&rsquo; Capital by another $600 &mdash; not net income. A draw is not an expense; it never enters the income statement.' },
   { id:'1440',      label:'$1,440',                    fb:'Not quite. A draw is money taken by the owner, not a cost of doing the work. It never appears on the income statement, so it cannot change net income.' }
 ];
@@ -182,7 +182,7 @@ function renderBeats(){
   var h = '';
 
   /* Beat 1 — the question and the hunt */
-  h += freddieBox('The season generated $2,640 of net income. Who did the repairs?');
+  h += freddieBox('The shop generated $2,640 of net income this season. Who did the repairs?');
   h += '<div class="narrative-block"><p>The owner did &mdash; every repair, all summer, at the bench.</p></div>';
   h += freddieBox('So what did the shop pay for that work? Show me the line.');
   h += '<div class="section-card"><div class="card-title">Income Statement</div><div class="xlsx">' + BRW.sheetHTML('income', {}) + '</div></div>';
@@ -191,16 +191,15 @@ function renderBeats(){
   /* Beat 2 — the draw objection + MCQ */
   if(step >= 1){
     h += youBox('But I took $600 out.');
-    h += '<div class="narrative-block"><p>The draw sits on the Statement of Changes in Members&rsquo; Capital &mdash; never in Expenses. That is exactly where Module 3 left it.</p></div>';
-    h += '<div class="section-card"><div class="card-title">Statement of Changes in Members&rsquo; Capital</div><div class="xlsx">' + BRW.sheetHTML('bridge', {}) + '</div></div>';
+    h += '<div class="narrative-block"><p>The $600 the owner took was jotted WITHDRAWN on the workbook&rsquo;s Reasons trail &mdash; never in Expenses. A draw never touches income &mdash; the WITHDRAWN pile from Module 3 showed exactly that.</p></div>';
     h += mcqHTML();
   }
 
   /* Beat 3 — the two hats */
   if(step >= 2){
-    h += '<div class="narrative-block"><p>One person wore two hats this season. At the bench, an employee; on the Operating Agreement, an owner. Only the owner hat was paid &mdash; the draw. The bench work itself cost the shop nothing.</p></div>';
+    h += '<div class="narrative-block"><p>One person wore both hats this season and owned the whole shop, so there was never any reason to split the take-out into pay-for-work and an owner&rsquo;s share &mdash; the draw was just money out. An investor who owns a share but never touches the bench changes that: the bench must be paid like any other cost &mdash; a salary, an expense &mdash; before there is anything for owners to share.</p></div>';
     h += annaBox('A ramped-up, full-time shop must pay the bench like any other cost &mdash; a salary, an expense of the shop. Same person, two roles, two treatments.');
-    h += freddieBox('I have a proposal about exactly that.');
+    h += freddieBox('The $600 left the shop, and it is not an expense &mdash; where do your statements show it? And Members&rsquo; Capital went from $2,460 to $4,500 &mdash; walk me from one to the other.');
   }
 
   document.getElementById('beats').innerHTML = h;
@@ -214,7 +213,7 @@ function renderControls(){
   } else if(step === 1){
     c = '<button class="btn-continue btn-block"' + (mcqAnswered ? '' : ' disabled') + ' onclick="advance()">Continue &rarr;</button>';
   } else {
-    c = '<button class="btn-continue btn-block" onclick="nav(\'42-2-Freddies-Napkin.html\')">Hear Freddie&rsquo;s proposal &rarr;</button>';
+    c = "<button class=\"btn-continue btn-block\" onclick=\"nav('43-1-The-Capital-Bridge.html')\">Build the walk &rarr;</button>";
   }
   document.getElementById('controls').innerHTML = c;
   if(window.lucide) lucide.createIcons();

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 1: The Statement Map &middot; The Investor Asks</title>
+  <title>Tutorial 1: The Investor Asks</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -15,8 +15,8 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 1: The Statement Map</h1>
-        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~5 min &middot; Page 1 of 2</p>
+        <h1>Tutorial 1: The Investor Asks</h1>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~5 min &middot; Page 1 of 1</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -62,8 +62,9 @@ function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog
 function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 
 /* ===== step state ===== */
-var step = 0; // 0: scene+ask, 1: hand-over, 2: the two sheets, 3: closing beat
+var step = 0; // 0: scene+ask, 1: hand-over, 2: income statement, 3: closing beat
 var TOTAL_STEPS = 4;
+var sheetsRegistered = false;
 
 /* ===== the two balance sheets (verbatim markup, June 1 / Aug 31) ===== */
 var BS_HTML =
@@ -129,23 +130,31 @@ var IDENTITY_HTML =
   + '</div>';
 
 /* ===== render ===== */
+function ensureSheets(){
+  if(!sheetsRegistered){ BR_WB.registerStatementSheets(); sheetsRegistered = true; }
+}
+
 function renderBeats(){
   var h = '';
 
-  h += annaBox('Season&rsquo;s closed, books are clean &mdash; and someone&rsquo;s been paying attention. Freddie stopped by the shop this week.');
+  h += annaBox('The season&rsquo;s income statement is finished, and an investor named Freddie wants to look at the shop.');
   h += freddieBox('I&rsquo;ve been watching this place all summer. Impressed by the season you put together. I&rsquo;m thinking about putting some money in to help it grow &mdash; but before we talk about any of that, I&rsquo;d like to see the financial statements.');
 
   if(step >= 1){
-    h += '<div class="narrative-block"><p>Freddie doesn&rsquo;t get the workbook. He doesn&rsquo;t see the Reasons tab, the parts shelf, or the dated cash ledger &mdash; none of the drill-downs built over the last three modules. An outside reader receives only the statement set: the reporting format, not the books behind it.</p></div>';
+    h += '<div class="narrative-block"><p>Freddie doesn&rsquo;t get the workbook. He doesn&rsquo;t see the Reasons tab, the parts shelf, or the dated cash ledger &mdash; none of the drill-downs built through Module 3. An outside reader receives only the statements Anna hands over: the reporting format, not the books behind it.</p></div>';
+    h += '<div class="section-card"><div class="card-title">June 1 and August 31 Balance Sheets</div>' + BS_HTML + IDENTITY_HTML + '</div>';
+    h += freddieBox('I see Members&rsquo; Capital at $2,460 on June 1, then $4,500 on August 31. I can see where the shop landed. I still don&rsquo;t know how it got there.');
   }
 
   if(step >= 2){
-    h += '<div class="section-card"><div class="card-title">The statements Freddie receives</div>' + BS_HTML + IDENTITY_HTML + '</div>';
+    ensureSheets();
+    h += '<div class="narrative-block"><p>Anna adds the one other statement that exists so far. It shows Revenue, Expenses, and net income for the season.</p></div>';
+    h += '<div class="section-card"><div class="card-title">Income Statement</div><div class="xlsx">' + BRW.sheetHTML('income', {}) + '</div></div>';
+    h += freddieBox('Let me read this. Revenue was $6,020, Expenses were $3,380, so net income was $2,640.');
   }
 
   if(step >= 3){
-    h += '<div class="narrative-block"><p>The two snapshots differ. Cash fell. A line appeared that wasn&rsquo;t on the June sheet, and both liability lines fell to zero. Members&rsquo; Capital rose. But two snapshots, standing alone, don&rsquo;t say how or why any of that happened &mdash; they only say where things stand at each date.</p></div>';
-    h += freddieBox('This tells me where things stand, June to August. It doesn&rsquo;t tell me how it got there. Walk me through it.');
+    h += freddieBox('That tells me the result. Now I want to know who did all this work.');
   }
 
   document.getElementById('beats').innerHTML = h;
@@ -157,7 +166,7 @@ function renderControls(){
   if(step < TOTAL_STEPS - 1){
     c = '<button class="btn-continue btn-block" onclick="advance()">Continue &rarr;</button>';
   } else {
-    c = '<button class="btn-continue btn-block" onclick="nav(\'41-2-The-Statement-Map.html\')">Walk Freddie through it &rarr;</button>';
+    c = "<button class=\"btn-continue btn-block\" onclick=\"nav('42-1-The-Missing-Wage.html')\">Walk Freddie through it &rarr;</button>";
   }
   document.getElementById('controls').innerHTML = c;
   if(window.lucide) lucide.createIcons();
@@ -176,7 +185,8 @@ function advance(){
 var glossaryTerms=[
   { term:'Balance sheet', def:'A snapshot of Assets, Liabilities, and Members&rsquo; Capital at one point in time &mdash; here, June 1 and August 31, 2026.' },
   { term:'Accounting identity', def:'Assets minus Liabilities equals Members&rsquo; Capital. Holds at every date &mdash; here, at both June 1 ($4,710 &minus; $2,250 = $2,460) and August 31 ($4,500 &minus; $0 = $4,500).' },
-  { term:'Members&rsquo; Capital', def:'The name the Operating Agreement gives the difference between Assets and Liabilities. Two parts: Contributed (money put in) and Generated (built up from the work, after draws).' }
+  { term:'Members&rsquo; Capital', def:'The name the Operating Agreement gives the difference between Assets and Liabilities. Its two subparts are Contributed and Generated.' },
+  { term:'Income statement', def:'Revenue minus Expenses for the period: $6,020 &minus; $3,380 = $2,640.' }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){

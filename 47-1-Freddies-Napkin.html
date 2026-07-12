@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 2: Owner and Employee &middot; Freddie&rsquo;s Napkin</title>
+  <title>Tutorial 7: Freddie&rsquo;s Napkin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -15,8 +15,8 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 2: Owner and Employee</h1>
-        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~6 min &middot; Page 2 of 2</p>
+        <h1>Tutorial 7: Freddie&rsquo;s Napkin</h1>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~6 min &middot; Page 1 of 1</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -81,10 +81,10 @@ function renderNapkin(){
     h += '<div class="napkin-line"><span>'+NAPKIN_ROWS[i].label+'<\/span><span class="napkin-val">'+NAPKIN_ROWS[i].val+'<\/span><\/div>';
   }
   if(napkinLines >= NAPKIN_ROWS.length && !profitOK){
-    h += '<div class="napkin-total"><span>Profit<\/span><input class="calc-input" id="profitInput" inputmode="numeric" autocomplete="off" aria-label="Profit"><\/div>';
+    h += '<div class="napkin-total"><span>Free cash flow<\/span><input class="calc-input" id="profitInput" inputmode="numeric" autocomplete="off" aria-label="Free cash flow"><\/div>';
   }
   if(profitOK){
-    h += '<div class="napkin-total"><span>Profit<\/span><span class="napkin-val">$5,000<\/span><\/div>';
+    h += '<div class="napkin-total"><span>Free cash flow<\/span><span class="napkin-val">$5,000<\/span><\/div>';
     h += '<div class="napkin-note">an expectation, not a record<\/div>';
   }
   h += '<\/div>';
@@ -93,6 +93,7 @@ function renderNapkin(){
   }
   if(napkinLines >= 5 && !profitOK){
     h += freddieBox('Gear wears out and gets replaced. On a napkin I just carry that as cash going out.');
+    h += freddieBox('What&rsquo;s left is cash that could be paid out and not hurt the shop&rsquo;s business. I call that free cash flow.');
   }
   if(napkinLines >= NAPKIN_ROWS.length && !profitOK){
     h += '<div class="narrative-block"><p>Type Freddie&rsquo;s bottom line for a month like this.<\/p><\/div>';
@@ -125,7 +126,7 @@ function renderBeats(){
 
   if(step === 3){
     h += freddieBox('Months like that would be worth sharing. On what terms?');
-    h += '<div class="next-card"><div class="next-card-label">Coming Next<\/div><p>Freddie has to decide what he is buying and what the deal looks like. That is where Module 4 goes next.<\/p><\/div>';
+    h += '<div class="next-card"><div class="next-card-label">Coming Next<\/div><p>Freddie has to decide what he is buying and what the deal looks like. That is where the story goes next.<\/p><\/div>';
   }
 
   document.getElementById('beats').innerHTML = h;
@@ -181,7 +182,7 @@ function advance(){
 
 function back(){
   playClick();
-  if(step === 0){ nav('42-1-The-Missing-Wage.html'); return; }
+  if(step === 0){ nav('46-2-The-Statement-Map.html'); return; }
   if(step === 1 && napkinLines > 1 && !profitOK){
     napkinLines--;
     feedback = '';
@@ -220,7 +221,8 @@ var glossaryTerms=[
   { term:'Salary/Wages', def:'Pay for work. When the shop pays a repair person as an employee, it is an expense of the shop.' },
   { term:'Draw', def:'An owner move &mdash; money taken by the owner. Never an expense; it never touches net income.' },
   { term:'Expectation vs record', def:'A napkin sketch of the future is not a statement. Statements record what happened.' },
-  { term:'Replacement tools &amp; equipment', def:'An investor&rsquo;s cash sketch of gear wearing out and being replaced.' }
+  { term:'Replacement tools &amp; equipment', def:'An investor&rsquo;s cash sketch of gear wearing out and being replaced.' },
+  { term:'Free cash flow', def:'Cash that could be paid out and not hurt the shop&rsquo;s business. On Freddie&rsquo;s napkin it is an expectation, never a record.' }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){

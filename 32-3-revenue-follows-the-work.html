@@ -120,7 +120,10 @@ function setStep(n){
   step = n;
   if(step===2){
     // grow the real workbook: Accounts Receivable appears in Assets, DELIVERED rises to 6,020
-    BRW.update('wb', BR_WB.snapshot({ flowGroups:true, withReceivable:true }));
+    var snap2 = BR_WB.snapshot({ flowGroups:true, withReceivable:true });
+    snap2.tabs.push(BR_WB.balanceTab(['jun1']));
+    BR_WB.tagTabKinds(snap2);
+    BRW.update('wb', snap2);
     BRW.tab('wb', 'assets');
     BRW.x('wb', 'a', 1);   // open the new Accounts Receivable line
   }
@@ -170,7 +173,10 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 
 /* ===== init — the workbook with the season already sorted into DELIVERED / USED UP ===== */
 window.devFill = function(){ setStep(2); };
-BRW.mount('wb', BR_WB.snapshot({ flowGroups:true }));
+var snap = BR_WB.snapshot({ flowGroups:true });
+snap.tabs.push(BR_WB.balanceTab(['jun1']));
+BR_WB.tagTabKinds(snap);
+BRW.mount('wb', snap);
 BRW.tab('wb', 'reasons');
 renderTalk();
 </script>

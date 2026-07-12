@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 5: Closing the Season &middot; The Statements Tie Out</title>
+  <title>Tutorial 6: The Statements Tie Out</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -15,8 +15,8 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 5: Closing the Season</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 3 of 4</p>
+        <h1>Tutorial 6: The Statements Tie Out</h1>
+        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~10 min &middot; Page 1 of 2</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">The Statements Tie Out</div>
 
     <div class="narrative-block">
-      <p>Here is the whole workbook, closed for the season &mdash; and beside the tabs you built it from, the closing balance sheet and the season&rsquo;s three flow statements. Three things moved between the two snapshots. For each one, find the statement that carries the story.</p>
+      <p>Every statement Freddie asked for now exists: the income statement, the statement of changes in Members&rsquo; Capital, the cash-flow statement, and the walk from net income to operating cash. Before Anna puts the set in front of him as one picture, one thing remains to see: the statements hang together. Three things moved between the two balance-sheet snapshots. For each one, find the statement that carries the story.</p>
     </div>
 
     <div id="wb"></div>
@@ -74,7 +74,7 @@ function insightBox(label,inner){ return '<div class="insight-box"><div class="i
 
 /* ===== the closed workbook — the anchor — with the four statements as tabs beside it ===== */
 var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true, closed:true });
-snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income','cashflows','bridge','balance']));
+snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income','bridge','cashflows','balance']));
 
 /* ===== the three matching MCQs ===== */
 var MOVES = [
@@ -158,7 +158,7 @@ function renderTalk(done){
     anna = annaBox('Every one of those moves had a statement that could explain it. None of them was left as just a number that changed for no stated reason. Accountants have a name for this: <strong>articulation</strong> &mdash; the statements tie to each other. The balance sheet shows where things stand; the flow statements show how it got there. Neither stands alone.');
     ctrl = insightBox('Articulation',
         '<p>A balance sheet cannot show a new number without the story filed beside it. The difference never jumps from one snapshot to the next &mdash; it travels through the income statement, the statement of changes in Members&rsquo; Capital, and the statement of cash flows, in full. That is what it means for the statements to <strong>tie out</strong>.</p>')
-      + '<button class="btn-continue btn-block" onclick="nav(\'35-4-Module-Complete.html\')">Finish Module 3 &rarr;</button>';
+      + "<button class=\"btn-continue btn-block\" onclick=\"nav('46-2-The-Statement-Map.html')\">Next: the whole map &rarr;</button>";
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
@@ -193,6 +193,8 @@ window.devFill = function(){
 };
 BR_WB.registerSeasonSheets();
 BR_WB.registerStatementSheets();
+BR_WB.balanceTab(['jun1','aug31']);
+BR_WB.tagTabKinds(snap);
 BRW.mount('wb', snap);
 BRW.tab('wb', 'balance');
 renderMatch();

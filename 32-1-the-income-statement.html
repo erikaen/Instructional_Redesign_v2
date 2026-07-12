@@ -132,6 +132,8 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeTicket(); } });
 
 /* ===== init — mount the real workbook, open it on the Reasons pile ===== */
+SNAP.tabs.push(BR_WB.balanceTab(['jun1']));
+BR_WB.tagTabKinds(SNAP);
 BRW.mount('wb', SNAP);
 BRW.tab('wb', 'reasons');
 renderTalk();

@@ -259,6 +259,8 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 
 /* ===== init ===== */
 window.devFill = function(){ step = WALK.length; stepDone = false; renderTalk(); };
+SNAP.tabs.push(BR_WB.balanceTab(['jun1']));
+BR_WB.tagTabKinds(SNAP);
 BRW.mount('wb', SNAP);
 BRW.setHook(onBRW);
 renderTalk();

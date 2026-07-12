@@ -111,6 +111,8 @@ function sortSheet(cid, snap){
 /* ===== workbook state — the Reasons tab is our interactive sort sheet ===== */
 var snap = BR_WB.snapshot();
 snap.tabs = snap.tabs.map(function(t){ return t.id==='reasons' ? { id:'sort', label:'Reasons' } : t; });
+snap.tabs.push(BR_WB.balanceTab(['jun1']));
+BR_WB.tagTabKinds(snap);
 
 /* ===== interaction ===== */
 function nudge(kind, html){ var n=document.getElementById('sortNudge'); n.className='feedback '+kind+' show'; n.innerHTML=html; if(window.lucide) lucide.createIcons(); }
