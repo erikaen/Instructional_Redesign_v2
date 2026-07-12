@@ -360,3 +360,86 @@ var BR_WB = (function () {
     });
   };
 })();
+
+/* ==========================================================================
+ * Tab kinds + the dated Balance Sheet tab — approved additions (2026-07-11).
+ * Rick's ruling: color-code workbook tabs by account type, and carry a
+ * Balance Sheet tab (one Amount column per period, date in the heading) in
+ * every Module 3/4 workbook depiction. Both are OPT-IN per page: untagged
+ * tabs and pages that never call these render exactly as before, so Module
+ * 1/2 depictions are untouched.
+ *
+ *   BR_WB.tagTabKinds(snap) -> stamps t.kind on known tabs:
+ *       'perm' (Assets, Liabilities, Reasons — running totals from the
+ *       beginning of the business), 'temp' (Revenue, Expenses), 'stmt'
+ *       (Income, Cash Flows, Changes in Capital, Balance Sheet).
+ *       Call after ANY change to snap.tabs, before mount/update.
+ *   BR_WB.balanceTab(periods)  -> registers the dated balance-sheet renderer
+ *       ('jun1' / 'aug31' columns; supersedes the single-column 'balance'
+ *       sheet when called after registerStatementSheets) and returns the
+ *       tab entry for snap.tabs.
+ * ========================================================================== */
+(function () {
+  'use strict';
+  function xr(cls, label, val) {
+    return '<div class="xl-row ' + cls + '"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">' + label + '</div><div class="xl-v">' + val + '</div></div>';
+  }
+  function xr2(cls, label, v1, v2) {
+    return '<div class="xl-row xl-cols2 ' + cls + '"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">' + label + '</div><div class="xl-v">' + v1 + '</div><div class="xl-v">' + v2 + '</div></div>';
+  }
+
+  var TAB_KINDS = {
+    assets: 'perm', liabilities: 'perm', reasons: 'perm',
+    revenue: 'temp', expenses: 'temp',
+    income: 'stmt', cashflows: 'stmt', bridge: 'stmt', balance: 'stmt'
+  };
+  BR_WB.tagTabKinds = function (snap) {
+    (snap.tabs || []).forEach(function (t) { if (TAB_KINDS[t.id]) t.kind = TAB_KINDS[t.id]; });
+    return snap;
+  };
+
+  // Locked balance-sheet lines (never re-derive): [rowClass, label, jun1, aug31].
+  // null renders as an em dash (the line does not exist yet at that date).
+  var BS_ROWS = [
+    ['cat',   '<strong>Assets</strong>', null, null],
+    ['item',  'Cash', 1300, 620],
+    ['item',  'Accounts Receivable', null, 300],
+    ['item',  'Right of Use', 650, 650],
+    ['item',  'Parts', 200, 200],
+    ['item',  'Tools &amp; Repair Equipment', 1200, 1440],
+    ['item',  'Fixtures', 750, 710],
+    ['item',  'Laptop', 610, 580],
+    ['total', '<strong>Total Assets</strong>', 4710, 4500],
+    ['cat',   '<strong>Liabilities</strong>', null, null],
+    ['item',  'Credit Card', 2030, 0],
+    ['item',  'Customer Deposit', 220, 0],
+    ['total', '<strong>Total Liabilities</strong>', 2250, 0],
+    ['cat',   '<strong>Members&rsquo; Capital</strong>', null, null],
+    ['item',  'Contributed', 2290, 2290],
+    ['item',  'Generated', 170, 2210],
+    ['total', '<strong>Total Members&rsquo; Capital</strong>', 2460, 4500]
+  ];
+  var BS_DATES = { jun1: 'June 1, 2026', aug31: 'August 31, 2026' };
+
+  BR_WB.balanceTab = function (periods) {
+    periods = periods || ['jun1'];
+    var two = periods.length > 1;
+    BRW.registerSheet('balance', function (cid, snap) {
+      var heads = periods.map(function (p) { return BS_DATES[p]; });
+      var h = two ? xr2('xl-head', 'Balance Sheet', heads[0], heads[1])
+                  : xr('xl-head', 'Balance Sheet', heads[0]);
+      BS_ROWS.forEach(function (r) {
+        var isCat = (r[0] === 'cat');
+        var vals = periods.map(function (p) {
+          if (isCat) return '';
+          var v = (p === 'jun1') ? r[2] : r[3];
+          return (v === null) ? '&mdash;' : BRW.dol(v);
+        });
+        h += two ? xr2('xl-' + r[0], r[1], vals[0], vals[1])
+                 : xr('xl-' + r[0], r[1], vals[0]);
+      });
+      return h;
+    });
+    return { id: 'balance', label: 'Balance Sheet', kind: 'stmt' };
+  };
+})();

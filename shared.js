@@ -380,7 +380,7 @@ var BRW = (function () {
 
   function shell(cid, snap, activeLabel, body) {
     var tabs = snap.tabs.map(function (t) {
-      return '<button class="xlwb-tab' + (t.id === _reg[cid].ui.tab ? ' active' : '') + '" onclick="BRW.tab(\'' + cid + '\',\'' + t.id + '\')">' + t.label + '</button>';
+      return '<button class="xlwb-tab' + (t.kind ? ' tk-' + t.kind : '') + (t.id === _reg[cid].ui.tab ? ' active' : '') + '" onclick="BRW.tab(\'' + cid + '\',\'' + t.id + '\')">' + t.label + '</button>';
     }).join('');
     return '<div class="xlwb">'
       + '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">' + (snap.file || 'Bike-Repair.xlsx') + '</span></span><span class="xlwb-bar-sheet">' + activeLabel + ' sheet</span></div>'
