@@ -66,7 +66,6 @@ function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
-function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 /* ===== the contradiction: both true, at once ===== */
@@ -144,14 +143,13 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 
 /* ===== init — the graduated workbook, Assets tab, Cash line open ===== */
 window.devFill = function(){ mcqSel=2; mcqSubmitted=true; renderAll(); };
-BR_WB.registerSeasonSheets();
-var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true, closed:true });
+var snap = BR_WB.snapshot({ withReceivable:true, withDepreciation:true });
 snap.tabs.push(BR_WB.balanceTab(['jun1','aug31']));
 BR_WB.tagTabKinds(snap);
 BRW.mount('wb', snap);
 BRW.tab('wb', 'assets');
 BRW.x('wb', 'a', 0);
-document.getElementById('freddie').innerHTML = freddieBox('Net income was '+BRW.dol(NET_INCOME)+' &mdash; a profitable season. But the Cash line reads '+BRW.dol(CASH_NOW)+', down from '+BRW.dol(CASH_OPEN)+' when the account opened. Where did the cash go?');
+document.getElementById('freddie').innerHTML = annaBox('Freddie left a question on the table before he headed out: Net income was '+BRW.dol(NET_INCOME)+' &mdash; a profitable season. But the Cash line reads '+BRW.dol(CASH_NOW)+', down from '+BRW.dol(CASH_OPEN)+' when the account opened. Where did the cash go?');
 renderAll();
 if(window.lucide) lucide.createIcons();
 </script>

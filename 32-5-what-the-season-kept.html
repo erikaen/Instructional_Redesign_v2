@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">What the Season Kept</div>
 
     <div class="narrative-block">
-      <p>The income statement answers one question &mdash; how the season went. But that answer has to <strong>land</strong> somewhere in the books. Back on the Reasons tab, <strong>GENERATED &mdash; through May 31</strong> holds what the work had produced before the summer, <strong>CONTRIBUTED</strong> holds what you put in &mdash; and the season&rsquo;s own story now sits on the <strong>Revenue</strong> and <strong>Expenses</strong> tabs. When Net income is finished, which pile does it feed?</p>
+      <p>The income statement answers one question &mdash; how the season went. But that answer has to <strong>land</strong> somewhere in the books. Back on the Reasons tab, the continuous <strong>GENERATED</strong> pile holds it all: the <strong>$170</strong> the work had produced through May, then the season&rsquo;s rows right after it &mdash; Revenue and Expenses never left the pile; the income statement is a sort-view that reads the season&rsquo;s slice of it. <strong>CONTRIBUTED</strong> holds what you put in. When Net income is finished, which pile does it feed?</p>
     </div>
 
     <div id="wb"></div>
@@ -65,10 +65,10 @@ function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 function renderTalk(){
-  document.getElementById('anna').innerHTML = annaBox('Net income feeds the <strong>GENERATED</strong> side &mdash; never CONTRIBUTED. The <strong>Revenue</strong> and <strong>Expenses</strong> tabs answer for the season; what they net to will land in GENERATED, right under the <strong>$170</strong> the work had produced through May &mdash; same pile, one more season of it, period by period. What you put in ($2,290) sits in CONTRIBUTED &mdash; and a season of operations never touches it. That&rsquo;s the Module 2 split doing its work. And the books already grew this tutorial &mdash; Ridgeline&rsquo;s <strong>$300</strong> promise is now a line in Assets.');
+  document.getElementById('anna').innerHTML = annaBox('Net income isn&rsquo;t a new thing that has to be carried anywhere &mdash; it <em>is</em> the season&rsquo;s net addition to <strong>GENERATED</strong>, already sitting there row by row. The income statement just reads it in one number, right under the <strong>$170</strong> the work had produced through May &mdash; same pile, one more season of it. What you put in (<strong>$2,290</strong>) sits in <strong>CONTRIBUTED</strong>, and a season of operations never touches it &mdash; the Module 2 split doing its work. And the books already grew this tutorial &mdash; Ridgeline&rsquo;s <strong>$300</strong> promise is now a line in Assets.');
   document.getElementById('controls').innerHTML =
     insightBox('The income statement explains a balance-sheet move',
-        '<p>Between June and now, members&rsquo; capital moved. The income statement says <em>how</em>: Net income is exactly the amount added to <strong>GENERATED</strong> for the season. (Your <strong>$600</strong> draw sits in its own pile, <strong>WITHDRAWN</strong> &mdash; taking money out is a distribution, not a cost of the work. It gets its own statement later.)</p>')
+        '<p>Between June 1 and August 31 the difference between Assets and Liabilities moved. The income statement says <em>how</em>: its bottom line is the season&rsquo;s net addition to <strong>GENERATED</strong>. (Your <strong>$600</strong> draw sits in its own pile, <strong>WITHDRAWN</strong> &mdash; taking money out is a distribution, not a cost of the work. It gets its own statement later.)</p>')
     + '<div class="next-phase-msg">You built the whole shape: Revenue, Expenses, Net income &mdash; and where it lands. Only one thing is still open: the last expense. Your tools and laptop wore out all season, and that wear isn&rsquo;t counted yet. Finish it, and Net income finally gets its number.</div>'
     + '<button class="btn-continue btn-block" onclick="nav(\'33-1-Two-Kinds-of-Used-Up.html\')">Next: the wear you can&rsquo;t see &rarr;</button>';
   if(window.lucide) lucide.createIcons();
@@ -92,9 +92,8 @@ function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
-/* ===== init — the graduated workbook: the period tabs beside the continuous piles ===== */
-BR_WB.registerSeasonSheets();
-var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true });
+/* ===== init — the continuous workbook: the season's rows live in the GENERATED pile; the income statement reads them as a sort-view ===== */
+var snap = BR_WB.snapshot({ withReceivable:true });
 snap.tabs.push(BR_WB.balanceTab(['jun1']));
 BR_WB.tagTabKinds(snap);
 BRW.mount('wb', snap);

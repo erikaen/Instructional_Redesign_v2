@@ -11,24 +11,15 @@
  *       opts.flowGroups      -> show the SEASON's reasons regrouped into
  *                               DELIVERED / USED UP tallies (the 32-2 sort result) with
  *                               WITHDRAWN below; May's rows stay in their original piles
- *       opts.tabbed          -> the 32-4 graduation state: the season's DELIVERED / USED UP
- *                               rows leave Reasons for their own PERIOD tabs, Revenue and
- *                               Expenses (they exist to separate reasons by the period they
- *                               answer for). Pages mounting a tabbed snapshot must call
- *                               BR_WB.registerSeasonSheets() once, after shared.js loads.
- *       opts.withDepreciation-> the 33-2 state: the season's wear recorded — two depreciation
- *                               rows land on Expenses ($200 tools, equipment & fixtures;
+ *       opts.tabbed          -> RETIRED (2026-07-13): accepted and ignored. GENERATED is
+ *                               continuous — the season's rows never leave the Reasons tab;
+ *                               the income statement is a sort-view of them.
+ *       opts.withDepreciation-> the 33-2 state: the season's wear recorded — two Depreciation
+ *                               reasons land in GENERATED ($200 tools, equipment & fixtures;
  *                               $30 laptop), the asset ledgers carry the wear split $160/$40
- *                               (Tools 1,600 -> 1,440; Fixtures 750 -> 710; Laptop 610 -> 580);
- *                               the "one more kind of used-up" placeholder goes away.
- *       opts.closed          -> the 35-2 state: the FIRST-EVER CLOSE. Requires tabbed (and
- *                               normally withDepreciation). Revenue and Expenses empty out —
- *                               their rows fold into GENERATED as ONE period row each ("May
- *                               (pre-LLC) +$170", "Summer 2026 +$2,640"); May's individual
- *                               pre-season rows in GENERATED are replaced by that same May
- *                               period row (the same gesture files both periods at once).
- *                               WITHDRAWN is untouched. Revenue/Expenses tabs render an
- *                               emptied "closed into GENERATED, ready for next season" state.
+ *                               (Tools 1,600 -> 1,440; Fixtures 750 -> 710; Laptop 610 -> 580).
+ *       opts.closed          -> RETIRED (2026-07-13): accepted and ignored. There is no
+ *                               close in these materials.
  *   BR_WB.setupRows()        -> the pre-season (May + formation) reasons — the Reasons
  *                               list is one CONTINUOUS list, never settled or reset
  *   BR_WB.generatedRows()    -> the GENERATED reasons, each tagged flow:'in'|'up'
@@ -159,34 +150,21 @@ var BR_WB = (function () {
     var setup = setupRows();
     var gen = generatedRows();
     if (opts.withReceivable) gen.push(ridgelineReason);
-    // In flowGroups mode the SEASON's generated reasons are filed under their flow (in/up) —
-    // the state after the student sorts them in 32-2. May's rows keep their original piles:
-    // the period line the student drew stays visible in the workbook.
-    // In tabbed mode (the 32-4 graduation) the season's rows leave Reasons entirely —
-    // they live on their own period tabs, Revenue and Expenses.
-    // opts.closed (the 35-2 first-ever close): May's individual generated rows AND the
-    // season's generated rows both file into GENERATED as ONE period row apiece — the same
-    // gesture rules on both periods at once. Nothing here changes non-closed rendering.
-    var MAY_PERIOD_ROW = { kind: 'net', cat: 'generated', account: 'May (pre-LLC)', reason: 'the work before the LLC, filed as a closed period', delta: 170 };
-    var SEASON_PERIOD_ROW = { kind: 'net', cat: 'generated', account: 'Summer 2026', reason: 'net income for the season, closed into Generated', delta: 2640 };
-    var rows = opts.closed
-      ? setup.filter(function (r) { return r.cat !== 'generated'; }).concat([ MAY_PERIOD_ROW, SEASON_PERIOD_ROW ])
-      : (opts.tabbed
-        ? setup.slice()
-        : (opts.flowGroups
-          ? setup.concat(gen.map(function (r) { return { kind: 'net', cat: r.flow, flow: r.flow, account: r.account, reason: r.reason, delta: r.delta }; }))
-          : setup.concat(gen)));
+    if (opts.withDepreciation) {
+      gen.push({ kind: 'net', cat: 'generated', flow: 'up', account: 'Depreciation', reason: 'tools, equipment &amp; fixtures, Summer 2026', delta: -200 });
+      gen.push({ kind: 'net', cat: 'generated', flow: 'up', account: 'Depreciation', reason: 'laptop, Summer 2026', delta: -30 });
+    }
+    // GENERATED is CONTINUOUS (2026-07-13 ruling): the season's rows live on the Reasons
+    // tab permanently — the income statement is a SORT-VIEW of those rows, never a
+    // migration, and there is no close. opts.flowGroups still renders the 32-2 sort
+    // result. The retired opts.closed / opts.tabbed row-migration semantics are accepted
+    // and IGNORED so not-yet-reworked pages keep loading during the fold-in.
+    var rows = opts.flowGroups
+      ? setup.concat(gen.map(function (r) { return { kind: 'net', cat: r.flow, flow: r.flow, account: r.account, reason: r.reason, delta: r.delta }; }))
+      : setup.concat(gen);
     rows.push(drawReason);
 
-    var groups = opts.closed
-      ? [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in' },
-          { key: 'generated', label: 'GENERATED &mdash; closed periods', blurb: 'an archive of finished periods, one row per close' },
-          { key: 'drawn', label: 'WITHDRAWN', blurb: 'an owner move &mdash; dated to the season, but not part of how the work did' } ]
-      : opts.tabbed
-      ? [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in' },
-          { key: 'generated', label: 'GENERATED &mdash; through May 31', blurb: 'the work before the season, left where it was' },
-          { key: 'drawn', label: 'WITHDRAWN', blurb: 'an owner move &mdash; dated to the season, but not part of how the work did' } ]
-      : opts.flowGroups
+    var groups = opts.flowGroups
       ? [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in' },
           { key: 'generated', label: 'GENERATED &mdash; through May 31', blurb: 'the work before the season, left where it was' },
           { key: 'in', label: 'DELIVERED', blurb: 'reasons the work delivered to a customer' },
@@ -198,11 +176,7 @@ var BR_WB = (function () {
 
     var snap = {
       file: 'Bike-Repair.xlsx',
-      tabs: opts.tabbed
-        ? [ { id: 'assets', label: 'Assets' }, { id: 'liabilities', label: 'Liabilities' },
-            { id: 'revenue', label: 'Revenue' }, { id: 'expenses', label: 'Expenses' },
-            { id: 'reasons', label: 'Reasons' } ]
-        : [ { id: 'assets', label: 'Assets' }, { id: 'liabilities', label: 'Liabilities' }, { id: 'reasons', label: 'Reasons' } ],
+      tabs: [ { id: 'assets', label: 'Assets' }, { id: 'liabilities', label: 'Liabilities' }, { id: 'reasons', label: 'Reasons' } ],
       assets: assets,
       liabilities: [
         { label: 'Credit Card', amount: 0, events: [
@@ -218,11 +192,7 @@ var BR_WB = (function () {
       ],
       reasons: {
         pilesTitle: 'The Reasons piles &mdash; May 1 to today',
-        pilesSub: opts.closed
-          ? 'the season closed into GENERATED as a period row; May&rsquo;s rows filed the same way &mdash; the archive of finished periods'
-          : opts.tabbed
-          ? 'the season&rsquo;s rows now live on their own tabs &mdash; Revenue and Expenses; they come back when the season closes'
-          : opts.flowGroups
+        pilesSub: opts.flowGroups
           ? 'the season&rsquo;s rows sorted into tallies; May&rsquo;s rows left where they were'
           : 'one continuous list &mdash; every reason since the first May jot; nothing settled, nothing reset',
         mode: 'sorted',
@@ -230,27 +200,6 @@ var BR_WB = (function () {
         rows: rows
       }
     };
-    if (opts.tabbed) {
-      snap.revenueRows = gen.filter(function (r) { return r.flow === 'in'; });
-      snap.expenseRows = gen.filter(function (r) { return r.flow === 'up'; });
-      if (opts.withDepreciation) {
-        snap.expenseRows = snap.expenseRows.concat([
-          { account: 'Depreciation', reason: 'tools, equipment &amp; fixtures, Summer 2026 <span class="xl-new-tag">new</span>', delta: -200 },
-          { account: 'Depreciation', reason: 'laptop, Summer 2026 <span class="xl-new-tag">new</span>', delta: -30 }
-        ]);
-      } else {
-        snap.expensesNote = '&hellip; one more kind of used-up, still to come <span class="xl-new-tag">next tutorial</span>';
-      }
-      // opts.closed: the close empties both period tabs — their rows just filed into
-      // GENERATED (see SEASON_PERIOD_ROW above). The tabs stay, ready for next season at $0.
-      if (opts.closed) {
-        snap.revenueRows = [];
-        snap.expenseRows = [];
-        snap.expensesNote = null;
-        snap.revenueClosed = true;
-        snap.expensesClosed = true;
-      }
-    }
     return snap;
   }
 
@@ -305,6 +254,7 @@ var BR_WB = (function () {
   function xr(cls, label, val) {
     return '<div class="xl-row ' + cls + '"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">' + label + '</div><div class="xl-v">' + val + '</div></div>';
   }
+  function paren(n) { return '(' + BRW.dol(n) + ')'; }
   var STMT_LABELS = { income: 'Income', cashflows: 'Cash Flows', bridge: 'Changes in Capital', balance: 'Balance Sheet' };
 
   BR_WB.statementTabs = function (ids) {
@@ -326,14 +276,14 @@ var BR_WB = (function () {
     });
     BRW.registerSheet('cashflows', function (cid, snap) {
       var h = xr('xl-head', 'Statement of Cash Flows &middot; June&ndash;August 2026', 'Amount');
-      h += xr('xl-cat', '<strong>Operating</strong> &mdash; running the season', BRW.signed(320));
+      h += xr('xl-cat', '<strong>Operating</strong> &mdash; running the season', BRW.signed(2350));
       h += xr('xl-item', 'Repairs collected', BRW.signed(5500));
       h += xr('xl-item', 'Parts bought', BRW.signed(-1200));
       h += xr('xl-item', 'Rent paid', BRW.signed(-1950));
-      h += xr('xl-item', 'Credit-card payoff', BRW.signed(-2030));
       h += xr('xl-cat', '<strong>Investing</strong> &mdash; long-lived gear', BRW.signed(-400));
       h += xr('xl-item', 'New repair tool', BRW.signed(-400));
-      h += xr('xl-cat', '<strong>Financing</strong> &mdash; owner moves', BRW.signed(-600));
+      h += xr('xl-cat', '<strong>Financing</strong> &mdash; borrowing repaid and owner moves', BRW.signed(-2630));
+      h += xr('xl-item', 'Credit-card payoff &mdash; repaying the borrowing', BRW.signed(-2030));
       h += xr('xl-item', 'Owner&rsquo;s draw', BRW.signed(-600));
       h += xr('xl-total', '<strong>Net change in cash</strong>', BRW.signed(-680));
       h += xr('xl-item', 'Cash, June 1', BRW.dol(1300));
@@ -342,10 +292,20 @@ var BR_WB = (function () {
     });
     BRW.registerSheet('bridge', function (cid, snap) {
       var h = xr('xl-head', 'Statement of Changes in Members&rsquo; Capital &middot; June&ndash;August 2026', 'Amount');
-      h += xr('xl-item', 'Opening Members&rsquo; Capital &mdash; June 1', BRW.dol(2460));
-      h += xr('xl-item', '+ Net income &mdash; the season&rsquo;s work', BRW.signed(2640));
-      h += xr('xl-item', '&minus; Owner&rsquo;s draw', BRW.signed(-600));
-      h += xr('xl-total', '<strong>Closing Members&rsquo; Capital &mdash; August 31</strong> <span class="xl-new-tag">ties to the balance sheet</span>', BRW.dol(4500));
+      h += xr('xl-cat', '<strong>Contributed</strong>', '');
+      h += xr('xl-item', 'Beginning &mdash; June 1', BRW.dol(2290));
+      h += xr('xl-item', 'No changes this season', '');
+      h += xr('xl-total', 'Ending &mdash; August 31', BRW.dol(2290));
+      h += xr('xl-cat', '<strong>Generated</strong>', '');
+      h += xr('xl-item', 'Beginning &mdash; June 1', BRW.dol(170));
+      h += xr('xl-item', '+ Net income &mdash; from the Income Statement', BRW.signed(2640));
+      h += xr('xl-total', 'Ending &mdash; August 31', BRW.dol(2810));
+      h += xr('xl-cat', '<strong>Withdrawn</strong>', '');
+      h += xr('xl-item', 'Beginning &mdash; June 1', '&mdash;');
+      h += xr('xl-item', 'Owner&rsquo;s draw', paren(600));
+      h += xr('xl-total', 'Ending &mdash; August 31', paren(600));
+      h += xr('xl-item', '<strong>Total Members&rsquo; Capital &mdash; June 1</strong>', BRW.dol(2460));
+      h += xr('xl-total', '<strong>Total Members&rsquo; Capital &mdash; August 31</strong> <span class="xl-new-tag">ties to the balance sheet</span>', BRW.dol(4500));
       return h;
     });
     BRW.registerSheet('balance', function (cid, snap) {
@@ -354,7 +314,8 @@ var BR_WB = (function () {
       h += xr('xl-item', 'Liabilities', BRW.dol(0));
       h += xr('xl-cat', '<strong>Members&rsquo; Capital</strong>', BRW.dol(4500));
       h += xr('xl-item', 'Contributed', BRW.dol(2290));
-      h += xr('xl-item', 'Generated (170 + 2,640 &minus; 600)', BRW.dol(2210));
+      h += xr('xl-item', 'Generated (170 + 2,640)', BRW.dol(2810));
+      h += xr('xl-item', 'Withdrawn', paren(600));
       h += xr('xl-total', '<strong>Total Members&rsquo; Capital</strong>', BRW.dol(4500));
       return h;
     });
@@ -416,7 +377,8 @@ var BR_WB = (function () {
     ['total', '<strong>Total Liabilities</strong>', 2250, 0],
     ['cat',   '<strong>Members&rsquo; Capital</strong>', null, null],
     ['item',  'Contributed', 2290, 2290],
-    ['item',  'Generated', 170, 2210],
+    ['item',  'Generated', 170, 2810],
+    ['item',  'Withdrawn', null, -600],
     ['total', '<strong>Total Members&rsquo; Capital</strong>', 2460, 4500]
   ];
   var BS_DATES = { jun1: 'June 1, 2026', aug31: 'August 31, 2026' };
@@ -433,7 +395,7 @@ var BR_WB = (function () {
         var vals = periods.map(function (p) {
           if (isCat) return '';
           var v = (p === 'jun1') ? r[2] : r[3];
-          return (v === null) ? '&mdash;' : BRW.dol(v);
+          return (v === null) ? '&mdash;' : (v < 0 ? '(' + BRW.dol(-v) + ')' : BRW.dol(v));
         });
         h += two ? xr2('xl-' + r[0], r[1], vals[0], vals[1])
                  : xr('xl-' + r[0], r[1], vals[0]);

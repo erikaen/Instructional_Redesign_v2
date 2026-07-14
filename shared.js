@@ -468,3 +468,71 @@ function m1GlossaryOpen(pageId){
   document.getElementById('glossaryOverlay').classList.add('open');
 }
 function m1GlossaryClose(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+/* ===== BRW.tagger — per-row category tagger (approved addition 2026-07-13) =====
+   Shared by the income-statement sort (32-x) and the cash-flow activity sort (44-2).
+   BRW.tagger(containerId, {
+     rows:       [{ id, label, amt, cat }],   // cat = the CORRECT category key
+     categories: [{ key, label }],
+     sortLabel:  'Sort the rows &rarr;',      // optional
+     onSorted:   function(){}                 // fires once the sorted view renders
+   })
+   Every row starts untagged; picking a pill tags it. The Sort button appears once
+   all rows are tagged. On Sort, wrong tags flash .miss and revert to untagged
+   (retry until clean — forgiving, never punitive). When every tag is right, the
+   list re-renders as category bands with subtotals and onSorted fires. */
+BRW.tagger = function (cid, opts) {
+  var el = document.getElementById(cid);
+  var tags = {}, missed = {}, sorted = false;
+
+  function fmt(n) { return n < 0 ? '(' + BRW.dol(-n) + ')' : BRW.dol(n); }
+
+  function render() {
+    var h = '';
+    if (!sorted) {
+      opts.rows.forEach(function (r) {
+        h += '<div class="tagger-row"><div class="tagger-label">' + r.label + '</div>'
+           + '<div class="tagger-amt">' + BRW.signed(r.amt) + '</div>'
+           + '<div class="tagger-choices">' + opts.categories.map(function (c) {
+               var cls = 'tagger-choice' + (tags[r.id] === c.key ? ' on' : '') + (missed[r.id] ? ' miss' : '');
+               return '<button class="' + cls + '" onclick="BRW._tagPick(\'' + cid + '\',\'' + r.id + '\',\'' + c.key + '\')">' + c.label + '</button>';
+             }).join('') + '</div></div>';
+      });
+      var all = opts.rows.every(function (r) { return tags[r.id]; });
+      if (all) h += '<div class="tagger-actions"><button class="btn-continue" onclick="BRW._tagSort(\'' + cid + '\')">' + (opts.sortLabel || 'Sort the rows &rarr;') + '</button></div>';
+    } else {
+      opts.categories.forEach(function (c) {
+        var rows = opts.rows.filter(function (r) { return r.cat === c.key; });
+        var sub = rows.reduce(function (s, r) { return s + r.amt; }, 0);
+        h += '<div class="tagger-band"><span>' + c.label + '</span></div>';
+        rows.forEach(function (r) {
+          h += '<div class="tagger-row"><div class="tagger-label">' + r.label + '</div><div class="tagger-amt">' + BRW.signed(r.amt) + '</div><div></div></div>';
+        });
+        h += '<div class="tagger-subtotal"><div>' + c.label + ' subtotal</div><div class="tagger-amt">' + fmt(sub) + '</div><div></div></div>';
+      });
+    }
+    el.innerHTML = h;
+  }
+
+  BRW._taggers = BRW._taggers || {};
+  BRW._taggers[cid] = {
+    pick: function (rid, key) { tags[rid] = key; delete missed[rid]; if (window.playClick) playClick(); render(); },
+    sort: function () {
+      var wrong = opts.rows.filter(function (r) { return tags[r.id] !== r.cat; });
+      if (wrong.length) {
+        wrong.forEach(function (r) { missed[r.id] = true; delete tags[r.id]; });
+        if (window.playSoftNope) playSoftNope(); else if (window.playClick) playClick();
+        render();
+        if (opts.onMiss) opts.onMiss(wrong);
+      } else {
+        sorted = true;
+        if (window.playSuccess) playSuccess();
+        render();
+        if (opts.onSorted) opts.onSorted();
+      }
+    }
+  };
+  render();
+};
+BRW._tagPick = function (cid, rid, key) { BRW._taggers[cid].pick(rid, key); };
+BRW._tagSort = function (cid) { BRW._taggers[cid].sort(); };

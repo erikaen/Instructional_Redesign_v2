@@ -26,12 +26,28 @@
     <div class="phase-title" id="phaseTitle">Two Kinds of Reason</div>
 
     <div class="narrative-block">
-      <p>First, the period line. The question is how the shop did <em>this summer</em>, so May&rsquo;s rows stay exactly where they are &mdash; set aside, untouched. What&rsquo;s left is the season &mdash; and read any season reason and it records one of just <strong>two things</strong>: the work <strong>delivered</strong> &mdash; a repair finished, a frame handed over &mdash; or something got <strong>used up</strong> delivering. Nothing else.</p>
-      <p>Right in the workbook: <strong>click a reason</strong> in the pile, then click the pile it belongs in. Do a few and the pattern will be clear &mdash; then you can sort the rest in one go.</p>
+      <p>First, the period line. The question is how the shop did <em>this summer</em>, so May&rsquo;s rows stay exactly where they are &mdash; set aside, untouched. What&rsquo;s left is the season, and read any season reason and it records one of just <strong>two things</strong>. Anna names them right here, before you touch a thing &mdash; then you copy the season&rsquo;s rows to a working sheet and sort them by those two names.</p>
     </div>
 
+    <div id="annaIntro"></div>
+
     <div id="wb"></div>
-    <div class="feedback" id="sortNudge"></div>
+
+    <div id="copyBtnWrap">
+      <button class="btn-continue btn-block" onclick="copyToWorkSheet()">Copy the season&rsquo;s rows to a working sheet &rarr;</button>
+    </div>
+
+    <div id="workWrap" hidden>
+      <div class="tagger">
+        <div class="cash-sheet-head">
+          <div class="cash-sheet-title">Income Statement &mdash; working sheet &middot; Summer 2026</div>
+          <div class="cash-sheet-sub">the season&rsquo;s rows, copied here to sort by the two names</div>
+        </div>
+        <div id="workSheet"></div>
+      </div>
+    </div>
+
+    <div id="gate"></div>
     <div id="anna"></div>
     <div id="controls"></div>
 
@@ -62,123 +78,105 @@ var audioCtx=null;
 function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
 function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
 function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
-function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playSoftNope(){ tone(360,0.10,'sine',0.04); setTimeout(function(){tone(280,0.10,'sine',0.04);},110); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-/* ===== the GENERATED reasons, tagged flow: 'in' (delivered) | 'up' (used up) ===== */
+/* ===== the GENERATED reasons, tagged flow: 'in' (revenue) | 'up' (expense) ===== */
 var reasons = BR_WB.generatedRows();
-reasons.forEach(function (r, i) { r.id = 'g' + i; });
-function findR(id){ for(var i=0;i<reasons.length;i++) if(reasons[i].id===id) return reasons[i]; return null; }
-var visibleIds = reasons.slice(0, 9).map(function (r) { return r.id; });
+var first9 = reasons.slice(0, 9).map(function (r, i) {
+  return { id: 'w' + i, label: r.account + ' &mdash; ' + r.reason, amt: r.delta, cat: (r.flow === 'in' ? 'rev' : 'exp') };
+});
+var taggerCats = [ { key:'rev', label:'Revenue' }, { key:'exp', label:'Expense' } ];
 
-/* ===== state ===== */
-var placed = {}, selectedId = null, done = false, filling = false;
-
-function correctIn(b){ return reasons.some(function(r){ return placed[r.id]===b && r.flow===b; }); }
-function gateMet(){ return correctIn('in') && correctIn('up'); }
-function bTotal(b){ return reasons.filter(function(r){ return placed[r.id]===b; }).reduce(function(s,r){ return s+r.delta; }, 0); }
-function bCount(b){ return reasons.filter(function(r){ return placed[r.id]===b; }).length; }
-
-/* ===== the interactive "Reasons" sheet, rendered inside the workbook shell ===== */
-function xrow(cls, attrs, label, val){ return '<div class="xl-row '+cls+'"'+attrs+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
-function bucketGroup(b, label, blurb){
-  var mine = reasons.filter(function(r){ return placed[r.id]===b; });
-  var armed = selectedId && !done && !filling;
-  var head = label+' ('+mine.length+') &mdash; '+blurb+(armed?' <span class="xl-new-tag">click to drop here</span>':'');
-  var h = xrow('xl-cat', armed?(' onclick="placeInto(\''+b+'\')"'):'', head, BRW.signed(bTotal(b)));
-  mine.forEach(function(r){ h += xrow('xl-item', '', r.account+' &mdash; '+r.reason, BRW.signed(r.delta)); });
-  if(!mine.length && !armed) h += xrow('xl-item', '', '<em>empty</em>', '');
-  return h;
-}
-function sortSheet(cid, snap){
-  var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s reasons</div><div class="cash-sheet-sub">'+(done?'sorted into two piles &mdash; delivered, and used up':'click a reason, then click the pile it belongs in')+'</div></div>';
-  if(!done){
-    var remaining = visibleIds.map(findR).filter(function(r){ return !placed[r.id]; });
-    var hiddenLeft = reasons.length - visibleIds.length;
-    h += xrow('xl-cat', '', 'TO SORT ('+(remaining.length+hiddenLeft)+') &mdash; jumbled, job by job', '');
-    remaining.forEach(function(r){
-      var sel = selectedId===r.id;
-      var label = (sel?'<i data-lucide="hand" class="licon"></i> ':'')+r.account+' &mdash; '+r.reason+(sel?' <span class="xl-new-tag">pick a pile below &darr;</span>':'');
-      h += xrow('xl-item', ' onclick="pickReason(\''+r.id+'\')"', label, BRW.signed(r.delta));
-    });
-    if(hiddenLeft>0) h += xrow('xl-item', '', '<em>+ '+hiddenLeft+' more like these, still in the pile</em>', '');
-  }
-  h += bucketGroup('in', 'DELIVERED', 'reasons the work delivered to a customer');
-  h += bucketGroup('up', 'USED UP', 'reasons things got used up');
-  return h;
-}
-
-/* ===== workbook state — the Reasons tab is our interactive sort sheet ===== */
+/* ===== workbook facsimile — the continuous snapshot, opened on Reasons; never changes ===== */
 var snap = BR_WB.snapshot();
-snap.tabs = snap.tabs.map(function(t){ return t.id==='reasons' ? { id:'sort', label:'Reasons' } : t; });
 snap.tabs.push(BR_WB.balanceTab(['jun1']));
 BR_WB.tagTabKinds(snap);
+BRW.mount('wb', snap);
+BRW.tab('wb', 'reasons');
 
-/* ===== interaction ===== */
-function nudge(kind, html){ var n=document.getElementById('sortNudge'); n.className='feedback '+kind+' show'; n.innerHTML=html; if(window.lucide) lucide.createIcons(); }
-function refresh(){ BRW.update('wb', snap); renderControls(); }
-function pickReason(id){ if(done||filling) return; playClick(); selectedId = (selectedId===id)?null:id; refresh(); }
-function placeInto(b){
-  if(done||filling||!selectedId) return;
-  var r = findR(selectedId);
-  if(r.flow!==b){
-    playNope();
-    nudge('err', '<i data-lucide="alert-triangle" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; records '+(r.flow==='in'?'a <strong>delivery</strong> &mdash; work handed to a customer, not something used up.':'something being <strong>used up</strong> &mdash; not a delivery.'));
-    selectedId = null; refresh();
-    return;
-  }
-  playSuccess();
-  placed[r.id] = b;
-  selectedId = null;
-  nudge('ok', '<i data-lucide="check" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; &mdash; '+(b==='in'?'delivered.':'used up.'));
-  refresh();
-}
-function doTheRest(){
-  if(done||filling||!gateMet()) return;
-  playClick(); filling=true; selectedId=null;
-  document.getElementById('controls').innerHTML='';
-  document.getElementById('sortNudge').className='feedback';
-  setTimeout(function(){
-    reasons.forEach(function(r){ placed[r.id]=r.flow; });
-    filling=false; done=true;
-    playSuccess();
-    BRW.update('wb', snap);
-    renderDone();
-    window.scrollTo(0, document.body.scrollHeight);
-  }, 700);
-}
-
-/* ===== controls / Anna ===== */
+/* ===== Anna's naming dialog (names up front, in her dialog box) ===== */
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
-function renderControls(){
-  if(done||filling) return;
-  var ctrl='';
-  if(Object.keys(placed).length>0){
-    var met=gateMet();
-    ctrl = '<div class="gate-card'+(met?' gate-armed-maria':'')+'"><div class="gate-card-title">'
-      +(met?'That&rsquo;s the whole trick &mdash; every reason is one kind or the other. Sort the rest the same way.':'Get at least one reason correctly into <strong>each</strong> pile to unlock the rest.')
-      +'</div><button class="btn-continue btn-block" onclick="doTheRest()"'+(met?'':' disabled')+'>Sort the rest &rarr;</button></div>';
-  }
-  document.getElementById('controls').innerHTML = ctrl;
-  if(window.lucide) lucide.createIcons();
+document.getElementById('annaIntro').innerHTML = annaBox(
+  'There &mdash; every season reason records one of two things, and here are their names. ' +
+  '<strong>Revenue</strong> &mdash; the value of the work delivered in the period, whichever way the cash runs. ' +
+  '<strong>Expenses</strong> &mdash; what got used up delivering it. That&rsquo;s all. ' +
+  'Copy the season&rsquo;s rows to a working sheet and sort them by those two names.'
+);
+if (window.lucide) lucide.createIcons();
+
+/* ===== the working sheet (the sort-view): a COPY the student sorts; the originals stay in GENERATED ===== */
+function copyToWorkSheet(){
+  playClick();
+  document.getElementById('copyBtnWrap').style.display = 'none';
+  var wrap = document.getElementById('workWrap');
+  wrap.hidden = false;
+  BRW.tagger('workSheet', {
+    rows: first9,
+    categories: taggerCats,
+    sortLabel: 'Sort these rows &rarr;',
+    onSorted: function(){
+      playSuccess();
+      document.getElementById('gate').innerHTML =
+        '<div class="gate-card gate-armed-maria"><div class="gate-card-title">That&rsquo;s the whole trick &mdash; every season reason is one or the other. Sort the rest the same way.</div>' +
+        '<button class="btn-continue btn-block" onclick="revealFull()">Sort the rest &rarr;</button></div>';
+      if (window.lucide) lucide.createIcons();
+      document.getElementById('gate').scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+  });
+  wrap.scrollIntoView({ behavior:'smooth', block:'center' });
 }
-function renderDone(){
-  var inT=bTotal('in'), upT=bTotal('up');
-  document.getElementById('sortNudge').className='feedback';
-  document.getElementById('anna').innerHTML = annaBox('There &mdash; the same reasons, no longer jumbled. One pile holds every <strong>delivery</strong> the books caught ('+BRW.dol(inT)+'), the other everything that got <strong>used up</strong> ('+BRW.dol(Math.abs(upT))+'). Same total as before &mdash; '+BRW.dol(inT+upT)+' &mdash; but now you can read it. And look at <strong>Smith&rsquo;s frame</strong> in DELIVERED: no cash moved this season at all &mdash; his money came in <em>May</em>, as a deposit. What this summer&rsquo;s row records is the frame going out the door and the promise coming off the books. These piles aren&rsquo;t about money moving. They&rsquo;re about what the work did.');
-  document.getElementById('controls').innerHTML =
-    insightBox('Two piles, two totals',
-      '<p>Every season reason sorts into one of these two. Line the <strong>DELIVERED</strong> total up against the <strong>USED UP</strong> total and the difference is how the season went &mdash; the answer the jumbled pile could never give in one place.</p>')
-    + '<div class="next-phase-msg">One loose end before the piles get their names. In USED UP sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong> &mdash; and there&rsquo;s no delivery across from it in DELIVERED. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job.</div>'
+
+/* ===== the FULL sorted view — every season row, grouped by the two names ===== */
+function bandHTML(key, label){
+  var rows = reasons.filter(function (r) { return (r.flow === 'in' ? 'rev' : 'exp') === key; });
+  var sub = rows.reduce(function (s, r) { return s + r.delta; }, 0);
+  var h = '<div class="tagger-band"><span>' + label + '</span><span></span></div>';
+  rows.forEach(function (r) {
+    h += '<div class="tagger-row"><div class="tagger-label">' + r.account + ' &mdash; ' + r.reason + '</div>'
+        + '<div class="tagger-amt">' + BRW.signed(r.delta) + '</div><div></div></div>';
+  });
+  h += '<div class="tagger-subtotal"><div>' + label + ' subtotal</div><div class="tagger-amt">' + (sub < 0 ? '(' + BRW.dol(-sub) + ')' : BRW.dol(sub)) + '</div><div></div></div>';
+  return h;
+}
+function revealFull(){
+  playClick();
+  document.getElementById('gate').innerHTML = '';
+  var h = '<div class="tagger">' +
+    '<div class="cash-sheet-head"><div class="cash-sheet-title">Income Statement &mdash; working sheet &middot; Summer 2026</div>' +
+    '<div class="cash-sheet-sub">sorted &mdash; every season row, by the two names</div></div>' +
+    bandHTML('rev', 'Revenue') + bandHTML('exp', 'Expenses') + '</div>';
+  document.getElementById('controls').innerHTML = h;
+  renderPayoff();
+  if (window.lucide) lucide.createIcons();
+  document.getElementById('anna').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+/* ===== Anna's payoff — the beats from the old page, reworded to the new names ===== */
+function renderPayoff(){
+  document.getElementById('anna').innerHTML = annaBox(
+    'There &mdash; the same rows, no longer jumbled. One band holds every delivery the books caught &mdash; <strong>Revenue</strong>, $5,720 &mdash; ' +
+    'the other everything that got used up &mdash; the <strong>Expenses</strong> ($3,150). ' +
+    'Line the Revenue total up against the Expenses and the difference is how the season went &mdash; ' +
+    'the answer the jumbled pile could never give in one place. ' +
+    'And look at <strong>Smith&rsquo;s frame</strong> sitting in Revenue: no cash moved this season at all &mdash; ' +
+    'his money came in <em>May</em>, as a deposit. What this summer&rsquo;s row records is the frame going out the door and the promise coming off the books. ' +
+    'Revenue is not about money moving &mdash; it&rsquo;s about what the work did.'
+  );
+  document.getElementById('controls').innerHTML +=
+    insightBox('A sort, not a move',
+      '<p>Flip to the <strong>Reasons</strong> tab above &mdash; every row is still there, in the same continuous GENERATED list the season built. ' +
+      'The working sheet is a <strong>sort</strong> of those rows, not a move: the originals stay right where they were.</p>')
+    + '<div class="next-phase-msg">One loose end before the working sheet gets its name. In the Expenses band sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong> &mdash; and there&rsquo;s no Revenue across from it. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job.</div>'
     + '<button class="btn-continue btn-block" onclick="nav(\'32-3-revenue-follows-the-work.html\')">Find Ridgeline &rarr;</button>';
-  if(window.lucide) lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
 }
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Delivered', def:'A reason recording work handed to a customer &mdash; a repair finished, a frame delivered against a deposit. Not about cash: Smith&rsquo;s delivery settled a promise; cash can come before, after, or with the work. The plain word used before the term <em>revenue</em>.' },
-  { term:'Used up', def:'A reason recording why something went away &mdash; parts consumed on a job, a month of rent lived through. The plain phrase used before the term <em>expense</em>.' }
+  { term:'Revenue', def:'The value of the work delivered over a period &mdash; counted when the work goes out the door, not when the cash moves. Cash can come before, after, or with the work; the row records the work, not the money.' },
+  { term:'Expense', def:'What got used up delivering the period&rsquo;s work &mdash; parts consumed on a job, a month of rent lived through. The row records the using-up, not the paying.' }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
@@ -191,11 +189,13 @@ function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
-/* ===== init ===== */
-window.devFill = function(){ reasons.forEach(function(r){ placed[r.id]=r.flow; }); done=true; filling=false; BRW.update('wb', snap); renderDone(); };
-BRW.registerSheet('sort', sortSheet);
-BRW.mount('wb', snap);
-BRW.tab('wb', 'sort');
+/* ===== init / dev hook ===== */
+window.devFill = function(){
+  document.getElementById('copyBtnWrap').style.display = 'none';
+  document.getElementById('workWrap').hidden = false;
+  document.getElementById('gate').innerHTML = '';
+  revealFull();
+};
 </script>
   <script src="dev.js"></script>
 </body>

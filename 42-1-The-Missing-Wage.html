@@ -81,7 +81,7 @@ var HUNT_OPTS = [
 
 var MCQ_OPTS = [
   { id:'unchanged', label:'$2,640 &mdash; unchanged', fb:'Correct. A draw of any size never touches income. The draw reduces Members&rsquo; Capital directly, never Expenses &mdash; so a draw cannot be pay for work. It is an owner taking some of what is already the owner&rsquo;s.', correct:true },
-  { id:'2040',      label:'$2,040',                   fb:'Not quite. A $1,200 draw would lower closing Members&rsquo; Capital by another $600 &mdash; not net income. A draw is not an expense; it never enters the income statement.' },
+  { id:'2040',      label:'$2,040',                   fb:'Not quite. A $1,200 draw would lower ending Members&rsquo; Capital by another $600 &mdash; not net income. A draw is not an expense; it never enters the income statement.' },
   { id:'1440',      label:'$1,440',                    fb:'Not quite. A draw is money taken by the owner, not a cost of doing the work. It never appears on the income statement, so it cannot change net income.' }
 ];
 
@@ -200,6 +200,9 @@ function renderBeats(){
     h += '<div class="narrative-block"><p>One person wore both hats this season and owned the whole shop, so there was never any reason to split the take-out into pay-for-work and an owner&rsquo;s share &mdash; the draw was just money out. An investor who owns a share but never touches the bench changes that: the bench must be paid like any other cost &mdash; a salary, an expense &mdash; before there is anything for owners to share.</p></div>';
     h += annaBox('A ramped-up, full-time shop must pay the bench like any other cost &mdash; a salary, an expense of the shop. Same person, two roles, two treatments.');
     h += freddieBox('The $600 left the shop, and it is not an expense &mdash; where do your statements show it? And Members&rsquo; Capital went from $2,460 to $4,500 &mdash; walk me from one to the other.');
+    h += freddieBox('Show me the finished set, not the drafting. I will be back when the statements are done.');
+    h += '<div class="narrative-block"><p>Freddie picks up his napkin and leaves. His two questions stay on the table &mdash; the $600 that left the shop, and the walk from Members&rsquo; Capital $2,460 to $4,500. He will not be seen again until the statements are finished.</p></div>';
+    h += '<div class="narrative-block"><p>Next, that walk from $2,460 to $4,500 gets built &mdash; by folding the Members&rsquo; Capital piles.</p></div>';
   }
 
   document.getElementById('beats').innerHTML = h;

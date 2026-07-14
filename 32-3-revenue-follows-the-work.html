@@ -26,10 +26,12 @@
     <div class="phase-title" id="phaseTitle">The Work, Not the Cash</div>
 
     <div class="narrative-block">
-      <p>You sorted the season into <strong>DELIVERED</strong> and <strong>USED UP</strong> &mdash; and left one loose end. In USED UP sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong>, with no delivery across from it. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job. The job log will say what happened.</p>
+      <p>You sorted the season into <strong>Revenue</strong> and <strong>Expense</strong> on the working sheet &mdash; and left one loose end. In the Expense band sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong>, with no revenue across from it. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job. The job log will say what happened.</p>
     </div>
 
     <div id="wb"></div>
+
+    <div id="sheet"></div>
 
     <button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every repair this summer</button>
 
@@ -84,6 +86,41 @@ var moneyInNovice = allCharges - ridge.charge;                                  
 var inJobs = BR_JOBS.filter(function(j){ return j.collected; }).length;             // 20
 var totalJobs = BR_JOBS.length;                                                      // 21
 
+/* ===== the sorted working sheet — Revenue / Expense bands =====
+   The season's rows stay in the continuous GENERATED pile on the Reasons tab;
+   this is the sort-view of those rows, rendered statically with the shared
+   tagger classes. Ridgeline's delivery row joins the Revenue band at the reveal. */
+var RIDGE_ROW = { account:'Repair delivered', reason:'Ridgeline Trail Crew, billed net 15 (unpaid)', delta:ridge.charge };
+function seasonRows(withRec){
+  var gen = BR_WB.generatedRows();
+  if(withRec) gen.push({ flow:'in', account:RIDGE_ROW.account, reason:RIDGE_ROW.reason, delta:RIDGE_ROW.delta });
+  return {
+    rev: gen.filter(function(r){ return r.flow==='in'; }),
+    exp: gen.filter(function(r){ return r.flow==='up'; })
+  };
+}
+function bandFmt(n){ return n<0 ? '('+BRW.dol(-n)+')' : BRW.dol(n); }
+function bandRow(label, amt){
+  return '<div class="tagger-row"><div class="tagger-label">'+label+'</div><div class="tagger-amt">'+BRW.signed(amt)+'</div><div></div></div>';
+}
+function bandSubtotal(label, amt){
+  return '<div class="tagger-subtotal"><div>'+label+' subtotal</div><div class="tagger-amt">'+bandFmt(amt)+'</div><div></div></div>';
+}
+function renderSheet(withRec){
+  var s = seasonRows(withRec);
+  var revTotal = s.rev.reduce(function(a,r){ return a+r.delta; }, 0);
+  var expTotal = s.exp.reduce(function(a,r){ return a+r.delta; }, 0);
+  var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s reasons &mdash; sorted</div>'
+        + '<div class="cash-sheet-sub">Revenue, the work delivered &middot; Expense, what got used up delivering</div></div>';
+  h += '<div class="tagger-band"><span>Revenue</span></div>';
+  s.rev.forEach(function(r){ h += bandRow(r.account+' &mdash; '+r.reason, r.delta); });
+  h += bandSubtotal('Revenue', revTotal);
+  h += '<div class="tagger-band"><span>Expense</span></div>';
+  s.exp.forEach(function(r){ h += bandRow(r.account+' &mdash; '+r.reason, r.delta); });
+  h += bandSubtotal('Expense', expTotal);
+  document.getElementById('sheet').innerHTML = h;
+}
+
 /* ===== state ===== */
 var step = 0;
 
@@ -93,21 +130,21 @@ function insightBox(label,inner){ return '<div class="insight-box"><div class="i
 function renderTalk(){
   var anna='', ctrl='';
   if(step===0){
-    anna = annaBox('DELIVERED should hold <strong>every</strong> job the work handed over. But the job log shows <strong>'+totalJobs+'</strong> repairs finished this summer, and only <strong>'+inJobs+'</strong> of them ever got a row in the pile. The missing one is the job whose parts you already jotted. Find it &mdash; it&rsquo;s marked <strong>outstanding</strong>.');
+    anna = annaBox('Revenue should hold <strong>every</strong> job the work handed over. But the job log shows <strong>'+totalJobs+'</strong> repairs finished this summer, and only <strong>'+inJobs+'</strong> of them ever got a row on the working sheet. The missing one is the job whose parts you already jotted. Find it &mdash; it&rsquo;s marked <strong>outstanding</strong>.');
     ctrl = '<div class="next-phase-msg">Open the job log above and spot the repair that was finished but never recorded.</div>'
       + '<button class="btn-continue btn-block" onclick="setStep(1)">I see the outstanding one &rarr;</button>';
   } else if(step===1){
-    anna = annaBox('There it is &mdash; <strong>'+ridge.customer+'</strong>, '+ridge.date+'. You did the whole job: '+ridge.hours+' hours, <strong>'+BRW.dol(ridge.partsCost)+'</strong> of parts off the shelf (that side you <em>did</em> jot &mdash; it&rsquo;s already in USED UP). You billed them <strong>'+BRW.dol(ridge.charge)+'</strong>, net 15. No cash came, so no row ever got written. But the work went <em>out the door</em>. Does the season really not count that delivery?');
+    anna = annaBox('There it is &mdash; <strong>'+ridge.customer+'</strong>, '+ridge.date+'. You did the whole job: '+ridge.hours+' hours, <strong>'+BRW.dol(ridge.partsCost)+'</strong> of parts off the shelf (that side you <em>did</em> jot &mdash; it&rsquo;s already in the Expense band). You billed them <strong>'+BRW.dol(ridge.charge)+'</strong>, net 15. No cash came, so no row ever got written. But the work went <em>out the door</em>. Does the season really not count that delivery?');
     ctrl = insightBox('It counts when the work is delivered, not when the cash comes',
-        '<p>DELIVERED never meant &ldquo;cash arrived&rdquo; &mdash; it records the work going out the door, and Ridgeline&rsquo;s did, on Aug 28. The row belongs in the pile now; the cash follows on its own schedule.</p>'
+        '<p>Revenue never meant &ldquo;cash arrived&rdquo; &mdash; it records the work going out the door, and Ridgeline&rsquo;s did, on Aug 28. The row belongs in the Revenue band now; the cash follows on its own schedule.</p>'
         +'<p>And there&rsquo;s a second thing: '+ridge.customer+' still <strong>owes</strong> '+BRW.dol(ridge.charge)+'. That unpaid promise is something the shop now holds &mdash; a right to be paid. A new line in Assets.</p>')
       + '<button class="btn-continue btn-block" onclick="setStep(2)">Put it on the books &rarr;</button>';
   } else {
-    anna = annaBox('There &mdash; a brand-new line in Assets: <strong>Accounts Receivable, '+BRW.dol(ridge.charge)+'</strong>, '+ridge.customer+'&rsquo;s unpaid promise. And flip to Reasons: DELIVERED now reads <strong>'+BRW.dol(allCharges)+'</strong> &mdash; complete. Every job in the log has its row in the pile. Now think about <strong>'+smith.customer+'</strong>&rsquo;s frame, in that same pile at <strong>'+BRW.dol(smith.charge)+'</strong> &mdash; his cash came in <em>last</em> period as a deposit, but the frame went out the door <em>this</em> summer. '+ridge.customer+': work now, cash later. '+smith.customer+': cash earlier, work now. Neither row is timed to the cash. Both are timed to the <strong>work</strong>.');
+    anna = annaBox('There &mdash; a brand-new line in Assets: <strong>Accounts Receivable, '+BRW.dol(ridge.charge)+'</strong>, '+ridge.customer+'&rsquo;s unpaid promise. And look at the working sheet: Revenue now reads <strong>'+BRW.dol(allCharges)+'</strong> &mdash; complete. Every job in the log has its row on the sheet. Now think about <strong>'+smith.customer+'</strong>&rsquo;s frame, in that same Revenue band at <strong>'+BRW.dol(smith.charge)+'</strong> &mdash; his cash came in <em>last</em> period as a deposit, but the frame went out the door <em>this</em> summer. '+ridge.customer+': work now, cash later. '+smith.customer+': cash earlier, work now. Neither row is timed to the cash. Both are timed to the <strong>work</strong>.');
     ctrl = insightBox('The work is what counts',
-        '<p>'+ridge.customer+': work done <strong>now</strong>, cash <strong>later</strong> &mdash; in the pile now (and a receivable until they pay). '+smith.customer+': cash <strong>earlier</strong>, work done <strong>now</strong> &mdash; in the pile now too. The pile follows the <strong>work</strong>, whichever way the cash runs. And the books stay balanced: assets went up '+BRW.dol(ridge.charge)+', and so did the pile.</p>')
-      + '<div class="next-phase-msg">The two piles are complete and honest now. Time to give them their real names &mdash; and their own sheets.</div>'
-      + '<button class="btn-continue btn-block" onclick="nav(\'32-4-name-the-income-statement.html\')">Name the piles &rarr;</button>';
+        '<p>'+ridge.customer+': work done <strong>now</strong>, cash <strong>later</strong> &mdash; on the sheet now (and a receivable until they pay). '+smith.customer+': cash <strong>earlier</strong>, work done <strong>now</strong> &mdash; on the sheet now too. The sheet follows the <strong>work</strong>, whichever way the cash runs. And the books stay balanced: assets went up '+BRW.dol(ridge.charge)+', and so did GENERATED &mdash; flip to Reasons and the row is there too; the sheet&rsquo;s Revenue band just reads it.</p>')
+      + '<div class="next-phase-msg">The working sheet is complete and honest now. Next: lay it out as the statement itself.</div>'
+      + '<button class="btn-continue btn-block" onclick="nav(\'32-4-name-the-income-statement.html\')">Lay out the statement &rarr;</button>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
@@ -119,13 +156,14 @@ function setStep(n){
   if(n>step) playSuccess();
   step = n;
   if(step===2){
-    // grow the real workbook: Accounts Receivable appears in Assets, DELIVERED rises to 6,020
-    var snap2 = BR_WB.snapshot({ flowGroups:true, withReceivable:true });
+    // grow the real workbook: Accounts Receivable appears in Assets, and the working sheet gains Ridgeline's row
+    var snap2 = BR_WB.snapshot({ withReceivable:true });
     snap2.tabs.push(BR_WB.balanceTab(['jun1']));
     BR_WB.tagTabKinds(snap2);
     BRW.update('wb', snap2);
     BRW.tab('wb', 'assets');
     BRW.x('wb', 'a', 1);   // open the new Accounts Receivable line
+    renderSheet(true);      // Revenue now 6,020 — complete
   }
   renderTalk();
   window.scrollTo(0, document.body.scrollHeight);
@@ -171,13 +209,14 @@ function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeTicket(); } });
 
-/* ===== init — the workbook with the season already sorted into DELIVERED / USED UP ===== */
+/* ===== init — the workbook (plain continuous Reasons tab) + the sorted working sheet ===== */
 window.devFill = function(){ setStep(2); };
-var snap = BR_WB.snapshot({ flowGroups:true });
+var snap = BR_WB.snapshot();
 snap.tabs.push(BR_WB.balanceTab(['jun1']));
 BR_WB.tagTabKinds(snap);
 BRW.mount('wb', snap);
 BRW.tab('wb', 'reasons');
+renderSheet(false);   // Revenue 5,720 / Expense (3,150) — Ridgeline's row still missing
 renderTalk();
 </script>
   <script src="dev.js"></script>

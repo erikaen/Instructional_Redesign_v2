@@ -218,7 +218,7 @@ function stmtBlocks(list){
     s.txns.forEach(function(t){
       h+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+t.desc+'</div><div class="xl-v">'+(t.note?'':BRW.signed(t.amt))+'</div></div>';
     });
-    h+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Closing balance</div><div class="xl-v">'+BRW.dol(s.closing)+'</div></div>';
+    h+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Balance, August 31</div><div class="xl-v">'+BRW.dol(s.closing)+'</div></div>';
     h+='</div>';
     return h;
   }).join('');

@@ -97,7 +97,8 @@ var CLOSING_SECTIONS = [
     ], total:{ id:'tl', label:'Total Liabilities', val:'$0' } },
   { sec:'Members&rsquo; Capital', rows:[
       { id:'contrib', label:'Contributed', val:'$2,290' },
-      { id:'gen',     label:'Generated',   val:'$2,210' }
+      { id:'gen',     label:'Generated',   val:'$2,810' },
+      { id:'wd',      label:'Withdrawn',    val:'($600)' }
     ], total:{ id:'mc', label:'Total Members&rsquo; Capital', val:'$4,500' } }
 ];
 
@@ -131,7 +132,7 @@ var IDENTITY_HTML =
     + '<div class="dib-group"><span class="dib-label">Members&rsquo; Capital</span><span class="dib-val">$2,460</span></div>'
   + '</div></div>'
   + '<div class="dib-divider"></div>'
-  + '<div class="dib-side"><span class="dib-tag">Closing &mdash; August 31</span><div class="dib-eq">'
+  + '<div class="dib-side"><span class="dib-tag">August 31 &mdash;</span><div class="dib-eq">'
     + '<div class="dib-group"><span class="dib-label">Assets</span><span class="dib-val">$4,500</span></div>'
     + '<span class="dib-op">&minus;</span>'
     + '<div class="dib-group"><span class="dib-label">Liabilities</span><span class="dib-val">$0</span></div>'
@@ -146,7 +147,7 @@ var TOTAL_STEPS = 5;
 var incomeOpen = false;    // display toggle for the nested Income Statement
 var incomeSeen = false;    // sticky gate: has the student opened it at least once
 
-var UNFADED = { 0:null, 1:['cash','ta'], 2:['contrib','gen','mc'], 3:['contrib','gen','mc'], 4:null };
+var UNFADED = { 0:null, 1:['cash','ta'], 2:['contrib','gen','wd','mc'], 3:['contrib','gen','wd','mc'], 4:null };
 
 /* wires the bridge panel's Net income row: locates it by its rendered text,
    adds the pointer-cursor class the engine's rows already support (sce-ni-clickable,
@@ -205,10 +206,10 @@ function renderBeats(){
     h += freddieBox('I have seen each statement. Walk me through how the set fits.');
   } else if(step === 1){
     h += freddieBox('Start with Cash. I saw it fell $680 &mdash; walk me through that path.');
-    h += '<div class="narrative-block"><p>Cash fell from <strong>$1,300</strong> to <strong>$620</strong> &mdash; down <strong>$680</strong>. The <strong>Statement of Cash Flows</strong> carries that one line&rsquo;s story: Operating <strong>+$320</strong>, Investing <strong>&minus;$400</strong>, Financing <strong>&minus;$600</strong>.</p></div>';
+    h += '<div class="narrative-block"><p>Cash fell from <strong>$1,300</strong> to <strong>$620</strong> &mdash; down <strong>$680</strong>. The <strong>Statement of Cash Flows</strong> carries that one line&rsquo;s story: Operating <strong>+$2,350</strong>, Investing <strong>&minus;$400</strong>, Financing <strong>&minus;$2,630</strong>. Financing holds both the card payoff (repaying a borrowing) and the owner&rsquo;s draw.</p></div>';
   } else if(step === 2){
     h += freddieBox('Now Members&rsquo; Capital. I saw it rose $2,040 &mdash; show me the path.');
-    h += '<div class="narrative-block"><p>Members&rsquo; Capital rose from <strong>$2,460</strong> to <strong>$4,500</strong>. The <strong>Statement of Changes in Members&rsquo; Capital</strong> carries that story: opening $2,460, plus net income $2,640, minus the owner&rsquo;s draw $600, equals closing $4,500. Contributed never moved &mdash; the whole path ran through Generated, $170 to $2,210.</p></div>';
+    h += '<div class="narrative-block"><p>Members&rsquo; Capital rose from <strong>$2,460</strong> to <strong>$4,500</strong> &mdash; up <strong>$2,040</strong>. The <strong>Statement of Changes in Members&rsquo; Capital</strong> tells it pile by pile. <strong>Contributed</strong>: Beginning $2,290, no changes, Ending $2,290 &mdash; it never moved. <strong>Generated</strong>: Beginning $170, plus Net income $2,640 from the Income Statement, Ending $2,810 &mdash; the whole path ran through Generated. <strong>Withdrawn</strong>: Beginning &mdash;, Owner&rsquo;s draw ($600), Ending ($600) &mdash; the draw sits in its own pile. The totals tie: $2,460 to $4,500.</p></div>';
   } else if(step === 3){
     h += freddieBox('Net income&rsquo;s the biggest line in that bridge. I remember that one &mdash; show me what&rsquo;s behind it.');
     h += '<div class="narrative-block"><p>Click the <strong>Net income</strong> line below to open the <strong>Income Statement</strong> behind it.</p></div>';
@@ -221,7 +222,7 @@ function renderBeats(){
 function renderGrid(){
   var unfaded = UNFADED[step];
   var openCol = renderCol('Opening Balance Sheet', 'June 1, 2026', OPENING_SECTIONS, unfaded);
-  var closeCol = renderCol('Closing Balance Sheet', 'August 31, 2026', CLOSING_SECTIONS, unfaded);
+  var closeCol = renderCol('August 31 Balance Sheet', 'August 31, 2026', CLOSING_SECTIONS, unfaded);
 
   var center = '<div>';
   if(step === 0){
@@ -296,8 +297,8 @@ function back(){
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
   { term:'Articulation', def:'The statements tie to each other: every change carried on a balance sheet travels through one of the flow statements. A balance sheet cannot show a new number without the story filed beside it.' },
-  { term:'Statement of Cash Flows', def:'Explains the change in Cash: Operating, Investing, Financing. Here: +$320, &minus;$400, &minus;$600 = &minus;$680, tying $1,300 to $620.' },
-  { term:'Statement of Changes in Members&rsquo; Capital', def:'Explains the change in Members&rsquo; Capital: opening, plus net income, minus draws, equals closing. Here: $2,460 + $2,640 &minus; $600 = $4,500.' },
+  { term:'Statement of Cash Flows', def:'Explains the change in Cash: Operating, Investing, Financing. Here: +$2,350, &minus;$400, &minus;$2,630 = &minus;$680, tying $1,300 to $620.' },
+  { term:'Statement of Changes in Members&rsquo; Capital', def:'Explains the change in Members&rsquo; Capital pile by pile: Contributed (Beginning $2,290, no changes, Ending $2,290), Generated (Beginning $170 + Net income $2,640 = Ending $2,810), Withdrawn (Beginning &mdash;, Owner&rsquo;s draw $600, Ending $600). Totals: $2,460 to $4,500.' },
   { term:'Income Statement', def:'Revenue minus Expenses for the season. Here: $6,020 &minus; $3,380 = $2,640 net income &mdash; the same figure that enters the Statement of Changes in Members&rsquo; Capital.' }
 ];
 function openGlossary(){

@@ -1,5 +1,25 @@
 # Module 4 — Design: *The Angel Investor*
 
+> **SUPERSESSION — 2026-07-14 (Rick's 2026-07-13 rulings; execution in progress).** Where
+> anything below conflicts with this block, THIS block governs:
+> - **Tutorial 4.3 is one page.** `43-2-The-First-Close.html` is **DELETED** — there is no
+>   close in these materials (the word may not appear student-facing). `43-1` rebuilds as the
+>   **fold-the-piles** development of the per-pile Statement of Changes in Members' Capital:
+>   each pile folds Beginning → Change → Ending (Contributed 2,290 → 2,290 · Generated 170
+>   +2,640 → 2,810 · Withdrawn — → (600)); totals 2,460 → 4,500. The engine 'bridge' sheet
+>   carries this per-pile form everywhere, including the 46-2 map.
+> - **Credit-card payoff is FINANCING** (classification follows the *liability settled*, not
+>   the purchase). Cash-flow contract: **Operating +2,350** (collected 5,500 − parts 1,200 −
+>   rent 1,950) · **Investing −400** · **Financing −2,630** (card −2,030 · draw −600) · net
+>   −680, cash 1,300 → 620. The 4.5 reconciliation is **2,640 − 300 − 220 + 230 = 2,350**
+>   (the −2,030 term is gone; "320" appears nowhere).
+> - **Freddie leaves after asking (42-1) and returns at 4.6**; between, Anna carries his
+>   standing questions (no Freddie dialog on 43-1–45-1). 44-2 sorts cash rows with the shared
+>   **`BRW.tagger`** (per-row Operating/Investing/Financing pills; the mis-tagged card payoff
+>   is the discovery beat, via the tagger's `onMiss` hook).
+> - **41-1's handed-over balance sheet** shows Members' Capital as Contributed 2,290 /
+>   Generated 2,810 / Withdrawn (600) at Aug 31 (June 1: 2,290 / 170 / —).
+
 **Status:** Draft v2 (2026-07-11) — **restructured (Rick's ruling):** Module 3's post-income-statement
 content (old 34-x/35-x) moves into this module; the statement of changes in Members' Capital, the
 cash-flow statement, and the NI↔CFO reconciliation now arrive **at Freddie's request**. The new arc

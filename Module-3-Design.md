@@ -1,5 +1,23 @@
 # Module 3 — Design: *The Story Between the Snapshots*
 
+> **SUPERSESSION — 2026-07-14 (Rick's 2026-07-13 rulings, EXECUTED).** The statement-construction
+> fold-in is built. Where anything below conflicts with this block, THIS block governs:
+> - **GENERATED is continuous; there are no Revenue/Expenses tabs and no close — ever.** The
+>   income statement is a **sort-view**: the season's rows are *copied* to a working sheet
+>   (32-2), tagged **Revenue** (the value of the work delivered, whichever way the cash runs)
+>   or **Expense** (used up delivering it), sorted into banded subtotals, and laid out as the
+>   statement (32-4) — while the original rows never leave the Reasons tab. "Temporary
+>   accounts," the 32-4 graduation-to-tabs, DELIVERED/USED UP, and the first close are all
+>   retired. Names-first (Rick): Anna defines Revenue/Expenses *before* the sort.
+> - **Engine:** `snapshot()` ignores the retired `tabbed`/`closed` opts; `withDepreciation`
+>   lands the two Depreciation reasons (−200, −30) in GENERATED; the shared **`BRW.tagger`**
+>   component (shared.js/shared.css, approved 2026-07-13) does the Pick→Sort idiom.
+> - **Numbers contract (M3):** Revenue 6,020 − Expenses 3,380 (Parts 1,200 · Rent 1,950 ·
+>   Depreciation 200 + 30) = **Net income 2,640**; pre-receivable Revenue 5,720; pre-dep
+>   Expenses 3,150; GENERATED continuous subtotal **170 (June 1) → 2,810 (Aug 31)**;
+>   Members' Capital = Contributed 2,290 + Generated 2,810 + **Withdrawn (600)** = 4,500.
+>   The balance-sheet renderers carry Withdrawn as its own line (never folded into Generated).
+
 **Status:** Draft v2 (2026-07-11) — **restructured (Rick's ruling):** everything after the production
 of the income statement moved to Module 4. Tutorials 3.4 (`34-`) and 3.5 (`35-`) — the cash-flow
 statement, the statement of changes in Members' Capital, the first close, and the tie-out — now arrive

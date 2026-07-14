@@ -28,7 +28,7 @@
     '32-1-the-income-statement', '32-2-two-kinds', '32-3-revenue-follows-the-work', '32-4-name-the-income-statement', '32-5-what-the-season-kept',
     '33-1-Two-Kinds-of-Used-Up', '33-2-The-Third-Kind', '33-3', '33-4',
     '41-1', '42-1',
-    '43-1', '43-2',
+    '43-1',
     '44-1', '44-2', '44-3',
     '45-1', '46-1', '46-2',
     '47-1'
@@ -40,7 +40,6 @@
     '41-1': '41-1-The-Investor-Asks',
     '42-1': '42-1-The-Missing-Wage',
     '43-1': '43-1-The-Capital-Bridge',
-    '43-2': '43-2-The-First-Close',
     '44-1': '44-1-The-Cash-Puzzle',
     '44-2': '44-2-Three-Buckets',
     '44-3': '44-3-The-Cash-Flow-Statement',

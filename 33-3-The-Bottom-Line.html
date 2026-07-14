@@ -65,14 +65,14 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
-/* ===== the completed income statement, read off the two period tabs ===== */
+/* ===== the completed income statement, read off the sorted season rows ===== */
 var REVENUE = 6020, PARTS = 1200, RENT = 1950, DEP_TOOLS = 200, DEP_LAPTOP = 30;
 var EXPENSES = PARTS + RENT + DEP_TOOLS + DEP_LAPTOP;   // 3,380
 var NET_INCOME = REVENUE - EXPENSES;                     // 2,640
 
 /* ===== state ===== */
 var step = 0;
-var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
+var snap = BR_WB.snapshot({ withReceivable:true, withDepreciation:true });
 snap.tabs.push(BR_WB.balanceTab(['jun1']));
 BR_WB.tagTabKinds(snap);
 
@@ -86,7 +86,7 @@ function renderTalk(){
   } else {
     anna = annaBox('There it is &mdash; the bottom line, at last: <strong>Net income, '+BRW.dol(NET_INCOME)+'</strong>. The shop delivered <strong>'+BRW.dol(REVENUE)+'</strong> of work this season and used up <strong>'+BRW.dol(EXPENSES)+'</strong> getting it done &mdash; parts, months of space, and wear. Every kind of used-up counted. Nothing left open.');
     ctrl = insightBox('How the season went &mdash; answered',
-        '<p>One statement, read straight off the two period tabs: Revenue '+BRW.dol(REVENUE)+' &minus; Expenses '+BRW.dol(EXPENSES)+' = <strong>Net income '+BRW.dol(NET_INCOME)+'</strong>. This is the answer the jumbled pile couldn&rsquo;t give &mdash; and it&rsquo;s complete now.</p>')
+        '<p>One statement, read straight off the sorted season rows (the working sheet&rsquo;s two bands): Revenue '+BRW.dol(REVENUE)+' &minus; Expenses '+BRW.dol(EXPENSES)+' = <strong>Net income '+BRW.dol(NET_INCOME)+'</strong>, the answer the jumbled pile couldn&rsquo;t give.</p>')
       + '<div class="next-phase-msg">One loose thread, though. A '+BRW.dol(NET_INCOME)+' season &mdash; and the Cash line reads <strong>$620</strong>, down from <strong>$1,300</strong> on opening day. Profitable, and poorer in cash. Both true. Hold on to that thread &mdash; it stays open past the end of this module.</div>'
       + "<button class=\"btn-continue btn-block\" onclick=\"nav('33-4-Module-Complete.html')\">Finish Module 3 &rarr;</button>";
   }
@@ -126,7 +126,6 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 
 /* ===== init — the workbook with the wear recorded, open on the Laptop ledger ===== */
 window.devFill = function(){ if(step===0) finishStatement(); };
-BR_WB.registerSeasonSheets();
 BR_WB.registerStatementSheets();
 BRW.mount('wb', snap);
 BRW.tab('wb', 'assets');

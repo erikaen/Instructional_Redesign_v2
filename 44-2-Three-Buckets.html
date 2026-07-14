@@ -26,11 +26,29 @@
     <div class="phase-title" id="phaseTitle">Three Buckets</div>
 
     <div class="narrative-block">
-      <p>Every dollar that moved through Cash this <strong>season</strong> is a fact &mdash; they&rsquo;re all in the Cash line on the <strong>Assets</strong> tab, and they&rsquo;re laid out again on a new <strong>Season Cash</strong> tab beside the ones you know. The June 1 opening deposit isn&rsquo;t one of them; that happened before the season started. Sort them into three piles, by <strong>purpose</strong>: running the season day to day, buying long-lived gear, or an owner moving money. <strong>Click a row</strong>, then click the pile it belongs in.</p>
+      <p>Every dollar that moved through Cash this <strong>season</strong> is a fact &mdash; they&rsquo;re all there in the Cash line on the <strong>Assets</strong> tab, laid out in the order they moved. The June 1 opening deposit isn&rsquo;t one of them; that happened before the season started. Anna names the three activity kinds right here, before you touch a thing &mdash; then you pick a row&rsquo;s kind and sort. Freddie&rsquo;s standing question &mdash; <em>where did the cash go?</em> &mdash; gets its answer in three piles.</p>
     </div>
 
+    <div id="annaIntro"></div>
+
     <div id="wb"></div>
-    <div class="feedback" id="sortNudge"></div>
+
+    <div id="copyBtnWrap">
+      <button class="btn-continue btn-block" onclick="copyToWorkSheet()">Copy a working set of the season&rsquo;s cash rows &rarr;</button>
+    </div>
+
+    <div id="workWrap" hidden>
+      <div class="tagger">
+        <div class="cash-sheet-head">
+          <div class="cash-sheet-title">Cash-Flow working sheet &middot; Summer 2026</div>
+          <div class="cash-sheet-sub">pick each row&rsquo;s kind, then sort &mdash; the card payoff is the one to think about</div>
+        </div>
+        <div id="workSheet"></div>
+      </div>
+    </div>
+
+    <div id="missFeedback"></div>
+    <div id="gate"></div>
     <div id="anna"></div>
     <div id="controls"></div>
 
@@ -61,158 +79,153 @@ var audioCtx=null;
 function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
 function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
 function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
-function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playSoftNope(){ tone(360,0.10,'sine',0.04); setTimeout(function(){tone(280,0.10,'sine',0.04);},110); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-/* ===== the SEASON's cash events only — nothing pre-June, no opening deposit ===== */
+/* ===== the season's cash rows, built from the job + parts records =====
+   every dollar that moved through Cash this season; the June 1 opening
+   deposit predates the season, so it isn't here. The card payoff is
+   Financing (2026-07-13 GAAP reclass): it settles the carried-in card
+   balance — a liability repaid — not the tools and parts the card once bought. */
 var monthName = { Jun:'June', Jul:'July', Aug:'August' };
-var rows = [];
-// repairs collected — cash in, per BR_JOBS (collected, not deposit-paid), totals $5,500
+var allRows = [];
 BR_JOBS.filter(function(j){ return j.collected && j.pay.indexOf('Deposit')<0; }).forEach(function(j){
-  rows.push({ bucket:'op', account:'Repair collected', reason:j.customer, delta:j.charge });
+  allRows.push({ label:'Repair collected &mdash; ' + j.customer, amt:j.charge, cat:'op' });
 });
-// parts bought — 3 rows from BR_PURCHASES, -$1,200 total
 BR_PURCHASES.forEach(function(p){
-  rows.push({ bucket:'op', account:'Parts bought', reason:monthName[p.date.slice(0,3)], delta:-p.total });
+  allRows.push({ label:'Parts bought &mdash; ' + monthName[p.date.slice(0,3)], amt:-p.total, cat:'op' });
 });
-// rent -$650 x3
 ['June','July','August'].forEach(function(m){
-  rows.push({ bucket:'op', account:'Rent paid', reason:m, delta:-650 });
+  allRows.push({ label:'Rent paid &mdash; ' + m, amt:-650, cat:'op' });
 });
-// credit card paid off -$2,030
-rows.push({ bucket:'op', account:'Credit card paid off', reason:'settling the carried-in card balance in full', delta:-2030 });
-// new repair tool -$400
-rows.push({ bucket:'inv', account:'New repair tool', reason:'bought mid-season', delta:-400 });
-// owner's draw -$600
-rows.push({ bucket:'fin', account:'Owner&rsquo;s draw', reason:'money taken out for personal use', delta:-600 });
+allRows.push({ label:'New repair tool &mdash; bought mid-season', amt:-400, cat:'inv' });
+allRows.push({ label:'Credit card paid off &mdash; settling the carried-in card balance in full', amt:-2030, cat:'fin', discovery:true });
+allRows.push({ label:'Owner&rsquo;s draw &mdash; money taken out for personal use', amt:-600, cat:'fin' });
+allRows.forEach(function(r,i){ r.id='r'+i; });
 
-rows.forEach(function(r,i){ r.id='c'+i; });
-function findR(id){ for(var i=0;i<rows.length;i++) if(rows[i].id===id) return rows[i]; return null; }
-var visibleIds = rows.map(function(r){ return r.id; });
+/* the representative subset for the sort: several collected repairs, one parts
+   purchase, one rent, the new tool, the card payoff, and the draw. */
+var subsetIds = ['r2','r5','r10','r16','r19','r22','r25','r26','r27'];
+function findR(id){ for(var i=0;i<allRows.length;i++) if(allRows[i].id===id) return allRows[i]; return null; }
+var subset = subsetIds.map(findR);
 
-/* ===== state ===== */
-var placed = {}, selectedId = null, done = false, filling = false;
-var bucketOpen = { op:true, inv:true, fin:true };
-var BUCKETS = [
-  { key:'op',  label:'Running the season',    blurb:'day-to-day cash in and out of doing the work' },
-  { key:'inv', label:'Long-lived gear',        blurb:'cash for things that will last beyond this season' },
-  { key:'fin', label:'Owner moves',            blurb:'cash moving between the shop and the owner, not the work' }
+var taggerCats = [
+  { key:'op',  label:'Operating' },
+  { key:'inv', label:'Investing' },
+  { key:'fin', label:'Financing' }
 ];
 
-function correctIn(b){ return rows.some(function(r){ return placed[r.id]===b && r.bucket===b; }); }
-function gateMet(){ return BUCKETS.every(function(b){ return correctIn(b.key); }); }
-function bTotal(b){ return rows.filter(function(r){ return placed[r.id]===b; }).reduce(function(s,r){ return s+r.delta; }, 0); }
-
-/* ===== the interactive sort sheet, rendered inside the workbook shell ===== */
-function xrow(cls, attrs, label, val){ return '<div class="xl-row '+cls+'"'+attrs+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
-function bucketGroup(b){
-  var mine = rows.filter(function(r){ return placed[r.id]===b.key; });
-  var armed = selectedId && !done && !filling;
-  var head = b.label+' ('+mine.length+') &mdash; '+b.blurb+(armed?' <span class="xl-new-tag">click to drop here</span>':'');
-  var open = !done || bucketOpen[b.key];
-  var gutter = done
-    ? '<button class="xl-toggle" onclick="toggleBucket(\''+b.key+'\')" aria-expanded="'+open+'">'+(open?'&minus;':'+')+'</button>'
-    : '';
-  var h = '<div class="xl-row xl-cat"'+(armed?' onclick="placeInto(\''+b.key+'\')" style="cursor:pointer;"':'')+'>'
-    +'<div class="xl-gutter">'+gutter+'</div><div class="xl-rownum"></div><div class="xl-c">'+head+'</div><div class="xl-v">'+BRW.signed(bTotal(b.key))+'</div></div>';
-  if(open){
-    mine.forEach(function(r){ h += xrow('xl-item', '', r.account+' &mdash; '+r.reason, BRW.signed(r.delta)); });
-    if(!mine.length && !armed) h += xrow('xl-item', '', '<em>empty</em>', '');
-  }
-  return h;
-}
-function toggleBucket(k){ playClick(); bucketOpen[k] = !bucketOpen[k]; BRW.update('wb', snap); }
-function sortSheet(cid, snap){
-  var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s cash events</div><div class="cash-sheet-sub">'+(done?'sorted into three piles, by purpose':'click a row, then click the pile it belongs in')+'</div></div>';
-  if(!done){
-    var remaining = visibleIds.map(findR).filter(function(r){ return !placed[r.id]; });
-    h += xrow('xl-cat', '', 'TO SORT ('+remaining.length+') &mdash; jumbled, in the order cash moved', '');
-    remaining.forEach(function(r){
-      var sel = selectedId===r.id;
-      var label = (sel?'<i data-lucide="hand" class="licon"></i> ':'')+r.account+' &mdash; '+r.reason+(sel?' <span class="xl-new-tag">pick a pile below &darr;</span>':'');
-      h += xrow('xl-item', ' onclick="pickReason(\''+r.id+'\')"', label, BRW.signed(r.delta));
-    });
-  }
-  BUCKETS.forEach(function(b){ h += bucketGroup(b); });
-  return h;
-}
-
-/* the full workbook stays the anchor — the sort sheet is one more tab beside it */
-var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true, closed:true });
-snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
-snap.tabs.push({ id:'sort', label:'Season Cash' });
+/* ===== workbook facsimile — the Aug-31 snapshot, opened on the Assets tab ===== */
+var snap = BR_WB.snapshot({ withReceivable:true, withDepreciation:true });
 snap.tabs.push(BR_WB.balanceTab(['jun1','aug31']));
 BR_WB.tagTabKinds(snap);
+BRW.mount('wb', snap);
+BRW.tab('wb', 'assets');
 
-/* ===== interaction ===== */
-function nudge(kind, html){ var n=document.getElementById('sortNudge'); n.className='feedback '+kind+' show'; n.innerHTML=html; if(window.lucide) lucide.createIcons(); }
-function refresh(){ BRW.update('wb', snap); renderControls(); }
-function pickReason(id){ if(done||filling) return; playClick(); selectedId = (selectedId===id)?null:id; refresh(); }
-function bucketWord(k){ return k==='op' ? 'running the season' : (k==='inv' ? 'long-lived gear' : 'an owner move'); }
-function placeInto(b){
-  if(done||filling||!selectedId) return;
-  var r = findR(selectedId);
-  if(r.bucket!==b){
-    playNope();
-    nudge('err', '<i data-lucide="alert-triangle" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; is really about <strong>'+bucketWord(r.bucket)+'</strong>, not this pile.');
-    selectedId = null; refresh();
-    return;
-  }
-  playSuccess();
-  placed[r.id] = b;
-  selectedId = null;
-  nudge('ok', '<i data-lucide="check" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; &mdash; '+bucketWord(b)+'.');
-  refresh();
-}
-function doTheRest(){
-  if(done||filling||!gateMet()) return;
-  playClick(); filling=true; selectedId=null;
-  document.getElementById('controls').innerHTML='';
-  document.getElementById('sortNudge').className='feedback';
-  setTimeout(function(){
-    rows.forEach(function(r){ placed[r.id]=r.bucket; });
-    filling=false; done=true;
-    playSuccess();
-    BRW.update('wb', snap);
-    renderDone();
-    window.scrollTo(0, document.body.scrollHeight);
-  }, 700);
-}
-
-/* ===== controls / Anna ===== */
+/* ===== Anna's naming dialog (the three kinds, named up front) ===== */
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
-function renderControls(){
-  if(done||filling) return;
-  var ctrl='';
-  if(Object.keys(placed).length>0){
-    var met=gateMet();
-    ctrl = '<div class="gate-card'+(met?' gate-armed-maria':'')+'"><div class="gate-card-title">'
-      +(met?'That&rsquo;s the pattern &mdash; every row sorts by purpose. Sort the rest the same way.':'Get at least one row correctly into <strong>each</strong> pile to unlock the rest.')
-      +'</div><button class="btn-continue btn-block" onclick="doTheRest()"'+(met?'':' disabled')+'>Sort the rest &rarr;</button></div>';
-  }
-  document.getElementById('controls').innerHTML = ctrl;
-  if(window.lucide) lucide.createIcons();
+document.getElementById('annaIntro').innerHTML = annaBox(
+  'Freddie asked where the cash went. Here is how these books answer &mdash; every cash move this season is one of three kinds, and here are their names. ' +
+  '<strong>OPERATING</strong> &mdash; running the season, day to day: repairs collected, parts bought, rent paid. ' +
+  '<strong>INVESTING</strong> &mdash; buying (or selling) long-lived gear, things the shop will use for more than one season. ' +
+  '<strong>FINANCING</strong> &mdash; money moved between the shop and the people who fund it: borrowings taken or repaid, owner money in or out. ' +
+  'Copy a working set of the season&rsquo;s cash rows and sort them by those three names. The card payoff is the one to think about.'
+);
+if (window.lucide) lucide.createIcons();
+
+/* ===== the working sheet: BRW.tagger on the subset, with onMiss wired ===== */
+function copyToWorkSheet(){
+  playClick();
+  document.getElementById('copyBtnWrap').style.display = 'none';
+  var wrap = document.getElementById('workWrap');
+  wrap.hidden = false;
+  BRW.tagger('workSheet', {
+    rows: subset,
+    categories: taggerCats,
+    sortLabel: 'Sort these rows &rarr;',
+    onMiss: function(wrongRows){
+      playSoftNope();
+      var hit = wrongRows.some(function(r){ return r.discovery; });
+      var fb = document.getElementById('missFeedback');
+      if (hit){
+        fb.innerHTML = annaBox(
+          'Look at what that payment actually <strong>settled</strong> &mdash; not what the card once bought. ' +
+          'The $2,030 paid off the <strong>card balance</strong>, a <strong>liability</strong> carried in from before the season. ' +
+          'Classification follows the <strong>liability settled</strong>, not the purchase: repaying a borrowing is <strong>FINANCING</strong>, ' +
+          'even though the card once bought tools and parts. Tag it Financing and sort again.'
+        );
+      } else {
+        fb.innerHTML = annaBox('Not quite &mdash; re-read the row and match it to the kind that fits. Repairs collected, parts bought, and rent are <strong>Operating</strong>; long-lived gear is <strong>Investing</strong>; a borrowing repaid or an owner&rsquo;s move is <strong>Financing</strong>.');
+      }
+      if (window.lucide) lucide.createIcons();
+      fb.scrollIntoView({ behavior:'smooth', block:'center' });
+    },
+    onSorted: function(){
+      playSuccess();
+      document.getElementById('missFeedback').innerHTML = '';
+      document.getElementById('gate').innerHTML =
+        '<div class="gate-card gate-armed-maria"><div class="gate-card-title">That&rsquo;s the pattern &mdash; every row sorts by activity kind. Now lay out the whole season the same way.</div>' +
+        '<button class="btn-continue btn-block" onclick="revealFull()">Sort the rest &rarr;</button></div>';
+      if (window.lucide) lucide.createIcons();
+      document.getElementById('gate').scrollIntoView({ behavior:'smooth', block:'center' });
+    }
+  });
+  wrap.scrollIntoView({ behavior:'smooth', block:'center' });
 }
 
-var OP_TOTAL = 320, INV_TOTAL = -400, FIN_TOTAL = -600, NET_CHANGE = -680;
+/* ===== the FULL sorted view — every season cash row, in three bands ===== */
+function bandHTML(key, label){
+  var rows = allRows.filter(function(r){ return r.cat===key; });
+  var sub = rows.reduce(function(s,r){ return s+r.amt; }, 0);
+  var h = '<div class="tagger-band"><span>' + label + '</span></div>';
+  rows.forEach(function(r){
+    h += '<div class="tagger-row"><div class="tagger-label">' + r.label + '</div><div class="tagger-amt">' + BRW.signed(r.amt) + '</div><div></div></div>';
+  });
+  h += '<div class="tagger-subtotal"><div>' + label + ' subtotal</div><div class="tagger-amt">' + (sub<0 ? '('+BRW.dol(-sub)+')' : BRW.dol(sub)) + '</div><div></div></div>';
+  return h;
+}
+var OP_TOTAL = 2350, INV_TOTAL = -400, FIN_TOTAL = -2630, NET_CHANGE = -680;
+function revealFull(){
+  playClick();
+  document.getElementById('gate').innerHTML = '';
+  var h = '<div class="tagger">' +
+    '<div class="cash-sheet-head"><div class="cash-sheet-title">Cash-Flow working sheet &middot; Summer 2026</div>' +
+    '<div class="cash-sheet-sub">sorted &mdash; every season cash row, by the three names</div></div>' +
+    bandHTML('op', 'Operating') + bandHTML('inv', 'Investing') + bandHTML('fin', 'Financing') +
+    '<div class="tagger-subtotal"><div>Operating + Investing + Financing</div><div class="tagger-amt">' + (NET_CHANGE<0 ? '('+BRW.dol(-NET_CHANGE)+')' : BRW.dol(NET_CHANGE)) + '</div><div></div></div>' +
+    '</div>';
+  h += '<div class="next-phase-msg">The three bands sum to &minus;$680 &mdash; exactly the Cash line&rsquo;s fall, from $1,300 on June 1 to $620 on August 31. Every dollar sorted; nothing missing.</div>';
+  document.getElementById('controls').innerHTML = h;
+  renderPayoff();
+  if (window.lucide) lucide.createIcons();
+  document.getElementById('anna').scrollIntoView({ behavior:'smooth', block:'start' });
+}
 
-function renderDone(){
-  document.getElementById('sortNudge').className='feedback';
-  document.getElementById('anna').innerHTML = annaBox('Three piles &mdash; and each one has a name in the house that keeps these kinds of books. Running the season, day to day: <strong>OPERATING</strong>, net <strong>'+BRW.signed(OP_TOTAL)+'</strong>. Buying the long-lived tool: <strong>INVESTING</strong>, <strong>'+BRW.signed(INV_TOTAL)+'</strong>. The owner&rsquo;s move: <strong>FINANCING</strong>, <strong>'+BRW.signed(FIN_TOTAL)+'</strong>. Add the three: '+BRW.signed(OP_TOTAL)+' '+BRW.signed(INV_TOTAL)+' '+BRW.signed(FIN_TOTAL)+' = <strong>'+BRW.signed(NET_CHANGE)+'</strong> &mdash; exactly the Cash line&rsquo;s fall, dollar for dollar.');
-  document.getElementById('controls').innerHTML =
-    insightBox('Three piles, one tie-out',
-      '<p><strong>Operating</strong> +$320 &middot; <strong>Investing</strong> &minus;$400 &middot; <strong>Financing</strong> &minus;$600. Together, &minus;$680 &mdash; the same $680 the Cash line fell, from $1,300 to $620. Nothing missing; every dollar sorted.</p>')
-    + '<div class="next-phase-msg">One thing still doesn&rsquo;t add up cleanly: Net income was <strong>+$2,640</strong>, but the OPERATING pile only nets <strong>+$320</strong>. That gap is a question still standing &mdash; hold it for now.</div>'
+/* ===== Anna's payoff — three piles, each named, with the liability-settled rule ===== */
+function renderPayoff(){
+  document.getElementById('anna').innerHTML = annaBox(
+    'Three piles &mdash; and each one has a name in the house that keeps these kinds of books. ' +
+    'Running the season, day to day: <strong>OPERATING</strong>, net <strong>+' + BRW.dol(OP_TOTAL) + '</strong> &mdash; repairs collected $5,500, parts bought ($1,200), rent paid ($1,950). ' +
+    'Buying the long-lived tool: <strong>INVESTING</strong>, <strong>(' + BRW.dol(-INV_TOTAL) + ')</strong>. ' +
+    'The card payoff and the owner&rsquo;s move: <strong>FINANCING</strong>, <strong>(' + BRW.dol(-FIN_TOTAL) + ')</strong>. ' +
+    'And the one to remember: the $2,030 card payoff sits in Financing, not Operating, because the payment settled a <strong>liability</strong> &mdash; the card balance carried in from before the season. ' +
+    'Classification follows the liability settled, not what the card once bought. ' +
+    'Add the three: +' + BRW.dol(OP_TOTAL) + ' (' + BRW.dol(-INV_TOTAL) + ') (' + BRW.dol(-FIN_TOTAL) + ') = <strong>(' + BRW.dol(-NET_CHANGE) + ')</strong> &mdash; exactly the Cash line&rsquo;s fall, dollar for dollar.'
+  );
+  document.getElementById('controls').innerHTML +=
+    insightBox('A sort, not a move',
+      '<p>Flip to the <strong>Assets</strong> tab above &mdash; every cash row is still there, in the same Cash ledger the season built. The working sheet is a <strong>sort</strong> of those rows, not a move: the originals stay right where they were.</p>')
+    + '<div class="next-phase-msg">One thing still doesn&rsquo;t line up by itself: Net income was <strong>+$2,640</strong>, but the OPERATING pile nets only <strong>+$2,350</strong>. A $290 gap, and depreciation never touched Cash at all. That gap is the next page&rsquo;s job.</div>'
     + "<button class=\"btn-continue btn-block\" onclick=\"nav('44-3-The-Cash-Flow-Statement.html')\">Lay the piles out as a statement &rarr;</button>";
-  if(window.lucide) lucide.createIcons();
+  if (window.lucide) lucide.createIcons();
 }
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Operating', def:'Cash in and out from running the season day to day: repairs collected, parts bought, rent paid, the credit-card payoff. Net +$320 this season.' },
+  { term:'Operating', def:'Cash in and out from running the season day to day &mdash; repairs collected, parts bought, rent paid. Net +$2,350 this season.' },
   { term:'Investing', def:'Cash spent on or received from long-lived gear the shop will use for more than one season &mdash; here, the new repair tool, &minus;$400.' },
-  { term:'Financing', def:'Cash moving between the shop and its owner or lenders, not tied to running the work &mdash; here, the owner&rsquo;s draw, &minus;$600.' }
+  { term:'Financing', def:'Cash moving between the shop and its owner or lenders &mdash; borrowings taken or repaid, owner money in or out. Classification follows the liability settled, not what the borrowing once bought: the card payoff repays a borrowing, so it is Financing (&minus;$2,030), even though the card once bought tools and parts. Net &minus;$2,630 this season.' }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
@@ -225,13 +238,14 @@ function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
-/* ===== init ===== */
-window.devFill = function(){ rows.forEach(function(r){ placed[r.id]=r.bucket; }); done=true; filling=false; BRW.update('wb', snap); renderDone(); };
-BR_WB.registerSeasonSheets();
-BR_WB.registerStatementSheets();
-BRW.registerSheet('sort', sortSheet);
-BRW.mount('wb', snap);
-BRW.tab('wb', 'sort');
+/* ===== init / dev hook ===== */
+window.devFill = function(){
+  document.getElementById('copyBtnWrap').style.display = 'none';
+  document.getElementById('workWrap').hidden = true;
+  document.getElementById('missFeedback').innerHTML = '';
+  document.getElementById('gate').innerHTML = '';
+  revealFull();
+};
 </script>
   <script src="dev.js"></script>
 </body>

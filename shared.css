@@ -2930,3 +2930,38 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .xlwb-tab.tk-stmt { box-shadow: inset 0 -3px 0 #c4b5fd; }
   .xl-row.xl-cols2 .xl-v { border-left-color: #3a3844; }
 }
+
+/* ===================================================================
+   CATEGORY TAGGER — approved additions (2026-07-13)
+   Per-row category tagging + sort-into-banded-subtotals component,
+   shared by the income-statement sort (32-x) and the cash-flow sort
+   (44-2). Rendered by BRW.tagger() in shared.js. .tagger-actions is
+   the Sort-button footer strip (structural part of the wrapper).
+   =================================================================== */
+.tagger { border: 1px solid var(--border); border-radius: 10px; background: var(--page-bg); font-family: Inter, sans-serif; overflow: hidden; margin: 14px 0; }
+.tagger-row { display: grid; grid-template-columns: 1fr 92px auto; gap: 10px; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.tagger-row:last-child { border-bottom: 0; }
+.tagger-label { font-size: var(--font-s); color: #374151; }
+.tagger-amt { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; font-size: var(--font-s); text-align: right; color: #1f2937; }
+.tagger-choices { display: flex; gap: 6px; justify-content: flex-end; }
+.tagger-choice { font-family: Inter, sans-serif; font-size: var(--font-xs); font-weight: 600; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border-strong); background: transparent; color: #4b5563; cursor: pointer; }
+.tagger-choice:hover { background: var(--primary-faint); }
+.tagger-choice.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+.tagger-choice.miss { background: var(--error-bg); border-color: var(--error-border); color: var(--error-text); }
+.tagger-band { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 12px; background: var(--primary-faint); font-size: var(--font-xs); font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #334155; }
+.tagger-subtotal { display: grid; grid-template-columns: 1fr 92px auto; gap: 10px; padding: 8px 12px; border-top: 2px solid var(--primary); font-weight: 700; font-size: var(--font-s); color: #1f2937; }
+.tagger-subtotal .tagger-amt { font-weight: 700; }
+.tagger-actions { padding: 10px 12px; display: flex; justify-content: flex-end; border-top: 1px solid var(--border); }
+@media (prefers-color-scheme: dark) {
+  .tagger { background: #26242e; border-color: #3a3844; }
+  .tagger-row { border-bottom-color: #3a3844; }
+  .tagger-label { color: #c9c6d4; }
+  .tagger-amt { color: #eeebf5; }
+  .tagger-choice { border-color: #4a4856; color: #b8b5c4; }
+  .tagger-choice:hover { background: #322f3d; }
+  .tagger-choice.on { background: #60a5fa; border-color: #60a5fa; color: #16141d; }
+  .tagger-choice.miss { background: #3b2225; border-color: #7f1d1d; color: #fca5a5; }
+  .tagger-band { background: #322f3d; color: #c9c6d4; }
+  .tagger-subtotal { border-top-color: #60a5fa; color: #eeebf5; }
+  .tagger-actions { border-top-color: #3a3844; }
+}

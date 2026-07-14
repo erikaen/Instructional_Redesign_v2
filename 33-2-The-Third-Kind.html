@@ -26,7 +26,7 @@
     <div class="phase-title" id="phaseTitle">The Third Kind</div>
 
     <div class="narrative-block">
-      <p>The wear on the tools is real used-up &mdash; a little of them was plainly used up during the season &mdash; and the Expenses tab has no row for it. Before a row can exist, someone has to put a <strong>number</strong> on it. Where would one come from?</p>
+      <p>The wear on the tools is real used-up &mdash; a little of them was plainly used up during the season &mdash; and no row names it yet. The in-progress Income Statement lists the season&rsquo;s expenses by kind, but the last line is still a placeholder. Before a row can exist, someone has to put a <strong>number</strong> on it. Where would one come from?</p>
     </div>
 
     <div class="mc-card">
@@ -72,6 +72,27 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+/* ===== the income statement, one step from done ===== */
+var REVENUE = 6020, PARTS = 1200, RENT = 1950, DEP_TOOLS = 200, DEP_LAPTOP = 30;
+function xrow(cls, label, val){ return '<div class="xl-row '+cls+'"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
+function incomeSheet(cid, snap){
+  var h = xrow('xl-head', 'Income Statement &middot; June&ndash;August 2026', 'Amount');
+  h += xrow('xl-cat', '<strong>Revenue</strong> &mdash; the work delivered this season', BRW.dol(REVENUE));
+  h += xrow('xl-item', '<strong>Expenses</strong> &mdash; used up delivering it', '');
+  h += xrow('xl-item', 'Parts used', BRW.dol(PARTS));
+  h += xrow('xl-item', 'Rent used', BRW.dol(RENT));
+  if (recorded) {
+    h += xrow('xl-item', 'Depreciation &mdash; tools, equipment &amp; fixtures', BRW.dol(DEP_TOOLS));
+    h += xrow('xl-item', 'Depreciation &mdash; laptop', BRW.dol(DEP_LAPTOP));
+    h += xrow('xl-cat', 'Total expenses', BRW.dol(PARTS + RENT + DEP_TOOLS + DEP_LAPTOP));
+  } else {
+    h += xrow('xl-item', '<em>&hellip; one more kind of used-up, still to come</em> <span class="xl-new-tag">this tutorial</span>', '?');
+    h += xrow('xl-cat', 'Total expenses <em>so far</em>', BRW.dol(PARTS + RENT));
+  }
+  h += xrow('xl-total', '<strong>Net income</strong> &mdash; Revenue &minus; Expenses', '<span class="xl-new-tag">not yet</span>');
+  return h;
+}
 
 /* ===== the choice: no meter, no lapse — a rule must be chosen ===== */
 var MCQ = [
@@ -128,7 +149,7 @@ function renderTalk(){
     anna = annaBox('Accountants chose one. Spread the thing&rsquo;s <strong>cost</strong> over the seasons of its <strong>useful life</strong>, and charge each season its share &mdash; the simplest rule splits the cost evenly, the same share every season, straight down the line. The share has a name: <strong>depreciation</strong>. Be clear about what it is: an <strong>allocation</strong> &mdash; a chosen convention. Not use anyone observed, not the mere passage of time, and not a market price looked up &mdash; a rule standing in for a mix of time, wear and tear, and judgment. The useful life and the spreading rule are <em>choices</em>, and people argue about them. For the shop, each share is just cost &divide; useful life: <strong>$200</strong> this season on the tools, equipment &amp; fixtures, and <strong>$30</strong> on the laptop &mdash; two separate lines, so each can be argued with on its own. The useful lives and the exact schedule behind those two numbers follow generally accepted accounting principles &mdash; the specific rules for depreciating exactly this kind of asset. That&rsquo;s a course of its own. For now, take <strong>$200</strong> and <strong>$30</strong> as given, the same way you took the original purchase prices as given.');
     ctrl = '<button class="btn-continue btn-block" onclick="recordWear()">Record the wear &rarr;</button>';
   } else {
-    anna = annaBox('There &mdash; the third kind of used-up, on the tab at last: <strong>Depreciation</strong>, $200 for the tools, equipment and fixtures, and $30 for the laptop. Expenses now read <strong>$3,380</strong>, and the placeholder is gone. And flip to Assets: the Tools &amp; Repair Equipment line carries <strong>&minus;$160</strong> now, Fixtures <strong>&minus;$40</strong>, the Laptop <strong>&minus;$30</strong>. The wear didn&rsquo;t just cost the season &mdash; it lowered what the records carry.');
+    anna = annaBox('There &mdash; the third kind of used-up, on the tab at last: two <strong>Depreciation</strong> rows land at the bottom of GENERATED like every other reason &mdash; <strong>$200</strong> for the tools, equipment and fixtures, <strong>$30</strong> for the laptop. Flip to the Income sheet: the expense list reads complete now &mdash; Parts <strong>$1,200</strong> &middot; Rent <strong>$1,950</strong> &middot; Depreciation <strong>$200 + $30</strong> &rarr; <strong>Expenses $3,380</strong>, the placeholder gone. And flip to Assets: the Tools &amp; Repair Equipment line carries <strong>&minus;$160</strong> now, Fixtures <strong>&minus;$40</strong>, the Laptop <strong>&minus;$30</strong>. The wear didn&rsquo;t just cost the season &mdash; it lowered what the records carry.');
     ctrl = insightBox('An allocation, openly chosen',
         '<p>The $200 isn&rsquo;t a reading of anything. It&rsquo;s the season&rsquo;s <strong>share of a cost</strong>, set by a rule someone chose &mdash; and back in May, you took none, which was also a choice. That&rsquo;s not a flaw to hide. It&rsquo;s what this number <em>is</em>.</p>')
       + '<button class="btn-continue btn-block" onclick="nav(\'33-3-The-Bottom-Line.html\')">What the wear did to the books &rarr;</button>';
@@ -141,11 +162,12 @@ function renderTalk(){
 function recordWear(){
   playClick(); playSuccess();
   recorded = true;
-  var snap2 = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
+  var snap2 = BR_WB.snapshot({ withReceivable:true, withDepreciation:true });
   snap2.tabs.push(BR_WB.balanceTab(['jun1']));
+  snap2.tabs.push({ id:'income', label:'Income' });
   BR_WB.tagTabKinds(snap2);
   BRW.update('wb', snap2);
-  BRW.tab('wb', 'expenses');
+  BRW.tab('wb', 'reasons');
   renderMcq(); renderTalk();
   window.scrollTo(0, document.body.scrollHeight);
 }
@@ -167,14 +189,15 @@ function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
-/* ===== init — the graduated workbook, Expenses tab, wear not yet recorded ===== */
+/* ===== init — the graduated workbook, the income sheet one step from done ===== */
 window.devFill = function(){ mcqSel=3; mcqSubmitted=true; renderMcq(); if(!recorded) recordWear(); };
-BR_WB.registerSeasonSheets();
-var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true });
+BRW.registerSheet('income', incomeSheet);
+var snap = BR_WB.snapshot({ withReceivable:true });
 snap.tabs.push(BR_WB.balanceTab(['jun1']));
+snap.tabs.push({ id:'income', label:'Income' });
 BR_WB.tagTabKinds(snap);
 BRW.mount('wb', snap);
-BRW.tab('wb', 'expenses');
+BRW.tab('wb', 'income');
 renderMcq(); renderTalk();
 </script>
   <script src="dev.js"></script>

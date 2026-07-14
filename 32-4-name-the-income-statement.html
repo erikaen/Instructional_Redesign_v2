@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.2: The Income Statement &middot; Name the Piles</title>
+  <title>Tutorial 3.2: The Income Statement &middot; Laying It Out</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -23,10 +23,10 @@
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">Name the Piles</div>
+    <div class="phase-title" id="phaseTitle">Laying It Out</div>
 
     <div class="narrative-block">
-      <p>Two clean piles on the Reasons tab, each with a total: <strong>DELIVERED</strong> ($6,020) and <strong>USED UP</strong> ($3,150). These aren&rsquo;t your invention &mdash; they&rsquo;re the two things every business tracks about a season, and they have names. And once they have names, they&rsquo;re getting something more: sheets of their own.</p>
+      <p>The working sheet is complete. The Revenue band totals <strong>$6,020</strong> &mdash; every delivery this summer &mdash; and the Expense band totals <strong>($3,150)</strong>: Parts used $1,200, Rent used $1,950, and one more kind of used-up still to come. A sorted list is almost a statement; next you lay those bands out as the shape the books have been building toward.</p>
     </div>
 
     <div id="wb"></div>
@@ -62,7 +62,9 @@ function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c
 function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-/* ===== the income statement, laid out as a new sheet of Bike-Repair.xlsx ===== */
+/* ===== the income statement, laid out as a new sheet of Bike-Repair.xlsx =====
+   Amounts read as positive magnitudes on the statement — that is the formatting
+   convention the statement adopts (Revenue and each Expense shown without sign). */
 var REVENUE = 6020, PARTS = 1200, RENT = 1950, EXPENSES = PARTS + RENT;  // 3,150 so far
 function xrow(cls, label, val){ return '<div class="xl-row '+cls+'"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
 function incomeSheet(cid, snap){
@@ -77,11 +79,11 @@ function incomeSheet(cid, snap){
   return h;
 }
 
-/* ===== workbook state ===== */
-var snap = BR_WB.snapshot({ flowGroups:true, withReceivable:true });
+/* ===== workbook state — the plain continuous snapshot; the Income sheet is added on demand ===== */
+var snap = BR_WB.snapshot({ withReceivable:true });
 snap.tabs.push(BR_WB.balanceTab(['jun1']));
 BR_WB.tagTabKinds(snap);
-var step = 0;   // 0 = name the piles · 1 = graduated to their own tabs · 2 = the statement laid out
+var step = 0;   // 0 = working sheet, Reasons tab · 1 = laid out as the Income Statement
 
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
@@ -89,19 +91,12 @@ function insightBox(label,inner){ return '<div class="insight-box"><div class="i
 function renderTalk(){
   var anna='', ctrl='';
   if(step===0){
-    anna = annaBox('The DELIVERED pile has a name: <strong>Revenue</strong> &mdash; the value of the work delivered in a period, whichever way the cash runs. USED UP is <strong>Expenses</strong> &mdash; what got used up delivering it. And notice: both answer for <em>this season only</em>. Next summer, &ldquo;how did the season go?&rdquo; starts over &mdash; so these tallies must too. Cash and Parts never reset, because &ldquo;how much is there?&rdquo; never restarts. Tallies that fill for one period and then make way for the next are called <strong>temporary accounts</strong> &mdash; and they&rsquo;ve earned sheets of their own.');
-    ctrl = insightBox('Revenue and Expenses',
-        '<p>You didn&rsquo;t invent these piles &mdash; you rediscovered <strong>Revenue</strong> and <strong>Expenses</strong>, the two temporary accounts every business keeps, period by period. They exist to separate reasons by the <strong>period they answer for</strong>: the Reasons tab runs on forever, but a season&rsquo;s question needs a tally that starts and ends with the season.</p>')
-      + '<button class="btn-continue btn-block" onclick="graduate()">Move them to their own sheets &rarr;</button>';
-  } else if(step===1){
-    anna = annaBox('There &mdash; the season&rsquo;s rows moved out of Reasons onto two new tabs: <strong>Revenue</strong> and <strong>Expenses</strong>. Flip to Reasons: CONTRIBUTED, GENERATED through May, WITHDRAWN &mdash; all still there. The trail isn&rsquo;t broken; the season&rsquo;s rows are just filed by the period they answer for. And notice what <em>didn&rsquo;t</em> move: your <strong>$600 draw</strong>. It&rsquo;s dated to the season, but it isn&rsquo;t part of how the work did &mdash; an owner move, not a delivery or a using-up.');
-    ctrl = insightBox('Two period tabs, one continuous trail',
-        '<p>Assets, Liabilities, and the Reasons piles carry on. <strong>Revenue</strong> and <strong>Expenses</strong> fill for this season and will close when it does &mdash; that&rsquo;s ahead. Laid out together, Revenue over Expenses, they read as one short statement.</p>')
-      + '<button class="btn-continue btn-block" onclick="layItOut()">Lay them out as a statement &rarr;</button>';
+    anna = annaBox('A sorted list is almost a statement. The standard layout puts <strong>Revenue</strong> first &mdash; as ONE line, the season&rsquo;s deliveries totaled &mdash; then the <strong>Expenses</strong> listed by kind, then the difference. Yours is ready: Revenue '+BRW.dol(REVENUE)+', Expenses '+BRW.dol(EXPENSES)+' so far. Lay it out and the shape appears.');
+    ctrl = '<button class="btn-continue btn-block" onclick="layItOut()">Lay it out as the Income Statement &rarr;</button>';
   } else {
-    anna = annaBox('There&rsquo;s the new sheet: the <strong>Income Statement</strong> &mdash; Revenue, then Expenses, and the difference is <strong>Net income</strong>: how the season went. It reads straight off your two new tabs. But hold on before you subtract. Your <strong>Revenue</strong> is complete &mdash; every delivery, '+BRW.dol(REVENUE)+'. Your <strong>Expenses</strong> aren&rsquo;t. Your tools and laptop wore out all summer doing these jobs &mdash; that&rsquo;s something getting used up too, and no row says so yet. Subtract now and the number would be wrong.');
+    anna = annaBox('There&rsquo;s the new sheet: the <strong>Income Statement</strong> &mdash; Revenue first as one line, then the Expenses by kind, and the difference is <strong>Net income</strong>. Now flip back to Reasons: every one of those rows stays right where it always was, in <strong>GENERATED</strong>. This new sheet didn&rsquo;t take anything anywhere &mdash; it&rsquo;s the <em>same</em> rows, sorted and totaled &mdash; a way of <em>reading</em> the pile, period by period. And notice what the working sheet never picked up: your <strong>$600 draw</strong>. It&rsquo;s dated to the season, but it isn&rsquo;t part of how the work did &mdash; an owner move, not a delivery or a using-up; it sits in <strong>WITHDRAWN</strong>. Your Revenue is complete &mdash; every delivery, '+BRW.dol(REVENUE)+'. Your Expenses aren&rsquo;t. Your tools and laptop wore out all summer doing these jobs &mdash; that&rsquo;s something getting used up too, and no row says so yet. Subtract now and the number would be wrong.');
     ctrl = insightBox('The statement, but not the bottom line &mdash; yet',
-        '<p>Revenue minus Expenses is <strong>Net income</strong> &mdash; the answer, at last, to how the season actually went. The shape is right and Revenue is finished &mdash; but the Expenses sheet is still missing one kind of used-up, so the bottom line stays open on purpose.</p>')
+        '<p>Revenue minus Expenses is <strong>Net income</strong> &mdash; the answer, at last, to how the season actually went. The shape is right and Revenue is finished &mdash; but the Expenses are still missing one kind of used-up, so the bottom line stays open on purpose.</p>')
       + '<div class="next-phase-msg">First, see where this bottom line is headed once it&rsquo;s finished &mdash; and why it lands where it does.</div>'
       + '<button class="btn-continue btn-block" onclick="nav(\'32-5-what-the-season-kept.html\')">Where net income goes &rarr;</button>';
   }
@@ -110,20 +105,9 @@ function renderTalk(){
   if(window.lucide) lucide.createIcons();
 }
 
-function graduate(){
-  playClick(); playSuccess();
-  step = 1;
-  snap = BR_WB.snapshot({ tabbed:true, withReceivable:true });   // the season's rows move to their own period tabs
-  snap.tabs.push(BR_WB.balanceTab(['jun1']));
-  BR_WB.tagTabKinds(snap);
-  BRW.update('wb', snap);
-  BRW.tab('wb', 'revenue');
-  renderTalk();
-  window.scrollTo(0, document.body.scrollHeight);
-}
 function layItOut(){
   playClick(); playSuccess();
-  step = 2;
+  step = 1;
   snap.tabs.push({ id:'income', label:'Income' });   // the workbook grows one more sheet
   BR_WB.tagTabKinds(snap);
   BRW.update('wb', snap);
@@ -134,9 +118,8 @@ function layItOut(){
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Revenue', def:'The value of the work delivered over a period &mdash; counted when the work goes out the door, not when the cash moves. The formal name for the DELIVERED pile.' },
-  { term:'Expenses', def:'What got used up delivering the period&rsquo;s work &mdash; parts, rent, and (soon) the wear on the tools and laptop. The formal name for the USED UP pile.' },
-  { term:'Temporary account', def:'A tally scoped to one period: it fills for a season, answers for it, then closes and starts the next at zero. Revenue and Expenses get their own sheets for exactly this reason. Contrast Cash or Parts, which carry on.' },
+  { term:'Revenue', def:'The value of the work delivered over a period &mdash; counted when the work goes out the door, not when the cash moves. The Revenue band of the working sheet, totaled as one line on the Income Statement.' },
+  { term:'Expenses', def:'What got used up delivering the period&rsquo;s work &mdash; parts, rent, and (soon) the wear on the tools and laptop. The Expense band of the working sheet, listed by kind on the Income Statement.' },
   { term:'Income Statement', def:'The short sheet that lays Revenue over Expenses; the difference is Net income &mdash; how the season went. Not a snapshot of what you hold, but the story of one period.' },
   { term:'Net income', def:'Revenue &minus; Expenses for the period. Here it stays open until the last expense &mdash; the wear on the tools and laptop &mdash; is added next tutorial.' }
 ];
@@ -151,9 +134,8 @@ function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
-/* ===== init — workbook on the Reasons tab (DELIVERED / USED UP); the period tabs, then the Income sheet, appear on demand ===== */
-window.devFill = function(){ if(step===0) graduate(); if(step===1) layItOut(); };
-BR_WB.registerSeasonSheets();
+/* ===== init — workbook open on the Reasons tab (the season's rows in GENERATED); the Income sheet appears on demand ===== */
+window.devFill = function(){ if(step===0) layItOut(); };
 BRW.registerSheet('income', incomeSheet);
 BRW.mount('wb', snap);
 BRW.tab('wb', 'reasons');
