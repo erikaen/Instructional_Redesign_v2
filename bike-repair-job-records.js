@@ -258,3 +258,114 @@ var BR_JOBS = [
     "note": "Custom frame completed — earns the $220 advance taken in Module 2."
   }
 ];
+
+/* May (pre-LLC) jobs, folded in from the Module 1 customer receipts
+   (Source-Documents/source-documents.html, Document 8 — "Customer Receipts").
+   One record per receipt; the receipts don't record customer names, parts
+   used, or time spent, so those fields carry "N/A". Kept as a SEPARATE array:
+   BR_JOBS and its consumers (cashEvents, generatedRows, pages 31-2/32-1/32-3/
+   44-2) are season-scoped and filter nothing — never fold these into BR_JOBS.
+   The seven repair receipts total $1,120 (May earnings); Smith's $220 is a
+   deposit on undelivered work, not earnings. */
+var BR_JOBS_MAY = [
+  {
+    "id": "R-001",
+    "date": "May 7",
+    "customer": "N/A",
+    "work": "Brake job + Tune-up + Tire mounting ×2 @ $70",
+    "parts": "N/A",
+    "partsCost": "N/A",
+    "charge": 340,
+    "hours": "N/A",
+    "pay": "Venmo",
+    "collected": true
+  },
+  {
+    "id": "R-002",
+    "date": "May 10",
+    "customer": "N/A",
+    "work": "Walk-ins — mixed work (no itemized detail)",
+    "parts": "N/A",
+    "partsCost": "N/A",
+    "charge": 180,
+    "hours": "N/A",
+    "pay": "Venmo",
+    "collected": true
+  },
+  {
+    "id": "R-003",
+    "date": "May 12",
+    "customer": "N/A",
+    "work": "Tune-up",
+    "parts": "N/A",
+    "partsCost": "N/A",
+    "charge": 80,
+    "hours": "N/A",
+    "pay": "Venmo",
+    "collected": true
+  },
+  {
+    "id": "R-004",
+    "date": "May 14",
+    "customer": "N/A",
+    "work": "Brake overhaul",
+    "parts": "N/A",
+    "partsCost": "N/A",
+    "charge": 140,
+    "hours": "N/A",
+    "pay": "Venmo",
+    "collected": true
+  },
+  {
+    "id": "R-005",
+    "date": "May 19",
+    "customer": "N/A",
+    "work": "Chain + cassette replacement",
+    "parts": "N/A",
+    "partsCost": "N/A",
+    "charge": 130,
+    "hours": "N/A",
+    "pay": "Venmo",
+    "collected": true
+  },
+  {
+    "id": "R-006",
+    "date": "May 23",
+    "customer": "N/A",
+    "work": "Tune-up + minor repair",
+    "parts": "N/A",
+    "partsCost": "N/A",
+    "charge": 100,
+    "hours": "N/A",
+    "pay": "Venmo",
+    "collected": true
+  },
+  {
+    "id": "R-007",
+    "date": "May 27",
+    "customer": "N/A",
+    "work": "Custom wheel work + new spokes",
+    "parts": "N/A",
+    "partsCost": "N/A",
+    "charge": 150,
+    "hours": "N/A",
+    "pay": "Venmo",
+    "collected": true
+  },
+  {
+    "id": "R-008",
+    "date": "May 22",
+    "customer": "J. Smith",
+    "work": "Custom frame build — deposit taken",
+    "parts": "N/A",
+    "partsCost": "N/A",
+    "charge": 220,
+    "hours": "N/A",
+    "pay": "Check — deposit only",
+    "collected": true,
+    "note": "Deposit on undelivered work — not earnings yet. Estimated delivery ~ July 3; the frame is finished and the advance earned in J-0021 (Aug 30)."
+  }
+];
+
+/* Every job from the first May receipt through August 31, in date order. */
+var BR_JOBS_ALL = BR_JOBS_MAY.concat(BR_JOBS);
