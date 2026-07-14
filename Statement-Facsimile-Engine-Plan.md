@@ -1,6 +1,8 @@
 # Statement-Facsimile Engine Plan
 
-**Created 2026-07-14.** Numbered, append-only. Each PART is approved on its own before any
+**Created 2026-07-14. Amended 2026-07-14 session 3 (PART 5: the in-cell Category-column pick is
+replaced by the Maria's-Form sorting panel — Rick's ruling; original spec in git history).**
+Numbered, append-only. Each PART is approved on its own before any
 code is written for it. Nothing in `shared.css`, `shared.js`, or `bike-repair-workbook.js` is
 touched until the PART that changes it is approved. This doc supersedes the hardcoded-statement
 approach in `bike-repair-workbook.js` (the `registerStatementSheets` income/cashflows/bridge
@@ -13,7 +15,8 @@ sheets and the `BS_ROWS` balance tab) — those stay in place until pages migrat
 Rick's four Excel files are the single source of truth. A Python script reads them and emits one
 committed JS data file. The tutorials render **from that data file**, so the facsimile plays
 Rick's files verbatim; when Rick edits a file in Excel and re-runs the script, the facsimile
-follows. Students never touch the real `.xlsx`. The four files:
+follows. Students never touch the real `.xlsx`. The four files live in
+**`Bike-Repair-Source-Workbooks/`** (v2 repo; moved from the repo root 2026-07-14):
 
 | File | Role |
 |---|---|
@@ -204,9 +207,9 @@ own statement tab transforming through its states — replacing the hardcoded
   Expense → Sort → … → Format statement`). Advancing swaps to the next `order` sheet; the grid
   re-renders (groups re-collapse per 3b).
 - **Non-clerical rule:** the student never moves data by hand. Between one state and the next the
-  rows simply *are* the next extracted state. The only student action is the classification pick
-  (PART 5) on `Pick` steps; every other step is "watch it take the next form," advanced by one
-  button.
+  rows simply *are* the next extracted state. The only student action is the classification sort
+  (PART 5, the Maria's-Form panel) on `Pick` steps; every other step is "watch it take the next
+  form," advanced by one button.
 - `opts.startAt` / `opts.stopAt` let a page mount a sub-range of steps (so a construction page can
   own steps 0–2 and a later page 3–5).
 
@@ -217,27 +220,52 @@ and those finals equal the corresponding `Bike-Repair-End` statement tab (the `-
 
 ---
 
-## PART 5 — the classify-a-row interaction ("the Category column")
+## PART 5 — the sorting interaction (Maria's-Form panel) + column-C sync
 
-**Approval gate 5. Appends to `shared.js` + `shared.css`.** This is what "column C" means: the
-`Pick` steps carry a **Category column** (column C) the student fills — `Income-Statement-Steps
-1 · Pick — Revenue or Expense` (C = Revenue / Expense), `3 · Pick — kind of expense`
-(C = Rent / Parts Used / Depreciation), `Cash-Flow-Steps 1 · Pick the activity`
-(C = Operating / Investing / Financing), with the guidance text the files carry in column F.
+**Approval gate 5. Appends to `shared.js` + `shared.css`.**
 
-- On a `Pick` step, column-C cells start blank; the extracted C value is the **answer key**.
-- The student clicks a C cell and picks from that step's allowed set (derived from the distinct
-  extracted C values). Correct → the cell fills and locks; wrong → a light nudge, retry (reuse the
-  existing three-strike tone conventions from the tutorial pattern, not a hard fail).
-- After the student has classified a few rows correctly, a **"Do the rest"** control fills the
-  remaining C cells from the answer key — judgment shown, clerical work skipped (Rick's rule).
-- Column-F guidance renders beside the grid as help text (from the extracted F cells), never as
-  something the student edits.
-- When every C cell is filled, the advance control (PART 4) unlocks.
+**AMENDED 2026-07-14 (Rick's ruling):** the in-cell column-C pick is replaced by the
+**course-standard sorting panel** from `12-2-Marias-Form.html` — things to be sorted on the
+left, the categories they go in on the right, drag a few in, "Sort the rest" unlocks. One
+consistent sorting mechanic course-wide: students learn it in 12-2 (Module 1), so by the M3/M4
+statement builds the interaction is invisible and all attention goes to the judgment.
+**Principle:** the sorter is the *thinking surface*; the workbook is the *record*. The facsimile
+contract protects the artifact — each state's content, formats, and totals — not the input
+mechanic (nobody sorts *inside* Excel; the judgment happens in the head and Excel records the
+outcome). The workbook tab visibly takes the result of every sort.
 
-**Acceptance:** on `3 · Pick — kind of expense` the three depreciation rows accept **Depreciation**
-as their kind; "Do the rest" completes the column; advancing sorts by kind (`4 · Sort expenses by
-kind`) with the three dep amounts (160 / 40 / 30) grouped and subtotalling 230, then folds to the
+**Scope unchanged from the original spec:** the `Pick` steps — `Income-Statement-Steps
+1 · Pick — Revenue or Expense` (Revenue / Expense), `3 · Pick — kind of expense`
+(Rent / Parts Used / Depreciation), `Cash-Flow-Steps 1 · Pick the activity`
+(Operating / Investing / Financing). Column C remains the record of the pick; the extracted C
+values remain the **answer key**; each step's allowed categories derive from its distinct
+extracted C values; column-F guidance renders beside the grid as help text, never editable.
+
+**Mechanic (per 12-2, adapted):**
+- **Two surfaces, live-linked.** The sorter panel renders above/beside the grid
+  (`BRW.renderGrid`). Left: the rows to classify — same labels and amounts as the grid rows,
+  visibly the workbook's rows, never restated. Right: one drop zone per allowed category.
+  Drag, or click-select then click the zone (12-2's keyboard/click fallback).
+- **Every correct drop writes the record.** The item seats in its category AND that row's
+  column-C cell fills on the grid at that moment, with a brief highlight — the student watches
+  the judgment become a record, drop by drop. Wrong → light nudge, retry (the existing
+  three-strike tone conventions, no hard fail).
+- **"Sort the rest" gate = coverage + diagnostics.** It unlocks after (a) at least one correct
+  item in every category (12-2's gate) and (b) that step's **diagnostic rows** are hand-sorted —
+  declared per step; e.g. at least one of the three depreciation rows on `3 · Pick — kind of
+  expense`. It then fills the remaining C cells from the answer key — judgment shown, clerical
+  work skipped (Rick's rule).
+- **The panel is scaffolding; the tab persists.** When every C cell is filled, the panel
+  collapses away, the workbook tab remains, and the advance control (PART 4) unlocks. Advancing
+  to the following `Sort` step re-orders the rows as a watch-it-happen transformation — the
+  student never manually re-orders rows. Judgment is the pick; rearrangement is clerical.
+
+**Acceptance:** on `3 · Pick — kind of expense` the sorter shows the expense rows on the left
+and Rent / Parts Used / Depreciation zones on the right; dropping a depreciation row into
+**Depreciation** fills that row's C cell on the grid; "Sort the rest" stays locked until every
+category has one correct item *and* at least one depreciation row was hand-sorted, then
+completes column C; the panel collapses; advancing sorts by kind (`4 · Sort expenses by kind`)
+with the three dep amounts (160 / 40 / 30) grouped and subtotalling 230, then folds to the
 single `Depreciation 230` line at `5 · Format statement`.
 
 ---
@@ -296,7 +324,7 @@ files.
 2. **PART 2** — `BRW.fmt` + unit tests on the five real nf codes.
 3. **PART 3** — `BRW.renderGrid` + collapse; verify against `Bike-Repair-End!Assets`.
 4. **PART 4** — `mountStatementBuild`; walk the income build end to end.
-5. **PART 5** — the Category-column pick + "Do the rest".
+5. **PART 5** — the Maria's-Form sorting panel + live column-C sync + "Sort the rest".
 6. **PART 6** — wire pages; resolve the `snapshot()` supersession decision; lint clean.
 
 Each part is a self-contained Ringer task with its own acceptance check above. Parts 2–5 append to
@@ -310,11 +338,15 @@ migrates the pages that use them.
 - **Singular "Member's Capital" course-wide** — a separate mechanical sweep across M1 prework +
   M2–M4 tutorials + specs + `lint-language.sh` + memory. `Members' Capital` → `Member's Capital`
   everywhere, **including the student's own LLC Operating Agreement** (the one the course creates —
-  a single-member LLC). **Sole carve-out:** the Operating Agreement in **Anna's example from her
-  old job** — leave that instance untouched and list it for Rick's ruling (its firm's membership
-  is undecided). Not in this engine plan.
-- **Depreciation split to three** (tools & equipment 160 / fixtures 40 / laptop 30) in every
-  itemized place — Rick edits the `.xlsx` in Excel; the engine inherits it on re-extraction. Exact
-  cell list to be handed over on request.
+  a single-member LLC). **Sole carve-out (RULED 2026-07-14 session 3):** the Operating Agreement
+  in **Anna's example from her old job** stays **plural "Members' Capital"** — that firm is
+  multi-member. The sweep is fully specified and unblocked. Not in this engine plan.
+- **Depreciation split to three — DONE 2026-07-14** (tools & repair equipment 160 / fixtures 40 /
+  laptop 30 in all 7 itemized places; formatted income statement stays one line 230). Executed by
+  a verified Ringer run (statement-facsimile, codex workers), labels mirroring the Assets ledger
+  class names; Rick inspected and approved. All totals held (Total expenses 3,380 · Net income
+  2,640 · GENERATED 2,810).
 - **Anna's depreciation-discovery beat** lands on the Reasons/GENERATED page (prose), upstream of
-  the income build; wording names tools & equipment, fixtures, and the laptop.
+  the income build; wording names tools & equipment, fixtures, and the laptop. **Ruled 2026-07-14
+  session 3: no useful-life or depreciation-calculation questions anywhere** — the amounts are
+  given and explained; the lesson is the no-transaction contrast, never the arithmetic.
