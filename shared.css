@@ -2205,41 +2205,35 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 
 /* ----- Speaker dialog boxes ----- */
 /* ===== Dialog component (consolidated 2026-07-14) =====
-   The character speech is the spine of every tutorial. Chat layout: a filled
-   name bubble on the left, the speech bubble beside it on the right. One
-   canonical component; variants only swap the band color. */
+   The character speech is the spine of every tutorial. One canonical component;
+   variants only change the speaker color via --dialog-accent. Distinct teal so
+   speech never blends into the blue UI chrome. */
 .dialog-box { --dialog-band: var(--primary); --dialog-band-hi: #0a47b8;
-  position: relative; display: flex; align-items: flex-start; gap: 14px;
-  background: transparent; border: none; border-radius: 0; padding: 0; margin: 22px 0; box-shadow: none; }
-/* the name bubble — light, lets the speech carry the weight */
+  position: relative; background: #ffffff; border: 2px solid var(--dialog-band);
+  border-radius: 16px; padding: 0 0 16px; margin: 22px 0 22px 6px; overflow: visible;
+  box-shadow: 0 2px 8px rgba(0, 50, 157, 0.10), 0 12px 30px rgba(0, 50, 157, 0.08); }
+/* the tail sits at band height, filled with the band color */
+.dialog-box::before { content: ''; position: absolute; top: 15px; left: -7px; width: 14px; height: 14px;
+  background: var(--dialog-band-hi); border-radius: 3px; transform: rotate(45deg); }
+.dialog-box.freddie { --dialog-band: var(--accent); --dialog-band-hi: #c25c20;
+  box-shadow: 0 2px 8px rgba(189, 83, 25, 0.10), 0 12px 30px rgba(189, 83, 25, 0.08); }
+/* "you" answers back: quiet gray frame, tail on the right */
+.dialog-box.you { --dialog-band: #9ca3af; --dialog-band-hi: #6b7280; margin: 22px 6px 22px 0; box-shadow: none; }
+.dialog-box.you::before { left: auto; right: -7px; }
+/* the speaker band: a filled strip across the top with avatar + name */
 .dialog-label { font-family: Inter, sans-serif; font-size: var(--font-s); font-weight: 700; letter-spacing: 0.6px;
-  color: var(--dialog-band); margin: 0; padding: 10px 18px; flex-shrink: 0;
-  background: #fff; border-radius: 14px 14px 14px 4px; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.10); }
-/* the speech bubble — filled dark blue, the loudest element on the page */
-.dialog-box .dialog-text { flex: 1; position: relative; color: rgba(255,255,255,0.96);
-  background: linear-gradient(180deg, var(--dialog-band-hi), var(--dialog-band));
-  border-radius: 4px 16px 16px 16px; padding: 13px 20px 15px;
-  box-shadow: 0 2px 6px rgba(0, 50, 157, 0.25), 0 10px 26px rgba(0, 50, 157, 0.16); }
-.dialog-box .dialog-text::before { content: ''; position: absolute; top: 14px; left: -5px; width: 12px; height: 12px;
-  background: var(--dialog-band-hi); border-radius: 2px; transform: rotate(45deg); }
-.dialog-box .dialog-text strong { color: #fff; }
-.dialog-box .dialog-prefix { color: rgba(255,255,255,0.65); }
-.dialog-box.freddie .dialog-label { background: #fff; color: var(--accent); }
-.dialog-box.freddie .dialog-text { box-shadow: 0 2px 6px rgba(189, 83, 25, 0.25), 0 10px 26px rgba(189, 83, 25, 0.16); }
-.dialog-box.freddie { --dialog-band: var(--accent); --dialog-band-hi: #c25c20; }
-.dialog-box.freddie .dialog-label { box-shadow: 0 2px 8px rgba(189, 83, 25, 0.18); }
-/* "you" answers back: mirrored — name on the right, speech to its left */
-.dialog-box.you { flex-direction: row-reverse; }
-.dialog-box.you .dialog-label { background: #fff; color: #4b5563; border-radius: 14px 14px 4px 14px; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.10); }
-.dialog-box.you .dialog-text { background: var(--primary-faint); color: #374151; border-radius: 16px 4px 16px 16px; box-shadow: none; }
-.dialog-box.you .dialog-text strong { color: #111; }
-.dialog-box.you .dialog-prefix { color: #888; }
-.dialog-box.you .dialog-text::before { left: auto; right: -5px; background: var(--primary-faint); }
+  color: #fff; margin: 0 0 4px; padding: 8px 18px; display: flex; align-items: center; gap: 10px;
+  background: linear-gradient(90deg, var(--dialog-band-hi), var(--dialog-band));
+  border-radius: 13px 13px 0 0; }
+/* the speech body */
+.dialog-box .dialog-text { padding: 10px 22px 0; }
+/* boxes without a label band still get body padding */
+.dialog-box > .dialog-text:first-child { padding-top: 16px; }
 /* Freddie — the M4 angel investor (approved addition 2026-07-09). Dark mode inherits:
    the .dialog-box dark background applies to all variants and --accent is redefined
    in the dark block, so no new dark rules are needed. */
 /* Freddie's colors now come from --dialog-accent on .dialog-box.freddie above. */
-.dialog-text { font-size: 17px; font-style: italic; line-height: 1.7; }  /* 17px sits between --font-m and --font-lg */
+.dialog-text { font-size: 17px; font-style: italic; color: #1e3a5f; line-height: 1.7; }  /* 17px sits between --font-m and --font-lg */  /* 17px sits between --font-m and --font-lg */
 .dialog-prefix { font-style: normal; color: #888; }
 
 /* ----- Insurance form layout ----- */
@@ -2353,11 +2347,9 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .xlsx-cell.more { font-style: italic; color: #888; }
 
 @media (prefers-color-scheme: dark) {
-  .dialog-box .dialog-text { box-shadow: 0 2px 6px rgba(0,0,0,0.4), 0 10px 26px rgba(0,0,0,0.3); }
-  .dialog-label { background: rgba(59,102,163,0.3); color: #a9c4e8; }
-  .dialog-box.you .dialog-label { background: #3a3848; color: #b0aec0; }
-  .dialog-box.you .dialog-text { background: #2b2933; color: #c8ccd8; }
-  .dialog-box.you .dialog-text::before { background: #2b2933; }
+  .dialog-box { background: #32303c; border-color: #3b66a3; box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 12px 30px rgba(0,0,0,0.3); }
+  .dialog-box.you { background: #2b2933; }
+  .dialog-text { color: #c8ccd8; }
   .things-sidebar { background: #32303c; border-color: var(--border); }
   .sidebar-item { background: #32303c; }
   .ins-form { background: #32303c; }
