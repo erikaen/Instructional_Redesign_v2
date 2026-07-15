@@ -405,3 +405,138 @@ var BR_WB = (function () {
     return { id: 'balance', label: 'Balance Sheet', kind: 'stmt' };
   };
 })();
+
+/* ============================================================================
+ * Statement-tab build player (PART 4).
+ *
+ * The extracted Steps workbooks are successive states of the student's own
+ * statement tab. Advancing replaces the whole sheet state; it never asks the
+ * student to move rows between the states. The data and BRW renderer load after
+ * this file, so both globals are deliberately looked up only inside API calls.
+ * ========================================================================== */
+(function () {
+  'use strict';
+
+  function escapeHTML(value) {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  BR_WB.buildSteps = function (workbookKey, opts) {
+    opts = opts || {};
+    var data = window.BR_STMT_DATA;
+    var workbook = data && data.workbooks && data.workbooks[workbookKey];
+    var sheets = workbook && workbook.sheets ? workbook.sheets : [];
+    var startAt = opts.startAt === undefined ? -Infinity : Number(opts.startAt);
+    var stopAt = opts.stopAt === undefined ? Infinity : Number(opts.stopAt);
+
+    return sheets.filter(function (sheet) {
+      return typeof sheet.order === 'number' && isFinite(sheet.order)
+        && Math.floor(sheet.order) === sheet.order
+        && sheet.order >= startAt && sheet.order <= stopAt;
+    }).slice().sort(function (a, b) {
+      return a.order - b.order;
+    }).map(function (sheet) {
+      return { order: sheet.order, stepLabel: sheet.stepLabel, sheet: sheet };
+    });
+  };
+
+  BR_WB.renderStatementStep = function (workbookKey, stepIndex, opts) {
+    opts = opts || {};
+    var steps = BR_WB.buildSteps(workbookKey, opts);
+    var index = Number(stepIndex);
+    if (Math.floor(index) !== index || index < 0 || index >= steps.length) return '';
+
+    var strip = '<div class="brw-step-strip">';
+    steps.forEach(function (step, i) {
+      var active = i === index;
+      strip += '<div class="brw-step' + (active ? ' is-active' : '') + '"'
+        + (active ? ' aria-current="step"' : '')
+        + ' data-step-order="' + step.order + '">' + escapeHTML(step.stepLabel) + '</div>';
+    });
+    strip += '</div>';
+
+    return strip + BRW.renderGrid(steps[index].sheet, opts.gridOpts || {});
+  };
+
+  BR_WB.mountStatementBuild = function (containerId, workbookKey, opts) {
+    opts = opts || {};
+    var container = document.getElementById(containerId);
+    if (!container) return '';
+
+    var steps = BR_WB.buildSteps(workbookKey, opts);
+    var index = 0;
+    var gateAdvance = typeof opts.gateAdvance === 'function'
+      ? opts.gateAdvance
+      : function () { return true; };
+
+    function checkGuard(guard, order, done) {
+      var result = guard(order);
+      if (result && typeof result.then === 'function') {
+        result.then(function (allowed) { done(allowed !== false); });
+      } else {
+        done(result !== false);
+      }
+    }
+
+    function render() {
+      if (!steps.length) {
+        container.innerHTML = '';
+        return '';
+      }
+
+      var html = BR_WB.renderStatementStep(workbookKey, index, opts);
+      if (index < steps.length - 1) {
+        html += '<button type="button" class="brw-step-advance">Next: '
+          + escapeHTML(steps[index + 1].stepLabel) + ' &rarr;</button>';
+      }
+      container.innerHTML = html;
+
+      if (index < steps.length - 1) {
+        var controls = container.getElementsByClassName('brw-step-advance');
+        var advanceControl = controls && controls[0];
+        if (advanceControl) {
+          var waiting = false;
+          advanceControl.addEventListener('click', function () {
+            if (waiting) return;
+            waiting = true;
+            advanceControl.disabled = true;
+            var currentOrder = steps[index].order;
+
+            function release() {
+              waiting = false;
+              advanceControl.disabled = false;
+            }
+            function advance() {
+              index++;
+              render();
+              if (typeof opts.onStep === 'function') opts.onStep(steps[index].order);
+            }
+
+            checkGuard(gateAdvance, currentOrder, function (gatePassed) {
+              if (!gatePassed) { release(); return; }
+
+              /* PART 5 hook: a Pick interaction may complete (or veto) here
+                 before this state machine reveals the next extracted state. */
+              if (typeof opts.beforeAdvance === 'function') {
+                checkGuard(opts.beforeAdvance, currentOrder, function (beforePassed) {
+                  if (beforePassed) advance();
+                  else release();
+                });
+              } else {
+                advance();
+              }
+            });
+          });
+        }
+      }
+      return html;
+    }
+
+    return render();
+  };
+})();

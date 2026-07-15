@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.3: Depreciation &middot; The Third Kind</title>
+  <title>Tutorial 3.3: Depreciation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -23,21 +23,14 @@
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">The Third Kind</div>
+    <div class="phase-title" id="phaseTitle">Depreciation</div>
 
     <div class="narrative-block">
-      <p>The wear on the tools is real used-up &mdash; a little of them was plainly used up during the season &mdash; and no row names it yet. The in-progress Income Statement lists the season&rsquo;s expenses by kind, but the last line is still a placeholder. Before a row can exist, someone has to put a <strong>number</strong> on it. Where would one come from?</p>
+      <p>Anna asked how the shop did this season. One kind of used-up is still missing from the reasons behind the answer. The Reasons tab is open to its GENERATED section below, with three rows not yet written. Walk it with Anna.</p>
     </div>
 
-    <div class="mc-card">
-      <div class="mc-q">How could the season put a number on the tools&rsquo; wear?</div>
-      <div class="mc-opts" id="mcOpts"></div>
-      <div class="feedback" id="mcqFb"></div>
-    </div>
-    <div class="btn-row" id="mcqBtnRow"></div>
-
-    <div id="wb"></div>
     <div id="anna"></div>
+    <div id="wb"></div>
     <div id="controls"></div>
 
   </div>
@@ -58,6 +51,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -73,113 +67,134 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
-/* ===== the income statement, one step from done ===== */
-var REVENUE = 6020, PARTS = 1200, RENT = 1950, DEP_TOOLS = 200, DEP_LAPTOP = 30;
-function xrow(cls, label, val){ return '<div class="xl-row '+cls+'"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
-function incomeSheet(cid, snap){
-  var h = xrow('xl-head', 'Income Statement &middot; June&ndash;August 2026', 'Amount');
-  h += xrow('xl-cat', '<strong>Revenue</strong> &mdash; the work delivered this season', BRW.dol(REVENUE));
-  h += xrow('xl-item', '<strong>Expenses</strong> &mdash; used up delivering it', '');
-  h += xrow('xl-item', 'Parts used', BRW.dol(PARTS));
-  h += xrow('xl-item', 'Rent used', BRW.dol(RENT));
-  if (recorded) {
-    h += xrow('xl-item', 'Depreciation &mdash; tools, equipment &amp; fixtures', BRW.dol(DEP_TOOLS));
-    h += xrow('xl-item', 'Depreciation &mdash; laptop', BRW.dol(DEP_LAPTOP));
-    h += xrow('xl-cat', 'Total expenses', BRW.dol(PARTS + RENT + DEP_TOOLS + DEP_LAPTOP));
-  } else {
-    h += xrow('xl-item', '<em>&hellip; one more kind of used-up, still to come</em> <span class="xl-new-tag">this tutorial</span>', '?');
-    h += xrow('xl-cat', 'Total expenses <em>so far</em>', BRW.dol(PARTS + RENT));
+/* ===== generated Reasons-tab view ===== */
+function sheetOf(wb, part) {
+  var ss = BR_STMT_DATA.workbooks[wb].sheets;
+  for (var i = 0; i < ss.length; i++) {
+    if (ss[i].name.indexOf(part) >= 0) {
+      var copy = JSON.parse(JSON.stringify(ss[i]));
+      copy.cells.forEach(function(c){
+        if(typeof c.value === 'string') c.value = c.value.replace(/Members/g, 'Member');
+      });
+      return copy;
+    }
   }
-  h += xrow('xl-total', '<strong>Net income</strong> &mdash; Revenue &minus; Expenses', '<span class="xl-new-tag">not yet</span>');
-  return h;
+  return null;
 }
-
-/* ===== the choice: no meter, no lapse — a rule must be chosen ===== */
-var MCQ = [
-  { id:'a', text:'Watch it, like parts &mdash; count what left the shelf.',
-    fb:'There&rsquo;s nothing to watch. Nothing left the shelf &mdash; the stand is right there, whole, doing its job. Direct observation needs something you can watch go, and wear isn&rsquo;t that.' },
-  { id:'b', text:'Let time lapse it, like rent &mdash; one season on the calendar, one share gone.',
-    fb:'Closer &mdash; time is part of it. But rent came priced by the month: the calendar did the whole job. The tools weren&rsquo;t bought by the season, and a stand that was used on 21 jobs isn&rsquo;t the same as one that sat. Time alone doesn&rsquo;t produce the number.' },
-  { id:'d', text:'Look it up &mdash; find what a season-old stand fetches on eBay, and charge the drop.',
-    fb:'The market would give you <em>a</em> number &mdash; tonight, for every tool, if you went hunting. But keeping that up, every tool, every season, isn&rsquo;t worth the effort &mdash; and it&rsquo;s the wrong question anyway: what the tools would <em>fetch</em> today, not how to spread what you paid for them across the seasons they serve. There&rsquo;s no true wear-cost sitting out there to look up &mdash; whatever number lands here will come from a rule, not a market. Something else is needed.' },
-  { id:'c', text:'None of those works &mdash; someone has to choose a rule.', ok:true,
-    fb:'Right. Nothing to watch go, no month that expires, and market prices answer a different question. If the season is to carry a share of the tools&rsquo; cost, the share has to come from a <strong>chosen rule</strong>.' }
-];
-var mcqSel = null, mcqSubmitted = false, recorded = false;
-
-function renderMcq(){
-  var h='';
-  MCQ.forEach(function(o,i){
-    var cls = 'mc-opt' + (!mcqSubmitted && mcqSel===i ? ' selected' : '') + (mcqSubmitted && mcqSel===i ? (o.ok?' correct':' wrong') : '') + (mcqSubmitted ? ' locked' : '');
-    h += '<div class="'+cls+'" onclick="selectMcq('+i+')"><div class="mc-letter">'+String.fromCharCode(65+i)+'</div><div>'+o.text+'</div></div>';
+function rowForLabel(sheet, label){
+  for(var i=0;i<sheet.cells.length;i++){
+    var c=sheet.cells[i];
+    if(c.c===2 && c.value===label) return c.r;
+  }
+  return 0;
+}
+function rowsContaining(sheet, text){
+  var rows=[];
+  sheet.cells.forEach(function(c){
+    if(c.c===2 && String(c.value).indexOf(text)>=0) rows.push(c.r);
   });
-  document.getElementById('mcOpts').innerHTML = h;
-  var fb = document.getElementById('mcqFb');
-  fb.className = 'feedback'+(mcqSubmitted?(MCQ[mcqSel].ok?' ok':' err')+' show':'');
-  fb.innerHTML = mcqSubmitted ? MCQ[mcqSel].fb : '';
-  document.getElementById('mcqBtnRow').innerHTML = !mcqSubmitted
-    ? '<button class="btn-continue" onclick="submitMcq()"'+(mcqSel===null?' disabled':'')+'>Submit</button>'
-    : (recorded ? '' : '<button class="btn-reset" onclick="resetMcq()" style="margin-left:auto;">Reset</button>');
+  return rows;
 }
-function selectMcq(i){
-  if(mcqSubmitted) return;
-  mcqSel = i;
-  renderMcq();
-}
-function submitMcq(){
-  if(mcqSel===null || mcqSubmitted) return;
-  mcqSubmitted = true;
-  if(MCQ[mcqSel].ok) playSuccess(); else playNope();
-  renderMcq(); renderTalk();
-  window.scrollTo(0, document.body.scrollHeight);
-}
-function resetMcq(){
-  if(recorded) return;
-  mcqSel = null; mcqSubmitted = false;
-  renderMcq(); renderTalk();
+function expandGroup(containerId, groupId){
+  var container=document.getElementById(containerId);
+  if(!container) return;
+  var toggles=container.getElementsByClassName('brw-og-toggle');
+  var rows=container.getElementsByClassName('brw-og-row');
+  for(var i=0;i<toggles.length;i++){
+    if(toggles[i].getAttribute('data-brw-group')===groupId){
+      toggles[i].setAttribute('aria-expanded','true');
+      toggles[i].textContent='−';
+    }
+  }
+  for(var j=0;j<rows.length;j++){
+    if(rows[j].getAttribute('data-brw-group')===groupId) rows[j].classList.remove('is-collapsed');
+  }
 }
 
+var reasonsSheet=sheetOf('bike-repair-end','Reasons');
+var depreciationRows=rowsContaining(reasonsSheet,'Depreciation');
+var generatedStart=rowForLabel(reasonsSheet,'GENERATED');
+var withdrawnStart=rowForLabel(reasonsSheet,'WITHDRAWN');
+var outsideGeneratedRows=[];
+for(var r=1;r<=reasonsSheet.rows.length;r++){
+  if(r!==1 && (r<generatedStart || r>=withdrawnStart)) outsideGeneratedRows.push(r);
+}
+function mountReasons(reveal){
+  var hidden=outsideGeneratedRows.slice();
+  if(!reveal) hidden=hidden.concat(depreciationRows);
+  var gridId=reveal?'reasonsAfterWrite':'reasonsBeforeWrite';
+  BRW.mountGrid('wb',reasonsSheet,{gridId:gridId,hiddenRows:hidden});
+  expandGroup('wb','og-2');
+  expandGroup('wb','og-3');
+}
+
+/* ===== Anna walks the GENERATED reasons ===== */
+var walkStep=0, recorded=false;
+var annaScript=[
+  "Let's look back at the reasons we wrote in the Generated part of the tab. Every one got written because we used something up. We used the rent as the month passed — a reason. We used parts as we did jobs — a reason. Things we charged on the card and used — a reason. Using something up is what made us write it down.",
+  "Now look at what we haven't touched: the Laptop, the Fixtures, and the Tools &amp; Repair Equipment. Eventually they won't be providing any future benefit — tools get worn out, the laptop becomes obsolete. But nothing ever stopped us and made us write a reason. No sale, no bill, no empty shelf.",
+  "An asset is a present right to a future benefit. When that benefit drains away, the asset has to come down — and if no transaction will write that reason for us, we write it ourselves. That reason is depreciation. We spread each thing's cost over the time we expect to use it — Tools &amp; Repair Equipment, 160; Fixtures, 40; the Laptop, 30 — and show them together as one line, 230, on the income statement."
+];
 function renderTalk(){
   var anna='', ctrl='';
-  if(!mcqSubmitted || !MCQ[mcqSel].ok){
-    document.getElementById('anna').innerHTML=''; document.getElementById('controls').innerHTML='';
-    return;
-  }
   if(!recorded){
-    anna = annaBox('Accountants chose one. Spread the thing&rsquo;s <strong>cost</strong> over the seasons of its <strong>useful life</strong>, and charge each season its share &mdash; the simplest rule splits the cost evenly, the same share every season, straight down the line. The share has a name: <strong>depreciation</strong>. Be clear about what it is: an <strong>allocation</strong> &mdash; a chosen convention. Not use anyone observed, not the mere passage of time, and not a market price looked up &mdash; a rule standing in for a mix of time, wear and tear, and judgment. The useful life and the spreading rule are <em>choices</em>, and people argue about them. For the shop, each share is just cost &divide; useful life: <strong>$200</strong> this season on the tools, equipment &amp; fixtures, and <strong>$30</strong> on the laptop &mdash; two separate lines, so each can be argued with on its own. The useful lives and the exact schedule behind those two numbers follow generally accepted accounting principles &mdash; the specific rules for depreciating exactly this kind of asset. That&rsquo;s a course of its own. For now, take <strong>$200</strong> and <strong>$30</strong> as given, the same way you took the original purchase prices as given.');
-    ctrl = '<button class="btn-continue btn-block" onclick="recordWear()">Record the wear &rarr;</button>';
+    anna=annaBox(annaScript[walkStep]);
+    if(walkStep===0){
+      ctrl='<button class="btn-continue btn-block" onclick="advanceWalk()">What hasn&rsquo;t been touched? &rarr;</button>';
+    } else if(walkStep===1){
+      ctrl='<button class="btn-continue btn-block" onclick="advanceWalk()">Name the missing reason &rarr;</button>';
+    } else {
+      ctrl='<button class="btn-continue btn-block" onclick="writeReasons()">Write the reasons &rarr;</button>';
+    }
   } else {
-    anna = annaBox('There &mdash; the third kind of used-up, on the tab at last: two <strong>Depreciation</strong> rows land at the bottom of GENERATED like every other reason &mdash; <strong>$200</strong> for the tools, equipment and fixtures, <strong>$30</strong> for the laptop. Flip to the Income sheet: the expense list reads complete now &mdash; Parts <strong>$1,200</strong> &middot; Rent <strong>$1,950</strong> &middot; Depreciation <strong>$200 + $30</strong> &rarr; <strong>Expenses $3,380</strong>, the placeholder gone. And flip to Assets: the Tools &amp; Repair Equipment line carries <strong>&minus;$160</strong> now, Fixtures <strong>&minus;$40</strong>, the Laptop <strong>&minus;$30</strong>. The wear didn&rsquo;t just cost the season &mdash; it lowered what the records carry.');
-    ctrl = insightBox('An allocation, openly chosen',
-        '<p>The $200 isn&rsquo;t a reading of anything. It&rsquo;s the season&rsquo;s <strong>share of a cost</strong>, set by a rule someone chose &mdash; and back in May, you took none, which was also a choice. That&rsquo;s not a flaw to hide. It&rsquo;s what this number <em>is</em>.</p>')
-      + '<button class="btn-continue btn-block" onclick="nav(\'33-3-The-Bottom-Line.html\')">What the wear did to the books &rarr;</button>';
+    ctrl=insightBox('The missing reasons are written',
+      '<p>The three rows total <strong>$230</strong>. The GENERATED balance is <strong>$170</strong> at June 1 and <strong>$2,810</strong> at August 31. The formatted income statement will show the three amounts together as one <strong>Depreciation</strong> line.</p>')
+      +insightBox('The dated line is the scoreboard',
+        '<p>The number on the August 31 line changed from <strong>$3,040</strong> to <strong>$2,810</strong>. The wear is now in the books.</p>')
+      +annaBox('They&rsquo;re expense reasons &mdash; we just wrote them &mdash; and they&rsquo;re their own kind: <strong>Depreciation</strong>. I&rsquo;ll file them with the <strong>WORKING SHEET</strong>, already grouped. No re-sorting.')
+      +'<div id="expenseKindsGrid"></div>'
+      +'<button class="btn-continue btn-block" onclick="nav(\'33-3-The-Bottom-Line.html\')">Format the statement &rarr;</button>';
   }
-  document.getElementById('anna').innerHTML = anna;
-  document.getElementById('controls').innerHTML = ctrl;
+  document.getElementById('anna').innerHTML=anna;
+  document.getElementById('controls').innerHTML=ctrl;
+  if(recorded){
+    var kindSheet=sheetOf('income-statement-steps','4 ');
+    var netIncomeRow=rowForLabel(kindSheet,'Net income');
+    BR_WB.mountStatementBuild('expenseKindsGrid','income-statement-steps',{
+      startAt:4,
+      stopAt:4,
+      gridOpts:{
+        gridId:'depreciation-kind-grid',
+        hiddenRows:netIncomeRow?[netIncomeRow]:[]
+      }
+    });
+  }
   if(window.lucide) lucide.createIcons();
 }
-
-function recordWear(){
+function advanceWalk(){
+  if(recorded || walkStep>=2) return;
+  playClick();
+  walkStep++;
+  renderTalk();
+  window.scrollTo(0,0);
+}
+function writeReasons(){
+  if(recorded) return;
   playClick(); playSuccess();
-  recorded = true;
-  var snap2 = BR_WB.snapshot({ withReceivable:true, withDepreciation:true });
-  snap2.tabs.push(BR_WB.balanceTab(['jun1']));
-  snap2.tabs.push({ id:'income', label:'Income' });
-  BR_WB.tagTabKinds(snap2);
-  BRW.update('wb', snap2);
-  BRW.tab('wb', 'reasons');
-  renderMcq(); renderTalk();
-  window.scrollTo(0, document.body.scrollHeight);
+  recorded=true;
+  mountReasons(true);
+  renderTalk();
+  window.scrollTo(0,document.body.scrollHeight);
 }
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Depreciation', def:'A season&rsquo;s share of a long-lived thing&rsquo;s cost, charged as an expense by a chosen rule. An allocation &mdash; a convention standing in for time, wear and tear, and judgment together &mdash; not observed use, not mere calendar, not a market price.' },
-  { term:'Allocation', def:'Splitting one cost across the periods it serves, by a rule someone chose. The rule has authors and room to argue &mdash; useful life and method are choices.' },
-  { term:'Useful life', def:'How many seasons the thing is expected to serve &mdash; a judgment, made up front, that sets each season&rsquo;s share.' }
+  { term:'Asset', def:'A present right to a future benefit.' },
+  { term:'Depreciation', def:'A reason written when part of an asset&rsquo;s future benefit was used up and no sale, bill, or other transaction recorded that change.' },
+  { term:'GENERATED', def:'The part of the Reasons tab for reasons created as the shop operates.' }
 ];
 function openGlossary(){
-  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(g){
     return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
   }).join('');
   document.getElementById('glossaryOverlay').classList.add('open');
@@ -187,18 +202,12 @@ function openGlossary(){
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
-document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
 
-/* ===== init — the graduated workbook, the income sheet one step from done ===== */
-window.devFill = function(){ mcqSel=3; mcqSubmitted=true; renderMcq(); if(!recorded) recordWear(); };
-BRW.registerSheet('income', incomeSheet);
-var snap = BR_WB.snapshot({ withReceivable:true });
-snap.tabs.push(BR_WB.balanceTab(['jun1']));
-snap.tabs.push({ id:'income', label:'Income' });
-BR_WB.tagTabKinds(snap);
-BRW.mount('wb', snap);
-BRW.tab('wb', 'income');
-renderMcq(); renderTalk();
+/* ===== init ===== */
+window.devFill=function(){ walkStep=2; if(!recorded) writeReasons(); };
+mountReasons(false);
+renderTalk();
 </script>
   <script src="dev.js"></script>
 </body>

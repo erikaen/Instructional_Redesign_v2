@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DEV — statement-facsimile engine smoke</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+  body { font-family: sans-serif; margin: 2rem; max-width: 1100px; }
+  section { margin-bottom: 3rem; border-top: 2px solid #ccc; padding-top: 1rem; }
+  h2 { font-size: 1rem; color: #555; }
+</style>
+</head>
+<body>
+<h1>Engine smoke (instructor-side; not a student page)</h1>
+
+<section>
+  <h2>1 — BRW.renderGrid: Bike-Repair-End!Assets (collapse-on-generate)</h2>
+  <div id="gridAssets"></div>
+</section>
+
+<section>
+  <h2>2 — Same ledger, depreciation rows hidden (re-sum: Tools 1,600 / Laptop 610)</h2>
+  <div id="gridAssetsPre"></div>
+</section>
+
+<section>
+  <h2>3 — BR_WB.mountStatementBuild: income statement, steps 0–5</h2>
+  <div id="stmtBuild"></div>
+</section>
+
+<section>
+  <h2>4 — BRW.mountSorter: '3 · Pick — kind of expense' (panel + live column-C fill)</h2>
+  <div id="sorterPanel"></div>
+  <div id="sorterGrid"></div>
+</section>
+
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
+<script>
+function sheetOf(wb, part) {
+  var ss = BR_STMT_DATA.workbooks[wb].sheets;
+  for (var i = 0; i < ss.length; i++) if (ss[i].name.indexOf(part) >= 0) return ss[i];
+  return null;
+}
+var assets = sheetOf('bike-repair-end', 'Assets');
+BRW.mountGrid('gridAssets', assets, { gridId: 'gA' });
+var depRows = [];
+assets.cells.forEach(function (c) {
+  if (c.c === 2 && String(c.value).indexOf('Depreciation') >= 0) depRows.push(c.r);
+});
+BRW.mountGrid('gridAssetsPre', assets, { gridId: 'gB', hiddenRows: depRows });
+BR_WB.mountStatementBuild('stmtBuild', 'income-statement-steps', {});
+var pick = sheetOf('income-statement-steps', '3 ');
+var pickDepRows = [];
+pick.cells.forEach(function (c) {
+  if (c.c === 3 && c.value === 'Depreciation') pickDepRows.push(c.r);
+});
+BRW.mountSorter('sorterPanel', 'sorterGrid', pick, {
+  diagnosticRows: pickDepRows,
+  onComplete: function () { console.log('SMOKE: sorter complete'); }
+});
+console.log('SMOKE: all four mounts executed');
+</script>
+</body>
+</html>

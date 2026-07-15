@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.2: The Income Statement &middot; The Work, Not the Cash</title>
+  <title>Tutorial 3.2: The Income Statement &middot; Revenue Earned on Account</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,17 +16,17 @@
     <div class="tut-header">
       <div class="tut-header-main">
         <h1>Tutorial 2: The Income Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 3 of 5</p>
+        <p class="tut-header-sub">Module 3 &middot; Reading the Season&rsquo;s Activity &middot; ~10 min &middot; Phase 3 of 3</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">The Work, Not the Cash</div>
+    <div class="phase-title" id="phaseTitle">Revenue Earned on Account</div>
 
     <div class="narrative-block">
-      <p>You sorted the season into <strong>Revenue</strong> and <strong>Expense</strong> on the working sheet &mdash; and left one loose end. In the Expense band sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong>, with no revenue across from it. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job. The job log will say what happened.</p>
+      <p>You sorted the season&rsquo;s generated rows into <strong>Revenue</strong> and <strong>Expense</strong> on the working statement view &mdash; and left one loose end. In the Expense band sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong>, with no revenue across from it. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job. Check the job log to find what happened.</p>
     </div>
 
     <div id="wb"></div>
@@ -36,6 +36,10 @@
     <button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every repair this summer</button>
 
     <div id="anna"></div>
+    <div id="scoreboardWrap" hidden>
+      <div class="next-phase-msg"><strong>Reasons tab &middot; GENERATED</strong><br>The dated lines are the scoreboard. Before you booked Ridgeline, the August 31 line read <strong>$2,740</strong>. It now reads <strong>$3,040</strong>. Your own dated line moved by $300.</div>
+      <div id="scoreboard"></div>
+    </div>
     <div id="controls"></div>
 
   </div>
@@ -67,6 +71,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -82,43 +87,82 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 var allCharges = BR_JOBS.reduce(function(s,j){ return s+j.charge; }, 0);            // 6,020 — every repair
 var ridge = BR_JOBS.filter(function(j){ return j.collected===false; })[0];          // done but not paid
 var smith = BR_JOBS.filter(function(j){ return j.pay.indexOf('Deposit')>=0; })[0];  // cash came last period
-var moneyInNovice = allCharges - ridge.charge;                                       // 5,720 — what got jotted
 var inJobs = BR_JOBS.filter(function(j){ return j.collected; }).length;             // 20
 var totalJobs = BR_JOBS.length;                                                      // 21
 
-/* ===== the sorted working sheet — Revenue / Expense bands =====
-   The season's rows stay in the continuous GENERATED pile on the Reasons tab;
-   this is the sort-view of those rows, rendered statically with the shared
-   tagger classes. Ridgeline's delivery row joins the Revenue band at the reveal. */
-var RIDGE_ROW = { account:'Repair delivered', reason:'Ridgeline Trail Crew, billed net 15 (unpaid)', delta:ridge.charge };
-function seasonRows(withRec){
-  var gen = BR_WB.generatedRows();
-  if(withRec) gen.push({ flow:'in', account:RIDGE_ROW.account, reason:RIDGE_ROW.reason, delta:RIDGE_ROW.delta });
-  return {
-    rev: gen.filter(function(r){ return r.flow==='in'; }),
-    exp: gen.filter(function(r){ return r.flow==='up'; })
-  };
+/* ===== extracted workbook views ===== */
+function sheetOf(workbookKey,namePart){
+  var sheets=BR_STMT_DATA.workbooks[workbookKey].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name.indexOf(namePart)>=0) return sheets[i];
+  return null;
 }
-function bandFmt(n){ return n<0 ? '('+BRW.dol(-n)+')' : BRW.dol(n); }
-function bandRow(label, amt){
-  return '<div class="tagger-row"><div class="tagger-label">'+label+'</div><div class="tagger-amt">'+BRW.signed(amt)+'</div><div></div></div>';
+function rowsByLabel(sheet,pattern){
+  var rows=[];
+  (sheet.cells||[]).forEach(function(cell){
+    if(cell.c===2 && pattern.test(String(cell.value||''))) rows.push(cell.r);
+  });
+  return rows;
 }
-function bandSubtotal(label, amt){
-  return '<div class="tagger-subtotal"><div>'+label+' subtotal</div><div class="tagger-amt">'+bandFmt(amt)+'</div><div></div></div>';
+function accountBlockRows(sheet,heading){
+  var labels=(sheet.cells||[]).filter(function(cell){ return cell.c===2; })
+    .sort(function(a,b){ return a.r-b.r; });
+  var start=0,end=0;
+  for(var i=0;i<labels.length;i++){
+    if(!start && heading.test(String(labels[i].value||''))){ start=labels[i].r; continue; }
+    if(start && /^Balance,/.test(String(labels[i].value||''))){ end=labels[i].r; break; }
+  }
+  var rows=[];
+  for(var row=start;row && row<=end;row++) rows.push(row);
+  return rows;
 }
-function renderSheet(withRec){
-  var s = seasonRows(withRec);
-  var revTotal = s.rev.reduce(function(a,r){ return a+r.delta; }, 0);
-  var expTotal = s.exp.reduce(function(a,r){ return a+r.delta; }, 0);
-  var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s reasons &mdash; sorted</div>'
-        + '<div class="cash-sheet-sub">Revenue, the work delivered &middot; Expense, what got used up delivering</div></div>';
-  h += '<div class="tagger-band"><span>Revenue</span></div>';
-  s.rev.forEach(function(r){ h += bandRow(r.account+' &mdash; '+r.reason, r.delta); });
-  h += bandSubtotal('Revenue', revTotal);
-  h += '<div class="tagger-band"><span>Expense</span></div>';
-  s.exp.forEach(function(r){ h += bandRow(r.account+' &mdash; '+r.reason, r.delta); });
-  h += bandSubtotal('Expense', expTotal);
-  document.getElementById('sheet').innerHTML = h;
+function rowsOutsideSection(sheet,sectionName){
+  var headers=(sheet.cells||[]).filter(function(cell){
+    return cell.c===2 && cell.bold && /^(CONTRIBUTED|GENERATED|WITHDRAWN)$/.test(String(cell.value||''));
+  }).sort(function(a,b){ return a.r-b.r; });
+  var maxRow=(sheet.cells||[]).reduce(function(max,cell){ return Math.max(max,cell.r||0); },0);
+  var rows=[];
+  for(var i=0;i<headers.length;i++){
+    if(String(headers[i].value)===sectionName) continue;
+    var end=i+1<headers.length ? headers[i+1].r-1 : maxRow;
+    for(var row=headers[i].r;row<=end;row++) rows.push(row);
+  }
+  return rows;
+}
+var statementSheet=sheetOf('income-statement-steps','2 ');
+var assetsSheet=sheetOf('bike-repair-end','Assets');
+var reasonsSheet=sheetOf('bike-repair-end','Reasons');
+var statementDepRows=rowsByLabel(statementSheet,/^Depreciation/);
+var statementReceivableRows=rowsByLabel(statementSheet,/^Repair delivered.*Ridgeline/);
+var assetsDepRows=rowsByLabel(assetsSheet,/^Depreciation/);
+var assetsReceivableRows=accountBlockRows(assetsSheet,/^Accounts Receivable$/);
+var reasonsDepRows=rowsByLabel(reasonsSheet,/^Depreciation/);
+var nonGeneratedRows=rowsOutsideSection(reasonsSheet,'GENERATED');
+
+function mountBeforeDiscovery(){
+  BRW.mountGrid('wb',assetsSheet,{
+    gridId:'assets-pre-receivable',
+    hiddenRows:assetsDepRows.concat(assetsReceivableRows)
+  });
+  BRW.mountGrid('sheet',statementSheet,{
+    gridId:'income-pre-receivable',
+    hiddenRows:statementDepRows.concat(statementReceivableRows)
+  });
+}
+function mountAfterDiscovery(){
+  BRW.mountGrid('wb',assetsSheet,{
+    gridId:'assets-post-receivable',
+    hiddenRows:assetsDepRows
+  });
+  BRW.mountGrid('sheet',statementSheet,{
+    gridId:'income-post-receivable',
+    hiddenRows:statementDepRows
+  });
+}
+function mountReasonsScoreboard(){
+  BRW.mountGrid('scoreboard',reasonsSheet,{
+    gridId:'reasons-post-receivable',
+    hiddenRows:[1].concat(nonGeneratedRows,reasonsDepRows)
+  });
 }
 
 /* ===== state ===== */
@@ -130,21 +174,21 @@ function insightBox(label,inner){ return '<div class="insight-box"><div class="i
 function renderTalk(){
   var anna='', ctrl='';
   if(step===0){
-    anna = annaBox('Revenue should hold <strong>every</strong> job the work handed over. But the job log shows <strong>'+totalJobs+'</strong> repairs finished this summer, and only <strong>'+inJobs+'</strong> of them ever got a row on the working sheet. The missing one is the job whose parts you already jotted. Find it &mdash; it&rsquo;s marked <strong>outstanding</strong>.');
+    anna = annaBox('Revenue should include <strong>every</strong> job the shop handed over. There are <strong>'+totalJobs+'</strong> repairs finished this summer in the job log, and only <strong>'+inJobs+'</strong> of them ever got a row on the working statement view. The missing one is the job whose parts you already jotted. Find it &mdash; it&rsquo;s marked <strong>outstanding</strong>.');
     ctrl = '<div class="next-phase-msg">Open the job log above and spot the repair that was finished but never recorded.</div>'
       + '<button class="btn-continue btn-block" onclick="setStep(1)">I see the outstanding one &rarr;</button>';
   } else if(step===1){
-    anna = annaBox('There it is &mdash; <strong>'+ridge.customer+'</strong>, '+ridge.date+'. You did the whole job: '+ridge.hours+' hours, <strong>'+BRW.dol(ridge.partsCost)+'</strong> of parts off the shelf (that side you <em>did</em> jot &mdash; it&rsquo;s already in the Expense band). You billed them <strong>'+BRW.dol(ridge.charge)+'</strong>, net 15. No cash came, so no row ever got written. But the work went <em>out the door</em>. Does the season really not count that delivery?');
+    anna = annaBox('There it is &mdash; <strong>'+ridge.customer+'</strong>, '+ridge.date+'. You did the whole job: '+ridge.hours+' hours, <strong>'+BRW.dol(ridge.partsCost)+'</strong> of parts off the shelf (that side you <em>did</em> jot &mdash; it&rsquo;s already in the Expense band). You billed them <strong>'+BRW.dol(ridge.charge)+'</strong>, net 15. No cash came, so no row ever got written. But the work went <em>out the door</em>. Should that delivery really be absent from the season&rsquo;s Revenue?');
     ctrl = insightBox('It counts when the work is delivered, not when the cash comes',
         '<p>Revenue never meant &ldquo;cash arrived&rdquo; &mdash; it records the work going out the door, and Ridgeline&rsquo;s did, on Aug 28. The row belongs in the Revenue band now; the cash follows on its own schedule.</p>'
-        +'<p>And there&rsquo;s a second thing: '+ridge.customer+' still <strong>owes</strong> '+BRW.dol(ridge.charge)+'. That unpaid promise is something the shop now holds &mdash; a right to be paid. A new line in Assets.</p>')
+        +'<p>And there&rsquo;s a second thing: '+ridge.customer+' still <strong>owes</strong> '+BRW.dol(ridge.charge)+'. That right to be paid gets a new line in Assets: Accounts Receivable.</p>')
       + '<button class="btn-continue btn-block" onclick="setStep(2)">Put it on the books &rarr;</button>';
   } else {
-    anna = annaBox('There &mdash; a brand-new line in Assets: <strong>Accounts Receivable, '+BRW.dol(ridge.charge)+'</strong>, '+ridge.customer+'&rsquo;s unpaid promise. And look at the working sheet: Revenue now reads <strong>'+BRW.dol(allCharges)+'</strong> &mdash; complete. Every job in the log has its row on the sheet. Now think about <strong>'+smith.customer+'</strong>&rsquo;s frame, in that same Revenue band at <strong>'+BRW.dol(smith.charge)+'</strong> &mdash; his cash came in <em>last</em> period as a deposit, but the frame went out the door <em>this</em> summer. '+ridge.customer+': work now, cash later. '+smith.customer+': cash earlier, work now. Neither row is timed to the cash. Both are timed to the <strong>work</strong>.');
+    anna = annaBox('There &mdash; a brand-new line in Assets: <strong>Accounts Receivable, '+BRW.dol(ridge.charge)+'</strong>, for '+ridge.customer+'&rsquo;s unpaid bill. And look at the working statement view: Revenue now reads <strong>'+BRW.dol(allCharges)+'</strong> &mdash; complete. Every job in the log now has a Revenue row. Think about <strong>'+smith.customer+'</strong>&rsquo;s frame, in that same Revenue band at <strong>'+BRW.dol(smith.charge)+'</strong> &mdash; his cash came in <em>last</em> period as a deposit, but the frame went out the door <em>this</em> summer. '+ridge.customer+': work now, cash later. '+smith.customer+': cash earlier, work now. Neither row is timed to the cash. Both are timed to the <strong>work</strong>.');
     ctrl = insightBox('The work is what counts',
-        '<p>'+ridge.customer+': work done <strong>now</strong>, cash <strong>later</strong> &mdash; on the sheet now (and a receivable until they pay). '+smith.customer+': cash <strong>earlier</strong>, work done <strong>now</strong> &mdash; on the sheet now too. The sheet follows the <strong>work</strong>, whichever way the cash runs. And the books stay balanced: assets went up '+BRW.dol(ridge.charge)+', and so did GENERATED &mdash; flip to Reasons and the row is there too; the sheet&rsquo;s Revenue band just reads it.</p>')
-      + '<div class="next-phase-msg">The working sheet is complete and honest now. Next: lay it out as the statement itself.</div>'
-      + '<button class="btn-continue btn-block" onclick="nav(\'32-4-name-the-income-statement.html\')">Lay out the statement &rarr;</button>';
+        '<p>'+ridge.customer+': work done <strong>now</strong>, cash <strong>later</strong> &mdash; recorded now (and a receivable until they pay). '+smith.customer+': cash <strong>earlier</strong>, work done <strong>now</strong> &mdash; recorded now too. The rows are timed to the <strong>work</strong>, whichever way the cash runs. The records remain balanced: assets went up '+BRW.dol(ridge.charge)+', and so did GENERATED. On the Reasons tab, the generated row remains where it was recorded; the Revenue band is a sorting of it.</p>')
+      + '<div class="next-phase-msg">The working sheet now includes every job. Next, go straight to the Expenses and group them by kind.</div>'
+      + '<button class="btn-continue btn-block" onclick="nav(\'33-1-Two-Kinds-of-Used-Up.html\')">Group the expenses &rarr;</button>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
@@ -156,14 +200,10 @@ function setStep(n){
   if(n>step) playSuccess();
   step = n;
   if(step===2){
-    // grow the real workbook: Accounts Receivable appears in Assets, and the working sheet gains Ridgeline's row
-    var snap2 = BR_WB.snapshot({ withReceivable:true });
-    snap2.tabs.push(BR_WB.balanceTab(['jun1']));
-    BR_WB.tagTabKinds(snap2);
-    BRW.update('wb', snap2);
-    BRW.tab('wb', 'assets');
-    BRW.x('wb', 'a', 1);   // open the new Accounts Receivable line
-    renderSheet(true);      // Revenue now 6,020 — complete
+    // Re-mount the extracted views with Ridgeline revealed; ruled totals re-sum.
+    mountAfterDiscovery();
+    document.getElementById('scoreboardWrap').hidden=false;
+    mountReasonsScoreboard();
   }
   renderTalk();
   window.scrollTo(0, document.body.scrollHeight);
@@ -194,7 +234,7 @@ function closeTicket(){ document.getElementById('ticketOverlay').classList.remov
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Accounts Receivable', def:'A right to be paid later for work already done &mdash; an asset. Ridgeline owes $300 for a finished job; until they pay, the shop holds the promise.' },
+  { term:'Accounts Receivable', def:'A right to be paid later for work already done &mdash; an asset. Ridgeline owes $300 for a finished job; the line remains in Assets until payment.' },
   { term:'On account', def:'Billed, to be paid later (here, net 15 &mdash; within 15 days). The work is done, so the delivery counts <em>now</em> &mdash; the cash follows on its own schedule.' },
   { term:'Customer Deposit', def:'Cash taken before the work is done. The delivery counts only once the work is finished &mdash; which is why Smith&rsquo;s frame lands this season, not last.' }
 ];
@@ -209,14 +249,9 @@ function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeTicket(); } });
 
-/* ===== init — the workbook (plain continuous Reasons tab) + the sorted working sheet ===== */
+/* ===== init — extracted Assets ledger + pre-receivable statement view ===== */
 window.devFill = function(){ setStep(2); };
-var snap = BR_WB.snapshot();
-snap.tabs.push(BR_WB.balanceTab(['jun1']));
-BR_WB.tagTabKinds(snap);
-BRW.mount('wb', snap);
-BRW.tab('wb', 'reasons');
-renderSheet(false);   // Revenue 5,720 / Expense (3,150) — Ridgeline's row still missing
+mountBeforeDiscovery(); // Revenue 5,720 / Expenses 3,150; receivable and depreciation rows hidden
 renderTalk();
 </script>
   <script src="dev.js"></script>

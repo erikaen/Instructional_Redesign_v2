@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.3: Depreciation &middot; The Bottom Line</title>
+  <title>Tutorial 3.3: Depreciation &middot; The Income Statement</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -23,14 +23,15 @@
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">The Bottom Line</div>
+    <div class="phase-title" id="phaseTitle">The Income Statement</div>
 
     <div class="narrative-block">
-      <p>The Expenses tab is complete. Before the bottom line, one look at what the wear did to the <em>other</em> side of the books.</p>
+      <p>The working sheet holds the season&rsquo;s GENERATED rows, now grouped: <strong>Revenue $6,020</strong>; <strong>Parts Used $1,200</strong>; <strong>Rent $1,950</strong>; and <strong>Depreciation $230</strong>. The detail is ready. Now format the statement.</p>
     </div>
 
     <div id="wb"></div>
     <div id="anna"></div>
+    <div id="tie"></div>
     <div id="controls"></div>
 
   </div>
@@ -51,6 +52,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -65,53 +67,78 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
-/* ===== the completed income statement, read off the sorted season rows ===== */
-var REVENUE = 6020, PARTS = 1200, RENT = 1950, DEP_TOOLS = 200, DEP_LAPTOP = 30;
-var EXPENSES = PARTS + RENT + DEP_TOOLS + DEP_LAPTOP;   // 3,380
-var NET_INCOME = REVENUE - EXPENSES;                     // 2,640
+/* ===== the completed income statement, read off the grouped season rows ===== */
+var REVENUE = 6020, EXPENSES = 3380, NET_INCOME = 2640;
 
 /* ===== state ===== */
 var step = 0;
-var snap = BR_WB.snapshot({ withReceivable:true, withDepreciation:true });
-snap.tabs.push(BR_WB.balanceTab(['jun1']));
-BR_WB.tagTabKinds(snap);
+
+function sheetOf(wb, part) {
+  var ss = BR_STMT_DATA.workbooks[wb].sheets;
+  for (var i = 0; i < ss.length; i++) if (ss[i].name.indexOf(part) >= 0) return ss[i];
+  return null;
+}
+
+var reasons = sheetOf('bike-repair-end', 'Reasons');
+
+/* Keep one section of the full sheet. Detail rows stay in the sheet so the
+   extracted ruled totals keep their workbook values; the outline renders the
+   long detail collapsed behind the student's dated lines. */
+function hideOutsideSection(sheet, label){
+  var headers = (sheet.cells || []).filter(function(c){
+    return c.c===2 && c.bold && typeof c.value==='string';
+  }).sort(function(a,b){ return a.r-b.r; });
+  var start = 1, end = (sheet.rows || []).length + 1;
+  for(var i=0;i<headers.length;i++){
+    if(headers[i].value===label){
+      start = headers[i].r;
+      if(headers[i+1]) end = headers[i+1].r;
+      break;
+    }
+  }
+  var hidden = [];
+  for(var r=1;r<=sheet.rows.length;r++){
+    if(r<start || r>=end) hidden.push(r);
+  }
+  return hidden;
+}
+
+function renderTie(){
+  var tie = document.getElementById('tie');
+  if(step===0){ tie.innerHTML=''; return; }
+  tie.innerHTML = '<div class="narrative-block"><p><strong>A quiet tie.</strong> Read the two ruled lines you drew on GENERATED. June 1 says <strong>$170</strong>. August 31 says <strong>$2,810</strong>.</p></div><div id="generatedTieGrid"></div>';
+  BRW.mountGrid('generatedTieGrid', reasons, {
+    gridId:'income-statement-generated-tie',
+    hiddenRows:hideOutsideSection(reasons, 'GENERATED')
+  });
+}
 
 function renderTalk(){
   var anna='', ctrl='';
   if(step===0){
-    anna = annaBox('Look at the <strong>Laptop</strong> line: cost <strong>$610</strong>, this season&rsquo;s wear <strong>&minus;$30</strong> &mdash; the records carry it at <strong>$580</strong> now. That number has a name: <strong>carrying value</strong>, also called <strong>book value</strong> &mdash; what&rsquo;s left of the cost after the depreciation charged so far. Be clear about what it is: a cost walking down a <em>chosen path</em>. You could ask the market instead &mdash; comparable laptops fetch something on eBay tonight &mdash; and the records <em>deliberately don&rsquo;t</em>: chasing that price every season isn&rsquo;t worth the effort, and it isn&rsquo;t what depreciation is. The cost walks its chosen path; the market answers its own question. Don&rsquo;t expect book and market to agree. Hold onto that &mdash; it matters later.');
-    ctrl = insightBox('Carrying value is a path, not a price',
-        '<p>Cost, minus the depreciation charged so far. It tells you where the number has <em>been</em> &mdash; not what the laptop would fetch. And unlike rent &mdash; where a lapsed month is simply gone &mdash; a fully depreciated tool is still on the bench, and may still be worth something. The path runs out; the thing doesn&rsquo;t.</p>')
-      + '<button class="btn-continue btn-block" onclick="finishStatement()">Finish the income statement &rarr;</button>';
+    anna = annaBox('The sorting work is done. Format the grouped sheet: fold Revenue to one line, keep one line for each expense kind, and rule the totals.');
+    ctrl = insightBox('The format carries the answer',
+        '<p>Revenue becomes one <strong>$6,020</strong> line. The expense kinds become <strong>Parts Used $1,200</strong>, <strong>Rent $1,950</strong>, and one <strong>Depreciation $230</strong> line.</p>');
   } else {
-    anna = annaBox('There it is &mdash; the bottom line, at last: <strong>Net income, '+BRW.dol(NET_INCOME)+'</strong>. The shop delivered <strong>'+BRW.dol(REVENUE)+'</strong> of work this season and used up <strong>'+BRW.dol(EXPENSES)+'</strong> getting it done &mdash; parts, months of space, and wear. Every kind of used-up counted. Nothing left open.');
-    ctrl = insightBox('How the season went &mdash; answered',
-        '<p>One statement, read straight off the sorted season rows (the working sheet&rsquo;s two bands): Revenue '+BRW.dol(REVENUE)+' &minus; Expenses '+BRW.dol(EXPENSES)+' = <strong>Net income '+BRW.dol(NET_INCOME)+'</strong>, the answer the jumbled pile couldn&rsquo;t give.</p>')
+    anna = annaBox('The formatted sheet has earned its name: <strong>Income Statement</strong>. The new tab contains only the statement: Revenue <strong>'+BRW.dol(REVENUE)+'</strong>, Total expenses <strong>'+BRW.dol(EXPENSES)+'</strong>, and Net income <strong>'+BRW.dol(NET_INCOME)+'</strong>.');
+    ctrl = insightBox('The same season, told two ways',
+        '<p>The Income Statement says <strong>'+BRW.dol(NET_INCOME)+'</strong>. The ruled GENERATED lines say <strong>'+BRW.dol(2810)+' &minus; '+BRW.dol(170)+' = '+BRW.dol(NET_INCOME)+'</strong>. The statement summarizes the rows between the same dates; it does not move them.</p>'
+        + '<p>One small carrying-value reminder: cost minus depreciation charged so far is a path in the records, not a market price.</p>')
       + '<div class="next-phase-msg">One loose thread, though. A '+BRW.dol(NET_INCOME)+' season &mdash; and the Cash line reads <strong>$620</strong>, down from <strong>$1,300</strong> on opening day. Profitable, and poorer in cash. Both true. Hold on to that thread &mdash; it stays open past the end of this module.</div>'
       + "<button class=\"btn-continue btn-block\" onclick=\"nav('33-4-Module-Complete.html')\">Finish Module 3 &rarr;</button>";
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
+  renderTie();
   if(window.lucide) lucide.createIcons();
-}
-
-function finishStatement(){
-  playClick(); playSuccess();
-  step = 1;
-  snap.incomeNew = true;
-  snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
-  BR_WB.tagTabKinds(snap);
-  BRW.update('wb', snap);
-  BRW.tab('wb', 'income');
-  renderTalk();
-  window.scrollTo(0, document.body.scrollHeight);
 }
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Carrying value (book value)', def:'What the records show is left of a thing&rsquo;s cost: cost minus the depreciation charged so far. A path the books walk down by rule &mdash; not what the thing would fetch. The thing can outlive its path: fully depreciated, still on the bench.' },
-  { term:'Net income', def:'Revenue &minus; Expenses for the period: $6,020 &minus; $3,380 = $2,640. Complete now that every kind of used-up &mdash; directly observed, time-lapsed, and allocated &mdash; is counted.' },
-  { term:'Depreciation', def:'A season&rsquo;s share of a long-lived thing&rsquo;s cost, by a chosen rule. An allocation &mdash; a convention standing in for time, wear and tear, and judgment together.' }
+  { term:'Income statement', def:'A report that summarizes Revenue and Expenses between chosen dates. Here, it formats the season&rsquo;s GENERATED rows on their own tab.' },
+  { term:'Net income', def:'Revenue minus Expenses between the chosen dates: $6,020 minus $3,380 = $2,640.' },
+  { term:'Depreciation', def:'A share of a long-lived thing&rsquo;s cost assigned to the chosen dates by a rule. The three detailed amounts fold to one $230 line on this statement.' },
+  { term:'Carrying value (book value)', def:'Cost minus the depreciation charged so far. It follows a path in the records; it is not a market price.' }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
@@ -124,12 +151,24 @@ function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
-/* ===== init — the workbook with the wear recorded, open on the Laptop ledger ===== */
-window.devFill = function(){ if(step===0) finishStatement(); };
-BR_WB.registerStatementSheets();
-BRW.mount('wb', snap);
-BRW.tab('wb', 'assets');
-BRW.x('wb', 'a', 6);   // open the Laptop line
+/* ===== init — grouped working sheet, ready for the one formatting act ===== */
+window.devFill = function(){
+  var advance = document.querySelector('#wb .brw-step-advance');
+  if(advance) advance.click();
+};
+BR_WB.mountStatementBuild('wb', 'income-statement-steps', {
+  startAt:4,
+  stopAt:5,
+  gridOpts:{ gridId:'income-statement-format-build' },
+  onStep:function(order){
+    if(order===5){
+      step = 1;
+      renderTalk();
+      playSuccess();
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  }
+});
 renderTalk();
 </script>
   <script src="dev.js"></script>

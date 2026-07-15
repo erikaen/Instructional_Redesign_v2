@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.1: Run the Season &middot; A Season Goes By</title>
+  <title>Tutorial 3.1: Run the Season &middot; Welcome</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -17,14 +17,14 @@
     <div class="tut-header">
       <div class="tut-header-main">
         <h1>Tutorial 1: Run the Season</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 5</p>
+        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 2</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">A Season Goes By</div>
+    <div class="phase-title" id="phaseTitle">Welcome to Module 3</div>
 
     <!-- ===== welcome ===== -->
     <div class="phase active" id="phase-welcome">
@@ -42,18 +42,18 @@
       </div>
       <div id="bsClose" hidden></div>
       <div class="narrative-block">
-        <p>Then summer came. You kept your day job and worked the shop in the evenings and on weekends &mdash; part-time, but busy. Repairs brought money <strong>in</strong>. Parts and rent got <strong>used up</strong>. You bought a new tool and took some cash out for yourself. Beside each change, you jotted a short <strong>Reason</strong>, the way you learned to back in Module 1.</p>
-        <p>Now it&rsquo;s the end of August, and <strong>Anna</strong> &mdash; who set up your books when you formed the LLC &mdash; checks back in. <em>&ldquo;I set up your books,&rdquo;</em> she says. <em>&ldquo;Now let&rsquo;s read them. A season has gone by &mdash; let&rsquo;s see how the shop did.&rdquo;</em></p>
+        <p>Through the summer, you kept your day job and worked in the shop during evenings and weekends &mdash; part-time, but busy. Repairs brought money <strong>in</strong>. Parts and rent got <strong>used up</strong>. You bought a new tool and took some cash out for yourself. Beside each change, you jotted a short <strong>Reason</strong>, the way you learned to back in Module 1.</p>
+        <p>Now it&rsquo;s August 31, and <strong>Anna</strong> &mdash; who set up your books when you formed the LLC &mdash; checks back in. <em>&ldquo;I set up your books,&rdquo;</em> she says. <em>&ldquo;Now let&rsquo;s read them. We&rsquo;ll start with the history you kept, then mark the dates that let us read the season.&rdquo;</em></p>
       </div>
       <div class="section-card">
-        <div class="card-title">What you&rsquo;ll discover</div>
+        <div class="card-title">What you&rsquo;ll do</div>
         <ul class="bullet-list">
-          <li>How the shop&rsquo;s numbers looked after a full summer of repairs &mdash; and how that compares to the day you opened.</li>
-          <li>Why a single fresh snapshot, on its own, leaves the most important question unanswered.</li>
-          <li>What a whole season&rsquo;s worth of Reasons is quietly pushing you toward.</li>
+          <li>Walk through the continuous history in <span class="mono">Bike-Repair.xlsx</span>.</li>
+          <li>Choose June 1 and August 31, then add ruled, dated subtotal lines.</li>
+          <li>Check the new June 1 lines against the opening balance sheet already in the workbook.</li>
         </ul>
       </div>
-      <button class="btn-continue btn-block" id="goBtn" hidden onclick="nav('31-2-work-the-season.html')">Open Bike-Repair.xlsx &rarr;</button>
+      <button class="btn-continue btn-block" id="goBtn" hidden onclick="nav('31-2-work-the-season.html')">Open the workbook and add dated subtotals &rarr;</button>
     </div>
 
   </div>
@@ -70,6 +70,7 @@
   </div>
 </div>
 
+<script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -82,7 +83,7 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== glossary (shared across all phases of 3.1) ===== */
 var glossaryTerms = [
-  { term:"Members&rsquo; capital", def:"The LLC&rsquo;s name for Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $4,710 &minus; $2,250 = $2,460." },
+  { term:"Member&rsquo;s capital", def:"The LLC&rsquo;s name for Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $4,710 &minus; $2,250 = $2,460." },
   { term:"Reason", def:"The short note you jot beside a change in the books to record <em>why</em> it happened. You started the practice in Module 1; over a whole season the Reasons pile up." },
   { term:"Balance sheet", def:"A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the difference between them. It says where things stand, not how they got there." }
 ];
@@ -116,17 +117,17 @@ function buildOpeningBS(showTotal){
   h+=bsRow('Credit Card','$2,030');
   h+=bsRow('Customer Deposit','$220');
   h+=bsTotal('Total liabilities','$2,250');
-  h+='<h4>Members&rsquo; capital</h4>';
+  h+='<h4>Member&rsquo;s capital</h4>';
   h+=bsRow('Contributed','$2,290');
   h+=bsRow('Generated','$170');
-  h+=bsTotal('Total members&rsquo; capital (Assets &minus; Liabilities)', showTotal?'$2,460':'?');
+  h+=bsTotal('Total member&rsquo;s capital (Assets &minus; Liabilities)', showTotal?'$2,460':'?');
   h+='</div>';
   document.getElementById('openingBS').innerHTML=h;
 }
 buildOpeningBS(false);
 document.getElementById('llcInline').textContent = llcName();
 
-/* ===== verify the frame: Assets − Liabilities = Members' Capital ===== */
+/* ===== verify the frame: Assets − Liabilities = Member's Capital ===== */
 function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
 function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
 var bsDone=false, bsAttempts=0;
@@ -147,7 +148,7 @@ function revealBS(){
   document.getElementById('bsInput').disabled=true;
   var fb=document.getElementById('bsFb'); fb.className='feedback'; fb.classList.remove('show');
   var c=document.getElementById('bsClose'); c.hidden=false;
-  c.innerHTML='<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Assets &minus; Liabilities = Members&rsquo; Capital</div><p>$4,710 &minus; $2,250 = <strong>$2,460</strong> &mdash; exactly the <strong>Total members&rsquo; capital</strong> line. The difference you found in Module 1 now carries the LLC&rsquo;s name, and the balance sheet is built around the same identity &mdash; it holds by definition, every time.</p></div>';
+  c.innerHTML='<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Assets &minus; Liabilities = Member&rsquo;s Capital</div><p>$4,710 &minus; $2,250 = <strong>$2,460</strong> &mdash; exactly the <strong>Total member&rsquo;s capital</strong> line. The difference you found in Module 1 now carries the LLC&rsquo;s name, and the balance sheet is built around the same identity &mdash; it holds by definition, every time.</p></div>';
   document.getElementById('goBtn').hidden=false;
   if(window.lucide) lucide.createIcons();
 }

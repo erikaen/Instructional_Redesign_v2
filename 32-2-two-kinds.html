@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.2: The Income Statement &middot; Two Kinds of Reason</title>
+  <title>Tutorial 3.2: The Income Statement &middot; Revenue and Expenses</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -16,35 +16,26 @@
     <div class="tut-header">
       <div class="tut-header-main">
         <h1>Tutorial 2: The Income Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 5</p>
+        <p class="tut-header-sub">Module 3 &middot; Reading the Season&rsquo;s Activity &middot; ~10 min &middot; Phase 2 of 3</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">Two Kinds of Reason</div>
+    <div class="phase-title" id="phaseTitle">Revenue and Expenses</div>
 
     <div class="narrative-block">
-      <p>First, the period line. The question is how the shop did <em>this summer</em>, so May&rsquo;s rows stay exactly where they are &mdash; set aside, untouched. What&rsquo;s left is the season, and read any season reason and it records one of just <strong>two things</strong>. Anna names them right here, before you touch a thing &mdash; then you copy the season&rsquo;s rows to a working sheet and sort them by those two names.</p>
+      <p>First, the period line. The question is how the shop did <em>this summer</em>, so May&rsquo;s rows stay exactly where they are &mdash; set aside, untouched. Read any row in the season&rsquo;s slice and it records one of just <strong>two things</strong>. Anna names them right here, before you touch a thing &mdash; then you sort the generated rows on a working statement view.</p>
     </div>
 
     <div id="annaIntro"></div>
 
-    <div id="wb"></div>
+    <div id="statementBuild"></div>
 
-    <div id="copyBtnWrap">
-      <button class="btn-continue btn-block" onclick="copyToWorkSheet()">Copy the season&rsquo;s rows to a working sheet &rarr;</button>
-    </div>
-
-    <div id="workWrap" hidden>
-      <div class="tagger">
-        <div class="cash-sheet-head">
-          <div class="cash-sheet-title">Income Statement &mdash; working sheet &middot; Summer 2026</div>
-          <div class="cash-sheet-sub">the season&rsquo;s rows, copied here to sort by the two names</div>
-        </div>
-        <div id="workSheet"></div>
-      </div>
+    <div id="sortWrap" hidden>
+      <div id="sorterPanel"></div>
+      <div id="sorterGrid"></div>
     </div>
 
     <div id="gate"></div>
@@ -69,6 +60,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -81,76 +73,50 @@ function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},9
 function playSoftNope(){ tone(360,0.10,'sine',0.04); setTimeout(function(){tone(280,0.10,'sine',0.04);},110); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-/* ===== the GENERATED reasons, tagged flow: 'in' (revenue) | 'up' (expense) ===== */
-var reasons = BR_WB.generatedRows();
-var first9 = reasons.slice(0, 9).map(function (r, i) {
-  return { id: 'w' + i, label: r.account + ' &mdash; ' + r.reason, amt: r.delta, cat: (r.flow === 'in' ? 'rev' : 'exp') };
-});
-var taggerCats = [ { key:'rev', label:'Revenue' }, { key:'exp', label:'Expense' } ];
-
-/* ===== workbook facsimile — the continuous snapshot, opened on Reasons; never changes ===== */
-var snap = BR_WB.snapshot();
-snap.tabs.push(BR_WB.balanceTab(['jun1']));
-BR_WB.tagTabKinds(snap);
-BRW.mount('wb', snap);
-BRW.tab('wb', 'reasons');
-
 /* ===== Anna's naming dialog (names up front, in her dialog box) ===== */
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 document.getElementById('annaIntro').innerHTML = annaBox(
-  'There &mdash; every season reason records one of two things, and here are their names. ' +
+  'There &mdash; every reason in the season&rsquo;s slice records one of two things, and here are their names. ' +
   '<strong>Revenue</strong> &mdash; the value of the work delivered in the period, whichever way the cash runs. ' +
   '<strong>Expenses</strong> &mdash; what got used up delivering it. That&rsquo;s all. ' +
-  'Copy the season&rsquo;s rows to a working sheet and sort them by those two names.'
+  'The generated rows are already copied into this working statement view. Sort them by those two names.'
 );
 if (window.lucide) lucide.createIcons();
 
-/* ===== the working sheet (the sort-view): a COPY the student sorts; the originals stay in GENERATED ===== */
-function copyToWorkSheet(){
-  playClick();
-  document.getElementById('copyBtnWrap').style.display = 'none';
-  var wrap = document.getElementById('workWrap');
-  wrap.hidden = false;
-  BRW.tagger('workSheet', {
-    rows: first9,
-    categories: taggerCats,
-    sortLabel: 'Sort these rows &rarr;',
-    onSorted: function(){
-      playSuccess();
-      document.getElementById('gate').innerHTML =
-        '<div class="gate-card gate-armed-maria"><div class="gate-card-title">That&rsquo;s the whole trick &mdash; every season reason is one or the other. Sort the rest the same way.</div>' +
-        '<button class="btn-continue btn-block" onclick="revealFull()">Sort the rest &rarr;</button></div>';
-      if (window.lucide) lucide.createIcons();
-      document.getElementById('gate').scrollIntoView({ behavior:'smooth', block:'center' });
-    }
-  });
-  wrap.scrollIntoView({ behavior:'smooth', block:'center' });
+/* ===== extracted workbook helpers ===== */
+function sheetOf(workbookKey, namePart){
+  var sheets = BR_STMT_DATA.workbooks[workbookKey].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name.indexOf(namePart)>=0) return sheets[i];
+  return null;
 }
-
-/* ===== the FULL sorted view — every season row, grouped by the two names ===== */
-function bandHTML(key, label){
-  var rows = reasons.filter(function (r) { return (r.flow === 'in' ? 'rev' : 'exp') === key; });
-  var sub = rows.reduce(function (s, r) { return s + r.delta; }, 0);
-  var h = '<div class="tagger-band"><span>' + label + '</span><span></span></div>';
-  rows.forEach(function (r) {
-    h += '<div class="tagger-row"><div class="tagger-label">' + r.account + ' &mdash; ' + r.reason + '</div>'
-        + '<div class="tagger-amt">' + BRW.signed(r.delta) + '</div><div></div></div>';
+function rowsByLabel(sheet, pattern){
+  var rows=[];
+  (sheet.cells||[]).forEach(function(cell){
+    if(cell.c===2 && pattern.test(String(cell.value||''))) rows.push(cell.r);
   });
-  h += '<div class="tagger-subtotal"><div>' + label + ' subtotal</div><div class="tagger-amt">' + (sub < 0 ? '(' + BRW.dol(-sub) + ')' : BRW.dol(sub)) + '</div><div></div></div>';
-  return h;
+  return rows;
 }
-function revealFull(){
-  playClick();
-  document.getElementById('gate').innerHTML = '';
-  var h = '<div class="tagger">' +
-    '<div class="cash-sheet-head"><div class="cash-sheet-title">Income Statement &mdash; working sheet &middot; Summer 2026</div>' +
-    '<div class="cash-sheet-sub">sorted &mdash; every season row, by the two names</div></div>' +
-    bandHTML('rev', 'Revenue') + bandHTML('exp', 'Expenses') + '</div>';
-  document.getElementById('controls').innerHTML = h;
-  renderPayoff();
-  if (window.lucide) lucide.createIcons();
-  document.getElementById('anna').scrollIntoView({ behavior:'smooth', block:'start' });
+function rowByExactLabel(sheet,label){
+  var rows=rowsByLabel(sheet,new RegExp('^'+label.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'$'));
+  return rows.length ? rows[0] : null;
+}
+function futureRows(sheet){
+  return rowsByLabel(sheet,/^Repair delivered.*Ridgeline|^Depreciation/);
+}
+function filteredPickSheet(sheet, hiddenRows){
+  var hidden={};
+  var headers={};
+  hiddenRows.forEach(function(row){ hidden[row]=true; });
+  (sheet.cells||[]).forEach(function(cell){
+    if(cell.c===3 && cell.value==='Category') headers[cell.r]=true;
+  });
+  var copy={};
+  Object.keys(sheet).forEach(function(key){ copy[key]=sheet[key]; });
+  copy.cells=(sheet.cells||[]).filter(function(cell){
+    return !hidden[cell.r] && !headers[cell.r];
+  });
+  return copy;
 }
 
 /* ===== Anna's payoff — the beats from the old page, reworded to the new names ===== */
@@ -164,14 +130,66 @@ function renderPayoff(){
     'his money came in <em>May</em>, as a deposit. What this summer&rsquo;s row records is the frame going out the door and the promise coming off the books. ' +
     'Revenue is not about money moving &mdash; it&rsquo;s about what the work did.'
   );
-  document.getElementById('controls').innerHTML +=
+  document.getElementById('controls').innerHTML =
     insightBox('A sort, not a move',
-      '<p>Flip to the <strong>Reasons</strong> tab above &mdash; every row is still there, in the same continuous GENERATED list the season built. ' +
+      '<p>Every row is still on the <strong>Reasons</strong> tab, in the same continuous GENERATED list that grew during the season. ' +
       'The working sheet is a <strong>sort</strong> of those rows, not a move: the originals stay right where they were.</p>')
     + '<div class="next-phase-msg">One loose end before the working sheet gets its name. In the Expenses band sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong> &mdash; and there&rsquo;s no Revenue across from it. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job.</div>'
     + '<button class="btn-continue btn-block" onclick="nav(\'32-3-revenue-follows-the-work.html\')">Find Ridgeline &rarr;</button>';
   if (window.lucide) lucide.createIcons();
 }
+
+/* ===== income-statement build, with the Pick step gated by the sorter ===== */
+var WORKBOOK_KEY='income-statement-steps';
+var sortComplete=false;
+var buildOptions={
+  startAt:0,
+  stopAt:2,
+  gridOpts:{ gridId:'income-build-grid', hiddenRows:futureRows(sheetOf(WORKBOOK_KEY,'0 ')) },
+  gateAdvance:function(order){ return order!==1 || sortComplete; },
+  beforeAdvance:function(order){
+    var nextSheet=sheetOf(WORKBOOK_KEY,(order+1)+' ');
+    if(nextSheet) buildOptions.gridOpts.hiddenRows=futureRows(nextSheet);
+    return true;
+  },
+  onStep:function(order){
+    var wrap=document.getElementById('sortWrap');
+    wrap.hidden=order!==1;
+    document.getElementById('gate').innerHTML='';
+    if(order===1){
+      sortComplete=false;
+      var pick=sheetOf(WORKBOOK_KEY,'1 ');
+      var hiddenRows=futureRows(pick);
+      var buildGrid=document.querySelector('#statementBuild .brw-grid');
+      if(buildGrid) buildGrid.style.display='none';
+      var advance=document.querySelector('#statementBuild .brw-step-advance');
+      if(advance) advance.disabled=true;
+      BRW.mountSorter('sorterPanel','sorterGrid',filteredPickSheet(pick,hiddenRows),{
+        gridId:'income-sort-grid',
+        hiddenRows:hiddenRows,
+        showRows:[
+          rowByExactLabel(pick,'Repair collected — Dana R.'),
+          rowByExactLabel(pick,'Rent used — June'),
+          rowByExactLabel(pick,'Parts used — Dana R.'),
+          rowByExactLabel(pick,'Frame delivered — J. Smith (deposit earned)'),
+          rowByExactLabel(pick,'Parts used — Ridgeline Trail Crew')
+        ],
+        onComplete:function(){
+          sortComplete=true;
+          var next=document.querySelector('#statementBuild .brw-step-advance');
+          if(next) next.disabled=false;
+          document.getElementById('gate').innerHTML='<div class="gate-card gate-armed-maria"><div class="gate-card-title">Every visible row is sorted. Continue to see the same rows grouped by Revenue and Expenses.</div></div>';
+          if(window.lucide) lucide.createIcons();
+        }
+      });
+      wrap.scrollIntoView({behavior:'smooth',block:'start'});
+    } else if(order===2){
+      renderPayoff();
+      document.getElementById('anna').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  }
+};
+BR_WB.mountStatementBuild('statementBuild','income-statement-steps',buildOptions);
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
@@ -191,10 +209,11 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 
 /* ===== init / dev hook ===== */
 window.devFill = function(){
-  document.getElementById('copyBtnWrap').style.display = 'none';
-  document.getElementById('workWrap').hidden = false;
-  document.getElementById('gate').innerHTML = '';
-  revealFull();
+  var advance=document.querySelector('#statementBuild .brw-step-advance');
+  if(advance) advance.click();
+  sortComplete=true;
+  advance=document.querySelector('#statementBuild .brw-step-advance');
+  if(advance){ advance.disabled=false; advance.click(); }
 };
 </script>
   <script src="dev.js"></script>

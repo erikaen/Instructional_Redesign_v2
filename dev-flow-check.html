@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DEV — Module 3 flow check</title>
+<style>
+  body { font-family: sans-serif; margin: 2rem; }
+  table { border-collapse: collapse; margin-top: 1rem; }
+  td, th { border: 1px solid #ccc; padding: 4px 10px; font-size: 14px; }
+  .pass { background: #e6f7e6; } .fail { background: #fde3e3; font-weight: bold; }
+  #frame { width: 1200px; height: 500px; border: 1px solid #ddd; margin-top: 1rem; }
+  #banner { font-size: 20px; font-weight: bold; margin-top: 1rem; }
+</style>
+</head>
+<body>
+<h1>Module 3 flow check (instructor-side)</h1>
+<p>Drives every page's activities via its own devFill and asserts the flow's beats.</p>
+<div id="banner">running…</div>
+<table id="results"><tr><th>page</th><th>assert</th><th>result</th></tr></table>
+<iframe id="frame"></iframe>
+<script>
+var PLAN = [
+ {file:'31-1-welcome.html', asserts:[
+   ['header says Phase 1 of 2', d=>d.body.textContent.includes('Phase 1 of 2')],
+   ['links to 31-2', d=>d.documentElement.outerHTML.includes('31-2-work-the-season.html')]]},
+ {file:'31-2-work-the-season.html', asserts:[
+   ['dates-of-interest wording on page', d=>d.body.textContent.includes('dates of interest')],
+   ['dated subtotal lines present after fill', d=>d.body.textContent.includes('Balance, June 1')],
+   ['August 31 lines present', d=>d.body.textContent.includes('Balance, August 31')],
+   ['ties to the June 1 balance sheet (Parts 200)', d=>/balance sheet/i.test(d.body.textContent)],
+   ['Parts Aug-31 stages at 200 — Ridgeline parts row stays visible', d=>{var bad=false; d.querySelectorAll('.brw-grid').forEach(g=>{ if(g.textContent.includes('275')) bad=true; }); return !bad;}],
+   ['links to 32-1', d=>d.documentElement.outerHTML.includes('32-1-the-income-statement.html')]]},
+ {file:'32-1-the-income-statement.html', asserts:[
+   ['working sheet beat', d=>/working sheet/i.test(d.body.textContent)],
+   ['step 0 mounted (Data copied in)', d=>d.body.textContent.includes('Data copied in')],
+   ['links to 32-2', d=>d.documentElement.outerHTML.includes('32-2-two-kinds.html')]]},
+ {file:'32-2-two-kinds.html', asserts:[
+   ['staged revenue 5,720 after fill', d=>d.body.textContent.includes('5,720')],
+   ['staged expenses 3,150', d=>d.body.textContent.includes('3,150')],
+   ['no premature 6,020', d=>!(d.querySelector('.brw-grid')||{textContent:''}).textContent.includes('6,020')],
+   ['curation chip or completed sort', d=>d.body.textContent.includes('others to be sorted') || !d.querySelector('.brw-sort-rest') || d.querySelector('.brw-sort-done')],
+   ['links to 32-3', d=>d.documentElement.outerHTML.includes('32-3-revenue-follows-the-work.html')]]},
+ {file:'32-3-revenue-follows-the-work.html', asserts:[
+   ['revenue completes at 6,020', d=>d.body.textContent.includes('6,020')],
+   ['scoreboard moved to 3,040', d=>d.body.textContent.includes('3,040')],
+   ['chains straight to 33-1', d=>d.documentElement.outerHTML.includes('33-1-Two-Kinds-of-Used-Up.html')],
+   ['no reference to retired 32-4', d=>!d.documentElement.outerHTML.includes('32-4-name')]]},
+ {file:'33-1-Two-Kinds-of-Used-Up.html', asserts:[
+   ['Parts Used subtotal 1,200', d=>d.body.textContent.includes('1,200')],
+   ['Rent subtotal 1,950', d=>d.body.textContent.includes('1,950')],
+   ['fixtures named in the tease', d=>/fixtures/i.test(d.body.textContent)],
+   ['no depreciation rows yet in the grid', d=>((d.querySelector('.brw-grid')||{textContent:''}).textContent.match(/Depreciation — /g)||[]).length===0],
+   ['links to 33-2', d=>d.documentElement.outerHTML.includes('33-2-The-Third-Kind.html')]]},
+ {file:'33-2-The-Third-Kind.html', asserts:[
+   ["Anna's wording (write it ourselves)", d=>d.documentElement.outerHTML.includes('we write it ourselves')],
+   ['GENERATED settles at 2,810 after fill', d=>d.body.textContent.includes('2,810')],
+   ['three dep rows revealed', d=>{var g=d.querySelectorAll('.brw-grid'); var n=0; g.forEach(x=>{n=Math.max(n,(x.textContent.match(/Depreciation — /g)||[]).length)}); return n>=3;}],
+   ['working sheet grouped at 230', d=>d.body.textContent.includes('230')],
+   ['links to 33-3', d=>d.documentElement.outerHTML.includes('33-3-The-Bottom-Line.html')]]},
+ {file:'33-3-The-Bottom-Line.html', asserts:[
+   ['retitled (no Bottom Line title)', d=>!d.title.includes('The Bottom Line')],
+   ['formatted final: net income 2,640', d=>d.body.textContent.includes('2,640')],
+   ['one Depreciation line in the statement', d=>{var g=d.querySelector('.brw-grid'); return g && (g.textContent.match(/Depreciation/g)||[]).length===1;}],
+   ['total expenses 3,380', d=>d.body.textContent.includes('3,380')],
+   ['the tie reads 170', d=>d.body.textContent.includes('170')],
+   ['never says lands', d=>!/\blands\b/i.test(d.body.textContent)],
+   ['links to 33-4', d=>d.documentElement.outerHTML.includes('33-4-Module-Complete.html')]]},
+ {file:'33-4-Module-Complete.html', asserts:[
+   ['forward link to Module 4', d=>d.documentElement.outerHTML.includes('41-1-The-Investor-Asks.html')],
+   ['restart control', d=>/restart/i.test(d.documentElement.outerHTML)],
+   ['periodization echo (dates)', d=>/dates/i.test(d.body.textContent)],
+   ['recap net income 2,640', d=>d.body.textContent.includes('2,640')]]},
+];
+var frame = document.getElementById('frame'), tbl = document.getElementById('results');
+var idx = 0, failures = 0, runtimeErrors = [];
+function row(page, name, ok){
+  var tr = document.createElement('tr');
+  tr.className = ok ? 'pass' : 'fail';
+  tr.innerHTML = '<td>' + page + '</td><td>' + name + '</td><td>' + (ok ? 'PASS' : 'FAIL') + '</td>';
+  tbl.appendChild(tr);
+  if (!ok) failures++;
+}
+function step(){
+  if (idx >= PLAN.length){
+    var msg = failures === 0 ? 'ALL FLOW CHECKS PASS (' + PLAN.length + ' pages)'
+                             : failures + ' FLOW CHECK FAILURE(S)';
+    if (runtimeErrors.length) msg += ' · ' + runtimeErrors.length + ' runtime error(s): ' + runtimeErrors.join(' | ');
+    document.getElementById('banner').textContent = msg;
+    console.log('FLOWCHECK: ' + (failures === 0 && runtimeErrors.length === 0 ? 'PASS' : 'FAIL ' + failures));
+    return;
+  }
+  var p = PLAN[idx];
+  frame.onload = function(){
+    var w = frame.contentWindow, d = frame.contentDocument;
+    w.onerror = function(m){ runtimeErrors.push(p.file + ': ' + m); };
+    try { if (typeof w.devFill === 'function') w.devFill(); } catch(e){ runtimeErrors.push(p.file + ' devFill: ' + e.message); }
+    setTimeout(function(){
+      p.asserts.forEach(function(a){
+        var ok = false;
+        try { ok = !!a[1](d); } catch(e){ ok = false; }
+        row(p.file, a[0], ok);
+      });
+      idx++; step();
+    }, 900);
+  };
+  frame.src = p.file + '?flowcheck=' + Date.now();
+}
+step();
+</script>
+</body>
+</html>

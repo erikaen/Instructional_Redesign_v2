@@ -268,6 +268,13 @@ completes column C; the panel collapses; advancing sorts by kind (`4 · Sort exp
 with the three dep amounts (160 / 40 / 30) grouped and subtotalling 230, then folds to the
 single `Depreciation 230` line at `5 · Format statement`.
 
+**AMENDMENT 2 (Rick's click-through ruling, 2026-07-14 session 3):** the sorter shows a
+**curated subset** of items, never the full list — a few easy representatives plus EVERY edge
+case (the page declares them via `showRows`), with a footer chip reading "+N others to be
+sorted" (12-2's idiom); "Sort the rest" completes the unshown remainder. The coverage +
+diagnostic gate must be satisfiable from the featured items. Also under this gate: the PART 4
+step strip and advance control get proper course styling (they shipped as unstyled buttons).
+
 ---
 
 ## PART 6 — page integration & the growing workbook

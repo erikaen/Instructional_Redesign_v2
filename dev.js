@@ -25,7 +25,7 @@
     '24-1-welcome', '24-2-ein', '24-3-account', '24-4-statements', '24-5-complete',
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
-    '32-1-the-income-statement', '32-2-two-kinds', '32-3-revenue-follows-the-work', '32-4-name-the-income-statement', '32-5-what-the-season-kept',
+    '32-1-the-income-statement', '32-2-two-kinds', '32-3-revenue-follows-the-work',
     '33-1-Two-Kinds-of-Used-Up', '33-2-The-Third-Kind', '33-3', '33-4',
     '41-1', '42-1',
     '43-1',

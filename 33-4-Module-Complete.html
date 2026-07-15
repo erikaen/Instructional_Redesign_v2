@@ -20,6 +20,7 @@
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart" aria-label="Restart this module recap" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
     <div class="phase-title" id="phaseTitle">Module Complete</div>
@@ -31,24 +32,26 @@
     <div class="section-card">
       <div class="card-title">What You Discovered</div>
       <ul class="bullet-list check">
-        <li>The shop ran its first season, and the Reasons trail kept growing &mdash; one long true list of everything that happened.</li>
-        <li>That one list could not answer <em>how did the season go?</em> A pile of true rows is not the same as a period&rsquo;s story.</li>
-        <li>Sorting the season&rsquo;s rows &mdash; work <strong>DELIVERED</strong> and things <strong>USED UP</strong> &mdash; let them graduate to their own <strong>Revenue</strong> and <strong>Expenses</strong> tabs.</li>
-        <li>Revenue follows the work, not the cash. Smith&rsquo;s frame held: Ridgeline&rsquo;s unpaid delivery stayed on the Revenue tab because the work was done, and the receivable showed up there.</li>
-        <li>Three kinds of used-up surfaced: parts that meter off a shelf you can watch, rent that lapses with the calendar, and the kind that cannot be metered &mdash; tools, fixtures, and the laptop. That third kind is <strong>depreciation</strong>: an allocation by an openly chosen convention, not a reading.</li>
-        <li><strong>Carrying value</strong> is a path the records walk, not a price: cost minus the depreciation charged so far. Book and market need not agree.</li>
-        <li>The <strong>income statement</strong> read straight off the two tabs: Revenue $6,020 &minus; Expenses $3,380 = Net income $2,640.</li>
+        <li>The books began as one continuous list. You chose the <strong>dates</strong> of interest &mdash; June 1, when the LLC&rsquo;s books opened, and August 31, today &mdash; then added ruled, dated subtotal lines. Excel did the sums.</li>
+        <li>The June 1 lines tied to the June 1 balance sheet already in the workbook. Accounts Receivable and WITHDRAWN received no June 1 line because those accounts began during the season.</li>
+        <li>You read the GENERATED rows between the dated lines and copied those season rows to a working sheet. The source rows stayed in GENERATED.</li>
+        <li>You sorted the working rows, recorded Ridgeline&rsquo;s <strong>$300 Accounts Receivable</strong>, and grouped expenses by kind: <strong>Parts Used $1,200</strong>, <strong>Rent $1,950</strong>, and <strong>Depreciation $230</strong>.</li>
+        <li><strong>Depreciation</strong> supplied the reason no transaction had written. The $160, $40, and $30 details reduced the asset amounts and became one $230 expense line.</li>
+        <li>You formatted the season&rsquo;s GENERATED rows on their own <strong>Income Statement</strong> tab: Revenue $6,020 &minus; Total expenses $3,380 = <strong>Net income $2,640</strong>.</li>
+        <li><strong>Net income $2,640</strong> tells the season as a statement. The student-drawn GENERATED lines tell the same season as a change: $2,810 on August 31 minus $170 on June 1.</li>
+        <li><strong>Carrying value</strong> is cost minus depreciation charged so far. It follows a path in the records; it is not a market price.</li>
       </ul>
     </div>
     <div class="insight-box">
       <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
-      <p>One period question &mdash; <em>how did the season go?</em> &mdash; answered by one statement built from your own records. And sitting openly inside it is a chosen convention: depreciation, a share of cost assigned by a rule, not a reading. The records answer, and they show the convention they used.</p>
+      <p>The books just flow as one continuous list. You purposefully divide that list at dates that matter, and the ruled lines mark the boundaries. The income statement sorts and formats the rows between those boundaries; depreciation adds an openly chosen allocation where no transaction supplied a reason.</p>
     </div>
     <div class="next-card">
       <div class="next-card-label">Coming Next</div>
-      <p>A season that plainly went well &mdash; and the Cash line reads $620 where the account opened with $1,300. Both true, and neither one yet explained. And the difference between Assets and Liabilities &mdash; Members&rsquo; Capital, $2,460 when the season began &mdash; has moved, with nothing so far telling the story of how.</p>
-      <p>So the records have a season behind them, and an open question in front of them. Someone is about to look at the shop from the outside and decide whether to put money in &mdash; and the records will have to speak for themselves.</p>
+      <p>Net income is $2,640 &mdash; and the Cash line reads $620 where the account opened with $1,300. Both are true, and neither number explains the other.</p>
+      <p>An investor is about to look at the shop from the outside and decide whether to put money in. That loose cash thread will matter.</p>
     </div>
+    <button class="btn-continue btn-block" onclick="nav('41-1-The-Investor-Asks.html')">Continue to Module 4 &rarr;</button>
 
   </div>
 </div>
@@ -77,9 +80,10 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 /* ===== glossary ===== */
 var glossaryTerms=[
-  { term:'Net income', def:'Revenue $6,020 minus Expenses $3,380 = $2,640. Complete now that every kind of used-up has been counted.' },
-  { term:'Depreciation', def:'A period&rsquo;s share of a long-lived thing&rsquo;s cost, charged by a chosen rule &mdash; an allocation, a convention, not a meter reading.' },
-  { term:'Carrying value', def:'Cost minus the depreciation charged so far &mdash; a path the records walk, not a price.' }
+  { term:'Income statement', def:'A report that sorts and formats Revenue and Expenses between chosen dates. The season&rsquo;s source rows remain in GENERATED.' },
+  { term:'Net income', def:'Revenue $6,020 minus Total expenses $3,380 = $2,640 between the chosen dates.' },
+  { term:'Depreciation', def:'A share of a long-lived thing&rsquo;s cost assigned to the chosen dates by a rule &mdash; an allocation, not a meter reading.' },
+  { term:'Carrying value', def:'Cost minus depreciation charged so far &mdash; a path in the records, not a market price.' }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
@@ -88,6 +92,8 @@ function openGlossary(){
   document.getElementById('glossaryOverlay').classList.add('open');
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ playClick(); window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 </script>
   <script src="dev.js"></script>
