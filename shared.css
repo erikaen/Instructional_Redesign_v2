@@ -2204,19 +2204,36 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .mono { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
 
 /* ----- Speaker dialog boxes ----- */
-.dialog-box { background: var(--primary-faint); border: 1.5px solid var(--border-strong); border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
-.dialog-box.maria { border-color: var(--primary); }
-.dialog-box.anna { border-color: var(--primary); }
-.dialog-box.you { border: none; border-left: 4px solid var(--border-strong); background: var(--primary-faint); border-radius: 6px; padding: 12px 14px; }
-.dialog-label { font-family: Inter, sans-serif; font-size: var(--font-xs); font-weight: 700; letter-spacing: 0.6px; color: var(--primary); margin-bottom: 6px; }
-.dialog-box.anna .dialog-label { color: var(--primary); }
-.dialog-box.you .dialog-label { color: #888; }
+/* ===== Dialog component (consolidated 2026-07-14) =====
+   The character speech is the spine of every tutorial. One canonical component;
+   variants only change the speaker color via --dialog-accent. Distinct teal so
+   speech never blends into the blue UI chrome. */
+.dialog-box { --dialog-band: var(--primary); --dialog-band-hi: #0a47b8;
+  position: relative; background: #ffffff; border: 2px solid var(--dialog-band);
+  border-radius: 16px; padding: 0 0 16px; margin: 22px 0 22px 6px; overflow: visible;
+  box-shadow: 0 2px 8px rgba(0, 50, 157, 0.10), 0 12px 30px rgba(0, 50, 157, 0.08); }
+/* the tail sits at band height, filled with the band color */
+.dialog-box::before { content: ''; position: absolute; top: 15px; left: -7px; width: 14px; height: 14px;
+  background: var(--dialog-band-hi); border-radius: 3px; transform: rotate(45deg); }
+.dialog-box.freddie { --dialog-band: var(--accent); --dialog-band-hi: #c25c20;
+  box-shadow: 0 2px 8px rgba(189, 83, 25, 0.10), 0 12px 30px rgba(189, 83, 25, 0.08); }
+/* "you" answers back: quiet gray frame, tail on the right */
+.dialog-box.you { --dialog-band: #9ca3af; --dialog-band-hi: #6b7280; margin: 22px 6px 22px 0; box-shadow: none; }
+.dialog-box.you::before { left: auto; right: -7px; }
+/* the speaker band: a filled strip across the top with avatar + name */
+.dialog-label { font-family: Inter, sans-serif; font-size: var(--font-s); font-weight: 700; letter-spacing: 0.6px;
+  color: #fff; margin: 0 0 4px; padding: 8px 18px; display: flex; align-items: center; gap: 10px;
+  background: linear-gradient(90deg, var(--dialog-band-hi), var(--dialog-band));
+  border-radius: 13px 13px 0 0; }
+/* the speech body */
+.dialog-box .dialog-text { padding: 10px 22px 0; }
+/* boxes without a label band still get body padding */
+.dialog-box > .dialog-text:first-child { padding-top: 16px; }
 /* Freddie — the M4 angel investor (approved addition 2026-07-09). Dark mode inherits:
    the .dialog-box dark background applies to all variants and --accent is redefined
    in the dark block, so no new dark rules are needed. */
-.dialog-box.freddie { border-color: var(--accent); }
-.dialog-box.freddie .dialog-label { color: var(--accent); }
-.dialog-text { font-size: var(--font-m); font-style: italic; color: #374151; line-height: 1.65; }
+/* Freddie's colors now come from --dialog-accent on .dialog-box.freddie above. */
+.dialog-text { font-size: 17px; font-style: italic; color: #1e3a5f; line-height: 1.7; }  /* 17px sits between --font-m and --font-lg */
 .dialog-prefix { font-style: normal; color: #888; }
 
 /* ----- Insurance form layout ----- */
@@ -2330,7 +2347,8 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .xlsx-cell.more { font-style: italic; color: #888; }
 
 @media (prefers-color-scheme: dark) {
-  .dialog-box { background: #32303c; }
+  .dialog-box { background: #32303c; border-color: #3b66a3; box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 12px 30px rgba(0,0,0,0.3); }
+  .dialog-box.you { background: #2b2933; }
   .dialog-text { color: #c8ccd8; }
   .things-sidebar { background: #32303c; border-color: var(--border); }
   .sidebar-item { background: #32303c; }
@@ -2443,8 +2461,8 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .stmt-balrow { display: flex; justify-content: space-between; padding: 9px 18px; font-size: var(--font-s); background: var(--primary-faint); border-bottom: 1px solid var(--border); color: #374151; }
 .stmt-balrow.bottom { border-bottom: none; border-top: 2px solid var(--primary); font-weight: 700; }
 .stmt-colhead, .stmt-row { display: grid; align-items: center; gap: 8px; padding: 7px 12px; }
-.stmt-grid-bank { grid-template-columns: 3px 52px 1fr 70px 70px 82px 26px; }
-.stmt-grid-card { grid-template-columns: 3px 52px 1fr 72px 72px 26px; }
+.stmt-grid-bank { grid-template-columns: 26px 3px 52px 1fr 70px 70px 82px; }  /* info btn moved to the left of the stripe and date (advisors, 2026-07-12) */
+.stmt-grid-card { grid-template-columns: 26px 3px 52px 1fr 72px 72px; }  /* expander moved left, matching stmt-grid-bank */
 .stmt-colhead { font-size: var(--font-xs); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; color: #888; border-bottom: 1px solid var(--border); }
 .stmt-row { font-size: var(--font-s); color: #374151; border-bottom: 1px solid var(--primary-faint); }
 .stmt-row.alt { background: #fbfbf9; }
@@ -2903,3 +2921,57 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .progress-seg { background: #4a4858; }
   .progress-seg.done { background: var(--primary); }
 }
+
+/* Four-box variant of the sort-progress grid (three piles + unsorted; 34-2) */
+.sortprog-grid.four { grid-template-columns: repeat(4, 1fr); }
+
+/* Five-box variant of the sort-progress grid (four piles + unsorted; 12-2) */
+.sortprog-grid.five { grid-template-columns: repeat(5, 1fr); }
+
+/* "TO SORT" header row in the sorting sheets — yellow, a task still to do */
+.xl-row.xl-todo { background: var(--warn-bg); }
+.xl-row.xl-todo .xl-c { color: var(--warn-text); }
+@media (prefers-color-scheme: dark) {
+  .xl-row.xl-todo { background: rgba(202, 138, 4, 0.18); }
+  .xl-row.xl-todo .xl-c { color: #eab308; }
+}
+
+/* Statement-style sort documents (12-2, 32-2, 34-2, 14-4 — same look as 13-2) */
+.stmt-grid-sort { grid-template-columns: 26px 3px 1fr 90px; }
+.stmt-balrow.stmt-todo { background: var(--warn-bg); color: var(--warn-text); border-bottom: 1px solid var(--warn-border); }
+@media (prefers-color-scheme: dark) {
+  .stmt-balrow.stmt-todo { background: rgba(202, 138, 4, 0.18); color: #eab308; border-bottom-color: rgba(202,138,4,0.4); }
+}
+
+/* ===== Course banner + page footer (final.html navigation, added 2026-07-14) ===== */
+.course-banner { position: sticky; top: 0; z-index: 500; display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: #f7f9fc; border-bottom: 1px solid var(--border-strong); font-family: Inter, sans-serif; }
+.course-banner-side { flex: 1; display: flex; min-width: 0; }
+.course-banner-side.right { justify-content: flex-end; }
+.course-banner-mid { position: relative; flex: 0 0 auto; }
+.course-banner-btn { font-size: var(--font-s); padding: 7px 12px; white-space: nowrap; }
+.course-done-check { color: #16a34a; font-weight: 700; }
+.course-index-menu { position: absolute; top: calc(100% + 6px); left: 50%; transform: translateX(-50%); background: white; border: 1px solid var(--border-strong); border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.16); min-width: 300px; max-height: 70vh; overflow-y: auto; padding: 6px 0; z-index: 600; text-align: left; }
+.course-index-menu .gh { font-size: var(--font-m); font-weight: 800; color: var(--primary); padding: 11px 14px 6px; border-bottom: 1px solid var(--border); margin-bottom: 4px; }
+.course-index-menu .mh { font-size: var(--font-s); font-weight: 700; color: #286dc0; padding: 9px 14px 3px 22px; }
+.course-index-menu a { display: block; padding: 6px 14px 6px 38px; font-size: var(--font-s); color: #374151; text-decoration: none; }
+.course-index-menu a:hover { background: var(--primary-faint); }
+.course-index-menu a.cur { background: var(--primary-faint); color: var(--primary); font-weight: 600; }
+.course-page-footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: #f7f9fc; border-top: 1px solid var(--border-strong); font-family: Inter, sans-serif; }
+body.has-course-footer { padding-bottom: 62px; }
+@media (prefers-color-scheme: dark) {
+  .course-banner { background: #26242e; }
+  .course-page-footer { background: #26242e; }
+  .course-index-menu { background: #32303c; }
+  .course-index-menu .gh { color: var(--primary-light); }
+  .course-index-menu .mh { color: #7ea6d8; }
+  .course-index-menu a { color: #c8ccd8; }
+  .course-index-menu a:hover, .course-index-menu a.cur { background: rgba(59,102,163,0.25); }
+}
+
+/* Selected (being-walked) row in the statement-style walk sheets (14-2) */
+.stmt-row.selected { background: var(--primary-faint); }
+@media (prefers-color-scheme: dark) { .stmt-row.selected { background: rgba(59,102,163,0.25); } }
+
+/* Horizontal breathing room on every tutorial page (append-override, 2026-07-14):
+   a centered, width-capped content column with generous side margins. */
+.prework-wrap { max-width: 1060px; margin: 0 auto; padding-left: clamp(24px, 6vw, 80px); padding-right: clamp(24px, 6vw, 80px); }
