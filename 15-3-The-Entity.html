@@ -70,27 +70,53 @@ var CANDIDATES = [
   { label:'Last May', could:false,
     fb:'A stretch of time. Books belong to a subject and <em>cover</em> a time &mdash; May is the month the books covered, not a thing a set of books could be about.' }
 ];
-var answered = {};
+/* MCQ state per question: sel (true/false picked), submitted */
+var sel = {}, submitted = {};
+var OPTS = [
+  { val:true,  text:'Yes &mdash; there could be a set of books about it' },
+  { val:false, text:'No &mdash; a set of books could not be about it' }
+];
+function allCorrect(){
+  return CANDIDATES.every(function(c, i){ return submitted[i] && sel[i]===c.could; });
+}
 function renderQuiz(){
   var html = '';
   CANDIDATES.forEach(function(c, i){
-    var a = answered[i];
-    html += '<div class="mc-card"><div class="mc-q">'+c.label+'</div>'+
-      '<div class="btn-row">'+
-      '<button class="btn btn-outline" onclick="answerEntity('+i+',true)"'+(a!==undefined?' disabled':'')+'>Yes &mdash; there could be</button>'+
-      '<button class="btn btn-outline" onclick="answerEntity('+i+',false)"'+(a!==undefined?' disabled':'')+'>No</button>'+
-      '</div>'+
-      (a!==undefined ? '<div class="feedback '+(a===c.could?'ok':'err')+' show">'+(a===c.could?'Right. ':'Not quite. ')+c.fb+'</div>' : '')+
-      '</div>';
+    var sub = submitted[i], right = sub && sel[i]===c.could;
+    html += '<div class="mc-card"><div class="mc-q">'+c.label+'</div><div class="mc-opts">';
+    OPTS.forEach(function(o, oi){
+      var cls = 'mc-opt' + (!sub && sel[i]===o.val ? ' selected' : '')
+        + (sub && sel[i]===o.val ? (o.val===c.could?' correct':' wrong') : '')
+        + (sub ? ' locked' : '');
+      html += '<div class="'+cls+'" onclick="selectEntity('+i+','+o.val+')"><div class="mc-letter">'+String.fromCharCode(65+oi)+'</div><div>'+o.text+'</div></div>';
+    });
+    html += '</div>';
+    if(sub) html += '<div class="feedback '+(right?'ok':'err')+' show">'+(right?'Right. ':'Not quite. ')+c.fb+'</div>';
+    html += '<div class="btn-row">'+(sub
+      ? '<button class="btn-reset" onclick="resetEntity('+i+')" style="margin-left:auto;">Reset</button>'
+      : '<button class="btn-continue" onclick="submitEntity('+i+')"'+(sel[i]===undefined?' disabled':'')+'>Submit</button>')+'</div>';
+    html += '</div>';
   });
   document.getElementById('entityQuiz').innerHTML = html;
+  if(window.lucide) lucide.createIcons();
 }
-function answerEntity(i, val){
-  if(answered[i] !== undefined) return;
-  answered[i] = val;
-  if(val === CANDIDATES[i].could) playSuccess(); else playNope();
+function selectEntity(i, val){
+  if(submitted[i]) return;
+  sel[i] = val;
   renderQuiz();
-  if(Object.keys(answered).length === CANDIDATES.length) revealEntity();
+}
+function submitEntity(i){
+  if(sel[i]===undefined || submitted[i]) return;
+  submitted[i] = true;
+  if(sel[i] === CANDIDATES[i].could) playSuccess(); else playNope();
+  renderQuiz();
+  if(allCorrect()) revealEntity();
+}
+function resetEntity(i){
+  delete sel[i]; delete submitted[i];
+  document.getElementById('entityClose').hidden = true;
+  document.getElementById('entityClose').innerHTML = '';
+  renderQuiz();
 }
 function revealEntity(){
   var c = document.getElementById('entityClose');
@@ -103,7 +129,7 @@ function revealEntity(){
 
 /* ===== restart ===== */
 function restart(){
-  answered = {};
+  sel = {}; submitted = {};
   document.getElementById('entityClose').hidden = true;
   document.getElementById('entityClose').innerHTML = '';
   renderQuiz();

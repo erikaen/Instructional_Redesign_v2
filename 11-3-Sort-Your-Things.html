@@ -18,6 +18,8 @@
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>Your items are in two places: the <strong>rented space</strong> where you do your repair work, and your <strong>home</strong>. You open a spreadsheet and start with a tab called <strong>Things</strong>.</p>
       <p class="scenario-card-text">Tap or drag into the <strong>Things</strong> tab only the items that belong with <em>the repair work</em>. Leave everything else where it is. Select <i data-lucide="info" class="licon"></i> if you&rsquo;re not sure what an item is.</p>
@@ -199,6 +201,7 @@ function doTheRest() {
   renderSort();
   document.getElementById('sortLive').hidden = true;
   document.getElementById('sortDoneBlock').hidden = false;
+  updSortProg();
 }
 function sortBack() {
   placed = placedSnapshot ? Object.assign({}, placedSnapshot) : {};
@@ -206,6 +209,7 @@ function sortBack() {
   document.getElementById('sortDoneBlock').hidden = true;
   document.getElementById('sortLive').hidden = false;
   renderSort();
+  updSortProg();
   window.scrollTo(0, 0);
 }
 
@@ -215,8 +219,12 @@ function restart() {
   document.getElementById('sortLive').hidden = false;
   document.getElementById('sortDoneBlock').hidden = true;
   renderSort();
+  updSortProg();
   window.scrollTo(0, 0);
 }
+
+/* ===== segmented progress (two pages: the sort, then the insight) ===== */
+function updSortProg(){ if(window.renderStepProgress) renderStepProgress('stepProg', sortDone ? 2 : 1, 2); }
 
 /* ===== glossary ===== */
 function openGlossary(){ m1GlossaryOpen('11-3'); }
@@ -230,6 +238,7 @@ function renderSegProgress(){
 /* ===== init ===== */
 renderSegProgress();
 renderSort();
+updSortProg();
 </script>
   <script src="dev.js"></script>
 </body>

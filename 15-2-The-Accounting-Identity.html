@@ -15,6 +15,8 @@
 
     <div class="phase-title-row">
       <div class="phase-title" id="phaseTitle"></div>
+
+    <div id="stepProg"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
       <button class="icon-btn" title="Restart" aria-label="Restart this section" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
@@ -247,6 +249,7 @@ function balanceSheet(){
 }
 
 function renderIdentity(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', Math.min(idStage + 1, 5), 5);
   var c = document.getElementById('identityBody');
   var html = '';
   if(idStage===0){
