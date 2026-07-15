@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accounting Pre-Work — Contents</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Accounting Pre-Work</h1>
+        <p class="tut-header-sub">Contents &middot; Yale School of Management</p>
+      </div>
+      <div class="banner-instructor">
+        <div class="banner-instructor-name">Rick Antle</div>
+        <div class="banner-instructor-title">William S. Beinecke Professor of Accounting</div>
+      </div>
+    </div>
+
+    <p class="prose">Work the tutorials in order &mdash; each one builds on the last. A green <span class="course-done-check">&#10003;</span> marks the tutorials you have finished.</p>
+
+    <div id="courseList"></div>
+
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* Contents built from COURSE_TUTORIALS in shared.js — one source of truth. */
+(function renderContents(){
+  var html = '', lastMod = '';
+  COURSE_TUTORIALS.forEach(function(t){
+    if (t.module !== lastMod){
+      if (lastMod !== '') html += '</div>';
+      html += '<div class="section-card"><div class="section-tag">'+t.module+'</div>';
+      lastMod = t.module;
+    }
+    html += '<a class="roadmap-activity" href="'+t.pages[0].f+'"><span class="roadmap-activity-dot"></span>'+
+      '<span class="roadmap-activity-text"><span class="roadmap-activity-num">'+t.title+'</span>'+courseCheck(t.id)+'</span></a>';
+  });
+  if (lastMod !== '') html += '</div>';
+  document.getElementById('courseList').innerHTML = html;
+})();
+</script>
+</body>
+</html>

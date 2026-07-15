@@ -1212,3 +1212,113 @@ function renderStepProgress(elId, at, total, label) {
   h += '</div>';
   el.innerHTML = h;
 }
+
+
+
+/* ============================================================================
+ * Course chrome (added 2026-07-14): on every tutorial page,
+ *   - a sticky top banner: "Back Tutorial: <prev>" · index dropdown ·
+ *     "Next Tutorial: <next>" — the tutorial buttons carry a green checkmark
+ *     when that tutorial is complete (its last page reached);
+ *   - the index dropdown lists Module > Tutorial > pages, with a checkmark on
+ *     every page already visited and the current page highlighted;
+ *   - the page title fills the page's .phase-title slot when it is empty;
+ *   - a footer Back/Next row — page-level navigation within the course order.
+ * final.html builds its contents list from the same COURSE_TUTORIALS data.
+ * ========================================================================== */
+var COURSE_TUTORIALS = [
+  { id:'m1t1', module:'Module 1 · The Journey', num:'Tutorial 1', name:'Getting Organized', title:'1.1 Getting Organized', pages:[
+    {f:'11-1-Getting-Started.html', t:'Getting Started'}, {f:'11-2-A-Rough-Week.html', t:'A Rough Week'}, {f:'11-3-Sort-Your-Things.html', t:'Sort Your Things'}, {f:'11-4-The-Line-You-Drew.html', t:'The Line You Drew'}, {f:'11-5-Module-Complete.html', t:'Overview'} ] },
+  { id:'m1t2', module:'Module 1 · The Journey', num:'Tutorial 2', name:'Insurance and Maria', title:'1.2 Insurance and Maria', pages:[
+    {f:'12-1-Meet-Maria.html', t:'Meet Maria'}, {f:'12-2-Marias-Form.html', t:'Maria&rsquo;s Form'}, {f:'12-3-The-Read-Back.html', t:'The Read-Back'}, {f:'12-4-Module-Complete.html', t:'Overview'} ] },
+  { id:'m1t3', module:'Module 1 · The Journey', num:'Tutorial 3', name:'Anna and the Bank Statement', title:'1.3 Anna and the Bank Statement', pages:[
+    {f:'13-1-Meet-Anna.html', t:'Meet Anna'}, {f:'13-2-The-Bank-Statement.html', t:'The Bank Statement'}, {f:'13-3-The-Cash-Movement.html', t:'The Cash Movement'}, {f:'13-4-The-Customer-Payments.html', t:'The Customer Payments'}, {f:'13-5-The-Credit-Card-Statement.html', t:'The Credit Card Statement'}, {f:'13-6-The-Promises.html', t:'The Promises'}, {f:'13-7-The-Rent-Payment.html', t:'The Rent Payment'}, {f:'13-8-Naming-the-Lists.html', t:'Naming the Lists'}, {f:'13-9-Module-Complete.html', t:'Overview'} ] },
+  { id:'m1t4', module:'Module 1 · The Journey', num:'Tutorial 4', name:'Keeping the Reasons', title:'1.4 Keeping the Reasons', pages:[
+    {f:'14-1-Why-Keep-the-Reasons.html', t:'Why Keep the Reasons'}, {f:'14-2-Walk-the-Reasons.html', t:'Walk the Changes'}, {f:'14-4-What-Moves-the-Difference.html', t:'What Moves the Difference'}, {f:'14-5-Module-Complete.html', t:'Overview'} ] },
+  { id:'m1t5', module:'Module 1 · The Journey', num:'Tutorial 5', name:'Naming What You Built', title:'1.5 Naming What You Built', pages:[
+    {f:'15-1-Find-the-Difference.html', t:'Find the Difference'}, {f:'15-2-The-Accounting-Identity.html', t:'The Accounting Identity'}, {f:'15-3-The-Entity.html', t:'The Entity'}, {f:'15-4-Double-Entry.html', t:'Double-Entry'}, {f:'15-5-Module-Complete.html', t:'Overview'} ] },
+  { id:'m2t1', module:'Module 2 · Getting Formal', num:'Tutorial 1', name:'The Two Yous', title:'2.1 The Two Yous', pages:[
+    {f:'21-1-welcome.html', t:'The Call from Maria'}, {f:'21-2-exposure.html', t:'Follow the Claim'}, {f:'21-3-whoSeesTwo.html', t:'Who Sees Two?'}, {f:'21-4-twoHats.html', t:'Same Head, Two Hats'}, {f:'21-5-complete.html', t:'Complete'} ] },
+  { id:'m2t2', module:'Module 2 · Getting Formal', num:'Tutorial 2', name:'Filing for a Legal Body', title:'2.2 Filing for a Legal Body', pages:[
+    {f:'22-1-welcome.html', t:'Anna&rsquo;s Advice'}, {f:'22-2-name.html', t:'Name the LLC'}, {f:'22-3-file.html', t:'File the Certificate'}, {f:'22-4-whatChanged.html', t:'What Changed?'}, {f:'22-5-complete.html', t:'Complete'} ] },
+  { id:'m2t3', module:'Module 2 · Getting Formal', num:'Tutorial 3', name:'The Rules', title:'2.3 The Rules', pages:[
+    {f:'23-1-welcome.html', t:'The Operating Agreement'}, {f:'23-2-agreement.html', t:'Drafting the Agreement'}, {f:'23-3-contribution.html', t:'What You Put In'}, {f:'23-4-wall.html', t:'The Wall'}, {f:'23-5-keystone.html', t:'When Did It Become Real?'}, {f:'23-6-complete.html', t:'Complete'} ] },
+  { id:'m2t4', module:'Module 2 · Getting Formal', num:'Tutorial 4', name:'The Entity&rsquo;s Own Number', title:'2.4 The Entity&rsquo;s Own Number', pages:[
+    {f:'24-1-welcome.html', t:'An Identity of Its Own'}, {f:'24-2-ein.html', t:'Form SS-4'}, {f:'24-3-account.html', t:'Opening the Account'}, {f:'24-4-statements.html', t:'The Statements'}, {f:'24-5-schedule-a.html', t:'Complete Schedule A'}, {f:'24-6-complete.html', t:'Module 2 Complete'} ] },
+  { id:'m3t1', module:'Module 3 · The Full Set of Statements', num:'Tutorial 1', name:'Run the Season', title:'3.1 Run the Season', pages:[
+    {f:'31-1-welcome.html', t:'A Season Goes By'}, {f:'31-2-work-the-season.html', t:'Read the Books'} ] },
+  { id:'m3t2', module:'Module 3 · The Full Set of Statements', num:'Tutorial 2', name:'The Income Statement', title:'3.2 The Income Statement', pages:[
+    {f:'32-1-the-income-statement.html', t:'The Pile'}, {f:'32-2-two-kinds.html', t:'Two Kinds of Reason'}, {f:'32-3-revenue-follows-the-work.html', t:'The Work, Not the Cash'}, {f:'32-4-name-the-income-statement.html', t:'Name the Piles'}, {f:'32-5-what-the-season-kept.html', t:'What the Season Kept'} ] },
+  { id:'m3t3', module:'Module 3 · The Full Set of Statements', num:'Tutorial 3', name:'Depreciation', title:'3.3 Depreciation', pages:[
+    {f:'33-1-Two-Kinds-of-Used-Up.html', t:'Two Kinds of Used-Up'}, {f:'33-2-The-Third-Kind.html', t:'The Third Kind'}, {f:'33-3-The-Bottom-Line.html', t:'The Bottom Line'} ] },
+  { id:'m3t4', module:'Module 3 · The Full Set of Statements', num:'Tutorial 4', name:'The Cash-Flow Statement', title:'3.4 The Cash-Flow Statement', pages:[
+    {f:'34-1-The-Cash-Puzzle.html', t:'The Cash Puzzle'}, {f:'34-2-Three-Buckets.html', t:'Three Buckets'}, {f:'34-3-What-Cash-Missed.html', t:'What Cash Missed'}, {f:'34-4-The-Cash-Flow-Statement.html', t:'Laying It Out'} ] },
+  { id:'m3t5', module:'Module 3 · The Full Set of Statements', num:'Tutorial 5', name:'Closing the Season', title:'3.5 Closing the Season', pages:[
+    {f:'35-1-The-Capital-Bridge.html', t:'The Capital Bridge'}, {f:'35-2-The-First-Close.html', t:'The First Close'}, {f:'35-3-The-Statements-Tie-Out.html', t:'The Statements Tie Out'}, {f:'35-4-Module-Complete.html', t:'Module Complete'} ] },
+  { id:'m4t1', module:'Module 4 · Real Statements', num:'Tutorial 1', name:'The Statement Map', title:'4.1 The Statement Map', pages:[
+    {f:'41-1-The-Investor-Asks.html', t:'The Investor Asks'}, {f:'41-2-The-Statement-Map.html', t:'Three Paths and the Map'} ] }
+];
+function courseFlatPages(){ var a=[]; COURSE_TUTORIALS.forEach(function(t){ t.pages.forEach(function(p){ a.push(p.f); }); }); return a; }
+function courseTutorialOf(file){ for(var i=0;i<COURSE_TUTORIALS.length;i++) for(var j=0;j<COURSE_TUTORIALS[i].pages.length;j++) if(COURSE_TUTORIALS[i].pages[j].f===file) return i; return -1; }
+function courseTutDone(id){ try{ return localStorage.getItem('tutdone:'+id)==='1'; }catch(e){ return false; } }
+function courseMarkTutDone(id){ try{ localStorage.setItem('tutdone:'+id,'1'); }catch(e){} }
+function courseCheck(id){ return courseTutDone(id) ? ' <span class="course-done-check">&#10003;</span>' : ''; }
+function coursePageDone(f){ try{ return localStorage.getItem('pagedone:'+f)==='1'; }catch(e){ return false; } }
+function courseMarkPageDone(f){ try{ localStorage.setItem('pagedone:'+f,'1'); }catch(e){} }
+function coursePageCheck(f){ return coursePageDone(f) ? ' <span class="course-done-check">&#10003;</span>' : ''; }
+function initCourseChrome(){
+  if (window.self !== window.top) return;              /* not inside the old view.html iframe */
+  var file = location.pathname.split('/').pop() || '';
+  var ti = courseTutorialOf(file);
+  if (ti < 0) return;
+  var tut = COURSE_TUTORIALS[ti];
+  courseMarkPageDone(file);                                                   /* visiting a page checks it off */
+  if (file === tut.pages[tut.pages.length-1].f) courseMarkTutDone(tut.id);    /* reaching the last page completes the tutorial */
+
+  /* --- page title at the top: fill the page's .phase-title if it is empty --- */
+  var pageObj = null;
+  tut.pages.forEach(function(p){ if(p.f===file) pageObj = p; });
+  var pt = document.querySelector('.phase-title');
+  if (pt && pageObj && !pt.textContent.trim()) pt.innerHTML = pageObj.t;
+
+  /* --- top banner: tutorial-level nav + full-hierarchy index dropdown --- */
+  var prev = ti > 0 ? COURSE_TUTORIALS[ti-1] : null;
+  var next = ti < COURSE_TUTORIALS.length-1 ? COURSE_TUTORIALS[ti+1] : null;
+  var menuHtml = '', lastMod = '';
+  COURSE_TUTORIALS.forEach(function(t){
+    var mod = t.module.split(' · ')[0];
+    if (mod !== lastMod){ menuHtml += '<div class="gh">'+mod+'</div>'; lastMod = mod; }
+    menuHtml += '<div class="mh">'+t.num+': '+t.name+'</div>';
+    t.pages.forEach(function(p){
+      menuHtml += '<a href="'+p.f+'"'+(p.f===file?' class="cur"':'')+'>'+p.t+coursePageCheck(p.f)+'</a>';
+    });
+  });
+  var bar = document.createElement('div');
+  bar.className = 'course-banner';
+  bar.innerHTML =
+    '<div class="course-banner-side">'+(prev ? '<button class="btn-reset course-banner-btn" onclick="location.href=\''+prev.pages[0].f+'\'">&larr; Back Tutorial: '+prev.title+courseCheck(prev.id)+'</button>' : '')+'</div>'+
+    '<div class="course-banner-mid"><button class="btn-reset course-banner-btn" id="courseIndexBtn">'+tut.title+' &#9662;</button>'+
+      '<div class="course-index-menu" id="courseIndexMenu" hidden>'+menuHtml+'</div></div>'+
+    '<div class="course-banner-side right">'+(next ? '<button class="btn-continue course-banner-btn" onclick="location.href=\''+next.pages[0].f+'\'">Next Tutorial: '+next.title+courseCheck(next.id)+' &rarr;</button>' : '')+'</div>';
+  document.body.insertBefore(bar, document.body.firstChild);
+  var iBtn = document.getElementById('courseIndexBtn'), iMenu = document.getElementById('courseIndexMenu');
+  iBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    iMenu.hidden = !iMenu.hidden;
+    if (!iMenu.hidden){ var cur = iMenu.querySelector('a.cur'); if (cur) cur.scrollIntoView({ block:'center' }); }
+  });
+  document.addEventListener('click', function(){ iMenu.hidden = true; });
+
+  /* --- footer controller: fixed bottom bar with page-level Back / Next --- */
+  var flat = courseFlatPages();
+  var pi = flat.indexOf(file);
+  var foot = document.createElement('div');
+  foot.className = 'course-page-footer';
+  foot.innerHTML =
+    (pi > 0 ? '<button class="btn-reset course-banner-btn" onclick="location.href=\''+flat[pi-1]+'\'">&larr; Back</button>' : '') +
+    (pi < flat.length-1 ? '<button class="btn-continue course-banner-btn" style="margin-left:auto;" onclick="location.href=\''+flat[pi+1]+'\'">Next &rarr;</button>' : '');
+  document.body.appendChild(foot);
+  document.body.classList.add('has-course-footer');
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initCourseChrome);
+else initCourseChrome();
