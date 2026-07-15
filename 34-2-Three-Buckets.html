@@ -28,9 +28,10 @@
     <div id="stepProg"></div>
 
     <div class="narrative-block">
-      <p>Every dollar that moved through Cash this <strong>season</strong> is a fact &mdash; they&rsquo;re all in the Cash line on the <strong>Assets</strong> tab, and they&rsquo;re laid out again on a new <strong>Season Cash</strong> tab beside the ones you know. The June 1 opening deposit isn&rsquo;t one of them; that happened before the season started. Sort them into three piles, by <strong>purpose</strong>: running the season day to day, buying long-lived gear, or an owner moving money. <strong>Click a row</strong>, then click the pile it belongs in.</p>
+      <p>Every dollar that moved through Cash this <strong>season</strong> is a fact &mdash; they&rsquo;re all in the Cash line on the <strong>Assets</strong> tab, and they&rsquo;re laid out below as one <strong>Season Cash</strong> list. The June 1 opening deposit isn&rsquo;t one of them; that happened before the season started. Sort them into three piles, by <strong>purpose</strong>: running the season day to day, buying long-lived gear, or an owner moving money. Click the <strong><i data-lucide="chevron-down" class="licon"></i></strong> beside a row, then choose the pile it belongs in &mdash; then sort the rest in one go, and check your sort.</p>
     </div>
 
+    <div id="sortProgBox"></div>
     <div id="wb"></div>
     <div class="feedback" id="sortNudge"></div>
     <div id="anna"></div>
@@ -89,7 +90,7 @@ function findR(id){ for(var i=0;i<rows.length;i++) if(rows[i].id===id) return ro
 var visibleIds = rows.map(function(r){ return r.id; });
 
 /* ===== state ===== */
-var placed = {}, selectedId = null, done = false, filling = false;
+var placed = {}, expandedId = null, checked = false, autoDone = false, done = false, filling = false, hintSeen = false;
 var bucketOpen = { op:true, inv:true, fin:true };
 var BUCKETS = [
   { key:'op',  label:'Running the season',    blurb:'day-to-day cash in and out of doing the work' },
@@ -100,39 +101,61 @@ var BUCKETS = [
 function correctIn(b){ return rows.some(function(r){ return placed[r.id]===b && r.bucket===b; }); }
 function gateMet(){ return BUCKETS.every(function(b){ return correctIn(b.key); }); }
 function bTotal(b){ return rows.filter(function(r){ return placed[r.id]===b; }).reduce(function(s,r){ return s+r.delta; }, 0); }
+function bCount(b){ return rows.filter(function(r){ return placed[r.id]===b; }).length; }
+function wrongIds(){ return rows.filter(function(r){ return placed[r.id] && placed[r.id]!==r.bucket; }).map(function(r){ return r.id; }); }
+function unsortedCount(){ return rows.filter(function(r){ return !placed[r.id]; }).length; }
 
-/* ===== the interactive sort sheet, rendered inside the workbook shell ===== */
-function xrow(cls, attrs, label, val){ return '<div class="xl-row '+cls+'"'+attrs+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>'; }
-function bucketGroup(b){
-  var mine = rows.filter(function(r){ return placed[r.id]===b.key; });
-  var armed = selectedId && !done && !filling;
-  var head = b.label+' ('+mine.length+') &mdash; '+b.blurb+(armed?' <span class="xl-new-tag">click to drop here</span>':'');
-  var open = !done || bucketOpen[b.key];
-  var gutter = done
-    ? '<button class="xl-toggle" onclick="toggleBucket(\''+b.key+'\')" aria-expanded="'+open+'">'+(open?'&minus;':'+')+'</button>'
-    : '';
-  var h = '<div class="xl-row xl-cat"'+(armed?' onclick="placeInto(\''+b.key+'\')" style="cursor:pointer;"':'')+'>'
-    +'<div class="xl-gutter">'+gutter+'</div><div class="xl-rownum"></div><div class="xl-c">'+head+'</div><div class="xl-v">'+BRW.signed(bTotal(b.key))+'</div></div>';
+/* ===== the interactive Season Cash list — the same statement document as 13-2 =====
+   A chevron on the left of each row expands it, Classify buttons choose its
+   pile (the tag lands on the row), "Sort the rest" unlocks as you go, and
+   "Check my sort" verifies at the end. */
+function cashRow(r, i){
+  var open = expandedId===r.id;
+  var wrong = checked && placed[r.id] && placed[r.id]!==r.bucket;
+  var right = checked && placed[r.id] && placed[r.id]===r.bucket;
+  var stripeCls = wrong ? 'wrong' : (placed[r.id] ? 'shop' : '');
+  var tag = '';
+  if(placed[r.id]){ var b = BUCKETS.filter(function(x){ return x.key===placed[r.id]; })[0]; tag = '<span class="stmt-tag shop">'+b.label+'</span>'; }
+  if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
+  if(right) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
+  var h = '<div class="stmt-row stmt-grid-sort'+(i%2?' alt':'')+'">'+
+    '<button class="stmt-info-btn'+(open?' open':'')+(i===0&&!hintSeen?' hint-pulse':'')+'" onclick="toggleCash(\''+r.id+'\')" aria-label="'+(open?'Collapse':'Expand')+'"><i data-lucide="'+(open?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
+    '<div class="stmt-stripe '+stripeCls+'"></div>'+
+    '<span>'+r.account+' &mdash; '+r.reason+tag+'</span>'+
+    '<span class="stmt-num">'+BRW.signed(r.delta)+'</span></div>';
   if(open){
-    mine.forEach(function(r){ h += xrow('xl-item', '', r.account+' &mdash; '+r.reason, BRW.signed(r.delta)); });
-    if(!mine.length && !armed) h += xrow('xl-item', '', '<em>empty</em>', '');
+    var btns = BUCKETS.map(function(b){
+      return '<button class="classify-btn'+(placed[r.id]===b.key?' active-shop':'')+'"'+(right?' disabled':' onclick="classifyCash(\''+r.id+'\',\''+b.key+'\')"')+'>'+b.label+'</button>';
+    }).join('');
+    h += '<div class="stmt-expand"><div class="classify-row"><span class="classify-label">Classify:</span>'+btns+'</div></div>';
   }
   return h;
 }
-function toggleBucket(k){ playClick(); bucketOpen[k] = !bucketOpen[k]; BRW.update('wb', snap); }
-function sortSheet(cid, snap){
-  var h = '<div class="cash-sheet-head"><div class="cash-sheet-title">This season&rsquo;s cash events</div><div class="cash-sheet-sub">'+(done?'sorted into three piles, by purpose':'click a row, then click the pile it belongs in')+'</div></div>';
-  if(!done){
-    var remaining = visibleIds.map(findR).filter(function(r){ return !placed[r.id]; });
-    h += xrow('xl-cat', '', 'TO SORT ('+remaining.length+') &mdash; jumbled, in the order cash moved', '');
-    remaining.forEach(function(r){
-      var sel = selectedId===r.id;
-      var label = (sel?'<i data-lucide="hand" class="licon"></i> ':'')+r.account+' &mdash; '+r.reason+(sel?' <span class="xl-new-tag">pick a pile below &darr;</span>':'');
-      h += xrow('xl-item', ' onclick="pickReason(\''+r.id+'\')"', label, BRW.signed(r.delta));
-    });
-  }
-  BUCKETS.forEach(function(b){ h += bucketGroup(b); });
-  return h;
+function renderSortDoc(){
+  var un = unsortedCount();
+  var net = rows.reduce(function(s,r){ return s+r.delta; }, 0);
+  var h = '<div class="stmt">';
+  h += '<div class="stmt-head"><div><div class="stmt-bank">Bike-Repair.xlsx</div><div class="stmt-acct">Season Cash &middot; every cash move this season</div></div>'+
+    '<div><div class="stmt-period-label">Period</div><div class="stmt-period">Summer 2026</div></div></div>';
+  h += '<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Cash event</span><span class="stmt-num">Amount</span></div>';
+  visibleIds.map(findR).forEach(function(r, i){ h += cashRow(r, i); });
+  h += '<div class="stmt-balrow bottom"><span>Net change in cash</span><span class="stmt-num">'+BRW.signed(net)+'</span></div>';
+  h += '</div>';
+  document.getElementById('wb').innerHTML = h;
+}
+function sortProgress(){
+  var un = unsortedCount();
+  var btn = un > 0
+    ? '<button class="btn-continue btn-block"'+(gateMet()&&!autoDone&&!filling?' onclick="doTheRest()"':' disabled')+'>Sort the rest</button>'
+    : (!checked ? '<button class="btn-continue btn-block" onclick="checkSort()">Check my sort</button>' : '');
+  return '<div class="sortprog"><div class="sortprog-title">Sort the cash events</div>'+
+    '<p class="sortprog-hint">A shortcut to auto-sort the remaining rows will unlock as you go. Get one of each kind right to unlock it.</p>'+
+    '<div class="sortprog-grid four">'+
+    '<div class="sortprog-box shop"><div class="sortprog-label">Running</div><div class="sortprog-num">'+bCount('op')+'</div></div>'+
+    '<div class="sortprog-box shop"><div class="sortprog-label">Gear</div><div class="sortprog-num">'+bCount('inv')+'</div></div>'+
+    '<div class="sortprog-box personal"><div class="sortprog-label">Owner</div><div class="sortprog-num">'+bCount('fin')+'</div></div>'+
+    '<div class="sortprog-box'+(un===0?' done':'')+'"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">'+un+'</div></div>'+
+    '</div>'+btn+'</div>';
 }
 
 /* the full workbook stays the anchor — the sort sheet is one more tab beside it */
@@ -141,56 +164,42 @@ snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
 snap.tabs.push({ id:'sort', label:'Season Cash' });
 
 /* ===== interaction ===== */
-function nudge(kind, html){ var n=document.getElementById('sortNudge'); n.className='feedback '+kind+' show'; n.innerHTML=html; if(window.lucide) lucide.createIcons(); }
-function refresh(){ BRW.update('wb', snap); renderControls(); }
-function pickReason(id){ if(done||filling) return; playClick(); selectedId = (selectedId===id)?null:id; refresh(); }
-function bucketWord(k){ return k==='op' ? 'running the season' : (k==='inv' ? 'long-lived gear' : 'an owner move'); }
-function placeInto(b){
-  if(done||filling||!selectedId) return;
-  var r = findR(selectedId);
-  if(r.bucket!==b){
-    playNope();
-    nudge('err', '<i data-lucide="alert-triangle" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; is really about <strong>'+bucketWord(r.bucket)+'</strong>, not this pile.');
-    selectedId = null; refresh();
-    return;
-  }
-  playSuccess();
-  placed[r.id] = b;
-  selectedId = null;
-  nudge('ok', '<i data-lucide="check" class="licon"></i> &ldquo;'+r.account+' &mdash; '+r.reason+'&rdquo; &mdash; '+bucketWord(b)+'.');
-  refresh();
+function refresh(){ renderAll(); }
+function toggleCash(id){ hintSeen=true; expandedId = (expandedId===id)?null:id; renderAll(); }
+function classifyCash(id, b){
+  if(done||filling) return;
+  placed[id] = b;
+  expandedId = null;
+  playClick();
+  renderAll();
 }
+function checkSort(){ checked=true; playClick(); renderAll(); }
 var placedBeforeFill = null;
 function doTheRest(){
-  if(done||filling||!gateMet()) return;
+  if(done||filling||!gateMet()||autoDone) return;
   placedBeforeFill = {}; for(var k in placed) placedBeforeFill[k] = placed[k];   // remember the hand-sorted state
-  playClick(); filling=true; selectedId=null;
-  document.getElementById('controls').innerHTML='';
-  document.getElementById('sortNudge').className='feedback';
+  playClick(); filling=true; expandedId=null;
+  renderAll();
   setTimeout(function(){
-    rows.forEach(function(r){ placed[r.id]=r.bucket; });
-    filling=false; done=true;
+    rows.forEach(function(r){ if(!placed[r.id]) placed[r.id]=r.bucket; });   // fill only what the student left unsorted
+    filling=false; autoDone=true;
     playSuccess();
-    BRW.update('wb', snap);
-    renderDone();
-    window.scrollTo(0, document.body.scrollHeight);
+    renderAll();
   }, 700);
 }
 
 /* ===== controls / Anna ===== */
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
-function renderControls(){
+function renderAll(){
+  if(checked && !done && unsortedCount()===0 && wrongIds().length===0){ done=true; playSuccess(); }
   if (window.renderStepProgress) renderStepProgress('stepProg', done ? 2 : 1, 2);
-  if(done||filling) return;
-  var ctrl='';
-  if(Object.keys(placed).length>0){
-    var met=gateMet();
-    ctrl = '<div class="gate-card'+(met?' gate-armed-maria':'')+'"><div class="gate-card-title">'
-      +(met?'That&rsquo;s the pattern &mdash; every row sorts by purpose. Sort the rest the same way.':'Get at least one row correctly into <strong>each</strong> pile to unlock the rest.')
-      +'</div><button class="btn-continue btn-block" onclick="doTheRest()"'+(met?'':' disabled')+'>Sort the rest &rarr;</button></div>';
-  }
-  document.getElementById('controls').innerHTML = ctrl;
+  if(done){ renderSortDoc(); renderDone(); return; }
+  document.getElementById('sortProgBox').innerHTML = sortProgress();
+  document.getElementById('anna').innerHTML = (checked && wrongIds().length>0)
+    ? annaBox('Not all of these look right yet. I&rsquo;ve marked the ones that need another look. Try again.') : '';
+  document.getElementById('controls').innerHTML = '';
+  renderSortDoc();
   if(window.lucide) lucide.createIcons();
 }
 
@@ -211,10 +220,11 @@ function unSort(){
   playClick();
   placed = placedBeforeFill || {};
   placedBeforeFill = null;
-  done = false; filling = false; selectedId = null;
+  done = false; filling = false; expandedId = null; checked = false; autoDone = false;
   document.getElementById('anna').innerHTML = '';
+  document.getElementById('controls').innerHTML = '';
   document.getElementById('sortNudge').className = 'feedback';
-  refresh();
+  renderAll();
 }
 
 /* ===== glossary / nav ===== */
@@ -235,13 +245,8 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
 /* ===== init ===== */
-window.devFill = function(){ rows.forEach(function(r){ placed[r.id]=r.bucket; }); done=true; filling=false; BRW.update('wb', snap); renderDone(); };
-BR_WB.registerSeasonSheets();
-BR_WB.registerStatementSheets();
-BRW.registerSheet('sort', sortSheet);
-BRW.mount('wb', snap);
-BRW.tab('wb', 'sort');
-if (window.renderStepProgress) renderStepProgress('stepProg', 1, 2);
+window.devFill = function(){ rows.forEach(function(r){ placed[r.id]=r.bucket; }); checked=true; filling=false; renderAll(); };
+renderAll();
 </script>
   <script src="dev.js"></script>
 </body>

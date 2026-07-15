@@ -186,6 +186,7 @@ var selectedReasonId = null;
 var eliminateAutoActive = false, eliminateAutoDone = false, eliminateNudge = null;
 var assignments = {};
 var sortAutoActive = false, sortAutoDone = false, sortNudge = null;
+var sortExpandedId = null, sortChecked = false, moversDone = false, sortHintSeen = false;
 var expandedSortCats = { contributed:true, earned:true };
 var curWbContainer = null;
 
@@ -210,6 +211,7 @@ function restart(){
   step=0; activeTab='assets'; assetsExpanded={}; cashExpanded={}; liabExpanded={}; revealed={}; eliminated={};
   selectedReasonId=null; eliminateAutoActive=false; eliminateAutoDone=false; eliminateNudge=null;
   assignments={}; sortAutoActive=false; sortAutoDone=false; sortNudge=null;
+  sortExpandedId=null; sortChecked=false; moversDone=false; sortHintSeen=false;
   expandedSortCats={ contributed:true, earned:true };
   goto('welcome');
 }
@@ -289,39 +291,42 @@ function reasonsSheetWalkPairs(){
   });
   return html;
 }
-function sortBody(){
-  var solos = REASONS.filter(function(r){ return soloReasonIds.indexOf(r.id)>=0; });
-  var unassigned = solos.filter(function(r){ return !assignments[r.id]; });
-  var contributed = solos.filter(function(r){ return assignments[r.id]==='contributed'; });
-  var earned = solos.filter(function(r){ return assignments[r.id]==='earned'; });
-  var cTotal = contributed.reduce(function(s,r){ return s+r.delta; },0);
-  var eTotal = earned.reduce(function(s,r){ return s+r.delta; },0);
-  var html = '';
-  if(unassigned.length>0){
-    html += '<div class="cash-sheet-head"><div class="cash-sheet-title">To sort ('+unassigned.length+' '+(unassigned.length===1?'row':'rows')+')</div></div>';
-    html += '<div class="cash-group">';
-    unassigned.forEach(function(r){
-      html += '<div class="dep-card">'+
-        '<div class="dep-card-head"><div><div class="dep-card-meta">'+r.account+' &middot; '+signedDollars(r.delta)+'</div><div class="dep-card-title">'+r.reason+'</div></div></div>'+
-        '<div class="classify-row"><span class="classify-label">Sort:</span>'+
-          '<button class="classify-btn" onclick="assignRow(\''+r.id+'\',\'contributed\')">&rarr; Contributed</button>'+
-          '<button class="classify-btn" onclick="assignRow(\''+r.id+'\',\'earned\')">&rarr; Generated</button>'+
-        '</div></div>';
-    });
-    html += '</div>';
+/* ===== the movers sort — the same statement document as 13-2 ===== */
+function moverRow(r, i){
+  var a = assignments[r.id];
+  var wrong = sortChecked && a && CORRECT_CATEGORY[r.id]!==a;
+  var right = sortChecked && a && CORRECT_CATEGORY[r.id]===a;
+  var open = sortExpandedId===r.id;
+  var stripeCls = wrong ? 'wrong' : (a ? (a==='contributed'?'shop':'personal') : '');
+  var tag = '';
+  if(a) tag = '<span class="stmt-tag '+(a==='contributed'?'shop':'personal')+'">'+(a==='contributed'?'Contributed':'Generated')+'</span>';
+  if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
+  if(right) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
+  var html = '<div class="stmt-row stmt-grid-sort'+(i%2?' alt':'')+'">'+
+    '<button class="stmt-info-btn'+(open?' open':'')+(i===0&&!sortHintSeen?' hint-pulse':'')+'" onclick="toggleMover(\''+r.id+'\')" aria-label="'+(open?'Collapse':'Expand')+'"><i data-lucide="'+(open?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
+    '<div class="stmt-stripe '+stripeCls+'"></div>'+
+    '<span>'+r.account+' &mdash; '+r.reason+tag+'</span>'+
+    '<span class="stmt-num">'+signedDollars(r.delta)+'</span></div>';
+  if(open){
+    html += '<div class="stmt-expand"><div class="classify-row"><span class="classify-label">Sort:</span>'+
+      '<button class="classify-btn'+(a==='contributed'?' active-shop':'')+'"'+(right?' disabled':' onclick="assignRow(\''+r.id+'\',\'contributed\')"')+'>Contributed</button>'+
+      '<button class="classify-btn'+(a==='earned'?' active-personal':'')+'"'+(right?' disabled':' onclick="assignRow(\''+r.id+'\',\'earned\')"')+'>Generated</button>'+
+      '</div></div>';
   }
-  html += sortSection('CONTRIBUTED','contributed',contributed,cTotal);
-  html += sortSection('GENERATED','earned',earned,eTotal);
   return html;
 }
-function sortSection(title, key, rows, total){
-  var open = expandedSortCats[key];
-  var html = '<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleSortCat(\''+key+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum"></div><div class="xl-c">'+title+' ('+rows.length+')</div><div class="xl-v">'+signedDollars(total)+'</div></div>';
-  if(open){
-    if(rows.length===0) html += '<div class="bs-empty-msg">(empty so far)</div>';
-    else rows.forEach(function(r){ html += '<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r.account+' &mdash; '+r.reason+'</div><div class="xl-v">'+signedDollars(r.delta)+'</div></div>'; });
-  }
-  return html;
+function renderMoverDoc(){
+  var solos = REASONS.filter(function(r){ return soloReasonIds.indexOf(r.id)>=0; });
+  var un = solos.filter(function(r){ return !assignments[r.id]; }).length;
+  var total = solos.reduce(function(s,r){ return s+r.delta; },0);
+  var html = '<div class="stmt">';
+  html += '<div class="stmt-head"><div><div class="stmt-bank">Bike-Repair.xlsx</div><div class="stmt-acct">Reasons &mdash; the changes with no match</div></div>'+
+    '<div><div class="stmt-period-label">Period</div><div class="stmt-period">May 2026</div></div></div>';
+  html += '<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Reason</span><span></span></div>';
+  solos.forEach(function(r, i){ html += moverRow(r, i); });
+  html += '<div class="stmt-balrow bottom"><span>The difference has moved</span><span class="stmt-num">'+signedDollars(total)+'</span></div>';
+  html += '</div>';
+  document.getElementById('wbNM').innerHTML = html;
 }
 function renderWorkbook(containerId){
   curWbContainer = containerId;
@@ -438,49 +443,61 @@ function renderPairs(){
 }
 
 /* ===== movers ===== */
+function toggleMover(id){ sortHintSeen=true; sortExpandedId = (sortExpandedId===id)?null:id; renderMovers(); }
 function assignRow(id, category){
-  if(phase!=='movers' || sortAutoActive || sortAutoDone) return;
-  if(assignments[id]) return;
-  if(CORRECT_CATEGORY[id]===category){
-    playSuccess(); assignments[id]=category; sortNudge=null;
-  } else {
-    playNope(); sortNudge = { rowId:id, attempted:category };
-  }
+  if(phase!=='movers' || sortAutoActive || moversDone) return;
+  assignments[id]=category;
+  sortExpandedId=null;
+  playClick();
   renderMovers();
 }
+function checkMoverSort(){ sortChecked=true; playClick(); renderMovers(); }
 function sortAutocomplete(){
   if(sortAutoActive || sortAutoDone) return;
-  playClick(); sortAutoActive=true; sortNudge=null;
+  playClick(); sortAutoActive=true; sortExpandedId=null;
   renderMovers();
   setTimeout(function(){
     soloReasonIds.forEach(function(id){ if(!assignments[id]) assignments[id]=CORRECT_CATEGORY[id]; });
     sortAutoActive=false; sortAutoDone=true; playSuccess(); renderMovers();
   }, 700);
 }
+function moverSortProgress(triggerMet, unsorted, cCount, eCount){
+  var btn = unsorted > 0
+    ? '<button class="btn-continue btn-block"'+(triggerMet?' onclick="sortAutocomplete()"':' disabled')+'>Sort the rest</button>'
+    : (!sortChecked ? '<button class="btn-continue btn-block" onclick="checkMoverSort()">Check my sort</button>' : '');
+  return '<div class="sortprog"><div class="sortprog-title">Sort the reasons</div>'+
+    '<p class="sortprog-hint">A shortcut to auto-sort the remaining rows will unlock as you go.</p>'+
+    '<div class="sortprog-grid">'+
+    '<div class="sortprog-box shop"><div class="sortprog-label">Contributed</div><div class="sortprog-num">'+cCount+'</div></div>'+
+    '<div class="sortprog-box personal"><div class="sortprog-label">Generated</div><div class="sortprog-num">'+eCount+'</div></div>'+
+    '<div class="sortprog-box'+(unsorted===0?' done':'')+'"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">'+unsorted+'</div></div>'+
+    '</div>'+btn+'</div>';
+}
 function renderMovers(){
-  var correctlyAssigned = Object.keys(assignments).filter(function(id){ return CORRECT_CATEGORY[id]===assignments[id]; }).length;
-  var allSorted = correctlyAssigned===soloReasonIds.length;
-  var done = sortAutoDone || allSorted;
-  var triggerMet = correctlyAssigned>=2 && !allSorted && !sortAutoActive && !sortAutoDone;
+  var assignedIds = soloReasonIds.filter(function(id){ return assignments[id]; });
+  var unsorted = soloReasonIds.length - assignedIds.length;
+  var correctlyAssigned = assignedIds.filter(function(id){ return CORRECT_CATEGORY[id]===assignments[id]; }).length;
+  var wrongCount = assignedIds.length - correctlyAssigned;
+  if(sortChecked && unsorted===0 && wrongCount===0 && !moversDone){ moversDone=true; playSuccess(); }
+  var done = moversDone;
+  var triggerMet = correctlyAssigned>=2 && unsorted>0 && !sortAutoActive && !sortAutoDone;
+  var cCount = assignedIds.filter(function(id){ return assignments[id]==='contributed'; }).length;
+  var eCount = assignedIds.filter(function(id){ return assignments[id]==='earned'; }).length;
 
   var top = '';
   if(!done){
-    top += annaBox('The reasons on your tab &mdash; the changes with <strong>no match</strong> &mdash; split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work: the laptop and gear from home, and the $160 your personal self quietly covered. These are <strong>contributed</strong>. The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month of workspace used up along the way. These are <strong>generated</strong>. Sort each row into the right bin by clicking on the button in each row.', true);
-    if(sortNudge){
-      var msg = (sortNudge.attempted==='contributed')
-        ? 'That one didn&rsquo;t come from you bringing something in &mdash; it came from doing the repair work. Try the other bin.'
-        : 'That one didn&rsquo;t come from doing repair work &mdash; you brought it in from outside. Try the other bin.';
-      top += warnMsg('&ldquo;'+msg+'&rdquo;');
+    top += annaBox('The reasons on your tab &mdash; the changes with <strong>no match</strong> &mdash; split into just two kinds. Some you <strong>put in</strong> yourself, from outside the repair work: the laptop and gear from home, and the $160 your personal self quietly covered. These are <strong>contributed</strong>. The rest came from <strong>doing the work</strong> &mdash; what customers paid, less the parts and the month of workspace used up along the way. These are <strong>generated</strong>. Click the <strong><i data-lucide="chevron-down" class="licon"></i></strong> beside a row, then choose its bin.', true);
+    if(sortChecked && wrongCount>0){
+      top += warnMsg('&ldquo;Not all of these look right yet. I&rsquo;ve marked the ones that need another look. Try again.&rdquo;');
     }
+    top += moverSortProgress(triggerMet, unsorted, cCount, eCount);
   }
   document.getElementById('nmTop').innerHTML = top;
 
-  renderWorkbook('wbNM');
+  renderMoverDoc();
 
   var ctrl = '';
-  if(triggerMet){
-    ctrl = '<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Sort the rest?</p><button class="btn-continue btn-block" onclick="sortAutocomplete()">Sort the rest &rarr;</button></div>';
-  } else if(sortAutoActive){
+  if(sortAutoActive){
     ctrl = '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Sorting the rest&hellip;</div></div>';
   } else if(done){
     var contributedTotal = REASONS.filter(function(r){ return assignments[r.id]==='contributed'; }).reduce(function(s,r){ return s+r.delta; },0);

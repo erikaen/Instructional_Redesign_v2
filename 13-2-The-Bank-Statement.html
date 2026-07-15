@@ -21,7 +21,7 @@
     <div class="narrative-block"><p>You&rsquo;ve been using your personal bank account for the repair work. Last month&rsquo;s bank statement just arrived. Anna sits down at the workbench with you to look it over.</p></div>
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;Okay, let&rsquo;s clean this up first. There&rsquo;s a lot in here that has nothing to do with your repair work, like your paycheck, apartment rent, and groceries. We have to pull out the rows that actually belong with the repair work. For each row, decide whether it belongs with the <strong>repair work</strong> or with your <strong>personal life</strong>. Click the <strong><i data-lucide="info" class="licon"></i></strong> on any row to see what it was.&rdquo;</div>
+      <div class="dialog-text">&ldquo;Okay, let&rsquo;s clean this up first. There&rsquo;s a lot in here that has nothing to do with your repair work, like your paycheck, apartment rent, and groceries. We have to pull out the rows that actually belong with the repair work. For each row, decide whether it belongs with the <strong>repair work</strong> or with your <strong>personal life</strong>. Click the <strong><i data-lucide="chevron-down" class="licon"></i></strong> on any row to see what it was.&rdquo;</div>
     </div>
     <div id="bankArea"></div>
 
@@ -91,7 +91,7 @@ function renderStatement(rows, opts){
     '<div><div class="stmt-period-label">Statement Period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
   html += '<div class="stmt-balrow"><span>'+opts.topLabel+'</span><span class="stmt-num">'+opts.topVal+'</span></div>';
   if(opts.bank){
-    html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Withdrawal</span><span class="stmt-num">Deposit</span><span class="stmt-num">Balance</span><span></span></div>';
+    html += '<div class="stmt-colhead '+grid+'"><span></span><span></span><span>Date</span><span>Description</span><span class="stmt-num">Withdrawal</span><span class="stmt-num">Deposit</span><span class="stmt-num">Balance</span></div>';
   } else {
     html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Charge</span><span class="stmt-num">Payment</span><span></span></div>';
   }
@@ -105,6 +105,7 @@ function renderStatement(rows, opts){
     if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
     if(opts.checked && cls && !wrong) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
     html += '<div class="stmt-row '+grid+(i%2?' alt':'')+'">'+
+      '<button class="stmt-info-btn'+(open?' open':'')+''+(i===0&&opts.showHint?' hint-pulse':'')+'" onclick="'+opts.toggleFn+'(\''+tx.id+'\')" aria-label="'+(open?'Collapse':'Expand')+'"><i data-lucide="'+(open?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
       '<div class="stmt-stripe '+stripeCls+'"></div>'+
       '<span class="mono">'+tx.date+'</span>'+
       '<span>'+tx.desc+tag+'</span>';
@@ -116,7 +117,7 @@ function renderStatement(rows, opts){
       html += '<span class="stmt-num stmt-with">'+(tx.kind==='charge'?fmt(tx.amt):'&mdash;')+'</span>'+
         '<span class="stmt-num stmt-dep">'+(tx.kind==='payment'?fmt(tx.amt):'&mdash;')+'</span>';
     }
-    html += '<button class="stmt-info-btn'+(open?' open':'')+''+(i===0&&opts.showHint?' hint-pulse':'')+'" onclick="'+opts.toggleFn+'(\''+tx.id+'\')" aria-label="More info"><i data-lucide="info" class="licon"></i></button></div>';
+    html += '</div>';
     if(open){
       var a = opts.catA, b = opts.catB;
       var lockedRow = opts.allCorrect || (opts.checked && cls && !wrong);
@@ -163,7 +164,7 @@ function renderBankSort(){
   }
   html += renderStatement(txns, { bank:true, bankName:'ELM CITY BANK', acct:'Personal Checking · Account Ending •••• 8814',
     topLabel:'Beginning balance (May 1)', topVal:'$2,500.00', botLabel:'Ending balance (May 31)', botVal:'$4,074.00',
-    classObj:classifications, expandedId:expandedDescId, checked:sortChecked,
+    classObj:classifications, expandedId:expandedDescId, checked:sortChecked, unsorted:unsorted,
     toggleFn:'toggleBankDesc', classifyFn:'classifyBank', showHint:!hintSeen,
     catA:{id:'shop',label:'Repair'}, catB:{id:'personal',label:'Personal'},
     allCorrect:sortChecked && wrongIds.length===0 });

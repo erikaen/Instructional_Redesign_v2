@@ -223,14 +223,31 @@ function matchedCount(){ return Object.keys(explained).filter(function(id){ retu
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
-/* ===== the rule strip ===== */
+/* ===== the walk-progress card (top, same format as the other sorts) ===== */
+function walkTriggerMet(){
+  var b = beat(); if(!b) return false;
+  var changes = beatChanges(b.key);
+  var recCount = changes.filter(function(c){ return explained[c.id]; }).length;
+  var allRec = recCount===changes.length;
+  var hasM = changes.some(function(c){ return explained[c.id]==='match'; });
+  var hasR = changes.some(function(c){ return explained[c.id]==='reason'; });
+  var mixed = changes.some(function(c){ return c.ans==='none'; }) && changes.some(function(c){ return c.ans!=='none'; });
+  return !allRec && !activeChange && !autoActive && recCount>=3 && (!mixed || (hasM && hasR));
+}
 function ruleStrip(){
-  var rt = reasonsTotal();
-  return '<div class="callout" style="display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline;margin-bottom:12px">'+
-    '<span><strong>The rule:</strong> every change gets a <strong>match</strong> or a <strong>reason</strong>.</span>'+
-    '<span>Matched: <strong>'+matchedCount()+'</strong> <span style="opacity:.75">(Assets &minus; Liabilities didn&rsquo;t move)</span></span>'+
-    '<span>Reasons: <strong>'+reasonsCreated.length+'</strong> &mdash; the difference moved '+signed(rt)+'</span>'+
-  '</div>';
+  var un = CHANGES.filter(function(c){ return !c.hidden && !explained[c.id]; }).length;
+  var b = beat();
+  var btnLabel = b ? 'Walk the rest of '+catLabel(b.key==='SMITH'?'LIABILITIES':b.key) : 'Walk the rest';
+  var btn = '<button class="btn-continue btn-block"'+(walkTriggerMet()?' onclick="recordRest()"':' disabled')+'>'+btnLabel+'</button>';
+  return '<div class="sortprog"><div class="sortprog-title">The rule: every change gets a match or a reason</div>'+
+    '<p class="sortprog-hint">A shortcut to walk the rest of each category will unlock as you go. Matched pairs leave Assets &minus; Liabilities unmoved; reasons are the changes that moved it ('+signed(reasonsTotal())+' so far).</p>'+
+    '<div class="sortprog-grid">'+
+    '<div class="sortprog-box shop"><div class="sortprog-label">Matched</div><div class="sortprog-num">'+matchedCount()+'</div></div>'+
+    '<div class="sortprog-box personal"><div class="sortprog-label">Reasons</div><div class="sortprog-num">'+reasonsCreated.length+'</div></div>'+
+    '<div class="sortprog-box'+(un===0?' done':'')+'"><div class="sortprog-label">Unwalked</div><div class="sortprog-num">'+un+'</div></div>'+
+    '</div>'+btn+
+    ((matchedCount()+reasonsCreated.length>0 && un>0) ? '<div class="btn-row" style="justify-content: flex-end; margin-top: 10px;"><button class="btn-reset" onclick="restart()">Reset</button></div>' : '')+
+    '</div>';
 }
 
 /* ===== sheets ===== */
@@ -238,43 +255,80 @@ function changeState(c){
   if(!explained[c.id]) return null;
   return explained[c.id];
 }
-function assetsSheet(){
+function questionHtml(c){
+  var att = attempts[c.id]||0;
+  var h = '<div class="stmt-expand-info">'+c.label.replace(/<[^>]*>/g,'')+' ('+signed(c.delta)+') &mdash; what <em>else</em> moved?</div>'+
+    '<div class="classify-row"><span class="classify-label">Classify:</span>'+
+      '<button class="classify-btn" onclick="answer(\'card\')">The Credit Card &mdash; by the same amount</button>'+
+      '<button class="classify-btn" onclick="answer(\'cash\')">Cash &mdash; by the same amount</button>'+
+      '<button class="classify-btn" onclick="answer(\'promise\')">A promise &mdash; by the same amount</button>'+
+      '<button class="classify-btn" onclick="answer(\'none\')">Nothing else moved &mdash; write a reason</button>'+
+      (c.group?'<button class="btn-hint" onclick="openReceipt(\''+c.group+'\')"><i data-lucide="receipt" class="licon"></i> See the evidence</button>':'')+
+    '</div>';
+  if(nudgeItem===c.id && att<3){
+    h+='<div class="sort-msg warn">&ldquo;Hint '+att+'/2: '+(att===1?'open the evidence &mdash; it shows what moved with this one.':'a Visa charge means the card moved; a debit or check means Cash moved; no purchase at all means nothing else moved.')+'&rdquo;</div>';
+  }
+  return h;
+}
+function walkRow(c, alt){
+  var st = changeState(c);
   var b = beat();
-  var act = b && b.tab==='assets' ? b.key : null;
+  var act = b && (c.cat===b.key);
+  var canClick = act && !st && !autoActive;
+  var sel = (activeChange===c.id);
+  var click = canClick ? ' onclick="clickChange(\''+c.id+'\')" style="cursor:pointer;"' : '';
+  var chev = canClick
+    ? '<button class="stmt-info-btn'+(sel?' open':'')+'" aria-label="'+(sel?'Close this change':'Walk this change')+'"><i data-lucide="'+(sel?'chevron-up':'chevron-down')+'" class="licon"></i></button>'
+    : '<span></span>';
+  var stripeCls = st==='match' ? 'shop' : (st==='reason' ? 'personal' : '');
+  var tag = st==='match' ? '<span class="stmt-tag shop">Match</span>' : (st==='reason' ? '<span class="stmt-tag personal">Reason</span>' : '');
+  var h = '<div class="stmt-row stmt-grid-sort'+(sel?' selected':(alt?' alt':''))+'"'+click+'>'+chev+
+    '<div class="stmt-stripe '+stripeCls+'"></div>'+
+    '<span>'+c.label+tag+'</span>'+
+    '<span class="stmt-num">'+signed(c.delta)+'</span></div>';
+  if(sel && !autoActive){
+    h += '<div class="stmt-expand" onclick="event.stopPropagation()">'+questionHtml(c)+'</div>';
+  }
+  if(!sel && lastFlash && lastFlash.id===c.id){
+    h += '<div class="stmt-expand">'+flashHtml()+'</div>';
+  }
+  return h;
+}
+function assetsSheet(){
   var CATS = ['EQUIPMENT','COMPUTER EQUIPMENT','SUPPLIES','FIXTURES','RIGHT OF USE','CASH'];
-  var html='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Asset</div><div class="xl-v">Value</div></div>';
-  CATS.forEach(function(cat,i){
+  var html='<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Asset</span><span class="stmt-num">Value</span></div>';
+  var alt = 0;
+  CATS.forEach(function(cat){
     var rows = CHANGES.filter(function(c){ return c.cat===cat && (!c.hidden || coverFound); });
     var amount = rows.reduce(function(s,c){ return s+c.delta; },0);
     var open=!!assetsOpen[cat];
     var done = ORDERED_KEYS.indexOf(cat)>=0 && beatDone(cat) && (cat!=='CASH' || coverFound);
     var lbl = catLabel(cat) + (done?' <span class="stmt-dep">&#10003;</span>':'');
-    html+='<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\''+cat+'\')" aria-expanded="'+open+'">'+(open?'−':'+')+'</button></div><div class="xl-rownum">'+(i+1)+'</div><div class="xl-c">'+lbl+'</div><div class="xl-v">'+dol(amount)+'</div></div>';
-    if(open) rows.forEach(function(c){
-      var st = changeState(c);
-      var canClick = (cat===act) && !st && !autoActive;
-      var sel = (activeChange===c.id);
-      var click = canClick ? ' onclick="clickChange(\''+c.id+'\')" style="cursor:pointer;"' : '';
-      var tail;
-      if(st==='match') tail = '<span class="stmt-dep">&#10003; matched</span>';
-      else if(st==='reason') tail = '<span class="stmt-dep">&#10003; reason</span>';
-      else tail = signed(c.delta);
-      html+='<div class="xl-row xl-item'+(sel?' selected':'')+'"'+click+'><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+c.label+'</div><div class="xl-v">'+tail+'</div></div>';
-    });
+    html+='<div class="stmt-row stmt-grid-sort">'+
+      '<button class="stmt-info-btn'+(open?' open':'')+'" onclick="toggleCat(\''+cat+'\')" aria-label="'+(open?'Collapse':'Expand')+'"><i data-lucide="'+(open?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
+      '<div class="stmt-stripe"></div>'+
+      '<span><strong>'+lbl+'</strong></span>'+
+      '<span class="stmt-num">'+dol(amount)+'</span></div>';
+    if(open) rows.forEach(function(c){ html+=walkRow(c, (alt++)%2); });
   });
-  var total = 3410;
-  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+dol(total)+'</div></div>';
+  html+='<div class="stmt-balrow bottom"><span>TOTAL</span><span class="stmt-num">'+dol(3410)+'</span></div>';
   return html;
 }
 function liabilitiesSheet(){
   var b = beat();
-  var html='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Liability</div><div class="xl-v">Amount</div></div>';
+  var html='<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Liability</span><span class="stmt-num">Amount</span></div>';
   /* the card: every row is the other line of an asset-side transaction */
   var cardOpen = !!assetsOpen['CARD'];
-  html+='<div class="xl-row xl-cat"><div class="xl-gutter"><button class="xl-toggle" onclick="toggleCat(\'CARD\')" aria-expanded="'+cardOpen+'">'+(cardOpen?'−':'+')+'</button></div><div class="xl-rownum">1</div><div class="xl-c">Credit Card &mdash; still owed on the bike-repair card</div><div class="xl-v">'+dol(2030)+'</div></div>';
-  if(cardOpen) CARD_ROWS.forEach(function(r){
+  html+='<div class="stmt-row stmt-grid-sort">'+
+    '<button class="stmt-info-btn'+(cardOpen?' open':'')+'" onclick="toggleCat(\'CARD\')" aria-label="'+(cardOpen?'Collapse':'Expand')+'"><i data-lucide="'+(cardOpen?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
+    '<div class="stmt-stripe"></div>'+
+    '<span><strong>Credit Card &mdash; still owed on the bike-repair card</strong></span>'+
+    '<span class="stmt-num">'+dol(2030)+'</span></div>';
+  if(cardOpen) CARD_ROWS.forEach(function(r, i){
     var m = matchedPairs[r.pair];
-    html+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+r.label+'</div><div class="xl-v">'+(m?'<span class="stmt-dep">&#10003; the match</span>':signed(r.amt))+'</div></div>';
+    html+='<div class="stmt-row stmt-grid-sort'+(i%2?' alt':'')+'"><span></span><div class="stmt-stripe '+(m?'shop':'')+'"></div>'+
+      '<span>'+r.label+(m?'<span class="stmt-tag shop">Match</span>':'')+'</span>'+
+      '<span class="stmt-num">'+signed(r.amt)+'</span></div>';
   });
   /* Smith */
   var smith = BY_ID['smith'];
@@ -282,20 +336,33 @@ function liabilitiesSheet(){
   var canClick = b && b.key==='SMITH' && !st && !autoActive;
   var click = canClick ? ' onclick="clickChange(\'smith\')" style="cursor:pointer;"' : '';
   var sel = activeChange==='smith';
-  html+='<div class="xl-row xl-cat'+(sel?' selected':'')+'"'+click+'><div class="xl-gutter"></div><div class="xl-rownum">2</div><div class="xl-c">'+smith.label+'</div><div class="xl-v">'+(st?'<span class="stmt-dep">&#10003; matched</span>':dol(220))+'</div></div>';
-  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">TOTAL</div><div class="xl-v">'+dol(2250)+'</div></div>';
+  var smithChev = canClick ? '<button class="stmt-info-btn'+(sel?' open':'')+'" aria-label="'+(sel?'Close this change':'Walk this change')+'"><i data-lucide="'+(sel?'chevron-up':'chevron-down')+'" class="licon"></i></button>' : '<span></span>';
+  html+='<div class="stmt-row stmt-grid-sort'+(sel?' selected':'')+'"'+click+'>'+smithChev+
+    '<div class="stmt-stripe '+(st?'shop':'')+'"></div>'+
+    '<span><strong>'+smith.label+'</strong>'+(st?'<span class="stmt-tag shop">Match</span>':'')+'</span>'+
+    '<span class="stmt-num">'+dol(220)+'</span></div>';
+  if(sel && !autoActive){
+    html += '<div class="stmt-expand" onclick="event.stopPropagation()">'+questionHtml(smith)+'</div>';
+  }
+  if(!sel && lastFlash && lastFlash.id===smith.id){
+    html += '<div class="stmt-expand">'+flashHtml()+'</div>';
+  }
+  html+='<div class="stmt-balrow bottom"><span>TOTAL</span><span class="stmt-num">'+dol(2250)+'</span></div>';
   return html;
 }
 function reasonsSheet(){
-  var html='<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons &mdash; the changes with no match</div><div class="cash-sheet-sub">'+(reasonsCreated.length===0?'Changes that move Assets &minus; Liabilities land here.':reasonsCreated.length+' so far &mdash; each one moved the difference')+'</div></div>';
-  if(reasonsCreated.length===0){ html+='<div class="bs-empty-msg">No reasons yet &mdash; every change so far had a match.</div>'; return html; }
-  html+='<div class="cash-group">';
-  reasonsCreated.forEach(function(id){
+  var html='<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Reason &mdash; the changes with no match</span><span class="stmt-num">&Delta;</span></div>';
+  if(reasonsCreated.length===0){
+    html+='<div class="stmt-row stmt-grid-sort"><span></span><div class="stmt-stripe"></div><span><em>No reasons yet &mdash; every change so far had a match.</em></span><span></span></div>';
+    return html;
+  }
+  reasonsCreated.forEach(function(id, i){
     var c=BY_ID[id];
-    html+='<div class="cash-line"><span>'+c.reason+' <span class="stmt-tag">'+catLabel(c.cat==='SMITH'?'LIABILITIES':c.cat)+'</span></span><span class="cash-line-amt">'+signed(c.delta)+'</span></div>';
+    html+='<div class="stmt-row stmt-grid-sort'+(i%2?' alt':'')+'"><span></span><div class="stmt-stripe personal"></div>'+
+      '<span>'+c.reason+' <span class="stmt-tag personal">'+catLabel(c.cat==='SMITH'?'LIABILITIES':c.cat)+'</span></span>'+
+      '<span class="stmt-num">'+signed(c.delta)+'</span></div>';
   });
-  html+='</div>';
-  html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">The difference has moved</div><div class="xl-v">'+signed(reasonsTotal())+'</div></div>';
+  html+='<div class="stmt-balrow bottom"><span>The difference has moved</span><span class="stmt-num">'+signed(reasonsTotal())+'</span></div>';
   return html;
 }
 
@@ -305,9 +372,10 @@ function renderPane(side){
   var body = tab==='assets'?assetsSheet():(tab==='liabilities'?liabilitiesSheet():reasonsSheet());
   var activeLabel=TABS.filter(function(t){return t.id===tab;})[0].label;
   var tabsHtml=TABS.map(function(t){ return '<button class="xlwb-tab'+(t.id===tab?' active':'')+'" onclick="setPaneTab(\''+side+'\',\''+t.id+'\')">'+t.label+(t.isNew?' <span class="xl-new">new</span>':'')+'</button>'; }).join('');
-  return '<div class="xlwb">'+
-    '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></span><span class="xlwb-bar-sheet">'+activeLabel+' sheet</span></div>'+
-    '<div>'+body+'</div>'+
+  return '<div class="stmt">'+
+    '<div class="stmt-head"><div><div class="stmt-bank">Bike-Repair.xlsx</div><div class="stmt-acct">'+activeLabel+' sheet</div></div>'+
+    '<div><div class="stmt-period-label">Period</div><div class="stmt-period">May 2026</div></div></div>'+
+    body+
     '<div class="xlwb-tabs">'+tabsHtml+'<span class="xlwb-tab-add"><i data-lucide="plus" class="licon"></i></span></div></div>';
 }
 
@@ -339,37 +407,19 @@ function controls(){
   var trigger = !allRec && !activeChange && !autoActive && recCount>=3 && (!mixed || (hasM && hasR));
 
   if(allRec){
-    if(b.key==='CASH'){ return coverFound ? flashHtml()+finishedControls() : flashHtml()+tallyControls(); }
+    if(b.key==='CASH'){ return coverFound ? finishedControls() : tallyControls(); }
     var nextLbl = beatIndex<BEATS.length-1 ? catLabel(BEATS[beatIndex+1].key==='SMITH'?'LIABILITIES':BEATS[beatIndex+1].key) : null;
     var btn = nextLbl ? '<button class="btn-continue btn-block" onclick="advanceBeat()">Next &mdash; '+nextLbl+' &rarr;</button>' : '';
     var note = b.key==='SMITH'
       ? insightBox('Same rule, forward in time', '<p>'+b.done+'</p>')
       : (b.done ? insightBox('Done: '+catLabel(b.key==='SMITH'?'LIABILITIES':b.key), '<p>'+b.done+'</p>') : '');
-    return flashHtml() + note + btn;
+    return note + btn;
   }
   if(activeChange && !autoActive){
-    var c = BY_ID[activeChange];
-    var att = attempts[activeChange]||0;
-    var h='<div class="section-card"><div class="card-title">'+(c.delta>=0?'':'&minus;')+'<span class="mono">'+c.label.replace(/<[^>]*>/g,'')+'</span> ('+signed(c.delta)+') &mdash; what <em>else</em> moved?</div>'+
-      '<div class="classify-row">'+
-        '<button class="classify-btn" onclick="answer(\'card\')">The Credit Card &mdash; by the same amount</button>'+
-        '<button class="classify-btn" onclick="answer(\'cash\')">Cash &mdash; by the same amount</button>'+
-        '<button class="classify-btn" onclick="answer(\'promise\')">A promise &mdash; by the same amount</button>'+
-        '<button class="classify-btn" onclick="answer(\'none\')">Nothing else moved &mdash; write a reason</button>'+
-        (c.group?'<button class="btn-hint" onclick="openReceipt(\''+c.group+'\')"><i data-lucide="receipt" class="licon"></i> See the evidence</button>':'')+
-      '</div>';
-    if(nudgeItem===activeChange && att<3){
-      h+='<div class="sort-msg warn">&ldquo;Hint '+att+'/2: '+(att===1?'open the evidence &mdash; it shows what moved with this one.':'a Visa charge means the card moved; a debit or check means Cash moved; no purchase at all means nothing else moved.')+'&rdquo;</div>';
-    }
-    h+='</div>';
-    return flashHtml()+h;
+    return '';   /* the question and feedback open inline under the row */
   }
   if(autoActive){ return '<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Walking the rest&hellip;</div></div>'; }
-  if(trigger){
-    return flashHtml()+'<div class="gate-armed"><p><strong>You&rsquo;ve got the rule.</strong> Walk the rest of '+catLabel(b.key==='SMITH'?'LIABILITIES':b.key)+' the same way?</p><button class="btn-continue btn-block" onclick="recordRest()">Walk the rest &rarr;</button></div>';
-  }
-  var where = b.key==='SMITH' ? 'Smith&rsquo;s deposit' : catLabel(b.key);
-  return flashHtml()+'<p class="prose" style="text-align:center;font-style:italic;opacity:.7;">Click a change in '+where+' to walk it.</p>';
+  return '';
 }
 
 /* ===== the Cash tally discovery ===== */
@@ -390,7 +440,7 @@ function tallyAnswer(id){
     coverFound = true;
     var c = BY_ID['cover'];
     explained[c.id]='reason'; reasonsCreated.push(c.id);
-    lastFlash = { kind:'reason', text:'From your personal self +$160 &mdash; <strong>no match</strong>: it came from outside the repair work. The last reason. Found only by tallying.' };
+    lastFlash = { kind:'reason', text:'From your personal self +$160 &mdash; <strong>no match</strong>: it came from outside the repair work. The last reason. Found only by tallying.', id:'cover' };
     render();
   } else {
     playNope();
@@ -426,6 +476,7 @@ var nudgeItem = null;
 function clickChange(id){
   if(explained[id]||autoActive) return;
   playClick();
+  if(activeChange===id){ activeChange=null; nudgeItem=null; render(); return; }   /* chevron toggles closed */
   var c = BY_ID[id];
   paneTab.left = (c.side==='l') ? 'liabilities' : 'assets';
   activeChange=id; nudgeItem=null; render();
@@ -440,12 +491,12 @@ function answer(a){
   var correct = (a===c.ans) || (c.side==='l' && c.ans==='cash' && a==='cash');
   if(correct){
     playSuccess();
-    lastFlash = { kind: c.ans==='none'?'reason':'match', text: flashFor(c) };
+    lastFlash = { kind: c.ans==='none'?'reason':'match', text: flashFor(c), id: c.id };
     recordChange(c);
     activeChange=null; nudgeItem=null;
   } else {
     var n=(attempts[activeChange]||0)+1; attempts[activeChange]=n; playNope();
-    if(n>=3){ lastFlash={ kind:c.ans==='none'?'reason':'match', text: flashFor(c) }; recordChange(c); activeChange=null; nudgeItem=null; }
+    if(n>=3){ lastFlash={ kind:c.ans==='none'?'reason':'match', text: flashFor(c), id: c.id }; recordChange(c); activeChange=null; nudgeItem=null; }
     else nudgeItem=activeChange;
   }
   render();

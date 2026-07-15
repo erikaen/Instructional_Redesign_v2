@@ -21,7 +21,7 @@
     <div class="narrative-block"><p>You open your personal credit card statement for May and compare it with the Excel workbook you&rsquo;ve been building.</p></div>
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text"><p>&ldquo;Smith&rsquo;s deposit gave you one kind of promise: you received cash before doing the work, so you still owe him the custom frame. Now let&rsquo;s look for a different kind of promise: money you still owe because you used the credit card to buy things.</p><br><p>Your credit card statement has repair-related activity mixed with personal spending. Some lines are <strong>charges</strong>, which <strong>increase</strong> what you owe. Other lines are <strong>payments</strong>, which <strong>reduce</strong> what you owe.</p><br><p>Let&rsquo;s sort the credit card statement the same way we sorted the bank statement. For each row, decide whether it belongs with the <strong>repair work</strong> or with your <strong>personal life</strong>. Click the <strong><i data-lucide="info" class="licon"></i></strong> on any row to see what it was.&rdquo;</p></div>
+      <div class="dialog-text"><p>&ldquo;Smith&rsquo;s deposit gave you one kind of promise: you received cash before doing the work, so you still owe him the custom frame. Now let&rsquo;s look for a different kind of promise: money you still owe because you used the credit card to buy things.</p><br><p>Your credit card statement has repair-related activity mixed with personal spending. Some lines are <strong>charges</strong>, which <strong>increase</strong> what you owe. Other lines are <strong>payments</strong>, which <strong>reduce</strong> what you owe.</p><br><p>Let&rsquo;s sort the credit card statement the same way we sorted the bank statement. For each row, decide whether it belongs with the <strong>repair work</strong> or with your <strong>personal life</strong>. Click the <strong><i data-lucide="chevron-down" class="licon"></i></strong> on any row to see what it was.&rdquo;</p></div>
     </div>
     <div id="cardArea"></div>
 
@@ -85,9 +85,9 @@ function renderStatement(rows, opts){
     '<div><div class="stmt-period-label">Statement Period</div><div class="stmt-period">May 1 – May 31, 2026</div></div></div>';
   html += '<div class="stmt-balrow"><span>'+opts.topLabel+'</span><span class="stmt-num">'+opts.topVal+'</span></div>';
   if(opts.bank){
-    html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Withdrawal</span><span class="stmt-num">Deposit</span><span class="stmt-num">Balance</span><span></span></div>';
+    html += '<div class="stmt-colhead '+grid+'"><span></span><span></span><span>Date</span><span>Description</span><span class="stmt-num">Withdrawal</span><span class="stmt-num">Deposit</span><span class="stmt-num">Balance</span></div>';
   } else {
-    html += '<div class="stmt-colhead '+grid+'"><span></span><span>Date</span><span>Description</span><span class="stmt-num">Charge</span><span class="stmt-num">Payment</span><span></span></div>';
+    html += '<div class="stmt-colhead '+grid+'"><span></span><span></span><span>Date</span><span>Description</span><span class="stmt-num">Charge</span><span class="stmt-num">Payment</span></div>';
   }
   rows.forEach(function(tx, i){
     var cls = opts.classObj[tx.id];
@@ -99,6 +99,7 @@ function renderStatement(rows, opts){
     if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
     if(opts.checked && cls && !wrong) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
     html += '<div class="stmt-row '+grid+(i%2?' alt':'')+'">'+
+      '<button class="stmt-info-btn'+(open?' open':'')+''+(i===0&&opts.showHint?' hint-pulse':'')+'" onclick="'+opts.toggleFn+'(\''+tx.id+'\')" aria-label="'+(open?'Collapse':'Expand')+'"><i data-lucide="'+(open?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
       '<div class="stmt-stripe '+stripeCls+'"></div>'+
       '<span class="mono">'+tx.date+'</span>'+
       '<span>'+tx.desc+tag+'</span>';
@@ -110,7 +111,7 @@ function renderStatement(rows, opts){
       html += '<span class="stmt-num stmt-with">'+(tx.kind==='charge'?fmt(tx.amt):'&mdash;')+'</span>'+
         '<span class="stmt-num stmt-dep">'+(tx.kind==='payment'?fmt(tx.amt):'&mdash;')+'</span>';
     }
-    html += '<button class="stmt-info-btn'+(open?' open':'')+''+(i===0&&opts.showHint?' hint-pulse':'')+'" onclick="'+opts.toggleFn+'(\''+tx.id+'\')" aria-label="More info"><i data-lucide="info" class="licon"></i></button></div>';
+    html += '</div>';
     if(open){
       var a = opts.catA, b = opts.catB;
       var lockedRow = opts.allCorrect || (opts.checked && cls && !wrong);
@@ -158,7 +159,7 @@ function renderCardSort(){
   }
   html += renderStatement(cardTxns, { bank:false, bankName:'HARBORLINE VISA', acct:'Personal Credit Card · Account Ending •••• 3902',
     topLabel:'Beginning balance (May 1)', topVal:'$0.00', botLabel:'Ending balance (May 31)', botVal:'$2,260.00',
-    classObj:cardClass, expandedId:cardExpandedId, checked:cardSortChecked,
+    classObj:cardClass, expandedId:cardExpandedId, checked:cardSortChecked, unsorted:cardTxns.filter(function(t){ return !cardClass[t.id]; }).length,
     toggleFn:'toggleCardDesc', classifyFn:'classifyCard', showHint:!hintSeen,
     catA:{id:'repair',label:'Repair'}, catB:{id:'personal',label:'Personal'},
     allCorrect:cardSortChecked && wrongIds.length===0 });
