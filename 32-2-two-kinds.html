@@ -164,7 +164,7 @@ function doTheRest(){
 }
 
 /* ===== controls / Anna ===== */
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function renderAll(){
   if(checked && !done && unsortedCount()===0 && wrongIds().length===0){ done=true; playSuccess(); }

@@ -22,7 +22,7 @@
     <div id="depChips"></div>
     <div class="dialog-box anna" style="margin-bottom:0;">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;To figure out what each customer paid for, we need to check the receipts.&rdquo;</div>
+      <div class="dialog-text">To figure out what each customer paid for, we need to check the receipts.</div>
     </div>
     <button class="reveal-doc-btn" id="showReceiptsBtn" onclick="showReceipts()"><i data-lucide="receipt" class="licon"></i> Pull out the customer receipts</button>
     <div id="depWrap" hidden>
@@ -202,7 +202,7 @@ function prevDeposit(){
 }
 function renderDepositsClose(){
   var html =
-    '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;So you found two kinds of customer payments. Seven of them were for work you had already finished. That money is yours to keep. Smith&rsquo;s check is the odd one out. He paid you $220 now, but you still owe him the custom frame.<br><br>That means Smith&rsquo;s payment belongs in <strong>two places</strong>. You have the cash, but you also have a promise to keep. Your priced <strong>Things</strong> list doesn&rsquo;t show promises like that, so you need a second list: <strong>promises you still owe</strong>. Start it with Smith&rsquo;s $220.&rdquo;</div>'+
+    '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">So you found two kinds of customer payments. Seven of them were for work you had already finished. That money is yours to keep. Smith&rsquo;s check is the odd one out. He paid you $220 now, but you still owe him the custom frame.<br><br>That means Smith&rsquo;s payment belongs in <strong>two places</strong>. You have the cash, but you also have a promise to keep. Your priced <strong>Things</strong> list doesn&rsquo;t show promises like that, so you need a second list: <strong>promises you still owe</strong>. Start it with Smith&rsquo;s $220.</div>'+
     '<div class="promises-born" style="margin-top:14px;"><div class="promises-born-head">Promises</div><div class="promises-born-body"><div class="promises-line"><span>Smith&rsquo;s frame &mdash; paid $220 up front, not built yet</span><span class="mono">$220</span></div></div></div>'+
     '</div>';
   document.getElementById('depositsClose').innerHTML = html;

@@ -49,7 +49,7 @@
 
       <div class="dialog-box maria" id="laptopNudge" hidden>
         <div class="dialog-label">MARIA</div>
-        <div class="dialog-text"><span class="dialog-prefix">(looking over)</span>&ldquo;That laptop&rsquo;s got no receipt &mdash; you&rsquo;ve had it for years. For something used, we put down what it would <strong>sell for now</strong>. Tap <em>eBay comp</em> next to it, look at a few comparable ones, and write down a fair number.&rdquo;</div>
+        <div class="dialog-text"><span class="dialog-prefix">(looking over)</span>That laptop&rsquo;s got no receipt &mdash; you&rsquo;ve had it for years. For something used, we put down what it would <strong>sell for now</strong>. Tap <em>eBay comp</em> next to it, look at a few comparable ones, and write down a fair number.</div>
       </div>
 
       <div class="system-banner" id="systemBanner" hidden>
@@ -66,7 +66,7 @@
       <div id="formDoneBlock" hidden>
         <div class="dialog-box maria">
           <div class="dialog-label">MARIA</div>
-          <div class="dialog-text"><span class="dialog-prefix">(quietly)</span>&ldquo;And notice the supplies! you <strong>bought $500</strong> of parts, but only <strong>$200</strong> is still on the shelf to insure. The rest went into jobs. That gap comes back soon.&rdquo;</div>
+          <div class="dialog-text"><span class="dialog-prefix">(quietly)</span>And notice the supplies! you <strong>bought $500</strong> of parts, but only <strong>$200</strong> is still on the shelf to insure. The rest went into jobs. That gap comes back soon.</div>
         </div>
         <div class="insight-box">
           <div class="insight-label"><i data-lucide="check" class="licon"></i> Every line came from somewhere</div>
@@ -427,12 +427,12 @@ function showMariaTransitionNudge(){
   var nudge = document.getElementById('transitionNudge');
   if(catChecked && catUnsorted()===0 && catWrongs()===0){
     nudge.hidden = false;
-    nudge.innerHTML = '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;Good &mdash; everything&rsquo;s sorted by type. But here&rsquo;s the thing: if something happens to your shop, we don&rsquo;t bring you a new desk. We pay you what that desk is worth, so you can replace it yourself. To write a policy, I need a dollar amount on each item. Let&rsquo;s put numbers on them.&rdquo;</div></div>'+
+    nudge.innerHTML = '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">Good &mdash; everything&rsquo;s sorted by type. But here&rsquo;s the thing: if something happens to your shop, we don&rsquo;t bring you a new desk. We pay you what that desk is worth, so you can replace it yourself. To write a policy, I need a dollar amount on each item. Let&rsquo;s put numbers on them.</div></div>'+
       '<button class="btn-continue btn-block" onclick="transitionToValuePhase()">Add dollar values &rarr;</button>';
     if (window.lucide) lucide.createIcons();
   } else if(catChecked && catWrongs()>0){
     nudge.hidden = false;
-    nudge.innerHTML = '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;Not all of these look right yet &mdash; I&rsquo;ve marked the ones that need another look. Try again.&rdquo;</div></div>';
+    nudge.innerHTML = '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">Not all of these look right yet &mdash; I&rsquo;ve marked the ones that need another look. Try again.</div></div>';
   } else {
     nudge.hidden = true;
     nudge.innerHTML = '';
@@ -566,7 +566,7 @@ function receiptHTML(r){
     (r.paidNote?'<p class="doc-note">'+r.paidNote+'</p>':'');
   // The parts invoice is what came IN, for whole boxes. Maria wants what's still on the shelf — so count it.
   if(r.id==='qbp'){
-    html += '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;That&rsquo;s what you <strong>paid</strong> &mdash; for whole boxes. But I don&rsquo;t insure what you bought; I insure what&rsquo;s <strong>still on the shelf</strong> after a season of repairs. How much is left? You&rsquo;ll have to count.&rdquo;</div></div>'+
+    html += '<div class="dialog-box maria"><div class="dialog-label">MARIA</div><div class="dialog-text">That&rsquo;s what you <strong>paid</strong> &mdash; for whole boxes. But I don&rsquo;t insure what you bought; I insure what&rsquo;s <strong>still on the shelf</strong> after a season of repairs. How much is left? You&rsquo;ll have to count.</div></div>'+
       '<button class="btn-continue btn-block" onclick="openShelfCount()"><i data-lucide="clipboard-list" class="licon"></i> Count the shelf &rarr;</button>';
   }
   return html;

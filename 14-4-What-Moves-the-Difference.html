@@ -218,7 +218,7 @@ function restart(){
 
 /* ===== shared builders ===== */
 function annaBox(inner, quoted){
-  var text = quoted ? '&ldquo;'+inner+'&rdquo;' : inner;
+  var text = inner;  /* bubbles carry the speech styling; no quotation marks */
   return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+text+'</div></div>';
 }
 function insightBox(label, inner){

@@ -21,7 +21,7 @@
     <div class="narrative-block"><p>You open your personal credit card statement for May and compare it with the Excel workbook you&rsquo;ve been building.</p></div>
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text"><p>&ldquo;Smith&rsquo;s deposit gave you one kind of promise: you received cash before doing the work, so you still owe him the custom frame. Now let&rsquo;s look for a different kind of promise: money you still owe because you used the credit card to buy things.</p><br><p>Your credit card statement has repair-related activity mixed with personal spending. Some lines are <strong>charges</strong>, which <strong>increase</strong> what you owe. Other lines are <strong>payments</strong>, which <strong>reduce</strong> what you owe.</p><br><p>Let&rsquo;s sort the credit card statement the same way we sorted the bank statement. For each row, decide whether it belongs with the <strong>repair work</strong> or with your <strong>personal life</strong>. Click the <strong><i data-lucide="chevron-down" class="licon"></i></strong> on any row to see what it was.&rdquo;</p></div>
+      <div class="dialog-text"><p>Smith&rsquo;s deposit gave you one kind of promise: you received cash before doing the work, so you still owe him the custom frame. Now let&rsquo;s look for a different kind of promise: money you still owe because you used the credit card to buy things.</p><br><p>Your credit card statement has repair-related activity mixed with personal spending. Some lines are <strong>charges</strong>, which <strong>increase</strong> what you owe. Other lines are <strong>payments</strong>, which <strong>reduce</strong> what you owe.</p><br><p>Let&rsquo;s sort the credit card statement the same way we sorted the bank statement. For each row, decide whether it belongs with the <strong>repair work</strong> or with your <strong>personal life</strong>. Click the <strong><i data-lucide="chevron-down" class="licon"></i></strong> on any row to see what it was.</p></div>
     </div>
     <div id="cardArea"></div>
 
@@ -155,7 +155,7 @@ function renderCardSort(){
   var html = sortProgress(repair, personal, unsorted, 'Repair', triggerMet, !cardSortChecked && unsorted===0);
 
   if(cardSortChecked && wrongIds.length>0){
-    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Not all of these look right yet. I&rsquo;ve marked the ones that need another look. Try again.&rdquo;</div></div>';
+    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">Not all of these look right yet. I&rsquo;ve marked the ones that need another look. Try again.</div></div>';
   }
   html += renderStatement(cardTxns, { bank:false, bankName:'HARBORLINE VISA', acct:'Personal Credit Card · Account Ending •••• 3902',
     topLabel:'Beginning balance (May 1)', topVal:'$0.00', botLabel:'Ending balance (May 31)', botVal:'$2,260.00',
@@ -169,7 +169,7 @@ function renderCardSort(){
   }
 
   if(cardSortChecked && wrongIds.length===0){
-    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Good. Now we can see which rows belong with the repair work and which ones belong with your personal life. But look at the card&rsquo;s ending balance: <strong>$2,260.00</strong>. That is the <strong>total</strong> amount still owed on the card. The question now is how much of that balance is still owed because of the repair work.&rdquo;</div></div>';
+    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">Good. Now we can see which rows belong with the repair work and which ones belong with your personal life. But look at the card&rsquo;s ending balance: <strong>$2,260.00</strong>. That is the <strong>total</strong> amount still owed on the card. The question now is how much of that balance is still owed because of the repair work.</div></div>';
     var mcqWrongFb = {
       'a': 'Not quite. $2,260.00 is the total amount still owed on the card, but it includes $230.00 of personal spending.',
       'c': 'Not quite. $230.00 is the personal spending on the card &mdash; the part of the balance that has nothing to do with the repair work.'

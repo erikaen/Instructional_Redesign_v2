@@ -77,7 +77,7 @@ var SNAP = BR_WB.snapshot();
 var genTotal = BR_WB.generatedRows().reduce(function(s,r){ return s+r.delta; }, 0);
 
 /* ===== Anna ===== */
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function renderTalk(){
   document.getElementById('anna').innerHTML = annaBox('Start with the pile&rsquo;s own line: <strong>GENERATED +$'+(genTotal+170).toLocaleString('en-US')+'</strong>. Is that how the shop did <em>this summer</em>? It can&rsquo;t be &mdash; the pile has been growing since <strong>May</strong>; last spring&rsquo;s repairs sit in it right next to August&rsquo;s. You&rsquo;d have to fish the season out row by row before the question even starts. And even then, read it top to bottom: a repair collected, then parts going out, then a month&rsquo;s rent, then another repair. Ask it &ldquo;what did the work deliver this summer, and what got used up delivering?&rdquo; &mdash; you couldn&rsquo;t point to a line. There isn&rsquo;t one.');

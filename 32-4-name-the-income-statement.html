@@ -79,7 +79,7 @@ function incomeSheet(cid, snap){
 var snap = BR_WB.snapshot({ flowGroups:true, withReceivable:true });
 var step = 0;   // 0 = name the piles · 1 = graduated to their own tabs · 2 = the statement laid out
 
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 function renderTalk(){

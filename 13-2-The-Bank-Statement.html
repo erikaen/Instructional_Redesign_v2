@@ -21,7 +21,7 @@
     <div class="narrative-block"><p>You&rsquo;ve been using your personal bank account for the repair work. Last month&rsquo;s bank statement just arrived. Anna sits down at the workbench with you to look it over.</p></div>
     <div class="dialog-box anna">
       <div class="dialog-label">ANNA</div>
-      <div class="dialog-text">&ldquo;Okay, let&rsquo;s clean this up first. There&rsquo;s a lot in here that has nothing to do with your repair work, like your paycheck, apartment rent, and groceries. We have to pull out the rows that actually belong with the repair work. For each row, decide whether it belongs with the <strong>repair work</strong> or with your <strong>personal life</strong>. Click the <strong><i data-lucide="chevron-down" class="licon"></i></strong> on any row to see what it was.&rdquo;</div>
+      <div class="dialog-text">Okay, let&rsquo;s clean this up first. There&rsquo;s a lot in here that has nothing to do with your repair work, like your paycheck, apartment rent, and groceries. We have to pull out the rows that actually belong with the repair work. For each row, decide whether it belongs with the <strong>repair work</strong> or with your <strong>personal life</strong>. Click the <strong><i data-lucide="chevron-down" class="licon"></i></strong> on any row to see what it was.</div>
     </div>
     <div id="bankArea"></div>
 
@@ -160,7 +160,7 @@ function renderBankSort(){
 
   var html = sortProgress(shop, personal, unsorted, 'Repair-related', triggerMet, !sortChecked && unsorted===0);
   if(sortChecked && wrongIds.length>0){
-    html += '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Not all of these look right yet. I&rsquo;ve marked the ones that need another look. Try again.&rdquo;</div></div>';
+    html += '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">Not all of these look right yet. I&rsquo;ve marked the ones that need another look. Try again.</div></div>';
   }
   html += renderStatement(txns, { bank:true, bankName:'ELM CITY BANK', acct:'Personal Checking · Account Ending •••• 8814',
     topLabel:'Beginning balance (May 1)', topVal:'$2,500.00', botLabel:'Ending balance (May 31)', botVal:'$4,074.00',
@@ -172,7 +172,7 @@ function renderBankSort(){
     html += '<div class="btn-row" style="justify-content: flex-end; margin-top: 16px;"><button class="btn-reset" onclick="restart()">Reset</button></div>';
   }
   if(sortChecked && wrongIds.length===0){
-    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;Good. Now we can see which rows belong with the repair work and which ones belong with your personal life. Next, let&rsquo;s pull the repair-related rows into one place and see how cash moved during May.&rdquo;</div></div>';
+    html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">Good. Now we can see which rows belong with the repair work and which ones belong with your personal life. Next, let&rsquo;s pull the repair-related rows into one place and see how cash moved during May.</div></div>';
   }
   document.getElementById('bankArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();

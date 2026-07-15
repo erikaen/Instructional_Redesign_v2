@@ -30,7 +30,7 @@
     <div class="phase active" id="phase-exposure">
       <div class="dialog-box maria" style="margin-bottom:20px">
         <div class="dialog-label">MARIA</div>
-        <div class="dialog-text">&ldquo;Your property is well covered. That policy protects the tools, parts, and other things tied up in the repair work. But there&rsquo;s another issue property coverage does not solve: <strong>liability</strong>.<br><br>Suppose a bike you repaired fails on the road, and Smith, your customer, gets hurt. If Smith makes a claim, we need to ask what that claim can reach.&rdquo;</div>
+        <div class="dialog-text">Your property is well covered. That policy protects the tools, parts, and other things tied up in the repair work. But there&rsquo;s another issue property coverage does not solve: <strong>liability</strong>.<br><br>Suppose a bike you repaired fails on the road, and Smith, your customer, gets hurt. If Smith makes a claim, we need to ask what that claim can reach.</div>
       </div>
       <div id="exposureArea"></div>
     </div>
@@ -115,7 +115,7 @@ function renderExposure(){
   }
   html += '</div>';
   if(claimRun){
-    html += '<div class="dialog-box maria" style="margin-bottom:20px"><div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;Your books separate the repair work from your personal life, but the books alone do not create legal protection. Without a legal wall in place, the same claim can put your personal assets at risk: your car, your earnings, even your savings.<br><br>Liability coverage can help pay a claim, and you should carry it. But a policy only <strong>pays</strong> a claim; it does <strong>not</strong> proactively build protection. That is where an <strong>LLC (Limited Liability Company)</strong> comes in.&rdquo;</div></div>';
+    html += '<div class="dialog-box maria" style="margin-bottom:20px"><div class="dialog-label">MARIA</div><div class="dialog-text">Your books separate the repair work from your personal life, but the books alone do not create legal protection. Without a legal wall in place, the same claim can put your personal assets at risk: your car, your earnings, even your savings.<br><br>Liability coverage can help pay a claim, and you should carry it. But a policy only <strong>pays</strong> a claim; it does <strong>not</strong> proactively build protection. That is where an <strong>LLC (Limited Liability Company)</strong> comes in.</div></div>';
     html += '<button class="btn-continue btn-block" onclick="nav(\'21-3-whoSeesTwo.html\')">Continue &rarr;</button>';
   }
   document.getElementById('exposureArea').innerHTML = html;

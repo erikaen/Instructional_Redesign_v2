@@ -114,7 +114,7 @@ function renderReadback(){
   }).join('');
   rows += '<div class="totals-row total"><span>TOTAL (insurable)</span><span class="mono">'+fmt(totalInsurable())+'</span></div>';
   document.getElementById('readbackRows').innerHTML = rows;
-  document.getElementById('readbackMaria').innerHTML = '<div class="dialog-label">MARIA</div><div class="dialog-text">&ldquo;OK. Equipment '+fmt(subtotalForCat('equipment'))+'. Computer equipment '+fmt(subtotalForCat('computer'))+'. Supplies '+fmt(subtotalForCat('supplies'))+'. Fixtures '+fmt(subtotalForCat('fixtures'))+'. Total of '+fmt(totalInsurable())+'. That is what you have on hand now. Property policy goes on that. Paperwork in the mail.&rdquo;</div>';
+  document.getElementById('readbackMaria').innerHTML = '<div class="dialog-label">MARIA</div><div class="dialog-text">OK. Equipment '+fmt(subtotalForCat('equipment'))+'. Computer equipment '+fmt(subtotalForCat('computer'))+'. Supplies '+fmt(subtotalForCat('supplies'))+'. Fixtures '+fmt(subtotalForCat('fixtures'))+'. Total of '+fmt(totalInsurable())+'. That is what you have on hand now. Property policy goes on that. Paperwork in the mail.</div>';
 }
 
 /* ===== glossary ===== */
