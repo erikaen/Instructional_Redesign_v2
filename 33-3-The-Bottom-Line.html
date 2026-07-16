@@ -4,10 +4,14 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.3: Depreciation &middot; The Income Statement</title>
+  <title>The Income Statement</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+  </style>
 </head>
 <body>
 <div class="page">
@@ -15,21 +19,31 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 3: Depreciation</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 3 of 4</p>
+        <h1>The Bottom Line</h1>
+        <p class="tut-header-sub">The Story Between the Snapshots &middot; ~10 min &middot; Page 3 of 4</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">The Income Statement</div>
+    <div class="phase-title" id="phaseTitle">The Bottom Line</div>
 
     <div class="narrative-block">
       <p>The working sheet holds the season&rsquo;s GENERATED rows, now grouped: <strong>Revenue $6,020</strong>; <strong>Parts Used $1,200</strong>; <strong>Rent $1,950</strong>; and <strong>Depreciation $230</strong>. The detail is ready. Now format the statement.</p>
     </div>
 
-    <div id="wb"></div>
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet" id="workbookSheetLabel">Reasons &middot; WORKING SHEET</div>
+      </div>
+      <div class="wb-grid-wrap">
+        <div id="wb"></div>
+        <div id="referenceGrid" hidden></div>
+      </div>
+      <div class="xlwb-tabs" id="workbookTabs" aria-label="Workbook tabs"></div>
+    </div>
     <div id="anna"></div>
     <div id="tie"></div>
     <div id="controls"></div>
@@ -75,8 +89,44 @@ var step = 0;
 
 function sheetOf(wb, part) {
   var ss = BR_STMT_DATA.workbooks[wb].sheets;
-  for (var i = 0; i < ss.length; i++) if (ss[i].name.indexOf(part) >= 0) return ss[i];
+  for (var i = 0; i < ss.length; i++) if (ss[i].name.indexOf(part) >= 0) {
+    var copy=JSON.parse(JSON.stringify(ss[i]));
+    copy.cells.forEach(function(cell){
+      if(typeof cell.value==='string') cell.value=cell.value.replace(/Members/g,'Member');
+    });
+    return copy;
+  }
   return null;
+}
+
+var referenceMountSerial=0;
+function setWorkbookChrome(activeName){
+  var names=['Assets','Liabilities','Reasons','Balance Sheet'];
+  if(step===1) names.push('Income Statement');
+  document.getElementById('workbookTabs').innerHTML=names.map(function(name){
+    var active=name===activeName;
+    return '<button class="xlwb-tab'+(active?' active':'')+'" type="button" data-workbook-tab="'+name+'"'
+      +(active?' aria-current="page"':'')+' onclick="showWorkbookTab33(\''+name+'\')">'+name+'</button>';
+  }).join('');
+  document.getElementById('workbookSheetLabel').textContent=activeName==='Reasons' && step===0?'Reasons · WORKING SHEET':activeName;
+}
+function showWorkbookTab33(name){
+  var home=step===1?'Income Statement':'Reasons';
+  var build=document.getElementById('wb');
+  var reference=document.getElementById('referenceGrid');
+  playClick();
+  if(name===home){
+    build.hidden=false;
+    reference.hidden=true;
+  } else {
+    build.hidden=true;
+    reference.hidden=false;
+    BRW.mountGrid('referenceGrid',sheetOf('bike-repair-end',name),{
+      gridId:'bottom-line-'+name.toLowerCase().replace(/[^a-z]+/g,'-')+'-'+(++referenceMountSerial)
+    });
+  }
+  setWorkbookChrome(name);
+  if(window.lucide) lucide.createIcons();
 }
 
 var reasons = sheetOf('bike-repair-end', 'Reasons');
@@ -106,11 +156,7 @@ function hideOutsideSection(sheet, label){
 function renderTie(){
   var tie = document.getElementById('tie');
   if(step===0){ tie.innerHTML=''; return; }
-  tie.innerHTML = '<div class="narrative-block"><p><strong>A quiet tie.</strong> Read the two ruled lines you drew on GENERATED. June 1 says <strong>$170</strong>. August 31 says <strong>$2,810</strong>.</p></div><div id="generatedTieGrid"></div>';
-  BRW.mountGrid('generatedTieGrid', reasons, {
-    gridId:'income-statement-generated-tie',
-    hiddenRows:hideOutsideSection(reasons, 'GENERATED')
-  });
+  tie.innerHTML = '<div class="narrative-block"><p><strong>The ruled lines agree.</strong> GENERATED reads <strong>$170</strong> on June 1 and <strong>$2,810</strong> on August 31. Their <strong>$2,640</strong> change is the number on the formatted statement.</p></div>';
 }
 
 function renderTalk(){
@@ -120,25 +166,28 @@ function renderTalk(){
     ctrl = insightBox('The format carries the answer',
         '<p>Revenue becomes one <strong>$6,020</strong> line. The expense kinds become <strong>Parts Used $1,200</strong>, <strong>Rent $1,950</strong>, and one <strong>Depreciation $230</strong> line.</p>');
   } else {
-    anna = annaBox('The formatted sheet has earned its name: <strong>Income Statement</strong>. The new tab contains only the statement: Revenue <strong>'+BRW.dol(REVENUE)+'</strong>, Total expenses <strong>'+BRW.dol(EXPENSES)+'</strong>, and Net income <strong>'+BRW.dol(NET_INCOME)+'</strong>.');
+    anna = annaBox('Now call the formatted sheet the <strong>Income Statement</strong>. The new tab contains only the statement: Revenue <strong>'+BRW.dol(REVENUE)+'</strong>, Total expenses <strong>'+BRW.dol(EXPENSES)+'</strong>, and Net income <strong>'+BRW.dol(NET_INCOME)+'</strong>.');
     ctrl = insightBox('The same season, told two ways',
         '<p>The Income Statement says <strong>'+BRW.dol(NET_INCOME)+'</strong>. The ruled GENERATED lines say <strong>'+BRW.dol(2810)+' &minus; '+BRW.dol(170)+' = '+BRW.dol(NET_INCOME)+'</strong>. The statement summarizes the rows between the same dates; it does not move them.</p>'
-        + '<p>One small carrying-value reminder: cost minus depreciation charged so far is a path in the records, not a market price.</p>')
-      + '<div class="next-phase-msg">One loose thread, though. A '+BRW.dol(NET_INCOME)+' season &mdash; and the Cash line reads <strong>$620</strong>, down from <strong>$1,300</strong> on opening day. Profitable, and poorer in cash. Both true. Hold on to that thread &mdash; it stays open past the end of this module.</div>'
-      + "<button class=\"btn-continue btn-block\" onclick=\"nav('33-4-Module-Complete.html')\">Finish Module 3 &rarr;</button>";
+        + '<p>Carrying value is cost minus depreciation recorded so far. It is a path in the records, not what a buyer will pay.</p>')
+      + '<div class="next-phase-msg">Net income is <strong>'+BRW.dol(NET_INCOME)+'</strong>, while Cash reads <strong>$620</strong>, down from <strong>$1,300</strong> on June 1. Both numbers are true because they answer different questions.</div>'
+      + "<button class=\"btn-continue btn-block\" onclick=\"nav('33-4-Module-Complete.html')\">Read the cash question &rarr;</button>";
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
   renderTie();
+  document.getElementById('wb').hidden=false;
+  document.getElementById('referenceGrid').hidden=true;
+  setWorkbookChrome(step===1?'Income Statement':'Reasons');
   if(window.lucide) lucide.createIcons();
 }
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Income statement', def:'A report that summarizes Revenue and Expenses between chosen dates. Here, it formats the season&rsquo;s GENERATED rows on their own tab.' },
+  { term:'Income statement', def:'A report that summarizes Revenue and Expenses between chosen dates. Here, it formats the season&rsquo;s GENERATED rows on the Income Statement tab.' },
   { term:'Net income', def:'Revenue minus Expenses between the chosen dates: $6,020 minus $3,380 = $2,640.' },
-  { term:'Depreciation', def:'A share of a long-lived thing&rsquo;s cost assigned to the chosen dates by a rule. The three detailed amounts fold to one $230 line on this statement.' },
-  { term:'Carrying value (book value)', def:'Cost minus the depreciation charged so far. It follows a path in the records; it is not a market price.' }
+  { term:'Depreciation', def:'The recorded reduction for wear and obsolescence during the period. The three detailed amounts fold to one $230 line on this statement.' },
+  { term:'Carrying value (book value)', def:'Cost minus the depreciation recorded so far. It follows a path in the records; it is not what a buyer will pay.' }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){

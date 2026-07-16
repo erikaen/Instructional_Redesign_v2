@@ -4,10 +4,15 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.1: Run the Season &middot; Welcome</title>
+  <title>Run the Season</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+    #openingBS [data-brw-row="3"] .brw-col-d { text-align:center; }
+  </style>
 </head>
 <body>
 <div class="page">
@@ -16,24 +21,36 @@
     <!-- ===== Header ===== -->
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 1: Run the Season</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 2</p>
+        <h1>Run the Season</h1>
+        <p class="tut-header-sub">The Story Between the Snapshots &middot; ~10 min &middot; Page 1 of 2</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">Welcome to Module 3</div>
+    <div class="phase-title" id="phaseTitle">Run the Season</div>
 
     <!-- ===== welcome ===== -->
     <div class="phase active" id="phase-welcome">
       <div class="narrative-block">
-        <p>In Module 2 you made the repair work into a legal body: <strong id="llcInline">Bike Repairs, LLC</strong>. The day it became formal, your books &mdash; <span class="mono">Bike-Repair.xlsx</span> &mdash; showed a single balance sheet, one snapshot of the new entity:</p>
+        <p>Earlier, you made the repair work into a legal body: <strong id="llcInline">Bike Repairs, LLC</strong>. The day it became formal, your books &mdash; <span class="mono">Bike-Repair.xlsx</span> &mdash; showed a single balance sheet, one snapshot of the new entity:</p>
       </div>
-      <div id="openingBS"></div>
+      <div class="xlwb" id="workbookShell">
+        <div class="xlwb-bar">
+          <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+          <div class="xlwb-bar-sheet">Balance Sheet &middot; June 1</div>
+        </div>
+        <div class="wb-grid-wrap"><div id="openingBS"></div></div>
+        <div class="xlwb-tabs" aria-label="Workbook tabs">
+          <button class="xlwb-tab" type="button" aria-disabled="true">Assets</button>
+          <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
+          <button class="xlwb-tab" type="button" aria-disabled="true">Reasons</button>
+          <button class="xlwb-tab active" type="button" aria-current="page">Balance Sheet</button>
+        </div>
+      </div>
       <div class="mc-card">
-        <div class="mc-q">One check before the season starts &mdash; the frame from Module 1 should hold. <strong>Assets &minus; Liabilities</strong> = $4,710 &minus; $2,250 =</div>
+        <div class="mc-q">One check before the season starts &mdash; the frame you built earlier should hold. <strong>Assets &minus; Liabilities</strong> = $4,710 &minus; $2,250 =</div>
         <div class="btn-row">
           <input id="bsInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Assets minus Liabilities" onkeydown="if(event.key==='Enter'){checkBS();}">
           <button class="btn btn-primary" onclick="checkBS()">Check</button>
@@ -42,7 +59,7 @@
       </div>
       <div id="bsClose" hidden></div>
       <div class="narrative-block">
-        <p>Through the summer, you kept your day job and worked in the shop during evenings and weekends &mdash; part-time, but busy. Repairs brought money <strong>in</strong>. Parts and rent got <strong>used up</strong>. You bought a new tool and took some cash out for yourself. Beside each change, you jotted a short <strong>Reason</strong>, the way you learned to back in Module 1.</p>
+        <p>Through the summer, you kept your day job and worked in the shop during evenings and weekends &mdash; part-time, but busy. Repairs brought money <strong>in</strong>. Parts and rent got <strong>used up</strong>. You bought a new tool and took some cash out for yourself. Beside each change, you jotted a short <strong>Reason</strong>, the way you learned earlier.</p>
         <p>Now it&rsquo;s August 31, and <strong>Anna</strong> &mdash; who set up your books when you formed the LLC &mdash; checks back in. <em>&ldquo;I set up your books,&rdquo;</em> she says. <em>&ldquo;Now let&rsquo;s read them. We&rsquo;ll start with the history you kept, then mark the dates that let us read the season.&rdquo;</em></p>
       </div>
       <div class="section-card">
@@ -70,7 +87,9 @@
   </div>
 </div>
 
+<script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -84,7 +103,7 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 /* ===== glossary (shared across all phases of 3.1) ===== */
 var glossaryTerms = [
   { term:"Member&rsquo;s capital", def:"The LLC&rsquo;s name for Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $4,710 &minus; $2,250 = $2,460." },
-  { term:"Reason", def:"The short note you jot beside a change in the books to record <em>why</em> it happened. You started the practice in Module 1; over a whole season the Reasons pile up." },
+  { term:"Reason", def:"The short note you jot beside a change in the books to record <em>why</em> it happened. You started the practice earlier; over a whole season the Reasons pile up." },
   { term:"Balance sheet", def:"A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the difference between them. It says where things stand, not how they got there." }
 ];
 function openGlossary(){
@@ -99,30 +118,38 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 function nav(url){ playClick(); window.location.href = url; }
 function restart(){ window.location.reload(); }
 
-/* ===== the opening balance sheet (June 1) — the full statement, every line.
-   Same shared markup as 15-2 / 41-1: .acct-col + .bs-header + .acct-line/.acct-total ===== */
-function bsRow(label,val){ return '<div class="acct-line"><span>'+label+'</span><span class="acct-val">'+val+'</span></div>'; }
-function bsTotal(label,val){ return '<div class="acct-total"><span>'+label+'</span><span>'+val+'</span></div>'; }
+/* ===== the opening balance sheet (June 1), mounted from the extracted workbook ===== */
+function sheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-end'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
 /* ===== the LLC's name — chosen by the student in 2.2, persisted to localStorage ===== */
 var memberName=''; try{ var _n=localStorage.getItem('m2Member'); if(_n) memberName=_n; }catch(e){}
 function llcName(){ return (memberName.trim()||'[Your Name]') + '’s Bike Repairs, LLC'; }
 
+var openingGridSeq=0;
+function openingBalanceSheet(showTotal){
+  var sheet=cloneSheet(sheetOf('Balance Sheet'));
+  var futureReceivable='Accounts'+' Receivable', hiddenRows={};
+  sheet.cells.forEach(function(cell){
+    if(cell.c===2 && cell.value===futureReceivable) hiddenRows[cell.r]=true;
+  });
+  sheet.cells=sheet.cells.filter(function(cell){
+    return cell.c!==4 && !hiddenRows[cell.r];
+  }).map(function(cell){
+    if(cell.c===3) cell.c=4; /* re-home the June column into the amount column so it right-aligns and formats */
+    if(cell.r===1 && cell.c===2) cell.value=llcName();
+    if(cell.r===2 && cell.c===2) cell.value='Balance Sheet';
+    if(typeof cell.value==='string') cell.value=cell.value.replace(/Members(?:'|’) Capital/g,"Member's Capital");
+    if(cell.r===21 && cell.c===4 && !showTotal) cell.value='?';
+    return cell;
+  });
+  return sheet;
+}
 function buildOpeningBS(showTotal){
-  var h='<div class="acct-col">';
-  h+='<div class="bs-header"><div class="bs-header-title">'+llcName()+'</div><div class="bs-header-date">Opening balance sheet &middot; June 1, 2026</div></div>';
-  h+='<h4>Assets</h4>';
-  [['Cash','$1,300'],['Right of Use','$650'],['Parts','$200'],['Tools &amp; Repair Equipment','$1,200'],['Fixtures','$750'],['Laptop','$610']].forEach(function(r){ h+=bsRow(r[0],r[1]); });
-  h+=bsTotal('Total assets','$4,710');
-  h+='<h4>Liabilities</h4>';
-  h+=bsRow('Credit Card','$2,030');
-  h+=bsRow('Customer Deposit','$220');
-  h+=bsTotal('Total liabilities','$2,250');
-  h+='<h4>Member&rsquo;s capital</h4>';
-  h+=bsRow('Contributed','$2,290');
-  h+=bsRow('Generated','$170');
-  h+=bsTotal('Total member&rsquo;s capital (Assets &minus; Liabilities)', showTotal?'$2,460':'?');
-  h+='</div>';
-  document.getElementById('openingBS').innerHTML=h;
+  BRW.mountGrid('openingBS',openingBalanceSheet(showTotal),{gridId:'season-opening-balance-'+(++openingGridSeq)});
 }
 buildOpeningBS(false);
 document.getElementById('llcInline').textContent = llcName();
@@ -148,7 +175,7 @@ function revealBS(){
   document.getElementById('bsInput').disabled=true;
   var fb=document.getElementById('bsFb'); fb.className='feedback'; fb.classList.remove('show');
   var c=document.getElementById('bsClose'); c.hidden=false;
-  c.innerHTML='<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Assets &minus; Liabilities = Member&rsquo;s Capital</div><p>$4,710 &minus; $2,250 = <strong>$2,460</strong> &mdash; exactly the <strong>Total member&rsquo;s capital</strong> line. The difference you found in Module 1 now carries the LLC&rsquo;s name, and the balance sheet is built around the same identity &mdash; it holds by definition, every time.</p></div>';
+  c.innerHTML='<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Assets &minus; Liabilities = Member&rsquo;s Capital</div><p>$4,710 &minus; $2,250 = <strong>$2,460</strong> &mdash; exactly the <strong>Total member&rsquo;s capital</strong> line. The difference you found earlier now carries the LLC&rsquo;s name, and the balance sheet is built around the same identity &mdash; it holds by definition, every time.</p></div>';
   document.getElementById('goBtn').hidden=false;
   if(window.lucide) lucide.createIcons();
 }

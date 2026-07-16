@@ -4,10 +4,14 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.2: The Income Statement &middot; Revenue and Expenses</title>
+  <title>The Income Statement</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+  </style>
 </head>
 <body>
 <div class="page">
@@ -15,8 +19,8 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 2: The Income Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; Reading the Season&rsquo;s Activity &middot; ~10 min &middot; Phase 2 of 3</p>
+        <h1>The Income Statement</h1>
+        <p class="tut-header-sub">Reading the Season&rsquo;s Activity &middot; ~10 min &middot; Page 2 of 3</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -31,11 +35,24 @@
 
     <div id="annaIntro"></div>
 
-    <div id="statementBuild"></div>
-
-    <div id="sortWrap" hidden>
-      <div id="sorterPanel"></div>
-      <div id="sorterGrid"></div>
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet">Reasons &middot; Working sheet</div>
+      </div>
+      <div class="wb-grid-wrap">
+        <div id="statementBuild"></div>
+        <div id="sortWrap" hidden>
+          <div id="sorterPanel"></div>
+          <div id="sorterGrid"></div>
+        </div>
+      </div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab" type="button" aria-disabled="true">Assets</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
+        <button class="xlwb-tab active" type="button" aria-current="page">Reasons</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
+      </div>
     </div>
 
     <div id="gate"></div>
@@ -145,11 +162,14 @@ var sortComplete=false;
 var buildOptions={
   startAt:0,
   stopAt:2,
-  gridOpts:{ gridId:'income-build-grid', hiddenRows:futureRows(sheetOf(WORKBOOK_KEY,'0 ')) },
+  gridOpts:{ gridId:'income-build-grid-step-0', hiddenRows:futureRows(sheetOf(WORKBOOK_KEY,'0 ')) },
   gateAdvance:function(order){ return order!==1 || sortComplete; },
   beforeAdvance:function(order){
     var nextSheet=sheetOf(WORKBOOK_KEY,(order+1)+' ');
-    if(nextSheet) buildOptions.gridOpts.hiddenRows=futureRows(nextSheet);
+    if(nextSheet){
+      buildOptions.gridOpts.hiddenRows=futureRows(nextSheet);
+      buildOptions.gridOpts.gridId='income-build-grid-step-'+(order+1);
+    }
     return true;
   },
   onStep:function(order){

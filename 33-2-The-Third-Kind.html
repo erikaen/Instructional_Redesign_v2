@@ -4,10 +4,14 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.3: Depreciation</title>
+  <title>The Third Kind</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+  </style>
 </head>
 <body>
 <div class="page">
@@ -15,22 +19,34 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 3: Depreciation</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 4</p>
+        <h1>The Third Kind</h1>
+        <p class="tut-header-sub">The Story Between the Snapshots &middot; ~10 min &middot; Page 2 of 4</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">Depreciation</div>
+    <div class="phase-title" id="phaseTitle">The Third Kind</div>
 
     <div class="narrative-block">
       <p>Anna asked how the shop did this season. One kind of used-up is still missing from the reasons behind the answer. The Reasons tab is open to its GENERATED section below, with three rows not yet written. Walk it with Anna.</p>
     </div>
 
     <div id="anna"></div>
-    <div id="wb"></div>
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet" id="workbookSheetLabel">Reasons &middot; GENERATED</div>
+      </div>
+      <div class="wb-grid-wrap"><div id="wbGrid"></div></div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab" type="button" data-workbook-tab="Assets" onclick="showWorkbookTab('Assets')">Assets</button>
+        <button class="xlwb-tab" type="button" data-workbook-tab="Liabilities" onclick="showWorkbookTab('Liabilities')">Liabilities</button>
+        <button class="xlwb-tab active" type="button" data-workbook-tab="Reasons" aria-current="page" onclick="showWorkbookTab('Reasons')">Reasons</button>
+        <button class="xlwb-tab" type="button" data-workbook-tab="Balance Sheet" onclick="showWorkbookTab('Balance Sheet')">Balance Sheet</button>
+      </div>
+    </div>
     <div id="controls"></div>
 
   </div>
@@ -81,12 +97,21 @@ function sheetOf(wb, part) {
   }
   return null;
 }
+var mountSerial=0;
+function nextGridId(prefix){ mountSerial++; return prefix+'-'+mountSerial; }
 function rowForLabel(sheet, label){
   for(var i=0;i<sheet.cells.length;i++){
     var c=sheet.cells[i];
     if(c.c===2 && c.value===label) return c.r;
   }
   return 0;
+}
+function rowsWithExactLabel(sheet, label){
+  var rows=[];
+  sheet.cells.forEach(function(c){
+    if(c.c===2 && c.value===label) rows.push(c.r);
+  });
+  return rows;
 }
 function rowsContaining(sheet, text){
   var rows=[];
@@ -111,6 +136,66 @@ function expandGroup(containerId, groupId){
   }
 }
 
+function setActiveWorkbookTab(name){
+  var tabs=document.querySelectorAll('[data-workbook-tab]');
+  for(var i=0;i<tabs.length;i++){
+    var active=tabs[i].getAttribute('data-workbook-tab')===name;
+    tabs[i].classList.toggle('active',active);
+    if(active) tabs[i].setAttribute('aria-current','page');
+    else tabs[i].removeAttribute('aria-current');
+  }
+  document.getElementById('workbookSheetLabel').textContent=name==='Reasons'?'Reasons · GENERATED':name;
+}
+function juneOnlyBalanceSheet(sheet){
+  var copy=JSON.parse(JSON.stringify(sheet));
+  var arRows=rowsWithExactLabel(copy,'Accounts Receivable');
+  copy.cells=copy.cells.filter(function(c){
+    return c.c!==4 && arRows.indexOf(c.r)<0;
+  });
+  return copy;
+}
+function stagedAssets(reveal){
+  var copy=sheetOf('bike-repair-end','Assets');
+  var sections=[
+    {name:'Tools & Repair Equipment',before:1600},
+    {name:'Fixtures',before:750},
+    {name:'Laptop',before:610}
+  ];
+  var keep={1:true};
+  sections.forEach(function(section,index){
+    var start=rowForLabel(copy,section.name);
+    var end=index+1<sections.length?rowForLabel(copy,sections[index+1].name):copy.rows.length+1;
+    var beforeRow=0, wearRow=0, afterRow=0;
+    for(var i=0;i<copy.cells.length;i++){
+      var cell=copy.cells[i];
+      if(cell.c!==2 || cell.r<=start || cell.r>=end) continue;
+      var label=String(cell.value||'');
+      if(label==='Balance, June 1, 2026') beforeRow=cell.r;
+      if(label.indexOf('Depreciation')===0) wearRow=cell.r;
+      if(label==='Balance, August 31, 2026') afterRow=cell.r;
+    }
+    keep[start]=true;
+    keep[beforeRow]=true;
+    if(reveal){ keep[wearRow]=true; keep[afterRow]=true; }
+    copy.cells.forEach(function(cell){
+      if(cell.r===beforeRow && cell.c===2) cell.value='Amount before depreciation';
+      if(cell.r===beforeRow && cell.c===4){ cell.value=section.before; delete cell.sumSources; }
+      if(cell.r===afterRow && cell.c===4) delete cell.sumSources;
+    });
+  });
+  var hidden=[];
+  for(var r=1;r<=copy.rows.length;r++) if(!keep[r]) hidden.push(r);
+  return {sheet:copy,hiddenRows:hidden};
+}
+function expandAll(containerId){
+  var container=document.getElementById(containerId);
+  if(!container) return;
+  var toggles=container.getElementsByClassName('brw-og-toggle');
+  for(var i=0;i<toggles.length;i++){
+    if(toggles[i].getAttribute('aria-expanded')!=='true') toggles[i].click();
+  }
+}
+
 var reasonsSheet=sheetOf('bike-repair-end','Reasons');
 var depreciationRows=rowsContaining(reasonsSheet,'Depreciation');
 var generatedStart=rowForLabel(reasonsSheet,'GENERATED');
@@ -122,18 +207,36 @@ for(var r=1;r<=reasonsSheet.rows.length;r++){
 function mountReasons(reveal){
   var hidden=outsideGeneratedRows.slice();
   if(!reveal) hidden=hidden.concat(depreciationRows);
-  var gridId=reveal?'reasonsAfterWrite':'reasonsBeforeWrite';
-  BRW.mountGrid('wb',reasonsSheet,{gridId:gridId,hiddenRows:hidden});
-  expandGroup('wb','og-2');
-  expandGroup('wb','og-3');
+  BRW.mountGrid('wbGrid',reasonsSheet,{gridId:nextGridId(reveal?'reasons-after-write':'reasons-before-write'),hiddenRows:hidden});
+  setActiveWorkbookTab('Reasons');
+  expandGroup('wbGrid','og-2');
+  expandGroup('wbGrid','og-3');
+}
+function showWorkbookTab(name){
+  playClick();
+  if(name==='Reasons'){
+    mountReasons(recorded);
+  } else if(name==='Assets'){
+    var staged=stagedAssets(recorded);
+    BRW.mountGrid('wbGrid',staged.sheet,{gridId:nextGridId(recorded?'third-kind-assets-after':'third-kind-assets-before'),hiddenRows:staged.hiddenRows});
+    setActiveWorkbookTab('Assets');
+    if(recorded) expandAll('wbGrid');
+  } else if(name==='Balance Sheet'){
+    BRW.mountGrid('wbGrid',juneOnlyBalanceSheet(sheetOf('bike-repair-end','Balance Sheet')),{gridId:nextGridId('third-kind-balance-sheet-june')});
+    setActiveWorkbookTab('Balance Sheet');
+  } else {
+    BRW.mountGrid('wbGrid',sheetOf('bike-repair-end','Liabilities'),{gridId:nextGridId('third-kind-liabilities')});
+    setActiveWorkbookTab('Liabilities');
+  }
+  if(window.lucide) lucide.createIcons();
 }
 
 /* ===== Anna walks the GENERATED reasons ===== */
 var walkStep=0, recorded=false;
 var annaScript=[
   "Let's look back at the reasons we wrote in the Generated part of the tab. Every one got written because we used something up. We used the rent as the month passed — a reason. We used parts as we did jobs — a reason. Things we charged on the card and used — a reason. Using something up is what made us write it down.",
-  "Now look at what we haven't touched: the Laptop, the Fixtures, and the Tools &amp; Repair Equipment. Eventually they won't be providing any future benefit — tools get worn out, the laptop becomes obsolete. But nothing ever stopped us and made us write a reason. No sale, no bill, no empty shelf.",
-  "An asset is a present right to a future benefit. When that benefit drains away, the asset has to come down — and if no transaction will write that reason for us, we write it ourselves. That reason is depreciation. We spread each thing's cost over the time we expect to use it — Tools &amp; Repair Equipment, 160; Fixtures, 40; the Laptop, 30 — and show them together as one line, 230, on the income statement."
+  "Now look at what we haven't touched: the Laptop, the Fixtures, and the Tools &amp; Repair Equipment. Wear and obsolescence reduced their recorded amounts, but no sale, bill, or empty shelf prompted a reason.",
+  "An asset is a present right to a future benefit. Wear and obsolescence can reduce its recorded amount without a transaction. When that happens, we write it ourselves. That reason is depreciation. For this season the three entries are Tools &amp; Repair Equipment, 160; Fixtures, 40; and Laptop, 30. The income statement will show them together as one 230 line."
 ];
 function renderTalk(){
   var anna='', ctrl='';
@@ -147,28 +250,13 @@ function renderTalk(){
       ctrl='<button class="btn-continue btn-block" onclick="writeReasons()">Write the reasons &rarr;</button>';
     }
   } else {
-    ctrl=insightBox('The missing reasons are written',
-      '<p>The three rows total <strong>$230</strong>. The GENERATED balance is <strong>$170</strong> at June 1 and <strong>$2,810</strong> at August 31. The formatted income statement will show the three amounts together as one <strong>Depreciation</strong> line.</p>')
-      +insightBox('The dated line is the scoreboard',
-        '<p>The number on the August 31 line changed from <strong>$3,040</strong> to <strong>$2,810</strong>. The wear is now in the books.</p>')
-      +annaBox('They&rsquo;re expense reasons &mdash; we just wrote them &mdash; and they&rsquo;re their own kind: <strong>Depreciation</strong>. I&rsquo;ll file them with the <strong>WORKING SHEET</strong>, already grouped. No re-sorting.')
-      +'<div id="expenseKindsGrid"></div>'
+    ctrl=insightBox('The same entries on the Assets tab',
+      '<p>The three depreciation rows total <strong>$230</strong>. With those rows revealed, the recorded amounts read <strong>Tools &amp; Repair Equipment $1,600 &rarr; $1,440</strong>, <strong>Fixtures $750 &rarr; $710</strong>, and <strong>Laptop $610 &rarr; $580</strong>.</p><p>And on the Reasons tab, the GENERATED dated line moved with them: <strong>$3,040 &rarr; $2,810</strong> at August 31 &mdash; the wear is in the books, seen from both tabs.</p>')
+      +annaBox('Writing the reason on the <strong>Reasons</strong> tab and the asset coming down on the <strong>Assets</strong> tab are the same act, seen from two tabs.')
       +'<button class="btn-continue btn-block" onclick="nav(\'33-3-The-Bottom-Line.html\')">Format the statement &rarr;</button>';
   }
   document.getElementById('anna').innerHTML=anna;
   document.getElementById('controls').innerHTML=ctrl;
-  if(recorded){
-    var kindSheet=sheetOf('income-statement-steps','4 ');
-    var netIncomeRow=rowForLabel(kindSheet,'Net income');
-    BR_WB.mountStatementBuild('expenseKindsGrid','income-statement-steps',{
-      startAt:4,
-      stopAt:4,
-      gridOpts:{
-        gridId:'depreciation-kind-grid',
-        hiddenRows:netIncomeRow?[netIncomeRow]:[]
-      }
-    });
-  }
   if(window.lucide) lucide.createIcons();
 }
 function advanceWalk(){
@@ -183,6 +271,7 @@ function writeReasons(){
   playClick(); playSuccess();
   recorded=true;
   mountReasons(true);
+  showWorkbookTab('Assets');
   renderTalk();
   window.scrollTo(0,document.body.scrollHeight);
 }
@@ -190,7 +279,7 @@ function writeReasons(){
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
   { term:'Asset', def:'A present right to a future benefit.' },
-  { term:'Depreciation', def:'A reason written when part of an asset&rsquo;s future benefit was used up and no sale, bill, or other transaction recorded that change.' },
+  { term:'Depreciation', def:'A reason written when wear or obsolescence reduces an asset&rsquo;s recorded amount and no sale, bill, or other transaction recorded that change.' },
   { term:'GENERATED', def:'The part of the Reasons tab for reasons created as the shop operates.' }
 ];
 function openGlossary(){

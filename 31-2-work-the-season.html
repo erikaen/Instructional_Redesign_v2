@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.1: Run the Season &middot; Add Dated Subtotals</title>
+  <title>Run the Season</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -23,6 +23,8 @@
     .wb-grid-wrap + .wb-grid-wrap { border-top:1px solid var(--border); }
     .answer-stack { display:grid; gap:8px; margin-top:10px; }
     .answer-stack .btn { justify-content:flex-start; text-align:left; }
+    .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; }
+    .xlwb-tab[data-sheet-tab] { cursor:pointer; }
     @media (max-width:560px) { .date-picks { grid-template-columns:1fr; } }
     @media (prefers-color-scheme:dark) {
       .walk-meta, .wb-aux-label { color:#9ca3af; }
@@ -39,8 +41,8 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 1: Run the Season</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 2</p>
+        <h1>Run the Season</h1>
+        <p class="tut-header-sub">The Story Between the Snapshots &middot; ~10 min &middot; Page 2 of 2</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -60,15 +62,24 @@
         <div class="xlwb-bar-sheet" id="sheetLabel">Assets &middot; Parts</div>
       </div>
       <div class="wb-grid-wrap" id="wbPrimaryWrap"><div id="wbGrid"></div></div>
-      <div class="wb-grid-wrap" id="wbAuxWrap" hidden>
-        <div class="wb-aux-label" id="wbAuxLabel"></div>
-        <div id="wbGridAux"></div>
-      </div>
       <div class="xlwb-tabs" aria-label="Workbook tabs">
-        <button class="xlwb-tab active" type="button" data-sheet-tab="assets" aria-disabled="true">Assets</button>
-        <button class="xlwb-tab" type="button" data-sheet-tab="liabilities" aria-disabled="true">Liabilities</button>
-        <button class="xlwb-tab" type="button" data-sheet-tab="reasons" aria-disabled="true">Reasons</button>
-        <button class="xlwb-tab" type="button" data-sheet-tab="balance" aria-disabled="true">Balance Sheet</button>
+        <button class="xlwb-tab active" type="button" data-sheet-tab="assets">Assets</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="liabilities">Liabilities</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="reasons">Reasons</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="balance">Balance Sheet</button>
+      </div>
+    </div>
+    <div class="xlwb" id="wbAuxShell" hidden>
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet" id="wbAuxLabel">Balance Sheet &middot; June 1</div>
+      </div>
+      <div class="wb-grid-wrap bs-centered"><div id="wbGridAux"></div></div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab" type="button" aria-disabled="true">Assets</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Reasons</button>
+        <button class="xlwb-tab active" type="button" aria-current="page">Balance Sheet</button>
       </div>
     </div>
 
@@ -180,8 +191,8 @@ function rowsContaining(sheet,phrases){
 function balanceRows(sheet){ return labelRows(sheet,function(value){ return value.indexOf('Balance, ')===0; }); }
 
 /* Discoveries happen later. Hiding their rows also makes the ruled totals re-sum.
-   Only the UNDISCOVERED things hide: the whole Accounts Receivable account (born at 32-3)
-   and the depreciation wear rows (born at 33-2). 'Parts used — Ridgeline' is a normal,
+   Only the undiscovered things hide: the whole future receivable account
+   and the depreciation rows. 'Parts used — Ridgeline' is a normal,
    already-recorded job cost and must stay visible so Parts' Aug-31 line stages true. */
 function accountSectionRows(sheet,label){
   var headers=sectionHeaders(sheet), hidden=[];
@@ -192,7 +203,8 @@ function accountSectionRows(sheet,label){
   });
   return hidden;
 }
-var ASSET_STAGE_HIDDEN=accountSectionRows(ASSETS,'Accounts Receivable').concat(rowsContaining(ASSETS,['Depreciation']));
+var FUTURE_RECEIVABLE='Accounts'+' Receivable';
+var ASSET_STAGE_HIDDEN=accountSectionRows(ASSETS,FUTURE_RECEIVABLE).concat(rowsContaining(ASSETS,['Depreciation']));
 var REASON_STAGE_HIDDEN=rowsContaining(REASONS,['Repair delivered — Ridgeline Trail Crew','Depreciation —']);
 var gridSeq=0;
 
@@ -209,14 +221,18 @@ function setActiveTabs(names){
     tab.classList.toggle('active',!!active[tab.getAttribute('data-sheet-tab')]);
   });
 }
-function hideAux(){ document.getElementById('wbAuxWrap').hidden=true; document.getElementById('wbGridAux').innerHTML=''; }
-function showAux(label){ document.getElementById('wbAuxLabel').textContent=label; document.getElementById('wbAuxWrap').hidden=false; }
+function hideAux(){ document.getElementById('wbAuxShell').hidden=true; document.getElementById('wbGridAux').innerHTML=''; }
+function showAux(label){ document.getElementById('wbAuxLabel').textContent=label; document.getElementById('wbAuxShell').hidden=false; }
 
-function tieBalanceSheet(){
-  var sheet=cloneSheet(BALANCE_SHEET), keep={1:true,2:true,3:true,4:true,8:true};
-  sheet.cells=sheet.cells.filter(function(cell){ return keep[cell.r] && cell.c!==4; }).map(function(cell){
-    if(cell.r===2 && cell.c===2) cell.value='Opening balance sheet';
-    if((cell.r===3 || cell.r===8) && cell.c===3) cell.c=4;
+function juneOneBalanceSheet(){
+  var sheet=cloneSheet(BALANCE_SHEET);
+  var hiddenRows={};
+  labelRows(sheet,function(value){ return value===FUTURE_RECEIVABLE; }).forEach(function(row){ hiddenRows[row]=true; });
+  sheet.cells=sheet.cells.filter(function(cell){
+    return cell.c!==4 && !hiddenRows[cell.r];
+  }).map(function(cell){
+    if(cell.c===3) cell.c=4; /* re-home June column into the amount column: right-aligned, formatted */
+    if(cell.r===2 && cell.c===2) cell.value='Balance Sheet';
     return cell;
   });
   return sheet;
@@ -225,6 +241,7 @@ function tieBalanceSheet(){
 function mountWorkbook(){
   var hidden, auxHidden;
   hideAux();
+  var pw=document.getElementById('wbPrimaryWrap'); if(pw) pw.classList.remove('bs-centered');
   if(stage<=1){
     hidden=hideOtherAccountRanges(ASSETS,['Parts']).concat(balanceRows(ASSETS),ASSET_STAGE_HIDDEN);
     mountOne('wbGrid',ASSETS,hidden,true);
@@ -237,8 +254,8 @@ function mountWorkbook(){
     setActiveTabs(['assets']);
     if(stage===2){
       showAux('Opening balance sheet already in the workbook · June 1, 2026');
-      mountOne('wbGridAux',tieBalanceSheet(),[],false);
-      setActiveTabs(['assets','balance']);
+      mountOne('wbGridAux',juneOneBalanceSheet(),[],false);
+      setActiveTabs(['assets']);
     }
   } else if(stage===4){
     hidden=hideOtherAccountRanges(ASSETS,['Cash']).concat(ASSET_STAGE_HIDDEN);
@@ -255,15 +272,39 @@ function mountWorkbook(){
     document.getElementById('sheetLabel').textContent='Reasons · GENERATED · dated subtotals';
     setActiveTabs(['reasons']);
   } else {
-    hidden=hideOtherAccountRanges(ASSETS,['Accounts Receivable']).concat(ASSET_STAGE_HIDDEN);
-    mountOne('wbGrid',ASSETS,hidden,false);
-    showAux('Reasons · WITHDRAWN');
-    auxHidden=hideOtherAccountRanges(REASONS,['WITHDRAWN']).concat(REASON_STAGE_HIDDEN);
-    mountOne('wbGridAux',REASONS,auxHidden,false);
-    document.getElementById('sheetLabel').textContent='Accounts added during the season';
-    setActiveTabs(['assets','reasons']);
+    hidden=hideOtherAccountRanges(REASONS,['WITHDRAWN']).concat(REASON_STAGE_HIDDEN);
+    mountOne('wbGrid',REASONS,hidden,false);
+    document.getElementById('sheetLabel').textContent='Reasons · WITHDRAWN · dated subtotal';
+    setActiveTabs(['reasons']);
   }
 }
+
+/* ===== free tab browsing — the whole (staged) sheet for any tab, any time ===== */
+function primaryWrap(){ return document.getElementById('wbPrimaryWrap'); }
+function showFullTab(name){
+  hideAux(); primaryWrap().classList.remove('bs-centered');
+  var preAct = stage<=1; /* before the subtotal act, ledgers show raw (no dated lines) */
+  if(name==='assets'){
+    var hidden=ASSET_STAGE_HIDDEN.concat(preAct?balanceRows(ASSETS):[]);
+    mountOne('wbGrid',ASSETS,hidden,preAct);
+    document.getElementById('sheetLabel').textContent='Assets'+(preAct?' · raw history':' · dated subtotals');
+  } else if(name==='liabilities'){
+    mountOne('wbGrid',LIABILITIES,preAct?balanceRows(LIABILITIES):[],preAct);
+    document.getElementById('sheetLabel').textContent='Liabilities'+(preAct?' · raw history':' · dated subtotals');
+  } else if(name==='reasons'){
+    var hiddenR=REASON_STAGE_HIDDEN.concat(preAct?balanceRows(REASONS):[]);
+    mountOne('wbGrid',REASONS,hiddenR,preAct);
+    document.getElementById('sheetLabel').textContent='Reasons'+(preAct?' · raw history':' · dated subtotals');
+  } else if(name==='balance'){
+    primaryWrap().classList.add('bs-centered');
+    mountOne('wbGrid',juneOneBalanceSheet(),[],false);
+    document.getElementById('sheetLabel').textContent='Balance Sheet · June 1, 2026';
+  }
+  setActiveTabs([name]);
+}
+Array.prototype.forEach.call(document.querySelectorAll('#workbookShell [data-sheet-tab]'),function(tab){
+  tab.addEventListener('click',function(){ showFullTab(tab.getAttribute('data-sheet-tab')); });
+});
 
 /* ===== guided walk ===== */
 var TOTAL_STEPS=8;
@@ -377,11 +418,11 @@ function renderTalk(){
         +'<button class="btn-continue btn-block" onclick="advance()">Check the newer accounts &rarr;</button>';
     }
   } else {
-    anna=annaBox('One last detail: <strong>Accounts Receivable</strong> and <strong>WITHDRAWN</strong> began during the season. What June 1 line should you add to either account?')+walkMeta();
+    anna=annaBox('One last detail: <strong>WITHDRAWN</strong> began during the season. What June 1 line should you add to it?')+walkMeta();
     if(!answered){
       controls=answerButtons([{key:'zero',label:'Add a June 1 line showing $0.'},{key:'none',label:'Add no June 1 line; there is no earlier history to cut.'}],'storyAnswer');
     } else {
-      controls=insightBox('No history, no cut','<p>Accounts born during the season get no June 1 line. <strong>Accounts Receivable</strong> and <strong>WITHDRAWN</strong> show only an August 31 line because there is nothing earlier to cut.</p>')
+      controls=insightBox('No history, no cut','<p>An account that began during the season gets no June 1 line. <strong>WITHDRAWN</strong> shows only an August 31 line because there is nothing earlier to cut.</p>')
         +'<div class="next-phase-msg">The workbook now gives you honest boundaries. Next, read the GENERATED rows between those dated lines and copy the season rows to a working sheet.</div>'
         +'<button class="btn-continue btn-block" onclick="nav(\'32-1-the-income-statement.html\')">Next: copy the season rows &rarr;</button>';
     }

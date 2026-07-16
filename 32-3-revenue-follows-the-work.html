@@ -4,10 +4,14 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.2: The Income Statement &middot; Revenue Earned on Account</title>
+  <title>The Income Statement</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+  </style>
 </head>
 <body>
 <div class="page">
@@ -15,8 +19,8 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 2: The Income Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; Reading the Season&rsquo;s Activity &middot; ~10 min &middot; Phase 3 of 3</p>
+        <h1>The Income Statement</h1>
+        <p class="tut-header-sub">Reading the Season&rsquo;s Activity &middot; ~10 min &middot; Page 3 of 3</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -29,16 +33,52 @@
       <p>You sorted the season&rsquo;s generated rows into <strong>Revenue</strong> and <strong>Expense</strong> on the working statement view &mdash; and left one loose end. In the Expense band sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong>, with no revenue across from it. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job. Check the job log to find what happened.</p>
     </div>
 
-    <div id="wb"></div>
+    <div class="xlwb" id="assetsShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet">Assets</div>
+      </div>
+      <div class="wb-grid-wrap"><div id="wb"></div></div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab active" type="button" aria-current="page">Assets</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Reasons</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
+      </div>
+    </div>
 
-    <div id="sheet"></div>
+    <div class="xlwb" id="workingShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet">Reasons &middot; Working sheet</div>
+      </div>
+      <div class="wb-grid-wrap"><div id="sheet"></div></div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab" type="button" aria-disabled="true">Assets</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
+        <button class="xlwb-tab active" type="button" aria-current="page">Reasons</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
+      </div>
+    </div>
 
     <button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every repair this summer</button>
 
     <div id="anna"></div>
     <div id="scoreboardWrap" hidden>
       <div class="next-phase-msg"><strong>Reasons tab &middot; GENERATED</strong><br>The dated lines are the scoreboard. Before you booked Ridgeline, the August 31 line read <strong>$2,740</strong>. It now reads <strong>$3,040</strong>. Your own dated line moved by $300.</div>
-      <div id="scoreboard"></div>
+      <div class="xlwb">
+        <div class="xlwb-bar">
+          <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+          <div class="xlwb-bar-sheet">Reasons &middot; GENERATED</div>
+        </div>
+        <div class="wb-grid-wrap"><div id="scoreboard"></div></div>
+        <div class="xlwb-tabs" aria-label="Workbook tabs">
+          <button class="xlwb-tab" type="button" aria-disabled="true">Assets</button>
+          <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
+          <button class="xlwb-tab active" type="button" aria-current="page">Reasons</button>
+          <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
+        </div>
+      </div>
     </div>
     <div id="controls"></div>
 
