@@ -22,6 +22,9 @@ DEFAULT_OUTPUT = "bike-repair-statement-steps.generated.js"
 
 WORKBOOKS = (
     ("Bike-Repair-End.xlsx", "bike-repair-end"),
+    ("Bike-Repair-Beg-Module-3.xlsx", "bike-repair-beg-module-3"),
+    ("Bike-Repair-Module-3-1.xlsx", "bike-repair-module-3-1"),
+    ("Bike-Repair-Module-3-2.xlsx", "bike-repair-module-3-2"),
     ("Income-Statement-Steps.xlsx", "income-statement-steps"),
     ("Members-Capital-Steps.xlsx", "members-capital-steps"),
     ("Cash-Flow-Steps.xlsx", "cash-flow-steps"),
@@ -124,7 +127,38 @@ def extract_sheet(value_sheet: Any, formula_sheet: Any, workbook_name: str) -> d
                 "merge": anchors.get(coordinate),
             }
             if is_formula and (rule_top or rule_bottom):
-                cell_data["sumSources"] = expand_formula_sources(str(formula_cell.value))
+                formula = str(formula_cell.value)
+                sum_sources = expand_formula_sources(formula)
+                if formula.lstrip().upper().startswith("=SUBTOTAL"):
+                    sum_sources = [
+                        source
+                        for source in sum_sources
+                        if not (
+                            formula_sheet[source].data_type == "f"
+                            and str(formula_sheet[source].value)
+                            .lstrip()
+                            .upper()
+                            .startswith("=SUBTOTAL")
+                        )
+                    ]
+
+                # sumSources is consumed as an unsigned re-sum by the browser.
+                # Do not advertise formulas involving subtraction or constants,
+                # which that representation cannot reproduce.
+                source_total = sum(
+                    source_value
+                    for source in sum_sources
+                    if isinstance(
+                        source_value := value_sheet[source].value, (int, float)
+                    )
+                    and not isinstance(source_value, bool)
+                )
+                if (
+                    isinstance(cached_cell.value, (int, float))
+                    and not isinstance(cached_cell.value, bool)
+                    and source_total == cached_cell.value
+                ):
+                    cell_data["sumSources"] = sum_sources
             cells.append(cell_data)
 
     rows = []
@@ -453,6 +487,507 @@ def verify(data: dict[str, Any]) -> bool:
         passed,
         f"Balance Sheet ties to ledger ruled balances: {checked} comparisons"
         + (f"; MISMATCHES: {'; '.join(mismatches)}" if mismatches else ", all equal"),
+    )
+
+    # Invariant 7 — the authored start-of-Module-3 snapshot is internally
+    # complete, but does not yet contain the two discoveries made in Module 3.
+    snapshot_key = "bike-repair-beg-module-3"
+    snapshot_assets = get_sheet(data, snapshot_key, "Assets")
+    snapshot_liabilities = get_sheet(data, snapshot_key, "Liabilities")
+    snapshot_reasons = get_sheet(data, snapshot_key, "Reasons")
+    snapshot_balance_sheet = get_sheet(data, snapshot_key, "Balance Sheet")
+
+    def account_section_values(
+        sheet: dict[str, Any], account: str
+    ) -> tuple[int | float, int | float]:
+        grid = row_cells(sheet)
+        header_rows = [
+            row for row in label_rows(sheet, account)
+            if grid.get(row, {}).get(2, {}).get("bold")
+        ]
+        if not header_rows:
+            raise ExtractionError(
+                f"bold account header {account!r} not found in extracted sheet {sheet['name']}"
+            )
+        start = header_rows[0] + 1
+        balance_rows = label_rows(
+            sheet, "Balance, August 31, 2026", start=start
+        )
+        if not balance_rows:
+            raise ExtractionError(
+                f"August 31 balance not found for {account!r} in extracted sheet {sheet['name']}"
+            )
+        end = balance_rows[0]
+        item_total = sum(
+            cell["value"]
+            for row in range(start, end)
+            if (cell := grid.get(row, {}).get(4)) is not None
+            and isinstance(cell["value"], (int, float))
+            and not isinstance(cell["value"], bool)
+        )
+        balance = value_for_label(
+            sheet, "Balance, August 31, 2026", start=start, end=end
+        )
+        return item_total, balance
+
+    snapshot_account_expected = {
+        "Cash": 620,
+        "Right of Use": 650,
+        "Parts": 200,
+        "Tools & Repair Equipment": 1600,
+        "Fixtures": 750,
+        "Laptop": 610,
+        "Credit Card": 0,
+        "Customer Deposit": 0,
+    }
+    snapshot_account_actual: dict[str, tuple[int | float, int | float]] = {}
+    for ledger, accounts in (
+        (snapshot_assets, tuple(snapshot_account_expected)[:6]),
+        (snapshot_liabilities, tuple(snapshot_account_expected)[6:]),
+    ):
+        for account in accounts:
+            snapshot_account_actual[account] = account_section_values(ledger, account)
+
+    snapshot_reason_expected = {
+        "CONTRIBUTED": 2290,
+        "GENERATED": 2740,
+        "WITHDRAWN": -600,
+    }
+    snapshot_reason_actual: dict[str, tuple[int | float, int | float]] = {}
+    snapshot_reasons_grid = row_cells(snapshot_reasons)
+    for section in snapshot_reason_expected:
+        start, end = section_bounds(snapshot_reasons, section)
+        balance_rows = label_rows(
+            snapshot_reasons,
+            "Balance, August 31, 2026",
+            start=start,
+            end=end,
+        )
+        if not balance_rows:
+            raise ExtractionError(
+                f"August 31 balance not found for {section!r} in extracted sheet Reasons"
+            )
+        balance_row = balance_rows[0]
+        item_total = sum(
+            cell["value"]
+            for row in range(start, balance_row)
+            if (cell := snapshot_reasons_grid.get(row, {}).get(4)) is not None
+            and isinstance(cell["value"], (int, float))
+            and not isinstance(cell["value"], bool)
+        )
+        snapshot_reason_actual[section] = (
+            item_total,
+            section_value(
+                snapshot_reasons, section, "Balance, August 31, 2026"
+            ),
+        )
+
+    forbidden_hits = [
+        f"{sheet['name']}!{get_column_letter(cell['c'])}{cell['r']}={cell['value']!r}"
+        for sheet in data["workbooks"][snapshot_key]["sheets"]
+        for cell in sheet["cells"]
+        if isinstance(cell["value"], str)
+        and any(term in cell["value"] for term in ("Accounts Receivable", "Depreciation"))
+    ]
+
+    snapshot_bs_expected = {
+        "Cash": 1300,
+        "Right of Use": 650,
+        "Parts": 200,
+        "Tools & Repair Equipment": 1200,
+        "Fixtures": 750,
+        "Laptop": 610,
+        "Total Assets": 4710,
+        "Credit Card": 2030,
+        "Customer Deposit": 220,
+        "Total Liabilities": 2250,
+        "Contributed": 2290,
+        "Generated": 170,
+        "Total Member's Capital": 2460,
+    }
+    snapshot_bs_actual = {
+        label: value_for_label(snapshot_balance_sheet, label, column=3)
+        for label in snapshot_bs_expected
+    }
+    snapshot_equation = (
+        snapshot_bs_actual["Total Assets"]
+        - snapshot_bs_actual["Total Liabilities"]
+    )
+
+    snapshot_assets_grid = row_cells(snapshot_assets)
+    cash_header = label_rows(snapshot_assets, "Cash")[0]
+    cash_boundary = label_rows(
+        snapshot_assets,
+        "Deposited to open the LLC bank account",
+        start=cash_header + 1,
+        contains=True,
+    )[0]
+    june_cash = sum(
+        cell["value"]
+        for row in range(cash_header + 1, cash_boundary + 1)
+        if (cell := snapshot_assets_grid.get(row, {}).get(4)) is not None
+        and isinstance(cell["value"], (int, float))
+        and not isinstance(cell["value"], bool)
+    )
+    passed = (
+        all(
+            item_total == balance == snapshot_account_expected[account]
+            for account, (item_total, balance) in snapshot_account_actual.items()
+        )
+        and all(
+            item_total == balance == snapshot_reason_expected[section]
+            for section, (item_total, balance) in snapshot_reason_actual.items()
+        )
+        and not forbidden_hits
+        and snapshot_bs_actual == snapshot_bs_expected
+        and snapshot_equation == snapshot_bs_actual["Total Member's Capital"]
+        and june_cash == snapshot_bs_actual["Cash"] == 1300
+    )
+    results.append(passed)
+    report_invariant(
+        7,
+        passed,
+        f"ledger item sums/balances={snapshot_account_actual}; Reasons item sums/balances={snapshot_reason_actual}; "
+        f"forbidden hits={forbidden_hits}; Balance Sheet={snapshot_bs_actual}; "
+        f"equation={snapshot_bs_actual['Total Assets']}-{snapshot_bs_actual['Total Liabilities']}={snapshot_equation}; "
+        f"Cash through June-1 deposit={june_cash}",
+    )
+
+    # Invariant 8 — only the Module 3 receivable and depreciation discoveries
+    # separate the authored snapshot balances from the final workbook.
+    end_liabilities = liabilities
+    continuity_deltas = {
+        "Cash": 0,
+        "Right of Use": 0,
+        "Parts": 0,
+        "Tools & Repair Equipment": -160,
+        "Fixtures": -40,
+        "Laptop": -30,
+        "Credit Card": 0,
+        "Customer Deposit": 0,
+        "CONTRIBUTED": 0,
+        "GENERATED": 300 - 230,
+        "WITHDRAWN": 0,
+    }
+    continuity_actual: dict[str, tuple[int | float, int, int | float]] = {}
+    for snapshot_ledger, end_ledger, accounts in (
+        (snapshot_assets, assets, tuple(snapshot_account_expected)[:6]),
+        (snapshot_liabilities, end_liabilities, tuple(snapshot_account_expected)[6:]),
+    ):
+        for account in accounts:
+            snapshot_value = snapshot_account_actual[account][1]
+            end_value = account_section_values(end_ledger, account)[1]
+            continuity_actual[account] = (
+                snapshot_value,
+                continuity_deltas[account],
+                end_value,
+            )
+    for section in snapshot_reason_expected:
+        continuity_actual[section] = (
+            snapshot_reason_actual[section][1],
+            continuity_deltas[section],
+            section_value(reasons, section, "Balance, August 31, 2026"),
+        )
+
+    shared_bs_labels = (
+        "Cash",
+        "Right of Use",
+        "Parts",
+        "Tools & Repair Equipment",
+        "Fixtures",
+        "Laptop",
+        "Credit Card",
+        "Customer Deposit",
+        "Contributed",
+        "Generated",
+    )
+    june_1_continuity = {
+        label: (
+            value_for_label(snapshot_balance_sheet, label, column=3),
+            value_for_label(balance_sheet, label, column=3),
+        )
+        for label in shared_bs_labels
+    }
+    passed = (
+        all(start + delta == end for start, delta, end in continuity_actual.values())
+        and all(snapshot == end for snapshot, end in june_1_continuity.values())
+    )
+    results.append(passed)
+    report_invariant(
+        8,
+        passed,
+        f"Aug-31 continuity (snapshot, delta, End)={continuity_actual}; "
+        f"June-1 Balance Sheet (snapshot, End)={june_1_continuity}",
+    )
+
+    # Invariant 9 — Module 3-1 is the authored post-periodization state.
+    periodized_key = "bike-repair-module-3-1"
+    periodized_assets = get_sheet(data, periodized_key, "Assets")
+    periodized_liabilities = get_sheet(data, periodized_key, "Liabilities")
+    periodized_reasons = get_sheet(data, periodized_key, "Reasons")
+    periodized_balance_sheet = get_sheet(data, periodized_key, "Balance Sheet")
+    periodized_reasons_grid = row_cells(periodized_reasons)
+
+    dated_expected = {
+        "Cash": (1300, 620),
+        "Right of Use": (650, 650),
+        "Parts": (200, 200),
+        "Tools & Repair Equipment": (1200, 1600),
+        "Fixtures": (750, 750),
+        "Laptop": (610, 610),
+        "Credit Card": (2030, 0),
+        "Customer Deposit": (220, 0),
+        "CONTRIBUTED": (2290, 2290),
+        "GENERATED": (170, 2740),
+        "WITHDRAWN": (0, -600),
+    }
+
+    def dated_values(
+        sheet: dict[str, Any], account: str
+    ) -> tuple[int | float, int | float]:
+        grid = row_cells(sheet)
+        headers = sorted(
+            cell["r"]
+            for cell in sheet["cells"]
+            if cell["c"] == 2 and cell.get("bold") and cell.get("value")
+        )
+        account_rows = [
+            row
+            for row in label_rows(sheet, account)
+            if grid.get(row, {}).get(2, {}).get("bold")
+        ]
+        if not account_rows:
+            raise ExtractionError(
+                f"bold account header {account!r} not found in extracted sheet {sheet['name']}"
+            )
+        start = account_rows[0] + 1
+        later_headers = [row for row in headers if row >= start]
+        end = min(later_headers) - 1 if later_headers else len(sheet["rows"])
+        return (
+            value_for_label(
+                sheet,
+                "Balance, June 1, 2026",
+                start=start,
+                end=end,
+            ),
+            value_for_label(
+                sheet,
+                "Balance, August 31, 2026",
+                start=start,
+                end=end,
+            ),
+        )
+
+    def all_dated_values(workbook_key: str) -> dict[str, tuple[int | float, int | float]]:
+        workbook_assets = get_sheet(data, workbook_key, "Assets")
+        workbook_liabilities = get_sheet(data, workbook_key, "Liabilities")
+        workbook_reasons = get_sheet(data, workbook_key, "Reasons")
+        actual: dict[str, tuple[int | float, int | float]] = {}
+        for ledger, accounts in (
+            (workbook_assets, tuple(dated_expected)[:6]),
+            (workbook_liabilities, tuple(dated_expected)[6:8]),
+            (workbook_reasons, tuple(dated_expected)[8:]),
+        ):
+            for account in accounts:
+                actual[account] = dated_values(ledger, account)
+        return actual
+
+    statement_key = "bike-repair-module-3-2"
+    canonical_dated_labels = {
+        "Balance, June 1, 2026",
+        "Balance, August 31, 2026",
+    }
+    dated_label_offenders_by_workbook = {
+        workbook_key: [
+            f"{workbook_key}/{sheet['name']}!B{cell['r']}={cell['value']!r}"
+            for sheet in data["workbooks"][workbook_key]["sheets"]
+            if sheet["name"] in ("Assets", "Liabilities", "Reasons")
+            for cell in sheet["cells"]
+            if cell["c"] == 2
+            and isinstance(cell["value"], str)
+            and cell["value"].startswith("Balance,")
+            and cell["value"] not in canonical_dated_labels
+        ]
+        for workbook_key in (periodized_key, "bike-repair-module-3-2")
+    }
+    dated_label_offenders = [
+        offender
+        for offenders in dated_label_offenders_by_workbook.values()
+        for offender in offenders
+    ]
+    # Audit before exact lookup: a malformed dated label must be reported as an
+    # invariant failure (with its exact text), not abort verification as missing.
+    periodized_dated_actual = (
+        {}
+        if dated_label_offenders_by_workbook[periodized_key]
+        else all_dated_values(periodized_key)
+    )
+    periodized_forbidden_hits = [
+        f"{sheet['name']}!{get_column_letter(cell['c'])}{cell['r']}={cell['value']!r}"
+        for sheet in data["workbooks"][periodized_key]["sheets"]
+        for cell in sheet["cells"]
+        if isinstance(cell["value"], str)
+        and any(
+            term in cell["value"]
+            for term in ("Accounts Receivable", "Depreciation")
+        )
+    ]
+    periodized_bs_actual = {
+        label: value_for_label(periodized_balance_sheet, label, column=3)
+        for label in snapshot_bs_expected
+    }
+    passed = (
+        periodized_dated_actual == dated_expected
+        and not dated_label_offenders
+        and not periodized_forbidden_hits
+        and periodized_bs_actual == snapshot_bs_expected
+    )
+    results.append(passed)
+    report_invariant(
+        9,
+        passed,
+        f"dated ledger values (June 1, August 31)={periodized_dated_actual}; "
+        f"dated label offenders={dated_label_offenders}; "
+        f"forbidden hits={periodized_forbidden_hits}; Balance Sheet={periodized_bs_actual}",
+    )
+
+    # Invariant 10 — Module 3-2 adds only the raw Income Statement working tab.
+    statement_sheet_names = [
+        sheet["name"] for sheet in data["workbooks"][statement_key]["sheets"]
+    ]
+    statement_dated_actual = (
+        {}
+        if dated_label_offenders_by_workbook[statement_key]
+        else all_dated_values(statement_key)
+    )
+    working_income = get_sheet(data, statement_key, "Income Statement")
+    working_income_grid = row_cells(working_income)
+    title_actual = tuple(
+        working_income_grid.get(row, {}).get(2, {}).get("value")
+        for row in range(1, 4)
+    )
+    title_expected = (
+        "[Your Name]'s Bike Repair, LLC.",
+        "Income Statement",
+        "For the period June 1 – August 31, 2026",
+    )
+
+    generated_season_rows: list[tuple[Any, Any]] = []
+    if not dated_label_offenders_by_workbook[periodized_key]:
+        generated_start, generated_end = section_bounds(periodized_reasons, "GENERATED")
+        generated_june_row = label_rows(
+            periodized_reasons,
+            "Balance, June 1, 2026",
+            start=generated_start,
+            end=generated_end,
+        )[0]
+        generated_august_row = label_rows(
+            periodized_reasons,
+            "Balance, August 31, 2026",
+            start=generated_start,
+            end=generated_end,
+        )[0]
+        generated_season_rows = [
+            (
+                periodized_reasons_grid[row][2]["value"],
+                periodized_reasons_grid[row][4]["value"],
+            )
+            for row in range(generated_june_row + 1, generated_august_row)
+            if 2 in periodized_reasons_grid.get(row, {})
+            or 4 in periodized_reasons_grid.get(row, {})
+        ]
+    income_data_rows = [
+        (
+            working_income_grid[row][2]["value"],
+            working_income_grid[row][4]["value"],
+        )
+        for row in range(4, len(working_income["rows"]) + 1)
+        if 2 in working_income_grid.get(row, {})
+        or 4 in working_income_grid.get(row, {})
+    ]
+    income_data_sum = sum(
+        value
+        for _, value in income_data_rows
+        if isinstance(value, (int, float)) and not isinstance(value, bool)
+    )
+    statement_forbidden_hits = [
+        f"{sheet['name']}!{get_column_letter(cell['c'])}{cell['r']}={cell['value']!r}"
+        for sheet in data["workbooks"][statement_key]["sheets"]
+        for cell in sheet["cells"]
+        if isinstance(cell["value"], str)
+        and any(
+            term in cell["value"]
+            for term in (
+                "Accounts Receivable",
+                "Depreciation",
+                "Repair delivered — Ridgeline",
+            )
+        )
+    ]
+    passed = (
+        statement_sheet_names
+        == ["Assets", "Liabilities", "Reasons", "Balance Sheet", "Income Statement"]
+        and statement_dated_actual == dated_expected
+        and title_actual == title_expected
+        and income_data_rows == generated_season_rows
+        and income_data_sum == 2570 == dated_expected["GENERATED"][1] - dated_expected["GENERATED"][0]
+        and not statement_forbidden_hits
+    )
+    results.append(passed)
+    report_invariant(
+        10,
+        passed,
+        f"sheets={statement_sheet_names}; dated ledger values={statement_dated_actual}; "
+        f"titles={title_actual}; Income Statement rows={income_data_rows}; "
+        f"GENERATED season rows={generated_season_rows}; sum={income_data_sum}; "
+        f"forbidden hits={statement_forbidden_hits}",
+    )
+
+    # Invariant 11 — every browser re-sum agrees with its cached workbook value.
+    resum_checked = 0
+    resum_mismatches: list[str] = []
+    for workbook_key, workbook in data["workbooks"].items():
+        for sheet in workbook["sheets"]:
+            grid = row_cells(sheet)
+            for cell in sheet["cells"]:
+                if "sumSources" not in cell:
+                    continue
+                cached_value = cell["value"]
+                if isinstance(cached_value, bool) or not isinstance(
+                    cached_value, (int, float)
+                ):
+                    continue
+                resum_checked += 1
+                source_total: int | float = 0
+                for source in cell["sumSources"]:
+                    match = re.fullmatch(r"([A-Z]+)(\d+)", source)
+                    if match is None:
+                        resum_mismatches.append(
+                            f"{workbook_key}!{sheet['name']}!"
+                            f"{get_column_letter(cell['c'])}{cell['r']}: invalid source {source!r}"
+                        )
+                        continue
+                    source_column = 0
+                    for character in match.group(1):
+                        source_column = source_column * 26 + ord(character) - ord("A") + 1
+                    source_cell = grid.get(int(match.group(2)), {}).get(source_column)
+                    source_value = None if source_cell is None else source_cell["value"]
+                    if isinstance(source_value, (int, float)) and not isinstance(
+                        source_value, bool
+                    ):
+                        source_total += source_value
+                if source_total != cached_value:
+                    resum_mismatches.append(
+                        f"{workbook_key}!{sheet['name']}!"
+                        f"{get_column_letter(cell['c'])}{cell['r']}: "
+                        f"sources={source_total}, cached={cached_value}"
+                    )
+    passed = resum_checked > 0 and not resum_mismatches
+    results.append(passed)
+    report_invariant(
+        11,
+        passed,
+        f"checked={resum_checked}; mismatches={resum_mismatches}",
     )
 
     return all(results)
