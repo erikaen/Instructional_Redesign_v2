@@ -293,7 +293,7 @@ function reasonsSheetWalkPairs(){
   var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons — one row per change</div><div class="cash-sheet-sub">'+sub+'</div></div>';
   if(revealedRows.length===0){ html += '<div class="bs-empty-msg">No reasons recorded yet.</div>'; return html; }
   if(visible.length===0){ html += '<div class="bs-empty-msg">All paired rows crossed out.</div>'; return html; }
-  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Account &amp; reason</div><div class="xl-v">Δ</div></div>';
+  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Account &amp; reason</div><div class="xl-v"></div></div>';
   var clickable = (phase==='pairs' && !eliminateAutoActive && !eliminateAutoDone);
   visible.forEach(function(r){
     var sel = (selectedReasonId===r.id) ? ' selected' : '';

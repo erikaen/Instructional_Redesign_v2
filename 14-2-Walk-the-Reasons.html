@@ -18,6 +18,8 @@
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
 
+    <div id="stepProg"></div>
+
     <div id="walkAnna"></div>
 
     <!-- the rule + the running score -->
@@ -28,6 +30,8 @@
       <div id="paneLeft"></div>
       <div id="paneRight"></div>
     </div>
+
+    <div class="btn-row" style="justify-content:flex-end; margin-bottom:12px;"><button class="btn-reset" onclick="resetBeat()">Reset</button></div>
 
     <div id="walkControls"></div>
 
@@ -211,6 +215,8 @@ var lastFlash = null;
 var autoActive = false;
 var coverFound = false;
 var tallyPhase = false;   // cash rows done, discovery pending
+var explainedAt = {};     // change id -> beatIndex when recorded (per-page reset)
+var tallySel = null, tallySubmitted = false;
 
 function beat(){ return beatIndex < BEATS.length ? BEATS[beatIndex] : null; }
 function beatChanges(k){ return CHANGES.filter(function(c){ return c.cat===k && !c.hidden; }); }
@@ -244,9 +250,7 @@ function ruleStrip(){
     '<div class="sortprog-box shop"><div class="sortprog-label">Matched</div><div class="sortprog-num">'+matchedCount()+'</div></div>'+
     '<div class="sortprog-box personal"><div class="sortprog-label">Reasons</div><div class="sortprog-num">'+reasonsCreated.length+'</div></div>'+
     '<div class="sortprog-box'+(un===0?' done':'')+'"><div class="sortprog-label">Unwalked</div><div class="sortprog-num">'+un+'</div></div>'+
-    '</div>'+btn+
-    ((matchedCount()+reasonsCreated.length>0 && un>0) ? '<div class="btn-row" style="justify-content: flex-end; margin-top: 10px;"><button class="btn-reset" onclick="restart()">Reset</button></div>' : '')+
-    '</div>';
+    '</div>'+btn+'</div>';
 }
 
 /* ===== sheets ===== */
@@ -350,7 +354,7 @@ function liabilitiesSheet(){
   return html;
 }
 function reasonsSheet(){
-  var html='<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Reason &mdash; the changes with no match</span><span class="stmt-num">&Delta;</span></div>';
+  var html='<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Reason &mdash; the changes with no match</span><span class="stmt-num"></span></div>';
   if(reasonsCreated.length===0){
     html+='<div class="stmt-row stmt-grid-sort"><span></span><div class="stmt-stripe"></div><span><em>No reasons yet &mdash; every change so far had a match.</em></span><span></span></div>';
     return html;
@@ -406,7 +410,7 @@ function controls(){
   var trigger = !allRec && !activeChange && !autoActive && recCount>=3 && (!mixed || (hasM && hasR));
 
   if(allRec){
-    if(b.key==='CASH'){ return coverFound ? finishedControls() : tallyControls(); }
+    if(b.key==='CASH'){ return coverFound ? tallyControls() + finishedControls() : tallyControls(); }
     var nextLbl = beatIndex<BEATS.length-1 ? catLabel(BEATS[beatIndex+1].key==='SMITH'?'LIABILITIES':BEATS[beatIndex+1].key) : null;
     var btn = nextLbl ? '<button class="btn-continue btn-block" onclick="advanceBeat()">Next &mdash; '+nextLbl+' &rarr;</button>' : '';
     var note = b.key==='SMITH'
@@ -422,31 +426,61 @@ function controls(){
 }
 
 /* ===== the Cash tally discovery ===== */
+var TALLY_OPTS = [
+  { id:'a', text:'A customer must have paid $160 that never got written down',
+    fb:'&ldquo;Every customer payment has a row &mdash; and a reason already. Look at where the money would have to come <em>from</em>.&rdquo;' },
+  { id:'b', text:'The card must have covered it',
+    fb:'&ldquo;The card&rsquo;s charges are all on the Liabilities tab, and every one is matched. This $160 wasn&rsquo;t borrowed.&rdquo;' },
+  { id:'c', text:'It came from outside the repair work &mdash; you covered it yourself, without noticing',
+    fb:'From your personal self +$160 &mdash; <strong>no match</strong>: it came from outside the repair work. The last reason. Found only by tallying.' }
+];
 function tallyControls(){
   var h = insightBox('The ledger doesn&rsquo;t reach the sheet',
-    '<p>Every row is explained &mdash; and they sum to <strong>&minus;$160</strong>. But the Cash line reads <strong>$0</strong>: the account never went negative. $160 arrived with no receipt and no row. Where did it come from?</p>');
-  h += '<div class="section-card"><div class="classify-row" style="flex-direction:column;align-items:stretch">'+
-    '<button class="classify-btn" onclick="tallyAnswer(\'a\')">A customer must have paid $160 that never got written down</button>'+
-    '<button class="classify-btn" onclick="tallyAnswer(\'b\')">The card must have covered it</button>'+
-    '<button class="classify-btn" onclick="tallyAnswer(\'c\')">It came from outside the repair work &mdash; you covered it yourself, without noticing</button>'+
-  '</div><div id="tallyFb"></div></div>';
+    '<p>Every row is explained &mdash; and they sum to <strong>&minus;$160</strong>. But the Cash line reads <strong>$0</strong>: the account never went negative. $160 arrived with no receipt and no row.</p>');
+  var right = tallySubmitted && TALLY_OPTS[tallySel].id==='c';
+  h += '<div class="mc-card"><div class="mc-q">Where did the $160 come from?</div><div class="mc-opts">';
+  TALLY_OPTS.forEach(function(o, oi){
+    var cls = 'mc-opt' + (!tallySubmitted && tallySel===oi ? ' selected' : '')
+      + (tallySubmitted && tallySel===oi ? (o.id==='c'?' correct':' wrong') : '')
+      + (tallySubmitted ? ' locked' : '');
+    h += '<div class="'+cls+'" onclick="selectTally('+oi+')"><div class="mc-letter">'+String.fromCharCode(65+oi)+'</div><div>'+o.text+'</div></div>';
+  });
+  h += '</div>';
+  if(tallySubmitted) h += '<div class="feedback '+(right?'ok':'err')+' show">'+(right?'Right. ':'Not quite. ')+TALLY_OPTS[tallySel].fb+'</div>';
+  h += '<div class="btn-row">'+(tallySubmitted
+    ? '<button class="btn-reset" onclick="resetTally()" style="margin-left:auto;">Reset</button>'
+    : '<button class="btn-continue" onclick="submitTally()"'+(tallySel===null?' disabled':'')+'>Submit</button>')+'</div>';
+  h += '</div>';
   return h;
 }
-function tallyAnswer(id){
-  var fb = document.getElementById('tallyFb');
-  if(id==='c'){
+function selectTally(i){
+  if(tallySubmitted) return;
+  tallySel = i; render();
+}
+function submitTally(){
+  if(tallySel===null || tallySubmitted) return;
+  tallySubmitted = true;
+  if(TALLY_OPTS[tallySel].id==='c'){
     playSuccess();
     coverFound = true;
     var c = BY_ID['cover'];
-    explained[c.id]='reason'; reasonsCreated.push(c.id);
+    explainedAt[c.id]=beatIndex; explained[c.id]='reason'; if(reasonsCreated.indexOf(c.id)<0) reasonsCreated.push(c.id);
     lastFlash = { kind:'reason', text:'From your personal self +$160 &mdash; <strong>no match</strong>: it came from outside the repair work. The last reason. Found only by tallying.', id:'cover' };
-    render();
   } else {
     playNope();
-    fb.innerHTML = '<div class="sort-msg warn">'+(id==='a'
-      ? '&ldquo;Every customer payment has a row &mdash; and a reason already. Look at where the money would have to come <em>from</em>.&rdquo;'
-      : '&ldquo;The card&rsquo;s charges are all on the Liabilities tab, and every one is matched. This $160 wasn&rsquo;t borrowed.&rdquo;')+'</div>';
   }
+  render();
+}
+function resetTally(){
+  playClick();
+  tallySel = null; tallySubmitted = false;
+  if(coverFound){
+    coverFound = false;
+    delete explained['cover']; delete explainedAt['cover'];
+    var ri = reasonsCreated.indexOf('cover'); if(ri>=0) reasonsCreated.splice(ri,1);
+    lastFlash = null;
+  }
+  render();
 }
 
 /* ===== the close ===== */
@@ -454,8 +488,7 @@ function finishedControls(){
   return insightBox('The reasons are the record of the difference',
       '<p>Every change in an Asset or a Liability got a <strong>match or a reason</strong>. The matched pairs explained themselves &mdash; an Asset up with a Liability up, or one Asset up and another down &mdash; and <strong>Assets &minus; Liabilities never moved</strong>. The changes with <strong>no match</strong> are the ones that moved it &mdash; and every one of them is written on the Reasons tab, with its why.</p>')+
     insightBox('Two kinds, coming up',
-      '<p>Read the Reasons tab once more. Some of these you <em>put in</em> from outside. The rest came from <em>doing the work</em>. That split is next.</p>')+
-    '<div class="next-phase-msg">Click <strong>Next</strong> to sort them.</div>';
+      '<p>Read the Reasons tab once more. Some of these you <em>put in</em> from outside. The rest came from <em>doing the work</em>. That split is next.</p>');
 }
 
 /* ===== render ===== */
@@ -466,7 +499,10 @@ function render(){
   document.getElementById('ruleStrip').innerHTML = ruleStrip();
   document.getElementById('paneLeft').innerHTML = renderPane('left');
   document.getElementById('paneRight').innerHTML = renderPane('right');
-  document.getElementById('walkControls').innerHTML = controls();
+  var backRow = (beatIndex > 0 && !autoActive)
+    ? '<div class="btn-row" style="margin-bottom:12px;"><button class="btn-reset" onclick="beatBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>' : '';
+  document.getElementById('walkControls').innerHTML = backRow + controls();
+  if (window.renderStepProgress) renderStepProgress('stepProg', Math.min(beatIndex + 1, BEATS.length), BEATS.length);
   if(window.lucide) lucide.createIcons();
 }
 
@@ -481,8 +517,14 @@ function clickChange(id){
   activeChange=id; nudgeItem=null; render();
 }
 function recordChange(c){
-  if(c.ans==='none'){ explained[c.id]='reason'; if(reasonsCreated.indexOf(c.id)<0) reasonsCreated.push(c.id); }
-  else { explained[c.id]='match'; if(c.pair){ matchedPairs[c.pair]=true; CHANGES.forEach(function(x){ if(x.pair===c.pair) explained[x.id]='match'; }); } }
+  if(c.ans==='none'){
+    if(!explained[c.id]) explainedAt[c.id]=beatIndex;
+    explained[c.id]='reason'; if(reasonsCreated.indexOf(c.id)<0) reasonsCreated.push(c.id);
+  } else {
+    if(!explained[c.id]) explainedAt[c.id]=beatIndex;
+    explained[c.id]='match';
+    if(c.pair){ matchedPairs[c.pair]=true; CHANGES.forEach(function(x){ if(x.pair===c.pair){ if(!explained[x.id]) explainedAt[x.id]=beatIndex; explained[x.id]='match'; } }); }
+  }
 }
 function answer(a){
   if(!activeChange||autoActive) return;
@@ -511,6 +553,19 @@ function recordRest(){
       else render();
     }, i*150);
   });
+}
+function beatBack(){
+  if(beatIndex===0 || autoActive) return;
+  playClick();
+  var b = beat();
+  if(b && b.tab==='assets') assetsOpen[b.key]=false;
+  beatIndex--;
+  b = beat();
+  lastFlash=null; activeChange=null; nudgeItem=null;
+  if(b.tab==='assets'){ paneTab.left='assets'; assetsOpen[b.key]=true; }
+  else { paneTab.left='liabilities'; assetsOpen['CARD']=true; }
+  if(b.key==='CASH'){ assetsOpen['CASH']=true; }
+  render();
 }
 function advanceBeat(){
   playClick();
@@ -551,6 +606,20 @@ function closeReceipt(){ document.getElementById('receiptOverlay').classList.rem
 /* ===== glossary ===== */
 function openGlossary(){ m1GlossaryOpen('14-2'); }
 function closeGlossary(){ m1GlossaryClose(); }
+function resetBeat(){
+  playClick();
+  Object.keys(explainedAt).forEach(function(id){
+    if(explainedAt[id]!==beatIndex) return;
+    var c = BY_ID[id];
+    delete explained[id]; delete explainedAt[id]; delete attempts[id];
+    var ri = reasonsCreated.indexOf(id); if(ri>=0) reasonsCreated.splice(ri,1);
+    if(c.pair) delete matchedPairs[c.pair];
+  });
+  var b = beat();
+  if(b && b.key==='CASH'){ coverFound=false; tallySel=null; tallySubmitted=false; }
+  activeChange=null; nudgeItem=null; lastFlash=null; autoActive=false;
+  render();
+}
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeReceipt(); } });
 

@@ -142,46 +142,46 @@ function sigBlock(label, f, which, interactive){
     if(isSigned){
       inner = '<span style="font-family:\'Segoe Script\',\'Snell Roundhand\',\'Brush Script MT\',cursive;font-size:22px;color:#1a2b6b">'+esc(memberDisplay())+'</span>';
     } else {
-      inner = '<button onclick="'+(which==='company'?'signCompany()':'signMember()')+'" style="background:#e8dcc8;color:#a08050;border:0;border-radius:6px;padding:4px 12px;font-weight:600;font-size:13px;cursor:pointer;font-family:Inter,sans-serif">&#9997; Sign here</button>';
+      inner = '<button onclick="'+(which==='company'?'signCompany()':'signMember()')+'" style="background:#e8dcc8;color:#a08050;border:0;border-radius:6px;padding:4px 12px;font-weight:600;font-size:16px;cursor:pointer;font-family:Inter,sans-serif">&#9997; Sign here</button>';
     }
   } else {
     var s = which==='company' ? f.sig.company : f.sig.member;
     inner = s ? '<span style="font-family:\'Segoe Script\',\'Snell Roundhand\',\'Brush Script MT\',cursive;font-size:22px;color:#1a2b6b">'+esc(s)+'</span>' : '';
   }
   var roleSub = which==='company' ? esc(f.member)+', Managing Member' : esc(f.member)+', as an individual';
-  return '<div><div style="font-size:11px;text-transform:uppercase;color:#6b6b6b">'+label+'</div>'+
+  return '<div><div style="font-size:16px;text-transform:uppercase;color:#6b6b6b">'+label+'</div>'+
     '<div style="min-height:34px;border-bottom:1px solid #374151;display:flex;align-items:flex-end;padding-bottom:2px">'+inner+'</div>'+
-    '<div style="font-size:11px;color:#6b6b6b;margin-top:2px">'+roleSub+'</div>'+
-    '<div style="font-size:11px;color:#6b6b6b">Dated: '+esc(f.date)+'</div></div>';
+    '<div style="font-size:16px;color:#6b6b6b;margin-top:2px">'+roleSub+'</div>'+
+    '<div style="font-size:16px;color:#6b6b6b">Dated: '+esc(f.date)+'</div></div>';
 }
 function buildAgreement(f, interactive, draft){
   var marks = ['7','9','17'];
-  var html = '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">';
+  var html = '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:16px;color:#374151">';
   html += '<div style="text-align:center;font-weight:700;font-size:16px;letter-spacing:0.04em">OPERATING AGREEMENT</div>';
-  html += '<div style="text-align:center;font-weight:700;font-size:13px;color:var(--primary);margin-bottom:10px">OF '+esc(f.entity.toUpperCase())+'</div>';
-  if(draft) html += '<div style="text-align:center;margin-bottom:10px"><span style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:2px 10px">DRAFT &mdash; UNSIGNED</span></div>';
+  html += '<div style="text-align:center;font-weight:700;font-size:16px;color:var(--primary);margin-bottom:10px">OF '+esc(f.entity.toUpperCase())+'</div>';
+  if(draft) html += '<div style="text-align:center;margin-bottom:10px"><span style="font-family:Inter,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.08em;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:2px 10px">DRAFT &mdash; UNSIGNED</span></div>';
   html += '<p style="text-align:justify;margin-bottom:8px">This Operating Agreement of '+esc(f.entity)+', dated '+esc(f.date)+', is entered into by '+esc(f.member)+' (the &ldquo;Sole Member&rdquo;) and '+esc(f.entity)+' (the &ldquo;Company&rdquo;).</p>';
-  html += '<p style="font-size:11px;color:#6b6b6b;font-family:Inter,sans-serif;margin-bottom:8px">All nineteen sections are here &mdash; tap any heading to expand it.</p>';
+  html += '<p style="font-size:16px;color:#6b6b6b;font-family:Inter,sans-serif;margin-bottom:8px">All nineteen sections are here &mdash; tap any heading to expand it.</p>';
   clauseData(f).forEach(function(c){
     var n=c[0], title=c[1], body=c[2];
     var star = marks.indexOf(n) >= 0;
     var open = expanded.indexOf(n) >= 0;
     html += '<div style="margin-bottom:3px;padding-left:10px;border-left:3px solid '+(star?'var(--accent)':'#e5e0d5')+'">';
     html += '<div onclick="toggleClause(\''+n+'\')" style="cursor:pointer;display:flex;align-items:baseline;gap:6px">';
-    html += '<span style="color:#6b6b6b;font-size:11px">'+(open?'&#9662;':'&#9656;')+'</span>';
+    html += '<span style="color:#6b6b6b;font-size:16px">'+(open?'&#9662;':'&#9656;')+'</span>';
     html += '<span style="font-weight:700">'+n+'. '+esc(title)+'.</span>';
-    if(star) html += '<span style="font-size:11px;font-weight:700;color:var(--accent)">&#9733; watch this</span>';
+    if(star) html += '<span style="font-size:16px;font-weight:700;color:var(--accent)">&#9733; watch this</span>';
     html += '</div>';
     if(open) html += '<div style="padding-left:18px;padding-top:2px;padding-bottom:3px">'+esc(body)+'</div>';
     html += '</div>';
   });
-  html += '<div style="margin-top:12px;margin-bottom:4px;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;color:#6b6b6b">Schedule A &mdash; Contributed Property</div>';
+  html += '<div style="margin-top:12px;margin-bottom:4px;font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:0.04em;color:#6b6b6b">Schedule A &mdash; Contributed Property</div>';
   if(draft){
     html += '<div style="max-width:380px">';
     for(var bi=0; bi<4; bi++){ html += '<div style="border-bottom:1px solid #d8d8d8;height:22px"></div>'; }
     html += '<div style="display:flex;justify-content:space-between;font-weight:700;border-top:2px solid #374151;margin-top:6px"><span>Net contribution (members&rsquo; capital)</span><span class="mono">$ ____</span></div>';
     html += '</div>';
-    html += '<div style="font-size:11px;font-family:Inter,sans-serif;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:6px 10px;margin-top:8px;max-width:380px">DRAFT &mdash; you can&rsquo;t complete this schedule yet. The cash isn&rsquo;t deposited and the card is still in your name; both happen in 2.4. You complete the schedule from the Company&rsquo;s books after that &mdash; and you sign only after the schedule is complete.</div>';
+    html += '<div style="font-size:16px;font-family:Inter,sans-serif;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:6px 10px;margin-top:8px;max-width:380px">DRAFT &mdash; you can&rsquo;t complete this schedule yet. The cash isn&rsquo;t deposited and the card is still in your name; both happen in 2.4. You complete the schedule from the Company&rsquo;s books after that &mdash; and you sign only after the schedule is complete.</div>';
   } else {
     html += '<div style="max-width:380px">';
     f.sched.assets.forEach(function(a){ html += '<div style="display:flex;justify-content:space-between"><span>'+esc(a[0])+'</span><span class="mono">'+a[1]+'</span></div>'; });
@@ -191,12 +191,12 @@ function buildAgreement(f, interactive, draft){
     html += '<div style="display:flex;justify-content:space-between;font-weight:700;border-top:2px solid #374151"><span>Net contribution (members&rsquo; capital)</span><span class="mono">'+f.sched.net+'</span></div>';
     html += '</div>';
   }
-  html += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;color:#6b6b6b;font-size:12px">&mdash; signature page &mdash;</div>';
+  html += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;color:#6b6b6b;font-size:16px">&mdash; signature page &mdash;</div>';
   html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
   html += sigBlock('For the Company', f, 'company', interactive);
   html += sigBlock('As an individual', f, 'member', interactive);
   html += '</div>';
-  if(draft) html += '<div style="text-align:center;font-size:11px;font-family:Inter,sans-serif;color:#6b6b6b;margin-top:8px">Unsigned &mdash; you sign both lines at the end of Module 2, once you&rsquo;ve completed Schedule A.</div>';
+  if(draft) html += '<div style="text-align:center;font-size:16px;font-family:Inter,sans-serif;color:#6b6b6b;margin-top:8px">Unsigned &mdash; you sign both lines at the end of Module 2, once you&rsquo;ve completed Schedule A.</div>';
   html += '</div>';
   return html;
 }

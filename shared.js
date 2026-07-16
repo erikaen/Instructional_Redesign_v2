@@ -369,7 +369,7 @@ var BRW = (function () {
       var shown = r.rows.filter(function (x) { return x.revealed; });
       html += sub('This season&rsquo;s reasons', r.seasonSub || (shown.length + ' rows so far'));
       if (!shown.length) { html += '<div class="bs-empty-msg">No reasons recorded yet &mdash; walk the season.</div>'; return html; }
-      html += '<div class="xl-row xl-reasons xl-head"><div class="xl-gutter"></div><div class="xl-c">ACCOUNT</div><div class="xl-v">&Delta;</div><div class="xl-c">REASON</div></div>';
+      html += '<div class="xl-row xl-reasons xl-head"><div class="xl-gutter"></div><div class="xl-c">ACCOUNT</div><div class="xl-v"></div><div class="xl-c">REASON</div></div>';
       shown.forEach(function (x) {
         var strike = x.crossed ? ' eliminated' : '';
         html += '<div class="xl-row xl-reasons xl-item' + strike + '"><div class="xl-gutter"></div><div class="xl-c">' + x.account + '</div><div class="xl-v">' + signed(x.delta) + '</div><div class="xl-c">' + x.reason + '</div></div>';
@@ -1286,9 +1286,7 @@ function initCourseChrome(){
   var pt = document.querySelector('.phase-title');
   if (pt && pageObj && !pt.textContent.trim()) pt.innerHTML = pageObj.t;
 
-  /* --- top banner: tutorial-level nav + full-hierarchy index dropdown --- */
-  var prev = ti > 0 ? COURSE_TUTORIALS[ti-1] : null;
-  var next = ti < COURSE_TUTORIALS.length-1 ? COURSE_TUTORIALS[ti+1] : null;
+  /* --- top banner: the index dropdown alone, on the left --- */
   var menuHtml = '', lastMod = '';
   COURSE_TUTORIALS.forEach(function(t){
     var mod = t.module.split(' · ')[0];
@@ -1301,11 +1299,13 @@ function initCourseChrome(){
   var bar = document.createElement('div');
   bar.className = 'course-banner';
   bar.innerHTML =
-    '<div class="course-banner-side">'+(prev ? '<button class="btn-reset course-banner-btn" onclick="location.href=\''+prev.pages[0].f+'\'">&larr; Back Tutorial: '+prev.title+courseCheck(prev.id)+'</button>' : '')+'</div>'+
     '<div class="course-banner-mid"><button class="btn-reset course-banner-btn" id="courseIndexBtn">'+(pageObj ? pageObj.t : tut.title)+' &#9662;</button>'+
       '<div class="course-index-menu" id="courseIndexMenu" hidden>'+menuHtml+'</div></div>'+
-    '<div class="course-banner-side right">'+(next ? '<button class="btn-continue course-banner-btn" onclick="location.href=\''+next.pages[0].f+'\'">Next Tutorial: '+next.title+courseCheck(next.id)+' &rarr;</button>' : '')+'</div>';
+    (document.getElementById('glossaryOverlay') ? '<button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="if(window.openGlossary) openGlossary()"><i data-lucide="book-open"></i></button>' : '');
   document.body.insertBefore(bar, document.body.firstChild);
+  /* the glossary now lives in the banner: drop the per-page icon next to the title */
+  document.querySelectorAll('.phase-title-row .icon-btn').forEach(function(b){ b.remove(); });
+  if (window.lucide && lucide.createIcons) lucide.createIcons();
   var iBtn = document.getElementById('courseIndexBtn'), iMenu = document.getElementById('courseIndexMenu');
   iBtn.addEventListener('click', function(e){
     e.stopPropagation();
@@ -1314,14 +1314,25 @@ function initCourseChrome(){
   });
   document.addEventListener('click', function(){ iMenu.hidden = true; });
 
+  /* --- every page shows a progress bar: pages without their own get a full single-step bar --- */
+  if (!document.getElementById('stepProg')) {
+    var pt2 = document.querySelector('.phase-title-row');
+    if (pt2) {
+      var sp = document.createElement('div');
+      sp.id = 'stepProg';
+      pt2.parentNode.insertBefore(sp, pt2.nextSibling);
+      if (typeof renderStepProgress === 'function') renderStepProgress('stepProg', 1, 1);
+    }
+  }
+
   /* --- footer controller: fixed bottom bar with page-level Back / Next --- */
   var flat = courseFlatPages();
   var pi = flat.indexOf(file);
   var foot = document.createElement('div');
   foot.className = 'course-page-footer';
   foot.innerHTML =
-    (pi > 0 ? '<button class="btn-reset course-banner-btn" onclick="location.href=\''+flat[pi-1]+'\'">&larr; Back</button>' : '') +
-    (pi < flat.length-1 ? '<button class="btn-continue course-banner-btn" style="margin-left:auto;" onclick="location.href=\''+flat[pi+1]+'\'">Next &rarr;</button>' : '');
+    (pi > 0 ? '<button class="btn-reset course-banner-btn" onclick="location.href=\''+flat[pi-1]+'\'">&larr; Back'+coursePageCheck(flat[pi-1])+'</button>' : '') +
+    (pi < flat.length-1 ? '<button class="btn-continue course-banner-btn" style="margin-left:auto;" onclick="location.href=\''+flat[pi+1]+'\'">Next'+coursePageCheck(flat[pi+1])+' &rarr;</button>' : '');
   document.body.appendChild(foot);
   document.body.classList.add('has-course-footer');
 }

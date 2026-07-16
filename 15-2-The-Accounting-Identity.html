@@ -218,7 +218,11 @@ function toggleAssetCat(cat){ playClick(); assetsExpanded[cat] = !assetsExpanded
 /* ===== identity (staged reveal) ===== */
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label, inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
-function continueBtn(label){ return '<button class="btn-continue btn-block" onclick="identityNext()">'+label+' &rarr;</button>'; }
+function continueBtn(label){
+  if(idStage === 0) return '<button class="btn-continue btn-block" onclick="identityNext()">'+label+' &rarr;</button>';
+  return '<div class="btn-row"><button class="btn-reset" onclick="identityBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto" onclick="identityNext()">'+label+' &rarr;</button></div>';
+}
+function identityBack(){ if(idStage<=0) return; playClick(); idStage--; window.scrollTo(0,0); renderIdentity(); }
 
 function matchDisplay(){
   return '<div class="identity-bar">'+
@@ -284,6 +288,7 @@ function renderIdentity(){
     html += insightBox('The records show less than there is', '<p>Look at what&rsquo;s <em>not</em> on the page: your skill at the bench, the regulars who keep coming back, the name you&rsquo;re building on Whalley Ave. All real, all worth something to the work &mdash; none of it with a receipt, so none of it on the list.</p>'+
       '<p>So read &ldquo;Assets, '+d(ASSETS_TOTAL)+'&rdquo; as <strong>what the records show</strong> &mdash; not everything the work is worth. The list shows what it can; there is <strong>more</strong> than it shows. That isn&rsquo;t a hole to plug. It&rsquo;s what a record <em>is</em>.</p>'+
       '<p>It&rsquo;s also why the difference isn&rsquo;t a net-worth figure: it&rsquo;s the gap between two <em>recorded</em> lists, everything they leave out baked in.</p>');
+    html += '<div class="btn-row"><button class="btn-reset" onclick="identityBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   }
   c.innerHTML = html;
   if(window.lucide) lucide.createIcons();

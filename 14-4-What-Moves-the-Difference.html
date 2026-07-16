@@ -22,6 +22,7 @@
     <div class="phase active" id="phase-movers">
       <div id="nmTop"></div>
       <div id="wbNM"></div>
+      <div class="btn-row" style="justify-content:flex-end; margin-bottom:12px;"><button class="btn-reset" onclick="resetMoverSort()">Reset</button></div>
       <div id="nmControls"></div>
     </div>
 
@@ -279,7 +280,7 @@ function reasonsSheetWalkPairs(){
   var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons — one row per change</div><div class="cash-sheet-sub">'+sub+'</div></div>';
   if(revealedRows.length===0){ html += '<div class="bs-empty-msg">No reasons recorded yet.</div>'; return html; }
   if(notEliminated.length===0){ html += '<div class="bs-empty-msg">All paired rows crossed out.</div>'; return html; }
-  html += '<div class="xl-row xl-reasons xl-head"><div class="xl-gutter"></div><div class="xl-c">ACCOUNT</div><div class="xl-v">Δ</div><div class="xl-c">REASON</div></div>';
+  html += '<div class="xl-row xl-reasons xl-head"><div class="xl-gutter"></div><div class="xl-c">ACCOUNT</div><div class="xl-v"></div><div class="xl-c">REASON</div></div>';
   var clickable = (phase==='pairs' && !eliminateAutoActive && !eliminateAutoDone);
   revealedRows.forEach(function(r){
     var isEliminated = !!eliminated[r.id];
@@ -300,7 +301,7 @@ function moverRow(r, i){
   var tag = '';
   if(a) tag = '<span class="stmt-tag '+(a==='contributed'?'shop':'personal')+'">'+(a==='contributed'?'Contributed':'Generated')+'</span>';
   if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
-  if(right) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
+  if(right) tag += '<span style="color:#16a34a;font-weight:600;font-size:16px;margin-left:4px;">&#10003; Correct</span>';
   var html = '<div class="stmt-row stmt-grid-sort'+(i%2?' alt':'')+'">'+
     '<button class="stmt-info-btn'+(open?' open':'')+(i===0&&!sortHintSeen?' hint-pulse':'')+'" onclick="toggleMover(\''+r.id+'\')" aria-label="'+(open?'Collapse':'Expand')+'"><i data-lucide="'+(open?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
     '<div class="stmt-stripe '+stripeCls+'"></div>'+
@@ -451,6 +452,7 @@ function assignRow(id, category){
   renderMovers();
 }
 function checkMoverSort(){ sortChecked=true; playClick(); renderMovers(); }
+function resetMoverSort(){ playClick(); assignments={}; sortExpandedId=null; sortChecked=false; moversDone=false; sortAutoActive=false; sortAutoDone=false; renderMovers(); window.scrollTo(0,0); }
 function sortAutocomplete(){
   if(sortAutoActive || sortAutoDone) return;
   playClick(); sortAutoActive=true; sortExpandedId=null;
@@ -464,13 +466,14 @@ function moverSortProgress(triggerMet, unsorted, cCount, eCount){
   var btn = unsorted > 0
     ? '<button class="btn-continue btn-block"'+(triggerMet?' onclick="sortAutocomplete()"':' disabled')+'>Sort the rest</button>'
     : (!sortChecked ? '<button class="btn-continue btn-block" onclick="checkMoverSort()">Check my sort</button>' : '');
+  var resetBtn = '';
   return '<div class="sortprog"><div class="sortprog-title">Sort the reasons</div>'+
     '<p class="sortprog-hint">A shortcut to auto-sort the remaining rows will unlock as you go.</p>'+
     '<div class="sortprog-grid">'+
     '<div class="sortprog-box shop"><div class="sortprog-label">Contributed</div><div class="sortprog-num">'+cCount+'</div></div>'+
     '<div class="sortprog-box personal"><div class="sortprog-label">Generated</div><div class="sortprog-num">'+eCount+'</div></div>'+
     '<div class="sortprog-box'+(unsorted===0?' done':'')+'"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">'+unsorted+'</div></div>'+
-    '</div>'+btn+'</div>';
+    '</div>'+btn+resetBtn+'</div>';
 }
 function renderMovers(){
   var assignedIds = soloReasonIds.filter(function(id){ return assignments[id]; });

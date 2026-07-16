@@ -104,20 +104,20 @@ function ss4Lines(){
 function ss4RowsHtml(){
   return ss4Lines().map(function(l){
     return '<div style="display:flex;border:1px solid #d8d8d8;border-top:none">'+
-      '<div style="flex:0 0 30px;background:#f4f4f1;border-right:1px solid #d8d8d8;text-align:center;font-weight:700;padding:5px 0;font-size:11px;color:#374151">'+l[0]+'</div>'+
+      '<div style="flex:0 0 30px;background:#f4f4f1;border-right:1px solid #d8d8d8;text-align:center;font-weight:700;padding:5px 0;font-size:16px;color:#374151">'+l[0]+'</div>'+
       '<div style="flex:1;padding:5px 8px"><span style="color:#374151">'+l[1]+'</span> <span style="font-weight:700;color:#10243f">'+l[2]+'</span></div></div>';
   }).join('');
 }
 function ss4DocInner(){
   return '<div style="font-family:Georgia,\'Times New Roman\',serif">'+
     '<div style="text-align:center;font-weight:700;font-size:15px;color:#374151">FORM SS-4 &mdash; APPLICATION FOR EIN</div>'+
-    '<div style="text-align:center;font-size:12px;color:#6b6b6b;margin-bottom:12px">Filed June 1, 2026 &middot; EIN 88-3729104</div>'+
+    '<div style="text-align:center;font-size:16px;color:#6b6b6b;margin-bottom:12px">Filed June 1, 2026 &middot; EIN 88-3729104</div>'+
     '<div style="border-top:1px solid #d8d8d8">'+ss4RowsHtml()+'</div></div>';
 }
 
 /* ===== statement facsimiles ===== */
 function stmtInner(cfg){
-  var who = cfg.who.map(function(l){ return '<div style="font-size:11px;color:#6b6b6b">'+l+'</div>'; }).join('');
+  var who = cfg.who.map(function(l){ return '<div style="font-size:16px;color:#6b6b6b">'+l+'</div>'; }).join('');
   var box = cfg.box.map(function(b){ return '<div>'+b+'</div>'; }).join('');
   var head = cfg.head.map(function(h,i){ return '<th style="text-align:'+(i<=1?'left':'right')+';padding:4px 6px;color:#6b6b6b;font-weight:600">'+h+'</th>'; }).join('');
   var rows = cfg.rows.map(function(r){
@@ -131,12 +131,12 @@ function stmtInner(cfg){
     var trStyle = 'border-bottom:1px solid #d8d8d8;'+(r.total?'font-weight:700;border-top:2px solid #374151':'');
     return '<tr style="'+trStyle+'">'+tds+'</tr>';
   }).join('');
-  var note = cfg.note ? '<div style="margin-top:12px;border-radius:8px;padding:10px 12px;background:#f6f6f4;border:1px dashed #d8d8d8;font-size:12px;color:#444">'+cfg.note+'</div>' : '';
-  return '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">'+
+  var note = cfg.note ? '<div style="margin-top:12px;border-radius:8px;padding:10px 12px;background:#f6f6f4;border:1px dashed #d8d8d8;font-size:16px;color:#444">'+cfg.note+'</div>' : '';
+  return '<div style="font-family:Georgia,\'Times New Roman\',serif;font-size:16px;color:#374151">'+
     '<div style="font-weight:700;font-size:15px;margin-bottom:8px">'+cfg.heading+'</div>'+
     '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:8px">'+
       '<div><div style="font-size:16px;font-weight:700;color:var(--primary)">'+cfg.bank+'</div>'+who+'</div>'+
-      '<div style="border:1px solid #d8d8d8;border-radius:6px;padding:6px 10px;font-size:12px">'+box+'</div>'+
+      '<div style="border:1px solid #d8d8d8;border-radius:6px;padding:6px 10px;font-size:16px">'+box+'</div>'+
     '</div>'+
     '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px"><tbody>'+
       '<tr style="border-bottom:1px solid #d8d8d8">'+head+'</tr>'+rows+

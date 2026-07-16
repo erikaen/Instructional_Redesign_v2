@@ -83,14 +83,14 @@ var filed = false;
 function renderFile(){
   var en = llcName(), dn = memberDisplay();
   var stamp = filed
-    ? '<div style="position:absolute;top:18px;right:18px;border:3px solid #15803d;color:#15803d;border-radius:8px;padding:4px 12px;font-weight:800;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;transform:rotate(-8deg)">Filed &middot; Jun 1, 2026</div>'
+    ? '<div style="position:absolute;top:18px;right:18px;border:3px solid #15803d;color:#15803d;border-radius:8px;padding:4px 12px;font-weight:800;font-size:16px;letter-spacing:0.06em;text-transform:uppercase;transform:rotate(-8deg)">Filed &middot; Jun 1, 2026</div>'
     : '';
   var cert = '<div class="doc-modal" style="margin:0 auto 20px;font-family:Georgia,&quot;Times New Roman&quot;,serif">'+stamp+
     '<div style="text-align:center;font-weight:700;font-size:17px;letter-spacing:0.04em;color:#374151">CERTIFICATE OF ORGANIZATION</div>'+
-    '<div style="text-align:center;font-size:12px;color:#6b6b6b">OF</div>'+
+    '<div style="text-align:center;font-size:16px;color:#6b6b6b">OF</div>'+
     '<div style="text-align:center;font-weight:700;font-size:15px;color:var(--primary);margin-bottom:14px">'+esc(en.toUpperCase())+'</div>'+
     '<p style="font-size:13.5px;text-align:justify;margin-bottom:12px;color:#1a1a1a">This Certificate of Organization of '+esc(en)+', dated June 1, 2026, is executed and filed by '+esc(dn)+', as an authorized person, to form a limited liability company under the Connecticut Uniform Limited Liability Company Act (Conn. Gen. Stat. &sect; 34-243, <em>et seq.</em>).</p>'+
-    '<div style="font-size:13px;color:#1a1a1a">'+
+    '<div style="font-size:16px;color:#1a1a1a">'+
       '<div style="margin-bottom:8px"><span style="font-weight:700;font-size:11.5px;letter-spacing:0.03em">FIRST.</span>&nbsp; Name: <strong>'+esc(en)+'</strong></div>'+
       '<div style="margin-bottom:8px"><span style="font-weight:700;font-size:11.5px;letter-spacing:0.03em">SECOND.</span>&nbsp; Registered agent: '+esc(dn)+', 142 Whalley Avenue, Unit B, New Haven, Connecticut 06511 &mdash; the principal office.</div>'+
       '<div><span style="font-weight:700;font-size:11.5px;letter-spacing:0.03em">THIRD.</span>&nbsp; Management is vested in the member(s).</div>'+

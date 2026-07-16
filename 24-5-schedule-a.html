@@ -179,11 +179,11 @@ function schedRow(l, v, opts){
 }
 function blankRow(){ return '<div style="border-bottom:1px solid #d8d8d8;height:22px"></div>'; }
 function scheduleHtml(){
-  var h = '<div class="doc-modal" style="margin:14px auto"><div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">';
-  h += '<div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;color:#6b6b6b;margin-bottom:2px">Schedule A &mdash; Contributed Property</div>';
+  var h = '<div class="doc-modal" style="margin:14px auto"><div style="font-family:Georgia,\'Times New Roman\',serif;font-size:16px;color:#374151">';
+  h += '<div style="font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:0.04em;color:#6b6b6b;margin-bottom:2px">Schedule A &mdash; Contributed Property</div>';
   h += allEntered()
-    ? '<div style="margin-bottom:8px"><span style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.06em;color:#15803d;border:1px solid #15803d;border-radius:6px;padding:1px 8px">COMPLETE &mdash; June 1, 2026</span></div>'
-    : '<div style="margin-bottom:8px"><span style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:1px 8px">IN PROGRESS &mdash; '+LINES.filter(function(l){return entered[l.id];}).length+' of '+LINES.length+' lines entered</span></div>';
+    ? '<div style="margin-bottom:8px"><span style="font-family:Inter,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.06em;color:#15803d;border:1px solid #15803d;border-radius:6px;padding:1px 8px">COMPLETE &mdash; June 1, 2026</span></div>'
+    : '<div style="margin-bottom:8px"><span style="font-family:Inter,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.08em;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:1px 8px">IN PROGRESS &mdash; '+LINES.filter(function(l){return entered[l.id];}).length+' of '+LINES.length+' lines entered</span></div>';
   h += '<div style="max-width:380px">';
   LINES.filter(function(l){ return l.sec==='a'; }).forEach(function(l){ h += entered[l.id] ? schedRow(l.sched, l.amt.toLocaleString('en-US')) : blankRow(); });
   h += schedRow('Total assets', secDone('a') ? '4,710' : '', {b:true,top:'1px solid #d8d8d8'});
@@ -194,7 +194,7 @@ function scheduleHtml(){
   h += '</div>';
   if(allEntered()){
     h += '<div style="padding-left:10px;border-left:3px solid var(--accent);margin-top:10px;margin-bottom:8px"><span style="font-weight:700">9. Capital Contributions.</span> &hellip;as set forth on Schedule A. Net book value contributed: <strong>$2,460</strong>.</div>';
-    h += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;color:#6b6b6b;font-size:12px">&mdash; signature page &mdash;</div>';
+    h += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;color:#6b6b6b;font-size:16px">&mdash; signature page &mdash;</div>';
     h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
     h += sigBlock('For the Company','company') + sigBlock('As an individual','member');
     h += '</div>';
@@ -206,12 +206,12 @@ function sigBlock(label, which){
   var isSigned = which==='company' ? signedCompany : signedMember;
   var inner = isSigned
     ? '<span style="font-family:\'Segoe Script\',\'Snell Roundhand\',\'Brush Script MT\',cursive;font-size:22px;color:#1a2b6b">'+esc(memberDisplay())+'</span>'
-    : '<button onclick="'+(which==='company'?'signCompany()':'signMember()')+'" style="background:#e8dcc8;color:#a08050;border:0;border-radius:6px;padding:4px 12px;font-weight:600;font-size:13px;cursor:pointer;font-family:Inter,sans-serif">&#9997; Sign here</button>';
+    : '<button onclick="'+(which==='company'?'signCompany()':'signMember()')+'" style="background:#e8dcc8;color:#a08050;border:0;border-radius:6px;padding:4px 12px;font-weight:600;font-size:16px;cursor:pointer;font-family:Inter,sans-serif">&#9997; Sign here</button>';
   var roleSub = which==='company' ? esc(memberDisplay())+', Managing Member' : esc(memberDisplay())+', as an individual';
-  return '<div><div style="font-size:11px;text-transform:uppercase;color:#6b6b6b">'+label+'</div>'+
+  return '<div><div style="font-size:16px;text-transform:uppercase;color:#6b6b6b">'+label+'</div>'+
     '<div style="min-height:34px;border-bottom:1px solid #374151;display:flex;align-items:flex-end;padding-bottom:2px">'+inner+'</div>'+
-    '<div style="font-size:11px;color:#6b6b6b;margin-top:2px">'+roleSub+'</div>'+
-    '<div style="font-size:11px;color:#6b6b6b">Dated: June 1, 2026</div></div>';
+    '<div style="font-size:16px;color:#6b6b6b;margin-top:2px">'+roleSub+'</div>'+
+    '<div style="font-size:16px;color:#6b6b6b">Dated: June 1, 2026</div></div>';
 }
 
 /* ===== interaction ===== */

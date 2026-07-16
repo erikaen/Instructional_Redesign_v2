@@ -290,7 +290,7 @@ function reasonsSheetWalkPairs(){
   var html = '<div class="cash-sheet-head"><div class="cash-sheet-title">Reasons — one row per change</div><div class="cash-sheet-sub">'+sub+'</div></div>';
   if(revealedRows.length===0){ html += '<div class="bs-empty-msg">No reasons recorded yet.</div>'; return html; }
   if(visible.length===0){ html += '<div class="bs-empty-msg">All paired rows crossed out.</div>'; return html; }
-  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Account &amp; reason</div><div class="xl-v">Δ</div></div>';
+  html += '<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Account &amp; reason</div><div class="xl-v"></div></div>';
   var clickable = (phase==='pairs' && !eliminateAutoActive && !eliminateAutoDone);
   visible.forEach(function(r){
     var sel = (selectedReasonId===r.id) ? ' selected' : '';
@@ -369,13 +369,30 @@ function advanceNarration(){
   window.scrollTo(0,0);
   renderWalk();
 }
+function backNarration(){
+  if(step <= 0) return;
+  playClick();
+  step--;
+  /* rebuild reveal + tab state from the steps already passed */
+  revealed = {};
+  activeTab = 'assets';
+  for(var i = 0; i < step; i++){
+    var s = NARRATION_STEPS[i];
+    if(s.reveal && s.reveal.length) s.reveal.forEach(function(id){ revealed[id]=true; });
+    if(s.goto) activeTab = s.goto;
+  }
+  window.scrollTo(0,0);
+  renderWalk();
+}
 function renderWalk(){
   var s = NARRATION_STEPS[step];
   document.getElementById('walkAnna').innerHTML = annaBox(s.anna, false);
   renderWorkbook('wbWalk');
   var ctrl = document.getElementById('walkControls');
   if(!s.finish){
-    ctrl.innerHTML = contBtn(step===0 ? 'Start walking the month' : 'Next', 'advanceNarration()');
+    ctrl.innerHTML = step===0
+      ? contBtn('Start walking the month', 'advanceNarration()')
+      : '<div class="btn-row"><button class="btn-reset" onclick="backNarration()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto" onclick="advanceNarration()">Next &rarr;</button></div>';
   } else {
     ctrl.innerHTML =
       insightBox('Most reasons show up in two rows',

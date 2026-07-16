@@ -37,7 +37,7 @@
       <div class="sort-msg" id="sortMsg"></div>
       <div class="btn-row" style="justify-content: space-between;">
         <button class="btn-continue" id="sortAction" onclick="doTheRest()" disabled>Sort the rest &rarr;</button>
-        <button class="btn-reset" id="sortReset" onclick="restart()" style="display:none;">Reset</button>
+        <button class="btn-reset" id="sortReset" onclick="restart()">Reset</button>
       </div>
     </div>
     <div id="sortDoneBlock" hidden>
@@ -189,8 +189,6 @@ function updateSortFeedback() {
   var btn = document.getElementById('sortAction');
   btn.disabled = !ready;
   btn.textContent = shopIds.some(function(id){ return !placed[id]; }) ? 'Sort the rest →' : 'Done →';
-  var rst = document.getElementById('sortReset');
-  if (rst) rst.style.display = ready ? '' : 'none';
 }
 function doTheRest() {
   if (sortDone) return;

@@ -30,6 +30,12 @@
 
       <div class="feedback" id="formNudge"></div>
 
+      <div class="gate-card" id="gateCard">
+        <div class="gate-card-title">Correctly group and value at least one item in each section to unlock the rest:</div>
+        <ul class="gate-list" id="gateList"></ul>
+        <button class="btn-continue btn-block" id="doRestBtn" onclick="doTheRest()" disabled>Do the rest &rarr;</button>
+      </div>
+
       <div class="ins-layout" style="grid-template-columns: 1fr;">
         <div class="ins-form">
           <div class="ins-form-head">
@@ -55,12 +61,6 @@
       <div class="system-banner" id="systemBanner" hidden>
         <div class="system-banner-title"><i data-lucide="settings" class="licon"></i> A few hours later&hellip;</div>
         <div class="system-banner-sub">You worked down the rest of the list the same way &mdash; receipts read across, the shelf counted.</div>
-      </div>
-
-      <div class="gate-card" id="gateCard">
-        <div class="gate-card-title">Correctly group and value at least one item in each section to unlock the rest:</div>
-        <ul class="gate-list" id="gateList"></ul>
-        <button class="btn-continue btn-block" id="doRestBtn" onclick="doTheRest()" disabled>Do the rest &rarr;</button>
       </div>
 
       <div id="formDoneBlock" hidden>
@@ -269,7 +269,7 @@ function catItemRow(item, i){
   var tag = '';
   if(placedCat){ var lbl = categoryDefs.filter(function(c){ return c.id===placedCat; })[0].label; tag = '<span class="stmt-tag shop">'+lbl+'</span>'; }
   if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
-  if(right) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
+  if(right) tag += '<span style="color:#16a34a;font-weight:600;font-size:16px;margin-left:4px;">&#10003; Correct</span>';
   var h = '<div class="stmt-row stmt-grid-sort'+(i%2?' alt':'')+'">'+
     '<button class="stmt-info-btn'+(open?' open':'')+(i===0&&!catHintSeen?' hint-pulse':'')+'" onclick="toggleCatExpand(\''+item.id+'\')" aria-label="'+(open?'Collapse':'Expand')+'"><i data-lucide="'+(open?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
     '<div class="stmt-stripe '+stripeCls+'"></div>'+
@@ -633,16 +633,15 @@ function renderFormActions(){
   if(!el) return;
   var back = '', reset = '';
   if(formPhase === 'categorize'){
-    // page 1: Reset appears at the same time as the "Add dollar values" button (every section has an item)
-    var addValuesShown = categoryDefs.every(function(cat){ return placeable.filter(function(i){ return placements[i.id]===cat.id; }).length > 0; });
-    if(addValuesShown) reset = '<button class="btn-reset" onclick="resetForm()">Reset</button>';
+    // page 1: Reset always available
+    reset = '<button class="btn-reset" onclick="resetForm()">Reset</button>';
   } else if(formDone){
     // page 3: Back only (no Reset)
     back = '<button class="btn-reset" onclick="backToValuate()"><i data-lucide="arrow-left" class="licon"></i> Back</button>';
   } else {
     // page 2: Back always; Reset appears once "Do the rest" lights up (gate met)
     back = '<button class="btn-reset" onclick="backToCategorize()"><i data-lucide="arrow-left" class="licon"></i> Back</button>';
-    if(formTriggerMet()) reset = '<button class="btn-reset" onclick="resetForm()">Reset</button>';
+    reset = '<button class="btn-reset" onclick="resetForm()">Reset</button>';
   }
   el.style.justifyContent = (back && reset) ? 'space-between' : (back ? 'flex-start' : 'flex-end');
   el.innerHTML = back + reset;

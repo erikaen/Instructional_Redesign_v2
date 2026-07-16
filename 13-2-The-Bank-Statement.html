@@ -103,7 +103,7 @@ function renderStatement(rows, opts){
     var tag = '';
     if(cls){ var lbl = cls==='shop'?'Repair':cls.charAt(0).toUpperCase()+cls.slice(1); tag = '<span class="stmt-tag '+cls+'">'+lbl+'</span>'; }
     if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
-    if(opts.checked && cls && !wrong) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
+    if(opts.checked && cls && !wrong) tag += '<span style="color:#16a34a;font-weight:600;font-size:16px;margin-left:4px;">&#10003; Correct</span>';
     html += '<div class="stmt-row '+grid+(i%2?' alt':'')+'">'+
       '<button class="stmt-info-btn'+(open?' open':'')+''+(i===0&&opts.showHint?' hint-pulse':'')+'" onclick="'+opts.toggleFn+'(\''+tx.id+'\')" aria-label="'+(open?'Collapse':'Expand')+'"><i data-lucide="'+(open?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
       '<div class="stmt-stripe '+stripeCls+'"></div>'+
@@ -168,9 +168,7 @@ function renderBankSort(){
     toggleFn:'toggleBankDesc', classifyFn:'classifyBank', showHint:!hintSeen,
     catA:{id:'shop',label:'Repair'}, catB:{id:'personal',label:'Personal'},
     allCorrect:sortChecked && wrongIds.length===0 });
-  if(correctCount>=5 && hasShop && hasPers){
-    html += '<div class="btn-row" style="justify-content: flex-end; margin-top: 16px;"><button class="btn-reset" onclick="restart()">Reset</button></div>';
-  }
+  html += '<div class="btn-row" style="justify-content: flex-end; margin-top: 16px;"><button class="btn-reset" onclick="restart()">Reset</button></div>';
   if(sortChecked && wrongIds.length===0){
     html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">Good. Now we can see which rows belong with the repair work and which ones belong with your personal life. Next, let&rsquo;s pull the repair-related rows into one place and see how cash moved during May.</div></div>';
   }

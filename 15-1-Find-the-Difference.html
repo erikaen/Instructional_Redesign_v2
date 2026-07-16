@@ -39,6 +39,7 @@
       <div class="btn-row">
         <input id="netInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="The difference" onkeydown="if(event.key==='Enter'){checkNet();}">
         <button class="btn btn-primary" onclick="checkNet()">Check</button>
+        <button class="btn-reset" id="netReset" onclick="resetNet()" style="margin-left:auto; display:none;">Reset</button>
       </div>
       <div class="feedback" id="netFb"></div>
     </div>
@@ -245,6 +246,7 @@ function checkNet(){
   var raw = document.getElementById('netInput').value;
   var val = parseInt(String(raw).replace(/[^0-9-]/g,''), 10);
   var fb = document.getElementById('netFb');
+  document.getElementById('netReset').style.display = '';
   if(val === NET){
     playSuccess(); revealNet();
   } else {
@@ -265,6 +267,18 @@ function revealNet(){
   close.hidden = false;
   close.innerHTML = '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The difference is '+d(NET)+'</div><p>Assets minus Liabilities &mdash; a difference, fully determined by the two lists. Hold onto that number.</p></div>';
   if(window.lucide) lucide.createIcons();
+}
+
+function resetNet(){
+  playClick();
+  netDone = false; netAttempts = 0;
+  var inp = document.getElementById('netInput');
+  inp.disabled = false; inp.value = '';
+  var fb = document.getElementById('netFb'); fb.className = 'feedback'; fb.classList.remove('show'); fb.innerHTML = '';
+  var close = document.getElementById('netClose');
+  close.hidden = true; close.innerHTML = '';
+  document.getElementById('netReset').style.display = 'none';
+  inp.focus();
 }
 
 /* ===== restart ===== */

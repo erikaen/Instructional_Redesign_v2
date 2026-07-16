@@ -18,6 +18,8 @@
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block"><p>You and Anna have been working through the records one piece at a time. The workbook now has three tabs: <strong>Things</strong>, <strong>Promises</strong>, and <strong>Cash</strong>. You have listed what&rsquo;s tied up in the repair work, what&rsquo;s still owed because of it, and the money that moved in and out during May.</p><p>Now Anna says it is time to give the lists their proper names.</p></div>
     <div id="nameWb"></div>
     <div id="nameSteps"></div>
@@ -185,6 +187,8 @@ function renderNameSteps(){
     html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">Now you have the two names. <strong>Assets</strong> is the proper name for the Things list &mdash; everything recorded on the repair-work side of your line: <strong>'+dollars(ASSETS_TOTAL)+'</strong>, including the right to use the workspace later. <strong>Liabilities</strong> is the name for the Promises list &mdash; everything still owed because of the repair work: <strong>'+dollars(LIABILITIES_TOTAL)+'</strong>. And now you know that an asset is a <strong>present right to an economic benefit</strong>, and a liability is a <strong>present obligation to transfer an economic benefit later</strong>.</div></div>';
   }
   document.getElementById('nameSteps').innerHTML = backHtml + html;
+  var at = liabilitiesNamed ? 4 : (rouRevealed ? 3 : (assetsNamed ? 2 : 1));
+  if (window.renderStepProgress) renderStepProgress('stepProg', at, 4);
   if(window.lucide) lucide.createIcons();
 }
 function nameAssets(){ playClick(); assetsNamed=true; excelTab='things'; renderWorkbook('nameWb','name'); renderNameSteps(); }

@@ -85,7 +85,7 @@ function reasonRow(r, i){
   var tag = '';
   if(placed[r.id]) tag = '<span class="stmt-tag '+(placed[r.id]==='in'?'shop':'personal')+'">'+(placed[r.id]==='in'?'Delivered':'Used up')+'</span>';
   if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
-  if(right) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
+  if(right) tag += '<span style="color:#16a34a;font-weight:600;font-size:16px;margin-left:4px;">&#10003; Correct</span>';
   var h = '<div class="stmt-row stmt-grid-sort'+(i%2?' alt':'')+'">'+
     '<button class="stmt-info-btn'+(open?' open':'')+(i===0&&!hintSeen?' hint-pulse':'')+'" onclick="toggleReason(\''+r.id+'\')" aria-label="'+(open?'Collapse':'Expand')+'"><i data-lucide="'+(open?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
     '<div class="stmt-stripe '+stripeCls+'"></div>'+
@@ -106,7 +106,7 @@ function renderSortDoc(){
   var h = '<div class="stmt">';
   h += '<div class="stmt-head"><div><div class="stmt-bank">Bike-Repair.xlsx</div><div class="stmt-acct">Reasons sheet &middot; this season&rsquo;s rows</div></div>'+
     '<div><div class="stmt-period-label">Period</div><div class="stmt-period">Summer 2026</div></div></div>';
-  h += '<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Reason</span><span class="stmt-num">&Delta;</span></div>';
+  h += '<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Reason</span><span class="stmt-num"></span></div>';
   visibleIds.map(findR).forEach(function(r, i){ h += reasonRow(r, i); });
   if(hiddenUnplaced>0) h += '<div class="stmt-row stmt-grid-sort alt"><span></span><div class="stmt-stripe"></div><span><em>+ '+hiddenUnplaced+' more like these, still in the pile</em></span><span></span></div>';
   h += '<div class="stmt-balrow bottom"><span>This season&rsquo;s reasons, together</span><span class="stmt-num">'+BRW.signed(seasonTotal)+'</span></div>';
@@ -124,7 +124,7 @@ function sortProgress(){
     '<div class="sortprog-box shop"><div class="sortprog-label">Delivered</div><div class="sortprog-num">'+inC+'</div></div>'+
     '<div class="sortprog-box personal"><div class="sortprog-label">Used up</div><div class="sortprog-num">'+upC+'</div></div>'+
     '<div class="sortprog-box'+(un===0?' done':'')+'"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">'+un+'</div></div>'+
-    '</div>'+btn+'</div>';
+    '</div>'+btn+'<div class="btn-row" style="justify-content: flex-end; margin-top: 10px;"><button class="btn-reset" onclick="restart()">Reset</button></div>'+'</div>';
 }
 
 /* ===== workbook state — the Reasons tab is our interactive sort sheet ===== */

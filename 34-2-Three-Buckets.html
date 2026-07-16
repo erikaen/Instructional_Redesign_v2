@@ -110,7 +110,7 @@ function cashRow(r, i){
   var tag = '';
   if(placed[r.id]){ var b = BUCKETS.filter(function(x){ return x.key===placed[r.id]; })[0]; tag = '<span class="stmt-tag shop">'+b.label+'</span>'; }
   if(wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
-  if(right) tag += '<span style="color:#16a34a;font-weight:600;font-size:0.85em;margin-left:4px;">&#10003; Correct</span>';
+  if(right) tag += '<span style="color:#16a34a;font-weight:600;font-size:16px;margin-left:4px;">&#10003; Correct</span>';
   var h = '<div class="stmt-row stmt-grid-sort'+(i%2?' alt':'')+'">'+
     '<button class="stmt-info-btn'+(open?' open':'')+(i===0&&!hintSeen?' hint-pulse':'')+'" onclick="toggleCash(\''+r.id+'\')" aria-label="'+(open?'Collapse':'Expand')+'"><i data-lucide="'+(open?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
     '<div class="stmt-stripe '+stripeCls+'"></div>'+
@@ -148,7 +148,7 @@ function sortProgress(){
     '<div class="sortprog-box shop"><div class="sortprog-label">Gear</div><div class="sortprog-num">'+bCount('inv')+'</div></div>'+
     '<div class="sortprog-box personal"><div class="sortprog-label">Owner</div><div class="sortprog-num">'+bCount('fin')+'</div></div>'+
     '<div class="sortprog-box'+(un===0?' done':'')+'"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">'+un+'</div></div>'+
-    '</div>'+btn+'</div>';
+    '</div>'+btn+'<div class="btn-row" style="justify-content: flex-end; margin-top: 10px;"><button class="btn-reset" onclick="restart()">Reset</button></div>'+'</div>';
 }
 
 /* the full workbook stays the anchor — the sort sheet is one more tab beside it */
