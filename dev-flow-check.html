@@ -23,16 +23,29 @@ var PLAN = [
  {file:'31-1-welcome.html', asserts:[
    ['header counter honest (1 of 2)', d=>/(Phase|Page) 1 of 2/.test(d.body.textContent)],
    ['links to 31-2', d=>d.documentElement.outerHTML.includes('31-2-work-the-season.html')]]},
+ {file:'31-2-work-the-season.html', skipFill:true, asserts:[
+   ['opening Assets includes all six categories', d=>{var t=(d.querySelector('.brw-grid')||{textContent:''}).textContent; return ['Cash','Right of Use','Parts','Tools & Repair Equipment','Fixtures','Laptop'].every(x=>t.includes(x));}],
+   ['opening grid includes August 31 balances', d=>(d.querySelector('.brw-grid')||{textContent:''}).textContent.includes('Balance, August 31, 2026')],
+   ['opening grid has no June 1 balance yet', d=>!(d.querySelector('.brw-grid')||{textContent:''}).textContent.includes('Balance, June 1')],
+   ['opening grid has no receivable or depreciation', d=>{var t=(d.querySelector('.brw-grid')||{textContent:''}).textContent; return !t.includes('Accounts Receivable') && !t.includes('Depreciation');}],
+   ['opening grid has a collapsed outline toggle', d=>!!d.querySelector('.brw-og-toggle[aria-expanded="false"]')],
+   ['page source names the authored snapshot', d=>d.documentElement.outerHTML.includes('bike-repair-beg-module-3')]]},
  {file:'31-2-work-the-season.html', asserts:[
    ['dates-of-interest wording on page', d=>d.body.textContent.includes('dates of interest')],
    ['dated subtotal lines present after fill', d=>d.body.textContent.includes('Balance, June 1')],
    ['August 31 lines present', d=>d.body.textContent.includes('Balance, August 31')],
    ['ties to the June 1 balance sheet (Parts 200)', d=>/balance sheet/i.test(d.body.textContent)],
+   ['aux workbook shell removed', d=>!d.getElementById('wbAuxShell')],
    ['Parts Aug-31 stages at 200 — Ridgeline parts row stays visible', d=>{var bad=false; d.querySelectorAll('.brw-grid').forEach(g=>{ if(g.textContent.includes('275')) bad=true; }); return !bad;}],
+   ['post-act mounts authored M31', d=>d.documentElement.outerHTML.includes('bike-repair-module-3-1')],
+   ['WITHDRAWN June 1 reads $0 beat', d=>d.body.textContent.includes('June 1: $0')],
    ['links to 32-1', d=>d.documentElement.outerHTML.includes('32-1-the-income-statement.html')]]},
  {file:'32-1-the-income-statement.html', asserts:[
    ['working sheet beat', d=>/working sheet/i.test(d.body.textContent)],
-   ['step 0 mounted (Data copied in)', d=>d.body.textContent.includes('Data copied in')],
+   ['Income Statement tab born amber and active', d=>{var t=d.querySelector('[data-sheet-tab="income"]'); return !!t && !t.hidden && t.classList.contains('tk-temp') && t.classList.contains('active');}],
+   ['authored copied view (period title)', d=>d.body.textContent.includes('For the period June 1')],
+   ['first copied row is Rent used — June', d=>(d.querySelector('.brw-grid')||{textContent:''}).textContent.includes('Rent used — June')],
+   ['no dead tabs', d=>!d.querySelector('[aria-disabled]')],
    ['links to 32-2', d=>d.documentElement.outerHTML.includes('32-2-two-kinds.html')]]},
  {file:'32-2-two-kinds.html', asserts:[
    ['staged revenue 5,720 after fill', d=>d.body.textContent.includes('5,720')],
@@ -41,6 +54,11 @@ var PLAN = [
    ['curation chip or completed sort', d=>d.body.textContent.includes('others to be sorted') || !d.querySelector('.brw-sort-rest') || d.querySelector('.brw-sort-done')],
    ['links to 32-3', d=>d.documentElement.outerHTML.includes('32-3-revenue-follows-the-work.html')]]},
  {file:'32-3-revenue-follows-the-work.html', asserts:[
+   ['two side-by-side panels present', d=>!!d.getElementById('booksPanel') && !!d.getElementById('workingPanel')],
+   ['no third scoreboard shell', d=>!d.getElementById('scoreboardWrap')],
+   ['tabs are live in both panels (none aria-disabled)', d=>{var t=d.querySelectorAll('.xlwb-tab'); return t.length>=8 && !Array.prototype.some.call(t,function(x){return x.hasAttribute('aria-disabled');});}],
+   ['both panels have full data-sheet-tab bars', d=>d.querySelectorAll('#booksPanel [data-sheet-tab]').length>=4 && d.querySelectorAll('#workingPanel [data-sheet-tab]').length>=4],
+   ['receivable revealed after booking', d=>d.body.textContent.includes('Accounts Receivable')],
    ['revenue completes at 6,020', d=>d.body.textContent.includes('6,020')],
    ['scoreboard moved to 3,040', d=>d.body.textContent.includes('3,040')],
    ['chains straight to 33-1', d=>d.documentElement.outerHTML.includes('33-1-Two-Kinds-of-Used-Up.html')],
@@ -93,7 +111,7 @@ function step(){
   frame.onload = function(){
     var w = frame.contentWindow, d = frame.contentDocument;
     w.onerror = function(m){ runtimeErrors.push(p.file + ': ' + m); };
-    try { if (typeof w.devFill === 'function') w.devFill(); } catch(e){ runtimeErrors.push(p.file + ' devFill: ' + e.message); }
+    try { if (!p.skipFill && typeof w.devFill === 'function') w.devFill(); } catch(e){ runtimeErrors.push(p.file + ' devFill: ' + e.message); }
     setTimeout(function(){
       p.asserts.forEach(function(a){
         var ok = false;

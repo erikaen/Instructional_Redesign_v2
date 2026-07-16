@@ -42,7 +42,7 @@
     <div class="xlwb" id="workbookShell">
       <div class="xlwb-bar">
         <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet">Reasons &middot; WORKING SHEET</div>
+        <div class="xlwb-bar-sheet">Income Statement &middot; working sheet</div>
       </div>
       <div class="wb-grid-wrap">
         <div id="statementBuild"></div>
@@ -50,10 +50,11 @@
         <div id="referenceGrid" hidden></div>
       </div>
       <div class="xlwb-tabs" aria-label="Workbook tabs">
-        <button class="xlwb-tab" type="button" data-workbook-tab="Assets" onclick="showWorkbookTab31('Assets')">Assets</button>
-        <button class="xlwb-tab" type="button" data-workbook-tab="Liabilities" onclick="showWorkbookTab31('Liabilities')">Liabilities</button>
-        <button class="xlwb-tab active" type="button" data-workbook-tab="Reasons" aria-current="page" onclick="showWorkbookTab31('Reasons')">Reasons</button>
-        <button class="xlwb-tab" type="button" data-workbook-tab="Balance Sheet" onclick="showWorkbookTab31('Balance Sheet')">Balance Sheet</button>
+        <button class="xlwb-tab" type="button" data-workbook-tab="Assets" data-sheet-tab="Assets" onclick="showWorkbookTab31('Assets')">Assets</button>
+        <button class="xlwb-tab" type="button" data-workbook-tab="Liabilities" data-sheet-tab="Liabilities" onclick="showWorkbookTab31('Liabilities')">Liabilities</button>
+        <button class="xlwb-tab" type="button" data-workbook-tab="Reasons" data-sheet-tab="Reasons" onclick="showWorkbookTab31('Reasons')">Reasons</button>
+        <button class="xlwb-tab" type="button" data-workbook-tab="Balance Sheet" data-sheet-tab="Balance Sheet" onclick="showWorkbookTab31('Balance Sheet')">Balance Sheet</button>
+        <button class="xlwb-tab tk-temp active" type="button" data-workbook-tab="Income Statement" data-sheet-tab="Income Statement" aria-current="page" onclick="showWorkbookTab31('Income Statement')">Income Statement</button>
       </div>
     </div>
 
@@ -152,14 +153,14 @@ function setActiveTab31(name){
     if(active) tabs[i].setAttribute('aria-current','page');
     else tabs[i].removeAttribute('aria-current');
   }
-  document.querySelector('#workbookShell .xlwb-bar-sheet').textContent=name==='Reasons'?'Reasons · WORKING SHEET':name;
+  document.querySelector('#workbookShell .xlwb-bar-sheet').textContent=name==='Income Statement'?'Income Statement · working sheet':name;
 }
 function showWorkbookTab31(name){
   playClick();
   var build=document.getElementById('statementBuild');
   var sorter=document.getElementById('sorterGrid');
   var reference=document.getElementById('referenceGrid');
-  if(name==='Reasons'){
+  if(name==='Income Statement'){
     reference.hidden=true;
     build.hidden=false;
     sorter.hidden=groupedState;

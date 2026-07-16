@@ -13,24 +13,13 @@
     .walk-step { flex:none; font-weight:700; letter-spacing:0.02em; }
     .walk-nudge { margin-left:auto; color:var(--primary); text-align:right; opacity:0; transition:opacity 160ms ease; }
     .walk-nudge.show { opacity:1; }
-    .date-picks { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:12px 0; }
-    .date-pick { min-height:64px; padding:9px 12px; border:1px solid var(--border-strong); border-radius:8px; background:white; color:#374151; cursor:pointer; text-align:left; font-family:Inter,sans-serif; }
-    .date-pick strong, .date-pick span { display:block; }
-    .date-pick span { margin-top:2px; color:#6b7280; font-size:var(--font-xs); }
-    .date-pick.selected { border-color:var(--primary); background:var(--primary-faint); box-shadow:inset 0 0 0 1px var(--primary); }
-    .wb-aux-label { padding:8px 12px 4px; color:#6b7280; font-family:Inter,sans-serif; font-size:var(--font-xs); font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
     .wb-grid-wrap { padding:8px; background:white; }
-    .wb-grid-wrap + .wb-grid-wrap { border-top:1px solid var(--border); }
     .answer-stack { display:grid; gap:8px; margin-top:10px; }
     .answer-stack .btn { justify-content:flex-start; text-align:left; }
-    .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; }
+    .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
     .xlwb-tab[data-sheet-tab] { cursor:pointer; }
-    @media (max-width:560px) { .date-picks { grid-template-columns:1fr; } }
     @media (prefers-color-scheme:dark) {
-      .walk-meta, .wb-aux-label { color:#9ca3af; }
-      .date-pick { background:#26242e; color:#d1d5db; }
-      .date-pick span { color:#9ca3af; }
-      .date-pick.selected { background:#233029; }
+      .walk-meta { color:#9ca3af; }
       .wb-grid-wrap { background:#26242e; }
     }
   </style>
@@ -52,8 +41,8 @@
     <div class="phase-title" id="phaseTitle">Add Dated Subtotals</div>
 
     <div class="narrative-block">
-      <p>Open <span class="mono">Bike-Repair.xlsx</span>. The walk starts on <strong>Assets</strong> at <strong>Parts</strong>, before any dated subtotal lines have been added. The sheet shows one undifferentiated history from May onward.</p>
-      <p>Anna looks down the list. <em>&ldquo;Every entry is here, but I can&rsquo;t see where the Parts balance stood on any date that matters. Let&rsquo;s make the first change in the workbook.&rdquo;</em></p>
+      <p>Open <span class="mono">Bike-Repair.xlsx</span>. The walk starts on <strong>Assets</strong> at <strong>Parts</strong>. Every category already shows a ruled balance through August 31, but no line shows where anything stood on June 1.</p>
+      <p>Anna looks down the list. <em>&ldquo;Every entry is here, and Excel keeps a running balance through today. But I can&rsquo;t see where Parts stood on June 1. Let&rsquo;s make the first change in the workbook.&rdquo;</em></p>
     </div>
 
     <div class="xlwb" id="workbookShell">
@@ -69,20 +58,6 @@
         <button class="xlwb-tab" type="button" data-sheet-tab="balance">Balance Sheet</button>
       </div>
     </div>
-    <div class="xlwb" id="wbAuxShell" hidden>
-      <div class="xlwb-bar">
-        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet" id="wbAuxLabel">Balance Sheet &middot; June 1</div>
-      </div>
-      <div class="wb-grid-wrap bs-centered"><div id="wbGridAux"></div></div>
-      <div class="xlwb-tabs" aria-label="Workbook tabs">
-        <button class="xlwb-tab" type="button" aria-disabled="true">Assets</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Reasons</button>
-        <button class="xlwb-tab active" type="button" aria-current="page">Balance Sheet</button>
-      </div>
-    </div>
-
     <div id="anna"></div>
     <div id="controls"></div>
     <div id="evidence"></div>
@@ -132,8 +107,13 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 function playSoftNope(){ tone(360,0.10,'sine',0.04); setTimeout(function(){tone(280,0.10,'sine',0.04);},110); }
 
 /* ===== generated workbook helpers ===== */
-function sheetOf(name){
-  var sheets=BR_STMT_DATA.workbooks['bike-repair-end'].sheets;
+function m31SheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-module-3-1'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function snapshotSheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-beg-module-3'].sheets;
   for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
   return null;
 }
@@ -152,10 +132,13 @@ function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
   });
 })();
 
-var ASSETS=sheetOf('Assets');
-var LIABILITIES=sheetOf('Liabilities');
-var REASONS=sheetOf('Reasons');
-var BALANCE_SHEET=sheetOf('Balance Sheet');
+var M31_ASSETS=m31SheetOf('Assets');
+var M31_LIABILITIES=m31SheetOf('Liabilities');
+var M31_REASONS=m31SheetOf('Reasons');
+var SNAPSHOT_ASSETS=snapshotSheetOf('Assets');
+var SNAPSHOT_LIABILITIES=snapshotSheetOf('Liabilities');
+var SNAPSHOT_REASONS=snapshotSheetOf('Reasons');
+var SNAPSHOT_BALANCE_SHEET=snapshotSheetOf('Balance Sheet');
 
 function labelRows(sheet,test){
   var rows=[];
@@ -190,30 +173,24 @@ function rowsContaining(sheet,phrases){
 }
 function balanceRows(sheet){ return labelRows(sheet,function(value){ return value.indexOf('Balance, ')===0; }); }
 
-/* Discoveries happen later. Hiding their rows also makes the ruled totals re-sum.
-   Only the undiscovered things hide: the whole future receivable account
-   and the depreciation rows. 'Parts used — Ridgeline' is a normal,
-   already-recorded job cost and must stay visible so Parts' Aug-31 line stages true. */
-function accountSectionRows(sheet,label){
-  var headers=sectionHeaders(sheet), hidden=[];
-  headers.forEach(function(header,index){
-    if(String(header.value)!==label) return;
-    var end=index+1<headers.length ? headers[index+1].r-1 : sheet.rows.length;
-    for(var row=header.r;row<=end;row++) hidden.push(row);
-  });
-  return hidden;
-}
-var FUTURE_RECEIVABLE='Accounts'+' Receivable';
-var ASSET_STAGE_HIDDEN=accountSectionRows(ASSETS,FUTURE_RECEIVABLE).concat(rowsContaining(ASSETS,['Depreciation']));
-var REASON_STAGE_HIDDEN=rowsContaining(REASONS,['Repair delivered — Ridgeline Trail Crew','Depreciation —']);
 var gridSeq=0;
 
-function mountOne(containerId,sheet,hiddenRows,raw){
-  var view=raw ? cloneSheet(sheet) : sheet;
-  if(raw){
-    view.rows.forEach(function(row){ row.outlineLevel=0; });
-  }
-  BRW.mountGrid(containerId,view,{gridId:'season-walk-'+(++gridSeq),hiddenRows:uniqueRows(hiddenRows||[])});
+function mountOne(containerId,sheet,hiddenRows){
+  BRW.mountGrid(containerId,sheet,{gridId:'season-walk-'+(++gridSeq),hiddenRows:uniqueRows(hiddenRows||[])});
+  BRW.markDatedRows(containerId);
+}
+function mountSnapshot(containerId,sheet){
+  BRW.mountGrid(containerId,sheet,{gridId:'season-walk-'+(++gridSeq)});
+  BRW.markDatedRows(containerId);
+}
+/* Rick's authored Balance Sheet keeps its amounts in column C; the grid
+   renderer's amount treatment (right-justified, mono) is hard-wired to
+   column D. Re-home C into D for display only — values stay the file's. */
+function snapshotBalanceSheetView(){
+  var sheet=cloneSheet(SNAPSHOT_BALANCE_SHEET);
+  sheet.cells.forEach(function(cell){ if(cell.c===3) cell.c=4; });
+  if(sheet.cols && sheet.cols[3] && sheet.cols[2]) sheet.cols[3].width=sheet.cols[2].width;
+  return sheet;
 }
 function setActiveTabs(names){
   var active={}; names.forEach(function(name){ active[name]=true; });
@@ -221,59 +198,39 @@ function setActiveTabs(names){
     tab.classList.toggle('active',!!active[tab.getAttribute('data-sheet-tab')]);
   });
 }
-function hideAux(){ document.getElementById('wbAuxShell').hidden=true; document.getElementById('wbGridAux').innerHTML=''; }
-function showAux(label){ document.getElementById('wbAuxLabel').textContent=label; document.getElementById('wbAuxShell').hidden=false; }
-
-function juneOneBalanceSheet(){
-  var sheet=cloneSheet(BALANCE_SHEET);
-  var hiddenRows={};
-  labelRows(sheet,function(value){ return value===FUTURE_RECEIVABLE; }).forEach(function(row){ hiddenRows[row]=true; });
-  sheet.cells=sheet.cells.filter(function(cell){
-    return cell.c!==4 && !hiddenRows[cell.r];
-  }).map(function(cell){
-    if(cell.c===3) cell.c=4; /* re-home June column into the amount column: right-aligned, formatted */
-    if(cell.r===2 && cell.c===2) cell.value='Balance Sheet';
-    return cell;
-  });
-  return sheet;
-}
-
 function mountWorkbook(){
-  var hidden, auxHidden;
-  hideAux();
+  var hidden;
   var pw=document.getElementById('wbPrimaryWrap'); if(pw) pw.classList.remove('bs-centered');
   if(stage<=1){
-    hidden=hideOtherAccountRanges(ASSETS,['Parts']).concat(balanceRows(ASSETS),ASSET_STAGE_HIDDEN);
-    mountOne('wbGrid',ASSETS,hidden,true);
-    document.getElementById('sheetLabel').textContent='Assets · Parts · raw history';
+    mountSnapshot('wbGrid',SNAPSHOT_ASSETS);
+    document.getElementById('sheetLabel').textContent='Assets · all categories · through August 31';
     setActiveTabs(['assets']);
-  } else if(stage===2 || stage===3){
-    hidden=hideOtherAccountRanges(ASSETS,['Parts']).concat(ASSET_STAGE_HIDDEN);
-    mountOne('wbGrid',ASSETS,hidden,false);
+  } else if(stage===2){
+    mountOne('wbGrid',M31_ASSETS,[]);
+    document.getElementById('sheetLabel').textContent='Assets · dated subtotals';
+    setActiveTabs(['assets']);
+  } else if(stage===3){
+    hidden=hideOtherAccountRanges(M31_ASSETS,['Parts']);
+    mountOne('wbGrid',M31_ASSETS,hidden);
     document.getElementById('sheetLabel').textContent='Assets · Parts · dated subtotals';
     setActiveTabs(['assets']);
-    if(stage===2){
-      showAux('Opening balance sheet already in the workbook · June 1, 2026');
-      mountOne('wbGridAux',juneOneBalanceSheet(),[],false);
-      setActiveTabs(['assets']);
-    }
   } else if(stage===4){
-    hidden=hideOtherAccountRanges(ASSETS,['Cash']).concat(ASSET_STAGE_HIDDEN);
-    mountOne('wbGrid',ASSETS,hidden,false);
+    hidden=hideOtherAccountRanges(M31_ASSETS,['Cash']);
+    mountOne('wbGrid',M31_ASSETS,hidden);
     document.getElementById('sheetLabel').textContent='Assets · Cash · dated subtotals';
     setActiveTabs(['assets']);
   } else if(stage===5){
-    mountOne('wbGrid',LIABILITIES,[],false);
+    mountOne('wbGrid',M31_LIABILITIES,[]);
     document.getElementById('sheetLabel').textContent='Liabilities · dated subtotals';
     setActiveTabs(['liabilities']);
   } else if(stage===6){
-    hidden=hideOtherAccountRanges(REASONS,['GENERATED']).concat(REASON_STAGE_HIDDEN);
-    mountOne('wbGrid',REASONS,hidden,false);
+    hidden=hideOtherAccountRanges(M31_REASONS,['GENERATED']);
+    mountOne('wbGrid',M31_REASONS,hidden);
     document.getElementById('sheetLabel').textContent='Reasons · GENERATED · dated subtotals';
     setActiveTabs(['reasons']);
   } else {
-    hidden=hideOtherAccountRanges(REASONS,['WITHDRAWN']).concat(REASON_STAGE_HIDDEN);
-    mountOne('wbGrid',REASONS,hidden,false);
+    hidden=hideOtherAccountRanges(M31_REASONS,['WITHDRAWN']);
+    mountOne('wbGrid',M31_REASONS,hidden);
     document.getElementById('sheetLabel').textContent='Reasons · WITHDRAWN · dated subtotal';
     setActiveTabs(['reasons']);
   }
@@ -282,33 +239,61 @@ function mountWorkbook(){
 /* ===== free tab browsing — the whole (staged) sheet for any tab, any time ===== */
 function primaryWrap(){ return document.getElementById('wbPrimaryWrap'); }
 function showFullTab(name){
-  hideAux(); primaryWrap().classList.remove('bs-centered');
-  var preAct = stage<=1; /* before the subtotal act, ledgers show raw (no dated lines) */
+  primaryWrap().classList.remove('bs-centered');
+  var preAct = stage<=1;
+  if(preAct){
+    if(name==='assets'){
+      mountSnapshot('wbGrid',SNAPSHOT_ASSETS);
+      document.getElementById('sheetLabel').textContent='Assets · all categories · through August 31';
+    } else if(name==='liabilities'){
+      mountSnapshot('wbGrid',SNAPSHOT_LIABILITIES);
+      document.getElementById('sheetLabel').textContent='Liabilities · through August 31';
+    } else if(name==='reasons'){
+      mountSnapshot('wbGrid',SNAPSHOT_REASONS);
+      document.getElementById('sheetLabel').textContent='Reasons · through August 31';
+    } else if(name==='balance'){
+      primaryWrap().classList.add('bs-centered');
+      mountSnapshot('wbGrid',snapshotBalanceSheetView());
+      document.getElementById('sheetLabel').textContent='Balance Sheet · June 1, 2026';
+    }
+    setActiveTabs([name]);
+    return;
+  }
   if(name==='assets'){
-    var hidden=ASSET_STAGE_HIDDEN.concat(preAct?balanceRows(ASSETS):[]);
-    mountOne('wbGrid',ASSETS,hidden,preAct);
-    document.getElementById('sheetLabel').textContent='Assets'+(preAct?' · raw history':' · dated subtotals');
+    mountOne('wbGrid',M31_ASSETS,[]);
+    document.getElementById('sheetLabel').textContent='Assets · dated subtotals';
   } else if(name==='liabilities'){
-    mountOne('wbGrid',LIABILITIES,preAct?balanceRows(LIABILITIES):[],preAct);
-    document.getElementById('sheetLabel').textContent='Liabilities'+(preAct?' · raw history':' · dated subtotals');
+    mountOne('wbGrid',M31_LIABILITIES,[]);
+    document.getElementById('sheetLabel').textContent='Liabilities · dated subtotals';
   } else if(name==='reasons'){
-    var hiddenR=REASON_STAGE_HIDDEN.concat(preAct?balanceRows(REASONS):[]);
-    mountOne('wbGrid',REASONS,hiddenR,preAct);
-    document.getElementById('sheetLabel').textContent='Reasons'+(preAct?' · raw history':' · dated subtotals');
+    mountOne('wbGrid',M31_REASONS,[]);
+    document.getElementById('sheetLabel').textContent='Reasons · dated subtotals';
   } else if(name==='balance'){
     primaryWrap().classList.add('bs-centered');
-    mountOne('wbGrid',juneOneBalanceSheet(),[],false);
+    mountSnapshot('wbGrid',snapshotBalanceSheetView());
     document.getElementById('sheetLabel').textContent='Balance Sheet · June 1, 2026';
   }
   setActiveTabs([name]);
 }
 Array.prototype.forEach.call(document.querySelectorAll('#workbookShell [data-sheet-tab]'),function(tab){
-  tab.addEventListener('click',function(){ showFullTab(tab.getAttribute('data-sheet-tab')); });
+  tab.addEventListener('click',function(){
+    var name=tab.getAttribute('data-sheet-tab');
+    showFullTab(name);
+    if(stage!==2 || stage2Phase!=='visit') return;
+    if(name==='balance'){
+      visitedBalanceTab=true;
+    } else if(name==='assets' && visitedBalanceTab){
+      playSuccess(); stage2Phase='done'; renderTalk();
+    } else if(!visitedBalanceTab){
+      showWalkNudge('Visit the Balance Sheet tab first — find Parts on June 1, 2026.');
+    }
+  });
 });
 
 /* ===== guided walk ===== */
 var TOTAL_STEPS=8;
-var stage=0, answered=false, selectedDates={}, dateAttempts=0, tieAttempts=0, nudgeTimer=null;
+var stage=0, answered=false, subtotalAttempts=0, nudgeTimer=null;
+var stage2Phase='expand', visitedBalanceTab=false;
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function walkMeta(){ return '<div class="walk-meta"><span class="walk-step">Step '+(stage+1)+' of '+TOTAL_STEPS+'</span><span class="walk-nudge" id="walkNudge" role="status" aria-live="polite"></span></div>'; }
@@ -329,76 +314,83 @@ function markAnswered(){ answered=true; playSuccess(); renderTalk(); }
 function advance(){ playClick(); stage++; answered=false; mountWorkbook(); renderTalk(); }
 
 function confirmRaw(key){
-  if(key!=='missing'){ wrong('Look for a ruled line labeled with a date. There is not one yet.'); return; }
+  if(key!=='missing'){ wrong('The August 31 balance is visible, but look for a June 1 line. There is not one yet.'); return; }
   stage=1; playSuccess(); mountWorkbook(); renderTalk();
 }
-function toggleDate(key){ selectedDates[key]=!selectedDates[key]; playClick(); renderTalk(); }
-function checkDates(){
-  var picked=Object.keys(selectedDates).filter(function(key){ return selectedDates[key]; }).sort().join(',');
-  if(picked==='aug31,jun1'){
-    playSuccess(); stage=2; answered=false; mountWorkbook(); renderTalk(); return;
+function subtotalAnswer(key){
+  if(key==='add'){
+    playSuccess(); stage=2; mountWorkbook(); renderTalk(); return;
   }
-  dateAttempts++;
-  if(dateAttempts>=3){ selectedDates={jun1:true,aug31:true}; playSuccess(); stage=2; mountWorkbook(); renderTalk(); return; }
-  wrong('Choose the day the LLC&rsquo;s books opened and today at the season&rsquo;s end.');
-}
-function pickTie(key){
-  if(key==='parts'){ markAnswered(); return; }
-  tieAttempts++;
-  if(tieAttempts>=3){ markAnswered(); return; }
-  wrong('Compare the June 1 Parts subtotal with the Parts line on the opening balance sheet.');
+  subtotalAttempts++;
+  if(subtotalAttempts>=3){ playSuccess(); stage=2; mountWorkbook(); renderTalk(); return; }
+  wrong('Without a June 1 line, nothing says where the season started.');
 }
 function storyAnswer(key){
-  var correct={3:'parts',4:'cash',5:'liabilities',6:'may',7:'none'};
+  var correct={4:'cash',5:'liabilities',7:'zero'};
   if(key===correct[stage]) markAnswered();
   else wrong();
 }
 
-function datePicker(){
-  var dates=[
-    {key:'may1',date:'May 1',note:'the first repair-work jot'},
-    {key:'jun1',date:'June 1',note:'the day the LLC&rsquo;s books opened'},
-    {key:'aug31',date:'August 31',note:'today, season&rsquo;s end'},
-    {key:'sep1',date:'September 1',note:'tomorrow'}
-  ];
-  return '<div class="date-picks">'+dates.map(function(item){
-    return '<button type="button" class="date-pick'+(selectedDates[item.key]?' selected':'')+'" aria-pressed="'+(selectedDates[item.key]?'true':'false')+'" onclick="toggleDate(\''+item.key+'\')"><strong>'+item.date+'</strong><span>'+item.note+'</span></button>';
-  }).join('')+'</div><button class="btn btn-primary" type="button" onclick="checkDates()">Add subtotals at these dates</button>';
+function partsBalanceRows(){
+  var headers=sectionHeaders(M31_ASSETS), start=0, end=M31_ASSETS.rows.length;
+  headers.forEach(function(header,index){
+    if(String(header.value)!=='Parts') return;
+    start=header.r;
+    if(index+1<headers.length) end=headers[index+1].r-1;
+  });
+  var wanted={
+    'Balance, June 1, 2026':true,
+    'Balance, August 31, 2026':true
+  };
+  return labelRows(M31_ASSETS,function(value){ return !!wanted[value]; }).filter(function(row){
+    return row>start && row<=end;
+  });
 }
+document.getElementById('wbGrid').addEventListener('click',function(event){
+  if(stage!==2 || stage2Phase!=='expand' || !event.target.closest('.brw-og-toggle')) return;
+  var rows=partsBalanceRows();
+  if(rows.length!==2) return;
+  var bothOpen=rows.every(function(row){
+    var toggle=document.querySelector('[data-brw-row="'+row+'"] .brw-og-toggle');
+    return toggle && toggle.getAttribute('aria-expanded')==='true';
+  });
+  if(bothOpen){
+    playSuccess(); stage2Phase='visit'; renderTalk();
+  }
+});
 
 function renderTalk(){
   if(nudgeTimer){ clearTimeout(nudgeTimer); nudgeTimer=null; }
   var anna='', controls='';
   if(stage===0){
-    anna=annaBox('Parts is a long, true list. But before we calculate anything else, can you point to a dated line that says where Parts stood on June 1 or August 31?')+walkMeta();
-    controls='<div class="next-phase-msg">Read the raw Parts history, then choose what the sheet shows.</div>'
-      +answerButtons([{key:'visible',label:'The dated balances are already visible.'},{key:'missing',label:'No dated balance is visible yet.'}],'confirmRaw');
+    anna=annaBox('Every category ends in a ruled balance for today, August 31. But the season did not start today. Can you point to a line that says where Parts stood on June 1, the day the LLC&rsquo;s books opened?')+walkMeta();
+    controls='<div class="next-phase-msg">Read the visible balance lines, then choose what the sheet shows.</div>'
+      +answerButtons([{key:'visible',label:'The June 1 balance is already visible.'},{key:'missing',label:'Only August 31 balances are visible — no June 1 line yet.'}],'confirmRaw');
   } else if(stage===1){
-    anna=annaBox('The books just flow; <strong>we divide time into periods of interest</strong>. Choose the <strong>dates of interest</strong> that frame the question: the day the LLC&rsquo;s books opened, and today at the season&rsquo;s end.')+walkMeta();
-    controls='<div class="mc-card"><div class="mc-q">Confirm the two dates where Excel should add ruled subtotal lines.</div>'+datePicker()+'</div>';
+    anna=annaBox('The August 31 line is already ruled at every category &mdash; Excel keeps it as the running balance. The books just flow; <strong>we divide time into periods of interest</strong>, and the <strong>dates of interest</strong> frame them. This season&rsquo;s story starts on <strong>June 1</strong>, the day the LLC&rsquo;s books opened.')+walkMeta();
+    controls='<div class="mc-card"><div class="mc-q">Add a June 1, 2026 subtotal?</div>'+answerButtons([{key:'add',label:'Yes &mdash; rule a June 1, 2026 subtotal at every account with earlier history.'},{key:'skip',label:'No &mdash; the August 31 balance already tells the season&rsquo;s story.'}],'subtotalAnswer')+'</div>';
   } else if(stage===2){
-    anna=annaBox('There they are. Excel did the sums, and the same ruled, dated lines now run across the workbook. Before we trust the new June 1 lines, check one against the June 1 balance sheet already in the workbook.')+walkMeta();
-    if(!answered){
-      controls='<div class="mc-card"><div class="mc-q">Which opening balance-sheet line ties to the new <strong>Balance, June 1</strong> line for Parts?</div>'
-        +answerButtons([{key:'cash',label:'Cash · $1,300'},{key:'parts',label:'Parts · $200'},{key:'card',label:'Credit Card · $2,030'}],'pickTie')+'</div>';
+    if(stage2Phase==='expand'){
+      anna=annaBox('There they are — the same ruled, dated lines now run across the workbook. Parts got two. Open both <strong>+</strong> boxes inside Parts and watch how the subtotals work.')+walkMeta();
+      controls='<div class="next-phase-msg">Open both <strong>+</strong> boxes in Parts.</div>';
+    } else if(stage2Phase==='visit'){
+      anna=annaBox('Read what you opened: the starting items add up to the <strong>June 1</strong> line — $200 — and the purchases and uses after it carry the story to the <strong>August 31</strong> line. Once these dated lines are in, the balance sheet&rsquo;s amounts are easy to read off the Assets, Liabilities, and Reasons tabs. Verify one: click the <strong>Balance Sheet</strong> tab and notice Parts on June 1, 2026 — then come back to <strong>Assets</strong>.')+walkMeta();
+      controls='';
     } else {
-      controls=insightBox('The June 1 line ties','<p><strong>Parts $200 = Parts $200.</strong> The new subtotal agrees with the opening balance sheet. That tie confirms that you placed the June 1 cut correctly.</p>')
+      anna=walkMeta();
+      controls=insightBox('The June 1 line ties','<p><strong>Parts $200 = Parts $200.</strong> The Balance Sheet&rsquo;s June 1 amount and the new <strong>Balance, June 1, 2026</strong> subtotal on Assets show the same figure. The dated lines put the balance sheet&rsquo;s amounts right on the tabs.</p>')
         +'<button class="btn-continue btn-block" onclick="advance()">Continue the walk &rarr;</button>';
     }
   } else if(stage===3){
-    anna=annaBox('Now read Parts through the dated structure: <strong>$200 on June 1</strong> and <strong>$200 on August 31</strong>. What does the matching pair conceal? Open either <strong>+</strong> if you want the detail.')+walkMeta();
-    if(!answered){
-      controls=answerButtons([{key:'nothing',label:'No parts moved during the season.'},{key:'parts',label:'You bought $1,200 and used $1,200 on jobs.'}],'storyAnswer');
-    } else {
-      controls=insightBox('A flat balance can hold a busy story','<p>The detail shows <strong>$1,200 bought</strong> and <strong>$1,200 used</strong>. The two dated lines both read $200, but the history between them was active.</p>')
-        +'<button class="btn-continue btn-block" onclick="advance()">Next account &rarr;</button>';
-    }
+    anna=annaBox('Note that the balance in Parts was <strong>$200 at June 1</strong> and also <strong>$200 at August 31</strong>. Just looking at those numbers, you might think nothing happened to Parts between those dates. Of course, when we expand the Parts picture we see a lot of parts moved between those dates. That&rsquo;s just an example of what snapshots at two points in time can conceal &mdash; and that&rsquo;s why we are going to have more financial statements than just balance sheets.')+walkMeta();
+    controls='<div class="next-phase-msg">Open either <strong>+</strong> if you want the detail.</div>'
+      +'<button class="btn-continue btn-block" onclick="advance()">Next account &rarr;</button>';
   } else if(stage===4){
     anna=annaBox('Cash reads <strong>$1,300 on June 1</strong> and <strong>$620 on August 31</strong>. Repairs brought cash in, while rent, parts, a new tool, the card payoff, and a draw sent cash out. What can these two lines establish by themselves?')+walkMeta();
     if(!answered){
       controls=answerButtons([{key:'income',label:'They measure the season&rsquo;s income.'},{key:'cash',label:'They establish that Cash decreased by $680.'}],'storyAnswer');
     } else {
-      controls=insightBox('Cash answers a cash question','<p>The dated lines establish a <strong>$680 decrease in Cash</strong>. They do not yet compare what the shop delivered with what was used up delivering it.</p>')
+      controls=insightBox('Cash answers a cash question','<p>The dated lines establish a <strong>$680 decrease in Cash</strong>. This decrease in cash doesn&rsquo;t tell you how much cash flowed through the shop. It only tells you that $680 more flowed out than flowed in.</p>')
         +'<button class="btn-continue btn-block" onclick="advance()">Read Liabilities &rarr;</button>';
     }
   } else if(stage===5){
@@ -410,19 +402,14 @@ function renderTalk(){
         +'<button class="btn-continue btn-block" onclick="advance()">Read GENERATED &rarr;</button>';
     }
   } else if(stage===6){
-    anna=annaBox('On Reasons, GENERATED now reads <strong>$170 on June 1</strong> and <strong>$2,740 on August 31</strong>. The first dated line is easy to overlook. Which work sits above it?')+walkMeta();
-    if(!answered){
-      controls=answerButtons([{key:'summer',label:'The June&ndash;August work.'},{key:'may',label:'The May work recorded before the LLC&rsquo;s books opened.'}],'storyAnswer');
-    } else {
-      controls=insightBox('The June 1 line preserves the earlier work','<p><strong>GENERATED $170</strong> is the May work. The August 31 line currently reads <strong>$2,740</strong>. On the next page, you will read only the season rows between your two dated lines and copy them to a working sheet.</p>')
-        +'<button class="btn-continue btn-block" onclick="advance()">Check the newer accounts &rarr;</button>';
-    }
+    anna=annaBox('Look at what happened in <strong>GENERATED</strong> between June 1 and August 31. We have a lot of Reasons for assets and liabilities moving that bear on the question of how the shop did over the season. We&rsquo;ll want to spend a lot of time here in coming up with our answer. In fact, if everything that mattered were already entered in this section of GENERATED, we would be done &mdash; just pull the answer out of this section of Reasons. But let&rsquo;s be really careful before we conclude that this section captures everything we want it to.')+walkMeta();
+    controls='<button class="btn-continue btn-block" onclick="advance()">Check the one remaining account &rarr;</button>';
   } else {
-    anna=annaBox('One last detail: <strong>WITHDRAWN</strong> began during the season. What June 1 line should you add to it?')+walkMeta();
+    anna=annaBox('One last detail: <strong>WITHDRAWN</strong> began during the season &mdash; nothing sits above its June 1 line. What does its June 1 subtotal read?')+walkMeta();
     if(!answered){
-      controls=answerButtons([{key:'zero',label:'Add a June 1 line showing $0.'},{key:'none',label:'Add no June 1 line; there is no earlier history to cut.'}],'storyAnswer');
+      controls=answerButtons([{key:'zero',label:'It reads $0 &mdash; there was no earlier history to cut.'},{key:'none',label:'It has no June 1 line at all.'}],'storyAnswer');
     } else {
-      controls=insightBox('No history, no cut','<p>An account that began during the season gets no June 1 line. <strong>WITHDRAWN</strong> shows only an August 31 line because there is nothing earlier to cut.</p>')
+      controls=insightBox('A new account still gets the cut','<p><strong>WITHDRAWN, June 1: $0.</strong> The ruled cut runs across every account; where there is no earlier history it simply reads zero. The August 31 line carries the season&rsquo;s only entry: the $600 draw.</p>')
         +'<div class="next-phase-msg">The workbook now gives you honest boundaries. Next, read the GENERATED rows between those dated lines and copy the season rows to a working sheet.</div>'
         +'<button class="btn-continue btn-block" onclick="nav(\'32-1-the-income-statement.html\')">Next: copy the season rows &rarr;</button>';
     }
@@ -496,7 +483,7 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ window.location.reload(); }
+function restart(){ stage2Phase='expand'; visitedBalanceTab=false; window.location.reload(); }
 document.addEventListener('keydown',function(event){ if(event.key==='Escape'){ closeGlossary(); closeTicket(); } });
 
 /* ===== init ===== */

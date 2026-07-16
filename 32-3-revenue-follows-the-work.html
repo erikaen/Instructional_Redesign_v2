@@ -10,7 +10,12 @@
   <link rel="stylesheet" href="shared.css">
   <style>
     .wb-grid-wrap { padding:8px; background:white; }
+    .two-panel { display:flex; gap:12px; align-items:flex-start; }
+    .two-panel > .xlwb { flex:1 1 0; min-width:0; }
+    .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+    .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
     @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+    @media (max-width:860px) { .two-panel { flex-direction:column; } }
   </style>
 </head>
 <body>
@@ -30,56 +35,44 @@
     <div class="phase-title" id="phaseTitle">Revenue Earned on Account</div>
 
     <div class="narrative-block">
-      <p>You sorted the season&rsquo;s generated rows into <strong>Revenue</strong> and <strong>Expense</strong> on the working statement view &mdash; and left one loose end. In the Expense band sits <strong>Parts used &mdash; Ridgeline Trail Crew</strong>, with no revenue across from it. Parts don&rsquo;t leave the shelf on their own; they leave on a finished job. Check the job log to find what happened.</p>
+      <p>Two windows on <span class="mono">Bike-Repair.xlsx</span> sit side by side, the way Excel shows one workbook with <em>View Side by Side</em>. On the <strong>left</strong> is the full Assets ledger. On the <strong>right</strong> is the <strong>Income Statement</strong> tab &mdash; the working sheet where you sorted the season&rsquo;s generated rows into <strong>Revenue</strong> and <strong>Expenses</strong>.</p>
+      <p>Before trusting the Revenue band, check it against the source: the <strong>job log</strong> lists every job the shop finished this summer. Compare the log to the Revenue rows on the Income Statement tab &mdash; every finished job should have a Revenue row.</p>
     </div>
 
-    <div class="xlwb" id="assetsShell">
-      <div class="xlwb-bar">
-        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet">Assets</div>
+    <div class="two-panel">
+      <div class="xlwb" id="booksPanel">
+        <div class="xlwb-bar">
+          <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+          <div class="xlwb-bar-sheet" id="booksLabel">Assets</div>
+        </div>
+        <div class="wb-grid-wrap" id="booksWrap"><div id="booksGrid"></div></div>
+        <div class="xlwb-tabs" aria-label="Workbook tabs">
+          <button class="xlwb-tab active" type="button" data-panel="books" data-sheet-tab="assets" aria-current="page">Assets</button>
+          <button class="xlwb-tab" type="button" data-panel="books" data-sheet-tab="liabilities">Liabilities</button>
+          <button class="xlwb-tab" type="button" data-panel="books" data-sheet-tab="reasons">Reasons</button>
+          <button class="xlwb-tab" type="button" data-panel="books" data-sheet-tab="balance">Balance Sheet</button>
+          <button class="xlwb-tab tk-temp" type="button" data-panel="books" data-sheet-tab="income">Income Statement</button>
+        </div>
       </div>
-      <div class="wb-grid-wrap"><div id="wb"></div></div>
-      <div class="xlwb-tabs" aria-label="Workbook tabs">
-        <button class="xlwb-tab active" type="button" aria-current="page">Assets</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Reasons</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
-      </div>
-    </div>
-
-    <div class="xlwb" id="workingShell">
-      <div class="xlwb-bar">
-        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet">Reasons &middot; Working sheet</div>
-      </div>
-      <div class="wb-grid-wrap"><div id="sheet"></div></div>
-      <div class="xlwb-tabs" aria-label="Workbook tabs">
-        <button class="xlwb-tab" type="button" aria-disabled="true">Assets</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
-        <button class="xlwb-tab active" type="button" aria-current="page">Reasons</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
+      <div class="xlwb" id="workingPanel">
+        <div class="xlwb-bar">
+          <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+          <div class="xlwb-bar-sheet" id="workingLabel">Income Statement &middot; working sheet</div>
+        </div>
+        <div class="wb-grid-wrap" id="workingWrap"><div id="workingGrid"></div></div>
+        <div class="xlwb-tabs" aria-label="Workbook tabs">
+          <button class="xlwb-tab" type="button" data-panel="working" data-sheet-tab="assets">Assets</button>
+          <button class="xlwb-tab" type="button" data-panel="working" data-sheet-tab="liabilities">Liabilities</button>
+          <button class="xlwb-tab" type="button" data-panel="working" data-sheet-tab="reasons">Reasons</button>
+          <button class="xlwb-tab" type="button" data-panel="working" data-sheet-tab="balance">Balance Sheet</button>
+          <button class="xlwb-tab tk-temp active" type="button" data-panel="working" data-sheet-tab="income" aria-current="page">Income Statement</button>
+        </div>
       </div>
     </div>
 
     <button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every repair this summer</button>
 
     <div id="anna"></div>
-    <div id="scoreboardWrap" hidden>
-      <div class="next-phase-msg"><strong>Reasons tab &middot; GENERATED</strong><br>The dated lines are the scoreboard. Before you booked Ridgeline, the August 31 line read <strong>$2,740</strong>. It now reads <strong>$3,040</strong>. Your own dated line moved by $300.</div>
-      <div class="xlwb">
-        <div class="xlwb-bar">
-          <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-          <div class="xlwb-bar-sheet">Reasons &middot; GENERATED</div>
-        </div>
-        <div class="wb-grid-wrap"><div id="scoreboard"></div></div>
-        <div class="xlwb-tabs" aria-label="Workbook tabs">
-          <button class="xlwb-tab" type="button" aria-disabled="true">Assets</button>
-          <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
-          <button class="xlwb-tab active" type="button" aria-current="page">Reasons</button>
-          <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
-        </div>
-      </div>
-    </div>
     <div id="controls"></div>
 
   </div>
@@ -136,6 +129,26 @@ function sheetOf(workbookKey,namePart){
   for(var i=0;i<sheets.length;i++) if(sheets[i].name.indexOf(namePart)>=0) return sheets[i];
   return null;
 }
+function snapshotSheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-beg-module-3'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
+
+/* The source workbook still carries an older plural label. Keep every rendered
+   student-facing label aligned with the LLC agreement's singular wording. */
+(function singularMemberCapital(){
+  var books=BR_STMT_DATA.workbooks;
+  Object.keys(books).forEach(function(key){
+    books[key].sheets.forEach(function(sheet){
+      sheet.cells.forEach(function(cell){
+        if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['’] Capital/g,"Member's Capital");
+      });
+    });
+  });
+})();
+
 function rowsByLabel(sheet,pattern){
   var rows=[];
   (sheet.cells||[]).forEach(function(cell){
@@ -170,40 +183,67 @@ function rowsOutsideSection(sheet,sectionName){
 }
 var statementSheet=sheetOf('income-statement-steps','2 ');
 var assetsSheet=sheetOf('bike-repair-end','Assets');
+var LIABILITIES=sheetOf('bike-repair-end','Liabilities');
 var reasonsSheet=sheetOf('bike-repair-end','Reasons');
+var SNAPSHOT_BALANCE_SHEET=snapshotSheetOf('Balance Sheet');
 var statementDepRows=rowsByLabel(statementSheet,/^Depreciation/);
 var statementReceivableRows=rowsByLabel(statementSheet,/^Repair delivered.*Ridgeline/);
 var assetsDepRows=rowsByLabel(assetsSheet,/^Depreciation/);
 var assetsReceivableRows=accountBlockRows(assetsSheet,/^Accounts Receivable$/);
 var reasonsDepRows=rowsByLabel(reasonsSheet,/^Depreciation/);
+var reasonsReceivableRows=rowsByLabel(reasonsSheet,/^Repair delivered.*Ridgeline/);
 var nonGeneratedRows=rowsOutsideSection(reasonsSheet,'GENERATED');
 
-function mountBeforeDiscovery(){
-  BRW.mountGrid('wb',assetsSheet,{
-    gridId:'assets-pre-receivable',
-    hiddenRows:assetsDepRows.concat(assetsReceivableRows)
-  });
-  BRW.mountGrid('sheet',statementSheet,{
-    gridId:'income-pre-receivable',
-    hiddenRows:statementDepRows.concat(statementReceivableRows)
+/* Rick's authored Balance Sheet keeps its amounts in column C; the grid
+   renderer's amount treatment (right-justified, mono) is hard-wired to
+   column D. Re-home C into D for display only — values stay the file's. */
+function snapshotBalanceSheetView(){
+  var sheet=cloneSheet(SNAPSHOT_BALANCE_SHEET);
+  sheet.cells.forEach(function(cell){ if(cell.c===3) cell.c=4; });
+  if(sheet.cols && sheet.cols[3] && sheet.cols[2]) sheet.cols[3].width=sheet.cols[2].width;
+  return sheet;
+}
+
+var gridSeq=0;
+function uniqueRows(rows){ var seen={},out=[]; (rows||[]).forEach(function(r){ r=Number(r); if(!seen[r]){seen[r]=true; out.push(r);} }); return out; }
+function mountOne(cid,sheet,hidden){ BRW.mountGrid(cid,sheet,{gridId:'wb32-3-'+(++gridSeq),hiddenRows:uniqueRows(hidden)}); }
+
+var discovered=false;
+var panelTab={ books:'assets', working:'income' };
+
+function assetsHidden(){ return assetsDepRows.concat(discovered?[]:assetsReceivableRows); }
+function workingHidden(){ return statementDepRows.concat(discovered?[]:statementReceivableRows); }
+function booksReasonsHidden(){ return [1].concat(nonGeneratedRows,reasonsDepRows,discovered?[]:reasonsReceivableRows); }
+
+function setActiveTab(panel,name){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-panel="'+panel+'"][data-sheet-tab]'),function(tab){
+    var on=tab.getAttribute('data-sheet-tab')===name;
+    tab.classList.toggle('active',on);
+    if(on) tab.setAttribute('aria-current','page'); else tab.removeAttribute('aria-current');
   });
 }
-function mountAfterDiscovery(){
-  BRW.mountGrid('wb',assetsSheet,{
-    gridId:'assets-post-receivable',
-    hiddenRows:assetsDepRows
-  });
-  BRW.mountGrid('sheet',statementSheet,{
-    gridId:'income-post-receivable',
-    hiddenRows:statementDepRows
-  });
+function paint(panel,name){
+  panelTab[panel]=name;
+  var gridId  = panel==='books' ? 'booksGrid'  : 'workingGrid';
+  var labelId = panel==='books' ? 'booksLabel' : 'workingLabel';
+  var wrap = document.getElementById(panel==='books' ? 'booksWrap' : 'workingWrap');
+  wrap.classList.remove('bs-centered');
+  var label;
+  if(name==='assets'){ mountOne(gridId,assetsSheet,assetsHidden()); label='Assets'; }
+  else if(name==='liabilities'){ mountOne(gridId,LIABILITIES,[]); label='Liabilities'; }
+  else if(name==='reasons'){ mountOne(gridId,reasonsSheet,booksReasonsHidden()); label='Reasons · GENERATED'; }
+  else if(name==='income'){ mountOne(gridId,statementSheet,workingHidden()); label='Income Statement · working sheet'; }
+  else { wrap.classList.add('bs-centered'); mountOne(gridId,snapshotBalanceSheetView(),[]); label='Balance Sheet · June 1, 2026'; }
+  document.getElementById(labelId).textContent=label;
+  setActiveTab(panel,name);
+  BRW.markDatedRows(gridId);
 }
-function mountReasonsScoreboard(){
-  BRW.mountGrid('scoreboard',reasonsSheet,{
-    gridId:'reasons-post-receivable',
-    hiddenRows:[1].concat(nonGeneratedRows,reasonsDepRows)
+Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+  tab.addEventListener('click',function(){
+    playClick();
+    paint(tab.getAttribute('data-panel'),tab.getAttribute('data-sheet-tab'));
   });
-}
+});
 
 /* ===== state ===== */
 var step = 0;
@@ -214,17 +254,17 @@ function insightBox(label,inner){ return '<div class="insight-box"><div class="i
 function renderTalk(){
   var anna='', ctrl='';
   if(step===0){
-    anna = annaBox('Revenue should include <strong>every</strong> job the shop handed over. There are <strong>'+totalJobs+'</strong> repairs finished this summer in the job log, and only <strong>'+inJobs+'</strong> of them ever got a row on the working statement view. The missing one is the job whose parts you already jotted. Find it &mdash; it&rsquo;s marked <strong>outstanding</strong>.');
-    ctrl = '<div class="next-phase-msg">Open the job log above and spot the repair that was finished but never recorded.</div>'
-      + '<button class="btn-continue btn-block" onclick="setStep(1)">I see the outstanding one &rarr;</button>';
+    anna = annaBox('Open the job log and compare its <strong>'+totalJobs+'</strong> finished jobs with the <strong>'+inJobs+'</strong> Revenue rows on the working sheet. Find the finished job that has <strong>no Revenue row</strong>.');
+    ctrl = '<div class="next-phase-msg">Open the job log above and find the finished job that has no Revenue row on the working sheet.</div>'
+      + '<button class="btn-continue btn-block" onclick="setStep(1)">I found it &mdash; Ridgeline Trail Crew &rarr;</button>';
   } else if(step===1){
-    anna = annaBox('There it is &mdash; <strong>'+ridge.customer+'</strong>, '+ridge.date+'. You did the whole job: '+ridge.hours+' hours, <strong>'+BRW.dol(ridge.partsCost)+'</strong> of parts off the shelf (that side you <em>did</em> jot &mdash; it&rsquo;s already in the Expense band). You billed them <strong>'+BRW.dol(ridge.charge)+'</strong>, net 15. No cash came, so no row ever got written. But the work went <em>out the door</em>. Should that delivery really be absent from the season&rsquo;s Revenue?');
+    anna = annaBox('There it is &mdash; <strong>'+ridge.customer+'</strong>, '+ridge.date+'. The job log shows the job as finished but unpaid: '+ridge.hours+' hours, <strong>'+BRW.dol(ridge.partsCost)+'</strong> of parts off the shelf, and <strong>'+BRW.dol(ridge.charge)+'</strong> billed net 15. Now notice that the workbook already carries <strong>Parts used &mdash; Ridgeline Trail Crew</strong> in the Expense band &mdash; the parts left the shelf on that job, so the using-up is recorded. Only the Revenue row is missing.');
     ctrl = insightBox('It counts when the work is delivered, not when the cash comes',
         '<p>Revenue never meant &ldquo;cash arrived&rdquo; &mdash; it records the work going out the door, and Ridgeline&rsquo;s did, on Aug 28. The row belongs in the Revenue band now; the cash follows on its own schedule.</p>'
         +'<p>And there&rsquo;s a second thing: '+ridge.customer+' still <strong>owes</strong> '+BRW.dol(ridge.charge)+'. That right to be paid gets a new line in Assets: Accounts Receivable.</p>')
       + '<button class="btn-continue btn-block" onclick="setStep(2)">Put it on the books &rarr;</button>';
   } else {
-    anna = annaBox('There &mdash; a brand-new line in Assets: <strong>Accounts Receivable, '+BRW.dol(ridge.charge)+'</strong>, for '+ridge.customer+'&rsquo;s unpaid bill. And look at the working statement view: Revenue now reads <strong>'+BRW.dol(allCharges)+'</strong> &mdash; complete. Every job in the log now has a Revenue row. Think about <strong>'+smith.customer+'</strong>&rsquo;s frame, in that same Revenue band at <strong>'+BRW.dol(smith.charge)+'</strong> &mdash; his cash came in <em>last</em> period as a deposit, but the frame went out the door <em>this</em> summer. '+ridge.customer+': work now, cash later. '+smith.customer+': cash earlier, work now. Neither row is timed to the cash. Both are timed to the <strong>work</strong>.');
+    anna = annaBox('There &mdash; a brand-new line in the <strong>Assets</strong> window on the left: <strong>Accounts Receivable, '+BRW.dol(ridge.charge)+'</strong>, for '+ridge.customer+'&rsquo;s unpaid bill. And on the <strong>Income Statement</strong> tab to the right, Revenue now reads <strong>'+BRW.dol(allCharges)+'</strong> &mdash; complete. Every job in the log now has a Revenue row. Think about <strong>'+smith.customer+'</strong>&rsquo;s frame, in that same Revenue band at <strong>'+BRW.dol(smith.charge)+'</strong> &mdash; his cash came in <em>last</em> period as a deposit, but the frame went out the door <em>this</em> summer. '+ridge.customer+': work now, cash later. '+smith.customer+': cash earlier, work now. Neither row is timed to the cash. Both are timed to the <strong>work</strong>. Now click the <strong>Reasons</strong> tab in the left window: your own GENERATED line for August 31 reads <strong>$3,040</strong> where it read <strong>$2,740</strong> before you booked Ridgeline &mdash; your dated line moved by $300.');
     ctrl = insightBox('The work is what counts',
         '<p>'+ridge.customer+': work done <strong>now</strong>, cash <strong>later</strong> &mdash; recorded now (and a receivable until they pay). '+smith.customer+': cash <strong>earlier</strong>, work done <strong>now</strong> &mdash; recorded now too. The rows are timed to the <strong>work</strong>, whichever way the cash runs. The records remain balanced: assets went up '+BRW.dol(ridge.charge)+', and so did GENERATED. On the Reasons tab, the generated row remains where it was recorded; the Revenue band is a sorting of it.</p>')
       + '<div class="next-phase-msg">The working sheet now includes every job. Next, go straight to the Expenses and group them by kind.</div>'
@@ -240,10 +280,9 @@ function setStep(n){
   if(n>step) playSuccess();
   step = n;
   if(step===2){
-    // Re-mount the extracted views with Ridgeline revealed; ruled totals re-sum.
-    mountAfterDiscovery();
-    document.getElementById('scoreboardWrap').hidden=false;
-    mountReasonsScoreboard();
+    discovered=true;
+    paint('books',panelTab.books);
+    paint('working',panelTab.working);
   }
   renderTalk();
   window.scrollTo(0, document.body.scrollHeight);
@@ -291,7 +330,8 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlo
 
 /* ===== init — extracted Assets ledger + pre-receivable statement view ===== */
 window.devFill = function(){ setStep(2); };
-mountBeforeDiscovery(); // Revenue 5,720 / Expenses 3,150; receivable and depreciation rows hidden
+paint('books','assets');
+paint('working','income');
 renderTalk();
 </script>
   <script src="dev.js"></script>

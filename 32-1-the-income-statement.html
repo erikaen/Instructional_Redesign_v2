@@ -10,7 +10,12 @@
   <link rel="stylesheet" href="shared.css">
   <style>
     .wb-grid-wrap { padding:8px; background:white; }
-    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+    .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+    .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+    .brw-row-copysel { outline:2px dashed var(--primary); outline-offset:-2px; }
+    @media (prefers-color-scheme:dark) {
+      .wb-grid-wrap { background:#26242e; }
+    }
   </style>
 </head>
 <body>
@@ -34,21 +39,22 @@
       <p>Read between them. Every GENERATED row below the June 1 line and above the August 31 line records activity from this season. Those rows are the season&rsquo;s activity in the records.</p>
     </div>
 
-    <div id="anna"></div>
-    <div id="controls"></div>
-    <div class="xlwb" id="statementShell" hidden>
+    <div class="xlwb" id="workbookShell">
       <div class="xlwb-bar">
         <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet">Reasons &middot; Working sheet</div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Reasons</div>
       </div>
-      <div class="wb-grid-wrap"><div id="statementBuild"></div></div>
+      <div class="wb-grid-wrap" id="wbGridWrap"><div id="wbGrid"></div></div>
       <div class="xlwb-tabs" aria-label="Workbook tabs">
-        <button class="xlwb-tab" type="button" aria-disabled="true">Assets</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
-        <button class="xlwb-tab active" type="button" aria-current="page">Reasons</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="assets">Assets</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="liabilities">Liabilities</button>
+        <button class="xlwb-tab active" type="button" data-sheet-tab="reasons" aria-current="page">Reasons</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="balance">Balance Sheet</button>
+        <button class="xlwb-tab tk-temp" type="button" data-sheet-tab="income" hidden>Income Statement</button>
       </div>
     </div>
+    <div id="anna"></div>
+    <div id="controls"></div>
     <div id="afterCopy"></div>
 
   </div>
@@ -85,49 +91,201 @@ function insightBox(label,inner){ return '<div class="insight-box"><div class="i
 document.getElementById('anna').innerHTML = annaBox(
   'You picked the dates. Now I have one question: <strong>How did the shop do this season?</strong> The rows between your two dated lines are where we begin.'
 );
-document.getElementById('controls').innerHTML =
-  insightBox('Read between the dated lines',
-    '<p>The June 1 line ties to the June 1 balance sheet you already made. The GENERATED rows after that line record the season&rsquo;s work delivered and what was used up during the work.</p>')
-  + '<button class="btn-continue btn-block" onclick="copySeasonRows()">Copy the season&rsquo;s rows to a working sheet &rarr;</button>';
+function preCopyContext(){
+  return insightBox('Read between the dated lines',
+    '<p>The June 1 line ties to the June 1 balance sheet you already made. The GENERATED rows after that line record the season&rsquo;s work delivered and what was used up during the work.</p>');
+}
 
-/* ===== extracted workbook helpers ===== */
-function sheetOf(workbookKey, namePart){
-  var sheets=BR_STMT_DATA.workbooks[workbookKey].sheets;
-  for(var i=0;i<sheets.length;i++) if(sheets[i].name.indexOf(namePart)>=0) return sheets[i];
+/* ===== generated workbook helpers ===== */
+function m31SheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-module-3-1'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
   return null;
 }
-function rowsByLabel(sheet,pattern){
-  var rows=[];
-  (sheet.cells||[]).forEach(function(cell){
-    if(cell.c===2 && pattern.test(String(cell.value||''))) rows.push(cell.r);
-  });
-  return rows;
+function m32SheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-module-3-2'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
 }
-function futureRows(sheet){
-  return rowsByLabel(sheet,/^Repair delivered.*Ridgeline|^Depreciation/);
+function snapshotSheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-beg-module-3'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
+
+/* The source workbook still carries an older plural label. Keep every rendered
+   student-facing label aligned with the LLC agreement's singular wording. */
+(function singularMemberCapital(){
+  var books=BR_STMT_DATA.workbooks;
+  Object.keys(books).forEach(function(key){
+    books[key].sheets.forEach(function(sheet){
+      sheet.cells.forEach(function(cell){
+        if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['’] Capital/g,"Member's Capital");
+      });
+    });
+  });
+})();
+
+var M31_ASSETS=m31SheetOf('Assets');
+var M31_LIABILITIES=m31SheetOf('Liabilities');
+var M31_REASONS=m31SheetOf('Reasons');
+var M32_INCOME_STATEMENT=m32SheetOf('Income Statement');
+var SNAPSHOT_BALANCE_SHEET=snapshotSheetOf('Balance Sheet');
+var gridSeq=0;
+var currentSheet='reasons', preCopyBeat='expand', seasonExpanded=false, seasonRowsSelected=false;
+
+function generatedSeasonBounds(){
+  var generatedRow=0, nextSection=M31_REASONS.rows.length+1;
+  M31_REASONS.cells.forEach(function(cell){
+    if(cell.c!==2) return;
+    if(cell.value==='GENERATED') generatedRow=cell.r;
+    if(generatedRow && cell.r>generatedRow && cell.value==='WITHDRAWN' && cell.r<nextSection) nextSection=cell.r;
+  });
+  var bounds={start:0,end:0};
+  M31_REASONS.cells.forEach(function(cell){
+    if(cell.c!==2 || cell.r<=generatedRow || cell.r>=nextSection) return;
+    if(cell.value==='Balance, June 1, 2026') bounds.start=cell.r;
+    if(cell.value==='Balance, August 31, 2026') bounds.end=cell.r;
+  });
+  return bounds;
 }
 
+function restoreSeasonExpansion(){
+  if(!seasonExpanded || currentSheet!=='reasons') return;
+  var row=generatedSeasonBounds().end;
+  var toggle=document.querySelector('#wbGrid [data-brw-row="'+row+'"] .brw-og-toggle');
+  if(!toggle || toggle.getAttribute('aria-expanded')==='true') return;
+  toggle.setAttribute('aria-expanded','true');
+  toggle.textContent='−';
+  var group=toggle.getAttribute('data-brw-group');
+  Array.prototype.forEach.call(document.querySelectorAll('#wbGrid .brw-og-row[data-brw-group="'+group+'"]'),function(detail){
+    detail.classList.remove('is-collapsed');
+  });
+}
+
+function highlightSeasonRows(){
+  if(!seasonRowsSelected || currentSheet!=='reasons') return;
+  var bounds=generatedSeasonBounds();
+  for(var row=bounds.start+1;row<bounds.end;row++){
+    var el=document.querySelector('#wbGrid [data-brw-row="'+row+'"]');
+    if(el) el.classList.add('brw-row-copysel');
+  }
+}
+
+function renderPreCopyControls(){
+  var action='';
+  if(preCopyBeat==='expand'){
+    action='<div class="next-phase-msg">Open the <strong>+</strong> on GENERATED&rsquo;s <strong>Balance, August 31, 2026</strong> line to see the season&rsquo;s rows.</div>';
+  } else if(preCopyBeat==='copy'){
+    action='<button class="btn-continue btn-block" onclick="selectSeasonRows()">Copy the season&rsquo;s rows</button>';
+  } else {
+    action='<button class="btn-continue btn-block" onclick="copySeasonRows()">Paste these rows into a working sheet &rarr;</button>';
+  }
+  document.getElementById('controls').innerHTML=preCopyContext()+action;
+  if(window.lucide) lucide.createIcons();
+}
+
+function mountOne(containerId,sheet){
+  BRW.mountGrid(containerId,sheet,{gridId:'wb32-1-'+(++gridSeq)});
+  BRW.markDatedRows(containerId);
+}
+function mountSnapshot(containerId,sheet){
+  BRW.mountGrid(containerId,sheet,{gridId:'wb32-1-'+(++gridSeq)});
+  BRW.markDatedRows(containerId);
+}
+/* Rick's authored Balance Sheet keeps its amounts in column C; the grid
+   renderer's amount treatment (right-justified, mono) is hard-wired to
+   column D. Re-home C into D for display only — values stay the file's. */
+function snapshotBalanceSheetView(){
+  var sheet=cloneSheet(SNAPSHOT_BALANCE_SHEET);
+  sheet.cells.forEach(function(cell){ if(cell.c===3) cell.c=4; });
+  if(sheet.cols && sheet.cols[3] && sheet.cols[2]) sheet.cols[3].width=sheet.cols[2].width;
+  return sheet;
+}
+function setActiveTab(name){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+    var active=tab.getAttribute('data-sheet-tab')===name;
+    tab.classList.toggle('active',active);
+    if(active) tab.setAttribute('aria-current','page');
+    else tab.removeAttribute('aria-current');
+  });
+}
+function paint(name){
+  var wrap=document.getElementById('wbGridWrap');
+  wrap.classList.remove('bs-centered');
+  if(name==='assets'){
+    mountOne('wbGrid',M31_ASSETS);
+    document.getElementById('sheetLabel').textContent='Assets';
+  } else if(name==='liabilities'){
+    mountOne('wbGrid',M31_LIABILITIES);
+    document.getElementById('sheetLabel').textContent='Liabilities';
+  } else if(name==='reasons'){
+    mountOne('wbGrid',M31_REASONS);
+    document.getElementById('sheetLabel').textContent='Reasons';
+  } else if(name==='balance'){
+    wrap.classList.add('bs-centered');
+    mountSnapshot('wbGrid',snapshotBalanceSheetView());
+    document.getElementById('sheetLabel').textContent='Balance Sheet · June 1, 2026';
+  } else if(name==='income' && copied){
+    mountOne('wbGrid',M32_INCOME_STATEMENT);
+    document.getElementById('sheetLabel').textContent='Income Statement · working sheet';
+  } else {
+    return;
+  }
+  currentSheet=name;
+  setActiveTab(name);
+  if(name==='reasons'){
+    restoreSeasonExpansion();
+    highlightSeasonRows();
+  }
+}
+
+Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+  tab.addEventListener('click',function(){ paint(tab.getAttribute('data-sheet-tab')); });
+});
+
 var copied=false;
+document.getElementById('wbGrid').addEventListener('click',function(event){
+  if(preCopyBeat!=='expand' || currentSheet!=='reasons') return;
+  var toggle=event.target.closest('.brw-og-toggle');
+  if(!toggle) return;
+  var summary=toggle.closest('[data-brw-row]');
+  if(!summary || Number(summary.getAttribute('data-brw-row'))!==generatedSeasonBounds().end) return;
+  if(toggle.getAttribute('aria-expanded')==='true'){
+    seasonExpanded=true;
+    preCopyBeat='copy';
+    playSuccess();
+    renderPreCopyControls();
+  }
+});
+
+function selectSeasonRows(){
+  if(copied || preCopyBeat!=='copy') return;
+  if(currentSheet!=='reasons') paint('reasons');
+  seasonExpanded=true;
+  restoreSeasonExpansion();
+  seasonRowsSelected=true;
+  highlightSeasonRows();
+  playClick();
+  preCopyBeat='paste';
+  renderPreCopyControls();
+}
+
 function copySeasonRows(){
   if(copied) return;
   copied=true;
   playClick();
   playSuccess();
   document.getElementById('controls').innerHTML='';
-  var build=document.getElementById('statementBuild');
-  document.getElementById('statementShell').hidden=false;
-  var copiedSheet=sheetOf('income-statement-steps','0 ');
-  BR_WB.mountStatementBuild('statementBuild','income-statement-steps',{
-    startAt:0,
-    stopAt:0,
-    gridOpts:{ gridId:'income-copy-grid', hiddenRows:futureRows(copiedSheet) }
-  });
+  document.querySelector('[data-sheet-tab="income"]').hidden=false;
+  paint('income');
   document.getElementById('afterCopy').innerHTML =
     insightBox('A working sheet',
-      '<p>The copied rows now sit on a <strong>working sheet</strong>. The original rows remain on the Reasons tab, in the same order. Next, you will sort the copied rows by what they describe.</p>')
+      '<p>The copied rows now sit on a tab of their own &mdash; a <strong>working sheet</strong>. The original rows remain on the <strong>Reasons</strong> tab, in the same order &mdash; click the tabs and check. Next, you will sort the copied rows by what they describe.</p>')
     + '<button class="btn-continue btn-block" onclick="nav(\'32-2-two-kinds.html\')">Sort the rows &rarr;</button>';
   if(window.lucide) lucide.createIcons();
-  build.scrollIntoView({behavior:'smooth',block:'start'});
+  document.getElementById('workbookShell').scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 /* ===== glossary / nav ===== */
@@ -147,7 +305,24 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 
 /* ===== dev hook ===== */
-window.devFill = copySeasonRows;
+window.devFill = function(){
+  if(copied) return;
+  if(preCopyBeat==='expand'){
+    if(currentSheet!=='reasons') paint('reasons');
+    var row=generatedSeasonBounds().end;
+    var toggle=document.querySelector('#wbGrid [data-brw-row="'+row+'"] .brw-og-toggle');
+    if(toggle && toggle.getAttribute('aria-expanded')!=='true') toggle.click();
+    if(preCopyBeat==='expand'){
+      seasonExpanded=true;
+      preCopyBeat='copy';
+      renderPreCopyControls();
+    }
+  }
+  if(preCopyBeat==='copy') selectSeasonRows();
+  if(preCopyBeat==='paste') copySeasonRows();
+};
+paint('reasons');
+renderPreCopyControls();
 if(window.lucide) lucide.createIcons();
 </script>
   <script src="dev.js"></script>

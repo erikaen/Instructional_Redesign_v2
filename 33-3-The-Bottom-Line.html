@@ -36,7 +36,7 @@
     <div class="xlwb" id="workbookShell">
       <div class="xlwb-bar">
         <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet" id="workbookSheetLabel">Reasons &middot; WORKING SHEET</div>
+        <div class="xlwb-bar-sheet" id="workbookSheetLabel">Income Statement &middot; working sheet</div>
       </div>
       <div class="wb-grid-wrap">
         <div id="wb"></div>
@@ -101,17 +101,17 @@ function sheetOf(wb, part) {
 
 var referenceMountSerial=0;
 function setWorkbookChrome(activeName){
-  var names=['Assets','Liabilities','Reasons','Balance Sheet'];
-  if(step===1) names.push('Income Statement');
+  var names=['Assets','Liabilities','Reasons','Balance Sheet','Income Statement'];
   document.getElementById('workbookTabs').innerHTML=names.map(function(name){
     var active=name===activeName;
-    return '<button class="xlwb-tab'+(active?' active':'')+'" type="button" data-workbook-tab="'+name+'"'
+    var tabKind=name==='Income Statement'?(step===0?' tk-temp':' tk-stmt'):'';
+    return '<button class="xlwb-tab'+tabKind+(active?' active':'')+'" type="button" data-workbook-tab="'+name+'"'
       +(active?' aria-current="page"':'')+' onclick="showWorkbookTab33(\''+name+'\')">'+name+'</button>';
   }).join('');
-  document.getElementById('workbookSheetLabel').textContent=activeName==='Reasons' && step===0?'Reasons · WORKING SHEET':activeName;
+  document.getElementById('workbookSheetLabel').textContent=activeName==='Income Statement' && step===0?'Income Statement · working sheet':activeName;
 }
 function showWorkbookTab33(name){
-  var home=step===1?'Income Statement':'Reasons';
+  var home='Income Statement';
   var build=document.getElementById('wb');
   var reference=document.getElementById('referenceGrid');
   playClick();
@@ -178,7 +178,7 @@ function renderTalk(){
   renderTie();
   document.getElementById('wb').hidden=false;
   document.getElementById('referenceGrid').hidden=true;
-  setWorkbookChrome(step===1?'Income Statement':'Reasons');
+  setWorkbookChrome('Income Statement');
   if(window.lucide) lucide.createIcons();
 }
 

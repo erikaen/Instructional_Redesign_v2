@@ -10,6 +10,8 @@
   <link rel="stylesheet" href="shared.css">
   <style>
     .wb-grid-wrap { padding:8px; background:white; }
+    .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+    .xlwb-tab[data-sheet-tab] { cursor:pointer; }
     @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
   </style>
 </head>
@@ -38,20 +40,22 @@
     <div class="xlwb" id="workbookShell">
       <div class="xlwb-bar">
         <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet">Reasons &middot; Working sheet</div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Income Statement &middot; working sheet</div>
       </div>
-      <div class="wb-grid-wrap">
+      <div class="wb-grid-wrap" id="wbGridWrap">
         <div id="statementBuild"></div>
+        <div id="wanderGrid" hidden></div>
         <div id="sortWrap" hidden>
           <div id="sorterPanel"></div>
           <div id="sorterGrid"></div>
         </div>
       </div>
       <div class="xlwb-tabs" aria-label="Workbook tabs">
-        <button class="xlwb-tab" type="button" aria-disabled="true">Assets</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
-        <button class="xlwb-tab active" type="button" aria-current="page">Reasons</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="assets">Assets</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="liabilities">Liabilities</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="reasons">Reasons</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="balance">Balance Sheet</button>
+        <button class="xlwb-tab tk-temp active" type="button" data-sheet-tab="income" aria-current="page">Income Statement</button>
       </div>
     </div>
 
@@ -100,6 +104,94 @@ document.getElementById('annaIntro').innerHTML = annaBox(
   'The generated rows are already copied into this working statement view. Sort them by those two names.'
 );
 if (window.lucide) lucide.createIcons();
+
+/* ===== generated workbook helpers ===== */
+function m31SheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-module-3-1'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function snapshotSheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-beg-module-3'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
+
+/* The source workbook still carries an older plural label. Keep every rendered
+   student-facing label aligned with the LLC agreement's singular wording. */
+(function singularMemberCapital(){
+  var books=BR_STMT_DATA.workbooks;
+  Object.keys(books).forEach(function(key){
+    books[key].sheets.forEach(function(sheet){
+      sheet.cells.forEach(function(cell){
+        if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['’] Capital/g,"Member's Capital");
+      });
+    });
+  });
+})();
+
+var M31_ASSETS=m31SheetOf('Assets');
+var M31_LIABILITIES=m31SheetOf('Liabilities');
+var M31_REASONS=m31SheetOf('Reasons');
+var SNAPSHOT_BALANCE_SHEET=snapshotSheetOf('Balance Sheet');
+var wanderGridSeq=0;
+
+/* Rick's authored Balance Sheet keeps its amounts in column C; the grid
+   renderer's amount treatment (right-justified, mono) is hard-wired to
+   column D. Re-home C into D for display only — values stay the file's. */
+function snapshotBalanceSheetView(){
+  var sheet=cloneSheet(SNAPSHOT_BALANCE_SHEET);
+  sheet.cells.forEach(function(cell){ if(cell.c===3) cell.c=4; });
+  if(sheet.cols && sheet.cols[3] && sheet.cols[2]) sheet.cols[3].width=sheet.cols[2].width;
+  return sheet;
+}
+function setActiveTab(name){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+    var active=tab.getAttribute('data-sheet-tab')===name;
+    tab.classList.toggle('active',active);
+    if(active) tab.setAttribute('aria-current','page');
+    else tab.removeAttribute('aria-current');
+  });
+}
+function mountWander(sheet){
+  BRW.mountGrid('wanderGrid',sheet,{gridId:'wb32-2-wander-'+(++wanderGridSeq)});
+  BRW.markDatedRows('wanderGrid');
+}
+function paint(name){
+  var gridWrap=document.getElementById('wbGridWrap');
+  var statementBuild=document.getElementById('statementBuild');
+  var sortWrap=document.getElementById('sortWrap');
+  var wanderGrid=document.getElementById('wanderGrid');
+  gridWrap.classList.remove('bs-centered');
+  if(name==='income'){
+    wanderGrid.hidden=true;
+    statementBuild.hidden=false;
+    sortWrap.hidden=currentBuildStep!==1;
+    document.getElementById('sheetLabel').textContent='Income Statement · working sheet';
+  } else {
+    statementBuild.hidden=true;
+    sortWrap.hidden=true;
+    wanderGrid.hidden=false;
+    if(name==='assets'){
+      mountWander(M31_ASSETS);
+      document.getElementById('sheetLabel').textContent='Assets';
+    } else if(name==='liabilities'){
+      mountWander(M31_LIABILITIES);
+      document.getElementById('sheetLabel').textContent='Liabilities';
+    } else if(name==='reasons'){
+      mountWander(M31_REASONS);
+      document.getElementById('sheetLabel').textContent='Reasons';
+    } else if(name==='balance'){
+      gridWrap.classList.add('bs-centered');
+      mountWander(snapshotBalanceSheetView());
+      document.getElementById('sheetLabel').textContent='Balance Sheet · June 1, 2026';
+    } else {
+      return;
+    }
+  }
+  setActiveTab(name);
+}
 
 /* ===== extracted workbook helpers ===== */
 function sheetOf(workbookKey, namePart){
@@ -159,6 +251,11 @@ function renderPayoff(){
 /* ===== income-statement build, with the Pick step gated by the sorter ===== */
 var WORKBOOK_KEY='income-statement-steps';
 var sortComplete=false;
+var currentBuildStep=0;
+/* point 6: statement builds render grids directly, so register their live container page-side. */
+function registerBuildGrid(order){
+  BRW._grids['income-build-grid-step-'+order]={containerId:'statementBuild'};
+}
 var buildOptions={
   startAt:0,
   stopAt:2,
@@ -173,6 +270,8 @@ var buildOptions={
     return true;
   },
   onStep:function(order){
+    registerBuildGrid(order);
+    currentBuildStep=order;
     var wrap=document.getElementById('sortWrap');
     wrap.hidden=order!==1;
     document.getElementById('gate').innerHTML='';
@@ -184,16 +283,18 @@ var buildOptions={
       if(buildGrid) buildGrid.style.display='none';
       var advance=document.querySelector('#statementBuild .brw-step-advance');
       if(advance) advance.disabled=true;
-      BRW.mountSorter('sorterPanel','sorterGrid',filteredPickSheet(pick,hiddenRows),{
+      var SHOWN_ROWS=[
+        rowByExactLabel(pick,'Repair collected — Dana R.'),
+        rowByExactLabel(pick,'Rent used — June'),
+        rowByExactLabel(pick,'Parts used — Dana R.'),
+        rowByExactLabel(pick,'Frame delivered — J. Smith (deposit earned)'),
+        rowByExactLabel(pick,'Parts used — Ridgeline Trail Crew')
+      ];
+      var sorterInstance=BRW.mountSorter('sorterPanel','sorterGrid',filteredPickSheet(pick,hiddenRows),{
         gridId:'income-sort-grid',
+        categoryOrder:['Revenue','Expense'],
         hiddenRows:hiddenRows,
-        showRows:[
-          rowByExactLabel(pick,'Repair collected — Dana R.'),
-          rowByExactLabel(pick,'Rent used — June'),
-          rowByExactLabel(pick,'Parts used — Dana R.'),
-          rowByExactLabel(pick,'Frame delivered — J. Smith (deposit earned)'),
-          rowByExactLabel(pick,'Parts used — Ridgeline Trail Crew')
-        ],
+        showRows:SHOWN_ROWS,
         onComplete:function(){
           sortComplete=true;
           var next=document.querySelector('#statementBuild .brw-step-advance');
@@ -202,6 +303,13 @@ var buildOptions={
           if(window.lucide) lucide.createIcons();
         }
       });
+      if(sorterInstance){
+        /* Rick 2026-07-16: the rest-chip unlocks only when every shown row is hand-sorted */
+        sorterInstance.restUnlocked=function(){
+          for(var i=0;i<SHOWN_ROWS.length;i++){ if(!sorterInstance.wasHandSorted(SHOWN_ROWS[i])) return false; }
+          return true;
+        };
+      }
       wrap.scrollIntoView({behavior:'smooth',block:'start'});
     } else if(order===2){
       renderPayoff();
@@ -210,6 +318,12 @@ var buildOptions={
   }
 };
 BR_WB.mountStatementBuild('statementBuild','income-statement-steps',buildOptions);
+registerBuildGrid(0);
+
+Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+  tab.addEventListener('click',function(){ paint(tab.getAttribute('data-sheet-tab')); });
+});
+paint('income');
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
