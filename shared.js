@@ -1273,6 +1273,11 @@ function initCourseChrome(){
   if (ti < 0) return;
   var tut = COURSE_TUTORIALS[ti];
   courseMarkPageDone(file);                                                   /* visiting a page checks it off */
+
+  /* --- one glossary everywhere: the full course glossary replaces each page's local one --- */
+  if (typeof courseGlossaryOpen === 'function' && document.getElementById('glossaryOverlay')) {
+    window.openGlossary = courseGlossaryOpen;
+  }
   if (file === tut.pages[tut.pages.length-1].f) courseMarkTutDone(tut.id);    /* reaching the last page completes the tutorial */
 
   /* --- page title at the top: fill the page's .phase-title if it is empty --- */
@@ -1322,3 +1327,140 @@ function initCourseChrome(){
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initCourseChrome);
 else initCourseChrome();
+
+/* ============================================================================
+ * COURSE_GLOSSARY (added 2026-07-15): every term from every module, in one
+ * card. Auto-merged from M1_GLOSSARY and the per-page glossaryTerms lists;
+ * duplicates deduped, first definition wins. courseGlossaryOpen() renders it
+ * and initCourseChrome() overrides each page's local openGlossary with it,
+ * so every page shows the same full glossary.
+ * ========================================================================== */
+var COURSE_GLOSSARY = [
+  { module:'Module 1 · The Journey', tutorial:'Tutorial 2 · Insurance and Maria', terms:[
+    { term:'Property Policy', def:'Insurance that pays out if covered things are damaged or destroyed. Doesn&rsquo;t cover cash, or things you don&rsquo;t own (like the rented space).' },
+    { term:'Market Value', def:'What it would fetch &mdash; what a comparable one sells for today (e.g. recent used &ldquo;eBay comp&rdquo; prices); the basis used to value the pre-owned laptop. One way to arrive at an asset&rsquo;s value &mdash; a choice, not the only one.' },
+  ] },
+  { module:'Module 1 · The Journey', tutorial:'Tutorial 3 · Anna and the Bank Statement', terms:[
+    { term:'Asset', def:'A present right to an economic benefit, recorded on the repair-work side of the line (the gear, the parts, the prepaid month, cash). &ldquo;Right to,&rdquo; not &ldquo;owns&rdquo;: a leased item is an asset.' },
+    { term:'Noncash Asset', def:'An asset that isn&rsquo;t cash: equipment, parts on the shelf, fixtures, or a future right like prepaid rent.' },
+    { term:'Liability', def:'A present obligation to transfer an economic benefit later, recorded against the repair work (the card balance; Smith&rsquo;s deposit, where what&rsquo;s owed is the frame, not money).' },
+    { term:'Prepaid Rent', def:'Rent already paid for a future month; a present right (an asset) until the month is used, then it becomes a cost.' },
+    { term:'Promise', def:'Something still to be done or paid because of the repair work &mdash; a promise made in the course of it. The plain word used before the term &ldquo;Liability.&rdquo;' },
+    { term:'Deposit', def:'Money paid in advance for something not yet received. For the receiver it&rsquo;s a liability &mdash; the goods, the work, or the money back is still owed &mdash; not earnings yet.' },
+  ] },
+  { module:'Module 1 · The Journey', tutorial:'Tutorial 4 · Keeping the Reasons', terms:[
+    { term:'Reason', def:'The why you write down for a change in an Asset or a Liability that has <em>no match</em> &mdash; nothing else moved with it. The reasons are the changes that move the difference between Assets and Liabilities.' },
+    { term:'Match', def:'The other line that moved with a change &mdash; same transaction, same amount: an Asset with a Liability, or one Asset with another. A matched pair explains itself, and the difference between Assets and Liabilities does not move. Every change gets either a match or a reason.' },
+    { term:'Receipt', def:'The evidence for a purchase &mdash; vendor, date, amount, and how it was paid. The clue for each reason.' },
+    { term:'Brought from home', def:'Gear you already owned and moved into the repair work &mdash; no purchase, valued by what a comparable one sells for.' },
+    { term:'Contributed', def:'Resources put into the repair work from outside it (the cash you covered, the laptop and gear from home).' },
+    { term:'Generated', def:'What the repair work produced, net of its costs (from running the repair work).' },
+    { term:'Cost of Repairs Done', def:'The value of parts/resources consumed in finished customer jobs; a reason that makes parts-on-the-shelf go down.' },
+  ] },
+  { module:'Module 1 · The Journey', tutorial:'Tutorial 5 · Naming What You Built', terms:[
+    { term:'Entity', def:'A perspective you adopt by deciding what counts as &ldquo;in&rdquo; (your repair work) vs. &ldquo;out&rdquo; (your personal life), for a purpose. The line is drawn, not found.' },
+    { term:'Accounting Identity', def:'Assets &minus; Liabilities. The difference is fully determined once Assets and Liabilities are set; it has no single name &mdash; each kind of entity gives it its own, and even those names have shifted over time. An identity, not an equation; it holds by definition for every entity.' },
+  ] },
+  { module:'Module 2 · Getting Formal', tutorial:'Tutorial 1 · The Two Yous', terms:[
+    { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the tools and parts in the repair work." },
+    { term:"Personal assets", def:"What you own as a person &mdash; your savings, your car, your earnings (you rent your apartment, so there&rsquo;s no house at stake) &mdash; separate from anything recorded for the repair work." },
+    { term:"LLC", def:"Limited Liability Company &mdash; a legal form that can hold the operation and stand as a wall between a claim and your personal life. Maria names it here; you form one next." },
+  ] },
+  { module:'Module 2 · Getting Formal', tutorial:'Tutorial 2 · Filing for a Legal Body', terms:[
+    { term:"Certificate of Organization", def:"In Connecticut, the one-page filing that brings a limited liability company (LLC) into legal existence. (Delaware calls its version a &ldquo;Certificate of Formation.&rdquo;)" },
+    { term:"Legal entity", def:"A &ldquo;person&rdquo; in the eyes of the law that can own things, owe debts, sign contracts, and be sued &mdash; separate from the human beings behind it. An LLC is one." },
+    { term:"Registered agent", def:"The person or office an LLC names to receive legal mail at a real in-state address. A small owner often serves as their own." },
+  ] },
+  { module:'Module 2 · Getting Formal', tutorial:'Tutorial 3 · The Rules', terms:[
+    { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
+    { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
+    { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
+    { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the generated slice ($170) are kept separate." },
+    { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
+    { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." },
+  ] },
+  { module:'Module 2 · Getting Formal', tutorial:'Tutorial 4 · The Entity&rsquo;s Own Number', terms:[
+    { term:"EIN", def:"Employer Identification Number &mdash; the entity&rsquo;s own tax ID with the IRS, like a Social Security number for a business. The bank needs it to open an account in the LLC&rsquo;s name." },
+    { term:"Co-mingling", def:"Running business and personal money through the same account, so they have to be sorted apart by hand. Opening the LLC&rsquo;s own account ends it." },
+    { term:"Disregarded entity", def:"For federal income tax, a single-member LLC is &ldquo;looked through&rdquo; to its owner &mdash; even though it holds its own EIN for every other purpose. Different lines drawn for different purposes." },
+    { term:"Counterparty", def:"The other party to a transaction or contract. With its own EIN and accounts, the LLC is a counterparty in its own right &mdash; it deals with banks, customers, and the IRS in its own name, and can owe and be owed (even sue and be sued) as itself, not as you." },
+    { term:"Schedule A", def:"The Operating Agreement&rsquo;s list of what the member contributes &mdash; assets, liabilities assumed, and the difference. You complete it from the Company&rsquo;s books, after the contributing is done." },
+    { term:"Execute (a document)", def:"To sign it and make it operative. You execute the Operating Agreement here &mdash; after Schedule A is complete, because the schedule attests to facts." },
+  ] },
+  { module:'Module 3 · The Full Set of Statements', tutorial:'Tutorial 1 · Run the Season', terms:[
+    { term:"Balance sheet", def:"A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the difference between them. It says where things stand, not how they got there." },
+    { term:'Used up', def:'A thing the work consumed &mdash; parts off the shelf and into a bike, a month of rent lived through. The records show it leaving; the benefit is gone.' },
+  ] },
+  { module:'Module 3 · The Full Set of Statements', tutorial:'Tutorial 2 · The Income Statement', terms:[
+    { term:'Reasons pile', def:'The running list on the Reasons tab where you jot <em>why</em> each balance moved. Kept job by job, in the order things happened &mdash; a true record, but not organized to answer &ldquo;how did the season go?&rdquo;' },
+    { term:'Delivered', def:'A reason recording work handed to a customer &mdash; a repair finished, a frame delivered against a deposit. Not about cash: Smith&rsquo;s delivery settled a promise; cash can come before, after, or with the work. The plain word used before the term <em>revenue</em>.' },
+    { term:'Accounts Receivable', def:'A right to be paid later for work already done &mdash; an asset. Ridgeline owes $300 for a finished job; until they pay, the shop holds the promise.' },
+    { term:'On account', def:'Billed, to be paid later (here, net 15 &mdash; within 15 days). The work is done, so the delivery counts <em>now</em> &mdash; the cash follows on its own schedule.' },
+    { term:'Customer Deposit', def:'Cash taken before the work is done. The delivery counts only once the work is finished &mdash; which is why Smith&rsquo;s frame lands this season, not last.' },
+    { term:'Revenue', def:'The value of the work delivered over a period &mdash; counted when the work goes out the door, not when the cash moves. The formal name for the DELIVERED pile.' },
+    { term:'Expenses', def:'What got used up delivering the period&rsquo;s work &mdash; parts, rent, and (soon) the wear on the tools and laptop. The formal name for the USED UP pile.' },
+    { term:'Temporary account', def:'A tally scoped to one period: it fills for a season, answers for it, then closes and starts the next at zero. Revenue and Expenses get their own sheets for exactly this reason. Contrast Cash or Parts, which carry on.' },
+    { term:'Income Statement', def:'The short sheet that lays Revenue over Expenses; the difference is Net income &mdash; how the season went. Not a snapshot of what you hold, but the story of one period.' },
+    { term:'Net income', def:'Revenue &minus; Expenses for the period. Here it stays open until the last expense &mdash; the wear on the tools and laptop &mdash; is added next tutorial.' },
+    { term:'Draw (distribution)', def:'Money the owner takes out for personal use. It reduces what the work kept, but it is not an expense &mdash; it&rsquo;s a distribution, shown on its own statement, not on the income statement.' },
+  ] },
+  { module:'Module 3 · The Full Set of Statements', tutorial:'Tutorial 3 · Depreciation', terms:[
+    { term:'Directly observed use', def:'Used-up you can watch: each part that leaves the shelf is a dollar you can point to. &ldquo;Parts used&rdquo; records use somebody could watch happen, not a guess.' },
+    { term:'Time-lapsed use', def:'Used-up done by the calendar: a month of the workspace, lived through. &ldquo;Rent used&rdquo; is one month per row; time does the work by itself.' },
+    { term:'Right of Use', def:'The lease&rsquo;s last month, paid in advance and parked in Assets. It becomes used-up only when its month arrives &mdash; the pure-time case, waiting.' },
+    { term:'Depreciation', def:'A season&rsquo;s share of a long-lived thing&rsquo;s cost, charged as an expense by a chosen rule. An allocation &mdash; a convention standing in for time, wear and tear, and judgment together &mdash; not observed use, not mere calendar, not a market price.' },
+    { term:'Allocation', def:'Splitting one cost across the periods it serves, by a rule someone chose. The rule has authors and room to argue &mdash; useful life and method are choices.' },
+    { term:'Useful life', def:'How many seasons the thing is expected to serve &mdash; a judgment, made up front, that sets each season&rsquo;s share.' },
+    { term:'Carrying value (book value)', def:'What the records show is left of a thing&rsquo;s cost: cost minus the depreciation charged so far. A path the books walk down by rule &mdash; not what the thing would fetch. The thing can outlive its path: fully depreciated, still on the bench.' },
+  ] },
+  { module:'Module 3 · The Full Set of Statements', tutorial:'Tutorial 4 · The Cash-Flow Statement', terms:[
+    { term:'Cash', def:'What the Assets tab shows the shop actually holds in the bank right now: $620, down from $1,300 on June 1. A correct read of a different line &mdash; not a contradiction of net income.' },
+    { term:'Operating', def:'Cash in and out from running the season day to day: repairs collected, parts bought, rent paid, the credit-card payoff. Net +$320 this season.' },
+    { term:'Investing', def:'Cash spent on or received from long-lived gear the shop will use for more than one season &mdash; here, the new repair tool, &minus;$400.' },
+    { term:'Financing', def:'Cash moving between the shop and its owner or lenders, not tied to running the work &mdash; here, the owner&rsquo;s draw, &minus;$600.' },
+    { term:'Accounts Receivable (timing gap)', def:'Ridgeline&rsquo;s $300: revenue counted this season because the work was delivered, with the cash still to come. Net income is ahead of cash on this one.' },
+    { term:'Customer Deposit (timing gap)', def:'Smith&rsquo;s $220: revenue counted this season because the frame was delivered now &mdash; but the cash for it arrived last period, as a deposit. Cash was ahead of net income on this one.' },
+    { term:'Depreciation (non-cash expense)', def:'An allocation that lowers net income ($230) with no cash leaving at all. Added back when reconciling net income to cash.' },
+    { term:'Credit-card payoff (non-expense cash)', def:'$2,030 in cash that left the shop but never touched net income &mdash; it settled a Module 2 liability. The costs behind it were expensed earlier, when the things were used.' },
+    { term:'Statement of Cash Flows', def:'The statement that lays Operating, Investing, and Financing cash side by side, totals a season&rsquo;s Net change in cash, and reconciles to the Cash line on the balance sheet: $1,300 &rarr; $620.' },
+  ] },
+  { module:'Module 3 · The Full Set of Statements', tutorial:'Tutorial 5 · Closing the Season', terms:[
+    { term:'Statement of Changes in Members&rsquo; Capital', def:'The bridge between two balance sheets&rsquo; Members&rsquo; Capital lines: opening, plus net income, minus draws, equals closing. Here: $2,460 + $2,640 &minus; $600 = $4,500.' },
+    { term:'Owner&rsquo;s draw', def:'Cash the owner takes out for personal use. It reduces Members&rsquo; Capital but is not an expense &mdash; it never touches the income statement.' },
+    { term:'Close', def:'The act of filing a finished period&rsquo;s Revenue and Expenses into GENERATED as one row, then emptying both tabs so the next period starts at $0. Not a ritual &mdash; a filing.' },
+    { term:'GENERATED (closed periods)', def:'The Reasons-tab pile that, after a close, holds an archive of finished periods &mdash; one row per period &mdash; instead of every individual row: &ldquo;May (pre-LLC) +$170,&rdquo; &ldquo;Summer 2026 +$2,640.&rdquo;' },
+    { term:'Articulation', def:'The statements tie to each other: every change carried on a balance sheet travels through one of the flow statements. A balance sheet cannot show a new number without the story filed beside it.' },
+  ] },
+];
+function courseGlossaryOpen(){
+  var byModule = {}, order = [];
+  COURSE_GLOSSARY.forEach(function(sec){
+    if (!byModule[sec.module]){ byModule[sec.module] = []; order.push(sec.module); }
+    byModule[sec.module] = byModule[sec.module].concat(sec.terms);
+  });
+  var html = '<input type="text" class="glossary-search" placeholder="Search the glossary&hellip;" oninput="courseGlossaryFilter(this.value)">';
+  order.forEach(function(mod){
+    html += '<div class="glossary-group" data-gg><div class="glossary-module">'+mod+'</div>'+byModule[mod].map(function(g){
+      return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+    }).join('')+'</div>';
+  });
+  var list = document.getElementById('glossaryList');
+  var overlay = document.getElementById('glossaryOverlay');
+  if (!list || !overlay) return;
+  list.innerHTML = html;
+  overlay.classList.add('open');
+  var s = list.querySelector('.glossary-search');
+  if (s) s.focus();
+}
+function courseGlossaryFilter(q){
+  q = (q || '').toLowerCase();
+  var list = document.getElementById('glossaryList');
+  list.querySelectorAll('.glossary-entry').forEach(function(e){
+    e.style.display = (e.textContent.toLowerCase().indexOf(q) >= 0) ? '' : 'none';
+  });
+  list.querySelectorAll('[data-gg]').forEach(function(g){
+    var any = Array.prototype.some.call(g.querySelectorAll('.glossary-entry'), function(e){ return e.style.display !== 'none'; });
+    g.style.display = any ? '' : 'none';
+  });
+}
+

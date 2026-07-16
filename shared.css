@@ -1483,9 +1483,6 @@ body { background: var(--page-bg); font-family: 'Open Sans', sans-serif; color: 
   flex-direction: column;
   gap: 12px;
 }
-@media (prefers-color-scheme: dark) {
-  .glossary-group { background: #322f3c; border-color: var(--border); }
-}
 
 /* ===== NARRATIVE INSET — contrasting inner box inside .narrative-block ===== */
 /* Used by: Module-2/01-three-businesses.html */
@@ -1501,535 +1498,6 @@ body { background: var(--page-bg); font-family: 'Open Sans', sans-serif; color: 
 .narrative-inset ul { margin: 0; padding: 0; }
 
 /* ===== DARK MODE ===== */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary: #6aa3e8;
-    --primary-light: #88b8f0;
-    --primary-faint: #1a2540;
-    --accent: #e07840;
-
-    --border: #2a2830;
-    --border-strong: #3a3848;
-
-    --success-bg: #192a20;
-    --success-border: #2a5c38;
-    --success-text: #6db890;
-    --error-bg: #2a1818;
-    --error-border: #5c2a2a;
-    --error-text: #c08888;
-    --warn-bg: #1e1a10;
-    --warn-border: #52401a;
-    --warn-text: #d4a444;
-  }
-
-  body {
-    background: #1b191f;
-    color: #ffffff;
-  }
-
-  h1 { color: #eeebf5; }
-  .page h2 { color: var(--primary); }
-
-  /* Content divider */
-  .divider { border-top-color: #2a2830; }
-
-  /* Info boxes */
-  .info-box { background: #16243a; border-color: #22355a; }
-  .info-box h3 { color: var(--primary); }
-  .info-box p { color: #b0b8d0; }
-
-  /* Rabbit holes */
-  .rabbit-hole { background: #1a1510; border-color: #352a1e; }
-  .rabbit-hole-trigger:hover { background: #221a10; }
-  .rabbit-hole-trigger .rh-chevron { color: #6b5540; }
-  .rabbit-hole-body { color: #b8afa4; }
-
-  /* Activity pages */
-  .section-tag { color: #8a8898; }
-  .section-title { color: var(--primary); }
-  .section-sub { color: #b0aec0; }
-  .prose { color: #d0cede; }
-  .rh-body .prose { color: #b8afa4; }
-  .callout {
-    background: #16243a;
-    border-left-color: var(--primary);
-    color: #a8bcd8;
-  }
-  .callout strong { color: var(--primary-light); }
-  .section-card {
-    background: #32303c;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.4);
-  }
-  .activity-card { border-color: #2a2830; }
-  .activity-tag {
-    background: var(--primary-faint);
-    color: var(--primary);
-  }
-  .activity-title { color: #eeebf5; }
-  .activity-desc { color: #b0aec0; }
-  .btn-outline {
-    background: #32303c;
-    color: #d0cede;
-    border-color: #2a2830;
-  }
-  .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
-  .btn-primary {
-    background: var(--primary);
-    color: #1b191f;
-  }
-  .btn-primary:hover { background: var(--primary-light); }
-  .btn-hint {
-    background: var(--primary-faint);
-    color: #93c5fd;
-    border-color: #3a5080;
-  }
-  .btn-hint:hover {
-    background: #1e2e50;
-    border-color: var(--primary);
-  }
-  .next-page-hint { color: var(--primary); }
-  .act-footer { border-top-color: #2a2830; }
-  .act-progress { color: #8a8898; }
-
-  /* Balance sheet card */
-  .acct-col { background: #32303c; border-color: var(--border); }
-  .acct-col h4 { color: var(--primary); border-bottom-color: var(--primary); }
-  .acct-line { color: #b0aec0; }
-  .acct-line .acct-val { color: #eeebf5; }
-  .acct-total { color: var(--primary); border-top-color: var(--border); }
-  .bs-col-header { color: var(--primary); border-bottom-color: var(--primary); }
-  .bs-col-header.closing { color: var(--accent); border-color: var(--accent); }
-
-  /* Multi-step activity header & progress */
-  .page-title { color: #eeebf5; }
-  .page-sub { color: #b0aec0; }
-  .prog-dot { background: #4a4858; }
-  .prog-dot.active { background: var(--primary); }
-  .prog-dot.done { background: #22c55e; }
-  .prog-label { color: #8a8898; }
-  .step-tag { color: #8a8898; }
-  .step-title { color: #eeebf5; }
-  .step-desc { color: #b0aec0; }
-
-  /* MCQ */
-  .mcq-opt,
-  .mc-opt {
-    background: #3e3c48;
-    border-color: #4a4858;
-    color: #c8ccd8;
-  }
-  .mcq-opt:hover:not(.locked),
-  .mc-opt:hover:not(.locked) {
-    border-color: var(--primary);
-    background: var(--primary-faint);
-    color: var(--primary);
-  }
-  .mcq-opt.selected:not(.locked),
-  .mc-opt.selected:not(.locked) {
-    border-color: var(--primary);
-    background: var(--primary-faint);
-    color: var(--primary);
-  }
-  .mcq-opt.correct,
-  .mc-opt.correct {
-    border-color: var(--success-border) !important;
-    background: var(--success-bg) !important;
-    color: var(--success-text) !important;
-  }
-  .mcq-opt.wrong,
-  .mc-opt.wrong {
-    border-color: var(--error-border) !important;
-    background: var(--error-bg) !important;
-    color: var(--error-text) !important;
-  }
-  .mc-letter { border-color: #4a4858; color: #8a8898; }
-  .mc-opt.selected:not(.locked) .mc-letter {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: #1b191f;
-  }
-  .mc-opt.correct .mc-letter {
-    background: #2a5c38;
-    border-color: #2a5c38;
-    color: #6db890;
-  }
-  .mc-opt.wrong .mc-letter {
-    background: #5c2a2a;
-    border-color: #5c2a2a;
-    color: #c08888;
-  }
-  .mcq-fb.ok,
-  .feedback.ok {
-    background: var(--success-bg);
-    color: var(--success-text);
-    border-color: var(--success-border);
-  }
-  .mcq-fb.inf { background: var(--primary-faint); color: #93c5fd; }
-  .mcq-fb.err,
-  .feedback.err {
-    background: var(--error-bg);
-    color: var(--error-text);
-    border-color: var(--error-border);
-  }
-
-  /* Nav buttons */
-  .btn-back { background: #32303c; border-color: #3a3848; color: #b0aec0; }
-  .btn-back:hover:not(:disabled) { background: #3e3c48; border-color: #6aa3e8; color: #6aa3e8; } 
-  .btn-back:disabled { background: #32303c; border-color: #3a3848; color: #4a4858; }
-  .btn-next { background: var(--primary); color: #1b191f; }
-  .btn-next:hover { background: var(--primary-light); }
-  .btn-next:disabled { background: #3a3848; }
-  .btn-reset { background: #32303c; border-color: var(--border-strong); color: #b0aec0; }
-  .btn-reset:hover { border-color: var(--primary); color: var(--primary); }
-  .btn-continue { background: var(--primary); color: #1b191f; }
-  .btn-continue:hover { background: var(--primary-light); }
-
-  /* Subsection head */
-  .subsection-head { color: #eeebf5; }
-
-  /* Sort grid */
-  .sort-item { background: #32303c; border-color: var(--border); }
-  .sort-text { color: #c8ccd8; }
-  .sort-btn {  background: #32303c;
-    color: #d0cede;
-    border-color: #2a2830;
-  }
-  .sort-btn:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
-  .sort-btn.selected-shown { background: var(--primary); border-color: var(--primary); color: #1b191f; }
-  .sort-btn.selected-needs { background: var(--accent); border-color: var(--accent); color: #1b191f; }
-
-  /* Accordion */
-  .accordion { border-color: var(--border); }
-  .acc-item { border-bottom-color: var(--border); }
-  .acc-trigger { background: #32303c; }
-  .acc-trigger:hover { background: #3e3c48; }
-  .acc-term { color: var(--primary); }
-  .acc-tag { color: #8a8898; }
-  .acc-icon { border-color: var(--border-strong); color: #8a8898; }
-  .acc-trigger[aria-expanded="true"] .acc-icon { background: var(--primary); border-color: var(--primary); color: #1b191f; }
-  .acc-body { background: #28262e; }
-  .acc-body p { color: #b0aec0; }
-
-  /* Match statement */
-  .match-prompt { color: #c8ccd8; }
-  .match-opt { background: #32303c; border-color: var(--border); color: #b0aec0; }
-  .match-opt:hover:not(.locked) { border-color: var(--primary); color: var(--primary); }
-  .match-opt.selected { background: var(--primary-faint) !important; border-color: var(--primary) !important; color: var(--primary) !important; }
-  .match-check-btn { background: #32303c; border-color: var(--border-strong); color: #b0aec0; }
-  .match-check-btn:hover:not(:disabled) { border-color: var(--primary); color: var(--primary); }
-
-  /* Match Q numbered */
-  .match-q-label { color: #c8ccd8; }
-  .match-q-feedback { background: #28262e; color: #b0aec0; }
-  .match-q-feedback.ok  { background: var(--success-bg); color: var(--success-text); }
-  .match-q-feedback.inf { background: var(--primary-faint); color: var(--primary); }
-  .match-q-feedback.err { background: var(--error-bg); color: var(--error-text); }
-
-  /* Analogy box */
-  .analogy-box { background: #1e1230; border-color: #6b3fa0; color: #c4a8f8; }
-  .analogy-box cite { color: inherit;}
-
-  /* Flow diagram */
-  .diagram-wrap { background: #28262e; border-color: var(--border); }
-  .pillar-label { color: #93b4e8; }
-  .pillar-date { color: #8a8898; }
-  .flow-arrow { color: var(--primary); }
-  .flow-box { background: #1a2540; border-color: #3a5a90; color: #93b4e8; }
-
-  /* DND zone/item */
-  .dnd-bank-wrap { background: #28262e; border-color: var(--border-strong); }
-  .dnd-bank-wrap.drag-over { background: #32303c; border-color: #4a4858; }
-  .dnd-bank-label { color: #8a8898; }
-  .dnd-zone { border-color: var(--border-strong); }
-  .dnd-zone.drag-over { background: var(--primary-faint); border-color: var(--primary); }
-  .dnd-zone-label { color: #c8ccd8; border-bottom-color: var(--border); }
-  .dnd-zone-empty { color: #4a4858; }
-  .dnd-item { background: #3e3c48; border-color: var(--border-strong); color: #c8ccd8; }
-  .dnd-item:hover:not(.checked) { border-color: var(--primary); color: var(--primary); background: var(--primary-faint); }
-  .dnd-fb-label { color: var(--warn-text); }
-  .dnd-fb-soft { background: #1a2820; border-color: #2a5c38; color: #8dcc9a; }
-
-  /* DND bank/card */
-  .dnd-bank-card { background: #32303c; border-color: var(--border); }
-  .dnd-card { background: #3e3c48; border-color: var(--border); color: #c8ccd8; }
-  .dnd-card:hover { border-color: var(--primary); background: var(--primary-faint); }
-  .dnd-card-sub { color: #8a8898; }
-  .dnd-zone-col { border-color: var(--border-strong); }
-  .dnd-zone-col.z-assets, .dnd-zone-col.z-liab, .dnd-zone-col.z-equity { border-color: #2a4a70; background: #1a2540; }
-  .dnd-zone-col.over { background: var(--primary-faint); border-color: var(--primary); }
-  .zone-title { color: var(--primary); }
-  .zone-hint { color: #8a8898; }
-  .placed-chip { background: var(--primary-faint); color: var(--primary); }
-  .dnd-progress { color: #8a8898; }
-  .progress-bar { background: #3a3848; }
-
-  /* Structure diagram */
-  .structure-diagram { background: #32303c; border-color: var(--border); }
-  .sd-row { color: var(--primary); }
-  .sd-arrow { color: #8a8898; }
-
-  /* Multi-select */
-  .ms-item { background: #32303c; border-color: var(--border); }
-  .ms-item:hover:not(.revealed) { border-color: var(--primary); }
-  .ms-item.selected:not(.revealed) { border-color: var(--primary); background: var(--primary-faint); }
-  .ms-check { border-color: var(--border-strong); }
-  .ms-text { color: #c8ccd8; }
-
-  /* Rabbit hole toggle variant */
-  .rh-toggle:hover { background: #281a10; }
-
-  /* Delta box */
-  .delta-box { background: #32303c; border-color: var(--border); }
-  .delta-row { border-bottom-color: #2a2830; }
-  .delta-name { color: #c8ccd8; }
-  .delta-calc { color: #8a8898; }
-  .delta-result { background: var(--primary-faint); color: var(--primary); }
-
-  /* MC card */
-  .mc-card { background: #32303c; box-shadow: 0 1px 3px rgba(0,0,0,0.4); }
-  .mc-q { color: #eeebf5; }
-
-  /* Equation visual */
-  .eq-compare { background: #32303c; border-color: var(--border); }
-  .eq-panel-tag { color: #8a8898; }
-  .eq-panel-caption { color: #8a8898; }
-  .eq-connector-rule { background: #2a2830; }
-  .eq-connector-label { color: #8a8898; }
-  .eq-term.a { background: #0c2a40; color: #38bdf8; }
-  .eq-term.l { background: #0f1f40; color: #6aa3e8; }
-  .eq-term.e { background: #111a38; color: #93b4f8; }
-  .eq-op { color: #8a8898; }
-
-  /* Flip cards */
-  .flip-card-front, .flip-card-back { background: #32303c; border-color: var(--border); }
-  .def-brief { color: #b0aec0; }
-  .flip-card-back p { color: #b0aec0; }
-  .flip-hint, .flip-back-hint { color: #8a8898; }
-
-  /* Insight box */
-  .insight-box { background: var(--primary-faint); border-color: #2a4a70; }
-  .insight-label { color: var(--primary); }
-  .insight-box p { color: #93b4e8; }
-
-  /* Org compare + pills */
-  .org-card { background: #32303c; border-color: var(--border); }
-  .org-type { color: #8a8898; }
-  .org-name { color: #eeebf5; }
-  .org-badge { background: #28262e; border-color: var(--border); color: #8a8898; }
-  .pill.a  { background: #0c2a40; color: #38bdf8; }
-  .pill.l  { background: #0f1f40; color: #6aa3e8; }
-  .pill.e, .pill.na { background: #111a38; color: #93b4f8; }
-  .pill-op { color: #8a8898; }
-
-  /* Double-entry visual */
-  .de-card { background: #32303c; border-color: var(--border); }
-  .de-event { color: #c8ccd8; }
-  .de-side { background: #28262e; }
-  .de-side-label { color: #8a8898; }
-  .de-net { color: #c8ccd8; border-top-color: #2a2830; }
-  .de-op { color: #8a8898; }
-  .de-verdict { background: var(--primary-faint); color: var(--primary); }
-
-  /* Interlude panel */
-  .interlude-intro { color: #b0aec0; }
-  .interlude-card { background: #32303c; border-color: var(--border-strong); }
-  .interlude-card-title { color: var(--warn-text); }
-  .interlude-row.why .interlude-row-label { color: var(--warn-text); }
-  .interlude-row.when .interlude-row-label { color: var(--primary); }
-  .interlude-row-text { color: #b0aec0; }
-  .interlude-row.when .interlude-row-text { color: var(--primary); }
-
-  /* Reconcile visual */
-  .reconcile-card { background: #32303c; border-color: var(--border); }
-  .reconcile-card.ok .reconcile-card-header { background: var(--primary-faint); color: var(--primary); border-bottom-color: #2a4a70; }
-  .reconcile-card.err .reconcile-card-header { background: var(--error-bg); color: var(--error-text); border-bottom-color: var(--error-border); }
-  .reconcile-side-label { color: #8a8898; }
-  .reconcile-item { color: #b0aec0; }
-  .reconcile-item span { color: #eeebf5; }
-  .reconcile-total { color: #eeebf5; border-top-color: var(--border); }
-  .reconcile-card.ok  .reconcile-op { color: var(--primary); }
-  .reconcile-card.err .reconcile-op { color: var(--error-text); }
-  .reconcile-card.ok  .reconcile-verdict { background: var(--primary-faint); color: var(--primary); }
-  .reconcile-card.err .reconcile-verdict { background: var(--error-bg); color: var(--error-text); }
-
-  /* Stage progress */
-  .stage-dot { background: #3a3848; }
-  .stage-dot.done   { background: var(--primary-light); }
-  .stage-dot.active { background: var(--accent); }
-  .stage-label-pill { color: var(--accent); }
-  .stage-card-title { color: var(--accent); }
-  .stage-instruction { color: #8a8898; }
-  .stage-footnote { color: #8a8898; }
-
-  /* Balance sheet header (activity) */
-  .bs-header { border-bottom-color: var(--border); }
-  .bs-header-title { color: var(--primary); }
-  .bs-header-date { color: #8a8898; }
-  .hl-equity { background: rgba(224,120,64,0.15); }
-
-  /* Center card */
-  .center-card { background: #32303c; border-color: var(--border); }
-  .stage-text strong { color: var(--primary); }
-  .transition-note { background: var(--primary-faint); border-color: #2a4a70; color: #b0aec0; }
-
-  /* Decomp sections */
-  .decomp-section { background: #32303c; border-color: var(--border); }
-  .decomp-section h4 { border-bottom-color: var(--border); }
-  .decomp-cfs h4 { color: var(--success-text); }
-  .decomp-sce h4 { color: var(--warn-text); }
-  .decomp-is  h4 { color: var(--primary); }
-  .decomp-cat-label { color: #8a8898; }
-  .decomp-line { color: #b0aec0; }
-  .decomp-line .dl-val { color: #eeebf5; }
-  .decomp-total { border-top-color: var(--border); color: #eeebf5; }
-  .decomp-line.cfs-clickable:hover { background: #1d2e20; }
-  .decomp-line.cfs-clickable.cfs-open { background: #1a2820; }
-  .cfs-expand-icon { color: var(--success-text); }
-  .cfs-scenario { background: #1a2820; border-color: #2a5c38; color: #8dcc9a; }
-
-  /* Knowledge check */
-  .kc-wrap { background: #32303c; border-color: var(--border); }
-  .kc-question-block { background: #28262e; border-color: var(--border); }
-  .kc-q-text { color: #eeebf5; }
-  .kc-choice { background: #3e3c48; border-color: var(--border); color: #c8ccd8; }
-  .kc-choice:not(:disabled):hover { background: var(--primary-faint); border-color: #3a5a90; }
-  .kc-selected { background: var(--primary-faint); border-color: #3a5a90; }
-  .kc-reflection { background: #32303c; border-color: var(--border); }
-  .kc-reflection-label { color: #8a8898; }
-  .kc-reflection textarea { background: #28262e; border-color: var(--border); color: #c8ccd8; }
-  .kc-reflection textarea::placeholder { color: #4a4858; }
-  .kc-reflection textarea:focus { border-color: var(--primary); }
-
-  /* MCQ card */
-  .mcq-card { background: #32303c; border-color: var(--border); }
-  .mcq-question { color: #eeebf5; }
-  .mcq-choice { background: #3e3c48; border-color: var(--border); color: #c8ccd8; }
-  .mcq-choice:not(:disabled):hover { background: var(--primary-faint); border-color: #3a5a90; }
-  .mcq-feedback { background: var(--success-bg); color: var(--success-text); border-color: var(--success-border); }
-  .correct-fb { background: var(--success-bg); border-color: var(--success-border); color: var(--success-text); }
-  .wrong-fb   { background: var(--error-bg); border-color: var(--error-border); color: var(--error-text); }
-
-  /* Prompt card */
-  .prompt-card { background: #32303c; border-color: var(--border); }
-  .prompt-q { color: #c8ccd8; }
-  .prompt-card textarea { background: #28262e; border-color: var(--border); color: #c8ccd8; }
-  .prompt-card textarea::placeholder { color: #4a4858; }
-  .prompt-card textarea:focus { border-color: var(--primary); }
-
-  /* Transaction card + tags */
-  .txn-card { background: #32303c; border-color: var(--border); }
-  .txn-label { color: #8a8898; }
-  .txn-desc { color: #c8ccd8; }
-  .txn-effects { background: #2a2830; color: #b0aec0; }
-  .tag-is { background: var(--primary-faint); color: var(--primary); }
-  .eff-acct { color: #b0aec0; }
-
-  /* Decomp scroll box */
-  .decomp-scroll-box { background: #28262e; border-color: var(--border); }
-  .decomp-scroll-head { background: #32303c; border-bottom-color: var(--border); }
-  .decomp-scroll-box h3 { color: #8a8898; }
-  .decomp-scroll-intro { color: #8a8898; }
-  .decomp-empty { color: #4a4858; }
-  .bs-empty-msg { color: #4a4858; }
-
-  /* Reveal box */
-  .reveal-box { background: #32303c; border-color: var(--border); }
-  .reveal-para { color: #d0cede; }
-
-  /* Change summary */
-  .change-summary-box { background: #28262e; border-color: var(--border); }
-  .change-summary { color: #b0aec0; }
-
-  /* Reflect4 layout */
-  .reflect4-footnote { color: #8a8898; }
-
-  /* Press-explain */
-  .press-explain-block { background: #32303c; border-color: var(--border); }
-  .press-explain-label { color: #8a8898; }
-  .press-explain-text { color: #b0aec0; }
-
-  /* Clarif card */
-  .clarif-card { background: #32303c; border-color: var(--border); }
-
-  /* SCE panel */
-  .sce-is-intro { color: #b0aec0; }
-  .sce-is-panel { background: var(--primary-faint); border-color: var(--border); }
-  .sce-is-title { color: var(--primary); }
-  .sce-ni-clickable:hover { background: #1a1228; }
-  .sce-ni-open { background: var(--primary-faint); }
-  .sce-expand-icon { color: var(--primary); }
-
-  /* Eq box */
-  .eq-box { background: #32303c; border-color: var(--border); }
-  .eq-box-heading { color: #8a8898; }
-  .eq-formula { color: var(--primary); }
-  .eq-note { color: #8a8898; }
-  .eq-source { color: #8a8898; }
-  .sealed-line { background: var(--primary-faint); border-color: var(--border); }
-  .sealed-val { color: var(--primary); }
-  .sl-main { color: #c8ccd8; }
-  .sl-note { color: #8a8898; }
-  .panel-footnote { color: #8a8898; }
-
-  /* Rh-toggle supporting elements */
-  .rh-chevron { color: #6b5540; }
-  .rh-body { color: #b8afa4; }
-
-  /* Press-explain rows */
-  .press-explain-row.why  .press-explain-label { color: #c8a86a; }
-  .press-explain-row.when .press-explain-label { color: var(--primary); }
-  .press-explain-row.when .press-explain-text  { color: var(--primary); }
-
-  /* Stage note */
-  .stage-note { background: var(--warn-bg); border-color: var(--warn-border); color: var(--warn-text); }
-
-  /* SCE nested */
-  .sce-is-nested { border-left-color: var(--primary); }
-  .sce-is-confirm { color: #8a8898; }
-  .sce-ni-highlight { background: rgba(224,120,64,0.12); }
-
-  /* KC question (non-block variant) */
-  .kc-question { background: #32303c; border-color: var(--border); }
-
-  /* Decomp helpers */
-  .decomp-is-total { color: var(--primary); }
-  .decomp-line-hl { background: #2a2830; }
-
-  /* Effect amount states */
-  .eff-amt.pos { color: var(--success-text); }
-  .eff-amt.neg { color: var(--error-text); }
-
-  /* Prompt sub-elements */
-  .prompt-number { color: var(--accent); }
-
-  /* Narrative block */
-  .narrative-block { background: #1e150a; border-left-color: var(--accent); color: #b8afa4; }
-  .narrative-block strong { color: var(--accent); }
-
-  /* Pick / YN buttons */
-  .pick-btn { background: #3e3c48; border-color: #4a4858; color: #c8ccd8; }
-  .pick-btn:hover:not([disabled]) { border-color: var(--primary); color: var(--primary); }
-  .pick-btn.selected { background: var(--primary-faint); border-color: var(--primary); color: var(--primary); }
-
-  /* Acct-col helpers */
-  .acct-section { color: var(--primary); }
-  .acct-footer { color: #8a8898; border-top-color: #2a2830; }
-  .acct-empty { color: #4a4858; }
-
-  /* Glossary overlay */
-  .glossary-panel { background: #2a2830; }
-  .glossary-panel-head { border-bottom-color: var(--border); }
-  .glossary-panel-title { color: var(--primary); }
-  .glossary-close-btn { color: #8a8898; }
-  .glossary-search-wrap { border-bottom-color: var(--border); }
-  .glossary-search-wrap input { background: #1e1c26; border-color: var(--border-strong); color: #c8ccd8; }
-  .glossary-search-wrap input::placeholder { color: #4a4858; }
-  .glossary-entry-term { color: var(--primary); }
-  .glossary-entry-def { color: #b0aec0; }
-
-  /* Narrative inset box */
-  .narrative-inset { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.1); color: #b8afa4; }
-}
 
 /* ===================================================================
    PREWORK — BIKE-REPAIR ARC (page-specific components)
@@ -2179,24 +1647,6 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .loc-stack { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; }
 
 /* ===== PREWORK — DARK MODE OVERRIDES (literal-white surfaces) ===== */
-@media (prefers-color-scheme: dark) {
-  .roadmap-item { background: #32303c; }
-  .roadmap-item.muted .roadmap-dot { background: #32303c; border-color: var(--border-strong); }
-  .roadmap-title { color: #eeebf5; }
-  .roadmap-desc { color: #b0aec0; }
-  .roadmap-activity-text { color: #c8ccd8; }
-  .roadmap-toggle { background: #32303c; color: #b0aec0; }
-  .transcript-beat-text { color: #b0aec0; }
-  .scenario-card { background: #32303c; border-color: var(--border); }
-  .scenario-card-text { color: #c8ccd8; }
-  .reveal-next { background: #32303c; }
-  .reveal-next:hover { background: var(--primary-faint); }
-  .loc-panel { background: #32303c; border-color: var(--border); }
-  .item-chip-row { background: #32303c; }
-  .item-chip-row.dragging { background: var(--primary-faint); }
-  .sort-msg { background: #32303c; border-color: var(--border); color: #c8ccd8; }
-  .card-title { color: var(--primary); }
-}
 
 /* ===================================================================
    PREWORK 1.2 — Insurance & Maria (form, evidence popups, dialog)
@@ -2297,7 +1747,6 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .gate-armed p { font-size: var(--font-m); color: #374151; line-height: 1.6; margin-bottom: 8px; }
 .gate-armed-maria { background: var(--primary-faint); border: 1px solid var(--primary); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
 .gate-armed-maria p { font-size: var(--font-m); color: #374151; line-height: 1.6; margin-bottom: 8px; }
-@media (prefers-color-scheme: dark) { .gate-armed-maria { background: #32303c; border-color: var(--primary); } .gate-armed-maria p { color: #c8ccd8; } }
 
 /* ----- Document facsimile popups (receipt / credit card / eBay) ----- */
 .doc-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 200; overflow: auto; }
@@ -2346,23 +1795,6 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 /* ----- Welcome xlsx (read-only italic "more" row) ----- */
 .xlsx-cell.more { font-style: italic; color: #888; }
 
-@media (prefers-color-scheme: dark) {
-  .dialog-box { background: #32303c; border-color: #3b66a3; box-shadow: 0 2px 8px rgba(0,0,0,0.4), 0 12px 30px rgba(0,0,0,0.3); }
-  .dialog-box.you { background: #2b2933; }
-  .dialog-text { color: #c8ccd8; }
-  .things-sidebar { background: #32303c; border-color: var(--border); }
-  .sidebar-item { background: #32303c; }
-  .ins-form { background: #32303c; }
-  .ins-dropzone.filled { background: #32303c; }
-  .ins-row { border-bottom-color: var(--border); }
-  .ins-colhead { background: var(--primary-faint); border-bottom-color: var(--border); }
-  .ins-row-name, .ins-total, .ins-subtotal, .ins-val-static { color: #c8ccd8; }
-  .ins-val { background: #28262e; color: #eeebf5; }
-  .gate-card { background: #32303c; border-color: var(--border); color: #c8ccd8; }
-  .gate-armed p { color: #c8ccd8; }
-  .totals-card { background: #32303c; border-color: var(--border); }
-  .totals-row { color: #c8ccd8; }
-}
 
 /* ===================================================================
    PREWORK — HEADER REDESIGN + REFINEMENTS (per design review)
@@ -2423,11 +1855,6 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .transcript-toggle.open .licon { transform: rotate(90deg); }
 .roadmap-toggle.open .licon { transform: rotate(180deg); }
 
-@media (prefers-color-scheme: dark) {
-  .tut-header-sub { color: #b0aec0; }
-  .dev-bar-btn { background: #32303c; color: #b0aec0; }
-  .icon-btn:hover { background: #243049; border-color: var(--border-strong); }
-}
 
 /* ----- Clickable affordance: every interactive element gets a pointer ----- */
 button:not(:disabled),
@@ -2634,113 +2061,11 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .card-result-line.total { border-top: 2px solid var(--border-strong); margin-top: 6px; padding-top: 8px; font-weight: 700; color: var(--primary); }
 .card-result-note { font-size: var(--font-xs); font-style: italic; color: #888; margin-top: 8px; }
 
-@media (prefers-color-scheme: dark) {
-  .sortprog { background: #32303c; border-color: var(--border); }
-  .sortprog-box { border-color: var(--border); }
-  .sortprog-box.personal { background: #2a2830; }
-  .txcard { background: #32303c; border-color: var(--border); }
-  .dep-chip { background: #32303c; }
-  .dep-card { background: #32303c; border-color: var(--border); }
-  .dep-receipt { background: #2a2614; }
-  .dep-choice { background: #32303c; border-color: var(--border); color: #c8ccd8; }
-  .tp-card { background: #32303c; }
-  .promises-born { background: #32303c; }
-  .promises-born-head { background: #28262e; color: #c8ccd8; }
-  .promises-line { color: #c8ccd8; }
-  .card-result { background: #32303c; }
-  .card-result-line { color: #c8ccd8; }
-  .reveal-doc-btn { background: #32303c; }
-}
 
 /* ===================================================================
    PREWORK — DARK MODE for spreadsheets & document facsimiles
    (these surfaces were left light by default; in dark mode they go dark)
    =================================================================== */
-@media (prefers-color-scheme: dark) {
-  /* Narrative block — blue tone in dark mode (override reference amber) */
-  .narrative-block { background: var(--primary-faint); border-left-color: var(--primary); color: #c8ccd8; }
-  .narrative-block strong { color: var(--primary); }
-
-  /* Bullet / discover lists */
-  .bullet-list li { color: #d0cede; }
-
-  /* Coming-next preview card */
-  .next-card { border-color: #2a4a70; }
-  .next-card p { color: #b0aec0; }
-
-  /* Two-places beat text */
-  .tp-card-text { color: #c8ccd8; }
-  .tp-card.owe .tp-card-label { color: #c8ccd8; }
-
-  /* xlsx Things tab (1.1 / 1.2) */
-  .xlsx { border-color: var(--border); box-shadow: none; }
-  .xlsx-titlebar { background: #28262e; color: #c8ccd8; border-bottom-color: var(--border); }
-  .xlsx-titlebar-hint { color: #8a8898; }
-  .xlsx-grid { background: #32303c; }
-  .xlsx-colhead { background: #3a3848; color: #c8ccd8; border-bottom-color: #2a2830; }
-  .xlsx-corner { background: #3a3848; border-color: #2a2830; }
-  .xlsx-rownum { background: #3a3848; color: #8a8898; border-color: #2a2830; }
-  .xlsx-cell { color: #c8ccd8; border-bottom-color: #2a2830; }
-  .xlsx-cell.more { color: #8a8898; }
-  .xlsx-tabs { background: #28262e; border-top-color: var(--border); }
-  .xlsx-tab { background: #32303c; color: #6db890; border-top-color: #2a5c38; }
-  .xlsx-tab-add { color: #8a8898; }
-
-  /* Excel workbook (1.3) */
-  .xlwb { background: #32303c; border-color: var(--border); }
-  .xlwb-bar { background: #28262e; color: #c8ccd8; border-bottom-color: var(--border); }
-  .xlwb-bar-sheet { color: #8a8898; }
-  .xlwb-tabs { background: #28262e; border-top-color: var(--border); }
-  .xlwb-tab { color: #8a8898; }
-  .xlwb-tab.active { background: #32303c; color: #6db890; border-top-color: #2a5c38; }
-  .xl-gutter { background: #3a3848; border-right-color: #2a2830; }
-  .xl-head { background: #3a3848; color: #c8ccd8; border-bottom-color: #2a2830; }
-  .xl-c, .xl-v { color: #c8ccd8; }
-  .xl-rownum { background: #3a3848; color: #8a8898; border-right-color: #2a2830; }
-  .xl-cat { background: #233029; border-bottom-color: #2a2830; }
-  .xl-cat.new { background: #332b14; }
-  .xl-cat .xl-c, .xl-cat .xl-v { color: #6db890; }
-  .xl-cat.new .xl-c, .xl-cat.new .xl-v { color: var(--accent); }
-  .xl-toggle { background: #32303c; border-color: #6b7280; color: #c8ccd8; }
-  .xl-item { border-bottom-color: #2a2830; }
-  .xl-total { background: var(--primary-faint); border-top-color: #2a5c38; }
-  .xl-total .xl-c, .xl-total .xl-v { color: var(--primary); }
-  .cash-sheet-head { background: #28262e; border-bottom-color: var(--border); }
-  .cash-line { color: #c8ccd8; border-bottom-color: #2a2830; }
-  .cash-subtotal { color: #c8ccd8; border-top-color: var(--border-strong); }
-  .cash-net { background: var(--primary-faint); }
-  .cash-net-val { color: #c8ccd8; }
-
-  /* Bank / card statement */
-  .stmt { background: #32303c; border-color: var(--border); }
-  .stmt-bank { color: var(--primary); }
-  .stmt-acct, .stmt-period-label { color: #8a8898; }
-  .stmt-period { color: #c8ccd8; }
-  .stmt-balrow { background: var(--primary-faint); border-bottom-color: var(--border); color: #c8ccd8; }
-  .stmt-colhead { color: #8a8898; border-bottom-color: var(--border); }
-  .stmt-row { color: #c8ccd8; border-bottom-color: #2a2830; }
-  .stmt-row.alt { background: #2c2a34; }
-  .stmt-stripe.personal { background: #6b7280; }
-  .stmt-expand { background: #2c2a34; border-bottom-color: #2a2830; }
-  .stmt-expand-info { color: #b0aec0; }
-  .stmt-tag.personal { background: #3a3848; color: #c8ccd8; border-color: #6b7280; }
-  .classify-btn { background: #32303c; color: #c8ccd8; border-color: var(--border-strong); }
-  .classify-btn.active-personal { background: #6b7280; border-color: #6b7280; color: #fff; }
-
-  /* Deposit receipt facsimile */
-  .dep-receipt-table td { color: #c8ccd8; border-bottom-color: var(--border); }
-  .dep-receipt-note, .dep-receipt-meta, .dep-receipt-label { color: #8a8898; }
-
-  /* Lease facsimile */
-  .lease { background: #32303c; border-color: var(--border); }
-  .lease-head { background: #28262e; border-bottom-color: var(--border-strong); }
-  .lease-name { color: #eeebf5; }
-  .lease-sub, .lease-dated-label, .lease-note, .lease-line-note { color: #8a8898; }
-  .lease-dated { color: #c8ccd8; }
-  .lease-terms { color: #c8ccd8; border-bottom-color: var(--border); }
-  .lease-table th { color: #8a8898; border-bottom-color: var(--border); }
-  .lease-table td { color: #c8ccd8; }
-}
 
 /* Reasons sheet — three-column row layout (account | Δ | reason) */
 .xl-row.xl-reasons { grid-template-columns: 22px 1fr 1fr 2fr; }
@@ -2753,10 +2078,6 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .xl-item.eliminated .xl-c { text-decoration: line-through; }
 .xl-item.eliminated .xl-v { text-decoration: line-through; }
 
-@media (prefers-color-scheme: dark) {
-  .xl-item.selected { background: var(--primary-faint); outline-color: var(--accent); }
-  .xl-item.pair-selected { background: #1e3a5f; }
-}
 
 /* ===================================================================
    PREWORK — SEGMENTED PHASE PROGRESS BAR
@@ -2839,19 +2160,7 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 }
 .next-phase-msg strong { color: var(--primary); font-weight: 700; }
 
-@media (prefers-color-scheme: dark) {
-  .next-phase-msg { background: var(--primary-faint); border-color: var(--border); color: #c8ccd8; }
-}
 
-@media (prefers-color-scheme: dark) {
-  .seg-step-num { color: #4a4858; }
-  .seg-step-bar { background: #3a3848; }
-  .seg-step.done .seg-step-num { color: var(--primary); }
-  .seg-step.done .seg-step-bar { background: var(--primary); }
-  .seg-step.done:hover .seg-step-bar { background: var(--primary-light); }
-  .seg-step.active .seg-step-num { color: var(--accent); }
-  .seg-step.active .seg-step-bar { background: var(--accent); }
-}
 
 /* ===== CALC INPUT — numeric/dollar entry field (e.g. compute-the-net) ===== */
 .calc-input {
@@ -2868,10 +2177,6 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 }
 .calc-input:focus { outline: none; border-color: var(--primary); }
 .calc-input:disabled { opacity: 0.6; cursor: default; }
-@media (prefers-color-scheme: dark) {
-  .calc-input { background: #28262e; border-color: var(--border-strong); color: #eeebf5; }
-  .calc-input:focus { border-color: var(--primary); }
-}
 
 /* ----- Sort-progress hint + pulse + title-row (13 / Module-3 activity; unused here, kept to match main) ----- */
 .sortprog-hint { font-size: var(--font-s); color: #666; line-height: 1.55; margin-top: 10px; }
@@ -2883,9 +2188,6 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .hint-pulse::after { content: ''; position: absolute; width: 34px; height: 34px; top: 50%; left: 50%; border-radius: 50%; border: 2px solid var(--primary); animation: hint-pulse-ring 1.2s ease-out infinite; pointer-events: none; }
 @keyframes hint-pulse-ring { 0% { transform: translate(-50%, -50%) scale(0.9); opacity: 1; } 100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; } }
 
-@media (prefers-color-scheme: dark) {
-  .sortprog-hint { color: #8a8898; }
-}
 
 /* ----- Hover/focus info tooltip + 2-col location grid (Sarah / Module-1 sort activity; kept for the cross-branch union) ----- */
 .loc-cols { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8px; align-items: start; }
@@ -2907,9 +2209,6 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 }
 
 /* dark-mode title color — placed after all three (.glossary-module, .complete-title, .phase-title) definitions so it wins the cascade */
-@media (prefers-color-scheme: dark) {
-  .phase-title, .complete-title, .glossary-module { color: #f4f4f5; }
-}
 
 /* ===== Segmented step progress (approved 2026-07-10) =====
    One pill per step of an in-page walk; .done pills are filled.
@@ -2917,10 +2216,6 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .progress-segs { display: flex; gap: 10px; margin-bottom: 8px; }
 .progress-seg { flex: 1; height: 9px; background: var(--border-strong); border-radius: 5px; transition: background 0.3s ease; }
 .progress-seg.done { background: var(--primary); }
-@media (prefers-color-scheme: dark) {
-  .progress-seg { background: #4a4858; }
-  .progress-seg.done { background: var(--primary); }
-}
 
 /* Four-box variant of the sort-progress grid (three piles + unsorted; 34-2) */
 .sortprog-grid.four { grid-template-columns: repeat(4, 1fr); }
@@ -2931,17 +2226,10 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 /* "TO SORT" header row in the sorting sheets — yellow, a task still to do */
 .xl-row.xl-todo { background: var(--warn-bg); }
 .xl-row.xl-todo .xl-c { color: var(--warn-text); }
-@media (prefers-color-scheme: dark) {
-  .xl-row.xl-todo { background: rgba(202, 138, 4, 0.18); }
-  .xl-row.xl-todo .xl-c { color: #eab308; }
-}
 
 /* Statement-style sort documents (12-2, 32-2, 34-2, 14-4 — same look as 13-2) */
 .stmt-grid-sort { grid-template-columns: 26px 3px 1fr 90px; }
 .stmt-balrow.stmt-todo { background: var(--warn-bg); color: var(--warn-text); border-bottom: 1px solid var(--warn-border); }
-@media (prefers-color-scheme: dark) {
-  .stmt-balrow.stmt-todo { background: rgba(202, 138, 4, 0.18); color: #eab308; border-bottom-color: rgba(202,138,4,0.4); }
-}
 
 /* ===== Course banner + page footer (final.html navigation, added 2026-07-14) ===== */
 .course-banner { position: sticky; top: 0; z-index: 500; display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: #f7f9fc; border-bottom: 1px solid var(--border-strong); font-family: Inter, sans-serif; }
@@ -2958,20 +2246,16 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 .course-index-menu a.cur { background: var(--primary-faint); color: var(--primary); font-weight: 600; }
 .course-page-footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 500; display: flex; align-items: center; gap: 10px; padding: 8px 14px; background: #f7f9fc; border-top: 1px solid var(--border-strong); font-family: Inter, sans-serif; }
 body.has-course-footer { padding-bottom: 62px; }
-@media (prefers-color-scheme: dark) {
-  .course-banner { background: #26242e; }
-  .course-page-footer { background: #26242e; }
-  .course-index-menu { background: #32303c; }
-  .course-index-menu .gh { color: var(--primary-light); }
-  .course-index-menu .mh { color: #7ea6d8; }
-  .course-index-menu a { color: #c8ccd8; }
-  .course-index-menu a:hover, .course-index-menu a.cur { background: rgba(59,102,163,0.25); }
-}
 
 /* Selected (being-walked) row in the statement-style walk sheets (14-2) */
 .stmt-row.selected { background: var(--primary-faint); }
-@media (prefers-color-scheme: dark) { .stmt-row.selected { background: rgba(59,102,163,0.25); } }
 
 /* Horizontal breathing room on every tutorial page (append-override, 2026-07-14):
    a centered, width-capped content column with generous side margins. */
 .prework-wrap { max-width: 1060px; margin: 0 auto; padding-left: clamp(24px, 6vw, 80px); padding-right: clamp(24px, 6vw, 80px); }
+
+/* Glossary card search (added 2026-07-15) */
+.glossary-search { width: 100%; box-sizing: border-box; margin-bottom: 12px; padding: 9px 12px;
+  font-family: Inter, sans-serif; font-size: var(--font-s); color: #374151;
+  background: white; border: 1.5px solid var(--border-strong); border-radius: 8px; }
+.glossary-search:focus { outline: none; border-color: var(--primary); }
