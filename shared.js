@@ -1280,11 +1280,11 @@ function initCourseChrome(){
   }
   if (file === tut.pages[tut.pages.length-1].f) courseMarkTutDone(tut.id);    /* reaching the last page completes the tutorial */
 
-  /* --- page title at the top: fill the page's .phase-title if it is empty --- */
-  var pageObj = null;
-  tut.pages.forEach(function(p){ if(p.f===file) pageObj = p; });
+  /* --- page title at the top: numbered within its tutorial (1. Getting Started) --- */
+  var pageObj = null, pageNum = 0;
+  tut.pages.forEach(function(p, i){ if(p.f===file){ pageObj = p; pageNum = i+1; } });
   var pt = document.querySelector('.phase-title');
-  if (pt && pageObj && !pt.textContent.trim()) pt.innerHTML = pageObj.t;
+  if (pt && pageObj) pt.innerHTML = pageNum+'. '+pageObj.t;
 
   /* --- top banner: the index dropdown alone, on the left --- */
   var menuHtml = '', lastMod = '';
@@ -1292,14 +1292,14 @@ function initCourseChrome(){
     var mod = t.module;
     if (mod !== lastMod){ menuHtml += '<div class="gh">'+mod+'</div>'; lastMod = mod; }
     menuHtml += '<div class="mh">'+t.num+': '+t.name+'</div>';
-    t.pages.forEach(function(p){
-      menuHtml += '<a href="'+p.f+'"'+(p.f===file?' class="cur"':'')+'>'+p.t+coursePageCheck(p.f)+'</a>';
+    t.pages.forEach(function(p, i){
+      menuHtml += '<a href="'+p.f+'"'+(p.f===file?' class="cur"':'')+'>'+(i+1)+'. '+p.t+coursePageCheck(p.f)+'</a>';
     });
   });
   var bar = document.createElement('div');
   bar.className = 'course-banner';
   bar.innerHTML =
-    '<div class="course-banner-mid"><button class="btn-reset course-banner-btn" id="courseIndexBtn">'+(pageObj ? pageObj.t : tut.title)+' &#9662;</button>'+
+    '<div class="course-banner-mid"><button class="btn-reset course-banner-btn" id="courseIndexBtn">'+(pageObj ? pageNum+'. '+pageObj.t : tut.title)+' &#9662;</button>'+
       '<div class="course-index-menu" id="courseIndexMenu" hidden>'+menuHtml+'</div></div>'+
     (document.getElementById('glossaryOverlay') ? '<button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="if(window.openGlossary) openGlossary()"><i data-lucide="book-open"></i></button>' : '');
   document.body.insertBefore(bar, document.body.firstChild);
