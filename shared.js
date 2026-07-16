@@ -1343,30 +1343,17 @@ else initCourseChrome();
  * so every page shows the same full glossary.
  * ========================================================================== */
 var COURSE_GLOSSARY = [
-  { module:'Module 1 · The Journey', tutorial:'Tutorial 2 · Insurance and Maria', terms:[
-    { term:'Property Policy', def:'Insurance that pays out if covered things are damaged or destroyed. Doesn&rsquo;t cover cash, or things you don&rsquo;t own (like the rented space).' },
-    { term:'Market Value', def:'What it would fetch &mdash; what a comparable one sells for today (e.g. recent used &ldquo;eBay comp&rdquo; prices); the basis used to value the pre-owned laptop. One way to arrive at an asset&rsquo;s value &mdash; a choice, not the only one.' },
-  ] },
-  { module:'Module 1 · The Journey', tutorial:'Tutorial 3 · Anna and the Bank Statement', terms:[
-    { term:'Asset', def:'A present right to an economic benefit, recorded on the repair-work side of the line (the gear, the parts, the prepaid month, cash). &ldquo;Right to,&rdquo; not &ldquo;owns&rdquo;: a leased item is an asset.' },
+  { module:'Module 1 · The Journey', tutorial:'', terms:[
+    { term:'Entity', def:'A perspective you adopt by deciding what counts as &ldquo;in&rdquo; (your repair work) vs. &ldquo;out&rdquo; (your personal life), for a purpose. The line is drawn, not found. (Named in 1.5; the formal/legal entity is Module 2.)' },
+    { term:'Asset', def:'Something you HAVE &mdash; a present right to an economic benefit (the gear, the parts, the prepaid month, cash). &ldquo;Right to,&rdquo; not &ldquo;owns&rdquo;: a leased item is an asset. (The word &ldquo;Asset&rdquo; arrives in 1.3; at 1.2 you work with &ldquo;insurable property.&rdquo;)' },
     { term:'Noncash Asset', def:'An asset that isn&rsquo;t cash: equipment, parts on the shelf, fixtures, or a future right like prepaid rent.' },
-    { term:'Liability', def:'A present obligation to transfer an economic benefit later, recorded against the repair work (the card balance; Smith&rsquo;s deposit, where what&rsquo;s owed is the frame, not money).' },
     { term:'Prepaid Rent', def:'Rent already paid for a future month; a present right (an asset) until the month is used, then it becomes a cost.' },
-    { term:'Promise', def:'Something still to be done or paid because of the repair work &mdash; a promise made in the course of it. The plain word used before the term &ldquo;Liability.&rdquo;' },
-    { term:'Deposit', def:'Money paid in advance for something not yet received. For the receiver it&rsquo;s a liability &mdash; the goods, the work, or the money back is still owed &mdash; not earnings yet.' },
-  ] },
-  { module:'Module 1 · The Journey', tutorial:'Tutorial 4 · Keeping the Reasons', terms:[
-    { term:'Reason', def:'The why you write down for a change in an Asset or a Liability that has <em>no match</em> &mdash; nothing else moved with it. The reasons are the changes that move the difference between Assets and Liabilities.' },
-    { term:'Match', def:'The other line that moved with a change &mdash; same transaction, same amount: an Asset with a Liability, or one Asset with another. A matched pair explains itself, and the difference between Assets and Liabilities does not move. Every change gets either a match or a reason.' },
-    { term:'Receipt', def:'The evidence for a purchase &mdash; vendor, date, amount, and how it was paid. The clue for each reason.' },
-    { term:'Brought from home', def:'Gear you already owned and moved into the repair work &mdash; no purchase, valued by what a comparable one sells for.' },
-    { term:'Contributed', def:'Resources put into the repair work from outside it (the cash you covered, the laptop and gear from home).' },
-    { term:'Generated', def:'What the repair work produced, net of its costs (from running the repair work).' },
+    { term:'Liability', def:'Something you OWE &mdash; a present obligation to transfer an economic benefit later (the card balance; Smith&rsquo;s deposit, where what&rsquo;s owed is the work, not money).' },
+    { term:'Accounting Identity', def:'Assets &minus; Liabilities &mdash; a difference fully determined by the two lists. An identity, not an equation; it holds by definition for every entity.' },
+    { term:'Contributed', def:'Resources that came into the entity from outside its own repair work (owner cash, equipment, items from home). Formal name later: Contributed Capital.' },
+    { term:'Generated', def:'What the repair work produced, net of its costs (&ldquo;from running the repair work&rdquo;). Formal name later: Retained Earnings.' },
     { term:'Cost of Repairs Done', def:'The value of parts/resources consumed in finished customer jobs; a reason that makes parts-on-the-shelf go down.' },
-  ] },
-  { module:'Module 1 · The Journey', tutorial:'Tutorial 5 · Naming What You Built', terms:[
-    { term:'Entity', def:'A perspective you adopt by deciding what counts as &ldquo;in&rdquo; (your repair work) vs. &ldquo;out&rdquo; (your personal life), for a purpose. The line is drawn, not found.' },
-    { term:'Accounting Identity', def:'Assets &minus; Liabilities. The difference is fully determined once Assets and Liabilities are set; it has no single name &mdash; each kind of entity gives it its own, and even those names have shifted over time. An identity, not an equation; it holds by definition for every entity.' },
+    { term:'Market Value (what it would fetch)', def:'What a comparable one sells for today (e.g. recent used &ldquo;eBay comp&rdquo; prices); the basis used to value the pre-owned laptop. One way to arrive at an asset&rsquo;s value &mdash; a choice, not the only one.' },
   ] },
   { module:'Module 2 · Getting Formal', tutorial:'Tutorial 1 · The Two Yous', terms:[
     { term:"Liability (legal)", def:"Being legally responsible for harm. Here it means a claim that can reach your personal savings, car, and earnings &mdash; not just the tools and parts in the repair work." },
