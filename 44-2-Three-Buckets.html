@@ -4,58 +4,64 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 4: The Cash-Flow Statement &middot; Three Buckets</title>
+  <title>Sort the Cash Flows</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    .page-nav { margin-top:14px; }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+  </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
-
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 4: The Cash-Flow Statement</h1>
-        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~10 min &middot; Page 2 of 3</p>
+        <h1>Sort the Cash Flows</h1>
+        <p class="tut-header-sub">The Angel Investor &middot; ~10 min &middot; Page 2 of 3</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">Three Buckets</div>
+    <div class="phase-title" id="phaseTitle">Sort the Cash Flows</div>
 
     <div class="narrative-block">
-      <p>Every dollar that moved through Cash this <strong>season</strong> is a fact &mdash; they&rsquo;re all there in the Cash line on the <strong>Assets</strong> tab, laid out in the order they moved. The June 1 opening deposit isn&rsquo;t one of them; that happened before the season started. Anna names the three activity kinds right here, before you touch a thing &mdash; then you pick a row&rsquo;s kind and sort. Freddie&rsquo;s standing question &mdash; <em>where did the cash go?</em> &mdash; gets its answer in three piles.</p>
+      <p>Start with a working copy of the Cash account&rsquo;s season rows while the original rows remain on <strong>Assets</strong>. The completed work will become the <strong>Cash Flow Statement</strong> on the next page.</p>
     </div>
-
     <div id="annaIntro"></div>
 
-    <div id="wb"></div>
-
-    <div id="copyBtnWrap">
-      <button class="btn-continue btn-block" onclick="copyToWorkSheet()">Copy a working set of the season&rsquo;s cash rows &rarr;</button>
-    </div>
-
-    <div id="workWrap" hidden>
-      <div class="tagger">
-        <div class="cash-sheet-head">
-          <div class="cash-sheet-title">Cash-Flow working sheet &middot; Summer 2026</div>
-          <div class="cash-sheet-sub">pick each row&rsquo;s kind, then sort &mdash; the card payoff is the one to think about</div>
-        </div>
-        <div id="workSheet"></div>
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet">Assets &middot; Cash working view</div>
+      </div>
+      <div class="wb-grid-wrap"><div id="statementBuild"></div></div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab active" type="button" aria-current="page">Assets</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Reasons</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Income Statement</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Member&rsquo;s Capital</button>
       </div>
     </div>
 
+    <div id="sortWrap" hidden>
+      <div id="sorterPanel"></div>
+      <div id="sorterGrid"></div>
+    </div>
     <div id="missFeedback"></div>
     <div id="gate"></div>
     <div id="anna"></div>
     <div id="controls"></div>
-
+    <div class="btn-row page-nav"><button class="btn btn-secondary" type="button" onclick="nav('44-1-The-Cash-Puzzle.html')">&larr; Profit and Cash</button></div>
   </div>
 </div>
 
-<!-- ===== Glossary overlay ===== -->
 <div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
   <div class="glossary-panel">
     <div class="glossary-panel-head">
@@ -70,11 +76,11 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
-if (window.lucide) lucide.createIcons();
+if(window.lucide) lucide.createIcons();
 
-/* ===== sound ===== */
 var audioCtx=null;
 function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
 function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
@@ -82,171 +88,130 @@ function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},9
 function playSoftNope(){ tone(360,0.10,'sine',0.04); setTimeout(function(){tone(280,0.10,'sine',0.04);},110); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-/* ===== the season's cash rows, built from the job + parts records =====
-   every dollar that moved through Cash this season; the June 1 opening
-   deposit predates the season, so it isn't here. The card payoff is
-   Financing (2026-07-13 GAAP reclass): it settles the carried-in card
-   balance — a liability repaid — not the tools and parts the card once bought. */
-var monthName = { Jun:'June', Jul:'July', Aug:'August' };
-var allRows = [];
-BR_JOBS.filter(function(j){ return j.collected && j.pay.indexOf('Deposit')<0; }).forEach(function(j){
-  allRows.push({ label:'Repair collected &mdash; ' + j.customer, amt:j.charge, cat:'op' });
-});
-BR_PURCHASES.forEach(function(p){
-  allRows.push({ label:'Parts bought &mdash; ' + monthName[p.date.slice(0,3)], amt:-p.total, cat:'op' });
-});
-['June','July','August'].forEach(function(m){
-  allRows.push({ label:'Rent paid &mdash; ' + m, amt:-650, cat:'op' });
-});
-allRows.push({ label:'New repair tool &mdash; bought mid-season', amt:-400, cat:'inv' });
-allRows.push({ label:'Credit card paid off &mdash; settling the carried-in card balance in full', amt:-2030, cat:'fin', discovery:true });
-allRows.push({ label:'Owner&rsquo;s draw &mdash; money taken out for personal use', amt:-600, cat:'fin' });
-allRows.forEach(function(r,i){ r.id='r'+i; });
-
-/* the representative subset for the sort: several collected repairs, one parts
-   purchase, one rent, the new tool, the card payoff, and the draw. */
-var subsetIds = ['r2','r5','r10','r16','r19','r22','r25','r26','r27'];
-function findR(id){ for(var i=0;i<allRows.length;i++) if(allRows[i].id===id) return allRows[i]; return null; }
-var subset = subsetIds.map(findR);
-
-var taggerCats = [
-  { key:'op',  label:'Operating' },
-  { key:'inv', label:'Investing' },
-  { key:'fin', label:'Financing' }
-];
-
-/* ===== workbook facsimile — the Aug-31 snapshot, opened on the Assets tab ===== */
-var snap = BR_WB.snapshot({ withReceivable:true, withDepreciation:true });
-snap.tabs.push(BR_WB.balanceTab(['jun1','aug31']));
-BR_WB.tagTabKinds(snap);
-BRW.mount('wb', snap);
-BRW.tab('wb', 'assets');
-
-/* ===== Anna's naming dialog (the three kinds, named up front) ===== */
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
-document.getElementById('annaIntro').innerHTML = annaBox(
-  'Freddie asked where the cash went. Here is how these books answer &mdash; every cash move this season is one of three kinds, and here are their names. ' +
-  '<strong>OPERATING</strong> &mdash; running the season, day to day: repairs collected, parts bought, rent paid. ' +
-  '<strong>INVESTING</strong> &mdash; buying (or selling) long-lived gear, things the shop will use for more than one season. ' +
-  '<strong>FINANCING</strong> &mdash; money moved between the shop and the people who fund it: borrowings taken or repaid, owner money in or out. ' +
-  'Copy a working set of the season&rsquo;s cash rows and sort them by those three names. The card payoff is the one to think about.'
-);
-if (window.lucide) lucide.createIcons();
+function sheetOf(workbookKey,namePart){
+  var sheets=BR_STMT_DATA.workbooks[workbookKey].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name.indexOf(namePart)>=0) return sheets[i];
+  return null;
+}
+function rowsByLabel(sheet,pattern){
+  var rows=[];
+  (sheet.cells||[]).forEach(function(cell){ if(cell.c===2&&pattern.test(String(cell.value||''))) rows.push(cell.r); });
+  return rows;
+}
+function rowByExactLabel(sheet,label){
+  var rows=rowsByLabel(sheet,new RegExp('^'+label.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'$'));
+  return rows.length?rows[0]:null;
+}
+function filteredPickSheet(sheet){
+  var headerRows={};
+  (sheet.cells||[]).forEach(function(cell){
+    if(cell.c===3&&/^(Activity|Category)$/i.test(String(cell.value||'').trim())) headerRows[cell.r]=true;
+  });
+  var copy={};
+  Object.keys(sheet).forEach(function(key){ copy[key]=sheet[key]; });
+  copy.cells=(sheet.cells||[]).filter(function(cell){ return !headerRows[cell.r]; });
+  return copy;
+}
+function setAdvanceLabel(label){
+  var button=document.querySelector('#statementBuild .brw-step-advance');
+  if(button) button.innerHTML=label;
+  return button;
+}
 
-/* ===== the working sheet: BRW.tagger on the subset, with onMiss wired ===== */
-function copyToWorkSheet(){
-  playClick();
-  document.getElementById('copyBtnWrap').style.display = 'none';
-  var wrap = document.getElementById('workWrap');
-  wrap.hidden = false;
-  BRW.tagger('workSheet', {
-    rows: subset,
-    categories: taggerCats,
-    sortLabel: 'Sort these rows &rarr;',
-    onMiss: function(wrongRows){
-      playSoftNope();
-      var hit = wrongRows.some(function(r){ return r.discovery; });
-      var fb = document.getElementById('missFeedback');
-      if (hit){
-        fb.innerHTML = annaBox(
-          'Look at what that payment actually <strong>settled</strong> &mdash; not what the card once bought. ' +
-          'The $2,030 paid off the <strong>card balance</strong>, a <strong>liability</strong> carried in from before the season. ' +
-          'Classification follows the <strong>liability settled</strong>, not the purchase: repaying a borrowing is <strong>FINANCING</strong>, ' +
-          'even though the card once bought tools and parts. Tag it Financing and sort again.'
-        );
-      } else {
-        fb.innerHTML = annaBox('Not quite &mdash; re-read the row and match it to the kind that fits. Repairs collected, parts bought, and rent are <strong>Operating</strong>; long-lived gear is <strong>Investing</strong>; a borrowing repaid or an owner&rsquo;s move is <strong>Financing</strong>.');
-      }
-      if (window.lucide) lucide.createIcons();
-      fb.scrollIntoView({ behavior:'smooth', block:'center' });
-    },
-    onSorted: function(){
-      playSuccess();
-      document.getElementById('missFeedback').innerHTML = '';
-      document.getElementById('gate').innerHTML =
-        '<div class="gate-card gate-armed-maria"><div class="gate-card-title">That&rsquo;s the pattern &mdash; every row sorts by activity kind. Now lay out the whole season the same way.</div>' +
-        '<button class="btn-continue btn-block" onclick="revealFull()">Sort the rest &rarr;</button></div>';
-      if (window.lucide) lucide.createIcons();
-      document.getElementById('gate').scrollIntoView({ behavior:'smooth', block:'center' });
+document.getElementById('annaIntro').innerHTML=annaBox('Just as the Income Statement began by copying <strong>GENERATED&rsquo;s season rows</strong>, this working view begins by copying the <strong>Cash account&rsquo;s season rows</strong> &mdash; the rows between <strong>Balance, June 1</strong> and <strong>Balance, August 31</strong>.');
+
+var sortComplete=false;
+var cashFlowTitleRows=rowsByLabel(sheetOf('cash-flow-steps','0 '),/^Cash Flow Statement$/i);
+var buildOptions={
+  startAt:0,
+  stopAt:2,
+  gridOpts:{gridId:'cash-flow-build-grid',hiddenRows:cashFlowTitleRows},
+  gateAdvance:function(order){ return order!==1||sortComplete; },
+  onStep:function(order){
+    document.getElementById('missFeedback').innerHTML='';
+    document.getElementById('gate').innerHTML='';
+    document.getElementById('anna').innerHTML='';
+    document.getElementById('controls').innerHTML='';
+    var wrap=document.getElementById('sortWrap');
+    if(order===1){
+      sortComplete=false;
+      wrap.hidden=false;
+      var buildGrid=document.querySelector('#statementBuild .brw-grid');
+      if(buildGrid) buildGrid.style.display='none';
+      var advance=setAdvanceLabel('Show the sorted view &rarr;');
+      if(advance) advance.disabled=true;
+      var pick=filteredPickSheet(sheetOf('cash-flow-steps','1 '));
+      var card=rowByExactLabel(pick,'Credit card paid off');
+      var draw=rowByExactLabel(pick,'Money taken out for personal use');
+      BRW.mountSorter('sorterPanel','sorterGrid',pick,{
+        gridId:'cash-flow-sorter-grid',
+        instruction:'Sort each featured cash row by activity. The chip counts the rows that will follow the same pattern.',
+        showRows:[
+          rowByExactLabel(pick,'Repair collected — Dana R.'),
+          rowByExactLabel(pick,'Parts bought — June'),
+          rowByExactLabel(pick,'Rent paid — June'),
+          rowByExactLabel(pick,'New repair tool'),
+          card,
+          draw
+        ],
+        diagnosticRows:[card,draw],
+        minPerCategory:1,
+        onWrong:function(row){
+          var message=(row===card)
+            ? 'The $2,030 card payoff settled a liability. Repaying that borrowing is <strong>Financing</strong>.'
+            : (row===draw)
+              ? 'The $600 owner&rsquo;s draw moves cash between the shop and its owner, so it is <strong>Financing</strong>.'
+              : 'Repairs collected, parts bought, and rent paid are <strong>Operating</strong>. The tools purchase is <strong>Investing</strong>.';
+          document.getElementById('missFeedback').innerHTML=annaBox(message);
+        },
+        onComplete:function(){
+          sortComplete=true;
+          var next=setAdvanceLabel('Show the sorted view &rarr;');
+          if(next) next.disabled=false;
+          document.getElementById('gate').innerHTML='<div class="gate-card gate-armed-maria"><div class="gate-card-title">Every cash row is sorted by activity. Continue to read the three totals.</div></div>';
+          if(window.lucide) lucide.createIcons();
+        }
+      });
+      wrap.scrollIntoView({behavior:'smooth',block:'start'});
+    } else if(order===2){
+      wrap.hidden=true;
+      renderSortedPayoff();
+      document.getElementById('anna').scrollIntoView({behavior:'smooth',block:'start'});
     }
-  });
-  wrap.scrollIntoView({ behavior:'smooth', block:'center' });
+    if(window.lucide) lucide.createIcons();
+  }
+};
+
+function renderSortedPayoff(){
+  document.getElementById('anna').innerHTML=annaBox('The sorted view answers Freddie&rsquo;s question. <strong>Operating $2,350</strong>; <strong>Investing ($400)</strong>; <strong>Financing ($2,630)</strong>. The $2,030 card payoff is Financing because it settled a liability, and the $600 owner&rsquo;s draw is Financing too.');
+  document.getElementById('controls').innerHTML=insightBox('The Cash decrease is fully explained','<p><strong>$2,350 &minus; $400 &minus; $2,630 = &minus;$680.</strong> Apply that change to Cash of $1,300 on June 1 and the result is $620 on August 31. Depreciation is not a cash flow.</p><p>One thread left: net income for the season was <strong>$2,640</strong>, but operating cash is <strong>$2,350</strong> &mdash; a <strong>$290</strong> gap. You&rsquo;ll walk that gap down to the dollar next.</p>')
+    +'<button class="btn-continue btn-block" onclick="nav(\'44-3-The-Cash-Flow-Statement.html\')">Lay out the statement &rarr;</button>';
 }
 
-/* ===== the FULL sorted view — every season cash row, in three bands ===== */
-function bandHTML(key, label){
-  var rows = allRows.filter(function(r){ return r.cat===key; });
-  var sub = rows.reduce(function(s,r){ return s+r.amt; }, 0);
-  var h = '<div class="tagger-band"><span>' + label + '</span></div>';
-  rows.forEach(function(r){
-    h += '<div class="tagger-row"><div class="tagger-label">' + r.label + '</div><div class="tagger-amt">' + BRW.signed(r.amt) + '</div><div></div></div>';
-  });
-  h += '<div class="tagger-subtotal"><div>' + label + ' subtotal</div><div class="tagger-amt">' + (sub<0 ? '('+BRW.dol(-sub)+')' : BRW.dol(sub)) + '</div><div></div></div>';
-  return h;
-}
-var OP_TOTAL = 2350, INV_TOTAL = -400, FIN_TOTAL = -2630, NET_CHANGE = -680;
-function revealFull(){
-  playClick();
-  document.getElementById('gate').innerHTML = '';
-  var h = '<div class="tagger">' +
-    '<div class="cash-sheet-head"><div class="cash-sheet-title">Cash-Flow working sheet &middot; Summer 2026</div>' +
-    '<div class="cash-sheet-sub">sorted &mdash; every season cash row, by the three names</div></div>' +
-    bandHTML('op', 'Operating') + bandHTML('inv', 'Investing') + bandHTML('fin', 'Financing') +
-    '<div class="tagger-subtotal"><div>Operating + Investing + Financing</div><div class="tagger-amt">' + (NET_CHANGE<0 ? '('+BRW.dol(-NET_CHANGE)+')' : BRW.dol(NET_CHANGE)) + '</div><div></div></div>' +
-    '</div>';
-  h += '<div class="next-phase-msg">The three bands sum to &minus;$680 &mdash; exactly the Cash line&rsquo;s fall, from $1,300 on June 1 to $620 on August 31. Every dollar sorted; nothing missing.</div>';
-  document.getElementById('controls').innerHTML = h;
-  renderPayoff();
-  if (window.lucide) lucide.createIcons();
-  document.getElementById('anna').scrollIntoView({ behavior:'smooth', block:'start' });
-}
-
-/* ===== Anna's payoff — three piles, each named, with the liability-settled rule ===== */
-function renderPayoff(){
-  document.getElementById('anna').innerHTML = annaBox(
-    'Three piles &mdash; and each one has a name in the house that keeps these kinds of books. ' +
-    'Running the season, day to day: <strong>OPERATING</strong>, net <strong>+' + BRW.dol(OP_TOTAL) + '</strong> &mdash; repairs collected $5,500, parts bought ($1,200), rent paid ($1,950). ' +
-    'Buying the long-lived tool: <strong>INVESTING</strong>, <strong>(' + BRW.dol(-INV_TOTAL) + ')</strong>. ' +
-    'The card payoff and the owner&rsquo;s move: <strong>FINANCING</strong>, <strong>(' + BRW.dol(-FIN_TOTAL) + ')</strong>. ' +
-    'And the one to remember: the $2,030 card payoff sits in Financing, not Operating, because the payment settled a <strong>liability</strong> &mdash; the card balance carried in from before the season. ' +
-    'Classification follows the liability settled, not what the card once bought. ' +
-    'Add the three: +' + BRW.dol(OP_TOTAL) + ' (' + BRW.dol(-INV_TOTAL) + ') (' + BRW.dol(-FIN_TOTAL) + ') = <strong>(' + BRW.dol(-NET_CHANGE) + ')</strong> &mdash; exactly the Cash line&rsquo;s fall, dollar for dollar.'
-  );
-  document.getElementById('controls').innerHTML +=
-    insightBox('A sort, not a move',
-      '<p>Flip to the <strong>Assets</strong> tab above &mdash; every cash row is still there, in the same Cash ledger the season built. The working sheet is a <strong>sort</strong> of those rows, not a move: the originals stay right where they were.</p>')
-    + '<div class="next-phase-msg">One thing still doesn&rsquo;t line up by itself: Net income was <strong>+$2,640</strong>, but the OPERATING pile nets only <strong>+$2,350</strong>. A $290 gap, and depreciation never touched Cash at all. That gap is the next page&rsquo;s job.</div>'
-    + "<button class=\"btn-continue btn-block\" onclick=\"nav('44-3-The-Cash-Flow-Statement.html')\">Lay the piles out as a statement &rarr;</button>";
-  if (window.lucide) lucide.createIcons();
-}
-
-/* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Operating', def:'Cash in and out from running the season day to day &mdash; repairs collected, parts bought, rent paid. Net +$2,350 this season.' },
-  { term:'Investing', def:'Cash spent on or received from long-lived gear the shop will use for more than one season &mdash; here, the new repair tool, &minus;$400.' },
-  { term:'Financing', def:'Cash moving between the shop and its owner or lenders &mdash; borrowings taken or repaid, owner money in or out. Classification follows the liability settled, not what the borrowing once bought: the card payoff repays a borrowing, so it is Financing (&minus;$2,030), even though the card once bought tools and parts. Net &minus;$2,630 this season.' }
+  {term:'Operating',def:'Cash collected and paid while running the shop: repairs collected, parts bought, and rent paid. Net cash from operating activities is $2,350.'},
+  {term:'Investing',def:'Cash used to buy tools and equipment. The new repair tool is a $400 investing outflow.'},
+  {term:'Financing',def:'Cash moving between the shop and its funders. The $2,030 card payoff settled a liability, and the $600 owner&rsquo;s draw moved cash to the owner. Net financing cash flow is negative $2,630.'}
 ];
-function openGlossary(){
-  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
-    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
-  }).join('');
-  document.getElementById('glossaryOverlay').classList.add('open');
-}
+function openGlossary(){ document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';}).join(''); document.getElementById('glossaryOverlay').classList.add('open'); }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
-document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+document.addEventListener('keydown',function(event){ if(event.key==='Escape')closeGlossary(); });
 
-/* ===== init / dev hook ===== */
-window.devFill = function(){
-  document.getElementById('copyBtnWrap').style.display = 'none';
-  document.getElementById('workWrap').hidden = true;
-  document.getElementById('missFeedback').innerHTML = '';
-  document.getElementById('gate').innerHTML = '';
-  revealFull();
+window.devFill=function(){
+  var advance=document.querySelector('#statementBuild .brw-step-advance');
+  if(advance) advance.click();
+  sortComplete=true;
+  advance=document.querySelector('#statementBuild .brw-step-advance');
+  if(advance){ advance.disabled=false; advance.click(); }
 };
+BR_WB.mountStatementBuild('statementBuild','cash-flow-steps',buildOptions);
+setAdvanceLabel('Pick the activities &rarr;');
+if(window.lucide) lucide.createIcons();
 </script>
-  <script src="dev.js"></script>
+<script src="dev.js"></script>
 </body>
 </html>

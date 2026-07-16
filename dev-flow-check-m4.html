@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DEV — Module 4 flow check</title>
+<style>
+  body { font-family: sans-serif; margin: 2rem; }
+  table { border-collapse: collapse; margin-top: 1rem; }
+  td, th { border: 1px solid #ccc; padding: 4px 10px; font-size: 14px; }
+  .pass { background: #e6f7e6; } .fail { background: #fde3e3; font-weight: bold; }
+  #frame { width: 1200px; height: 500px; border: 1px solid #ddd; margin-top: 1rem; }
+  #banner { font-size: 20px; font-weight: bold; margin-top: 1rem; }
+</style>
+</head>
+<body>
+<h1>Module 4 flow check (instructor-side)</h1>
+<p>Drives every page's activities via its own devFill and asserts the module's beats, the locked numbers, and the growing-workbook tab rule.</p>
+<div id="banner">running…</div>
+<table id="results"><tr><th>page</th><th>assert</th><th>result</th></tr></table>
+<iframe id="frame"></iframe>
+<script>
+function vis(d){ return d.body.innerText; }                      // rendered text only (no script source)
+function src(d){ return d.documentElement.outerHTML; }           // full source incl. scripts
+function tabs(d){ return Array.prototype.map.call(d.querySelectorAll('.xlwb-tab'), function(t){ return t.textContent.trim(); }).join(' | '); }
+function noPlural(d){ return !/Members[’']\s*Capital/.test(vis(d)); }
+function gridTexts(d){ return Array.prototype.map.call(d.querySelectorAll('.brw-grid'), function(g){ return g.textContent; }); }
+function someGrid(d, needle){ return gridTexts(d).some(function(t){ return t.indexOf(needle) >= 0; }); }
+
+var PLAN = [
+ {file:'41-1-The-Investor-Asks.html', asserts:[
+   ['no plural possessive rendered', noPlural],
+   ['August 31 Balance Sheet named', d=>vis(d).indexOf('August 31 Balance Sheet')>=0],
+   ['balance grid: Total Member’s Capital 4,500 (shim live)', d=>someGrid(d,'4,500')],
+   ['balance grid: Generated Aug-31 2,810 (not −30)', d=>someGrid(d,'2,810')],
+   ['no stale 1,660 anywhere', d=>vis(d).indexOf('1,660')<0],
+   ['income grid: ONE Depreciation line', d=>{ var n=0; gridTexts(d).forEach(function(t){ var m=t.match(/Depreciation/g); if(m && m.length>n) n=m.length; }); return n===1; }],
+   ['net income 2,640 rendered', d=>vis(d).indexOf('2,640')>=0],
+   ['never says Closing', d=>!/\bclosing\b/i.test(vis(d))],
+   ['links to 42-1', d=>src(d).indexOf('42-1-The-Missing-Wage.html')>=0]]},
+ {file:'42-1-The-Missing-Wage.html', asserts:[
+   ['owns the wages teaching (dual nature, compensate vs return)', d=>src(d).indexOf('compensate')>=0 && /dual/i.test(src(d))],
+   ['plain labor wording (no person-at-the-bench)', d=>src(d).indexOf('person at the bench')<0],
+   ['no plural possessive rendered', noPlural],
+   ['income grid mounted with one Depreciation 230 line', d=>someGrid(d,'Depreciation') && someGrid(d,'230')],
+   ['no stale $200 dep option', d=>vis(d).indexOf('$200')<0],
+   ['hunt payoff: no wage line on the statement', d=>/no wage (line|expense)/i.test(vis(d)) || /no wage (line|expense)/i.test(src(d))],
+   ['draw recast as record movement (WITHDRAWN), no possession framing', d=>vis(d).indexOf('WITHDRAWN')>=0 && vis(d).indexOf('what is already the owner')<0],
+   ['back to 41-1', d=>src(d).indexOf('41-1-The-Investor-Asks.html')>=0],
+   ['links to 43-1', d=>src(d).indexOf('43-1-The-Capital-Bridge.html')>=0]]},
+ {file:'43-1-The-Capital-Bridge.html', asserts:[
+   ['no plural possessive rendered', noPlural],
+   ['step strip carries Data copied in', d=>vis(d).indexOf('Data copied in')>=0],
+   ['final statement: GENERATED 2,810', d=>someGrid(d,'2,810')],
+   ['final statement: WITHDRAWN (600)', d=>someGrid(d,'(600)')],
+   ['gate: no live orphan input after solve', d=>{ var i=d.getElementById('gateInput'); return !i || i.disabled || i.offsetParent===null; }],
+   ['ending total 4,500 rendered', d=>vis(d).indexOf('4,500')>=0],
+   ['Member’s Capital tab present', d=>tabs(d).indexOf('Member’s Capital')>=0],
+   ['no draws (down) glossary leftover', d=>src(d).indexOf('draws (down)')<0],
+   ['back to 42-1', d=>src(d).indexOf('42-1-The-Missing-Wage.html')>=0],
+   ['links to 44-1', d=>src(d).indexOf('44-1-The-Cash-Puzzle.html')>=0]]},
+ {file:'44-1-The-Cash-Puzzle.html', asserts:[
+   ['no plural possessive rendered', noPlural],
+   ['grown strip: Member’s Capital persists', d=>tabs(d).indexOf('Member’s Capital')>=0],
+   ['grown strip: Income Statement present', d=>tabs(d).indexOf('Income')>=0],
+   ['Cash dated lines: 1,300 and 620', d=>someGrid(d,'1,300') && someGrid(d,'620')],
+   ['both-true payoff visible', d=>/profitable/i.test(vis(d))],
+   ['glossary voice fixed (no how-much-cash-do-we-have)', d=>src(d).indexOf('how much cash do we have')<0],
+   ['back to 43-1', d=>src(d).indexOf('43-1-The-Capital-Bridge.html')>=0],
+   ['links to 44-2', d=>src(d).indexOf('44-2-Three-Buckets.html')>=0]]},
+ {file:'44-2-Three-Buckets.html', asserts:[
+   ['no plural possessive rendered', noPlural],
+   ['sorted view: Operating 2,350', d=>someGrid(d,'2,350')],
+   ['sorted view: Financing ($2,630)', d=>someGrid(d,'($2,630)')],
+   ['sorted view: net change ($680)', d=>someGrid(d,'($680)')],
+   ['no Depreciation cash line in any grid', d=>{ var gs=d.querySelectorAll('.brw-grid'); if(!gs.length) return false; var bad=false; gs.forEach(function(g){ if(g.textContent.indexOf('Depreciation')>=0) bad=true; }); return !bad; }],
+   ['the 290 gap tee-up', d=>vis(d).indexOf('290')>=0],
+   ['grown strip: Member’s Capital persists', d=>tabs(d).indexOf('Member’s Capital')>=0],
+   ['no time-as-actor season-built slip', d=>src(d).indexOf('the season built')<0],
+   ['back to 44-1', d=>src(d).indexOf('44-1-The-Cash-Puzzle.html')>=0],
+   ['links to 44-3', d=>src(d).indexOf('44-3-The-Cash-Flow-Statement.html')>=0]]},
+ {file:'44-3-The-Cash-Flow-Statement.html', asserts:[
+   ['no plural possessive rendered', noPlural],
+   ['Cash Flow tab born and present', d=>tabs(d).indexOf('Cash Flow')>=0],
+   ['Member’s Capital tab persists', d=>tabs(d).indexOf('Member’s Capital')>=0],
+   ['statement: Operating 2,350', d=>someGrid(d,'2,350')],
+   ['statement: net change 680 (either format)', d=>someGrid(d,'($680)')||someGrid(d,'(680)')],
+   ['statement: Cash August 31 620', d=>someGrid(d,'620')],
+   ['back to 44-2', d=>src(d).indexOf('44-2-Three-Buckets.html')>=0],
+   ['links to 45-1', d=>src(d).indexOf('45-1-What-Cash-Missed.html')>=0]]},
+ {file:'45-1-What-Cash-Missed.html', asserts:[
+   ['no plural possessive rendered', noPlural],
+   ['reconciliation lands on 2,350', d=>vis(d).indexOf('2,350')>=0],
+   ['walk shows −300 and −220 and +230', d=>vis(d).indexOf('300')>=0 && vis(d).indexOf('220')>=0 && vis(d).indexOf('230')>=0],
+   ['no Expenses-tab reference', d=>!/expenses tab/i.test(src(d))],
+   ['itemization points at the ledger detail (160)', d=>src(d).indexOf('160')>=0],
+   ['no stale 200-tools-and-fixtures split', d=>!/tools and fixtures/i.test(src(d))],
+   ['no Module-2 fourth-wall break', d=>!/\bModule [123]\b/.test(src(d))],
+   ['back to 44-3', d=>src(d).indexOf('44-3-The-Cash-Flow-Statement.html')>=0],
+   ['links to 46-1', d=>src(d).indexOf('46-1-The-Statements-Tie-Out.html')>=0]]},
+ {file:'46-1-The-Statements-Tie-Out.html', asserts:[
+   ['no plural possessive rendered', noPlural],
+   ['all seven tabs present', d=>{ var t=tabs(d); return ['Assets','Liabilities','Reasons','Balance Sheet','Income','Member’s Capital','Cash Flow'].every(function(x){ return t.indexOf(x)>=0; }); }],
+   ['articulation payoff visible', d=>/articulation/i.test(vis(d))],
+   ['MC move numbers (2,040 / 2,810)', d=>vis(d).indexOf('2,040')>=0 && vis(d).indexOf('2,810')>=0],
+   ['back to 45-1', d=>src(d).indexOf('45-1-What-Cash-Missed.html')>=0],
+   ['links to 46-2', d=>src(d).indexOf('46-2-The-Statement-Map.html')>=0]]},
+ {file:'46-2-The-Statement-Map.html', asserts:[
+   ['no plural possessive rendered', noPlural],
+   ['map: cash-flow grid mounted (2,350)', d=>someGrid(d,'2,350')],
+   ['map: MC statement grid mounted (2,810)', d=>someGrid(d,'2,810')],
+   ['nested income grid open (2,640 + one Depreciation line)', d=>someGrid(d,'2,640')],
+   ['glossary sign fixed: no Ending $600', d=>src(d).indexOf('Ending $600')<0],
+   ['identity bars 2,460 / 4,500', d=>vis(d).indexOf('2,460')>=0 && vis(d).indexOf('4,500')>=0],
+   ['back to 46-1', d=>src(d).indexOf('46-1-The-Statements-Tie-Out.html')>=0],
+   ['links to 47-1', d=>src(d).indexOf('47-1-Freddies-Napkin.html')>=0]]},
+ {file:'47-1-Freddies-Napkin.html', asserts:[
+   ['no plural possessive rendered', noPlural],
+   ['wages callback only (the teaching lives on 42-1)', d=>src(d).indexOf('no wage line')>=0 && src(d).indexOf('With me in')>=0],
+   ['napkin explanations incl. Rent and Salary', d=>src(d).indexOf('Salary')>=0 && src(d).indexOf('Rent')>=0],
+   ['napkin bottom line 5,000', d=>vis(d).indexOf('5,000')>=0],
+   ['expectation-not-a-record guard rail', d=>/expectation, not a record/i.test(vis(d))],
+   ['links forward to 48-1 (The Deal)', d=>src(d).indexOf('48-1-The-Deal.html')>=0],
+   ['back to 46-2', d=>src(d).indexOf('46-2-The-Statement-Map.html')>=0]]},
+ {file:'48-1-The-Deal.html', asserts:[
+   ['no plural possessive rendered', noPlural],
+   ['the 70/30 offer stated', d=>src(d).indexOf('30%')>=0 && src(d).indexOf('70')>=0],
+   ['recognition-boundary beat (4,500 on the books)', d=>vis(d).indexOf('4,500')>=0 || src(d).indexOf('4,500')>=0],
+   ['ends under consideration', d=>/considered/i.test(src(d))],
+   ['no signing anywhere', d=>!/\bsign(ed|ing)?\b/i.test(src(d))],
+   ['no forward link; restart present', d=>/restart/i.test(src(d))],
+   ['back to 47-1', d=>src(d).indexOf('47-1-Freddies-Napkin.html')>=0]]},
+];
+var frame = document.getElementById('frame'), tbl = document.getElementById('results');
+var idx = 0, failures = 0, runtimeErrors = [];
+function row(page, name, ok){
+  var tr = document.createElement('tr');
+  tr.className = ok ? 'pass' : 'fail';
+  tr.innerHTML = '<td>' + page + '</td><td>' + name + '</td><td>' + (ok ? 'PASS' : 'FAIL') + '</td>';
+  tbl.appendChild(tr);
+  if (!ok) failures++;
+}
+function step(){
+  if (idx >= PLAN.length){
+    var ok = failures === 0 && runtimeErrors.length === 0;
+    var msg = failures === 0 ? 'ALL FLOW CHECKS PASS (' + PLAN.length + ' pages)'
+                             : failures + ' FLOW CHECK FAILURE(S)';
+    if (runtimeErrors.length) msg += ' · ' + runtimeErrors.length + ' runtime error(s): ' + runtimeErrors.join(' | ');
+    document.getElementById('banner').textContent = msg;
+    document.title = ok ? 'FLOWCHECK-M4 PASS' : 'FLOWCHECK-M4 FAIL ' + failures + '+' + runtimeErrors.length;
+    console.log('FLOWCHECK: ' + (ok ? 'PASS' : 'FAIL ' + failures));
+    return;
+  }
+  var p = PLAN[idx];
+  frame.onload = function(){
+    var w = frame.contentWindow, d = frame.contentDocument;
+    w.onerror = function(m){ runtimeErrors.push(p.file + ': ' + m); };
+    try { if (typeof w.devFill === 'function') w.devFill(); } catch(e){ runtimeErrors.push(p.file + ' devFill: ' + e.message); }
+    setTimeout(function(){
+      p.asserts.forEach(function(a){
+        var ok = false;
+        try { ok = !!a[1](d); } catch(e){ ok = false; }
+        row(p.file, a[0], ok);
+      });
+      idx++; step();
+    }, 900);
+  };
+  frame.src = p.file + '?flowcheck=' + Date.now();
+}
+step();
+</script>
+</body>
+</html>

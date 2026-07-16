@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Deal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Deal</h1>
+        <p class="tut-header-sub">The Angel Investor &middot; ~5 min &middot; Page 2 of 2</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Deal</div>
+
+    <div id="beats"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA<\/div><div class="dialog-text">&ldquo;'+inner+'&rdquo;<\/div><\/div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE<\/div><div class="dialog-text">&ldquo;'+inner+'&rdquo;<\/div><\/div>'; }
+
+var step = 0;
+var TOTAL_STEPS = 4;
+var mcqAnswered = false;
+var mcqWrong = {};
+var mcqFeedback = '';
+
+var MCQ_OPTS = [
+  { id:'recorded', label:'The recorded $4,500 on the balance sheet', fb:'Not quite. That number reports recognized Assets minus recognized Liabilities at August 31. Freddie&rsquo;s $20,000 offer looks to future cash flows.' },
+  { id:'future', label:'Future cash flows, supported by repair skill and customer relationships', fb:'Right. Freddie would pay $20,000 for 30% of the future cash flows. The skill and customer relationships that help produce them do not sit on the balance sheet under the records&rsquo; own rules.', correct:true },
+  { id:'kit', label:'Only the tools, equipment, and cash already listed', fb:'Not quite. Those recognized items matter, but Freddie would pay for a share of future cash flows supported by repair skill and customer relationships.' }
+];
+
+function mcqHTML(){
+  var h = '<div class="mc-card">';
+  h += '<div class="mc-q">Freddie would put in <strong>$20,000</strong> for 30% of a shop whose August 31 balance sheet shows Total Member&rsquo;s Capital of <strong>$4,500</strong>. What would he be paying for?</div>';
+  h += '<div class="mc-opts" id="mcqOpts">';
+  MCQ_OPTS.forEach(function(o,i){
+    var cls = 'mc-opt';
+    var dead = mcqAnswered || mcqWrong[o.id];
+    if(mcqAnswered && o.correct) cls += ' correct';
+    if(mcqWrong[o.id]) cls += ' wrong';
+    if(dead) cls += ' locked';
+    h += '<div class="'+cls+'" data-mcq="'+o.id+'"'+(dead?'':' onclick="mcqClick(\''+o.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+i)+'</span><span>'+o.label+'</span></div>';
+  });
+  h += '<\/div>';
+  if(mcqFeedback){
+    h += '<div class="feedback '+(mcqAnswered?'ok':'err')+' show">'+mcqFeedback+'<\/div>';
+  }
+  h += '<\/div>';
+  return h;
+}
+
+function mcqClick(id){
+  if(mcqAnswered || mcqWrong[id]) return;
+  var o = MCQ_OPTS.filter(function(x){ return x.id===id; })[0];
+  if(!o) return;
+  if(o.correct){
+    mcqAnswered = true;
+    mcqFeedback = o.fb;
+    playSuccess();
+  } else {
+    mcqWrong[id] = true;
+    mcqFeedback = o.fb;
+    playNope();
+  }
+  render();
+}
+
+function renderBeats(){
+  var h = '';
+
+  if(step === 0){
+    h += freddieBox('Here is my offer: I put <strong>$20,000</strong> into the LLC for a <strong>30%</strong> share. You keep <strong>70%</strong>, run the shop, and take the napkin&rsquo;s <strong>$2,000 salary each season</strong> &mdash; work paid as work.');
+    h += annaBox('After that salary and the napkin&rsquo;s other costs, the expected free cash flow is $5,000. You would take 70%, or $3,500, and Freddie would take 30%, or $1,500. The salary comes first; the cash-flow split follows ownership.');
+  }
+
+  if(step === 1){
+    h += '<div class="narrative-block"><p>Freddie sets the August 31 balance sheet beside his napkin.</p><\/div>';
+    h += mcqHTML();
+  }
+
+  if(step === 2){
+    h += freddieBox('I would put in $20,000 for 30% of the future cash flows we think the shop can produce. The napkin estimates $5,000 a season after salary and the other costs.');
+    h += annaBox('The repair skill and customer relationships help produce those flows, but neither one sits on the balance sheet under the records&rsquo; own rules.');
+    h += '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Two questions</div><p>The records carry only what the recognition conventions let in. The August 31 balance sheet answers its question exactly: recognized Assets of $4,500 minus recognized Liabilities of $0 equals Total Member&rsquo;s Capital of $4,500. Freddie&rsquo;s $20,000 offer asks what a buyer will pay for a 30% share of future cash flows supported by repair skill and customer relationships. Those productive sources sit on no balance sheet under the records&rsquo; own rules.</p><\/div>';
+  }
+
+  if(step === 3){
+    h += freddieBox('The terms are still being considered: $20,000 for 30%; your $2,000 seasonal salary plus 70% of free cash flow; and 30% of free cash flow for me.');
+    h += '<button class="btn-continue btn-block" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"><\/i> Restart this page<\/button>';
+  }
+
+  document.getElementById('beats').innerHTML = h;
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderControls(){
+  var c = '';
+  if(step === 1 && !mcqAnswered){
+    c += '<div class="next-phase-msg">Choose what Freddie is offering to share to unlock Next.<\/div>';
+  }
+  c += '<div class="nav-buttons">';
+  c += '<button class="btn-back" onclick="back()">&larr; Back<\/button>';
+  if(step < TOTAL_STEPS - 1){
+    var disabled = step === 1 && !mcqAnswered;
+    c += '<button class="btn-next"'+(disabled?' disabled':'')+' onclick="advance()">Next &rarr;<\/button>';
+  }
+  c += '<\/div>';
+  document.getElementById('controls').innerHTML = c;
+}
+
+function render(){
+  renderBeats();
+  renderControls();
+}
+
+function advance(){
+  if(step === 1 && !mcqAnswered) return;
+  playClick();
+  step = Math.min(step + 1, TOTAL_STEPS - 1);
+  render();
+  window.scrollTo(0, 0);
+}
+
+function back(){
+  playClick();
+  if(step === 0){ nav('47-1-Freddies-Napkin.html'); return; }
+  step = Math.max(step - 1, 0);
+  render();
+  window.scrollTo(0, 0);
+}
+
+var glossaryTerms=[
+  { term:'Member&rsquo;s Capital', def:'On this balance sheet, the difference between recognized Assets and recognized Liabilities. At August 31, the total is $4,500.' },
+  { term:'Future cash flows', def:'Cash the operation is expected to produce in future periods. Freddie&rsquo;s napkin estimates about $5,000 a season.' },
+  { term:'Recognition conventions', def:'The rules that determine what the records carry and when. Skill and returning customers can help produce cash without appearing as balance-sheet lines.' },
+  { term:'Ownership share', def:'A stated portion of the LLC. Freddie proposes $20,000 for 30%, leaving 70% with the current owner.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'<\/div><div class="glossary-entry-def">'+g.def+'<\/div><\/div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+window.devFill = function(){
+  step = TOTAL_STEPS - 1;
+  mcqAnswered = true;
+  mcqWrong = {};
+  mcqFeedback = MCQ_OPTS[1].fb;
+  render();
+};
+render();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

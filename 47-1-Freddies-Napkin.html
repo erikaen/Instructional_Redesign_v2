@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 7: Freddie&rsquo;s Napkin</title>
+  <title>Freddie&rsquo;s Napkin</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -15,8 +15,8 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 7: Freddie&rsquo;s Napkin</h1>
-        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~6 min &middot; Page 1 of 1</p>
+        <h1>Freddie&rsquo;s Napkin</h1>
+        <p class="tut-header-sub">The Angel Investor &middot; ~7 min &middot; Page 1 of 2</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
@@ -45,6 +45,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -58,27 +59,28 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA<\/div><div class="dialog-text">&ldquo;'+inner+'&rdquo;<\/div><\/div>'; }
 function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE<\/div><div class="dialog-text">&ldquo;'+inner+'&rdquo;<\/div><\/div>'; }
+function youBox(inner){ return '<div class="dialog-box you"><div class="dialog-label">YOU<\/div><div class="dialog-text">&ldquo;'+inner+'&rdquo;<\/div><\/div>'; }
 
 var step = 0;
-var TOTAL_STEPS = 4;
+var TOTAL_STEPS = 5;
 var napkinLines = 0;
 var tries = 0;
 var profitOK = false;
 var feedback = '';
 
 var NAPKIN_ROWS = [
-  { label:'Revenue', val:'$10,000' },
-  { label:'Parts', val:'&minus;$2,000' },
-  { label:'Rent', val:'&minus;$650' },
-  { label:'Salary', val:'&minus;$2,000' },
-  { label:'Replacement tools &amp; equipment', val:'&minus;$350' }
+  { label:'Revenue', val:'$10,000', note:'repair work at the ramped-up pace' },
+  { label:'Parts used', val:'&minus;$2,000', note:'scales with the jobs' },
+  { label:'Rent', val:'&minus;$650', note:'the lease runs on' },
+  { label:'Salary', val:'&minus;$2,000', note:'your work paid as work, now that labor and ownership separate' },
+  { label:'Replacement tools &amp; equipment', val:'&minus;$350', note:'keeping the kit whole' }
 ];
 
 function renderNapkin(){
   var h = '<div class="napkin">';
-  h += '<div class="napkin-title">FREDDIE&rsquo;S BACK-OF-THE-ENVELOPE &mdash; PER MONTH<\/div>';
+  h += '<div class="napkin-title">FREDDIE&rsquo;S BACK-OF-THE-ENVELOPE &mdash; PER SEASON<\/div>';
   for(var i=0; i<napkinLines; i++){
-    h += '<div class="napkin-line"><span>'+NAPKIN_ROWS[i].label+'<\/span><span class="napkin-val">'+NAPKIN_ROWS[i].val+'<\/span><\/div>';
+    h += '<div class="napkin-line"><span>'+NAPKIN_ROWS[i].label+'<span class="napkin-note" style="display:block;margin-top:2px">'+NAPKIN_ROWS[i].note+'<\/span><\/span><span class="napkin-val">'+NAPKIN_ROWS[i].val+'<\/span><\/div>';
   }
   if(napkinLines >= NAPKIN_ROWS.length && !profitOK){
     h += '<div class="napkin-total"><span>Free cash flow<\/span><input class="calc-input" id="profitInput" inputmode="numeric" autocomplete="off" aria-label="Free cash flow"><\/div>';
@@ -88,12 +90,8 @@ function renderNapkin(){
     h += '<div class="napkin-note">an expectation, not a record<\/div>';
   }
   h += '<\/div>';
-  if(napkinLines >= 2 && !profitOK){
-    h += freddieBox('Parts ran about a fifth of revenue during the season. I&rsquo;m using that same rough share here.');
-  }
   if(napkinLines >= 5 && !profitOK){
-    h += freddieBox('Gear wears out and gets replaced. On a napkin I just carry that as cash going out.');
-    h += freddieBox('What&rsquo;s left is cash that could be paid out and not hurt the shop&rsquo;s business. I call that free cash flow.');
+    h += freddieBox('The bottom line is cash the Company could pay out while keeping the operation going. I call that free cash flow.');
   }
   if(napkinLines >= NAPKIN_ROWS.length && !profitOK){
     h += '<div class="narrative-block"><p>Type Freddie&rsquo;s bottom line for a month like this.<\/p><\/div>';
@@ -109,28 +107,32 @@ function renderBeats(){
   var h = '';
 
   if(step === 0){
-    h += freddieBox('If I come in, the bench gets paid properly. Salary of $2,000 a month to the repair person, as an employee. That is an expense of the shop, like rent or parts.');
-    h += annaBox('Same two hats. One person can be an owner under the Operating Agreement and an employee at the bench. Freddie is putting a number on the employee hat.');
+    h += freddieBox('You told me why there is no wage line &mdash; one owner, one withdrawal. With me in, that changes.');
   }
 
   if(step === 1){
-    h += freddieBox('Suppose the ramped-up shop does $10,000 of repair work a month. Let me sketch it.');
-    h += renderNapkin();
+    h += freddieBox('With two owners, the shop work gets paid as work &mdash; a salary, an expense &mdash; before cash is shared by ownership. That is why my napkin carries a Salary line.');
   }
 
   if(step === 2){
+    h += freddieBox('Suppose the ramped-up repair work produces $10,000 of revenue in a season. Let me sketch it.');
     h += renderNapkin();
-    h += freddieBox('I&rsquo;m not changing last season after the fact. The statements record what happened, and no salary happened. This napkin is an expectation. Nothing on it is a recorded number, and nothing in the season&rsquo;s statements was a promise about any of it. If the ramp-up never comes, the napkin is worth nothing.');
-    h += annaBox('Use the statements for the past. Use the napkin for a future guess. Keep those two jobs separate.');
   }
 
   if(step === 3){
-    h += freddieBox('Months like that would be worth sharing. On what terms?');
-    h += '<div class="next-card"><div class="next-card-label">Coming Next<\/div><p>Freddie has to decide what he is buying and what the deal looks like. That is where the story goes next.<\/p><\/div>';
+    h += renderNapkin();
+    h += freddieBox('I&rsquo;m not changing last season after the fact. The statements record what happened, and no salary happened. This napkin is an expectation. Nothing on it is a recorded number, and nothing in the season&rsquo;s statements was a promise about any of it. The future may not match the sketch.');
+    h += annaBox('Use the statements for the past. Use the napkin for a future guess. Keep those two jobs separate.');
+  }
+
+  if(step === 4){
+    h += renderNapkin();
+    h += freddieBox('Future cash like that could command an investment. Now we have to talk about the share.');
+    h += '<button class="btn-continue btn-block" onclick="nav(\'48-1-The-Deal.html\')">Freddie&rsquo;s offer &rarr;<\/button>';
   }
 
   document.getElementById('beats').innerHTML = h;
-  if(step === 1 && napkinLines >= NAPKIN_ROWS.length && !profitOK){
+  if(step === 2 && napkinLines >= NAPKIN_ROWS.length && !profitOK){
     var input = document.getElementById('profitInput');
     if(input){
       input.focus();
@@ -144,7 +146,7 @@ function renderControls(){
   var c = '<div class="nav-buttons">';
   c += '<button class="btn-back" onclick="back()">&larr; Back<\/button>';
   if(step < TOTAL_STEPS - 1){
-    var disabled = (step === 1 && napkinLines >= NAPKIN_ROWS.length && !profitOK);
+    var disabled = (step === 2 && napkinLines >= NAPKIN_ROWS.length && !profitOK);
     c += '<button class="btn-next"' + (disabled ? ' disabled' : '') + ' onclick="advance()">Continue &rarr;<\/button>';
   }
   c += '<\/div>';
@@ -158,22 +160,22 @@ function render(){
 }
 
 function advance(){
-  if(step === 0){
+  if(step === 1){
     playClick();
-    step = 1;
+    step = 2;
     napkinLines = 1; // the napkin never renders empty — Revenue appears with it
     render();
     window.scrollTo(0, 0);
     return;
   }
-  if(step === 1 && napkinLines < NAPKIN_ROWS.length){
+  if(step === 2 && napkinLines < NAPKIN_ROWS.length){
     playClick();
     napkinLines++;
     render();
     window.scrollTo(0, document.body.scrollHeight);
     return;
   }
-  if(step === 1 && !profitOK) return;
+  if(step === 2 && !profitOK) return;
   playClick();
   step = Math.min(step + 1, TOTAL_STEPS - 1);
   render();
@@ -183,7 +185,7 @@ function advance(){
 function back(){
   playClick();
   if(step === 0){ nav('46-2-The-Statement-Map.html'); return; }
-  if(step === 1 && napkinLines > 1 && !profitOK){
+  if(step === 2 && napkinLines > 1 && !profitOK){
     napkinLines--;
     feedback = '';
     tries = 0;
@@ -218,11 +220,11 @@ function checkProfit(){
 }
 
 var glossaryTerms=[
-  { term:'Salary/Wages', def:'Pay for work. When the shop pays a repair person as an employee, it is an expense of the shop.' },
-  { term:'Draw', def:'An owner move &mdash; money taken by the owner. Never an expense; it never touches net income.' },
+  { term:'Salary / Wages', def:'Pay for work. When the Company pays a repair person as an employee, the records recognize an expense.' },
+  { term:'Withdrawal', def:'An owner move &mdash; money taken by the owner. It is not an expense and does not enter net income.' },
   { term:'Expectation vs record', def:'A napkin sketch of the future is not a statement. Statements record what happened.' },
   { term:'Replacement tools &amp; equipment', def:'An investor&rsquo;s cash sketch of gear wearing out and being replaced.' },
-  { term:'Free cash flow', def:'Cash that could be paid out and not hurt the shop&rsquo;s business. On Freddie&rsquo;s napkin it is an expectation, never a record.' }
+  { term:'Free cash flow', def:'Cash the Company could pay out while keeping the operation going. On Freddie&rsquo;s napkin it is an expectation, never a record.' }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){

@@ -4,10 +4,19 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3: The Change in Members&rsquo; Capital &middot; The Capital Bridge</title>
+  <title>The Change in Member&rsquo;s Capital</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    .build-note { margin-top:14px; }
+    .build-hint { margin:8px 2px 0; color:#6b7280; font-family:Inter,sans-serif; font-size:var(--font-xs); text-align:center; }
+    @media (prefers-color-scheme:dark) {
+      .wb-grid-wrap { background:#26242e; }
+      .build-hint { color:#9ca3af; }
+    }
+  </style>
 </head>
 <body>
 <div class="page">
@@ -15,19 +24,40 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Tutorial 3: The Change in Members&rsquo; Capital</h1>
-        <p class="tut-header-sub">Module 4 &middot; The Angel Investor &middot; ~10 min &middot; Page 1 of 1</p>
+        <h1>The Change in Member&rsquo;s Capital</h1>
+        <p class="tut-header-sub">The Angel Investor &middot; ~10 min &middot; Page 1 of 1</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">The Capital Bridge</div>
+    <div class="phase-title" id="phaseTitle">The Change in Member&rsquo;s Capital</div>
 
-    <div id="beats"></div>
-    <div id="wb"></div>
-    <div id="anna"></div>
+    <div id="annaIntro"></div>
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Member&rsquo;s Capital &middot; building</div>
+      </div>
+      <div class="wb-grid-wrap">
+        <div id="stmtBuild"></div>
+        <div id="tabGrid" hidden></div>
+      </div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab" type="button" data-sheet-tab="Assets" onclick="showWorkbookTab('Assets')">Assets</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="Liabilities" onclick="showWorkbookTab('Liabilities')">Liabilities</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="Reasons" onclick="showWorkbookTab('Reasons')">Reasons</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="Balance Sheet" onclick="showWorkbookTab('Balance Sheet')">Balance Sheet</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="Income Statement" onclick="showWorkbookTab('Income Statement')">Income Statement</button>
+        <button class="xlwb-tab active" type="button" data-sheet-tab="members" onclick="showMemberCapitalTab()">Member&rsquo;s Capital</button>
+      </div>
+    </div>
+
+    <div id="buildNote" class="build-note"></div>
+    <div id="interaction"></div>
+    <div id="advanceHint" class="build-hint" role="status" aria-live="polite"></div>
+    <div id="payoff"></div>
     <div id="controls"></div>
 
   </div>
@@ -48,9 +78,33 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
-if (window.lucide) lucide.createIcons();
+(function normalizeCapitalLabels(){
+  var books=BR_STMT_DATA.workbooks;
+  Object.keys(books).forEach(function(key){
+    books[key].sheets.forEach(function(sheet){
+      sheet.cells.forEach(function(cell){
+        if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['’] Capital/g,"Member’s Capital");
+      });
+    });
+  });
+  /* TEMPORARY SHIM: Bike-Repair-End.xlsx 'Balance Sheet' D19/D21 carry stale cached
+     values (their formulas =Reasons!D66/=SUM(..D20) point one row short after the
+     depreciation split). Mirror the intended values (Generated Aug-31 2,810; Total
+     4,500) until Rick fixes the source and re-extracts; the guards make this a
+     no-op once the source is fixed. */
+  books['bike-repair-end'].sheets.forEach(function(sheet){
+    if(sheet.name!=='Balance Sheet') return;
+    sheet.cells.forEach(function(cell){
+      if(cell.r===19&&cell.c===4&&cell.value===-30) cell.value=2810;
+      if(cell.r===21&&cell.c===4&&cell.value===1660) cell.value=4500;
+    });
+  });
+})();
+
+if(window.lucide) lucide.createIcons();
 
 /* ===== sound ===== */
 var audioCtx=null;
@@ -63,248 +117,225 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
-/* ===== locked numbers ===== */
-var OPEN_MC = 2460, END_MC = 4500, NET_INCOME = 2640, DRAW = 600;
-var CONTRIB = 2290, GEN_OPEN = 170, GEN_END = 2810;
-
-/* ===== xl-row helper for the fold panels (shared classes, no local CSS) ===== */
-function xr(cls, label, val){
-  return '<div class="xl-row '+cls+'"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+label+'</div><div class="xl-v">'+val+'</div></div>';
+/* ===== extracted workbook helpers ===== */
+function sheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-end'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
 }
-function foldCard(title, rowsHtml){
-  return '<div class="section-card"><div class="card-title">'+title+'</div><div class="xlsx">'+rowsHtml+'</div></div>';
+var sheetMap={
+  'Assets':'Assets',
+  'Liabilities':'Liabilities',
+  'Reasons':'Reasons',
+  'Balance Sheet':'Balance Sheet',
+  'Income Statement':'Income Statement'
+};
+var gridSeq=0;
+function setActiveTab(name){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+    tab.classList.toggle('active',tab.getAttribute('data-sheet-tab')===name);
+  });
+}
+function showWorkbookTab(name){
+  var sheet=sheetOf(sheetMap[name]);
+  if(!sheet) return;
+  playClick();
+  document.getElementById('stmtBuild').hidden=true;
+  document.getElementById('tabGrid').hidden=false;
+  document.getElementById('sheetLabel').textContent=name;
+  setActiveTab(name);
+  BRW.mountGrid('tabGrid',sheet,{gridId:'capital-page-tab-'+(++gridSeq)});
+}
+function showMemberCapitalTab(){
+  playClick();
+  document.getElementById('tabGrid').hidden=true;
+  document.getElementById('stmtBuild').hidden=false;
+  document.getElementById('sheetLabel').innerHTML='Member&rsquo;s Capital &middot; building';
+  setActiveTab('members');
 }
 
-/* ===== workbook state — the continuous snapshot, with the Income sheet and the two-date balance tab from the start ===== */
-var snap = BR_WB.snapshot({ withReceivable:true, withDepreciation:true });
-snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income']));
-snap.tabs.push(BR_WB.balanceTab(['jun1','aug31']));
-BR_WB.tagTabKinds(snap);
+/* ===== build state ===== */
+var currentOrder=0;
+var mcqAnswered=false;
+var gateDone=false;
+var gateAttempts=0;
 
-/* ===== step state =====
-   0 opener · 1 contributed folded · 2 generated folded (MCQ pending)
-   3 generated identified · 4 withdrawn folded · 5 gate passed · 6 statement made */
-var step = 0;
-var mcqAnswered = false;
-var gateDone = false, gateAttempts = 0;
-var bridgeShown = false;
-
-/* ===== the MCQ — what is the season's net addition to Generated? ===== */
-var MCQ_OPTS = [
-  { id:'rev',    label:'The season&rsquo;s revenue &mdash; $6,020',                     fb:'Revenue is the top line, not the addition. Parts of it were used up delivering the work &mdash; the addition is what stayed.' },
-  { id:'netinc', label:'Net income &mdash; $2,640, from the Income Statement',          fb:'Right. The sorted season rows net to one number &mdash; $2,640 &mdash; already totaled on the Income sheet. That is the season&rsquo;s addition to Generated.', correct:true },
-  { id:'cash',   label:'The cash change &mdash; &minus;$680',                            fb:'Cash fell this season, but Generated rose. Cash and net income move to different drums &mdash; that gap is the thread still standing.' }
+var MCQ_OPTS=[
+  {id:'rev',label:'Revenue &mdash; $6,020',fb:'Revenue is the top line, not the addition. Expenses are also part of the season&rsquo;s result, so use the number after Revenue and Expenses are compared.'},
+  {id:'netinc',label:'Net income &mdash; $2,640, from the Income Statement',fb:'Right. The Income Statement says net income is $2,640. That single number is the season&rsquo;s addition recorded in GENERATED.',correct:true},
+  {id:'cash',label:'The cash change &mdash; &minus;$680',fb:'Cash fell while GENERATED rose. The two clocks do not have to move together; use net income for this change.'}
 ];
 
 function mcqHTML(){
-  var h = '<div class="mc-card">';
-  h += '<div class="mc-q">Generated began the season at $170 and ends at $2,810. Which single number is the season&rsquo;s addition to the pile?</div>';
-  h += '<div class="mc-opts" id="mcqOpts">';
-  MCQ_OPTS.forEach(function(o, i){
-    var cls = 'mc-opt';
-    if(mcqAnswered){ cls += ' locked'; if(o.correct) cls += ' correct'; }
-    h += '<div class="'+cls+'" data-mcq="'+o.id+'"'+(mcqAnswered?'':' onclick="mcqClick(\''+o.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+i)+'</span><span>'+o.label+'</span></div>';
+  var html='<div class="mc-card"><div class="mc-q">Which single number is the season&rsquo;s addition to GENERATED?</div><div class="mc-opts" id="mcqOpts">';
+  MCQ_OPTS.forEach(function(option,index){
+    var cls='mc-opt';
+    if(mcqAnswered){ cls+=' locked'; if(option.correct) cls+=' correct'; }
+    html+='<div class="'+cls+'" data-mcq="'+option.id+'"'+(mcqAnswered?'':' onclick="mcqClick(\''+option.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+index)+'</span><span>'+option.label+'</span></div>';
   });
-  h += '</div>';
+  html+='</div>';
   if(mcqAnswered){
-    var correct = MCQ_OPTS.filter(function(o){return o.correct;})[0];
-    h += '<div class="feedback ok show">'+correct.fb+'</div>';
-  } else {
-    h += '<div class="feedback" id="mcqFb"></div>';
+    html+='<div class="feedback ok show">'+MCQ_OPTS[1].fb+'</div>';
+  }else{
+    html+='<div class="feedback" id="mcqFb"></div>';
   }
-  h += '</div>';
-  return h;
+  return html+'</div>';
 }
 function mcqClick(id){
   if(mcqAnswered) return;
-  var o = MCQ_OPTS.filter(function(x){return x.id===id;})[0];
-  if(!o) return;
-  var optEl = document.querySelector('[data-mcq="'+id+'"]');
-  var fbEl = document.getElementById('mcqFb');
-  if(!optEl || !fbEl) return;
-  if(o.correct){
-    mcqAnswered = true;
-    document.querySelectorAll('#mcqOpts .mc-opt').forEach(function(el){ el.classList.add('locked'); el.removeAttribute('onclick'); });
-    optEl.classList.add('correct');
-    fbEl.className = 'feedback ok show';
-    fbEl.innerHTML = o.fb;
+  var option=MCQ_OPTS.filter(function(item){ return item.id===id; })[0];
+  var choice=document.querySelector('[data-mcq="'+id+'"]');
+  var feedback=document.getElementById('mcqFb');
+  if(!option||!choice||!feedback) return;
+  if(option.correct){
+    mcqAnswered=true;
     playSuccess();
-    step = 3;
-    renderBeats();
-    renderControls();
-  } else {
-    optEl.classList.add('wrong','locked');
-    optEl.removeAttribute('onclick');
-    fbEl.className = 'feedback err show';
-    fbEl.innerHTML = o.fb;
+    renderInteraction();
+    setAdvanceState();
+  }else{
+    choice.classList.add('wrong','locked');
+    choice.removeAttribute('onclick');
+    feedback.className='feedback err show';
+    feedback.innerHTML=option.fb;
     playNope();
   }
 }
 
-/* ===== the gate — type the ending total ===== */
 function gateHTML(){
+  if(gateDone){
+    return '<div class="gate-card gate-armed-maria"><div class="gate-card-title">Ending total confirmed: <strong>$4,500</strong>. Continue to format the statement.</div></div>';
+  }
   return '<div class="mc-card">'
-    + '<div class="mc-q">The three folded piles walk the total from <strong>$2,460</strong> to this &mdash; type the ending total:</div>'
-    + '<div class="btn-row">'
-    + '<input id="gateInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Ending total Members\u2019 Capital" onkeydown="if(event.key===\'Enter\'){checkGate();}">'
-    + '<button class="btn btn-primary" onclick="checkGate()">Check</button>'
-    + '</div>'
-    + '<div class="feedback" id="gateFb"></div>'
-    + '</div>';
+    +'<div class="mc-q">Now walk the three piles: $2,290 + $2,810 &minus; $600. Type the ending total that ties to the balance sheet&rsquo;s August 31 column.</div>'
+    +'<div class="btn-row">'
+    +'<input id="gateInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Ending total Member&rsquo;s Capital" onkeydown="if(event.key===\'Enter\'){checkGate();}">'
+    +'<button class="btn btn-primary" type="button" onclick="checkGate()">Check</button>'
+    +'</div><div class="feedback" id="gateFb"></div></div>';
 }
 function checkGate(){
   if(gateDone) return;
-  var val = parseInt(String(document.getElementById('gateInput').value).replace(/[^0-9-]/g,''),10);
-  var fb = document.getElementById('gateFb');
-  if(val===END_MC){ playSuccess(); gateDone=true; document.getElementById('gateInput').disabled=true; fb.className='feedback'; fb.classList.remove('show'); step=5; renderBeats(); renderControls(); }
-  else{
-    gateAttempts++;
-    if(gateAttempts>=3){ playNope(); gateDone=true; document.getElementById('gateInput').disabled=true; fb.className='feedback'; fb.classList.remove('show'); step=5; renderBeats(); renderControls(); }
-    else{ playNope(); fb.className='feedback err show'; fb.innerHTML='Not quite &mdash; 2,290 + 2,810 &minus; 600.'; }
+  var input=document.getElementById('gateInput');
+  var feedback=document.getElementById('gateFb');
+  if(!input||!feedback) return;
+  var value=parseInt(String(input.value).replace(/[^0-9-]/g,''),10);
+  if(value===4500){
+    gateDone=true;
+    playSuccess();
+    renderInteraction();
+    setAdvanceState();
+    return;
   }
+  gateAttempts++;
+  if(gateAttempts>=3){
+    gateDone=true;
+    playNope();
+    renderInteraction();
+    setAdvanceState();
+    var advance=document.querySelector('#stmtBuild .brw-step-advance');
+    if(advance) advance.click();
+    return;
+  }
+  feedback.className='feedback err show';
+  feedback.innerHTML='Not quite &mdash; add 2,290 and 2,810, then subtract 600.';
+  playNope();
 }
 
-/* ===== the fold panels ===== */
-function contributedFold(){
-  return foldCard('Contributed &mdash; the pile, folded',
-    xr('xl-head','Contributed','')
-    + xr('xl-item','Beginning &mdash; June 1', BRW.dol(CONTRIB))
-    + xr('xl-item','No changes this season', '&mdash;')
-    + xr('xl-total','Ending &mdash; August 31', BRW.dol(CONTRIB)));
+function renderBuildNote(){
+  var html='';
+  if(currentOrder===0){
+    html=annaBox('First, copy the three Reasons piles onto the statement&rsquo;s own new tab: CONTRIBUTED, GENERATED, and WITHDRAWN. The Reasons rows stay where they are; this new tab begins with a copied working view.');
+  }else if(currentOrder===1){
+    html=annaBox('Now fold each pile into <strong>Beginning</strong>, <strong>Change</strong>, and <strong>Ending</strong>. CONTRIBUTED stays at $2,290. GENERATED moves from $170 to $2,810. WITHDRAWN records ($600).');
+  }else if(currentOrder===2){
+    html=annaBox('Column F identifies each change. The $2,640 change in GENERATED is net income from the Income Statement. The ($600) change in WITHDRAWN is the owner&rsquo;s draw.');
+  }else{
+    html=annaBox('There is the <strong>Statement of Changes in Member&rsquo;s Capital</strong>: CONTRIBUTED $2,290 to $2,290; GENERATED $170 plus net income of $2,640 to $2,810; and WITHDRAWN ($600).');
+  }
+  document.getElementById('buildNote').innerHTML=html;
 }
-function generatedFold(){
-  var changeRow = mcqAnswered
-    ? xr('xl-item','+ Net income &mdash; from the Income Statement', BRW.signed(NET_INCOME))
-    : xr('xl-item','One season&rsquo;s worth of rows &mdash; + ?', '');
-  return foldCard('Generated &mdash; the pile, folded',
-    xr('xl-head','Generated','')
-    + xr('xl-item','Beginning &mdash; June 1', BRW.dol(GEN_OPEN))
-    + changeRow
-    + xr('xl-total','Ending &mdash; August 31', BRW.dol(GEN_END)));
+function renderInteraction(){
+  var html='';
+  if(currentOrder===1) html=mcqHTML();
+  if(currentOrder===2) html=gateHTML();
+  document.getElementById('interaction').innerHTML=html;
 }
-function withdrawnFold(){
-  return foldCard('Withdrawn &mdash; the pile, folded',
-    xr('xl-head','Withdrawn','')
-    + xr('xl-item','Beginning &mdash; June 1', '&mdash;')
-    + xr('xl-item','Owner&rsquo;s draw', '($600)')
-    + xr('xl-total','Ending &mdash; August 31', '($600)'));
+function setAdvanceState(){
+  var advance=document.querySelector('#stmtBuild .brw-step-advance');
+  var disabled=(currentOrder===1&&!mcqAnswered)||(currentOrder===2&&!gateDone);
+  if(advance) advance.disabled=disabled;
+  var hint='';
+  if(currentOrder===1&&!mcqAnswered) hint='Choose the season&rsquo;s addition to unlock the next build step.';
+  if(currentOrder===2&&!gateDone) hint='Enter the ending total to unlock the formatted statement.';
+  document.getElementById('advanceHint').innerHTML=hint;
 }
-
-/* ===== render the beats ===== */
-function renderBeats(){
-  var h = '';
-
-  /* Beat 0 — Anna recalls Freddie's standing questions */
-  h += annaBox('Freddie left two questions on the table when he walked out. His words: &ldquo;Members&rsquo; Capital went from $2,460 to $4,500 &mdash; walk me from one to the other. And the $600 that left the shop without being an expense &mdash; show me where it sits.&rdquo; The answer is already sitting in the workbook &mdash; three piles on the Reasons trail. Each pile just needs <strong>folding</strong> into three numbers: what it began the season at, what changed, what it ends at.');
-  h += '<div class="narrative-block"><p>Three piles run under Members&rsquo; Capital on the balance sheet: <strong>Contributed</strong>, <strong>Generated</strong>, and <strong>Withdrawn</strong>. Same records as the Reasons tab &mdash; another way of reading them, the way the Income statement was a sort of the season&rsquo;s rows back in Module 3. Fold one pile at a time.</p></div>';
-
-  /* Beat 1 — Contributed folded */
-  if(step >= 1){
-    h += contributedFold();
-    h += annaBox('Contributed began at '+BRW.dol(CONTRIB)+' on June 1 and nothing was put in this season &mdash; so it ends at '+BRW.dol(CONTRIB)+'. The pile sat still.');
+function renderPayoff(){
+  var html='';
+  if(currentOrder===3){
+    html=annaBox('That is the walk Freddie asked for: <strong>$2,460 to $4,500</strong>. The $600 sits on its own WITHDRAWN line, in parentheses. It is <strong>not an expense; it is a distribution</strong>. The Statement of Changes in Member&rsquo;s Capital tells how each pile changed and ties the ending total to the balance sheet&rsquo;s August 31 column.')
+      +insightBox('One statement, three piles','<p>CONTRIBUTED remains <strong>$2,290</strong>. GENERATED moves from <strong>$170</strong> to <strong>$2,810</strong> with net income of <strong>$2,640</strong>. WITHDRAWN records <strong>($600)</strong>. Together, the total moves from <strong>$2,460</strong> to <strong>$4,500</strong>.</p>');
   }
-
-  /* Beat 2 — Generated folded + the MCQ */
-  if(step >= 2){
-    h += generatedFold();
-  }
-  if(step >= 2 && !mcqAnswered){
-    h += mcqHTML();
-  }
-
-  /* Beat 3 — Generated identified */
-  if(step >= 3){
-    h += annaBox('There it is &mdash; the addition is <strong>net income, '+BRW.dol(NET_INCOME)+'</strong>, straight off the Income sheet. The sorted rows net to one number, already totaled there. Generated began at '+BRW.dol(GEN_OPEN)+' and ends at '+BRW.dol(GEN_END)+'.');
-  }
-
-  /* Beat 4 — Withdrawn folded */
-  if(step >= 4){
-    h += withdrawnFold();
-    h += annaBox('The Withdrawn pile did not exist on June 1 &mdash; beginning, an em dash. One row this season: the owner&rsquo;s draw of $600, in parentheses because it is a reduction. So it ends at ($600). And there is Freddie&rsquo;s $600 &mdash; its own pile, its own line. Not an expense; a distribution.');
-  }
-
-  /* Beat 5 — the gate (type the ending total) */
-  if(step >= 5 && !bridgeShown){
-    h += gateHTML();
-  }
-
-  document.getElementById('beats').innerHTML = h;
-  if(window.lucide) lucide.createIcons();
+  document.getElementById('payoff').innerHTML=html;
 }
-
 function renderControls(){
-  var c = '';
-  if(step === 0){
-    c = '<button class="btn-continue btn-block" onclick="advance()">Fold the Contributed pile &rarr;</button>';
-  } else if(step === 1){
-    c = '<button class="btn-continue btn-block" onclick="advance()">Fold the Generated pile &rarr;</button>';
-  } else if(step === 2){
-    c = '<div class="next-phase-msg">Identify the season&rsquo;s addition to Generated first.</div>';
-  } else if(step === 3){
-    c = '<button class="btn-continue btn-block" onclick="advance()">Fold the Withdrawn pile &rarr;</button>';
-  } else if(step === 4){
-    c = '<button class="btn-continue btn-block" onclick="advance()">Walk the three piles &rarr;</button>';
-  } else if(step === 5){
-    c = '<button class="btn-continue btn-block" onclick="makeStatement()">Lay out the statement &rarr;</button>';
-  } else {
-    c = insightBox('One set of piles, two readings',
-        '<p>The Income statement read the season&rsquo;s slice of <strong>Generated</strong> &mdash; revenue over expenses, one number. This statement reads <strong>all three piles&rsquo;</strong> season change &mdash; each Beginning, its Change, its Ending. Same records; another way of reading them. Nothing moved; nothing reset.</p>')
-      + '<div class="next-phase-msg">One of Freddie&rsquo;s questions is answered &mdash; the $2,460 &rarr; $4,500 walk, with the $600 seated on its own line. The other thread still stands: the season was profitable, and Cash <strong>fell</strong>.</div>'
-      + "<button class=\"btn-continue btn-block\" onclick=\"nav('44-1-The-Cash-Puzzle.html')\">On to the cash question &rarr;</button>";
-  }
-  document.getElementById('controls').innerHTML = c;
+  var html='<div class="nav-buttons"><button class="btn-back" type="button" onclick="nav(\'42-1-The-Missing-Wage.html\')">&larr; Back</button>';
+  if(currentOrder===3) html+='<button class="btn-next" type="button" onclick="nav(\'44-1-The-Cash-Puzzle.html\')">On to the cash question &rarr;</button>';
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+function renderStage(order){
+  currentOrder=order;
+  showMemberCapitalTab();
+  renderBuildNote();
+  renderInteraction();
+  setAdvanceState();
+  renderPayoff();
+  renderControls();
   if(window.lucide) lucide.createIcons();
 }
 
-function advance(){
-  playClick();
-  step = Math.min(step + 1, 5);
-  renderBeats();
-  renderControls();
-  window.scrollTo(0, document.body.scrollHeight);
-}
+document.getElementById('annaIntro').innerHTML=annaBox('Freddie left two questions on the table: &ldquo;Member&rsquo;s Capital went from $2,460 to $4,500 &mdash; walk me from one to the other. And show me the $600 that left without being an expense.&rdquo; The answer begins with the three piles on the Reasons trail. Read them another way, the way the Income Statement was a sort of the season&rsquo;s rows back when you built it.');
 
-function makeStatement(){
-  playClick(); playSuccess();
-  bridgeShown = true;
-  step = 6;
-  snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['bridge']));
-  BR_WB.tagTabKinds(snap);
-  BRW.update('wb', snap);
-  BRW.tab('wb', 'bridge');
-  document.getElementById('anna').innerHTML = annaBox('There is the walk. Each pile Beginning &rarr; Change &rarr; Ending, the reasons as the line items. The totals run $2,460 on June 1 to $4,500 on August 31 &mdash; tying to the balance sheet&rsquo;s two columns. And there is the $600: its own line, Withdrawn, in parentheses &mdash; not an expense, a distribution. That is the bridge Freddie asked for.');
-  renderControls();
-  window.scrollTo(0, document.body.scrollHeight);
-}
+var buildOptions={
+  startAt:0,
+  stopAt:3,
+  gridOpts:{gridId:'members-capital-build-grid'},
+  gateAdvance:function(order){
+    if(order===1) return mcqAnswered;
+    if(order===2) return gateDone;
+    return true;
+  },
+  beforeAdvance:function(){ playClick(); return true; },
+  onStep:function(order){ renderStage(order); if(order===3) playSuccess(); }
+};
+BR_WB.mountStatementBuild('stmtBuild','members-capital-steps',buildOptions);
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  { term:'Statement of Changes in Members&rsquo; Capital', def:'Per-pile: each pile&rsquo;s Beginning, the season&rsquo;s Change, its Ending &mdash; the reasons as the line items. Here the three piles walk $2,460 on June 1 to $4,500 on August 31, tying to the balance sheet&rsquo;s two columns.' },
-  { term:'Distribution (draw)', def:'Cash an owner takes out for personal use &mdash; the Withdrawn pile. It reduces Members&rsquo; Capital but is not an expense; it never touches the income statement. Here: ($600) this season, shown in parentheses.' },
-  { term:'Generated', def:'The slice of Members&rsquo; Capital built from running the work, not from contributions. Moves with net income (up) and draws (down). This season: Beginning $170 + net income $2,640 = Ending $2,810, with Withdrawn now its own pile.' }
+  {term:'Statement of Changes in Member&rsquo;s Capital',def:'A statement that shows each pile&rsquo;s Beginning, Change, and Ending. Here CONTRIBUTED, GENERATED, and WITHDRAWN walk the total from $2,460 on June 1 to $4,500 on August 31.'},
+  {term:'Distribution (draw)',def:'Cash withdrawn by an owner for personal use and recorded in WITHDRAWN. It reduces Member&rsquo;s Capital but is not an expense. Here it is ($600), shown in parentheses.'},
+  {term:'Generated',def:'The part of Member&rsquo;s Capital built from running the work, not from contributions. GENERATED moves with net income. Here: Beginning $170 + net income $2,640 = Ending $2,810.'}
 ];
 function openGlossary(){
-  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
-    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
   }).join('');
   document.getElementById('glossaryOverlay').classList.add('open');
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
-document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') closeGlossary(); });
 
 /* ===== init ===== */
-window.devFill = function(){
-  mcqAnswered = true;
-  gateDone = true;
-  makeStatement();
+window.devFill=function(){
+  mcqAnswered=true;
+  gateDone=true;
+  for(var i=0;i<3;i++){
+    var advance=document.querySelector('#stmtBuild .brw-step-advance');
+    if(advance){ advance.disabled=false; advance.click(); }
+  }
 };
-BR_WB.registerStatementSheets();
-BRW.mount('wb', snap);
-BRW.tab('wb', 'reasons');
-renderBeats();
-renderControls();
+renderStage(0);
 </script>
   <script src="dev.js"></script>
 </body>
