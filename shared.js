@@ -919,6 +919,19 @@ BRW.sorterConfigFromPick = function (sheet, opts) {
     }
   }
 
+  /* categoryOrder option added under Rick's one-time append-only exception, 2026-07-16 (point 3: Revenue above Expenses). */
+  if (Array.isArray(opts.categoryOrder) && opts.categoryOrder.length) {
+    var orderedCategories = [];
+    var remainingCategories = categories.slice();
+    for (i = 0; i < opts.categoryOrder.length; i++) {
+      var categoryIndex = remainingCategories.indexOf(opts.categoryOrder[i]);
+      if (categoryIndex !== -1) {
+        orderedCategories.push(remainingCategories.splice(categoryIndex, 1)[0]);
+      }
+    }
+    categories = orderedCategories.concat(remainingCategories);
+  }
+
   return { items: items, categories: categories, guidance: guidance };
 };
 
@@ -1411,4 +1424,17 @@ BRW.renderSortPanel = function (sorter, opts) {
   }
 
   return html + '</section>';
+};
+
+/* Dated balance lines are blue by rule (Rick 2026-07-16): after mounting a grid, mark every row whose label cell reads 'Balance, ...' — including group-summary rows whose label starts with the +/− toggle. */
+BRW.markDatedRows = function (containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var rows = container.querySelectorAll('[data-brw-row]');
+  for (var i = 0; i < rows.length; i++) {
+    var label = rows[i].querySelector('.brw-col-b');
+    if (!label) continue;
+    var text = label.textContent.replace(/^[+\u2212-]\s*/, '').trim();
+    if (text.indexOf('Balance,') === 0) rows[i].classList.add('brw-dated');
+  }
 };

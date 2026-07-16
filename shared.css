@@ -3309,3 +3309,7 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
   .brw-step-advance:hover { background: var(--primary-light); }
   .brw-step-advance:disabled { background: #3a3848; color: #8a8898; }
 }
+
+/* ===== Dated balance lines are blue by rule (Rick 2026-07-16). A + toggle appears only where a collapsed detail group exists; the blue marks every ruled dated line regardless. ===== */
+.brw-dated { background: var(--primary-faint); }
+@media (prefers-color-scheme: dark) { .brw-dated { background: #233029; } }
