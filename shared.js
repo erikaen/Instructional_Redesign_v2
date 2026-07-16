@@ -1302,7 +1302,7 @@ function initCourseChrome(){
   bar.className = 'course-banner';
   bar.innerHTML =
     '<div class="course-banner-side">'+(prev ? '<button class="btn-reset course-banner-btn" onclick="location.href=\''+prev.pages[0].f+'\'">&larr; Back Tutorial: '+prev.title+courseCheck(prev.id)+'</button>' : '')+'</div>'+
-    '<div class="course-banner-mid"><button class="btn-reset course-banner-btn" id="courseIndexBtn">'+tut.title+' &#9662;</button>'+
+    '<div class="course-banner-mid"><button class="btn-reset course-banner-btn" id="courseIndexBtn">'+(pageObj ? pageObj.t : tut.title)+' &#9662;</button>'+
       '<div class="course-index-menu" id="courseIndexMenu" hidden>'+menuHtml+'</div></div>'+
     '<div class="course-banner-side right">'+(next ? '<button class="btn-continue course-banner-btn" onclick="location.href=\''+next.pages[0].f+'\'">Next Tutorial: '+next.title+courseCheck(next.id)+' &rarr;</button>' : '')+'</div>';
   document.body.insertBefore(bar, document.body.firstChild);

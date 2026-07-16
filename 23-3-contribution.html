@@ -14,16 +14,13 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Activity 2.3: The Rules</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 3 of 6</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">What You Put In</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">What You Put In</div>
+
+    <div id="stepProg"></div>
+
 
     <!-- ===== contribution ===== -->
     <div class="phase active" id="phase-contribution">
@@ -182,6 +179,7 @@ BRW.registerSheet('balance', function(){ return '<div style="padding:10px 12px">
 
 var step = 0;   /* 0 walk the tabs, 1 read the balance sheet, 2 contributed */
 function renderContribution(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', step + 1, 3);
   var area = document.getElementById('contributionArea');
   var html = '<div id="bsWb"></div>';
   if(step===0){
@@ -189,12 +187,12 @@ function renderContribution(){
     html += '<button class="btn-continue btn-block" style="margin-top:14px" onclick="setStep(1)">Open the Balance Sheet tab &rarr;</button>';
   } else if(step===1){
     html += '<div class="dialog-box anna" style="margin-top:14px"><div class="dialog-label">ANNA</div><div class="dialog-text">Read it slowly. Assets, <strong>$3,410</strong> &mdash; every line straight off the Assets tab, Cash still $0. Liabilities, <strong>$2,250</strong> &mdash; the card and Smith&rsquo;s frame. And the difference, <strong>$1,160</strong>, in its two piles: <strong>Contributed $990</strong> and <strong>Generated $170</strong> &mdash; the same piles the Reasons tab has kept all along. This is the business &sect;9 moves into the Company &mdash; at these amounts, no revaluation.</div></div>';
-    html += '<button class="btn-continue btn-block" style="margin-top:14px" onclick="doContribute()">Contribute the business to the LLC &rarr;</button>';
+    html += '<div class="btn-row" style="margin-top:14px"><button class="btn-reset" onclick="setStep(0)"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto" onclick="doContribute()">Contribute the business to the LLC &rarr;</button></div>';
   } else {
     html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="check" class="licon"></i> Not one number changed</div>'+
       '<p>The same balance sheet you built informally is now the <strong>Company&rsquo;s</strong> &mdash; legally contributed in. Only one <em>word</em> on the right moved: &ldquo;the difference&rdquo; became <strong>Members&rsquo; Capital</strong>, the name the Operating Agreement uses. <strong>Contributed ($990)</strong> and <strong>Generated ($170)</strong> carried over untouched &mdash; same $1,160, the history intact.</p>'+
       '<p><strong>Schedule A</strong> of your draft is still <strong>empty</strong> &mdash; these are the lines you&rsquo;ll enter on it yourself, once the cash is deposited and the card is moved (2.4).</p></div>'+
-      '<button class="btn-continue btn-block" onclick="nav(\'23-4-wall.html\')">Now drill into &sect;17 &mdash; the wall &rarr;</button>';
+      '<div class="btn-row" style="margin-top:14px"><button class="btn-reset" onclick="unContribute()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   }
   area.innerHTML = html;
   BRW.mount('bsWb', bsSnap);
@@ -203,6 +201,7 @@ function renderContribution(){
 }
 function setStep(n){ playClick(); step=n; renderContribution(); }
 function doContribute(){ step=2; contributed=true; playSuccess(); renderContribution(); }
+function unContribute(){ playClick(); step=1; contributed=false; renderContribution(); }
 window.devFill = function(){ step=2; contributed=true; renderContribution(); };
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });

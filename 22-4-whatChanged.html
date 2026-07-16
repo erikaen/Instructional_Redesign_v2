@@ -14,16 +14,11 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 2: Filing for a Legal Body</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 4 of 5</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">What Changed?</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">What Changed?</div>
+
 
     <!-- ===== whatChanged ===== -->
     <div class="phase active" id="phase-whatChanged">
@@ -140,7 +135,7 @@ function figAdvance(){
     document.getElementById('figRing').style.opacity='1';
     document.getElementById('figRingLbl').innerHTML = esc(llcName())+' &mdash; a legal body (June 1)';
     document.getElementById('figCaption').innerHTML = 'The filing <strong>formalized</strong> the role: a separate legal person now holds it. Same items, same amounts &mdash; recognized first (Module 1), formalized today. That is the order it always happens in.';
-    document.getElementById('figBtn').hidden = true;
+    document.getElementById('figBtn').style.display = 'none';
     var cont=document.getElementById('figCont'); if(cont) cont.hidden = false;
     playSuccess();
   }
@@ -183,7 +178,7 @@ function renderWhatChanged(){
       '<p>One thing changed today: <strong>the LLC now exists as a legal entity</strong>. That matters. But the filing, by itself, did <strong>not</strong> change the balance sheet. The recorded assets, recorded liabilities, and the difference between them are still the same. The operation is the same operation you were already tracking. What is new is its <strong>legal standing</strong>.</p></div>';
     html += figureHtml();
     html += '<p class="callout">Two different lines, drawn at different times, for different reasons: first you <strong>recognized</strong> the bike-repair role (Module 1, in the books), then you <strong>formalized</strong> it (today, at the state). The repair work was already operating before today. The legal body is new.</p>';
-    html += '<button class="btn-continue btn-block" id="figCont" hidden onclick="nav(\'22-5-complete.html\')">Continue &rarr;</button>';
+    html += '';
   }
   document.getElementById('whatChangedArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();

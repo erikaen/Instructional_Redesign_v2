@@ -14,16 +14,13 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Activity 2.4: The Entity&rsquo;s Own Number</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 3 of 6</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Opening the Account</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Opening the Account</div>
+
+    <div id="stepProg"></div>
+
 
     <!-- ===== account ===== -->
     <div class="phase active" id="phase-account">
@@ -233,6 +230,7 @@ function acctRow(label, sub, amount, llc){
     '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:var(--font-s);font-weight:600">'+label+'</span>'+amt+'</div>'+subHtml+'</div>';
 }
 function renderAccount(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', step + 1, 4);
   var en = esc(llcName());
   var nextLabel = step===0 ? 'Open the LLC&rsquo;s bank account &rarr;'
     : step===1 ? 'Move $1,300 in cash into the account &rarr;'
@@ -251,18 +249,19 @@ function renderAccount(){
   var html = '<div class="main-grid two-col" style="margin-bottom:12px">'+personalCol+llcCol+'</div>';
   if(step===2){ html += '<div style="text-align:center;font-size:var(--font-xs);color:var(--primary);margin-bottom:10px">&uarr; your <strong>$1,300 cash contribution</strong> &mdash; Cash 0 &rarr; 1,300, members&rsquo; capital +1,300</div>'; }
   if(nextLabel){
-    html += '<button class="btn-continue btn-block" onclick="advanceAccount()">'+nextLabel+'</button>';
+    html += '<div class="btn-row">'+(step>0?'<button class="btn-reset" onclick="backAccount()"><i data-lucide="arrow-left" class="licon"></i> Back</button>':'')+'<button class="btn-continue" style="margin-left:auto" onclick="advanceAccount()">'+nextLabel+'</button></div>';
     html += docsButton();
   } else {
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Co-mingling ended</div>'+
       '<p>The LLC has its own account and card; your personal checking is personal again. The by-hand sorting you&rsquo;ve done since 1.1 is now <strong>institutional</strong> &mdash; banks, the IRS, and customers all deal with the LLC.</p></div>';
     html += '<p class="callout">Two of those moves changed <em>nothing</em> on the books &mdash; the EIN, and the card sliding to the LLC&rsquo;s name (<span class="mono">$2,030</span> stays <span class="mono">$2,030</span>). The <strong>one real change</strong> was your <strong>$1,300</strong>: a capital contribution. Cash <span class="mono">0 &rarr; 1,300</span>; members&rsquo; capital <span class="mono">990 &rarr; 2,290</span>. Next: check the paper trail &mdash; then you&rsquo;ll complete Schedule A from these books, and sign.</p>';
     html += docsButton();
-    html += '<button class="btn-continue btn-block" onclick="nav(\'24-4-statements.html\')">See the statements &rarr;</button>';
+    html += '<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="backAccount()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   }
   document.getElementById('accountArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
+function backAccount(){ playClick(); if(step>0) step--; renderAccount(); }
 function advanceAccount(){
   if(step===1 || step===2) playMove(); else playSuccess();
   if(step<3) step++;

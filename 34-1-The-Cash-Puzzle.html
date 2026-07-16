@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 4: The Cash-Flow Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 4</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">The Cash Puzzle</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Cash Puzzle</div>
 
     <div class="narrative-block">
       <p>The income statement is complete: a profitable season. But there&rsquo;s a loose thread Anna wouldn&rsquo;t let go of. Flip to <strong>Assets</strong> and look at <strong>Cash</strong> &mdash; already open below.</p>
@@ -111,7 +105,7 @@ function renderAll(){
     ctrl2 = insightBox('Two honest answers to two different questions',
         '<p>Profitable, <em>and</em> poorer in cash. Not an error. Not a theft. &ldquo;How did the shop do?&rdquo; turns out to be two questions, not one: cash misses things, and net income misses different things. That&rsquo;s why there are two statements &mdash; each answers honestly for its own question.</p>')
       + '<div class="next-phase-msg">The answer isn&rsquo;t hiding. It&rsquo;s written in the Cash line itself &mdash; every row in it is a fact. The next step is sorting those facts.</div>'
-      + '<button class="btn-continue btn-block" onclick="nav(\'34-2-Three-Buckets.html\')">Sort the cash &rarr;</button>';
+      + '';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML += ctrl2;

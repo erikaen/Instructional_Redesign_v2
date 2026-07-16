@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 4: The Cash-Flow Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 4</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Three Buckets</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Three Buckets</div>
 
     <div id="stepProg"></div>
 
@@ -212,7 +206,7 @@ function renderDone(){
     insightBox('Three piles, one tie-out',
       '<p><strong>Operating</strong> +$320 &middot; <strong>Investing</strong> &minus;$400 &middot; <strong>Financing</strong> &minus;$600. Together, &minus;$680 &mdash; the same $680 the Cash line fell, from $1,300 to $620. Nothing missing; every dollar sorted.</p>')
     + '<div class="next-phase-msg">One thing still doesn&rsquo;t add up cleanly: Net income was <strong>+$2,640</strong>, but the OPERATING pile only nets <strong>+$320</strong>. The gap between them is the next thing to explain.</div>'
-    + '<div class="btn-row"><button class="btn-reset" onclick="unSort()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto;" onclick="nav(\'34-3-What-Cash-Missed.html\')">Where the $2,320 gap comes from &rarr;</button></div>';
+    + '<div class="btn-row"><button class="btn-reset" onclick="unSort()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   if(window.lucide) lucide.createIcons();
 }
 function unSort(){

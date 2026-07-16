@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 5: Closing the Season</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 3 of 4</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">The Statements Tie Out</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Statements Tie Out</div>
 
     <div class="narrative-block">
       <p>Here is the whole workbook, closed for the season &mdash; and beside the tabs you built it from, the closing balance sheet and the season&rsquo;s three flow statements. Three things moved between the two snapshots. For each one, find the statement that carries the story.</p>
@@ -153,7 +147,7 @@ function renderTalk(done){
     anna = annaBox('Every one of those moves had a statement that could explain it. None of them was left as just a number that changed for no stated reason. Accountants have a name for this: <strong>articulation</strong> &mdash; the statements tie to each other. The balance sheet shows where things stand; the flow statements show how it got there. Neither stands alone.');
     ctrl = insightBox('Articulation',
         '<p>A balance sheet cannot show a new number without the story filed beside it. The difference never jumps from one snapshot to the next &mdash; it travels through the income statement, the statement of changes in Members&rsquo; Capital, and the statement of cash flows, in full. That is what it means for the statements to <strong>tie out</strong>.</p>')
-      + '<button class="btn-continue btn-block" onclick="nav(\'35-4-Module-Complete.html\')">Finish Module 3 &rarr;</button>';
+      + '';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;

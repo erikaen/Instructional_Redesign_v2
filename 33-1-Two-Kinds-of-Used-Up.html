@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 3: Depreciation</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 3</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Two Kinds of Used-Up</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Two Kinds of Used-Up</div>
 
     <div id="stepProg"></div>
 
@@ -109,7 +103,7 @@ function renderMcq(){
   if(correct){
     h += insightBox('Two kinds counted, one missing',
         '<p><strong>Parts</strong>: use you can observe directly. <strong>Rent</strong>: a month that lapses on its own. The wear on the tools is just as real &mdash; they were plainly used, and used up a little, during the season &mdash; but there&rsquo;s nothing to watch leave and no month that expires. Putting a number on it will take something new.</p>')
-      + '<button class="btn-continue btn-block" onclick="nav(\'33-2-The-Third-Kind.html\')">Where would a number come from? &rarr;</button>';
+      + '';
   }
   return h;
 }

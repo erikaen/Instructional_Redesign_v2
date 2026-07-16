@@ -14,16 +14,10 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 2: Filing for a Legal Body</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 2 of 5</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Name the LLC</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Name the LLC</div>
 
     <!-- ===== name ===== -->
     <div class="phase active" id="phase-name">
@@ -39,7 +33,7 @@
         <div id="entityPreview" style="font-family:Georgia,'Times New Roman',serif;text-align:center;font-size:20px;font-weight:700;color:var(--primary);background:var(--primary-faint);border-radius:8px;padding:12px 16px">[Your Name]&rsquo;s Bike Repairs, LLC</div>
         <p id="nameHint" style="font-size:var(--font-xs);margin-top:8px">Type your name to personalize the LLC name, or leave it blank to continue with the placeholder.</p>
       </div>
-      <button class="btn-continue btn-block" onclick="lockName()">Continue &rarr;</button>
+      <button class="btn-continue btn-block" id="confirmNameBtn" onclick="lockName()">Confirm</button>
     </div>
 
   </div>
@@ -66,6 +60,7 @@ var audioCtx = null;
 function ac(){ if(!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
 function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){ tone(784,0.16); },110); }
 
 /* ===== glossary (shared across all phases of 2.2) ===== */
 var glossaryTerms = [
@@ -91,14 +86,25 @@ var memberName = '';
 function memberDisplay(){ return memberName.trim() || "[Your Name]"; }
 function llcName(){ return memberDisplay() + "’s Bike Repairs, LLC"; }
 function syncName(){ var inp=document.getElementById('memberName'); if(inp) inp.value=memberName; updateNamePreview(); }
-function onNameInput(){ memberName = document.getElementById('memberName').value; updateNamePreview(); }
+var nameConfirmed = false;
+function onNameInput(){
+  memberName = document.getElementById('memberName').value;
+  updateNamePreview();
+  if(nameConfirmed){                       /* editing after confirm re-arms the button */
+    nameConfirmed = false;
+    document.getElementById('confirmNameBtn').disabled = false;
+  }
+}
 function updateNamePreview(){
   document.getElementById('entityPreview').textContent = llcName();
   document.getElementById('nameHint').style.display = memberName.trim() ? 'none' : '';
 }
 function lockName(){
-  if(memberName.trim()){ try{ localStorage.setItem('m2Member', memberName.trim()); }catch(e){} }
-  nav('22-3-file.html');
+  if(!memberName.trim() || nameConfirmed) return;
+  try{ localStorage.setItem('m2Member', memberName.trim()); }catch(e){}
+  nameConfirmed = true;
+  document.getElementById('confirmNameBtn').disabled = true;
+  playSuccess();
 }
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });

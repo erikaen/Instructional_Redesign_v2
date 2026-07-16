@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 2: The Income Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 5 of 5</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">What the Season Kept</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">What the Season Kept</div>
 
     <div class="narrative-block">
       <p>The income statement answers one question &mdash; how the season went. But that answer has to <strong>land</strong> somewhere in the books. Back on the Reasons tab, <strong>GENERATED &mdash; through May 31</strong> holds what the work had produced before the summer, <strong>CONTRIBUTED</strong> holds what you put in &mdash; and the season&rsquo;s own story now sits on the <strong>Revenue</strong> and <strong>Expenses</strong> tabs. When Net income is finished, which pile does it feed?</p>
@@ -65,7 +59,7 @@ function renderTalk(){
     insightBox('The income statement explains a balance-sheet move',
         '<p>Between June and now, members&rsquo; capital moved. The income statement says <em>how</em>: Net income is exactly the amount added to <strong>GENERATED</strong> for the season. (Your <strong>$600</strong> draw sits in its own pile, <strong>WITHDRAWN</strong> &mdash; taking money out is a distribution, not a cost of the work. It gets its own statement later.)</p>')
     + '<div class="next-phase-msg">You built the whole shape: Revenue, Expenses, Net income &mdash; and where it lands. Only one thing is still open: the last expense. Your tools and laptop wore out all season, and that wear isn&rsquo;t counted yet. Finish it, and Net income finally gets its number.</div>'
-    + '<button class="btn-continue btn-block" onclick="nav(\'33-1-Two-Kinds-of-Used-Up.html\')">Next: the wear you can&rsquo;t see &rarr;</button>';
+    + '';
   if(window.lucide) lucide.createIcons();
 }
 

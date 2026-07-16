@@ -14,16 +14,10 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Activity 2.3: The Rules</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 5 of 6</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">When Did It Become Real?</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">When Did It Become Real?</div>
 
     <!-- ===== keystone ===== -->
     <div class="phase active" id="phase-keystone">
@@ -83,48 +77,49 @@ function nav(url){ playClick(); window.location.href = url; }
 function restart(){ window.location.reload(); }
 
 /* ===== state (phase-local) ===== */
-var keystonePick = null;
 
-/* ===== keystone: the question ===== */
+/* ===== keystone: the question (canonical MCQ) ===== */
+var OPTS = [
+  { id:'cert', text:'When you filed the Certificate (2.2)',
+    fb:'Not quite &mdash; that&rsquo;s the day it became a <em>legal</em> entity. But was that when it became real? Try again.' },
+  { id:'oa', text:'When the Operating Agreement gets signed',
+    fb:'No &mdash; the agreement is the Company&rsquo;s internal rulebook. It <em>governs</em> the entity; it doesn&rsquo;t create it. Legal existence came with the Certificate (2.2) &mdash; and the signing hasn&rsquo;t even happened yet. Try again.' },
+  { id:'1.1', text:'Back in 1.1 &mdash; when you first drew the line in your books', ok:true,
+    fb:'Right. The <strong>Certificate</strong> gave the operation a legal body, and the agreement you drafted today will govern it &mdash; but <strong>neither created the entity</strong>. You&rsquo;ve kept these books, this boundary, since <strong>1.1</strong>. The <strong>accounting</strong> line came first &mdash; by months, and in a real firm, by years.' }
+];
+var sel = null, submitted = false;
 function renderKeystone(){
   var area = document.getElementById('keystoneArea');
-  var right = keystonePick==='1.1';
-  var opts = [
-    ['cert','When you filed the Certificate (2.2)',
-      'Not quite &mdash; that&rsquo;s the day it became a <em>legal</em> entity. But was that when it became real? Try again.'],
-    ['oa','When the Operating Agreement gets signed',
-      'No &mdash; the agreement is the Company&rsquo;s internal rulebook. It <em>governs</em> the entity; it doesn&rsquo;t create it. Legal existence came with the Certificate (2.2) &mdash; and the signing hasn&rsquo;t even happened yet. Try again.'],
-    ['1.1','Back in 1.1 &mdash; when you first drew the line in your books','']
-  ];
-  var html = '<div style="display:flex;flex-direction:column;gap:10px">';
-  opts.forEach(function(o){
-    var id=o[0], label=o[1], fb=o[2];
-    var picked = keystonePick===id;
-    var isRight = id==='1.1';
-    var show = keystonePick!==null;
-    var st = 'background:var(--primary-faint);border:2px solid var(--border-strong)';
-    if(show && picked){ st = isRight ? 'background:var(--success-bg);border:2px solid var(--success-border)' : 'background:var(--error-bg);border:2px solid var(--error-border)'; }
-    html += '<button onclick="pickKeystone(\''+id+'\')"'+(right?' disabled':'')+' style="text-align:left;border-radius:10px;padding:12px;cursor:pointer;font-family:inherit;font-size:var(--font-m);color:inherit;'+st+'">'+label;
-    if(show && picked && !isRight){ html += '<span style="display:block;font-size:var(--font-xs);margin-top:4px;color:var(--error-text)">'+fb+'</span>'; }
-    html += '</button>';
+  var right = submitted && OPTS[sel].ok;
+  var html = '<div class="mc-card"><div class="mc-q">When did this entity actually become real?</div><div class="mc-opts">';
+  OPTS.forEach(function(o, i){
+    var cls = 'mc-opt' + (!submitted && sel===i ? ' selected' : '')
+      + (submitted && sel===i ? (o.ok?' correct':' wrong') : '')
+      + (submitted ? ' locked' : '');
+    html += '<div class="'+cls+'" onclick="selectKeystone('+i+')"><div class="mc-letter">'+String.fromCharCode(65+i)+'</div><div>'+o.text+'</div></div>';
   });
   html += '</div>';
+  if(submitted) html += '<div class="feedback '+(right?'ok':'err')+' show">'+OPTS[sel].fb+'</div>';
+  html += '<div class="btn-row">'+(submitted
+    ? '<button class="btn-reset" onclick="resetKeystone()" style="margin-left:auto;">Reset</button>'
+    : '<button class="btn-continue" onclick="submitKeystone()"'+(sel===null?' disabled':'')+'>Submit</button>')+'</div>';
+  html += '</div>';
   if(right){
-    html += '<div class="callout" style="margin-top:14px">Right. The <strong>Certificate</strong> gave the operation a legal body, and the agreement you drafted today will govern it &mdash; but <strong>neither created the entity</strong>. You&rsquo;ve kept these books, this boundary, since <strong>1.1</strong>. The <strong>accounting</strong> line came first &mdash; by months, and in a real firm, by years.</div>';
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="key-round" class="licon"></i> The keystone</div>'+
       '<p style="font-size:var(--font-lg);font-weight:700;color:var(--primary);margin-bottom:6px">Accounting&#8209;entity &ne; legal&#8209;entity.</p>'+
       '<p>The accounting entity is a boundary you drew <em>for information</em> &mdash; it can exist with or without any legal body, and here it came first. The LLC is a legal wrapper placed around it. Getting an LLC didn&rsquo;t make the entity &ldquo;finally real&rdquo;; it was a real <em>accounting</em> entity all along.</p></div>';
-    html += '<button class="btn-continue btn-block" onclick="nav(\'23-6-complete.html\')">Finish up &rarr;</button>';
   }
   area.innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
-function pickKeystone(id){
-  if(keystonePick==='1.1') return;
-  keystonePick = id;
-  if(id==='1.1') playSuccess(); else playNope();
+function selectKeystone(i){ if(submitted) return; sel = i; renderKeystone(); }
+function submitKeystone(){
+  if(sel===null || submitted) return;
+  submitted = true;
+  if(OPTS[sel].ok) playSuccess(); else playNope();
   renderKeystone();
 }
+function resetKeystone(){ sel = null; submitted = false; renderKeystone(); }
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 

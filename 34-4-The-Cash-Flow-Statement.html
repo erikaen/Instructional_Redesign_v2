@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 4: The Cash-Flow Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 4 of 4</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Laying It Out</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Laying It Out</div>
 
     <div id="stepProg"></div>
 
@@ -82,7 +76,7 @@ function renderTalk(){
     ctrl = insightBox('Three statements, one workbook',
         '<p>Income statement: how the season went, by the work. Statement of cash flows: where the cash went, by purpose. Balance sheet: where things stand, this moment. Each answers a different question &mdash; and none of them is wrong for not answering the others.</p>')
       + '<div class="next-phase-msg">One question left: what happened to Members&rsquo; Capital over the season, and where does a finished season get filed?</div>'
-      + '<div class="btn-row"><button class="btn-reset" onclick="unBuild()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto;" onclick="nav(\'35-1-The-Capital-Bridge.html\')">Next: close the season &rarr;</button></div>';
+      + '<div class="btn-row"><button class="btn-reset" onclick="unBuild()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;

@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 2: The Income Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 3 of 5</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">The Work, Not the Cash</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Work, Not the Cash</div>
 
     <div id="stepProg"></div>
 
@@ -105,7 +99,7 @@ function renderTalk(){
     ctrl = insightBox('The work is what counts',
         '<p>'+ridge.customer+': work done <strong>now</strong>, cash <strong>later</strong> &mdash; in the pile now (and a receivable until they pay). '+smith.customer+': cash <strong>earlier</strong>, work done <strong>now</strong> &mdash; in the pile now too. The pile follows the <strong>work</strong>, whichever way the cash runs. And the books stay balanced: assets went up '+BRW.dol(ridge.charge)+', and so did the pile.</p>')
       + '<div class="next-phase-msg">The two piles are complete and honest now. Time to give them their real names &mdash; and their own sheets.</div>'
-      + '<div class="btn-row">'+backBtn(1)+'<button class="btn-continue" style="margin-left:auto;" onclick="nav(\'32-4-name-the-income-statement.html\')">Name the piles &rarr;</button></div>';
+      + '<div class="btn-row">'+backBtn(1)+'</div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;

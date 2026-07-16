@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 5: Closing the Season</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 4</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">The Capital Bridge</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Capital Bridge</div>
 
     <div class="narrative-block">
       <p>One number was moving the whole time and never got its own statement: <strong>Members&rsquo; Capital</strong>. June 1 it read <strong>$2,460</strong>. Where should it stand today? Do the arithmetic yourself.</p>
@@ -114,7 +108,7 @@ function ctrlAfterReveal(){
   return annaBox('Look at what didn&rsquo;t move: <strong>Contributed</strong> stayed at <strong>'+BRW.dol(CONTRIB)+'</strong> all season &mdash; no new contributions came in. The whole $2,040 swing ran through the other slice: <strong>Generated</strong> went from '+BRW.dol(RETAINED_OPEN)+' up to '+BRW.dol(RETAINED_CLOSE)+' &mdash; up by the net income, down by the draw. Every dollar of the move in Members&rsquo; Capital this season &mdash; up or down &mdash; this statement can name.')
     + insightBox('Two lines moved this bridge',
         '<p>Net income in, the draw out. Contributed sat still.</p>')
-    + '<button class="btn-continue btn-block" onclick="nav(\'35-2-The-First-Close.html\')">Where does a finished season get filed? &rarr;</button>';
+    + '';
 }
 
 /* ===== glossary / nav ===== */

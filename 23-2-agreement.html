@@ -14,16 +14,13 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Activity 2.3: The Rules</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 2 of 6</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Drafting the Agreement</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Drafting the Agreement</div>
+
+    <div id="stepProg"></div>
+
 
     <!-- ===== agreement ===== -->
     <div class="phase active" id="phase-agreement">
@@ -229,6 +226,7 @@ function closeDoc(){
 
 /* ===== agreement: generate + sign ===== */
 function renderAgreement(){
+  if (window.renderStepProgress) renderStepProgress('stepProg', generated ? 2 : 1, 2);
   var area = document.getElementById('agreementArea');
   if(!generated){
     area.innerHTML =
@@ -248,7 +246,8 @@ function renderAgreement(){
   html += '<button class="btn-continue btn-block" style="background:transparent;color:var(--primary);border:1.5px solid var(--primary)" onclick="openDoc(\'anna\')"><i data-lucide="file-text" class="licon"></i> View Anna&rsquo;s example &rarr;</button>';
   html += '<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="file-clock" class="licon"></i> A draft, on purpose</div>'+
     '<p>The agreement is complete except the part <em>you</em> can&rsquo;t honestly fill in yet. <strong>Schedule A</strong> attests to what the member contributes &mdash; and the contributing isn&rsquo;t done: the cash isn&rsquo;t deposited, and the card is still in your name. You complete the schedule after the facts are in, and you sign after that. Paper comes last.</p></div>';
-  html += '<button class="btn-continue btn-block" onclick="nav(\'23-3-contribution.html\')">Now drill into &sect;9 &mdash; what you put in &rarr;</button>';
+  html += '<div class="btn-row" style="margin-top:14px"><button class="btn-reset" onclick="unGenerate()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
+  html += '';
   area.innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
@@ -256,6 +255,7 @@ function onAgreementNameInput(){
   memberName = document.getElementById('mnInput').value;
   document.getElementById('agEntityPreview').textContent = llcName();
 }
+function unGenerate(){ playClick(); generated = false; renderAgreement(); }
 function generateAgreement(){
   var inp = document.getElementById('mnInput'); if(inp) memberName = inp.value;
   if(memberName.trim()){ try{ localStorage.setItem('m2Member', memberName.trim()); }catch(e){} }

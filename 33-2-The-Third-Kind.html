@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 3: Depreciation</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 3</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">The Third Kind</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Third Kind</div>
 
     <div id="stepProg"></div>
 
@@ -128,7 +122,7 @@ function renderTalk(){
     anna = annaBox('There &mdash; the third kind of used-up, on the tab at last: <strong>Depreciation</strong>, $200 for the tools, equipment and fixtures, and $30 for the laptop. Expenses now read <strong>$3,380</strong>, and the placeholder is gone. And flip to Assets: the Tools &amp; Repair Equipment line carries <strong>&minus;$160</strong> now, Fixtures <strong>&minus;$40</strong>, the Laptop <strong>&minus;$30</strong>. The wear didn&rsquo;t just cost the season &mdash; it lowered what the records carry.');
     ctrl = insightBox('An allocation, openly chosen',
         '<p>The $200 isn&rsquo;t a reading of anything. It&rsquo;s the season&rsquo;s <strong>share of a cost</strong>, set by a rule someone chose &mdash; and back in May, you took none, which was also a choice. That&rsquo;s not a flaw to hide. It&rsquo;s what this number <em>is</em>.</p>')
-      + '<div class="btn-row"><button class="btn-reset" onclick="unRecord()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto;" onclick="nav(\'33-3-The-Bottom-Line.html\')">What the wear did to the books &rarr;</button></div>';
+      + '<div class="btn-row"><button class="btn-reset" onclick="unRecord()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;

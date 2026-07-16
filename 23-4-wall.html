@@ -14,16 +14,11 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Activity 2.3: The Rules</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 4 of 6</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">The Wall</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Wall</div>
+
 
     <!-- ===== wall ===== -->
     <div class="phase active" id="phase-wall">
@@ -120,13 +115,14 @@ function renderWall(){
   } else {
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="shield" class="licon"></i> The wall</div>'+
       '<p>This is the wall Maria wanted. <strong>Limited liability</strong> is a <em>legal</em> fact &mdash; it changes <strong>who can be pursued</strong>, not what the records show. The balance sheet didn&rsquo;t move; the exposure did.</p></div>'+
-      '<button class="btn-continue btn-block" onclick="nav(\'23-5-keystone.html\')">One last thing &rarr;</button>';
+      '<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="resetWall()" style="margin-left:auto">Reset</button></div>';
   }
   html += '</div>';
   area.innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
 function runClaim(){ claimRun=true; playThud(); renderWall(); }
+function resetWall(){ playClick(); claimRun=false; compShown=false; youShown=false; renderWall(); window.scrollTo(0,0); }
 function showComp(){ compShown=true; playClick(); renderWall(); }
 function showYou(){ youShown=true; playClick(); renderWall(); }
 window.devFill = function(){ compShown=youShown=true; if(!claimRun) runClaim(); else renderWall(); };

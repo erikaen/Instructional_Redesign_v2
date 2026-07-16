@@ -14,16 +14,11 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 2: Filing for a Legal Body</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 3 of 5</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">File the Certificate</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">File the Certificate</div>
+
 
     <!-- ===== file ===== -->
     <div class="phase active" id="phase-file">
@@ -107,7 +102,7 @@ function renderFile(){
     below = '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Certificate of Organization Filed</div>'+
       '<p style="margin-bottom:20px">The State accepts the filing. As of this moment, <strong>'+esc(en)+'</strong> exists. It is now a <strong>legal entity</strong>: a &ldquo;legal person&rdquo; that can own things, owe debts, sign contracts, and be sued in its own name.</p>'+
       '<p>You filed in Connecticut because that is where you live and operate. Some companies choose another state, such as Delaware, for business or legal reasons. For this repair work, Connecticut is the straightforward choice.</p></div>'+
-      '<button class="btn-continue btn-block" onclick="nav(\'22-4-whatChanged.html\')">Continue &rarr;</button>';
+      '';
   }
   document.getElementById('fileArea').innerHTML =
     '<div class="narrative-block"><p>Here&rsquo;s the document Anna meant: <strong>Connecticut&rsquo;s Certificate of Organization</strong>. This is the filing that brings the LLC into legal existence.</p></div>'+cert+below;

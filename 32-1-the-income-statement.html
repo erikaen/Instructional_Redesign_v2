@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 2: The Income Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 1 of 5</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">The Pile</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Pile</div>
 
     <div class="narrative-block">
       <p>Here is <span class="mono">Bike-Repair.xlsx</span> again, right where you left it &mdash; the same three tabs. The one place the story actually lives is the <strong>Reasons</strong> tab, in the <strong>GENERATED</strong> pile &mdash; one continuous list, growing since your first jot back in May.</p>
@@ -83,7 +77,7 @@ function renderTalk(){
   document.getElementById('controls').innerHTML = insightBox('A true list, but not yet an answer',
       '<p>Nothing in the pile is wrong. But it has <strong>two troubles</strong> at once. It <strong>never resets</strong> &mdash; May&rsquo;s reasons and August&rsquo;s share one pile, so no line in it belongs to &ldquo;this season.&rdquo; And it&rsquo;s <strong>jumbled</strong> &mdash; what the work delivered and what got used up are scattered through it, job by job, instead of totaled in one place.</p>')
     + '<div class="next-phase-msg">Look closely and every season reason is really one of just <strong>two kinds</strong>. Next: set May&rsquo;s rows aside &mdash; the question is about the <em>summer</em> &mdash; then sort the season, right here in the workbook.</div>'
-    + '<button class="btn-continue btn-block" onclick="nav(\'32-2-two-kinds.html\')">Sort the pile &rarr;</button>';
+    + '';
   if(window.lucide) lucide.createIcons();
 }
 

@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 3: Depreciation</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 3 of 3</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">The Bottom Line</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Bottom Line</div>
 
     <div id="stepProg"></div>
 
@@ -84,7 +78,7 @@ function renderTalk(){
     ctrl = insightBox('How the season went &mdash; answered',
         '<p>One statement, read straight off the two period tabs: Revenue '+BRW.dol(REVENUE)+' &minus; Expenses '+BRW.dol(EXPENSES)+' = <strong>Net income '+BRW.dol(NET_INCOME)+'</strong>. This is the answer the jumbled pile couldn&rsquo;t give &mdash; and it&rsquo;s complete now.</p>')
       + '<div class="next-phase-msg">One loose thread, though. A '+BRW.dol(NET_INCOME)+' season &mdash; and the Cash line reads <strong>$620</strong>, down from <strong>$1,300</strong> on opening day. Profitable, and poorer in cash. Both true. The next tutorial pulls that apart.</div>'
-      + '<div class="btn-row"><button class="btn-reset" onclick="unFinish()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto;" onclick="nav(\'34-1-The-Cash-Puzzle.html\')">Next: profit vs. cash &rarr;</button></div>';
+      + '<div class="btn-row"><button class="btn-reset" onclick="unFinish()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;

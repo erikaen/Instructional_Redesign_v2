@@ -14,16 +14,11 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 2: The Two You&rsquo;s</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 3 of 5</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Who Sees Two?</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Who Sees Two?</div>
+
 
     <!-- ===== whoSeesTwo ===== -->
     <div class="phase active" id="phase-whoSeesTwo">
@@ -132,7 +127,7 @@ function renderObservers(){
   if(observers.every(function(o){ return placed[o.id]; })){
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="alert-triangle" class="licon"></i> Only the Books See the Boundary</div>'+
       '<p>Only your books treat your bike-repair role as separate from the rest of your life. The bank, the credit-card company, Smith, and the law still see <strong>one undivided you</strong>. You <em>recognized</em> the role &mdash; that is what Module 1&rsquo;s boundary did &mdash; but the recognition is informal: you maintain it yourself, and it has no legal force. That is why Smith&rsquo;s claim does not stop at it.</p></div>';
-    html += '<button class="btn-continue btn-block" onclick="nav(\'21-4-twoHats.html\')">Continue &rarr;</button>';
+    html += '';
   }
   document.getElementById('observerArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();

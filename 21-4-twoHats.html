@@ -14,16 +14,11 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 2: The Two You&rsquo;s</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 4 of 5</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Same Head, Two Hats</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Same Head, Two Hats</div>
+
 
     <!-- ===== twoHats ===== -->
     <div class="phase active" id="phase-twoHats">
@@ -89,7 +84,7 @@ function renderTwoHats(){
   } else {
     html = '<div class="insight-box"><div class="insight-label"><i data-lucide="scale" class="licon"></i> The second line</div>'+
       '<p>The boundary in your books is real, but it is an <strong>accounting boundary</strong> &mdash; it is where <em>you</em> recognized your bike-repair role. What comes next is <strong>formalizing</strong> it: a legal line beside the accounting one, giving the role a body of its own that the bank, the credit-card company, Smith, and the law must recognize. That is the order this always happens in &mdash; first recognize the separate roles, then formalize them into separate legal entities.<br><br>Maria already named one common way to draw that legal line: an <strong>LLC</strong>. Next, you will form one.</p></div>'+
-      '<button class="btn-continue btn-block" onclick="nav(\'21-5-complete.html\')">Continue &rarr;</button>';
+      '';
   }
   document.getElementById('twoHatsArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();

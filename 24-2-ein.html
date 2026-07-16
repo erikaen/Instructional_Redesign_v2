@@ -14,16 +14,11 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Activity 2.4: The Entity&rsquo;s Own Number</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 2 of 6</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Form SS-4</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Form SS-4</div>
+
 
     <!-- ===== ein ===== -->
     <div class="phase active" id="phase-ein">
@@ -239,7 +234,7 @@ function renderEin(){
       '<p>The IRS issues <strong>'+esc(llcName())+'</strong> its own number &mdash; <span class="mono">EIN 88-3729104</span>, filed June 1, 2026. The entity now has an identity to the outside world, separate from your personal one.</p></div>';
     html += '<p class="callout"><strong>One small irony (an aside, not the lesson):</strong> line 9a reads &ldquo;disregarded entity&rdquo; &mdash; for <em>income tax</em> the IRS looks back <em>through</em> the LLC to you, even though it now holds its own number for everything else. Different lines, drawn for different purposes.</p>';
     html += docsButton();
-    html += '<button class="btn-continue btn-block" onclick="nav(\'24-3-account.html\')">Now open the account &rarr;</button>';
+    html += '';
   }
   document.getElementById('einArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();

@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 5: Closing the Season</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 4</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">The First Close</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The First Close</div>
 
     <div id="stepProg"></div>
 
@@ -76,7 +70,7 @@ function renderTalk(){
     anna = annaBox('Look what happened. Revenue and Expenses are <strong>empty</strong> &mdash; closed into GENERATED, ready for next season at $0. And on the Reasons tab, GENERATED no longer lists every May row one by one, or every summer row one by one. It holds two lines: <strong>&ldquo;May (pre-LLC) +$170&rdquo;</strong> and <strong>&ldquo;Summer 2026 +$2,640&rdquo;</strong> &mdash; an archive of finished periods, one row per close. WITHDRAWN didn&rsquo;t move; the draw was never part of how the work did.');
     ctrl = insightBox('Closing is filing a finished period',
         '<p>Nothing about this is a ritual. A period tab exists to answer one question &mdash; how did <em>this</em> stretch go &mdash; and once it has, its answer gets filed as a single row and the tab clears for the next stretch to ask its own question. &ldquo;Temporary&rdquo; never meant fragile. It meant <em>period-scoped</em>: built to answer once, then reset.</p>')
-      + '<div class="btn-row"><button class="btn-reset" onclick="unClose()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-continue" style="margin-left:auto;" onclick="nav(\'35-3-The-Statements-Tie-Out.html\')">See it all tie together &rarr;</button></div>';
+      + '<div class="btn-row"><button class="btn-reset" onclick="unClose()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;

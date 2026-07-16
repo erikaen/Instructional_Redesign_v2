@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 1: Run the Season</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 2 of 5</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Read the Books</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Read the Books</div>
 
     <div id="stepProg"></div>
 
@@ -145,7 +139,7 @@ function renderTalk(){
     ctrl=insightBox('A workbook, not yet a statement',
       '<p>These three tabs show where things <strong>stand</strong> and <em>why</em> each balance moved. But they never line up, in one place, what the work <strong>delivered</strong> against what it <strong>used up</strong> delivering. That comparison is the next thing to build &mdash; and because &ldquo;how did the shop do?&rdquo; splits into two questions, it will take more than one statement to answer it whole.</p>')
       + '<div class="next-phase-msg" style="margin-top:10px;">You read the whole season off these tabs. Next, you&rsquo;ll take that GENERATED pile and turn it into the statement that answers that question.</div>'
-      + '<div class="btn-row">'+backBtnHtml()+'<button class="btn-continue" style="margin-left:auto;" onclick="nav(\'32-1-the-income-statement.html\')">Next: how the season went &rarr;</button></div>';
+      + '<div class="btn-row">'+backBtnHtml()+'</div>';
     evidence='<div class="section-card"><div class="card-title">Where these numbers came from</div>'
       + '<p>None of this is invented. Every line you just walked traces back to something you could hold &mdash; a repair ticket, a supplier invoice, a bank or credit-card statement. Open any of them below to check a number against its source.</p>'
       + '<button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every repair this summer</button>'

@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 2: The Income Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 4 of 5</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Name the Piles</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Name the Piles</div>
 
     <div id="stepProg"></div>
 
@@ -99,7 +93,7 @@ function renderTalk(){
     ctrl = insightBox('The statement, but not the bottom line &mdash; yet',
         '<p>Revenue minus Expenses is <strong>Net income</strong> &mdash; the answer, at last, to how the season actually went. The shape is right and Revenue is finished &mdash; but the Expenses sheet is still missing one kind of used-up, so the bottom line stays open on purpose.</p>')
       + '<div class="next-phase-msg">First, see where this bottom line is headed once it&rsquo;s finished &mdash; and why it lands where it does.</div>'
-      + '<div class="btn-row">'+backBtn(1)+'<button class="btn-continue" style="margin-left:auto;" onclick="nav(\'32-5-what-the-season-kept.html\')">Where net income goes &rarr;</button></div>';
+      + '<div class="btn-row">'+backBtn(1)+'</div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;

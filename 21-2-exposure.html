@@ -14,16 +14,11 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 2: The Two You&rsquo;s</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 2 of 5</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">Follow the Claim</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Follow the Claim</div>
+
 
     <!-- ===== exposure ===== -->
     <div class="phase active" id="phase-exposure">
@@ -115,7 +110,7 @@ function renderExposure(){
   html += '</div>';
   if(claimRun){
     html += '<div class="dialog-box maria" style="margin-bottom:20px"><div class="dialog-label">MARIA</div><div class="dialog-text">Your books separate the repair work from your personal life, but the books alone do not create legal protection. Without a legal wall in place, the same claim can put your personal assets at risk: your car, your earnings, even your savings.<br><br>Liability coverage can help pay a claim, and you should carry it. But a policy only <strong>pays</strong> a claim; it does <strong>not</strong> proactively build protection. That is where an <strong>LLC (Limited Liability Company)</strong> comes in.</div></div>';
-    html += '<button class="btn-continue btn-block" onclick="nav(\'21-3-whoSeesTwo.html\')">Continue &rarr;</button>';
+    html += '';
   }
   document.getElementById('exposureArea').innerHTML = html;
   if(window.lucide) lucide.createIcons();

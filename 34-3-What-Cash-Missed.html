@@ -13,16 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Tutorial 4: The Cash-Flow Statement</h1>
-        <p class="tut-header-sub">Module 3 &middot; The Story Between the Snapshots &middot; ~10 min &middot; Phase 3 of 4</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title" id="phaseTitle">What Cash Missed</div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">What Cash Missed</div>
 
     <div id="stepProg"></div>
 
@@ -121,7 +115,7 @@ function renderAll(){
     anna = annaBox('Four items, and the gap is fully explained: Net income <strong>'+BRW.dol(NET_INCOME)+'</strong>, minus Ridgeline&rsquo;s $300, minus Smith&rsquo;s $220, plus depreciation&rsquo;s $230 added back, minus the $2,030 card payoff &mdash; lands exactly on Operating cash, <strong>'+BRW.dol(OP_CASH)+'</strong>. Nothing left unexplained.');
     ctrl = insightBox('Two honest clocks',
         '<p>The income statement times things to the <strong>work</strong> &mdash; when it was delivered or used up. The Cash list times things to the <strong>cash</strong> &mdash; when money actually moved. Both are honest answers. They&rsquo;re just answering different questions.</p>')
-      + '<div class="btn-row">'+backBtnHtml()+'<button class="btn-continue" style="margin-left:auto;" onclick="nav(\'34-4-The-Cash-Flow-Statement.html\')">Lay it out as a statement &rarr;</button></div>';
+      + '<div class="btn-row">'+backBtnHtml()+'</div>';
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;
