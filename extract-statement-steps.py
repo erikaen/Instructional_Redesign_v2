@@ -415,6 +415,46 @@ def verify(data: dict[str, Any]) -> bool:
         f"{net_income}-{receivables_increase}-{deposit_released}+{depreciation_total}={indirect_total}; Cash Flow operating={operating_total}; expected=2350",
     )
 
+    # Invariant 6 — the Balance Sheet is hard values (no live formulas since
+    # 2026-07-15), so drift protection lives HERE: every BS account line must
+    # equal its ledger's ruled dated balances, both columns (Aug 31 = col 4,
+    # June 1 = col 3).
+    liabilities = get_sheet(data, "bike-repair-end", "Liabilities")
+    mismatches: list[str] = []
+    checked = 0
+    for ledger in (assets, liabilities):
+        headers = [c for c in ledger["cells"]
+                   if c["c"] == 2 and c["r"] > 1 and c.get("bold") and c.get("value")]
+        headers.sort(key=lambda c: c["r"])
+        for idx, header in enumerate(headers):
+            account = str(header["value"])
+            start = header["r"]
+            end = headers[idx + 1]["r"] - 1 if idx + 1 < len(headers) else 10_000
+            for label, bs_col in (("Balance, August 31, 2026", 4),
+                                  ("Balance, June 1, 2026", 3)):
+                try:
+                    ledger_value = value_for_label(ledger, label, start=start, end=end)
+                except Exception:
+                    continue  # accounts born mid-season carry no June-1 line
+                try:
+                    bs_value = value_for_label(balance_sheet, account, column=bs_col)
+                except Exception:
+                    mismatches.append(f"{account}: no Balance Sheet line found")
+                    continue
+                checked += 1
+                if bs_value != ledger_value:
+                    mismatches.append(
+                        f"{account} {label}: ledger={ledger_value} vs BS={bs_value}"
+                    )
+    passed = checked >= 10 and not mismatches
+    results.append(passed)
+    report_invariant(
+        6,
+        passed,
+        f"Balance Sheet ties to ledger ruled balances: {checked} comparisons"
+        + (f"; MISMATCHES: {'; '.join(mismatches)}" if mismatches else ", all equal"),
+    )
+
     return all(results)
 
 
