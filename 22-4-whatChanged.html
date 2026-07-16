@@ -99,19 +99,19 @@ var FIG = [
   { id:'figc1', t:'Paycheck',            role:false, p:[[34,72],[6,40]] },
   { id:'figc2', t:'Your car',            role:false, p:[[16,84],[6,60]] },
   { id:'figc3', t:'Apartment rent',      role:false, p:[[42,14],[6,80]] },
-  { id:'figc4', t:'Repair stand',        role:true,  p:[[64,20],[59,26]] },
-  { id:'figc5', t:'Parts shelf',         role:true,  p:[[10,50],[59,48]] },
-  { id:'figc6', t:'Smith&rsquo;s frame', role:true,  p:[[70,76],[59,70]] },
-  { id:'figc7', t:'Booking laptop',      role:true,  p:[[45,46],[78,48]] }
+  { id:'figc4', t:'Repair stand',        role:true,  p:[[64,20],[59,36]] },
+  { id:'figc5', t:'Parts shelf',         role:true,  p:[[10,50],[59,56]] },
+  { id:'figc6', t:'Smith&rsquo;s frame', role:true,  p:[[70,76],[59,76]] },
+  { id:'figc7', t:'Booking laptop',      role:true,  p:[[45,46],[78,56]] }
 ];
 function figureHtml(){
   var h = '<div class="section-card" style="margin-top:16px"><div class="card-title" style="text-transform:uppercase;letter-spacing:0.04em;font-size:var(--font-xs)">Separating out the bike-repair role</div>';
-  h += '<div style="position:relative;height:280px;border:2px solid var(--border-strong);border-radius:12px;margin-top:10px;overflow:hidden">';
+  h += '<div style="position:relative;height:340px;border:2px solid var(--border-strong);border-radius:12px;margin-top:10px;overflow:hidden">';
   h += '<div id="figYouLbl" style="position:absolute;top:6px;left:10px;font-size:16px;font-weight:700;color:var(--primary)">You &mdash; one person, everything mingled</div>';
   h += '<div id="figRole" style="position:absolute;left:54%;top:16%;width:43%;height:72%;border:2px dashed var(--primary);border-radius:12px;opacity:0;transition:opacity .9s">'
-     + '<div style="position:absolute;top:-9px;left:10px;background:var(--page-bg);padding:0 6px;font-size:16px;font-weight:700;color:var(--primary)">your bike-repair role &mdash; the boundary you drew in your books</div></div>';
+     + '<div style="position:absolute;top:-12px;left:10px;right:10px;background:var(--page-bg);padding:0 6px;font-size:16px;font-weight:700;line-height:1.3;color:var(--primary)">your bike-repair role &mdash; the boundary you drew in your books</div></div>';
   h += '<div id="figRing" style="position:absolute;left:51.5%;top:11%;width:47%;height:82%;border:3px solid var(--accent);border-radius:14px;opacity:0;transition:opacity .9s">'
-     + '<div id="figRingLbl" style="position:absolute;bottom:-9px;right:10px;background:var(--page-bg);padding:0 6px;font-size:16px;font-weight:700;color:var(--accent)"></div></div>';
+     + '<div id="figRingLbl" style="position:absolute;bottom:-12px;right:10px;background:var(--page-bg);padding:0 6px;font-size:16px;font-weight:700;white-space:nowrap;color:var(--accent)"></div></div>';
   FIG.forEach(function(c){
     h += '<div id="'+c.id+'" style="position:absolute;left:'+c.p[0][0]+'%;top:'+c.p[0][1]+'%;transition:left .9s ease,top .9s ease;font-size:16px;font-weight:600;padding:3px 9px;border-radius:999px;border:1px solid var(--border-strong);background:var(--primary-faint);white-space:nowrap">'+c.t+'</div>';
   });

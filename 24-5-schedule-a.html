@@ -27,6 +27,7 @@
       </div>
       <div id="wb"></div>
       <div id="schedArea"></div>
+      <div class="btn-row" style="justify-content:flex-end; margin-bottom:12px;"><button class="btn-reset" onclick="resetSched()">Reset</button></div>
       <div id="controls"></div>
     </div>
 
@@ -220,6 +221,12 @@ function enterLine(id){
   entered[id] = true;
   playClick(); playSuccess();
   renderAll();
+}
+function resetSched(){
+  playClick();
+  entered = {}; signedCompany = false; signedMember = false;
+  renderAll();
+  window.scrollTo(0,0);
 }
 function signCompany(){ signedCompany=true; playPen(); if(signedMember) playSuccess(); renderAll(); }
 function signMember(){ signedMember=true; playPen(); if(signedCompany) playSuccess(); renderAll(); }

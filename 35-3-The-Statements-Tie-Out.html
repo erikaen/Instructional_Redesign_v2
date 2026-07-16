@@ -18,6 +18,8 @@
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>Here is the whole workbook, closed for the season &mdash; and beside the tabs you built it from, the closing balance sheet and the season&rsquo;s three flow statements. Three things moved between the two snapshots. For each one, find the statement that carries the story.</p>
     </div>
@@ -104,10 +106,11 @@ function renderMatch(){
     }
     h += '</div>';
     h += '<div class="btn-row">'+(locked
-        ? (chosen.ok ? '' : '<button class="btn-reset" onclick="resetMove(\''+m.id+'\')" style="margin-left:auto;">Reset</button>')
+        ? '<button class="btn-reset" onclick="resetMove(\''+m.id+'\')" style="margin-left:auto;">Reset</button>'
         : '<button class="btn-continue" onclick="submitMove(\''+m.id+'\')"'+(sel[m.id]===undefined?' disabled':'')+'>Submit</button>')+'</div>';
   });
   document.getElementById('matchArea').innerHTML = h;
+  if (window.renderStepProgress) renderStepProgress('stepProg', allCorrect() ? 2 : 1, 2);
   if(window.lucide) lucide.createIcons();
 }
 function selectMove(id, i){
@@ -124,10 +127,11 @@ function submitMove(id){
   maybeFinish();
 }
 function resetMove(id){
-  var m = MOVES.filter(function(x){return x.id===id;})[0];
-  if(answered[id]!==undefined && m.opts[answered[id]].ok) return;
+  if(answered[id]===undefined) return;
+  var wasFinished = allCorrect();
   delete answered[id]; delete sel[id];
   renderMatch();
+  if(wasFinished) renderTalk(false);   /* redoing a question retracts the articulation close */
 }
 function allCorrect(){
   return MOVES.every(function(m){ return answered[m.id]!==undefined && m.opts[answered[m.id]].ok; });

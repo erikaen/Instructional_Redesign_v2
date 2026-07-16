@@ -27,6 +27,7 @@
       <div class="btn-row">
         <input id="bridgeInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Closing Members' Capital" onkeydown="if(event.key==='Enter'){checkBridge();}">
         <button class="btn btn-primary" onclick="checkBridge()">Check</button>
+        <button class="btn-reset" id="bridgeReset" onclick="resetBridge()" style="margin-left:auto; display:none;">Reset</button>
       </div>
       <div class="feedback" id="bridgeFb"></div>
     </div>
@@ -75,17 +76,20 @@ function checkBridge(){
   if(bridgeDone) return;
   var val = parseInt(String(document.getElementById('bridgeInput').value).replace(/[^0-9-]/g,''),10);
   var fb = document.getElementById('bridgeFb');
-  if(val===CLOSE_MC){ playSuccess(); revealBridge(); }
+  document.getElementById('bridgeReset').style.display='';
+  if(val===CLOSE_MC){ playSuccess(); revealBridge(true); }
   else{
     bridgeAttempts++;
-    if(bridgeAttempts>=3){ playNope(); revealBridge(); }
+    if(bridgeAttempts>=3){ playNope(); revealBridge(false); }
     else{ playNope(); fb.className='feedback err show'; fb.innerHTML='Not quite &mdash; $2,460 + $2,640 &minus; $600.'; }
   }
 }
-function revealBridge(){
+function revealBridge(right){
   bridgeDone=true;
   document.getElementById('bridgeInput').disabled=true;
-  var fb=document.getElementById('bridgeFb'); fb.className='feedback'; fb.classList.remove('show');
+  var fb=document.getElementById('bridgeFb');
+  if(right===false){ fb.className='feedback err show'; fb.innerHTML='Not quite &mdash; the closing balance is <strong>$4,500</strong>: $2,460 + $2,640 &minus; $600.'; }
+  else{ fb.className='feedback ok show'; fb.innerHTML='Right &mdash; $2,460 + $2,640 &minus; $600 = <strong>$4,500</strong>.'; }
   var c=document.getElementById('bridgeClose'); c.hidden=false;
   c.innerHTML = insightBox('The bridge holds',
     '<p>$2,460 + $2,640 &minus; $600 = <strong>$4,500</strong> &mdash; exactly the closing Members&rsquo; Capital sitting on today&rsquo;s balance sheet. The whole move from opening to closing runs through just two things: what the season <strong>generated</strong>, and what you <strong>withdrew</strong>.</p>');
@@ -99,9 +103,22 @@ function revealBridge(){
 var snap = BR_WB.snapshot({ tabbed:true, withReceivable:true, withDepreciation:true });
 snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['income','cashflows']));
 function renderSheet(){
-  snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['bridge']));
+  if(!snap.tabs.some(function(t){ return t.id==='bridge'; })) snap.tabs = snap.tabs.concat(BR_WB.statementTabs(['bridge']));
   BRW.update('wb', snap);
   BRW.tab('wb', 'bridge');
+}
+function resetBridge(){
+  playClick();
+  bridgeDone=false; bridgeAttempts=0;
+  var inp=document.getElementById('bridgeInput'); inp.disabled=false; inp.value='';
+  var fb=document.getElementById('bridgeFb'); fb.className='feedback'; fb.classList.remove('show'); fb.innerHTML='';
+  var c=document.getElementById('bridgeClose'); c.hidden=true; c.innerHTML='';
+  document.getElementById('controls').innerHTML='';
+  snap.tabs = snap.tabs.filter(function(t){ return t.id!=='bridge'; });
+  BRW.update('wb', snap);
+  BRW.tab('wb', 'reasons');
+  document.getElementById('bridgeReset').style.display='none';
+  inp.focus();
 }
 
 function ctrlAfterReveal(){
@@ -129,7 +146,7 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
 /* ===== init ===== */
-window.devFill = function(){ if(!bridgeDone) revealBridge(); };
+window.devFill = function(){ if(!bridgeDone) revealBridge(true); };
 BR_WB.registerSeasonSheets();
 BR_WB.registerStatementSheets();
 BRW.mount('wb', snap);

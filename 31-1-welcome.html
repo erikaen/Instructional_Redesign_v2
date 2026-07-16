@@ -30,6 +30,7 @@
         <div class="btn-row">
           <input id="bsInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Assets minus Liabilities" onkeydown="if(event.key==='Enter'){checkBS();}">
           <button class="btn btn-primary" onclick="checkBS()">Check</button>
+          <button class="btn-reset" id="bsReset" onclick="resetBS()" style="margin-left:auto; display:none;">Reset</button>
         </div>
         <div class="feedback" id="bsFb"></div>
       </div>
@@ -128,6 +129,7 @@ function checkBS(){
   if(bsDone) return;
   var val = parseInt(String(document.getElementById('bsInput').value).replace(/[^0-9-]/g,''),10);
   var fb = document.getElementById('bsFb');
+  document.getElementById('bsReset').style.display = '';
   if(val===2460){ playSuccess(); revealBS(); }
   else{
     bsAttempts++;
@@ -142,8 +144,18 @@ function revealBS(){
   var fb=document.getElementById('bsFb'); fb.className='feedback'; fb.classList.remove('show');
   var c=document.getElementById('bsClose'); c.hidden=false;
   c.innerHTML='<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Assets &minus; Liabilities = Members&rsquo; Capital</div><p>$4,710 &minus; $2,250 = <strong>$2,460</strong> &mdash; exactly the <strong>Total members&rsquo; capital</strong> line. The difference you found in Module 1 now carries the LLC&rsquo;s name, and the balance sheet is built around the same identity &mdash; it holds by definition, every time.</p></div>';
-  document.getElementById('goBtn').hidden=false;
   if(window.lucide) lucide.createIcons();
+}
+function resetBS(){
+  playClick();
+  bsDone=false; bsAttempts=0;
+  buildOpeningBS(false);
+  var inp=document.getElementById('bsInput');
+  inp.disabled=false; inp.value='';
+  var fb=document.getElementById('bsFb'); fb.className='feedback'; fb.classList.remove('show'); fb.innerHTML='';
+  var c=document.getElementById('bsClose'); c.hidden=true; c.innerHTML='';
+  document.getElementById('bsReset').style.display='none';
+  inp.focus();
 }
 window.devFill = function(){ if(!bsDone) revealBS(); };
 
