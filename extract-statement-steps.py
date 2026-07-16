@@ -851,16 +851,22 @@ def verify(data: dict[str, Any]) -> bool:
         f"forbidden hits={periodized_forbidden_hits}; Balance Sheet={periodized_bs_actual}",
     )
 
-    # Invariant 10 — Module 3-2 adds only the raw Income Statement working tab.
-    statement_sheet_names = [
-        sheet["name"] for sheet in data["workbooks"][statement_key]["sheets"]
+    # Invariant 10 — Module 3-2 adds only the raw Working Tab statement sheet.
+    statement_sheets = data["workbooks"][statement_key]["sheets"]
+    statement_sheet_names = [sheet["name"] for sheet in statement_sheets]
+    statement_name_hygiene_offenders = [
+        (name, name.strip())
+        for name in statement_sheet_names
+        if name != name.strip()
     ]
     statement_dated_actual = (
         {}
         if dated_label_offenders_by_workbook[statement_key]
         else all_dated_values(statement_key)
     )
-    working_income = get_sheet(data, statement_key, "Income Statement")
+    # Select by position so whitespace in the raw tab name is reported by this
+    # invariant (with repr via the offender tuple) instead of aborting lookup.
+    working_income = statement_sheets[4]
     working_income_grid = row_cells(working_income)
     title_actual = tuple(
         working_income_grid.get(row, {}).get(2, {}).get("value")
@@ -926,7 +932,8 @@ def verify(data: dict[str, Any]) -> bool:
     ]
     passed = (
         statement_sheet_names
-        == ["Assets", "Liabilities", "Reasons", "Balance Sheet", "Income Statement"]
+        == ["Assets", "Liabilities", "Reasons", "Balance Sheet", "Working Tab"]
+        and not statement_name_hygiene_offenders
         and statement_dated_actual == dated_expected
         and title_actual == title_expected
         and income_data_rows == generated_season_rows
@@ -937,7 +944,9 @@ def verify(data: dict[str, Any]) -> bool:
     report_invariant(
         10,
         passed,
-        f"sheets={statement_sheet_names}; dated ledger values={statement_dated_actual}; "
+        f"sheets={statement_sheet_names}; "
+        f"name hygiene offenders={statement_name_hygiene_offenders!r}; "
+        f"dated ledger values={statement_dated_actual}; "
         f"titles={title_actual}; Income Statement rows={income_data_rows}; "
         f"GENERATED season rows={generated_season_rows}; sum={income_data_sum}; "
         f"forbidden hits={statement_forbidden_hits}",

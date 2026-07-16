@@ -42,7 +42,7 @@ var PLAN = [
    ['links to 32-1', d=>d.documentElement.outerHTML.includes('32-1-the-income-statement.html')]]},
  {file:'32-1-the-income-statement.html', asserts:[
    ['working sheet beat', d=>/working sheet/i.test(d.body.textContent)],
-   ['Income Statement tab born amber and active', d=>{var t=d.querySelector('[data-sheet-tab="income"]'); return !!t && !t.hidden && t.classList.contains('tk-temp') && t.classList.contains('active');}],
+   ['Working Tab born amber and active', d=>{var t=d.querySelector('[data-sheet-tab="income"]'); return !!t && t.textContent==='Working Tab' && !t.hidden && t.classList.contains('tk-temp') && t.classList.contains('active');}],
    ['authored copied view (period title)', d=>d.body.textContent.includes('For the period June 1')],
    ['first copied row is Rent used — June', d=>(d.querySelector('.brw-grid')||{textContent:''}).textContent.includes('Rent used — June')],
    ['no dead tabs', d=>!d.querySelector('[aria-disabled]')],
@@ -82,6 +82,7 @@ var PLAN = [
    ['total expenses 3,380', d=>d.body.textContent.includes('3,380')],
    ['the tie reads 170', d=>d.body.textContent.includes('170')],
    ['never says lands', d=>!/\blands\b/i.test(d.body.textContent)],
+   ['tab christened Income Statement', d=>{var t=[...d.querySelectorAll('.xlwb-tab')].find(x=>x.textContent==='Income Statement'); return !!t && t.classList.contains('tk-stmt');}],
    ['links to 33-4', d=>d.documentElement.outerHTML.includes('33-4-Module-Complete.html')]]},
  {file:'33-4-Module-Complete.html', asserts:[
    ['forward link to Module 4', d=>d.documentElement.outerHTML.includes('41-1-The-Investor-Asks.html')],

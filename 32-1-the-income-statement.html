@@ -50,7 +50,7 @@
         <button class="xlwb-tab" type="button" data-sheet-tab="liabilities">Liabilities</button>
         <button class="xlwb-tab active" type="button" data-sheet-tab="reasons" aria-current="page">Reasons</button>
         <button class="xlwb-tab" type="button" data-sheet-tab="balance">Balance Sheet</button>
-        <button class="xlwb-tab tk-temp" type="button" data-sheet-tab="income" hidden>Income Statement</button>
+        <button class="xlwb-tab tk-temp" type="button" data-sheet-tab="income" hidden>Working Tab</button>
       </div>
     </div>
     <div id="anna"></div>
@@ -130,7 +130,7 @@ function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
 var M31_ASSETS=m31SheetOf('Assets');
 var M31_LIABILITIES=m31SheetOf('Liabilities');
 var M31_REASONS=m31SheetOf('Reasons');
-var M32_INCOME_STATEMENT=m32SheetOf('Income Statement');
+var M32_INCOME_STATEMENT=m32SheetOf('Working Tab');
 var SNAPSHOT_BALANCE_SHEET=snapshotSheetOf('Balance Sheet');
 var gridSeq=0;
 var currentSheet='reasons', preCopyBeat='expand', seasonExpanded=false, seasonRowsSelected=false;
@@ -229,7 +229,7 @@ function paint(name){
     document.getElementById('sheetLabel').textContent='Balance Sheet · June 1, 2026';
   } else if(name==='income' && copied){
     mountOne('wbGrid',M32_INCOME_STATEMENT);
-    document.getElementById('sheetLabel').textContent='Income Statement · working sheet';
+    document.getElementById('sheetLabel').textContent='Working Tab';
   } else {
     return;
   }

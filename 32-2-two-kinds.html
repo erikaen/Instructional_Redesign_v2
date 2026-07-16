@@ -40,7 +40,7 @@
     <div class="xlwb" id="workbookShell">
       <div class="xlwb-bar">
         <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet" id="sheetLabel">Income Statement &middot; working sheet</div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Working Tab</div>
       </div>
       <div class="wb-grid-wrap" id="wbGridWrap">
         <div id="statementBuild"></div>
@@ -55,7 +55,7 @@
         <button class="xlwb-tab" type="button" data-sheet-tab="liabilities">Liabilities</button>
         <button class="xlwb-tab" type="button" data-sheet-tab="reasons">Reasons</button>
         <button class="xlwb-tab" type="button" data-sheet-tab="balance">Balance Sheet</button>
-        <button class="xlwb-tab tk-temp active" type="button" data-sheet-tab="income" aria-current="page">Income Statement</button>
+        <button class="xlwb-tab tk-temp active" type="button" data-sheet-tab="income" aria-current="page">Working Tab</button>
       </div>
     </div>
 
@@ -168,7 +168,7 @@ function paint(name){
     wanderGrid.hidden=true;
     statementBuild.hidden=false;
     sortWrap.hidden=currentBuildStep!==1;
-    document.getElementById('sheetLabel').textContent='Income Statement · working sheet';
+    document.getElementById('sheetLabel').textContent='Working Tab';
   } else {
     statementBuild.hidden=true;
     sortWrap.hidden=true;

@@ -42,7 +42,7 @@
     <div class="xlwb" id="workbookShell">
       <div class="xlwb-bar">
         <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet">Income Statement &middot; working sheet</div>
+        <div class="xlwb-bar-sheet">Working Tab</div>
       </div>
       <div class="wb-grid-wrap">
         <div id="statementBuild"></div>
@@ -54,7 +54,7 @@
         <button class="xlwb-tab" type="button" data-workbook-tab="Liabilities" data-sheet-tab="Liabilities" onclick="showWorkbookTab31('Liabilities')">Liabilities</button>
         <button class="xlwb-tab" type="button" data-workbook-tab="Reasons" data-sheet-tab="Reasons" onclick="showWorkbookTab31('Reasons')">Reasons</button>
         <button class="xlwb-tab" type="button" data-workbook-tab="Balance Sheet" data-sheet-tab="Balance Sheet" onclick="showWorkbookTab31('Balance Sheet')">Balance Sheet</button>
-        <button class="xlwb-tab tk-temp active" type="button" data-workbook-tab="Income Statement" data-sheet-tab="Income Statement" aria-current="page" onclick="showWorkbookTab31('Income Statement')">Income Statement</button>
+        <button class="xlwb-tab tk-temp active" type="button" data-workbook-tab="Income Statement" data-sheet-tab="Income Statement" aria-current="page" onclick="showWorkbookTab31('Income Statement')">Working Tab</button>
       </div>
     </div>
 
@@ -153,7 +153,7 @@ function setActiveTab31(name){
     if(active) tabs[i].setAttribute('aria-current','page');
     else tabs[i].removeAttribute('aria-current');
   }
-  document.querySelector('#workbookShell .xlwb-bar-sheet').textContent=name==='Income Statement'?'Income Statement · working sheet':name;
+  document.querySelector('#workbookShell .xlwb-bar-sheet').textContent=name==='Income Statement'?'Working Tab':name;
 }
 function showWorkbookTab31(name){
   playClick();

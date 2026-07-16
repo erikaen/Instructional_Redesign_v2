@@ -36,7 +36,7 @@
     <div class="xlwb" id="workbookShell">
       <div class="xlwb-bar">
         <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet" id="workbookSheetLabel">Income Statement &middot; working sheet</div>
+        <div class="xlwb-bar-sheet" id="workbookSheetLabel">Working Tab</div>
       </div>
       <div class="wb-grid-wrap">
         <div id="wb"></div>
@@ -101,17 +101,18 @@ function sheetOf(wb, part) {
 
 var referenceMountSerial=0;
 function setWorkbookChrome(activeName){
-  var names=['Assets','Liabilities','Reasons','Balance Sheet','Income Statement'];
+  var home=step===0?'Working Tab':'Income Statement';
+  var names=['Assets','Liabilities','Reasons','Balance Sheet',home];
   document.getElementById('workbookTabs').innerHTML=names.map(function(name){
     var active=name===activeName;
-    var tabKind=name==='Income Statement'?(step===0?' tk-temp':' tk-stmt'):'';
+    var tabKind=name===home?(step===0?' tk-temp':' tk-stmt'):'';
     return '<button class="xlwb-tab'+tabKind+(active?' active':'')+'" type="button" data-workbook-tab="'+name+'"'
       +(active?' aria-current="page"':'')+' onclick="showWorkbookTab33(\''+name+'\')">'+name+'</button>';
   }).join('');
-  document.getElementById('workbookSheetLabel').textContent=activeName==='Income Statement' && step===0?'Income Statement · working sheet':activeName;
+  document.getElementById('workbookSheetLabel').textContent=activeName;
 }
 function showWorkbookTab33(name){
-  var home='Income Statement';
+  var home=step===0?'Working Tab':'Income Statement';
   var build=document.getElementById('wb');
   var reference=document.getElementById('referenceGrid');
   playClick();
@@ -168,7 +169,7 @@ function renderTalk(){
   } else {
     anna = annaBox('Now call the formatted sheet the <strong>Income Statement</strong>. The new tab contains only the statement: Revenue <strong>'+BRW.dol(REVENUE)+'</strong>, Total expenses <strong>'+BRW.dol(EXPENSES)+'</strong>, and Net income <strong>'+BRW.dol(NET_INCOME)+'</strong>.');
     ctrl = insightBox('The same season, told two ways',
-        '<p>The Income Statement says <strong>'+BRW.dol(NET_INCOME)+'</strong>. The ruled GENERATED lines say <strong>'+BRW.dol(2810)+' &minus; '+BRW.dol(170)+' = '+BRW.dol(NET_INCOME)+'</strong>. The statement summarizes the rows between the same dates; it does not move them.</p>'
+        '<p>The tab earns its name: <strong>Working Tab</strong> becomes <strong>Income Statement</strong>. The Income Statement says <strong>'+BRW.dol(NET_INCOME)+'</strong>. The ruled GENERATED lines say <strong>'+BRW.dol(2810)+' &minus; '+BRW.dol(170)+' = '+BRW.dol(NET_INCOME)+'</strong>. The statement summarizes the rows between the same dates; it does not move them.</p>'
         + '<p>Carrying value is cost minus depreciation recorded so far. It is a path in the records, not what a buyer will pay.</p>')
       + '<div class="next-phase-msg">Net income is <strong>'+BRW.dol(NET_INCOME)+'</strong>, while Cash reads <strong>$620</strong>, down from <strong>$1,300</strong> on June 1. Both numbers are true because they answer different questions.</div>'
       + "<button class=\"btn-continue btn-block\" onclick=\"nav('33-4-Module-Complete.html')\">Read the cash question &rarr;</button>";
@@ -178,7 +179,7 @@ function renderTalk(){
   renderTie();
   document.getElementById('wb').hidden=false;
   document.getElementById('referenceGrid').hidden=true;
-  setWorkbookChrome('Income Statement');
+  setWorkbookChrome(step===0?'Working Tab':'Income Statement');
   if(window.lucide) lucide.createIcons();
 }
 

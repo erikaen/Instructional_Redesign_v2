@@ -35,8 +35,8 @@
     <div class="phase-title" id="phaseTitle">Revenue Earned on Account</div>
 
     <div class="narrative-block">
-      <p>Two windows on <span class="mono">Bike-Repair.xlsx</span> sit side by side, the way Excel shows one workbook with <em>View Side by Side</em>. On the <strong>left</strong> is the full Assets ledger. On the <strong>right</strong> is the <strong>Income Statement</strong> tab &mdash; the working sheet where you sorted the season&rsquo;s generated rows into <strong>Revenue</strong> and <strong>Expenses</strong>.</p>
-      <p>Before trusting the Revenue band, check it against the source: the <strong>job log</strong> lists every job the shop finished this summer. Compare the log to the Revenue rows on the Income Statement tab &mdash; every finished job should have a Revenue row.</p>
+      <p>Two windows on <span class="mono">Bike-Repair.xlsx</span> sit side by side, the way Excel shows one workbook with <em>View Side by Side</em>. On the <strong>left</strong> is the full Assets ledger. On the <strong>right</strong> is the <strong>Working Tab</strong> &mdash; the working sheet where you sorted the season&rsquo;s generated rows into <strong>Revenue</strong> and <strong>Expenses</strong>.</p>
+      <p>Before trusting the Revenue band, check it against the source: the <strong>job log</strong> lists every job the shop finished this summer. Compare the log to the Revenue rows on the Working Tab &mdash; every finished job should have a Revenue row.</p>
     </div>
 
     <div class="two-panel">
@@ -51,13 +51,13 @@
           <button class="xlwb-tab" type="button" data-panel="books" data-sheet-tab="liabilities">Liabilities</button>
           <button class="xlwb-tab" type="button" data-panel="books" data-sheet-tab="reasons">Reasons</button>
           <button class="xlwb-tab" type="button" data-panel="books" data-sheet-tab="balance">Balance Sheet</button>
-          <button class="xlwb-tab tk-temp" type="button" data-panel="books" data-sheet-tab="income">Income Statement</button>
+          <button class="xlwb-tab tk-temp" type="button" data-panel="books" data-sheet-tab="income">Working Tab</button>
         </div>
       </div>
       <div class="xlwb" id="workingPanel">
         <div class="xlwb-bar">
           <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-          <div class="xlwb-bar-sheet" id="workingLabel">Income Statement &middot; working sheet</div>
+          <div class="xlwb-bar-sheet" id="workingLabel">Working Tab</div>
         </div>
         <div class="wb-grid-wrap" id="workingWrap"><div id="workingGrid"></div></div>
         <div class="xlwb-tabs" aria-label="Workbook tabs">
@@ -65,7 +65,7 @@
           <button class="xlwb-tab" type="button" data-panel="working" data-sheet-tab="liabilities">Liabilities</button>
           <button class="xlwb-tab" type="button" data-panel="working" data-sheet-tab="reasons">Reasons</button>
           <button class="xlwb-tab" type="button" data-panel="working" data-sheet-tab="balance">Balance Sheet</button>
-          <button class="xlwb-tab tk-temp active" type="button" data-panel="working" data-sheet-tab="income" aria-current="page">Income Statement</button>
+          <button class="xlwb-tab tk-temp active" type="button" data-panel="working" data-sheet-tab="income" aria-current="page">Working Tab</button>
         </div>
       </div>
     </div>
@@ -232,7 +232,7 @@ function paint(panel,name){
   if(name==='assets'){ mountOne(gridId,assetsSheet,assetsHidden()); label='Assets'; }
   else if(name==='liabilities'){ mountOne(gridId,LIABILITIES,[]); label='Liabilities'; }
   else if(name==='reasons'){ mountOne(gridId,reasonsSheet,booksReasonsHidden()); label='Reasons · GENERATED'; }
-  else if(name==='income'){ mountOne(gridId,statementSheet,workingHidden()); label='Income Statement · working sheet'; }
+  else if(name==='income'){ mountOne(gridId,statementSheet,workingHidden()); label='Working Tab'; }
   else { wrap.classList.add('bs-centered'); mountOne(gridId,snapshotBalanceSheetView(),[]); label='Balance Sheet · June 1, 2026'; }
   document.getElementById(labelId).textContent=label;
   setActiveTab(panel,name);
@@ -264,7 +264,7 @@ function renderTalk(){
         +'<p>And there&rsquo;s a second thing: '+ridge.customer+' still <strong>owes</strong> '+BRW.dol(ridge.charge)+'. That right to be paid gets a new line in Assets: Accounts Receivable.</p>')
       + '<button class="btn-continue btn-block" onclick="setStep(2)">Put it on the books &rarr;</button>';
   } else {
-    anna = annaBox('There &mdash; a brand-new line in the <strong>Assets</strong> window on the left: <strong>Accounts Receivable, '+BRW.dol(ridge.charge)+'</strong>, for '+ridge.customer+'&rsquo;s unpaid bill. And on the <strong>Income Statement</strong> tab to the right, Revenue now reads <strong>'+BRW.dol(allCharges)+'</strong> &mdash; complete. Every job in the log now has a Revenue row. Think about <strong>'+smith.customer+'</strong>&rsquo;s frame, in that same Revenue band at <strong>'+BRW.dol(smith.charge)+'</strong> &mdash; his cash came in <em>last</em> period as a deposit, but the frame went out the door <em>this</em> summer. '+ridge.customer+': work now, cash later. '+smith.customer+': cash earlier, work now. Neither row is timed to the cash. Both are timed to the <strong>work</strong>. Now click the <strong>Reasons</strong> tab in the left window: your own GENERATED line for August 31 reads <strong>$3,040</strong> where it read <strong>$2,740</strong> before you booked Ridgeline &mdash; your dated line moved by $300.');
+    anna = annaBox('There &mdash; a brand-new line in the <strong>Assets</strong> window on the left: <strong>Accounts Receivable, '+BRW.dol(ridge.charge)+'</strong>, for '+ridge.customer+'&rsquo;s unpaid bill. And on the <strong>Working Tab</strong> to the right, Revenue now reads <strong>'+BRW.dol(allCharges)+'</strong> &mdash; complete. Every job in the log now has a Revenue row. Think about <strong>'+smith.customer+'</strong>&rsquo;s frame, in that same Revenue band at <strong>'+BRW.dol(smith.charge)+'</strong> &mdash; his cash came in <em>last</em> period as a deposit, but the frame went out the door <em>this</em> summer. '+ridge.customer+': work now, cash later. '+smith.customer+': cash earlier, work now. Neither row is timed to the cash. Both are timed to the <strong>work</strong>. Now click the <strong>Reasons</strong> tab in the left window: your own GENERATED line for August 31 reads <strong>$3,040</strong> where it read <strong>$2,740</strong> before you booked Ridgeline &mdash; your dated line moved by $300.');
     ctrl = insightBox('The work is what counts',
         '<p>'+ridge.customer+': work done <strong>now</strong>, cash <strong>later</strong> &mdash; recorded now (and a receivable until they pay). '+smith.customer+': cash <strong>earlier</strong>, work done <strong>now</strong> &mdash; recorded now too. The rows are timed to the <strong>work</strong>, whichever way the cash runs. The records remain balanced: assets went up '+BRW.dol(ridge.charge)+', and so did GENERATED. On the Reasons tab, the generated row remains where it was recorded; the Revenue band is a sorting of it.</p>')
       + '<div class="next-phase-msg">The working sheet now includes every job. Next, go straight to the Expenses and group them by kind.</div>'
