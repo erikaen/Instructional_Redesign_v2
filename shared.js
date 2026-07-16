@@ -1289,7 +1289,7 @@ function initCourseChrome(){
   /* --- top banner: the index dropdown alone, on the left --- */
   var menuHtml = '', lastMod = '';
   COURSE_TUTORIALS.forEach(function(t){
-    var mod = t.module.split(' · ')[0];
+    var mod = t.module;
     if (mod !== lastMod){ menuHtml += '<div class="gh">'+mod+'</div>'; lastMod = mod; }
     menuHtml += '<div class="mh">'+t.num+': '+t.name+'</div>';
     t.pages.forEach(function(p){
