@@ -1300,12 +1300,8 @@ function initCourseChrome(){
   bar.className = 'course-banner';
   bar.innerHTML =
     '<div class="course-banner-mid"><button class="btn-reset course-banner-btn" id="courseIndexBtn">'+(pageObj ? pageNum+'. '+pageObj.t : tut.title)+' &#9662;</button>'+
-      '<div class="course-index-menu" id="courseIndexMenu" hidden>'+menuHtml+'</div></div>'+
-    (document.getElementById('glossaryOverlay') ? '<button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="if(window.openGlossary) openGlossary()"><i data-lucide="book-open"></i></button>' : '');
+      '<div class="course-index-menu" id="courseIndexMenu" hidden>'+menuHtml+'</div></div>';
   document.body.insertBefore(bar, document.body.firstChild);
-  /* the glossary now lives in the banner: drop the per-page icon next to the title */
-  document.querySelectorAll('.phase-title-row .icon-btn').forEach(function(b){ b.remove(); });
-  if (window.lucide && lucide.createIcons) lucide.createIcons();
   var iBtn = document.getElementById('courseIndexBtn'), iMenu = document.getElementById('courseIndexMenu');
   iBtn.addEventListener('click', function(e){
     e.stopPropagation();
