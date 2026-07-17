@@ -9,10 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
   <style>
-    .statement-shell { margin:16px 0; }
-    .statement-grid-wrap { padding:8px; background:#fff; }
     .statement-step { margin-top:14px; }
-    @media (prefers-color-scheme:dark) { .statement-grid-wrap { background:#26242e; } }
   </style>
 </head>
 <body>
@@ -70,25 +67,11 @@ function sheetOf(name){
   return null;
 }
 
-function tabStrip(active){
-  var tabs=[
-    ['Assets','perm'],
-    ['Liabilities','perm'],
-    ['Reasons','perm'],
-    ['Balance Sheet','stmt'],
-    ['Income Statement','stmt']
-  ];
-  return '<div class="xlwb-tabs" aria-label="Workbook tabs">'+tabs.map(function(tab){
-    return '<button class="xlwb-tab'+(tab[0]===active?' active':'')+' xlwb-tab-'+tab[1]+'" type="button" aria-disabled="true">'+tab[0]+'</button>';
-  }).join('')+'</div>';
-}
-
-function statementShell(active, gridId, label){
-  return '<div class="xlwb statement-shell">'
-    + '<div class="xlwb-bar"><div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div><div class="xlwb-bar-sheet">'+label+'</div></div>'
-    + '<div class="statement-grid-wrap"><div id="'+gridId+'"></div></div>'
-    + tabStrip(active)
-    + '</div>';
+function statementPaper(gridId, caption){
+  return '<figure class="stmt-paper">'
+    + '<div class="stmt-paper-sheet"><div id="'+gridId+'"></div></div>'
+    + '<figcaption class="stmt-paper-cap">'+caption+'</figcaption>'
+    + '</figure>';
 }
 
 var IDENTITY_HTML =
@@ -119,14 +102,14 @@ function render(){
   if(step>=1){
     h += '<div class="narrative-block"><p>You hand Freddie the <strong>June 1 and August 31 Balance Sheets</strong> from the workbook.</p></div>';
     h += '<div class="section-card"><div class="card-title">June 1 and August 31 Balance Sheets</div>'
-      + statementShell('Balance Sheet','balanceGrid41','Balance Sheet') + IDENTITY_HTML + '</div>';
+      + statementPaper('balanceGrid41','PDF handout &middot; Generated from the Balance Sheet tab in Bike-Repair.xlsx &middot; June 1 and August 31') + IDENTITY_HTML + '</div>';
     h += freddieBox('Member&rsquo;s Capital was $2,460 on June 1 and $4,500 on August 31. I can see where the shop stood on each date. I still can&rsquo;t see how it got from one to the other.');
   }
 
   if(step>=2){
     h += '<div class="narrative-block statement-step"><p>You hand Freddie the other statement already in the workbook: the <strong>Income Statement</strong>.</p></div>';
     h += '<div class="section-card"><div class="card-title">Income Statement</div>'
-      + statementShell('Income Statement','incomeGrid41','Income Statement') + '</div>';
+      + statementPaper('incomeGrid41','Printed from Bike-Repair.xlsx &middot; Income Statement tab') + '</div>';
     h += freddieBox('Revenue was $6,020. Expenses were $3,380, including one Depreciation line of $230. Net income was $2,640. That tells me the result. Now I want to know: who did all this work?');
   }
 

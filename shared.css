@@ -3313,3 +3313,50 @@ button:disabled *, [onclick]:disabled * { cursor: default !important; }
 /* ===== Dated balance lines are blue by rule (Rick 2026-07-16). A + toggle appears only where a collapsed detail group exists; the blue marks every ruled dated line regardless. ===== */
 .brw-dated { background: var(--primary-faint); }
 @media (prefers-color-scheme: dark) { .brw-dated { background: #233029; } }
+
+/* ===== M4 paper/PDF idiom - diegetic "statement printed on paper" frame (Rick-approved 2026-07-16). ===== */
+.stmt-paper {
+  width: 100%;
+  max-width: 760px;
+  margin: 16px auto;
+  padding: clamp(18px, 4vw, 38px);
+  overflow: hidden;
+  border: 1px solid #d8d5cc;
+  border-radius: 3px;
+  background: #fff;
+  color: #374151;
+  box-shadow: 0 12px 30px rgba(34, 40, 52, .14), 0 2px 5px rgba(34, 40, 52, .08);
+}
+.stmt-paper-sheet { min-width: 0; overflow-x: auto; }
+.stmt-paper-cap {
+  margin-top: 14px;
+  padding-top: 9px;
+  border-top: 1px solid #e5e2da;
+  color: #6b7280;
+  font: 500 var(--font-xs)/1.4 Inter, sans-serif;
+  letter-spacing: .015em;
+  text-align: right;
+}
+
+@media (max-width: 560px) {
+  .stmt-paper { padding: 14px; }
+}
+
+@media (prefers-color-scheme: dark) {
+  .stmt-paper {
+    border-color: #d8d5cc;
+    background: #fff;
+    color: #374151;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, .38), 0 2px 6px rgba(0, 0, 0, .28);
+  }
+  .stmt-paper-cap { border-top-color: #e5e2da; color: #6b7280; }
+  .stmt-paper .brw-grid { border-color: #cbd5e1; background: #fff; color: #374151; }
+  .stmt-paper .brw-row { border-bottom-color: #eef2f7; }
+  .stmt-paper .brw-amount { border-left-color: #f1f5f9; }
+  .stmt-paper .brw-hint { color: #64748b; }
+  .stmt-paper .brw-rule-top { border-top-color: #0e6b3a; }
+  .stmt-paper .brw-rule-bottom { border-bottom-color: #0e6b3a; }
+  .stmt-paper .brw-og-summary,
+  .stmt-paper .brw-dated { background: #f0f4f8; }
+  .stmt-paper .brw-og-toggle { border-color: #6b7280; background: #fff; color: #374151; }
+}
