@@ -30,6 +30,9 @@ WORKBOOKS = (
     ("Income-Statement-Steps.xlsx", "income-statement-steps"),
     ("Members-Capital-Steps.xlsx", "members-capital-steps"),
     ("Cash-Flow-Steps.xlsx", "cash-flow-steps"),
+    ("Bike-Repair-Module-4-1.xlsx", "bike-repair-module-4-1"),
+    ("Bike-Repair-Module-4-1a.xlsx", "bike-repair-module-4-1a"),
+    ("Bike-Repair-Module-4-2.xlsx", "bike-repair-module-4-2"),
 )
 
 STEP_TAB_RE = re.compile(r"^(\d+)\s*·\s*(.+)$")
@@ -184,10 +187,12 @@ def extract_sheet(value_sheet: Any, formula_sheet: Any, workbook_name: str) -> d
         cols.append({"width": width})
 
     tab_match = STEP_TAB_RE.match(value_sheet.title)
+    tab_color = value_sheet.sheet_properties.tabColor
     return {
         "name": value_sheet.title,
         "order": int(tab_match.group(1)) if tab_match else None,
         "stepLabel": tab_match.group(2).strip() if tab_match else None,
+        "tabColor": tab_color.rgb if tab_color is not None and tab_color.rgb else None,
         "rows": rows,
         "cols": cols,
         "cells": cells,
@@ -1346,6 +1351,475 @@ def verify(data: dict[str, Any]) -> bool:
         f"Data copied in rows={len(copied_income_rows)}, sum={copied_income_sum}; "
         f"Working Tab rows={len(authored_income_rows)}, sum={authored_income_sum}; "
         f"first mismatching pair={first_income_row_mismatch}",
+    )
+
+    # Invariant 15 — Module 4 tab order and color communicate statement state:
+    # blue source ledgers, purple completed statements, and amber working tabs.
+    tab_canon = {
+        "bike-repair-module-4-1": (
+            [
+                "Assets",
+                "Liabilities",
+                "Reasons",
+                "Balance Sheet",
+                "Income Statement",
+                "Working Tab",
+            ],
+            [
+                "FF2563EB",
+                "FF2563EB",
+                "FF2563EB",
+                "FF7030A0",
+                "FF7030A0",
+                "FFFFC000",
+            ],
+        ),
+        "bike-repair-module-4-1a": (
+            [
+                "Assets",
+                "Liabilities",
+                "Reasons",
+                "Balance Sheet",
+                "Income Statement",
+                "St_Members_Capital",
+            ],
+            [
+                "FF2563EB",
+                "FF2563EB",
+                "FF2563EB",
+                "FF7030A0",
+                "FF7030A0",
+                "FF7030A0",
+            ],
+        ),
+        "bike-repair-module-4-2": (
+            [
+                "Assets",
+                "Liabilities",
+                "Reasons",
+                "Balance Sheet",
+                "Income Statement",
+                "St_Members_Capital",
+                "Working Tab",
+            ],
+            [
+                "FF2563EB",
+                "FF2563EB",
+                "FF2563EB",
+                "FF7030A0",
+                "FF7030A0",
+                "FF7030A0",
+                "FFFFC000",
+            ],
+        ),
+        "bike-repair-end": (
+            [
+                "Assets",
+                "Liabilities",
+                "Reasons",
+                "Balance Sheet",
+                "Income Statement",
+                "St_Members_Capital",
+                "Cash_Flow_Statement",
+            ],
+            [
+                "FF2563EB",
+                "FF2563EB",
+                "FF2563EB",
+                "FF7030A0",
+                "FF7030A0",
+                "FF7030A0",
+                "FF7030A0",
+            ],
+        ),
+    }
+    tab_actual = {
+        workbook_key: (
+            [sheet["name"] for sheet in data["workbooks"][workbook_key]["sheets"]],
+            [sheet["tabColor"] for sheet in data["workbooks"][workbook_key]["sheets"]],
+        )
+        for workbook_key in tab_canon
+    }
+    amber_offenders_4_1a = [
+        sheet["name"]
+        for sheet in data["workbooks"]["bike-repair-module-4-1a"]["sheets"]
+        if sheet["tabColor"] == "FFFFC000"
+    ]
+    passed = tab_actual == tab_canon and not amber_offenders_4_1a
+    results.append(passed)
+    report_invariant(
+        15,
+        passed,
+        f"ordered tabs/colors={tab_actual}; 4-1a amber tabs={amber_offenders_4_1a}",
+    )
+
+    def first_cell_list_difference(
+        left: dict[str, Any], right: dict[str, Any], left_label: str, right_label: str
+    ) -> str | None:
+        left_cells = left["cells"]
+        right_cells = right["cells"]
+        for offset in range(max(len(left_cells), len(right_cells))):
+            left_cell = left_cells[offset] if offset < len(left_cells) else None
+            right_cell = right_cells[offset] if offset < len(right_cells) else None
+            if left_cell == right_cell:
+                continue
+            location_cell = left_cell or right_cell
+            coordinate = (
+                f"{get_column_letter(location_cell['c'])}{location_cell['r']}"
+                if location_cell is not None
+                else "unknown cell"
+            )
+            return (
+                f"{left['name']}!{coordinate}: {left_label}={left_cell!r}; "
+                f"{right_label}={right_cell!r}"
+            )
+        return None
+
+    # Invariant 16 — all five shared Module 4 sheets are exact extracted-cell
+    # copies of the final workbook, across all three authored snapshots.
+    shared_module_4_sheets = (
+        "Assets",
+        "Liabilities",
+        "Reasons",
+        "Balance Sheet",
+        "Income Statement",
+    )
+    shared_sheet_differences: dict[str, str | None] = {}
+    for workbook_key in (
+        "bike-repair-module-4-1",
+        "bike-repair-module-4-1a",
+        "bike-repair-module-4-2",
+    ):
+        first_difference: str | None = None
+        for sheet_name in shared_module_4_sheets:
+            first_difference = first_cell_list_difference(
+                get_sheet(data, workbook_key, sheet_name),
+                get_sheet(data, "bike-repair-end", sheet_name),
+                workbook_key,
+                "bike-repair-end",
+            )
+            if first_difference is not None:
+                break
+        shared_sheet_differences[workbook_key] = first_difference
+    passed = all(
+        difference is None for difference in shared_sheet_differences.values()
+    )
+    results.append(passed)
+    report_invariant(
+        16,
+        passed,
+        f"first differing shared sheet/cell={shared_sheet_differences}",
+    )
+
+    def data_pairs_after_period(sheet: dict[str, Any]) -> list[tuple[Any, Any]]:
+        period_rows = label_rows(sheet, "For the period", contains=True)
+        if len(period_rows) != 1:
+            raise ExtractionError(
+                f"expected one period title in extracted sheet {sheet['name']}; "
+                f"found rows {period_rows}"
+            )
+        grid = row_cells(sheet)
+        return [
+            (
+                grid.get(row, {}).get(2, {}).get("value"),
+                grid.get(row, {}).get(4, {}).get("value"),
+            )
+            for row in range(period_rows[0] + 1, len(sheet["rows"]) + 1)
+            if 2 in grid.get(row, {}) or 4 in grid.get(row, {})
+        ]
+
+    def section_item_sum(sheet: dict[str, Any], section: str) -> int | float:
+        start, end = section_bounds(sheet, section)
+        grid = row_cells(sheet)
+        return sum(
+            cell["value"]
+            for row in range(start, end + 1)
+            if not str(grid.get(row, {}).get(2, {}).get("value", "")).startswith(
+                "Balance,"
+            )
+            if (cell := grid.get(row, {}).get(4)) is not None
+            and isinstance(cell["value"], (int, float))
+            and not isinstance(cell["value"], bool)
+        )
+
+    # Invariant 17 — Module 4-1 copies the complete member-capital ledger into
+    # its amber Working Tab, including the mid-season birth of WITHDRAWN.
+    working_members = get_sheet(data, "bike-repair-module-4-1", "Working Tab")
+    copied_members = get_sheet(data, "members-capital-steps", "0 · Data copied in")
+    working_members_rows = data_pairs_after_period(working_members)
+    copied_members_rows = data_pairs_after_period(copied_members)
+    first_members_row_mismatch = first_row_pair_mismatch(
+        copied_members_rows, working_members_rows
+    )
+    member_item_sums = {
+        section: section_item_sum(working_members, section)
+        for section in ("CONTRIBUTED", "GENERATED", "WITHDRAWN")
+    }
+    working_generated_start = section_value(
+        working_members, "GENERATED", "Balance, June 1, 2026"
+    )
+    working_generated_end = section_value(
+        working_members, "GENERATED", "Balance, August 31, 2026"
+    )
+    withdrawn_start, withdrawn_end = section_bounds(working_members, "WITHDRAWN")
+    withdrawn_june_rows = label_rows(
+        working_members,
+        "Balance, June 1, 2026",
+        start=withdrawn_start,
+        end=withdrawn_end,
+    )
+    passed = (
+        first_members_row_mismatch is None
+        and member_item_sums
+        == {"CONTRIBUTED": 2290, "GENERATED": 2810, "WITHDRAWN": -600}
+        and working_generated_start == 170
+        and working_generated_end == 2810
+        and working_generated_end - working_generated_start == 2640
+        and not withdrawn_june_rows
+    )
+    results.append(passed)
+    report_invariant(
+        17,
+        passed,
+        f"4-1/copy rows={len(working_members_rows)}/{len(copied_members_rows)}; "
+        f"first mismatching pair={first_members_row_mismatch}; item sums={member_item_sums}; "
+        f"GENERATED={working_generated_end}-{working_generated_start}="
+        f"{working_generated_end - working_generated_start}; "
+        f"WITHDRAWN June-1 rows={withdrawn_june_rows}",
+    )
+
+    # Invariant 18 — Module 4-2 copies the Cash ledger's exact 28-row season
+    # slice to its amber Working Tab, and that slice explains the cash change.
+    working_cash = get_sheet(data, "bike-repair-module-4-2", "Working Tab")
+    copied_cash = get_sheet(data, "cash-flow-steps", "0 · Data copied in")
+    working_cash_rows = data_pairs_after_period(working_cash)
+    copied_cash_rows = data_pairs_after_period(copied_cash)
+    first_cash_row_mismatch = first_row_pair_mismatch(
+        copied_cash_rows, working_cash_rows
+    )
+    working_cash_values = [
+        value
+        for _, value in working_cash_rows
+        if isinstance(value, (int, float)) and not isinstance(value, bool)
+    ]
+    module_4_2_assets = get_sheet(data, "bike-repair-module-4-2", "Assets")
+    module_4_2_assets_grid = row_cells(module_4_2_assets)
+    cash_header_row = label_rows(module_4_2_assets, "Cash")[0]
+    cash_end_row = label_rows(module_4_2_assets, "Accounts Receivable")[0] - 1
+    cash_june_rows = [
+        row
+        for row in label_rows(
+            module_4_2_assets,
+            "Balance, June 1, 2026",
+            start=cash_header_row + 1,
+            end=cash_end_row,
+        )
+        if module_4_2_assets_grid.get(row, {}).get(4, {}).get("value") == 1300
+    ]
+    cash_august_rows = [
+        row
+        for row in label_rows(
+            module_4_2_assets,
+            "Balance, August 31, 2026",
+            start=cash_header_row + 1,
+            end=cash_end_row,
+        )
+        if module_4_2_assets_grid.get(row, {}).get(4, {}).get("value") == 620
+    ]
+    cash_season_values: list[int | float] = []
+    if len(cash_june_rows) == len(cash_august_rows) == 1:
+        cash_season_values = [
+            cell["value"]
+            for row in range(cash_june_rows[0] + 1, cash_august_rows[0])
+            if (cell := module_4_2_assets_grid.get(row, {}).get(4)) is not None
+            and isinstance(cell["value"], (int, float))
+            and not isinstance(cell["value"], bool)
+        ]
+    passed = (
+        first_cash_row_mismatch is None
+        and len(working_cash_values) == 28
+        and sum(working_cash_values) == -680
+        and len(cash_june_rows) == len(cash_august_rows) == 1
+        and len(cash_season_values) == 28
+        and sum(cash_season_values) == -680
+        and working_cash_values == cash_season_values
+    )
+    results.append(passed)
+    report_invariant(
+        18,
+        passed,
+        f"4-2/copy rows={len(working_cash_rows)}/{len(copied_cash_rows)}, "
+        f"first mismatching pair={first_cash_row_mismatch}; Working values "
+        f"count/sum={len(working_cash_values)}/{sum(working_cash_values)}; "
+        f"Cash bounds={cash_june_rows}/{cash_august_rows}; season count/sum="
+        f"{len(cash_season_values)}/{sum(cash_season_values)}; "
+        f"ordered values equal={working_cash_values == cash_season_values}",
+    )
+
+    def normalized_cells_without_llc_title(
+        sheet: dict[str, Any]
+    ) -> list[dict[str, Any]]:
+        grid = row_cells(sheet)
+        first_label = grid.get(1, {}).get(2, {}).get("value")
+        dropped_rows = (
+            1
+            if isinstance(first_label, str)
+            and first_label.endswith("Bike Repair, LLC.")
+            else 0
+        )
+
+        def shift_coordinate(coordinate: str) -> str:
+            match = re.fullmatch(r"([A-Z]+)(\d+)", coordinate)
+            if match is None:
+                return coordinate
+            return f"{match.group(1)}{int(match.group(2)) - dropped_rows}"
+
+        normalized: list[dict[str, Any]] = []
+        for cell in sheet["cells"]:
+            if cell["r"] <= dropped_rows:
+                continue
+            normalized_cell = dict(cell)
+            normalized_cell["r"] -= dropped_rows
+            if normalized_cell.get("merge"):
+                normalized_cell["merge"] = re.sub(
+                    r"([A-Z]+)(\d+)",
+                    lambda match: (
+                        f"{match.group(1)}"
+                        f"{int(match.group(2)) - dropped_rows}"
+                    ),
+                    normalized_cell["merge"],
+                )
+            if "sumSources" in normalized_cell:
+                normalized_cell["sumSources"] = [
+                    shift_coordinate(source)
+                    for source in normalized_cell["sumSources"]
+                ]
+            normalized.append(normalized_cell)
+        return normalized
+
+    # Invariant 19 — the completed member-capital statement persists unchanged
+    # through Module 4 and matches the guided statement modulo End's LLC row.
+    end_members = get_sheet(data, "bike-repair-end", "St_Members_Capital")
+    module_4_1a_members = get_sheet(
+        data, "bike-repair-module-4-1a", "St_Members_Capital"
+    )
+    module_4_2_members = get_sheet(
+        data, "bike-repair-module-4-2", "St_Members_Capital"
+    )
+    module_4_1a_members_difference = first_cell_list_difference(
+        module_4_1a_members,
+        end_members,
+        "bike-repair-module-4-1a",
+        "bike-repair-end",
+    )
+    module_4_2_members_difference = first_cell_list_difference(
+        module_4_2_members,
+        end_members,
+        "bike-repair-module-4-2",
+        "bike-repair-end",
+    )
+    guided_members_normalized = normalized_cells_without_llc_title(members)
+    end_members_normalized = normalized_cells_without_llc_title(end_members)
+    first_guided_members_difference: str | None = None
+    for offset in range(
+        max(len(guided_members_normalized), len(end_members_normalized))
+    ):
+        guided_cell = (
+            guided_members_normalized[offset]
+            if offset < len(guided_members_normalized)
+            else None
+        )
+        end_cell = (
+            end_members_normalized[offset]
+            if offset < len(end_members_normalized)
+            else None
+        )
+        if guided_cell != end_cell:
+            first_guided_members_difference = (
+                f"normalized cell {offset + 1}: steps={guided_cell!r}; "
+                f"End={end_cell!r}"
+            )
+            break
+    total_members_june = value_for_label(
+        end_members, "Total Member's Capital, June 1, 2026"
+    )
+    total_members_august = value_for_label(
+        end_members, "Total Member's Capital, August 31, 2026"
+    )
+    passed = (
+        module_4_1a_members_difference is None
+        and module_4_2_members_difference is None
+        and first_guided_members_difference is None
+        and total_members_june == 2460
+        and total_members_august == 4500
+    )
+    results.append(passed)
+    report_invariant(
+        19,
+        passed,
+        f"4-1a first difference={module_4_1a_members_difference}; "
+        f"4-2 first difference={module_4_2_members_difference}; "
+        f"steps/End normalized cells={len(guided_members_normalized)}/"
+        f"{len(end_members_normalized)}, first difference={first_guided_members_difference}; "
+        f"total capital June/August={total_members_june}/{total_members_august}",
+    )
+
+    # Invariant 20 — the guided cash-flow statement matches End modulo its LLC
+    # row and carries the approved operating, investing, financing, and cash totals.
+    end_cash_flow = get_sheet(data, "bike-repair-end", "Cash_Flow_Statement")
+    guided_cash_flow_normalized = normalized_cells_without_llc_title(cash_flow)
+    end_cash_flow_normalized = normalized_cells_without_llc_title(end_cash_flow)
+    first_guided_cash_flow_difference: str | None = None
+    for offset in range(
+        max(len(guided_cash_flow_normalized), len(end_cash_flow_normalized))
+    ):
+        guided_cell = (
+            guided_cash_flow_normalized[offset]
+            if offset < len(guided_cash_flow_normalized)
+            else None
+        )
+        end_cell = (
+            end_cash_flow_normalized[offset]
+            if offset < len(end_cash_flow_normalized)
+            else None
+        )
+        if guided_cell != end_cell:
+            first_guided_cash_flow_difference = (
+                f"normalized cell {offset + 1}: steps={guided_cell!r}; "
+                f"End={end_cell!r}"
+            )
+            break
+    cash_flow_totals = {
+        "operating": value_for_label(
+            end_cash_flow, "Cash from operating activities"
+        ),
+        "investing": value_for_label(
+            end_cash_flow, "Cash used in investing activities"
+        ),
+        "financing": value_for_label(
+            end_cash_flow, "Cash used in financing activities"
+        ),
+        "net change": value_for_label(end_cash_flow, "Net change in cash"),
+        "ending cash": value_for_label(end_cash_flow, "Cash, August 31, 2026"),
+    }
+    passed = (
+        first_guided_cash_flow_difference is None
+        and cash_flow_totals
+        == {
+            "operating": 2350,
+            "investing": -400,
+            "financing": -2630,
+            "net change": -680,
+            "ending cash": 620,
+        }
+    )
+    results.append(passed)
+    report_invariant(
+        20,
+        passed,
+        f"steps/End normalized cells={len(guided_cash_flow_normalized)}/"
+        f"{len(end_cash_flow_normalized)}, first difference="
+        f"{first_guided_cash_flow_difference}; totals={cash_flow_totals}",
     )
 
     return all(results)

@@ -11,7 +11,10 @@ window.BR_STMT_DATA = {
       "Bike-Repair-Module-3-3.xlsx",
       "Income-Statement-Steps.xlsx",
       "Members-Capital-Steps.xlsx",
-      "Cash-Flow-Steps.xlsx"
+      "Cash-Flow-Steps.xlsx",
+      "Bike-Repair-Module-4-1.xlsx",
+      "Bike-Repair-Module-4-1a.xlsx",
+      "Bike-Repair-Module-4-2.xlsx"
     ]
   },
   "workbooks": {
@@ -21,6 +24,7 @@ window.BR_STMT_DATA = {
           "name": "Assets",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -3937,6 +3941,7 @@ window.BR_STMT_DATA = {
           "name": "Liabilities",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -4472,6 +4477,7 @@ window.BR_STMT_DATA = {
           "name": "Reasons",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -6617,6 +6623,7 @@ window.BR_STMT_DATA = {
           "name": "Balance Sheet",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF7030A0",
           "rows": [
             {
               "outlineLevel": 0,
@@ -7381,6 +7388,7 @@ window.BR_STMT_DATA = {
           "name": "Income Statement",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF7030A0",
           "rows": [
             {
               "outlineLevel": 0,
@@ -7918,6 +7926,7 @@ window.BR_STMT_DATA = {
           "name": "St_Members_Capital",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF7030A0",
           "rows": [
             {
               "outlineLevel": 0,
@@ -8441,6 +8450,7 @@ window.BR_STMT_DATA = {
           "name": "Cash_Flow_Statement",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF7030A0",
           "rows": [
             {
               "outlineLevel": 0,
@@ -9151,6 +9161,7 @@ window.BR_STMT_DATA = {
           "name": "Assets",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -12623,6 +12634,7 @@ window.BR_STMT_DATA = {
           "name": "Liabilities",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -13070,6 +13082,7 @@ window.BR_STMT_DATA = {
           "name": "Reasons",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -15007,6 +15020,7 @@ window.BR_STMT_DATA = {
           "name": "Balance Sheet",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF7030A0",
           "rows": [
             {
               "outlineLevel": 0,
@@ -15525,6 +15539,7 @@ window.BR_STMT_DATA = {
           "name": "Assets",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -19293,6 +19308,7 @@ window.BR_STMT_DATA = {
           "name": "Liabilities",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -19828,6 +19844,7 @@ window.BR_STMT_DATA = {
           "name": "Reasons",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -21905,6 +21922,7 @@ window.BR_STMT_DATA = {
           "name": "Balance Sheet",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF7030A0",
           "rows": [
             {
               "outlineLevel": 0,
@@ -22423,6 +22441,7 @@ window.BR_STMT_DATA = {
           "name": "Assets",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -26281,6 +26300,7 @@ window.BR_STMT_DATA = {
           "name": "Liabilities",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -26816,6 +26836,7 @@ window.BR_STMT_DATA = {
           "name": "Reasons",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -28923,6 +28944,7 @@ window.BR_STMT_DATA = {
           "name": "Balance Sheet",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF7030A0",
           "rows": [
             {
               "outlineLevel": 0,
@@ -29441,6 +29463,7 @@ window.BR_STMT_DATA = {
           "name": "Assets",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -33389,6 +33412,7 @@ window.BR_STMT_DATA = {
           "name": "Liabilities",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -33924,6 +33948,7 @@ window.BR_STMT_DATA = {
           "name": "Reasons",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -36121,6 +36146,7 @@ window.BR_STMT_DATA = {
           "name": "Balance Sheet",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF7030A0",
           "rows": [
             {
               "outlineLevel": 0,
@@ -36639,6 +36665,7 @@ window.BR_STMT_DATA = {
           "name": "Assets",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -40587,6 +40614,7 @@ window.BR_STMT_DATA = {
           "name": "Liabilities",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -41122,6 +41150,7 @@ window.BR_STMT_DATA = {
           "name": "Reasons",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF2563EB",
           "rows": [
             {
               "outlineLevel": 0,
@@ -43319,6 +43348,7 @@ window.BR_STMT_DATA = {
           "name": "Balance Sheet",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FF7030A0",
           "rows": [
             {
               "outlineLevel": 0,
@@ -43833,6 +43863,7 @@ window.BR_STMT_DATA = {
           "name": "Working Tab",
           "order": null,
           "stepLabel": null,
+          "tabColor": "FFFFC000",
           "rows": [
             {
               "outlineLevel": 0,
@@ -45262,6 +45293,7 @@ window.BR_STMT_DATA = {
           "name": "0 · Data copied in",
           "order": 0,
           "stepLabel": "Data copied in",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -46670,6 +46702,7 @@ window.BR_STMT_DATA = {
           "name": "1 · Pick — Revenue or Expense",
           "order": 1,
           "stepLabel": "Pick — Revenue or Expense",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -48666,6 +48699,7 @@ window.BR_STMT_DATA = {
           "name": "2 · Sort — Revenue & Expenses",
           "order": 2,
           "stepLabel": "Sort — Revenue & Expenses",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -50295,6 +50329,7 @@ window.BR_STMT_DATA = {
           "name": "3 · Pick — kind of expense",
           "order": 3,
           "stepLabel": "Pick — kind of expense",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -51469,6 +51504,7 @@ window.BR_STMT_DATA = {
           "name": "4 · Sort expenses by kind",
           "order": 4,
           "stepLabel": "Sort expenses by kind",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -52607,6 +52643,7 @@ window.BR_STMT_DATA = {
           "name": "5 · Format statement",
           "order": 5,
           "stepLabel": "Format statement",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -52976,6 +53013,7 @@ window.BR_STMT_DATA = {
           "name": "0 · Data copied in",
           "order": 0,
           "stepLabel": "Data copied in",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -55128,6 +55166,7 @@ window.BR_STMT_DATA = {
           "name": "1 · Fold each pile",
           "order": 1,
           "stepLabel": "Fold each pile",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -55572,6 +55611,7 @@ window.BR_STMT_DATA = {
           "name": "2 · Identify the reasons",
           "order": 2,
           "stepLabel": "Identify the reasons",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -56064,6 +56104,7 @@ window.BR_STMT_DATA = {
           "name": "3 · Make the statement",
           "order": 3,
           "stepLabel": "Make the statement",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -56574,6 +56615,7 @@ window.BR_STMT_DATA = {
           "name": "0 · Data copied in",
           "order": 0,
           "stepLabel": "Data copied in",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -57460,6 +57502,7 @@ window.BR_STMT_DATA = {
           "name": "1 · Pick the activity",
           "order": 1,
           "stepLabel": "Pick the activity",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -58754,6 +58797,7 @@ window.BR_STMT_DATA = {
           "name": "2 · Sort by activity",
           "order": 2,
           "stepLabel": "Sort by activity",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -59909,6 +59953,7 @@ window.BR_STMT_DATA = {
           "name": "3 · Make the statement",
           "order": 3,
           "stepLabel": "Make the statement",
+          "tabColor": null,
           "rows": [
             {
               "outlineLevel": 0,
@@ -60471,6 +60516,27789 @@ window.BR_STMT_DATA = {
                 "D20",
                 "D19"
               ]
+            }
+          ]
+        }
+      ]
+    },
+    "bike-repair-module-4-1": {
+      "sheets": [
+        {
+          "name": "Assets",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF2563EB",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 3.0
+            },
+            {
+              "width": 14.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "Assets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Cash",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "Rent paid in advance (the lease)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": -1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Park Tool repair stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "value": -200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 340,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 140,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Smith's deposit received",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Covered from your personal funds",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 4,
+              "value": 160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Deposited to open the LLC bank account",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D3",
+                "D4",
+                "D5",
+                "D6",
+                "D7",
+                "D8",
+                "D9",
+                "D10",
+                "D11",
+                "D12",
+                "D13",
+                "D14"
+              ]
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Repair collected — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Repair collected — Marcus T.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 2,
+              "value": "Repair collected — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Repair collected — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Repair collected — Sofia M.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Repair collected — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 2,
+              "value": "Repair collected — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 4,
+              "value": 225,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 2,
+              "value": "Repair collected — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 4,
+              "value": 210,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 2,
+              "value": "Repair collected — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 2,
+              "value": "Repair collected — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 2,
+              "value": "Repair collected — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 4,
+              "value": 450,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 2,
+              "value": "Repair collected — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 2,
+              "value": "Repair collected — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 2,
+              "value": "Repair collected — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 2,
+              "value": "Repair collected — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 2,
+              "value": "Repair collected — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 2,
+              "value": "Repair collected — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 4,
+              "value": 485,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 2,
+              "value": "Repair collected — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 4,
+              "value": 390,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 2,
+              "value": "Repair collected — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 4,
+              "value": 500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 2,
+              "value": "Parts bought — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 4,
+              "value": -500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 2,
+              "value": "Parts bought — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 4,
+              "value": -400,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 2,
+              "value": "Parts bought — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 4,
+              "value": -300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 2,
+              "value": "Rent paid — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 2,
+              "value": "Rent paid — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 2,
+              "value": "Rent paid — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 2,
+              "value": "New repair tool",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 4,
+              "value": -400,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 2,
+              "value": "Credit card paid off",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 4,
+              "value": -2030,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 2,
+              "value": "Money taken out for personal use",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 4,
+              "value": -600,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 4,
+              "value": 620,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D15",
+                "D16",
+                "D17",
+                "D18",
+                "D19",
+                "D20",
+                "D21",
+                "D22",
+                "D23",
+                "D24",
+                "D25",
+                "D26",
+                "D27",
+                "D28",
+                "D29",
+                "D30",
+                "D31",
+                "D32",
+                "D33",
+                "D34",
+                "D35",
+                "D36",
+                "D37",
+                "D38",
+                "D39",
+                "D40",
+                "D41",
+                "D42",
+                "D43"
+              ]
+            },
+            {
+              "r": 46,
+              "c": 2,
+              "value": "Accounts Receivable",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 2,
+              "value": "Ridgeline Trail Crew — finished Aug 28, net 15 (unpaid)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D47"
+              ]
+            },
+            {
+              "r": 50,
+              "c": 2,
+              "value": "Right of Use",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 2,
+              "value": "Last month's rent, paid in advance (on deposit)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 4,
+              "value": 650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 4,
+              "value": 650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D51"
+              ]
+            },
+            {
+              "r": 53,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 4,
+              "value": 650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D52"
+              ]
+            },
+            {
+              "r": 55,
+              "c": 2,
+              "value": "Parts",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 2,
+              "value": "Chains",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 4,
+              "value": 50,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 2,
+              "value": "Brake pads",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 2,
+              "value": "Derailleur cables",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 2,
+              "value": "Cassettes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 2,
+              "value": "Bottom brackets",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 2,
+              "value": "Spokes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 2,
+              "value": "Tubes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 4,
+              "value": 10,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D56",
+                "D57",
+                "D58",
+                "D59",
+                "D60",
+                "D61",
+                "D62"
+              ]
+            },
+            {
+              "r": 64,
+              "c": 2,
+              "value": "Chains ×10 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 64,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 2,
+              "value": "11-spd cassettes ×4 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 4,
+              "value": 160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 2,
+              "value": "Brake pad sets ×12 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 4,
+              "value": 90,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 2,
+              "value": "Cables + housing (assorted) (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 4,
+              "value": 60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 68,
+              "c": 2,
+              "value": "Tubes ×10 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 68,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 69,
+              "c": 2,
+              "value": "Chainrings + jockey wheels (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 69,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 2,
+              "value": "Bottom brackets ×3 (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 4,
+              "value": 105,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 2,
+              "value": "Shift cables + housing (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 4,
+              "value": 75,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 72,
+              "c": 2,
+              "value": "Tubeless sealant + valves (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 72,
+              "c": 4,
+              "value": 60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 73,
+              "c": 2,
+              "value": "Spokes + nipples (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 73,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 74,
+              "c": 2,
+              "value": "Tires ×4 (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 74,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 75,
+              "c": 2,
+              "value": "Brake pads (assorted) (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 75,
+              "c": 4,
+              "value": 70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 76,
+              "c": 2,
+              "value": "Cables + housing (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 76,
+              "c": 4,
+              "value": 50,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 77,
+              "c": 2,
+              "value": "Tubes ×8 (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 77,
+              "c": 4,
+              "value": 30,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 78,
+              "c": 2,
+              "value": "Small parts (bolts, tape) (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 78,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 79,
+              "c": 2,
+              "value": "Parts used — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 79,
+              "c": 4,
+              "value": -10,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 80,
+              "c": 2,
+              "value": "Parts used — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 80,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 81,
+              "c": 2,
+              "value": "Parts used — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 81,
+              "c": 4,
+              "value": -95,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 82,
+              "c": 2,
+              "value": "Parts used — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 82,
+              "c": 4,
+              "value": -60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 83,
+              "c": 2,
+              "value": "Parts used — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 83,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 84,
+              "c": 2,
+              "value": "Parts used — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 84,
+              "c": 4,
+              "value": -65,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 85,
+              "c": 2,
+              "value": "Parts used — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 85,
+              "c": 4,
+              "value": -35,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 86,
+              "c": 2,
+              "value": "Parts used — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 86,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 87,
+              "c": 2,
+              "value": "Parts used — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 87,
+              "c": 4,
+              "value": -125,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 88,
+              "c": 2,
+              "value": "Parts used — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 88,
+              "c": 4,
+              "value": -55,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 89,
+              "c": 2,
+              "value": "Parts used — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 89,
+              "c": 4,
+              "value": -45,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 90,
+              "c": 2,
+              "value": "Parts used — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 90,
+              "c": 4,
+              "value": -100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 91,
+              "c": 2,
+              "value": "Parts used — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 91,
+              "c": 4,
+              "value": -80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 92,
+              "c": 2,
+              "value": "Parts used — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 92,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 93,
+              "c": 2,
+              "value": "Parts used — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 93,
+              "c": 4,
+              "value": -129,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 94,
+              "c": 2,
+              "value": "Parts used — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 94,
+              "c": 4,
+              "value": -70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 95,
+              "c": 2,
+              "value": "Parts used — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 95,
+              "c": 4,
+              "value": -105,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 96,
+              "c": 2,
+              "value": "Parts used — Ridgeline Trail Crew",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 96,
+              "c": 4,
+              "value": -75,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 97,
+              "c": 2,
+              "value": "Parts used — J. Smith",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 97,
+              "c": 4,
+              "value": -36,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 98,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 98,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 98,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D63",
+                "D64",
+                "D65",
+                "D66",
+                "D67",
+                "D68",
+                "D69",
+                "D70",
+                "D71",
+                "D72",
+                "D73",
+                "D74",
+                "D75",
+                "D76",
+                "D77",
+                "D78",
+                "D79",
+                "D80",
+                "D81",
+                "D82",
+                "D83",
+                "D84",
+                "D85",
+                "D86",
+                "D87",
+                "D88",
+                "D89",
+                "D90",
+                "D91",
+                "D92",
+                "D93",
+                "D94",
+                "D95",
+                "D96",
+                "D97"
+              ]
+            },
+            {
+              "r": 100,
+              "c": 2,
+              "value": "Tools & Repair Equipment",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 101,
+              "c": 2,
+              "value": "Repair stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 101,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 102,
+              "c": 2,
+              "value": "Air compressor",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 102,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 103,
+              "c": 2,
+              "value": "Parts washer",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 103,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 104,
+              "c": 2,
+              "value": "Wheel-truing stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 104,
+              "c": 4,
+              "value": 170,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 105,
+              "c": 2,
+              "value": "Cone wrench set",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 105,
+              "c": 4,
+              "value": 65,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 106,
+              "c": 2,
+              "value": "Torque wrench",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 106,
+              "c": 4,
+              "value": 95,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 107,
+              "c": 2,
+              "value": "Hex/Allen set",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 107,
+              "c": 4,
+              "value": 45,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 108,
+              "c": 2,
+              "value": "Cable cutters",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 108,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 109,
+              "c": 2,
+              "value": "Chain breaker",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 109,
+              "c": 4,
+              "value": 35,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 110,
+              "c": 2,
+              "value": "Tire levers",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 110,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 111,
+              "c": 2,
+              "value": "Bench grinder",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 111,
+              "c": 4,
+              "value": 90,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 112,
+              "c": 2,
+              "value": "Headset press",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 112,
+              "c": 4,
+              "value": 70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 113,
+              "c": 2,
+              "value": "Shop vacuum",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 113,
+              "c": 4,
+              "value": 60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 114,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 114,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 114,
+              "c": 4,
+              "value": 1200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D101",
+                "D102",
+                "D103",
+                "D104",
+                "D105",
+                "D106",
+                "D107",
+                "D108",
+                "D109",
+                "D110",
+                "D111",
+                "D112",
+                "D113"
+              ]
+            },
+            {
+              "r": 115,
+              "c": 2,
+              "value": "New repair tool bought this season",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 115,
+              "c": 4,
+              "value": 400,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 116,
+              "c": 2,
+              "value": "Depreciation — Summer 2026 (the season's share of the cost)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 116,
+              "c": 4,
+              "value": -160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 117,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 117,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 117,
+              "c": 4,
+              "value": 1440,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D114",
+                "D115",
+                "D116"
+              ]
+            },
+            {
+              "r": 119,
+              "c": 2,
+              "value": "Fixtures",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 120,
+              "c": 2,
+              "value": "Desk",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 120,
+              "c": 4,
+              "value": 250,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 121,
+              "c": 2,
+              "value": "Shelving units",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 121,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 122,
+              "c": 2,
+              "value": "Display rack",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 122,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 123,
+              "c": 2,
+              "value": "Pegboard + hooks",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 123,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 124,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 124,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 124,
+              "c": 4,
+              "value": 750,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D120",
+                "D121",
+                "D122",
+                "D123"
+              ]
+            },
+            {
+              "r": 125,
+              "c": 2,
+              "value": "Depreciation — Summer 2026 (the season's share of the cost)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 125,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 126,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 126,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 126,
+              "c": 4,
+              "value": 710,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D124",
+                "D125"
+              ]
+            },
+            {
+              "r": 128,
+              "c": 2,
+              "value": "Laptop",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 129,
+              "c": 2,
+              "value": "Laptop (from home)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 129,
+              "c": 4,
+              "value": 610,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 130,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 130,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 130,
+              "c": 4,
+              "value": 610,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D129"
+              ]
+            },
+            {
+              "r": 131,
+              "c": 2,
+              "value": "Depreciation — Summer 2026 (the season's share of the cost)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 131,
+              "c": 4,
+              "value": -30,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 132,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 132,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 132,
+              "c": 4,
+              "value": 580,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D130",
+                "D131"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Liabilities",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF2563EB",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 3.0
+            },
+            {
+              "width": 14.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "Liabilities",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Credit Card",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "Charged — hand tools",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Charged — air compressor",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Charged — parts washer",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Charged — wheel-truing stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 170,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Charged — fixtures",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 750,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Charged — parts (QBP order)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 4,
+              "value": 2030,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D3",
+                "D4",
+                "D5",
+                "D6",
+                "D7",
+                "D8"
+              ]
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Paid off in full this season",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": -2030,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 0,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D9",
+                "D10"
+              ]
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Customer Deposit",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Smith's advance for a custom frame",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D14"
+              ]
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Built and delivered Smith's frame — no longer owed",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": -220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": 0,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D15",
+                "D16"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Reasons",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF2563EB",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 3.0
+            },
+            {
+              "width": 14.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "Reasons — Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "CONTRIBUTED",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "Cash — covered from your personal funds (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": 160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Laptop — brought from home (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "value": 610,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Equipment — gear from home — grinder, headset press, shop vacuum (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Cash — deposited to open the LLC bank account (June 1)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D3",
+                "D4",
+                "D5",
+                "D6"
+              ]
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D7"
+              ]
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "GENERATED",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Repair collected — Brake job + Tune-up + Tire mounting ×2 @ $70",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 340,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Repair collected — Walk-ins — mixed work (no itemized detail)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Repair collected — Tune-up",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 4,
+              "value": 80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Repair collected — Brake overhaul",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 140,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Repair collected — Chain + cassette replacement",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Repair collected — Tune-up + minor repair",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": 100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Repair collected — Custom wheel work + new spokes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 2,
+              "value": "Parts used — May",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 4,
+              "value": -300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Rent used — May",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": 170,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D11",
+                "D12",
+                "D13",
+                "D14",
+                "D15",
+                "D16",
+                "D17",
+                "D18",
+                "D19"
+              ]
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Rent used — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 2,
+              "value": "Repair collected — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 2,
+              "value": "Parts used — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 4,
+              "value": -10,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 2,
+              "value": "Repair collected — Marcus T.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 2,
+              "value": "Repair collected — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 2,
+              "value": "Parts used — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 2,
+              "value": "Repair collected — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 2,
+              "value": "Parts used — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 4,
+              "value": -95,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 2,
+              "value": "Repair collected — Sofia M.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 2,
+              "value": "Repair collected — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 2,
+              "value": "Parts used — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 4,
+              "value": -60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 2,
+              "value": "Repair collected — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 4,
+              "value": 225,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 2,
+              "value": "Parts used — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 2,
+              "value": "Repair collected — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 4,
+              "value": 210,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 2,
+              "value": "Parts used — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 4,
+              "value": -65,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 2,
+              "value": "Rent used — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 2,
+              "value": "Repair collected — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 2,
+              "value": "Parts used — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 4,
+              "value": -35,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 2,
+              "value": "Repair collected — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 2,
+              "value": "Parts used — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 2,
+              "value": "Repair collected — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 4,
+              "value": 450,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 2,
+              "value": "Parts used — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 4,
+              "value": -125,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 2,
+              "value": "Repair collected — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 2,
+              "value": "Parts used — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 4,
+              "value": -55,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 45,
+              "c": 2,
+              "value": "Repair collected — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 45,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 46,
+              "c": 2,
+              "value": "Parts used — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 46,
+              "c": 4,
+              "value": -45,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 2,
+              "value": "Repair collected — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 2,
+              "value": "Parts used — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 4,
+              "value": -100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 49,
+              "c": 2,
+              "value": "Repair collected — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 49,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 50,
+              "c": 2,
+              "value": "Parts used — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 50,
+              "c": 4,
+              "value": -80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 2,
+              "value": "Rent used — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 2,
+              "value": "Repair collected — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 2,
+              "value": "Parts used — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 54,
+              "c": 2,
+              "value": "Repair collected — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 54,
+              "c": 4,
+              "value": 485,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 55,
+              "c": 2,
+              "value": "Parts used — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 55,
+              "c": 4,
+              "value": -129,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 2,
+              "value": "Repair collected — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 4,
+              "value": 390,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 2,
+              "value": "Parts used — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 4,
+              "value": -70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 2,
+              "value": "Repair collected — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 4,
+              "value": 500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 2,
+              "value": "Parts used — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 4,
+              "value": -105,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 2,
+              "value": "Repair delivered — Ridgeline Trail Crew, billed net 15 (unpaid)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 2,
+              "value": "Parts used — Ridgeline Trail Crew",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 4,
+              "value": -75,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 2,
+              "value": "Frame delivered — J. Smith (deposit earned)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 2,
+              "value": "Parts used — J. Smith",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 4,
+              "value": -36,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 64,
+              "c": 2,
+              "value": "Depreciation — tools & repair equipment, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 64,
+              "c": 4,
+              "value": -160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 2,
+              "value": "Depreciation — fixtures, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 2,
+              "value": "Depreciation — laptop, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 4,
+              "value": -30,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 4,
+              "value": 2810,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D20",
+                "D21",
+                "D22",
+                "D23",
+                "D24",
+                "D25",
+                "D26",
+                "D27",
+                "D28",
+                "D29",
+                "D30",
+                "D31",
+                "D32",
+                "D33",
+                "D34",
+                "D35",
+                "D36",
+                "D37",
+                "D38",
+                "D39",
+                "D40",
+                "D41",
+                "D42",
+                "D43",
+                "D44",
+                "D45",
+                "D46",
+                "D47",
+                "D48",
+                "D49",
+                "D50",
+                "D51",
+                "D52",
+                "D53",
+                "D54",
+                "D55",
+                "D56",
+                "D57",
+                "D58",
+                "D59",
+                "D60",
+                "D61",
+                "D62",
+                "D63",
+                "D64",
+                "D65",
+                "D66"
+              ]
+            },
+            {
+              "r": 69,
+              "c": 2,
+              "value": "WITHDRAWN",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 2,
+              "value": "Owner's draw — money taken out for personal use",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 4,
+              "value": -600,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 4,
+              "value": -600,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D70"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Balance Sheet",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF7030A0",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 16.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "[Your Name]'s Bike Repair, LLC.",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Balance Sheets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "value": "June 1, 2026",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": "August 31, 2026",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Assets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Cash",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 3,
+              "value": 1300,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 620,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Accounts Receivable",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 3,
+              "value": 0,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 300,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Right of Use",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 3,
+              "value": 650,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 650,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Parts",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 3,
+              "value": 200,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 200,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Tools & Repair Equipment",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 3,
+              "value": 1200,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 4,
+              "value": 1440,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Fixtures",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 3,
+              "value": 750,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 710,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Laptop",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 3,
+              "value": 610,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 580,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Total Assets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 3,
+              "value": 4710,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 4500,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Liabilities",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Credit Card",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 3,
+              "value": 2030,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 0,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Customer Deposit",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": 220,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 0,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Total Liabilities",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 3,
+              "value": 2250,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": 0,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 2,
+              "value": "Contributed",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 3,
+              "value": 2290,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Generated",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 3,
+              "value": 170,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": 2810,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Withdrawn",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 3,
+              "value": 0,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": -600,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Total Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 3,
+              "value": 2460,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": 4500,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            }
+          ]
+        },
+        {
+          "name": "Income Statement",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF7030A0",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 3.1640625
+            },
+            {
+              "width": 50.6640625
+            },
+            {
+              "width": 4.5
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "[Your Name]'s Bike Repair, LLC.",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Income Statement",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "For the period June 1 – August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": true,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Revenue",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Repair services",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 6020,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Total revenue",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 6020,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D6"
+              ]
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Expenses",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Parts used",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 1200,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Rent",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 1950,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Depreciation",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 230,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Total expenses",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 4,
+              "value": 3380,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D10",
+                "D11",
+                "D12"
+              ]
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Net income",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 2640,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            }
+          ]
+        },
+        {
+          "name": "Working Tab",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FFFFC000",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 3.33203125
+            },
+            {
+              "width": 50.6640625
+            },
+            {
+              "width": 4.5
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "[Your Name]'s Bike Repair, LLC.",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Statement of Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "For the period June 1 – August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": true,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "CONTRIBUTED",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Cash — covered from your personal funds (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 160,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Laptop — brought from home (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 610,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Equipment — gear from home — grinder, headset press, shop vacuum (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 4,
+              "value": 220,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Cash — deposited to open the LLC bank account (June 1)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 1300,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "GENERATED",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Repair collected — Brake job + Tune-up + Tire mounting ×2 @ $70",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 340,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Repair collected — Walk-ins — mixed work (no itemized detail)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": 180,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Repair collected — Tune-up",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": 80,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 2,
+              "value": "Repair collected — Brake overhaul",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 4,
+              "value": 140,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Repair collected — Chain + cassette replacement",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": 130,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Repair collected — Tune-up + minor repair",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": 100,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Repair collected — Custom wheel work + new spokes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": 150,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 2,
+              "value": "Parts used — May",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 4,
+              "value": -300,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 2,
+              "value": "Rent used — May",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 4,
+              "value": -650,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 4,
+              "value": 170,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 2,
+              "value": "Rent used — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 4,
+              "value": -650,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 2,
+              "value": "Repair collected — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 4,
+              "value": 120,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 2,
+              "value": "Parts used — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 4,
+              "value": -10,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 2,
+              "value": "Repair collected — Marcus T.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 4,
+              "value": 150,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 2,
+              "value": "Repair collected — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 4,
+              "value": 270,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 2,
+              "value": "Parts used — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 4,
+              "value": -25,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 2,
+              "value": "Repair collected — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 4,
+              "value": 300,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 2,
+              "value": "Parts used — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 4,
+              "value": -95,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 2,
+              "value": "Repair collected — Sofia M.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 4,
+              "value": 150,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 2,
+              "value": "Repair collected — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 4,
+              "value": 360,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 2,
+              "value": "Parts used — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 4,
+              "value": -60,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 2,
+              "value": "Repair collected — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 4,
+              "value": 225,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 2,
+              "value": "Parts used — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 4,
+              "value": -40,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 2,
+              "value": "Repair collected — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 4,
+              "value": 210,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 2,
+              "value": "Parts used — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 4,
+              "value": -65,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 2,
+              "value": "Rent used — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 4,
+              "value": -650,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 2,
+              "value": "Repair collected — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 4,
+              "value": 240,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 2,
+              "value": "Parts used — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 4,
+              "value": -35,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 2,
+              "value": "Repair collected — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 4,
+              "value": 240,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 2,
+              "value": "Parts used — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 4,
+              "value": -25,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 45,
+              "c": 2,
+              "value": "Repair collected — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 45,
+              "c": 4,
+              "value": 450,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 46,
+              "c": 2,
+              "value": "Parts used — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 46,
+              "c": 4,
+              "value": -125,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 2,
+              "value": "Repair collected — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 4,
+              "value": 360,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 2,
+              "value": "Parts used — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 4,
+              "value": -55,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 49,
+              "c": 2,
+              "value": "Repair collected — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 49,
+              "c": 4,
+              "value": 270,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 50,
+              "c": 2,
+              "value": "Parts used — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 50,
+              "c": 4,
+              "value": -45,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 2,
+              "value": "Repair collected — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 4,
+              "value": 240,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 2,
+              "value": "Parts used — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 4,
+              "value": -100,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 2,
+              "value": "Repair collected — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 4,
+              "value": 300,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 54,
+              "c": 2,
+              "value": "Parts used — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 54,
+              "c": 4,
+              "value": -80,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 55,
+              "c": 2,
+              "value": "Rent used — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 55,
+              "c": 4,
+              "value": -650,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 2,
+              "value": "Repair collected — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 4,
+              "value": 240,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 2,
+              "value": "Parts used — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 4,
+              "value": -25,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 2,
+              "value": "Repair collected — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 4,
+              "value": 485,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 2,
+              "value": "Parts used — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 4,
+              "value": -129,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 2,
+              "value": "Repair collected — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 4,
+              "value": 390,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 2,
+              "value": "Parts used — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 4,
+              "value": -70,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 2,
+              "value": "Repair collected — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 4,
+              "value": 500,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 2,
+              "value": "Parts used — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 4,
+              "value": -105,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 64,
+              "c": 2,
+              "value": "Repair delivered — Ridgeline Trail Crew, billed net 15 (unpaid)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 64,
+              "c": 4,
+              "value": 300,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 2,
+              "value": "Parts used — Ridgeline Trail Crew",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 4,
+              "value": -75,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 2,
+              "value": "Frame delivered — J. Smith (deposit earned)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 4,
+              "value": 220,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 2,
+              "value": "Parts used — J. Smith",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 4,
+              "value": -36,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 68,
+              "c": 2,
+              "value": "Depreciation — tools & repair equipment, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 68,
+              "c": 4,
+              "value": -160,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 69,
+              "c": 2,
+              "value": "Depreciation — fixtures, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 69,
+              "c": 4,
+              "value": -40,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 2,
+              "value": "Depreciation — laptop, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 4,
+              "value": -30,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 4,
+              "value": 2810,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 73,
+              "c": 2,
+              "value": "WITHDRAWN",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 74,
+              "c": 2,
+              "value": "Owner's draw — money taken out for personal use",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 74,
+              "c": 4,
+              "value": -600,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 75,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 75,
+              "c": 4,
+              "value": -600,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            }
+          ]
+        }
+      ]
+    },
+    "bike-repair-module-4-1a": {
+      "sheets": [
+        {
+          "name": "Assets",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF2563EB",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 3.0
+            },
+            {
+              "width": 14.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "Assets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Cash",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "Rent paid in advance (the lease)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": -1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Park Tool repair stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "value": -200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 340,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 140,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Smith's deposit received",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Covered from your personal funds",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 4,
+              "value": 160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Deposited to open the LLC bank account",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D3",
+                "D4",
+                "D5",
+                "D6",
+                "D7",
+                "D8",
+                "D9",
+                "D10",
+                "D11",
+                "D12",
+                "D13",
+                "D14"
+              ]
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Repair collected — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Repair collected — Marcus T.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 2,
+              "value": "Repair collected — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Repair collected — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Repair collected — Sofia M.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Repair collected — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 2,
+              "value": "Repair collected — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 4,
+              "value": 225,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 2,
+              "value": "Repair collected — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 4,
+              "value": 210,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 2,
+              "value": "Repair collected — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 2,
+              "value": "Repair collected — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 2,
+              "value": "Repair collected — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 4,
+              "value": 450,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 2,
+              "value": "Repair collected — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 2,
+              "value": "Repair collected — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 2,
+              "value": "Repair collected — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 2,
+              "value": "Repair collected — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 2,
+              "value": "Repair collected — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 2,
+              "value": "Repair collected — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 4,
+              "value": 485,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 2,
+              "value": "Repair collected — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 4,
+              "value": 390,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 2,
+              "value": "Repair collected — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 4,
+              "value": 500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 2,
+              "value": "Parts bought — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 4,
+              "value": -500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 2,
+              "value": "Parts bought — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 4,
+              "value": -400,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 2,
+              "value": "Parts bought — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 4,
+              "value": -300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 2,
+              "value": "Rent paid — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 2,
+              "value": "Rent paid — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 2,
+              "value": "Rent paid — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 2,
+              "value": "New repair tool",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 4,
+              "value": -400,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 2,
+              "value": "Credit card paid off",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 4,
+              "value": -2030,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 2,
+              "value": "Money taken out for personal use",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 4,
+              "value": -600,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 4,
+              "value": 620,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D15",
+                "D16",
+                "D17",
+                "D18",
+                "D19",
+                "D20",
+                "D21",
+                "D22",
+                "D23",
+                "D24",
+                "D25",
+                "D26",
+                "D27",
+                "D28",
+                "D29",
+                "D30",
+                "D31",
+                "D32",
+                "D33",
+                "D34",
+                "D35",
+                "D36",
+                "D37",
+                "D38",
+                "D39",
+                "D40",
+                "D41",
+                "D42",
+                "D43"
+              ]
+            },
+            {
+              "r": 46,
+              "c": 2,
+              "value": "Accounts Receivable",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 2,
+              "value": "Ridgeline Trail Crew — finished Aug 28, net 15 (unpaid)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D47"
+              ]
+            },
+            {
+              "r": 50,
+              "c": 2,
+              "value": "Right of Use",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 2,
+              "value": "Last month's rent, paid in advance (on deposit)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 4,
+              "value": 650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 4,
+              "value": 650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D51"
+              ]
+            },
+            {
+              "r": 53,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 4,
+              "value": 650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D52"
+              ]
+            },
+            {
+              "r": 55,
+              "c": 2,
+              "value": "Parts",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 2,
+              "value": "Chains",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 4,
+              "value": 50,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 2,
+              "value": "Brake pads",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 2,
+              "value": "Derailleur cables",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 2,
+              "value": "Cassettes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 2,
+              "value": "Bottom brackets",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 2,
+              "value": "Spokes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 2,
+              "value": "Tubes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 4,
+              "value": 10,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D56",
+                "D57",
+                "D58",
+                "D59",
+                "D60",
+                "D61",
+                "D62"
+              ]
+            },
+            {
+              "r": 64,
+              "c": 2,
+              "value": "Chains ×10 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 64,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 2,
+              "value": "11-spd cassettes ×4 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 4,
+              "value": 160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 2,
+              "value": "Brake pad sets ×12 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 4,
+              "value": 90,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 2,
+              "value": "Cables + housing (assorted) (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 4,
+              "value": 60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 68,
+              "c": 2,
+              "value": "Tubes ×10 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 68,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 69,
+              "c": 2,
+              "value": "Chainrings + jockey wheels (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 69,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 2,
+              "value": "Bottom brackets ×3 (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 4,
+              "value": 105,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 2,
+              "value": "Shift cables + housing (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 4,
+              "value": 75,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 72,
+              "c": 2,
+              "value": "Tubeless sealant + valves (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 72,
+              "c": 4,
+              "value": 60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 73,
+              "c": 2,
+              "value": "Spokes + nipples (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 73,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 74,
+              "c": 2,
+              "value": "Tires ×4 (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 74,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 75,
+              "c": 2,
+              "value": "Brake pads (assorted) (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 75,
+              "c": 4,
+              "value": 70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 76,
+              "c": 2,
+              "value": "Cables + housing (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 76,
+              "c": 4,
+              "value": 50,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 77,
+              "c": 2,
+              "value": "Tubes ×8 (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 77,
+              "c": 4,
+              "value": 30,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 78,
+              "c": 2,
+              "value": "Small parts (bolts, tape) (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 78,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 79,
+              "c": 2,
+              "value": "Parts used — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 79,
+              "c": 4,
+              "value": -10,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 80,
+              "c": 2,
+              "value": "Parts used — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 80,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 81,
+              "c": 2,
+              "value": "Parts used — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 81,
+              "c": 4,
+              "value": -95,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 82,
+              "c": 2,
+              "value": "Parts used — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 82,
+              "c": 4,
+              "value": -60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 83,
+              "c": 2,
+              "value": "Parts used — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 83,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 84,
+              "c": 2,
+              "value": "Parts used — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 84,
+              "c": 4,
+              "value": -65,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 85,
+              "c": 2,
+              "value": "Parts used — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 85,
+              "c": 4,
+              "value": -35,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 86,
+              "c": 2,
+              "value": "Parts used — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 86,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 87,
+              "c": 2,
+              "value": "Parts used — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 87,
+              "c": 4,
+              "value": -125,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 88,
+              "c": 2,
+              "value": "Parts used — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 88,
+              "c": 4,
+              "value": -55,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 89,
+              "c": 2,
+              "value": "Parts used — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 89,
+              "c": 4,
+              "value": -45,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 90,
+              "c": 2,
+              "value": "Parts used — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 90,
+              "c": 4,
+              "value": -100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 91,
+              "c": 2,
+              "value": "Parts used — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 91,
+              "c": 4,
+              "value": -80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 92,
+              "c": 2,
+              "value": "Parts used — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 92,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 93,
+              "c": 2,
+              "value": "Parts used — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 93,
+              "c": 4,
+              "value": -129,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 94,
+              "c": 2,
+              "value": "Parts used — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 94,
+              "c": 4,
+              "value": -70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 95,
+              "c": 2,
+              "value": "Parts used — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 95,
+              "c": 4,
+              "value": -105,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 96,
+              "c": 2,
+              "value": "Parts used — Ridgeline Trail Crew",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 96,
+              "c": 4,
+              "value": -75,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 97,
+              "c": 2,
+              "value": "Parts used — J. Smith",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 97,
+              "c": 4,
+              "value": -36,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 98,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 98,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 98,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D63",
+                "D64",
+                "D65",
+                "D66",
+                "D67",
+                "D68",
+                "D69",
+                "D70",
+                "D71",
+                "D72",
+                "D73",
+                "D74",
+                "D75",
+                "D76",
+                "D77",
+                "D78",
+                "D79",
+                "D80",
+                "D81",
+                "D82",
+                "D83",
+                "D84",
+                "D85",
+                "D86",
+                "D87",
+                "D88",
+                "D89",
+                "D90",
+                "D91",
+                "D92",
+                "D93",
+                "D94",
+                "D95",
+                "D96",
+                "D97"
+              ]
+            },
+            {
+              "r": 100,
+              "c": 2,
+              "value": "Tools & Repair Equipment",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 101,
+              "c": 2,
+              "value": "Repair stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 101,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 102,
+              "c": 2,
+              "value": "Air compressor",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 102,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 103,
+              "c": 2,
+              "value": "Parts washer",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 103,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 104,
+              "c": 2,
+              "value": "Wheel-truing stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 104,
+              "c": 4,
+              "value": 170,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 105,
+              "c": 2,
+              "value": "Cone wrench set",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 105,
+              "c": 4,
+              "value": 65,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 106,
+              "c": 2,
+              "value": "Torque wrench",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 106,
+              "c": 4,
+              "value": 95,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 107,
+              "c": 2,
+              "value": "Hex/Allen set",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 107,
+              "c": 4,
+              "value": 45,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 108,
+              "c": 2,
+              "value": "Cable cutters",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 108,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 109,
+              "c": 2,
+              "value": "Chain breaker",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 109,
+              "c": 4,
+              "value": 35,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 110,
+              "c": 2,
+              "value": "Tire levers",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 110,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 111,
+              "c": 2,
+              "value": "Bench grinder",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 111,
+              "c": 4,
+              "value": 90,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 112,
+              "c": 2,
+              "value": "Headset press",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 112,
+              "c": 4,
+              "value": 70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 113,
+              "c": 2,
+              "value": "Shop vacuum",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 113,
+              "c": 4,
+              "value": 60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 114,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 114,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 114,
+              "c": 4,
+              "value": 1200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D101",
+                "D102",
+                "D103",
+                "D104",
+                "D105",
+                "D106",
+                "D107",
+                "D108",
+                "D109",
+                "D110",
+                "D111",
+                "D112",
+                "D113"
+              ]
+            },
+            {
+              "r": 115,
+              "c": 2,
+              "value": "New repair tool bought this season",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 115,
+              "c": 4,
+              "value": 400,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 116,
+              "c": 2,
+              "value": "Depreciation — Summer 2026 (the season's share of the cost)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 116,
+              "c": 4,
+              "value": -160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 117,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 117,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 117,
+              "c": 4,
+              "value": 1440,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D114",
+                "D115",
+                "D116"
+              ]
+            },
+            {
+              "r": 119,
+              "c": 2,
+              "value": "Fixtures",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 120,
+              "c": 2,
+              "value": "Desk",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 120,
+              "c": 4,
+              "value": 250,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 121,
+              "c": 2,
+              "value": "Shelving units",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 121,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 122,
+              "c": 2,
+              "value": "Display rack",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 122,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 123,
+              "c": 2,
+              "value": "Pegboard + hooks",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 123,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 124,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 124,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 124,
+              "c": 4,
+              "value": 750,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D120",
+                "D121",
+                "D122",
+                "D123"
+              ]
+            },
+            {
+              "r": 125,
+              "c": 2,
+              "value": "Depreciation — Summer 2026 (the season's share of the cost)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 125,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 126,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 126,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 126,
+              "c": 4,
+              "value": 710,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D124",
+                "D125"
+              ]
+            },
+            {
+              "r": 128,
+              "c": 2,
+              "value": "Laptop",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 129,
+              "c": 2,
+              "value": "Laptop (from home)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 129,
+              "c": 4,
+              "value": 610,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 130,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 130,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 130,
+              "c": 4,
+              "value": 610,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D129"
+              ]
+            },
+            {
+              "r": 131,
+              "c": 2,
+              "value": "Depreciation — Summer 2026 (the season's share of the cost)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 131,
+              "c": 4,
+              "value": -30,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 132,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 132,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 132,
+              "c": 4,
+              "value": 580,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D130",
+                "D131"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Liabilities",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF2563EB",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 3.0
+            },
+            {
+              "width": 14.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "Liabilities",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Credit Card",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "Charged — hand tools",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Charged — air compressor",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Charged — parts washer",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Charged — wheel-truing stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 170,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Charged — fixtures",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 750,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Charged — parts (QBP order)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 4,
+              "value": 2030,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D3",
+                "D4",
+                "D5",
+                "D6",
+                "D7",
+                "D8"
+              ]
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Paid off in full this season",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": -2030,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 0,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D9",
+                "D10"
+              ]
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Customer Deposit",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Smith's advance for a custom frame",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D14"
+              ]
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Built and delivered Smith's frame — no longer owed",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": -220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": 0,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D15",
+                "D16"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Reasons",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF2563EB",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 3.0
+            },
+            {
+              "width": 14.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "Reasons — Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "CONTRIBUTED",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "Cash — covered from your personal funds (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": 160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Laptop — brought from home (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "value": 610,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Equipment — gear from home — grinder, headset press, shop vacuum (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Cash — deposited to open the LLC bank account (June 1)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D3",
+                "D4",
+                "D5",
+                "D6"
+              ]
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D7"
+              ]
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "GENERATED",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Repair collected — Brake job + Tune-up + Tire mounting ×2 @ $70",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 340,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Repair collected — Walk-ins — mixed work (no itemized detail)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Repair collected — Tune-up",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 4,
+              "value": 80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Repair collected — Brake overhaul",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 140,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Repair collected — Chain + cassette replacement",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Repair collected — Tune-up + minor repair",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": 100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Repair collected — Custom wheel work + new spokes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 2,
+              "value": "Parts used — May",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 4,
+              "value": -300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Rent used — May",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": 170,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D11",
+                "D12",
+                "D13",
+                "D14",
+                "D15",
+                "D16",
+                "D17",
+                "D18",
+                "D19"
+              ]
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Rent used — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 2,
+              "value": "Repair collected — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 2,
+              "value": "Parts used — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 4,
+              "value": -10,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 2,
+              "value": "Repair collected — Marcus T.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 2,
+              "value": "Repair collected — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 2,
+              "value": "Parts used — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 2,
+              "value": "Repair collected — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 2,
+              "value": "Parts used — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 4,
+              "value": -95,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 2,
+              "value": "Repair collected — Sofia M.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 2,
+              "value": "Repair collected — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 2,
+              "value": "Parts used — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 4,
+              "value": -60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 2,
+              "value": "Repair collected — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 4,
+              "value": 225,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 2,
+              "value": "Parts used — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 2,
+              "value": "Repair collected — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 4,
+              "value": 210,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 2,
+              "value": "Parts used — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 4,
+              "value": -65,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 2,
+              "value": "Rent used — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 2,
+              "value": "Repair collected — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 2,
+              "value": "Parts used — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 4,
+              "value": -35,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 2,
+              "value": "Repair collected — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 2,
+              "value": "Parts used — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 2,
+              "value": "Repair collected — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 4,
+              "value": 450,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 2,
+              "value": "Parts used — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 4,
+              "value": -125,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 2,
+              "value": "Repair collected — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 2,
+              "value": "Parts used — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 4,
+              "value": -55,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 45,
+              "c": 2,
+              "value": "Repair collected — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 45,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 46,
+              "c": 2,
+              "value": "Parts used — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 46,
+              "c": 4,
+              "value": -45,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 2,
+              "value": "Repair collected — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 2,
+              "value": "Parts used — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 4,
+              "value": -100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 49,
+              "c": 2,
+              "value": "Repair collected — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 49,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 50,
+              "c": 2,
+              "value": "Parts used — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 50,
+              "c": 4,
+              "value": -80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 2,
+              "value": "Rent used — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 2,
+              "value": "Repair collected — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 2,
+              "value": "Parts used — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 54,
+              "c": 2,
+              "value": "Repair collected — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 54,
+              "c": 4,
+              "value": 485,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 55,
+              "c": 2,
+              "value": "Parts used — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 55,
+              "c": 4,
+              "value": -129,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 2,
+              "value": "Repair collected — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 4,
+              "value": 390,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 2,
+              "value": "Parts used — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 4,
+              "value": -70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 2,
+              "value": "Repair collected — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 4,
+              "value": 500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 2,
+              "value": "Parts used — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 4,
+              "value": -105,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 2,
+              "value": "Repair delivered — Ridgeline Trail Crew, billed net 15 (unpaid)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 2,
+              "value": "Parts used — Ridgeline Trail Crew",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 4,
+              "value": -75,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 2,
+              "value": "Frame delivered — J. Smith (deposit earned)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 2,
+              "value": "Parts used — J. Smith",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 4,
+              "value": -36,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 64,
+              "c": 2,
+              "value": "Depreciation — tools & repair equipment, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 64,
+              "c": 4,
+              "value": -160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 2,
+              "value": "Depreciation — fixtures, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 2,
+              "value": "Depreciation — laptop, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 4,
+              "value": -30,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 4,
+              "value": 2810,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D20",
+                "D21",
+                "D22",
+                "D23",
+                "D24",
+                "D25",
+                "D26",
+                "D27",
+                "D28",
+                "D29",
+                "D30",
+                "D31",
+                "D32",
+                "D33",
+                "D34",
+                "D35",
+                "D36",
+                "D37",
+                "D38",
+                "D39",
+                "D40",
+                "D41",
+                "D42",
+                "D43",
+                "D44",
+                "D45",
+                "D46",
+                "D47",
+                "D48",
+                "D49",
+                "D50",
+                "D51",
+                "D52",
+                "D53",
+                "D54",
+                "D55",
+                "D56",
+                "D57",
+                "D58",
+                "D59",
+                "D60",
+                "D61",
+                "D62",
+                "D63",
+                "D64",
+                "D65",
+                "D66"
+              ]
+            },
+            {
+              "r": 69,
+              "c": 2,
+              "value": "WITHDRAWN",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 2,
+              "value": "Owner's draw — money taken out for personal use",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 4,
+              "value": -600,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 4,
+              "value": -600,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D70"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Balance Sheet",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF7030A0",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 16.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "[Your Name]'s Bike Repair, LLC.",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Balance Sheets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "value": "June 1, 2026",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": "August 31, 2026",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Assets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Cash",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 3,
+              "value": 1300,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 620,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Accounts Receivable",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 3,
+              "value": 0,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 300,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Right of Use",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 3,
+              "value": 650,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 650,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Parts",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 3,
+              "value": 200,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 200,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Tools & Repair Equipment",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 3,
+              "value": 1200,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 4,
+              "value": 1440,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Fixtures",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 3,
+              "value": 750,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 710,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Laptop",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 3,
+              "value": 610,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 580,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Total Assets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 3,
+              "value": 4710,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 4500,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Liabilities",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Credit Card",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 3,
+              "value": 2030,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 0,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Customer Deposit",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": 220,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 0,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Total Liabilities",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 3,
+              "value": 2250,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": 0,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 2,
+              "value": "Contributed",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 3,
+              "value": 2290,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Generated",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 3,
+              "value": 170,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": 2810,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Withdrawn",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 3,
+              "value": 0,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": -600,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Total Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 3,
+              "value": 2460,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": 4500,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            }
+          ]
+        },
+        {
+          "name": "Income Statement",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF7030A0",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 3.1640625
+            },
+            {
+              "width": 50.6640625
+            },
+            {
+              "width": 4.5
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "[Your Name]'s Bike Repair, LLC.",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Income Statement",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "For the period June 1 – August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": true,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Revenue",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Repair services",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 6020,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Total revenue",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 6020,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D6"
+              ]
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Expenses",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Parts used",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 1200,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Rent",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 1950,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Depreciation",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 230,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Total expenses",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 4,
+              "value": 3380,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D10",
+                "D11",
+                "D12"
+              ]
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Net income",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 2640,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            }
+          ]
+        },
+        {
+          "name": "St_Members_Capital",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF7030A0",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 3.33203125
+            },
+            {
+              "width": 50.6640625
+            },
+            {
+              "width": 4.5
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "[Your Name]'s Bike Repair, LLC.",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Statement of Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "For the period June 1 – August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": true,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "CONTRIBUTED",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D6"
+              ]
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "GENERATED",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 170,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Net income (from the Income Statement)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 2640,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 2810,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D10",
+                "D11"
+              ]
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "WITHDRAWN",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 0,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Owner's draw",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": -600,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": -600,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D15",
+                "D16"
+              ]
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Total Member's Capital, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": 2460,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Change in total Member's Capital, June 1 to August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": 2040,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Total Member's Capital, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": 4500,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "double",
+              "merge": null
+            }
+          ]
+        }
+      ]
+    },
+    "bike-repair-module-4-2": {
+      "sheets": [
+        {
+          "name": "Assets",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF2563EB",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 3.0
+            },
+            {
+              "width": 14.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "Assets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Cash",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "Rent paid in advance (the lease)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": -1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Park Tool repair stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "value": -200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 340,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 140,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Smith's deposit received",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Repair, customer paid",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Covered from your personal funds",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 4,
+              "value": 160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Deposited to open the LLC bank account",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D3",
+                "D4",
+                "D5",
+                "D6",
+                "D7",
+                "D8",
+                "D9",
+                "D10",
+                "D11",
+                "D12",
+                "D13",
+                "D14"
+              ]
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Repair collected — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Repair collected — Marcus T.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 2,
+              "value": "Repair collected — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Repair collected — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Repair collected — Sofia M.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Repair collected — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 2,
+              "value": "Repair collected — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 4,
+              "value": 225,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 2,
+              "value": "Repair collected — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 4,
+              "value": 210,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 2,
+              "value": "Repair collected — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 2,
+              "value": "Repair collected — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 2,
+              "value": "Repair collected — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 4,
+              "value": 450,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 2,
+              "value": "Repair collected — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 2,
+              "value": "Repair collected — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 2,
+              "value": "Repair collected — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 2,
+              "value": "Repair collected — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 2,
+              "value": "Repair collected — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 2,
+              "value": "Repair collected — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 4,
+              "value": 485,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 2,
+              "value": "Repair collected — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 4,
+              "value": 390,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 2,
+              "value": "Repair collected — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 4,
+              "value": 500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 2,
+              "value": "Parts bought — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 4,
+              "value": -500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 2,
+              "value": "Parts bought — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 4,
+              "value": -400,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 2,
+              "value": "Parts bought — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 4,
+              "value": -300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 2,
+              "value": "Rent paid — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 2,
+              "value": "Rent paid — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 2,
+              "value": "Rent paid — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 2,
+              "value": "New repair tool",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 4,
+              "value": -400,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 2,
+              "value": "Credit card paid off",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 4,
+              "value": -2030,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 2,
+              "value": "Money taken out for personal use",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 4,
+              "value": -600,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 4,
+              "value": 620,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D15",
+                "D16",
+                "D17",
+                "D18",
+                "D19",
+                "D20",
+                "D21",
+                "D22",
+                "D23",
+                "D24",
+                "D25",
+                "D26",
+                "D27",
+                "D28",
+                "D29",
+                "D30",
+                "D31",
+                "D32",
+                "D33",
+                "D34",
+                "D35",
+                "D36",
+                "D37",
+                "D38",
+                "D39",
+                "D40",
+                "D41",
+                "D42",
+                "D43"
+              ]
+            },
+            {
+              "r": 46,
+              "c": 2,
+              "value": "Accounts Receivable",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 2,
+              "value": "Ridgeline Trail Crew — finished Aug 28, net 15 (unpaid)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D47"
+              ]
+            },
+            {
+              "r": 50,
+              "c": 2,
+              "value": "Right of Use",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 2,
+              "value": "Last month's rent, paid in advance (on deposit)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 4,
+              "value": 650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 4,
+              "value": 650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D51"
+              ]
+            },
+            {
+              "r": 53,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 4,
+              "value": 650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D52"
+              ]
+            },
+            {
+              "r": 55,
+              "c": 2,
+              "value": "Parts",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 2,
+              "value": "Chains",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 4,
+              "value": 50,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 2,
+              "value": "Brake pads",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 2,
+              "value": "Derailleur cables",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 2,
+              "value": "Cassettes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 2,
+              "value": "Bottom brackets",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 2,
+              "value": "Spokes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 2,
+              "value": "Tubes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 4,
+              "value": 10,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D56",
+                "D57",
+                "D58",
+                "D59",
+                "D60",
+                "D61",
+                "D62"
+              ]
+            },
+            {
+              "r": 64,
+              "c": 2,
+              "value": "Chains ×10 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 64,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 2,
+              "value": "11-spd cassettes ×4 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 4,
+              "value": 160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 2,
+              "value": "Brake pad sets ×12 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 4,
+              "value": 90,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 2,
+              "value": "Cables + housing (assorted) (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 4,
+              "value": 60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 68,
+              "c": 2,
+              "value": "Tubes ×10 (June)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 68,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 69,
+              "c": 2,
+              "value": "Chainrings + jockey wheels (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 69,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 2,
+              "value": "Bottom brackets ×3 (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 4,
+              "value": 105,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 2,
+              "value": "Shift cables + housing (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 4,
+              "value": 75,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 72,
+              "c": 2,
+              "value": "Tubeless sealant + valves (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 72,
+              "c": 4,
+              "value": 60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 73,
+              "c": 2,
+              "value": "Spokes + nipples (July)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 73,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 74,
+              "c": 2,
+              "value": "Tires ×4 (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 74,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 75,
+              "c": 2,
+              "value": "Brake pads (assorted) (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 75,
+              "c": 4,
+              "value": 70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 76,
+              "c": 2,
+              "value": "Cables + housing (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 76,
+              "c": 4,
+              "value": 50,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 77,
+              "c": 2,
+              "value": "Tubes ×8 (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 77,
+              "c": 4,
+              "value": 30,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 78,
+              "c": 2,
+              "value": "Small parts (bolts, tape) (August)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 78,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 79,
+              "c": 2,
+              "value": "Parts used — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 79,
+              "c": 4,
+              "value": -10,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 80,
+              "c": 2,
+              "value": "Parts used — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 80,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 81,
+              "c": 2,
+              "value": "Parts used — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 81,
+              "c": 4,
+              "value": -95,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 82,
+              "c": 2,
+              "value": "Parts used — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 82,
+              "c": 4,
+              "value": -60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 83,
+              "c": 2,
+              "value": "Parts used — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 83,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 84,
+              "c": 2,
+              "value": "Parts used — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 84,
+              "c": 4,
+              "value": -65,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 85,
+              "c": 2,
+              "value": "Parts used — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 85,
+              "c": 4,
+              "value": -35,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 86,
+              "c": 2,
+              "value": "Parts used — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 86,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 87,
+              "c": 2,
+              "value": "Parts used — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 87,
+              "c": 4,
+              "value": -125,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 88,
+              "c": 2,
+              "value": "Parts used — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 88,
+              "c": 4,
+              "value": -55,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 89,
+              "c": 2,
+              "value": "Parts used — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 89,
+              "c": 4,
+              "value": -45,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 90,
+              "c": 2,
+              "value": "Parts used — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 90,
+              "c": 4,
+              "value": -100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 91,
+              "c": 2,
+              "value": "Parts used — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 91,
+              "c": 4,
+              "value": -80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 92,
+              "c": 2,
+              "value": "Parts used — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 92,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 93,
+              "c": 2,
+              "value": "Parts used — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 93,
+              "c": 4,
+              "value": -129,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 94,
+              "c": 2,
+              "value": "Parts used — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 94,
+              "c": 4,
+              "value": -70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 95,
+              "c": 2,
+              "value": "Parts used — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 95,
+              "c": 4,
+              "value": -105,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 96,
+              "c": 2,
+              "value": "Parts used — Ridgeline Trail Crew",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 96,
+              "c": 4,
+              "value": -75,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 97,
+              "c": 2,
+              "value": "Parts used — J. Smith",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 97,
+              "c": 4,
+              "value": -36,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 98,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 98,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 98,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D63",
+                "D64",
+                "D65",
+                "D66",
+                "D67",
+                "D68",
+                "D69",
+                "D70",
+                "D71",
+                "D72",
+                "D73",
+                "D74",
+                "D75",
+                "D76",
+                "D77",
+                "D78",
+                "D79",
+                "D80",
+                "D81",
+                "D82",
+                "D83",
+                "D84",
+                "D85",
+                "D86",
+                "D87",
+                "D88",
+                "D89",
+                "D90",
+                "D91",
+                "D92",
+                "D93",
+                "D94",
+                "D95",
+                "D96",
+                "D97"
+              ]
+            },
+            {
+              "r": 100,
+              "c": 2,
+              "value": "Tools & Repair Equipment",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 101,
+              "c": 2,
+              "value": "Repair stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 101,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 102,
+              "c": 2,
+              "value": "Air compressor",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 102,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 103,
+              "c": 2,
+              "value": "Parts washer",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 103,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 104,
+              "c": 2,
+              "value": "Wheel-truing stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 104,
+              "c": 4,
+              "value": 170,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 105,
+              "c": 2,
+              "value": "Cone wrench set",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 105,
+              "c": 4,
+              "value": 65,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 106,
+              "c": 2,
+              "value": "Torque wrench",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 106,
+              "c": 4,
+              "value": 95,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 107,
+              "c": 2,
+              "value": "Hex/Allen set",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 107,
+              "c": 4,
+              "value": 45,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 108,
+              "c": 2,
+              "value": "Cable cutters",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 108,
+              "c": 4,
+              "value": 40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 109,
+              "c": 2,
+              "value": "Chain breaker",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 109,
+              "c": 4,
+              "value": 35,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 110,
+              "c": 2,
+              "value": "Tire levers",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 110,
+              "c": 4,
+              "value": 20,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 111,
+              "c": 2,
+              "value": "Bench grinder",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 111,
+              "c": 4,
+              "value": 90,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 112,
+              "c": 2,
+              "value": "Headset press",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 112,
+              "c": 4,
+              "value": 70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 113,
+              "c": 2,
+              "value": "Shop vacuum",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 113,
+              "c": 4,
+              "value": 60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 114,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 114,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 114,
+              "c": 4,
+              "value": 1200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D101",
+                "D102",
+                "D103",
+                "D104",
+                "D105",
+                "D106",
+                "D107",
+                "D108",
+                "D109",
+                "D110",
+                "D111",
+                "D112",
+                "D113"
+              ]
+            },
+            {
+              "r": 115,
+              "c": 2,
+              "value": "New repair tool bought this season",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 115,
+              "c": 4,
+              "value": 400,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 116,
+              "c": 2,
+              "value": "Depreciation — Summer 2026 (the season's share of the cost)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 116,
+              "c": 4,
+              "value": -160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 117,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 117,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 117,
+              "c": 4,
+              "value": 1440,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D114",
+                "D115",
+                "D116"
+              ]
+            },
+            {
+              "r": 119,
+              "c": 2,
+              "value": "Fixtures",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 120,
+              "c": 2,
+              "value": "Desk",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 120,
+              "c": 4,
+              "value": 250,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 121,
+              "c": 2,
+              "value": "Shelving units",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 121,
+              "c": 4,
+              "value": 200,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 122,
+              "c": 2,
+              "value": "Display rack",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 122,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 123,
+              "c": 2,
+              "value": "Pegboard + hooks",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 123,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 124,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 124,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 124,
+              "c": 4,
+              "value": 750,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D120",
+                "D121",
+                "D122",
+                "D123"
+              ]
+            },
+            {
+              "r": 125,
+              "c": 2,
+              "value": "Depreciation — Summer 2026 (the season's share of the cost)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 125,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 126,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 126,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 126,
+              "c": 4,
+              "value": 710,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D124",
+                "D125"
+              ]
+            },
+            {
+              "r": 128,
+              "c": 2,
+              "value": "Laptop",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 129,
+              "c": 2,
+              "value": "Laptop (from home)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 129,
+              "c": 4,
+              "value": 610,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 130,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 130,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 130,
+              "c": 4,
+              "value": 610,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D129"
+              ]
+            },
+            {
+              "r": 131,
+              "c": 2,
+              "value": "Depreciation — Summer 2026 (the season's share of the cost)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 131,
+              "c": 4,
+              "value": -30,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 132,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 132,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 132,
+              "c": 4,
+              "value": 580,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D130",
+                "D131"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Liabilities",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF2563EB",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 3.0
+            },
+            {
+              "width": 14.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "Liabilities",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Credit Card",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "Charged — hand tools",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Charged — air compressor",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Charged — parts washer",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Charged — wheel-truing stand",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 170,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Charged — fixtures",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 750,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Charged — parts (QBP order)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 4,
+              "value": 2030,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D3",
+                "D4",
+                "D5",
+                "D6",
+                "D7",
+                "D8"
+              ]
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Paid off in full this season",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": -2030,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 0,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D9",
+                "D10"
+              ]
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Customer Deposit",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Smith's advance for a custom frame",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D14"
+              ]
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Built and delivered Smith's frame — no longer owed",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": -220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": 0,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D15",
+                "D16"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Reasons",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF2563EB",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 1,
+              "collapsed": false,
+              "hidden": true
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": true,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 3.0
+            },
+            {
+              "width": 14.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "Reasons — Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "CONTRIBUTED",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "Cash — covered from your personal funds (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": 160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Laptop — brought from home (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 4,
+              "value": 610,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Equipment — gear from home — grinder, headset press, shop vacuum (May)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Cash — deposited to open the LLC bank account (June 1)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 1300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D3",
+                "D4",
+                "D5",
+                "D6"
+              ]
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D7"
+              ]
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "GENERATED",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Repair collected — Brake job + Tune-up + Tire mounting ×2 @ $70",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 340,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Repair collected — Walk-ins — mixed work (no itemized detail)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 180,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Repair collected — Tune-up",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 4,
+              "value": 80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Repair collected — Brake overhaul",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 140,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Repair collected — Chain + cassette replacement",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 130,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Repair collected — Tune-up + minor repair",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": 100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Repair collected — Custom wheel work + new spokes",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 2,
+              "value": "Parts used — May",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 4,
+              "value": -300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Rent used — May",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": 170,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D11",
+                "D12",
+                "D13",
+                "D14",
+                "D15",
+                "D16",
+                "D17",
+                "D18",
+                "D19"
+              ]
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Rent used — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 2,
+              "value": "Repair collected — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 2,
+              "value": "Parts used — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 4,
+              "value": -10,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 2,
+              "value": "Repair collected — Marcus T.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 2,
+              "value": "Repair collected — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 2,
+              "value": "Parts used — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 2,
+              "value": "Repair collected — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 2,
+              "value": "Parts used — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 4,
+              "value": -95,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 2,
+              "value": "Repair collected — Sofia M.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 2,
+              "value": "Repair collected — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 2,
+              "value": "Parts used — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 4,
+              "value": -60,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 2,
+              "value": "Repair collected — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 4,
+              "value": 225,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 2,
+              "value": "Parts used — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 33,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 2,
+              "value": "Repair collected — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 34,
+              "c": 4,
+              "value": 210,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 2,
+              "value": "Parts used — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 35,
+              "c": 4,
+              "value": -65,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 2,
+              "value": "Rent used — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 36,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 2,
+              "value": "Repair collected — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 37,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 2,
+              "value": "Parts used — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 38,
+              "c": 4,
+              "value": -35,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 2,
+              "value": "Repair collected — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 39,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 2,
+              "value": "Parts used — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 40,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 2,
+              "value": "Repair collected — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 41,
+              "c": 4,
+              "value": 450,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 2,
+              "value": "Parts used — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 42,
+              "c": 4,
+              "value": -125,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 2,
+              "value": "Repair collected — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 43,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 2,
+              "value": "Parts used — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 44,
+              "c": 4,
+              "value": -55,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 45,
+              "c": 2,
+              "value": "Repair collected — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 45,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 46,
+              "c": 2,
+              "value": "Parts used — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 46,
+              "c": 4,
+              "value": -45,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 2,
+              "value": "Repair collected — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 47,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 2,
+              "value": "Parts used — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 48,
+              "c": 4,
+              "value": -100,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 49,
+              "c": 2,
+              "value": "Repair collected — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 49,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 50,
+              "c": 2,
+              "value": "Parts used — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 50,
+              "c": 4,
+              "value": -80,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 2,
+              "value": "Rent used — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 51,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 2,
+              "value": "Repair collected — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 52,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 2,
+              "value": "Parts used — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 53,
+              "c": 4,
+              "value": -25,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 54,
+              "c": 2,
+              "value": "Repair collected — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 54,
+              "c": 4,
+              "value": 485,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 55,
+              "c": 2,
+              "value": "Parts used — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 55,
+              "c": 4,
+              "value": -129,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 2,
+              "value": "Repair collected — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 56,
+              "c": 4,
+              "value": 390,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 2,
+              "value": "Parts used — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 57,
+              "c": 4,
+              "value": -70,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 2,
+              "value": "Repair collected — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 58,
+              "c": 4,
+              "value": 500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 2,
+              "value": "Parts used — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 59,
+              "c": 4,
+              "value": -105,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 2,
+              "value": "Repair delivered — Ridgeline Trail Crew, billed net 15 (unpaid)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 60,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 2,
+              "value": "Parts used — Ridgeline Trail Crew",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 61,
+              "c": 4,
+              "value": -75,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 2,
+              "value": "Frame delivered — J. Smith (deposit earned)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 62,
+              "c": 4,
+              "value": 220,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 2,
+              "value": "Parts used — J. Smith",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 63,
+              "c": 4,
+              "value": -36,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 64,
+              "c": 2,
+              "value": "Depreciation — tools & repair equipment, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 64,
+              "c": 4,
+              "value": -160,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 2,
+              "value": "Depreciation — fixtures, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 65,
+              "c": 4,
+              "value": -40,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 2,
+              "value": "Depreciation — laptop, Summer 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 66,
+              "c": 4,
+              "value": -30,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 67,
+              "c": 4,
+              "value": 2810,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D20",
+                "D21",
+                "D22",
+                "D23",
+                "D24",
+                "D25",
+                "D26",
+                "D27",
+                "D28",
+                "D29",
+                "D30",
+                "D31",
+                "D32",
+                "D33",
+                "D34",
+                "D35",
+                "D36",
+                "D37",
+                "D38",
+                "D39",
+                "D40",
+                "D41",
+                "D42",
+                "D43",
+                "D44",
+                "D45",
+                "D46",
+                "D47",
+                "D48",
+                "D49",
+                "D50",
+                "D51",
+                "D52",
+                "D53",
+                "D54",
+                "D55",
+                "D56",
+                "D57",
+                "D58",
+                "D59",
+                "D60",
+                "D61",
+                "D62",
+                "D63",
+                "D64",
+                "D65",
+                "D66"
+              ]
+            },
+            {
+              "r": 69,
+              "c": 2,
+              "value": "WITHDRAWN",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 2,
+              "value": "Owner's draw — money taken out for personal use",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 2,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 70,
+              "c": 4,
+              "value": -600,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 71,
+              "c": 4,
+              "value": -600,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D70"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Balance Sheet",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF7030A0",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 2.0
+            },
+            {
+              "width": 50.0
+            },
+            {
+              "width": 16.0
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            },
+            {
+              "width": 8.83203125
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "[Your Name]'s Bike Repair, LLC.",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Balance Sheets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 3,
+              "value": "June 1, 2026",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 4,
+              "value": "August 31, 2026",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 4,
+              "c": 2,
+              "value": "Assets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Cash",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 3,
+              "value": 1300,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 620,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Accounts Receivable",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 3,
+              "value": 0,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 300,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Right of Use",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 3,
+              "value": 650,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 650,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Parts",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 3,
+              "value": 200,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 200,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Tools & Repair Equipment",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 3,
+              "value": 1200,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 4,
+              "value": 1440,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Fixtures",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 3,
+              "value": 750,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 710,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Laptop",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 3,
+              "value": 610,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 580,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Total Assets",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 3,
+              "value": 4710,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 4500,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Liabilities",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Credit Card",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 3,
+              "value": 2030,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 0,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Customer Deposit",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": 220,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 0,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Total Liabilities",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 3,
+              "value": 2250,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": 0,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 2,
+              "value": "Contributed",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 3,
+              "value": 2290,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Generated",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 3,
+              "value": 170,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": 2810,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Withdrawn",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 1,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 3,
+              "value": 0,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": -600,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Total Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 3,
+              "value": 2460,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": 4500,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            }
+          ]
+        },
+        {
+          "name": "Income Statement",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF7030A0",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 3.1640625
+            },
+            {
+              "width": 50.6640625
+            },
+            {
+              "width": 4.5
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "[Your Name]'s Bike Repair, LLC.",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Income Statement",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "For the period June 1 – August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": true,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Revenue",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Repair services",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 6020,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Total revenue",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 6020,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D6"
+              ]
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Expenses",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Parts used",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 1200,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Rent",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 1950,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Depreciation",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 230,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Total expenses",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 4,
+              "value": 3380,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D10",
+                "D11",
+                "D12"
+              ]
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Net income",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 2640,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            }
+          ]
+        },
+        {
+          "name": "St_Members_Capital",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FF7030A0",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 3.33203125
+            },
+            {
+              "width": 50.6640625
+            },
+            {
+              "width": 4.5
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "[Your Name]'s Bike Repair, LLC.",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Statement of Member's Capital",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "For the period June 1 – August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": true,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "CONTRIBUTED",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 2290,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D6"
+              ]
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "GENERATED",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 170,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Net income (from the Income Statement)",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 2640,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 2810,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D10",
+                "D11"
+              ]
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "WITHDRAWN",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Balance, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 0,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Owner's draw",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": -600,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Balance, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 3,
+              "value": null,
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": -600,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "thin",
+              "merge": null,
+              "sumSources": [
+                "D15",
+                "D16"
+              ]
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Total Member's Capital, June 1, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": 2460,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Change in total Member's Capital, June 1 to August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": 2040,
+              "numFmt": "_(* #,##0_);_(* \\(#,##0\\);_(* \"-\"_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Total Member's Capital, August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": 4500,
+              "numFmt": "_(\"$\"* #,##0_);_(\"$\"* \\(#,##0\\);_(\"$\"* \"-\"??_);_(@_)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": "thin",
+              "ruleBottom": "double",
+              "merge": null
+            }
+          ]
+        },
+        {
+          "name": "Working Tab",
+          "order": null,
+          "stepLabel": null,
+          "tabColor": "FFFFC000",
+          "rows": [
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            },
+            {
+              "outlineLevel": 0,
+              "collapsed": false,
+              "hidden": false
+            }
+          ],
+          "cols": [
+            {
+              "width": 4.0
+            },
+            {
+              "width": 50.6640625
+            },
+            {
+              "width": 4.5
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            },
+            {
+              "width": 13.0
+            }
+          ],
+          "cells": [
+            {
+              "r": 1,
+              "c": 2,
+              "value": "[Your Name]'s Bike Repair, LLC.",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 2,
+              "c": 2,
+              "value": "Cash Flow Statement",
+              "numFmt": "General",
+              "bold": true,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 3,
+              "c": 2,
+              "value": "For the period June 1 – August 31, 2026",
+              "numFmt": "General",
+              "bold": false,
+              "italic": true,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 2,
+              "value": "Repair collected — Dana R.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 5,
+              "c": 4,
+              "value": 120,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 2,
+              "value": "Repair collected — Marcus T.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 6,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 2,
+              "value": "Repair collected — Priya S.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 7,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 2,
+              "value": "Repair collected — Liam O.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 8,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 2,
+              "value": "Repair collected — Sofia M.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 9,
+              "c": 4,
+              "value": 150,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 2,
+              "value": "Repair collected — Jamal W.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 10,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 2,
+              "value": "Repair collected — Erin K.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 11,
+              "c": 4,
+              "value": 225,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 2,
+              "value": "Repair collected — Noah B.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 12,
+              "c": 4,
+              "value": 210,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 2,
+              "value": "Repair collected — Grace L.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 13,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 2,
+              "value": "Repair collected — Theo H.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 14,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 2,
+              "value": "Repair collected — Maya P.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 15,
+              "c": 4,
+              "value": 450,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 2,
+              "value": "Repair collected — Owen C.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 16,
+              "c": 4,
+              "value": 360,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 2,
+              "value": "Repair collected — Ava D.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 17,
+              "c": 4,
+              "value": 270,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 2,
+              "value": "Repair collected — Leo F.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 18,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 2,
+              "value": "Repair collected — Nina V.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 19,
+              "c": 4,
+              "value": 300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 2,
+              "value": "Repair collected — Caleb G.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 20,
+              "c": 4,
+              "value": 240,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 2,
+              "value": "Repair collected — Ruth A.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 21,
+              "c": 4,
+              "value": 485,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 2,
+              "value": "Repair collected — Sam Q.",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 22,
+              "c": 4,
+              "value": 390,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 2,
+              "value": "Repair collected — Westville Bike Share",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 23,
+              "c": 4,
+              "value": 500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 2,
+              "value": "Parts bought — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 24,
+              "c": 4,
+              "value": -500,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 2,
+              "value": "Parts bought — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 25,
+              "c": 4,
+              "value": -400,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 2,
+              "value": "Parts bought — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 26,
+              "c": 4,
+              "value": -300,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 2,
+              "value": "Rent paid — June",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 27,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 2,
+              "value": "Rent paid — July",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 28,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 2,
+              "value": "Rent paid — August",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 29,
+              "c": 4,
+              "value": -650,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 2,
+              "value": "New repair tool",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 30,
+              "c": 4,
+              "value": -400,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 2,
+              "value": "Credit card paid off",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 31,
+              "c": 4,
+              "value": -2030,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 2,
+              "value": "Money taken out for personal use",
+              "numFmt": "General",
+              "bold": false,
+              "italic": false,
+              "indent": 3,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
+            },
+            {
+              "r": 32,
+              "c": 4,
+              "value": -600,
+              "numFmt": "\\$#,##0;\\(\\$#,##0\\)",
+              "bold": false,
+              "italic": false,
+              "indent": 0,
+              "ruleTop": null,
+              "ruleBottom": null,
+              "merge": null
             }
           ]
         }
