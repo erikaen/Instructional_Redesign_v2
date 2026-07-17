@@ -25,8 +25,9 @@
     '24-1-welcome', '24-2-ein', '24-3-account', '24-4-statements', '24-5-complete',
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
-    '32-1-the-income-statement', '32-2-two-kinds', '32-3-revenue-follows-the-work',
-    '33-1-Two-Kinds-of-Used-Up', '33-2-The-Third-Kind', '33-3', '33-4',
+    '32-1-check-the-records', '32-2-record-the-receivable', '32-3-the-third-kind',
+    '33-1-copy-the-rows', '33-2-sort-the-rows', '33-3-format-the-statement',
+    '34-1-what-cash-missed', '34-2-module-complete',
     '41-1', '42-1',
     '43-1',
     '44-1', '44-2', '44-3',
@@ -35,8 +36,6 @@
   ];
 
   var URLS = {
-    '33-3': '33-3-The-Bottom-Line',
-    '33-4': '33-4-Module-Complete',
     '41-1': '41-1-The-Investor-Asks',
     '42-1': '42-1-The-Missing-Wage',
     '43-1': '43-1-The-Capital-Bridge',
