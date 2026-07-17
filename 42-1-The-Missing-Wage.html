@@ -9,9 +9,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
   <style>
-    .statement-grid-wrap { padding:8px; background:#fff; }
+    .stmt-paper .brw-hint { justify-content: flex-end; text-align: right; white-space: nowrap; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; font-size: var(--font-s); color: inherit; }
     .continue-hint { margin-top:8px; text-align:right; color:#6b7280; font-family:Inter,sans-serif; font-size:var(--font-xs); }
-    @media (prefers-color-scheme:dark) { .statement-grid-wrap { background:#26242e; } .continue-hint { color:#9ca3af; } }
+    @media (prefers-color-scheme:dark) { .continue-hint { color:#9ca3af; } }
   </style>
 </head>
 <body>
@@ -71,15 +71,11 @@ function sheetOf(name){
   for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
   return null;
 }
-function tabStrip(){
-  var tabs=[['Assets','perm'],['Liabilities','perm'],['Reasons','perm'],['Balance Sheet','stmt'],['Income Statement','stmt']];
-  return '<div class="xlwb-tabs" aria-label="Workbook tabs">'+tabs.map(function(tab){
-    return '<button class="xlwb-tab'+(tab[0]==='Income Statement'?' active':'')+' xlwb-tab-'+tab[1]+'" type="button" aria-disabled="true">'+tab[0]+'</button>';
-  }).join('')+'</div>';
-}
-function incomeShell(){
-  return '<div class="xlwb"><div class="xlwb-bar"><div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div><div class="xlwb-bar-sheet">Income Statement</div></div>'
-    + '<div class="statement-grid-wrap"><div id="incomeGrid42"></div></div>'+tabStrip()+'</div>';
+function statementPaper(gridId, caption){
+  return '<figure class="stmt-paper">'
+    + '<div class="stmt-paper-sheet"><div id="'+gridId+'"></div></div>'
+    + '<figcaption class="stmt-paper-cap">'+caption+'</figcaption>'
+    + '</figure>';
 }
 
 var step=0;
@@ -147,7 +143,7 @@ function render(){
   h += freddieBox('The shop generated $2,640 of net income this season. Who did the repairs?');
   h += '<div class="narrative-block"><p>The owner did &mdash; every repair, all summer, at the bench.</p></div>';
   h += freddieBox('So what did the shop record as pay for that work? Show me the line.');
-  h += '<div class="section-card"><div class="card-title">Income Statement</div>'+incomeShell()+'</div>';
+  h += '<div class="section-card"><div class="card-title">Income Statement</div>'+statementPaper('incomeGrid42','Printed from Bike-Repair.xlsx &middot; Income Statement tab')+'</div>';
   h += huntHTML();
 
   if(step>=1){

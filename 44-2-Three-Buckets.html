@@ -11,6 +11,7 @@
   <style>
     .wb-grid-wrap { padding:8px; background:white; }
     .page-nav { margin-top:14px; }
+    #sorterPanel { margin:18px 0 14px; }
     @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
   </style>
 </head>
@@ -34,6 +35,9 @@
     </div>
     <div id="annaIntro"></div>
 
+    <!-- The thinking panel stays outside the workbook facsimile. -->
+    <div id="sorterPanel" hidden></div>
+
     <div class="xlwb" id="workbookShell">
       <div class="xlwb-bar">
         <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
@@ -42,14 +46,11 @@
       <div class="wb-grid-wrap">
         <div id="assetsGrid"></div>
         <div id="statementBuild" hidden></div>
+        <div id="sorterGrid" hidden></div>
       </div>
       <div class="xlwb-tabs" id="workbookTabs" aria-label="Workbook tabs"></div>
     </div>
 
-    <div id="sortWrap" hidden>
-      <div id="sorterPanel"></div>
-      <div id="sorterGrid"></div>
-    </div>
     <div id="missFeedback"></div>
     <div id="gate"></div>
     <div id="anna"></div>
@@ -162,10 +163,12 @@ var buildOptions={
     document.getElementById('gate').innerHTML='';
     document.getElementById('anna').innerHTML='';
     document.getElementById('controls').innerHTML='';
-    var wrap=document.getElementById('sortWrap');
+    var sorterPanel=document.getElementById('sorterPanel');
+    var sorterGrid=document.getElementById('sorterGrid');
     if(order===1){
       sortComplete=false;
-      wrap.hidden=false;
+      sorterPanel.hidden=false;
+      sorterGrid.hidden=false;
       var buildGrid=document.querySelector('#statementBuild .brw-grid');
       if(buildGrid) buildGrid.style.display='none';
       var advance=setAdvanceLabel('Show the sorted view &rarr;');
@@ -203,9 +206,12 @@ var buildOptions={
           if(window.lucide) lucide.createIcons();
         }
       });
-      wrap.scrollIntoView({behavior:'smooth',block:'start'});
+      sorterPanel.scrollIntoView({behavior:'smooth',block:'start'});
     } else if(order===2){
-      wrap.hidden=true;
+      sorterPanel.hidden=true;
+      sorterGrid.hidden=true;
+      var sortedBuildGrid=document.querySelector('#statementBuild .brw-grid');
+      if(sortedBuildGrid) sortedBuildGrid.style.display='';
       renderSortedPayoff();
       document.getElementById('anna').scrollIntoView({behavior:'smooth',block:'start'});
     }

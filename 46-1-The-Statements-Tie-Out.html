@@ -115,7 +115,7 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function navButtons(forward){
-  return '<div class="nav-buttons"><button class="btn-back" onclick="nav(\'45-1-What-Cash-Missed.html\')">&larr; Back</button>'+forward+'</div>';
+  return '<div class="nav-buttons"><button class="btn-back" onclick="nav(\'44-3-The-Cash-Flow-Statement.html\')">&larr; Back</button>'+forward+'</div>';
 }
 
 /* ===== the growing workbook — all seven tabs remain available ===== */
@@ -241,7 +241,7 @@ function renderTalk(done){
     anna = annaBox('For every one of those moves, the record set gives an explanation. None was left as just a number that changed for no stated reason. Accountants have a name for this: <strong>articulation</strong> &mdash; the statements tie to each other. The balance sheet says where things stand; the flow statements tell how the records got there. Neither stands alone. The set is ready &mdash; I&rsquo;ll send Freddie word. He comes back next to walk the whole picture.');
     ctrl = insightBox('Articulation',
         '<p>Only two balance-sheet lines get their own explaining statements: Cash has the Cash Flow Statement, and Member&rsquo;s Capital has the Statement of Member&rsquo;s Capital. Changes in every other line are explained by the ledgers&rsquo; own dated entries, not by a dedicated statement. When the figures agree across those records, the statements <strong>tie out</strong>.</p>')
-      + navButtons("<button class=\"btn-continue btn-block\" onclick=\"nav('46-2-The-Statement-Map.html')\">Continue to the statement map &rarr;</button>");
+      + navButtons("<button class=\"btn-continue btn-block\" onclick=\"nav('47-1-Freddies-Napkin.html')\">Continue to Freddie&rsquo;s napkin &rarr;</button>");
   }
   document.getElementById('anna').innerHTML = anna;
   document.getElementById('controls').innerHTML = ctrl;

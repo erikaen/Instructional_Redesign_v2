@@ -10,6 +10,15 @@
   <link rel="stylesheet" href="shared.css">
   <style>
     .statement-step { margin-top:14px; }
+    .stmt-paper .brw-hint {
+      justify-content: flex-end;
+      text-align: right;
+      white-space: nowrap;
+      font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+      font-variant-numeric: tabular-nums;
+      font-size: var(--font-s);
+      color: inherit;
+    }
   </style>
 </head>
 <body>
@@ -102,7 +111,7 @@ function render(){
   if(step>=1){
     h += '<div class="narrative-block"><p>You hand Freddie the <strong>June 1 and August 31 Balance Sheets</strong> from the workbook.</p></div>';
     h += '<div class="section-card"><div class="card-title">June 1 and August 31 Balance Sheets</div>'
-      + statementPaper('balanceGrid41','PDF handout &middot; Generated from the Balance Sheet tab in Bike-Repair.xlsx &middot; June 1 and August 31') + IDENTITY_HTML + '</div>';
+      + statementPaper('balanceGrid41','Printed from Bike-Repair.xlsx &middot; Balance Sheet tab') + IDENTITY_HTML + '</div>';
     h += freddieBox('Member&rsquo;s Capital was $2,460 on June 1 and $4,500 on August 31. I can see where the shop stood on each date. I still can&rsquo;t see how it got from one to the other.');
   }
 
