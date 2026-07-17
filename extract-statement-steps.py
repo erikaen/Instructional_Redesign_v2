@@ -24,7 +24,9 @@ WORKBOOKS = (
     ("Bike-Repair-End.xlsx", "bike-repair-end"),
     ("Bike-Repair-Beg-Module-3.xlsx", "bike-repair-beg-module-3"),
     ("Bike-Repair-Module-3-1.xlsx", "bike-repair-module-3-1"),
-    ("Bike-Repair-Module-3-2.xlsx", "bike-repair-module-3-2"),
+    ("Bike-Repair-Module-3-2a.xlsx", "bike-repair-module-3-2a"),
+    ("Bike-Repair-Module-3-2b.xlsx", "bike-repair-module-3-2b"),
+    ("Bike-Repair-Module-3-3.xlsx", "bike-repair-module-3-3"),
     ("Income-Statement-Steps.xlsx", "income-statement-steps"),
     ("Members-Capital-Steps.xlsx", "members-capital-steps"),
     ("Cash-Flow-Steps.xlsx", "cash-flow-steps"),
@@ -236,6 +238,32 @@ def row_cells(sheet: dict[str, Any]) -> dict[int, dict[int, dict[str, Any]]]:
     for cell in sheet["cells"]:
         result.setdefault(cell["r"], {})[cell["c"]] = cell
     return result
+
+
+def statement_data_rows(sheet: dict[str, Any]) -> list[tuple[Any, Any]]:
+    grid = row_cells(sheet)
+    return [
+        (
+            grid.get(row, {}).get(2, {}).get("value"),
+            grid.get(row, {}).get(4, {}).get("value"),
+        )
+        for row in range(4, len(sheet["rows"]) + 1)
+        if 2 in grid.get(row, {}) or 4 in grid.get(row, {})
+    ]
+
+
+def first_row_pair_mismatch(
+    left: list[tuple[Any, Any]], right: list[tuple[Any, Any]]
+) -> str | None:
+    for offset in range(max(len(left), len(right))):
+        left_pair = left[offset] if offset < len(left) else None
+        right_pair = right[offset] if offset < len(right) else None
+        if left_pair != right_pair:
+            return (
+                f"data row {offset + 1}: Data copied in={left_pair!r}; "
+                f"Working Tab={right_pair!r}"
+            )
+    return None
 
 
 def label_rows(
@@ -726,7 +754,6 @@ def verify(data: dict[str, Any]) -> bool:
     periodized_liabilities = get_sheet(data, periodized_key, "Liabilities")
     periodized_reasons = get_sheet(data, periodized_key, "Reasons")
     periodized_balance_sheet = get_sheet(data, periodized_key, "Balance Sheet")
-    periodized_reasons_grid = row_cells(periodized_reasons)
 
     dated_expected = {
         "Cash": (1300, 620),
@@ -792,7 +819,9 @@ def verify(data: dict[str, Any]) -> bool:
                 actual[account] = dated_values(ledger, account)
         return actual
 
-    statement_key = "bike-repair-module-3-2"
+    receivable_key = "bike-repair-module-3-2a"
+    depreciation_key = "bike-repair-module-3-2b"
+    statement_key = "bike-repair-module-3-3"
     canonical_dated_labels = {
         "Balance, June 1, 2026",
         "Balance, August 31, 2026",
@@ -808,7 +837,12 @@ def verify(data: dict[str, Any]) -> bool:
             and cell["value"].startswith("Balance,")
             and cell["value"] not in canonical_dated_labels
         ]
-        for workbook_key in (periodized_key, "bike-repair-module-3-2")
+        for workbook_key in (
+            periodized_key,
+            receivable_key,
+            depreciation_key,
+            statement_key,
+        )
     }
     dated_label_offenders = [
         offender
@@ -851,105 +885,163 @@ def verify(data: dict[str, Any]) -> bool:
         f"forbidden hits={periodized_forbidden_hits}; Balance Sheet={periodized_bs_actual}",
     )
 
-    # Invariant 10 — Module 3-2 adds only the raw Working Tab statement sheet.
-    statement_sheets = data["workbooks"][statement_key]["sheets"]
-    statement_sheet_names = [sheet["name"] for sheet in statement_sheets]
-    statement_name_hygiene_offenders = [
+    # Invariant 10 — Module 3-2a records the receivable discovery, before
+    # depreciation is discovered or the statement Working Tab is created.
+    receivable_sheets = data["workbooks"][receivable_key]["sheets"]
+    receivable_sheet_names = [sheet["name"] for sheet in receivable_sheets]
+    receivable_name_hygiene_offenders = [
         (name, name.strip())
-        for name in statement_sheet_names
+        for name in receivable_sheet_names
         if name != name.strip()
     ]
-    statement_dated_actual = (
+    receivable_sheet_names_expected = [
+        "Assets",
+        "Liabilities",
+        "Reasons",
+        "Balance Sheet",
+    ]
+    receivable_structure_ok = (
+        receivable_sheet_names == receivable_sheet_names_expected
+        and not receivable_name_hygiene_offenders
+    )
+    receivable_dated_expected = dict(dated_expected)
+    receivable_dated_expected["GENERATED"] = (170, 3040)
+    receivable_dated_actual = (
         {}
-        if dated_label_offenders_by_workbook[statement_key]
-        else all_dated_values(statement_key)
+        if (
+            not receivable_structure_ok
+            or dated_label_offenders_by_workbook[receivable_key]
+        )
+        else all_dated_values(receivable_key)
     )
-    # Select by position so whitespace in the raw tab name is reported by this
-    # invariant (with repr via the offender tuple) instead of aborting lookup.
-    working_income = statement_sheets[4]
-    working_income_grid = row_cells(working_income)
-    title_actual = tuple(
-        working_income_grid.get(row, {}).get(2, {}).get("value")
-        for row in range(1, 4)
+    ar_header_rows: list[int] = []
+    ar_june_rows: list[int] = []
+    ar_august_rows: list[int] = []
+    ar_august_value: Any = None
+    ridgeline_label = (
+        "Repair delivered — Ridgeline Trail Crew, billed net 15 (unpaid)"
     )
-    title_expected = (
-        "[Your Name]'s Bike Repair, LLC.",
-        "Income Statement",
-        "For the period June 1 – August 31, 2026",
-    )
+    generated_season_bounds: tuple[int, int] | None = None
+    ridgeline_rows: list[int] = []
+    ridgeline_values: list[Any] = []
+    receivable_bs_actual: dict[str, int | float] = {}
+    if receivable_structure_ok:
+        receivable_assets = get_sheet(data, receivable_key, "Assets")
+        receivable_reasons = get_sheet(data, receivable_key, "Reasons")
+        receivable_balance_sheet = get_sheet(
+            data, receivable_key, "Balance Sheet"
+        )
+        receivable_assets_grid = row_cells(receivable_assets)
+        receivable_header_rows = sorted(
+            cell["r"]
+            for cell in receivable_assets["cells"]
+            if cell["c"] == 2 and cell.get("bold") and cell.get("value")
+        )
+        ar_header_rows = [
+            row
+            for row in label_rows(receivable_assets, "Accounts Receivable")
+            if receivable_assets_grid.get(row, {}).get(2, {}).get("bold")
+        ]
+        if len(ar_header_rows) == 1:
+            ar_start = ar_header_rows[0] + 1
+            later_headers = [
+                row for row in receivable_header_rows if row >= ar_start
+            ]
+            ar_end = (
+                min(later_headers) - 1
+                if later_headers
+                else len(receivable_assets["rows"])
+            )
+            ar_june_rows = label_rows(
+                receivable_assets,
+                "Balance, June 1, 2026",
+                start=ar_start,
+                end=ar_end,
+            )
+            ar_august_rows = label_rows(
+                receivable_assets,
+                "Balance, August 31, 2026",
+                start=ar_start,
+                end=ar_end,
+            )
+            if len(ar_august_rows) == 1:
+                ar_august_value = receivable_assets_grid.get(
+                    ar_august_rows[0], {}
+                ).get(4, {}).get("value")
 
-    generated_season_rows: list[tuple[Any, Any]] = []
-    if not dated_label_offenders_by_workbook[periodized_key]:
-        generated_start, generated_end = section_bounds(periodized_reasons, "GENERATED")
-        generated_june_row = label_rows(
-            periodized_reasons,
+        generated_start, generated_end = section_bounds(
+            receivable_reasons, "GENERATED"
+        )
+        receivable_reasons_grid = row_cells(receivable_reasons)
+        generated_june_rows = label_rows(
+            receivable_reasons,
             "Balance, June 1, 2026",
             start=generated_start,
             end=generated_end,
-        )[0]
-        generated_august_row = label_rows(
-            periodized_reasons,
+        )
+        generated_august_rows = label_rows(
+            receivable_reasons,
             "Balance, August 31, 2026",
             start=generated_start,
             end=generated_end,
-        )[0]
-        generated_season_rows = [
-            (
-                periodized_reasons_grid[row][2]["value"],
-                periodized_reasons_grid[row][4]["value"],
-            )
-            for row in range(generated_june_row + 1, generated_august_row)
-            if 2 in periodized_reasons_grid.get(row, {})
-            or 4 in periodized_reasons_grid.get(row, {})
-        ]
-    income_data_rows = [
-        (
-            working_income_grid[row][2]["value"],
-            working_income_grid[row][4]["value"],
         )
-        for row in range(4, len(working_income["rows"]) + 1)
-        if 2 in working_income_grid.get(row, {})
-        or 4 in working_income_grid.get(row, {})
-    ]
-    income_data_sum = sum(
-        value
-        for _, value in income_data_rows
-        if isinstance(value, (int, float)) and not isinstance(value, bool)
-    )
-    statement_forbidden_hits = [
+        if len(generated_june_rows) == len(generated_august_rows) == 1:
+            generated_season_bounds = (
+                generated_june_rows[0] + 1,
+                generated_august_rows[0] - 1,
+            )
+            ridgeline_rows = sorted(
+                {
+                    cell["r"]
+                    for cell in receivable_reasons["cells"]
+                    if cell["c"] == 2
+                    and generated_season_bounds[0]
+                    <= cell["r"]
+                    <= generated_season_bounds[1]
+                    and cell["value"] == ridgeline_label
+                }
+            )
+        ridgeline_values = [
+            receivable_reasons_grid.get(row, {}).get(4, {}).get("value")
+            for row in ridgeline_rows
+        ]
+        receivable_bs_actual = {
+            label: value_for_label(receivable_balance_sheet, label, column=3)
+            for label in snapshot_bs_expected
+        }
+    depreciation_hits = [
         f"{sheet['name']}!{get_column_letter(cell['c'])}{cell['r']}={cell['value']!r}"
-        for sheet in data["workbooks"][statement_key]["sheets"]
+        for sheet in receivable_sheets
         for cell in sheet["cells"]
         if isinstance(cell["value"], str)
-        and any(
-            term in cell["value"]
-            for term in (
-                "Accounts Receivable",
-                "Depreciation",
-                "Repair delivered — Ridgeline",
-            )
-        )
+        and "Depreciation" in cell["value"]
     ]
+    receivable_label_offenders = dated_label_offenders_by_workbook[receivable_key]
     passed = (
-        statement_sheet_names
-        == ["Assets", "Liabilities", "Reasons", "Balance Sheet", "Working Tab"]
-        and not statement_name_hygiene_offenders
-        and statement_dated_actual == dated_expected
-        and title_actual == title_expected
-        and income_data_rows == generated_season_rows
-        and income_data_sum == 2570 == dated_expected["GENERATED"][1] - dated_expected["GENERATED"][0]
-        and not statement_forbidden_hits
+        receivable_structure_ok
+        and receivable_dated_actual == receivable_dated_expected
+        and not receivable_label_offenders
+        and len(ar_header_rows) == 1
+        and len(ar_august_rows) == 1
+        and ar_august_value == 300
+        and not ar_june_rows
+        and ridgeline_values == [300]
+        and not depreciation_hits
+        and receivable_bs_actual == snapshot_bs_expected
     )
     results.append(passed)
     report_invariant(
         10,
         passed,
-        f"sheets={statement_sheet_names}; "
-        f"name hygiene offenders={statement_name_hygiene_offenders!r}; "
-        f"dated ledger values={statement_dated_actual}; "
-        f"titles={title_actual}; Income Statement rows={income_data_rows}; "
-        f"GENERATED season rows={generated_season_rows}; sum={income_data_sum}; "
-        f"forbidden hits={statement_forbidden_hits}",
+        f"sheets={receivable_sheet_names}; "
+        f"name hygiene offenders={receivable_name_hygiene_offenders!r}; "
+        f"dated ledger values={receivable_dated_actual}; "
+        f"dated label offenders={receivable_label_offenders}; "
+        f"Accounts Receivable headers={ar_header_rows}, June rows={ar_june_rows}, "
+        f"August rows={ar_august_rows}, value={ar_august_value}; "
+        f"GENERATED season bounds={generated_season_bounds}, "
+        f"Ridgeline rows/values={list(zip(ridgeline_rows, ridgeline_values))}; "
+        f"depreciation hits={depreciation_hits}; Balance Sheet={receivable_bs_actual}",
     )
 
     # Invariant 11 — every browser re-sum agrees with its cached workbook value.
@@ -997,6 +1089,263 @@ def verify(data: dict[str, Any]) -> bool:
         11,
         passed,
         f"checked={resum_checked}; mismatches={resum_mismatches}",
+    )
+
+    # Invariant 12 — Module 3-2b is the completed four-ledger state; Module
+    # 3-3 copies from it without changing a single extracted ledger cell.
+    depreciation_sheets = data["workbooks"][depreciation_key]["sheets"]
+    depreciation_sheet_names = [sheet["name"] for sheet in depreciation_sheets]
+    depreciation_name_hygiene_offenders = [
+        (name, name.strip())
+        for name in depreciation_sheet_names
+        if name != name.strip()
+    ]
+    expected_ledger_sheets = ["Assets", "Liabilities", "Reasons", "Balance Sheet"]
+    statement_sheets_by_name = {
+        sheet["name"]: sheet for sheet in data["workbooks"][statement_key]["sheets"]
+    }
+    first_cell_difference: str | None = None
+    if depreciation_sheet_names == expected_ledger_sheets:
+        for depreciation_sheet in depreciation_sheets:
+            sheet_name = depreciation_sheet["name"]
+            statement_sheet = statement_sheets_by_name.get(sheet_name)
+            if statement_sheet is None:
+                first_cell_difference = f"{sheet_name}: missing from {statement_key}"
+                break
+            left_cells = depreciation_sheet["cells"]
+            right_cells = statement_sheet["cells"]
+            if left_cells == right_cells:
+                continue
+            differing_left: dict[str, Any] | None = None
+            differing_right: dict[str, Any] | None = None
+            for left_cell, right_cell in zip(left_cells, right_cells):
+                if left_cell != right_cell:
+                    differing_left = left_cell
+                    differing_right = right_cell
+                    break
+            if differing_left is None and len(left_cells) != len(right_cells):
+                offset = min(len(left_cells), len(right_cells))
+                differing_left = left_cells[offset] if offset < len(left_cells) else None
+                differing_right = right_cells[offset] if offset < len(right_cells) else None
+            location_cell = differing_left or differing_right
+            coordinate = (
+                f"{get_column_letter(location_cell['c'])}{location_cell['r']}"
+                if location_cell is not None
+                else "unknown cell"
+            )
+            first_cell_difference = (
+                f"{sheet_name}!{coordinate}: 2b={differing_left!r}; "
+                f"3-3={differing_right!r}"
+            )
+            break
+    passed = (
+        depreciation_sheet_names == expected_ledger_sheets
+        and not depreciation_name_hygiene_offenders
+        and first_cell_difference is None
+    )
+    results.append(passed)
+    report_invariant(
+        12,
+        passed,
+        f"2b sheets={depreciation_sheet_names}; "
+        f"name hygiene offenders={depreciation_name_hygiene_offenders!r}; "
+        f"first differing sheet/cell={first_cell_difference}",
+    )
+
+    # Invariant 13 — Module 3-3 copies the completed GENERATED season slice
+    # onto the statement Working Tab and remains continuous with Bike Repair End.
+    statement_sheets = data["workbooks"][statement_key]["sheets"]
+    statement_sheet_names = [sheet["name"] for sheet in statement_sheets]
+    statement_name_hygiene_offenders = [
+        (name, name.strip())
+        for name in statement_sheet_names
+        if name != name.strip()
+    ]
+    statement_sheet_names_expected = [
+        "Assets",
+        "Liabilities",
+        "Reasons",
+        "Balance Sheet",
+        "Working Tab",
+    ]
+    statement_structure_ok = (
+        statement_sheet_names == statement_sheet_names_expected
+        and not statement_name_hygiene_offenders
+    )
+    statement_dated_expected = dict(receivable_dated_expected)
+    statement_dated_expected.update(
+        {
+            "Tools & Repair Equipment": (1200, 1440),
+            "Fixtures": (750, 710),
+            "Laptop": (610, 580),
+            "GENERATED": (170, 2810),
+        }
+    )
+    statement_label_offenders = dated_label_offenders_by_workbook[statement_key]
+    statement_assets = statement_sheets[0]
+    statement_liabilities = statement_sheets[1]
+    statement_reasons = statement_sheets[2]
+    statement_balance_sheet = statement_sheets[3]
+    working_income = statement_sheets[4]
+    statement_dated_actual = (
+        {}
+        if statement_label_offenders
+        else {
+            account: dated_values(ledger, account)
+            for ledger, accounts in (
+                (statement_assets, tuple(statement_dated_expected)[:6]),
+                (statement_liabilities, tuple(statement_dated_expected)[6:8]),
+                (statement_reasons, tuple(statement_dated_expected)[8:]),
+            )
+            for account in accounts
+        }
+    )
+    statement_asset_depreciation = sorted(
+        abs(value)
+        for value in values_for_matching_rows(statement_assets, "Depreciation")
+    )
+    statement_reason_depreciation = sorted(
+        abs(value)
+        for value in values_for_matching_rows(statement_reasons, "Depreciation")
+    )
+
+    working_income_grid = row_cells(working_income)
+    title_actual = tuple(
+        working_income_grid.get(row, {}).get(2, {}).get("value")
+        for row in range(1, 4)
+    )
+    title_expected = (
+        "[Your Name]'s Bike Repair, LLC.",
+        "Income Statement",
+        "For the period June 1 – August 31, 2026",
+    )
+    statement_reasons_grid = row_cells(statement_reasons)
+    generated_season_rows: list[tuple[Any, Any]] = []
+    if not statement_label_offenders:
+        generated_start, generated_end = section_bounds(statement_reasons, "GENERATED")
+        generated_june_row = label_rows(
+            statement_reasons,
+            "Balance, June 1, 2026",
+            start=generated_start,
+            end=generated_end,
+        )[0]
+        generated_august_row = label_rows(
+            statement_reasons,
+            "Balance, August 31, 2026",
+            start=generated_start,
+            end=generated_end,
+        )[0]
+        generated_season_rows = [
+            (
+                statement_reasons_grid[row][2]["value"],
+                statement_reasons_grid[row][4]["value"],
+            )
+            for row in range(generated_june_row + 1, generated_august_row)
+            if 2 in statement_reasons_grid.get(row, {})
+            or 4 in statement_reasons_grid.get(row, {})
+        ]
+    income_data_rows = statement_data_rows(working_income)
+    income_data_sum = sum(
+        value
+        for _, value in income_data_rows
+        if isinstance(value, (int, float)) and not isinstance(value, bool)
+    )
+    generated_change = (
+        statement_dated_actual.get("GENERATED", (None, None))[1]
+        - statement_dated_actual.get("GENERATED", (None, None))[0]
+        if "GENERATED" in statement_dated_actual
+        else None
+    )
+
+    end_august_actual: dict[str, int | float] = {}
+    for end_ledger, accounts in (
+        (assets, tuple(statement_dated_expected)[:6]),
+        (liabilities, tuple(statement_dated_expected)[6:8]),
+    ):
+        for account in accounts:
+            end_august_actual[account] = account_section_values(end_ledger, account)[1]
+    for section in tuple(statement_dated_expected)[8:]:
+        end_august_actual[section] = section_value(
+            reasons, section, "Balance, August 31, 2026"
+        )
+    august_continuity_mismatches = []
+    for account in statement_dated_expected:
+        statement_value = statement_dated_actual.get(account, (None, None))[1]
+        end_value = end_august_actual[account]
+        if statement_value != end_value:
+            august_continuity_mismatches.append(
+                f"{account}: 3-3={statement_value} vs End={end_value}"
+            )
+    june_1_continuity_mismatches = []
+    for label in shared_bs_labels:
+        statement_value = value_for_label(statement_balance_sheet, label, column=3)
+        end_value = value_for_label(balance_sheet, label, column=3)
+        if statement_value != end_value:
+            june_1_continuity_mismatches.append(
+                f"{label}: 3-3={statement_value} vs End={end_value}"
+            )
+
+    passed = (
+        statement_structure_ok
+        and statement_dated_actual == statement_dated_expected
+        and not statement_label_offenders
+        and statement_asset_depreciation == [30, 40, 160]
+        and statement_reason_depreciation == [30, 40, 160]
+        and title_actual == title_expected
+        and income_data_rows == generated_season_rows
+        and income_data_sum == 2640
+        and generated_change == 2640
+        and not august_continuity_mismatches
+        and not june_1_continuity_mismatches
+    )
+    results.append(passed)
+    report_invariant(
+        13,
+        passed,
+        f"sheets={statement_sheet_names}; "
+        f"name hygiene offenders={statement_name_hygiene_offenders!r}; "
+        f"dated ledger values={statement_dated_actual}; "
+        f"dated label offenders={statement_label_offenders}; "
+        f"depreciation Assets={statement_asset_depreciation}, "
+        f"Reasons={statement_reason_depreciation}; titles={title_actual}; "
+        f"Working Tab rows={income_data_rows}; GENERATED season rows={generated_season_rows}; "
+        f"sum/change={income_data_sum}/{generated_change}; "
+        f"Aug-31 continuity mismatches={august_continuity_mismatches}; "
+        f"June-1 Balance Sheet mismatches={june_1_continuity_mismatches}",
+    )
+
+    # Invariant 14 — the income-statement copy stage preserves the authored
+    # Module 3-3 Working Tab data rows one-to-one and in order.
+    copied_income = get_sheet(data, "income-statement-steps", "0 · Data copied in")
+    copied_income_rows = statement_data_rows(copied_income)
+    authored_income_rows = statement_data_rows(working_income)
+    copied_income_sum = sum(
+        value
+        for _, value in copied_income_rows
+        if isinstance(value, (int, float)) and not isinstance(value, bool)
+    )
+    authored_income_sum = sum(
+        value
+        for _, value in authored_income_rows
+        if isinstance(value, (int, float)) and not isinstance(value, bool)
+    )
+    first_income_row_mismatch = first_row_pair_mismatch(
+        copied_income_rows, authored_income_rows
+    )
+    passed = (
+        first_income_row_mismatch is None
+        and len(copied_income_rows) == 46
+        and len(authored_income_rows) == 46
+        and copied_income_sum == 2640
+        and authored_income_sum == 2640
+    )
+    results.append(passed)
+    report_invariant(
+        14,
+        passed,
+        f"Data copied in rows={len(copied_income_rows)}, sum={copied_income_sum}; "
+        f"Working Tab rows={len(authored_income_rows)}, sum={authored_income_sum}; "
+        f"first mismatching pair={first_income_row_mismatch}",
     )
 
     return all(results)
