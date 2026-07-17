@@ -298,21 +298,33 @@ function setAdvanceState(){
 }
 function renderPayoff(){
   var html='';
-  if(currentOrder===3){
+  if(currentOrder===3&&!completed){
+    html='<div class="narrative-block"><p>The statement is formatted, but the amber tab still carries its working name. Christen it to mark the statement as done.</p></div>'
+      +'<button class="btn-continue btn-block" type="button" onclick="christen()">Christen it the Statement of Member&rsquo;s Capital &rarr;</button>';
+  }else if(currentOrder===3){
     html=annaBox('That is the walk Freddie asked for: <strong>$2,460 to $4,500</strong>. The $600 sits on its own WITHDRAWN line, in parentheses. It is <strong>not an expense; it is a distribution</strong>. On the Statement of Member&rsquo;s Capital, the changes in all three piles walk to the same ending total as the balance sheet&rsquo;s August 31 column.')
       +insightBox('One statement, three piles','<p>CONTRIBUTED remains <strong>$2,290</strong>. GENERATED moves from <strong>$170</strong> to <strong>$2,810</strong> with net income of <strong>$2,640</strong>. WITHDRAWN records <strong>($600)</strong>. Together, the total moves from <strong>$2,460</strong> to <strong>$4,500</strong>.</p>');
   }
   document.getElementById('payoff').innerHTML=html;
 }
+function christen(){
+  if(completed) return;
+  completed=true;
+  playSuccess();
+  showMemberCapitalTab();
+  renderPayoff();
+  renderControls();
+  if(window.lucide) lucide.createIcons();
+  document.getElementById('payoff').scrollIntoView({behavior:'smooth',block:'start'});
+}
 function renderControls(){
   var html='<div class="nav-buttons"><button class="btn-back" type="button" onclick="nav(\'42-1-The-Missing-Wage.html\')">&larr; Back</button>';
-  if(currentOrder===3) html+='<button class="btn-next" type="button" onclick="nav(\'44-1-The-Cash-Puzzle.html\')">On to the cash question &rarr;</button>';
+  if(currentOrder===3&&completed) html+='<button class="btn-next" type="button" onclick="nav(\'44-1-The-Cash-Puzzle.html\')">On to the cash question &rarr;</button>';
   html+='</div>';
   document.getElementById('controls').innerHTML=html;
 }
 function renderStage(order){
   currentOrder=order;
-  if(order===3) completed=true;
   showMemberCapitalTab();
   expandAllGroups('stmtBuild');
   renderBuildNote();
@@ -382,6 +394,7 @@ window.devFill=function(){
     var advance=document.querySelector('#stmtBuild .brw-step-advance');
     if(advance){ advance.disabled=false; advance.click(); }
   }
+  christen();
   expandAllGroups('stmtBuild');
 };
 document.getElementById('annaIntro').innerHTML=sourceBeatHTML();
