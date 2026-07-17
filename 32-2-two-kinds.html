@@ -124,7 +124,7 @@ function sortProgress(){
     '<div class="sortprog-box shop"><div class="sortprog-label">Delivered</div><div class="sortprog-num">'+inC+'</div></div>'+
     '<div class="sortprog-box personal"><div class="sortprog-label">Used up</div><div class="sortprog-num">'+upC+'</div></div>'+
     '<div class="sortprog-box'+(un===0?' done':'')+'"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">'+un+'</div></div>'+
-    '</div>'+btn+'<div class="btn-row" style="justify-content: flex-end; margin-top: 10px;"><button class="btn-reset" onclick="restart()">Reset</button></div>'+'</div>';
+    '</div>'+btn+(Object.keys(placed).length>0 ? '<div class="btn-row" style="justify-content: flex-end; margin-top: 10px;"><button class="btn-reset" onclick="restart()">Reset</button></div>' : '')+'</div>';
 }
 
 /* ===== workbook state — the Reasons tab is our interactive sort sheet ===== */

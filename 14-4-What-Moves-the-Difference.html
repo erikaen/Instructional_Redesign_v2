@@ -22,7 +22,7 @@
     <div class="phase active" id="phase-movers">
       <div id="nmTop"></div>
       <div id="wbNM"></div>
-      <div class="btn-row" style="justify-content:flex-end; margin-bottom:12px;"><button class="btn-reset" onclick="resetMoverSort()">Reset</button></div>
+      <div class="btn-row" id="moverResetRow" style="justify-content:flex-end; margin-bottom:12px; display:none;"><button class="btn-reset" onclick="resetMoverSort()">Reset</button></div>
       <div id="nmControls"></div>
     </div>
 
@@ -512,6 +512,7 @@ function renderMovers(){
       contBtn('Finish up', "goto('complete')");
   }
   document.getElementById('nmControls').innerHTML = ctrl;
+  document.getElementById('moverResetRow').style.display = Object.keys(assignments).length ? '' : 'none';
   if(window.lucide) lucide.createIcons();
 }
 

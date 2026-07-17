@@ -31,7 +31,7 @@
       <div id="paneRight"></div>
     </div>
 
-    <div class="btn-row" style="justify-content:flex-end; margin-bottom:12px;"><button class="btn-reset" onclick="resetBeat()">Reset</button></div>
+    <div class="btn-row" id="beatResetRow" style="justify-content:flex-end; margin-bottom:12px; display:none;"><button class="btn-reset" onclick="resetBeat()">Reset</button></div>
 
     <div id="walkControls"></div>
 
@@ -502,6 +502,8 @@ function render(){
   var backRow = (beatIndex > 0 && !autoActive)
     ? '<div class="btn-row" style="margin-bottom:12px;"><button class="btn-reset" onclick="beatBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>' : '';
   document.getElementById('walkControls').innerHTML = backRow + controls();
+  var beatDirty = Object.keys(explainedAt).some(function(id){ return explainedAt[id]===beatIndex; }) || (b && b.key==='CASH' && (tallySubmitted || tallySel!==null));
+  document.getElementById('beatResetRow').style.display = beatDirty ? '' : 'none';
   if (window.renderStepProgress) renderStepProgress('stepProg', Math.min(beatIndex + 1, BEATS.length), BEATS.length);
   if(window.lucide) lucide.createIcons();
 }

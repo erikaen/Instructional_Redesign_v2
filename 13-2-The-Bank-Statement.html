@@ -168,7 +168,7 @@ function renderBankSort(){
     toggleFn:'toggleBankDesc', classifyFn:'classifyBank', showHint:!hintSeen,
     catA:{id:'shop',label:'Repair'}, catB:{id:'personal',label:'Personal'},
     allCorrect:sortChecked && wrongIds.length===0 });
-  html += '<div class="btn-row" style="justify-content: flex-end; margin-top: 16px;"><button class="btn-reset" onclick="restart()">Reset</button></div>';
+  if(Object.keys(classifications).length > 0){ html += '<div class="btn-row" style="justify-content: flex-end; margin-top: 16px;"><button class="btn-reset" onclick="restart()">Reset</button></div>'; }
   if(sortChecked && wrongIds.length===0){
     html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">Good. Now we can see which rows belong with the repair work and which ones belong with your personal life. Next, let&rsquo;s pull the repair-related rows into one place and see how cash moved during May.</div></div>';
   }

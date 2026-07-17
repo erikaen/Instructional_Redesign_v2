@@ -633,8 +633,10 @@ function renderFormActions(){
   if(!el) return;
   var back = '', reset = '';
   if(formPhase === 'categorize'){
-    // page 1: Reset always available
-    reset = '<button class="btn-reset" onclick="resetForm()">Reset</button>';
+    // page 1: Reset appears only once at least one item has been placed (an action to undo)
+    if(Object.keys(placements).length > 0){
+      reset = '<button class="btn-reset" onclick="resetForm()">Reset</button>';
+    }
   } else if(formDone){
     // page 3: Back only (no Reset)
     back = '<button class="btn-reset" onclick="backToValuate()"><i data-lucide="arrow-left" class="licon"></i> Back</button>';

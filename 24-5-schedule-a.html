@@ -27,7 +27,7 @@
       </div>
       <div id="wb"></div>
       <div id="schedArea"></div>
-      <div class="btn-row" style="justify-content:flex-end; margin-bottom:12px;"><button class="btn-reset" onclick="resetSched()">Reset</button></div>
+      <div class="btn-row" id="schedResetRow" style="justify-content:flex-end; margin-bottom:12px; display:none;"><button class="btn-reset" onclick="resetSched()">Reset</button></div>
       <div id="controls"></div>
     </div>
 
@@ -247,6 +247,7 @@ function renderAll(){
       '';
   }
   document.getElementById('controls').innerHTML = ctrl;
+  document.getElementById('schedResetRow').style.display = Object.keys(entered).length ? '' : 'none';
   if(window.lucide) lucide.createIcons();
 }
 

@@ -164,7 +164,7 @@ function renderCardSort(){
     catA:{id:'repair',label:'Repair'}, catB:{id:'personal',label:'Personal'},
     allCorrect:cardSortChecked && wrongIds.length===0 });
 
-  html += '<div class="btn-row" style="justify-content: flex-end; margin-top: 16px;"><button class="btn-reset" onclick="restart()">Reset</button></div>';
+  if(Object.keys(cardClass).length > 0){ html += '<div class="btn-row" style="justify-content: flex-end; margin-top: 16px;"><button class="btn-reset" onclick="restart()">Reset</button></div>'; }
 
   if(cardSortChecked && wrongIds.length===0){
     html += '<div class="dialog-box anna" style="margin-top:20px;"><div class="dialog-label">ANNA</div><div class="dialog-text">Good. Now we can see which rows belong with the repair work and which ones belong with your personal life. But look at the card&rsquo;s ending balance: <strong>$2,260.00</strong>. That is the <strong>total</strong> amount still owed on the card. The question now is how much of that balance is still owed because of the repair work.</div></div>';

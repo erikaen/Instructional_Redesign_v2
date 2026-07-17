@@ -1266,6 +1266,48 @@ function courseCheck(id){ return courseTutDone(id) ? ' <span class="course-done-
 function coursePageDone(f){ try{ return localStorage.getItem('pagedone:'+f)==='1'; }catch(e){ return false; } }
 function courseMarkPageDone(f){ try{ localStorage.setItem('pagedone:'+f,'1'); }catch(e){} }
 function coursePageCheck(f){ return coursePageDone(f) ? ' <span class="course-done-check">&#10003;</span>' : ''; }
+
+/* ===== PAGE COMPLETION (activity-aware) ======================================
+ * Reading pages complete on VISIT; activity pages complete when the activity is
+ * FINISHED (any answer — correctness NOT required). "done" persists as localStorage
+ * 'pagedone:' (coursePageDone). On completion we fill the page's fallback progress
+ * bar and post a 'page_complete' event (server-side progress). The per-page activity
+ * predicates live in COURSE_DONE (defined near the end of this file).
+ * Runs in the reader iframe AND standalone. ================================= */
+/* Fallback progress bar (the single bar initCourseChrome injects; pages with their
+ * OWN multi-step bar manage it and are left untouched). For a multi-step activity
+ * listed in COURSE_STEPS the bar shows its current step; a single-step activity is
+ * empty→full; reading/finished pages are full. */
+function courseBarState(f){
+  if (typeof COURSE_STEPS !== 'undefined' && COURSE_STEPS[f]) {
+    var s; try { s = COURSE_STEPS[f](); } catch(e){ s = null; }
+    s = s || { at: 0, total: 1 };
+    if (!(s.total > 0)) s.total = 1;
+    if (s.at < 0) s.at = 0; if (s.at > s.total) s.at = s.total;
+    return coursePageDone(f) ? { at: s.total, total: s.total } : s;   // finished → full
+  }
+  if (coursePageDone(f)) return { at: 1, total: 1 };                   // finished single-step / reading → full
+  if (typeof COURSE_DONE !== 'undefined' && COURSE_DONE[f]) return { at: 0, total: 1 };  // unfinished single-step activity → empty
+  return { at: 1, total: 1 };                                         // reading → full on visit
+}
+var _courseBarKey = '';
+function courseRenderBar(f){
+  var el = document.getElementById('stepProg');
+  if (!el || el.getAttribute('data-fallback') !== '1' || typeof renderStepProgress !== 'function') return;  // own bars manage themselves
+  var s = courseBarState(f);
+  var key = s.at + '/' + s.total;
+  if (key === _courseBarKey) return;                                  // unchanged → skip redraw
+  _courseBarKey = key;
+  renderStepProgress('stepProg', s.at, s.total);
+}
+function courseMarkComplete(f){
+  var already = coursePageDone(f);
+  courseMarkPageDone(f);                         // persist (localStorage) — v2 checkmarks + the bar
+  _courseBarKey = '';                            // force the bar to redraw to full
+  courseRenderBar(f);
+  if (!already && typeof window.CourseTrack === 'function') window.CourseTrack('page_complete', { activityId: f });
+}
+
 function initCourseChrome(){
   if (window.self !== window.top) return;              /* not inside the old view.html iframe */
   var file = location.pathname.split('/').pop() || '';
@@ -1299,7 +1341,7 @@ function initCourseChrome(){
   var bar = document.createElement('div');
   bar.className = 'course-banner';
   bar.innerHTML =
-    '<div class="course-banner-mid"><button class="btn-reset course-banner-btn" id="courseIndexBtn">'+(pageObj ? pageNum+'. '+pageObj.t : tut.title)+' &#9662;</button>'+
+    '<div class="course-banner-mid"><button class="btn-reset course-banner-btn" id="courseIndexBtn">'+(pageObj ? tut.title+' &middot; '+pageObj.t : tut.title)+' &#9662;</button>'+
       '<div class="course-index-menu" id="courseIndexMenu" hidden>'+menuHtml+'</div></div>';
   document.body.insertBefore(bar, document.body.firstChild);
   var iBtn = document.getElementById('courseIndexBtn'), iMenu = document.getElementById('courseIndexMenu');
@@ -1316,8 +1358,9 @@ function initCourseChrome(){
     if (pt2) {
       var sp = document.createElement('div');
       sp.id = 'stepProg';
+      sp.setAttribute('data-fallback', '1');
       pt2.parentNode.insertBefore(sp, pt2.nextSibling);
-      if (typeof renderStepProgress === 'function') renderStepProgress('stepProg', 1, 1);
+      if (typeof courseRenderBar === 'function') courseRenderBar(location.pathname.split('/').pop() || '');
     }
   }
 
@@ -1334,6 +1377,136 @@ function initCourseChrome(){
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initCourseChrome);
 else initCourseChrome();
+
+var COURSE_DONE = {
+  // 11-2: revealed (scenario counter) + scenarios[] — both top-level vars
+  '11-2-A-Rough-Week.html': function(){ return typeof revealed !== 'undefined' && Array.isArray(window.scenarios) && revealed >= scenarios.length; },
+  // 11-3: sortDone — set true by doTheRest()
+  '11-3-Sort-Your-Things.html': function(){ return typeof sortDone !== 'undefined' && sortDone === true; },
+  // 11-4: q1Submitted
+  '11-4-The-Line-You-Drew.html': function(){ return typeof q1Submitted !== 'undefined' && q1Submitted === true; },
+  // 12-2: formDone
+  '12-2-Marias-Form.html': function(){ return typeof formDone !== 'undefined' && formDone === true; },
+  // 13-2: every bank row classified — txns[] + classifications{} (correctness-free)
+  '13-2-The-Bank-Statement.html': function(){ return Array.isArray(window.txns) && typeof classifications !== 'undefined' && txns.every(function(t){ return classifications[t.id] !== undefined; }); },
+  // 13-3: cashSubmitted
+  '13-3-The-Cash-Movement.html': function(){ return typeof cashSubmitted !== 'undefined' && cashSubmitted === true; },
+  // 13-4: every deposit answered — deposits[] + depositAnswers{} (correctness-free)
+  '13-4-The-Customer-Payments.html': function(){ return Array.isArray(window.deposits) && typeof depositAnswers !== 'undefined' && deposits.every(function(d){ return depositAnswers[d.id] !== undefined; }); },
+  // 13-5: cardMCQSubmitted
+  '13-5-The-Credit-Card-Statement.html': function(){ return typeof cardMCQSubmitted !== 'undefined' && cardMCQSubmitted === true; },
+  // 13-7: q1Submitted
+  '13-7-The-Rent-Payment.html': function(){ return typeof q1Submitted !== 'undefined' && q1Submitted === true; },
+  // 13-8: liabilitiesNamed
+  '13-8-Naming-the-Lists.html': function(){ return typeof liabilitiesNamed !== 'undefined' && liabilitiesNamed === true; },
+  // 14-2: beatIndex reached last beat — beatIndex + BEATS[] (correctness-free; NOT coverFound)
+  '14-2-Walk-the-Reasons.html': function(){ return typeof beatIndex !== 'undefined' && Array.isArray(window.BEATS) && beatIndex >= BEATS.length - 1; },
+  // 14-4: moversDone
+  '14-4-What-Moves-the-Difference.html': function(){ return typeof moversDone !== 'undefined' && moversDone === true; },
+  // 15-1: netDone (set on answer OR after 3 attempts — correctness-free)
+  '15-1-Find-the-Difference.html': function(){ return typeof netDone !== 'undefined' && netDone === true; },
+  // 15-2: idStage reached final stage (max 4)
+  '15-2-The-Accounting-Identity.html': function(){ return typeof idStage !== 'undefined' && idStage >= 4; },
+  // 15-3: every candidate submitted — CANDIDATES[] + submitted{} by index (correctness-free; NOT allCorrect())
+  '15-3-The-Entity.html': function(){ return Array.isArray(window.CANDIDATES) && typeof submitted !== 'undefined' && CANDIDATES.every(function(c, i){ return submitted[i] !== undefined; }); },
+  // 21-2: claimRun
+  '21-2-exposure.html': function(){ return typeof claimRun !== 'undefined' && claimRun === true; },
+  // 21-3: every observer placed — observers[] + placed{}
+  '21-3-whoSeesTwo.html': function(){ return Array.isArray(window.observers) && typeof placed !== 'undefined' && observers.every(function(o){ return placed[o.id] !== undefined; }); },
+  // 21-4: wantRevealed
+  '21-4-twoHats.html': function(){ return typeof wantRevealed !== 'undefined' && wantRevealed === true; },
+  // 22-2: nameConfirmed
+  '22-2-name.html': function(){ return typeof nameConfirmed !== 'undefined' && nameConfirmed === true; },
+  // 22-3: filed
+  '22-3-file.html': function(){ return typeof filed !== 'undefined' && filed === true; },
+  // 22-4: every card placed AND figStage final — movedItems[], placed{}, figStage
+  '22-4-whatChanged.html': function(){ return Array.isArray(window.movedItems) && typeof placed !== 'undefined' && typeof figStage !== 'undefined' && movedItems.every(function(m){ return placed[m.id] !== undefined; }) && figStage >= 2; },
+  // 23-2: generated
+  '23-2-agreement.html': function(){ return typeof generated !== 'undefined' && generated === true; },
+  // 23-3: contributed (=== step 2)
+  '23-3-contribution.html': function(){ return typeof contributed !== 'undefined' && contributed === true; },
+  // 23-4: claimRun
+  '23-4-wall.html': function(){ return typeof claimRun !== 'undefined' && claimRun === true; },
+  // 23-5: submitted
+  '23-5-keystone.html': function(){ return typeof submitted !== 'undefined' && submitted === true; },
+  // 24-2: einFiled
+  '24-2-ein.html': function(){ return typeof einFiled !== 'undefined' && einFiled === true; },
+  // 24-3: step reached final move (capped at 3)
+  '24-3-account.html': function(){ return typeof step !== 'undefined' && step >= 3; },
+  // 24-5: allEntered() AND both signatures
+  '24-5-schedule-a.html': function(){ return typeof allEntered === 'function' && typeof signedCompany !== 'undefined' && typeof signedMember !== 'undefined' && allEntered() && signedCompany === true && signedMember === true; },
+  // 31-1: bsDone (set on answer OR after 3 attempts — correctness-free)
+  '31-1-welcome.html': function(){ return typeof bsDone !== 'undefined' && bsDone === true; },
+  // 31-2: step reached end of walk — step + WALK[]
+  '31-2-work-the-season.html': function(){ return typeof step !== 'undefined' && Array.isArray(window.WALK) && step >= WALK.length; },
+  // 32-2: checked (set by checkSort regardless of correctness; NOT done)
+  '32-2-two-kinds.html': function(){ return typeof checked !== 'undefined' && checked === true; },
+  // 32-3: step reached final step (max 2)
+  '32-3-revenue-follows-the-work.html': function(){ return typeof step !== 'undefined' && step >= 2; },
+  // 32-4: step reached final step (max 2)
+  '32-4-name-the-income-statement.html': function(){ return typeof step !== 'undefined' && step >= 2; },
+  // 33-1: mcqSubmitted (MCQ only shown at final step)
+  '33-1-Two-Kinds-of-Used-Up.html': function(){ return typeof mcqSubmitted !== 'undefined' && mcqSubmitted === true; },
+  // 33-2: mcqSubmitted (any submit; NOT recorded)
+  '33-2-The-Third-Kind.html': function(){ return typeof mcqSubmitted !== 'undefined' && mcqSubmitted === true; },
+  // 33-3: step reached final step (max 1)
+  '33-3-The-Bottom-Line.html': function(){ return typeof step !== 'undefined' && step >= 1; },
+  // 34-1: mcqSubmitted (any submit)
+  '34-1-The-Cash-Puzzle.html': function(){ return typeof mcqSubmitted !== 'undefined' && mcqSubmitted === true; },
+  // 34-2: checked (set by checkSort regardless of correctness; NOT done)
+  '34-2-Three-Buckets.html': function(){ return typeof checked !== 'undefined' && checked === true; },
+  // 34-3: step reached end — step + STEPS[]
+  '34-3-What-Cash-Missed.html': function(){ return typeof step !== 'undefined' && Array.isArray(window.STEPS) && step >= STEPS.length; },
+  // 34-4: step reached final step (max 1)
+  '34-4-The-Cash-Flow-Statement.html': function(){ return typeof step !== 'undefined' && step >= 1; },
+  // 35-1: bridgeDone (set on answer OR after 3 attempts — correctness-free)
+  '35-1-The-Capital-Bridge.html': function(){ return typeof bridgeDone !== 'undefined' && bridgeDone === true; },
+  // 35-2: step reached final step (max 1)
+  '35-2-The-First-Close.html': function(){ return typeof step !== 'undefined' && step >= 1; },
+  // 35-3: every move answered — MOVES[] + answered{} (value may be index 0 → !== undefined; correctness-free; NOT allCorrect())
+  '35-3-The-Statements-Tie-Out.html': function(){ return Array.isArray(window.MOVES) && typeof answered !== 'undefined' && MOVES.every(function(m){ return answered[m.id] !== undefined; }); }
+};
+
+/* Multi-step activity pages that lacked their own step bar and were stuck on the flat
+ * "1 of 1" fallback. Each returns {at,total} for the CURRENT step, using the page's
+ * own top-level globals; reaches at===total exactly when its COURSE_DONE finish-
+ * condition fires, so the bar and checkmark agree. (Single-step activities and pages
+ * that ship their own step bar are NOT listed.) */
+var COURSE_STEPS = {
+  // 12-2: categorize (1) → value (2) → done (3)  — the sort is ONE stage, not per-item
+  '12-2-Marias-Form.html': function(){ var done = (typeof formDone !== 'undefined' && formDone); var val = (typeof formPhase !== 'undefined' && formPhase === 'valuate'); return { at: done ? 3 : (val ? 2 : 1), total: 3 }; },
+  // 13-2: sorting (1) → all rows classified (2)  — the sort is ONE stage
+  '13-2-The-Bank-Statement.html': function(){ var all = Array.isArray(window.txns) && typeof classifications !== 'undefined' && txns.every(function(t){ return classifications[t.id] !== undefined; }); return { at: all ? 2 : 1, total: 2 }; },
+  // 13-4: deposits answered / total
+  '13-4-The-Customer-Payments.html': function(){ var n = (typeof depositAnswers !== 'undefined') ? Object.keys(depositAnswers).length : 0; return { at: n, total: (Array.isArray(window.deposits) ? deposits.length : 1) }; },
+  // 13-5: sort (1) → MCQ answered (2)  — the sort is ONE stage
+  '13-5-The-Credit-Card-Statement.html': function(){ return { at: (typeof cardMCQSubmitted !== 'undefined' && cardMCQSubmitted) ? 2 : 1, total: 2 }; },
+  // 15-3: candidates answered / total
+  '15-3-The-Entity.html': function(){ var n = (typeof submitted !== 'undefined') ? Object.keys(submitted).length : 0; return { at: n, total: (Array.isArray(window.CANDIDATES) ? CANDIDATES.length : 1) }; },
+  // 22-4: sort the cards (1) → figure (2) → done (3)  — the sort is ONE stage
+  '22-4-whatChanged.html': function(){ var mi = Array.isArray(window.movedItems) ? window.movedItems : []; var allPlaced = mi.length > 0 && typeof placed !== 'undefined' && mi.every(function(m){ return placed[m.id] !== undefined; }); var fs = (typeof figStage !== 'undefined') ? figStage : 0; return { at: allPlaced ? (fs >= 2 ? 3 : 2) : 1, total: 3 }; },
+  // 24-5: fill the schedule (1) → signing (2) → both signed / done (3)  — the fill is ONE stage
+  '24-5-schedule-a.html': function(){ var allEnt = (typeof allEntered === 'function') ? allEntered() : false; var both = (typeof signedCompany !== 'undefined' && signedCompany) && (typeof signedMember !== 'undefined' && signedMember); return { at: allEnt ? (both ? 3 : 2) : 1, total: 3 }; }
+};
+
+(function(){
+  function run(){
+    var f = location.pathname.split('/').pop() || '';
+    if (typeof courseTutorialOf === 'function' && courseTutorialOf(f) < 0) return;   // not a tracked lesson page
+    var cond = (typeof COURSE_DONE !== 'undefined') ? COURSE_DONE[f] : null;
+    if (!cond) { courseMarkComplete(f); return; }              // reading page → complete on visit
+    if (coursePageDone(f)) { courseRenderBar(f); return; }     // finished on a previous visit → full bar
+    courseRenderBar(f);                                        // initial bar (empty / first step)
+    var t = setInterval(function(){
+      courseRenderBar(f);                                      // keep a multi-step bar current as the student works
+      var done = false; try { done = !!cond(); } catch(e){ done = false; }
+      if (done) { clearInterval(t); courseMarkComplete(f); }
+    }, 300);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
+  else run();
+})();
+
 
 /* ============================================================================
  * COURSE_GLOSSARY (added 2026-07-15): every term from every module, in one
