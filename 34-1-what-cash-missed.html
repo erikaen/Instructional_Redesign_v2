@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Cash Missed</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    .bridge-list { list-style:none; margin:12px 0 0; padding:0; }
+    .bridge-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:18px; align-items:baseline; padding:9px 2px; border-bottom:1px solid rgba(128,128,128,.22); }
+    .bridge-row:last-child { border-bottom:0; }
+    .bridge-row strong { font-family:"JetBrains Mono",monospace; white-space:nowrap; }
+    .bridge-total { margin-top:4px; padding-top:12px; border-top:2px solid currentColor; font-weight:800; }
+    .bridge-check { margin:10px 0 0; font-family:"JetBrains Mono",monospace; font-size:.9rem; }
+    .tab-cue { margin-top:10px; padding:10px 12px; border-left:3px solid #6f42c1; background:rgba(111,66,193,.08); }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>What Cash Missed</h1>
+        <p class="tut-header-sub">The Season in Cash &middot; ~10 min &middot; Page 1 of 2</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">What Cash Missed</div>
+
+    <div class="narrative-block">
+      <p>The Income Statement is finished. The shop generated <strong>$2,640</strong> of net income from June 1 through August 31. One question remains: what happened to Cash over those same dates?</p>
+    </div>
+
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet" id="workbookSheetLabel">Income Statement</div>
+      </div>
+      <div class="wb-grid-wrap"><div id="workbookGrid"></div></div>
+      <div class="xlwb-tabs" id="workbookTabs" aria-label="Workbook tabs"></div>
+    </div>
+
+    <div id="anna"></div>
+    <div id="bridge"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+var LEDGER_WORKBOOK_KEY='bike-repair-module-3-3';
+var STATEMENT_WORKBOOK_KEY='income-statement-steps';
+var activeTab='Statement', assetsVisited=false, walkStep=0, mountSerial=0;
+var NET_INCOME=2640, CASH_CHANGE=-680;
+
+function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
+function normalizeCapital(sheet){
+  (sheet.cells||[]).forEach(function(cell){
+    if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['’] Capital/g,"Member's Capital");
+  });
+  return sheet;
+}
+function ledgerSheet(namePart){
+  var sheets=BR_STMT_DATA.workbooks[LEDGER_WORKBOOK_KEY].sheets;
+  for(var i=0;i<sheets.length;i++){
+    if(sheets[i].name.indexOf(namePart)>=0) return normalizeCapital(cloneSheet(sheets[i]));
+  }
+  return null;
+}
+function statementSheet(){
+  var sheets=BR_STMT_DATA.workbooks[STATEMENT_WORKBOOK_KEY].sheets;
+  for(var i=0;i<sheets.length;i++){
+    if(sheets[i].name==='5 · Format statement') return cloneSheet(sheets[i]);
+  }
+  return null;
+}
+
+/* The extracted Balance Sheet keeps display amounts in column C. Re-home
+   those cells to the amount-formatted column on a page-local copy. */
+function balanceSheetView(){
+  var sheet=ledgerSheet('Balance Sheet');
+  (sheet.cells||[]).forEach(function(cell){ if(cell.c===3) cell.c=4; });
+  if(sheet.cols&&sheet.cols[3]&&sheet.cols[2]) sheet.cols[3].width=sheet.cols[2].width;
+  return sheet;
+}
+
+function setWorkbookChrome(name){
+  var tabs=[
+    {key:'Assets',label:'Assets'},
+    {key:'Liabilities',label:'Liabilities'},
+    {key:'Reasons',label:'Reasons'},
+    {key:'Balance Sheet',label:'Balance Sheet'},
+    {key:'Statement',label:'Income Statement'}
+  ];
+  document.getElementById('workbookTabs').innerHTML=tabs.map(function(tab){
+    var active=tab.key===name;
+    return '<button class="xlwb-tab'+(tab.key==='Statement'?' tk-stmt':'')+(active?' active':'')+'" type="button" data-workbook-tab="'+tab.key+'"'
+      +(active?' aria-current="page"':'')+' onclick="showWorkbookTab(\''+tab.key+'\')">'+tab.label+'</button>';
+  }).join('');
+  document.getElementById('workbookSheetLabel').textContent=name==='Statement'?'Income Statement':name;
+}
+
+function showWorkbookTab(name){
+  playClick();
+  activeTab=name;
+  var container=document.getElementById('workbookGrid');
+  var gridId='what-cash-missed-'+name.toLowerCase().replace(/[^a-z]+/g,'-')+'-'+(++mountSerial);
+  if(name==='Statement'){
+    container.innerHTML='<div class="brw-step-strip"><div class="brw-step is-active" aria-current="step" data-step-order="5">Format statement</div></div>';
+    var grid=document.createElement('div');
+    grid.id='statementGrid'+mountSerial;
+    container.appendChild(grid);
+    BRW.mountGrid(grid.id,statementSheet(),{gridId:gridId});
+  } else {
+    var sheet=name==='Balance Sheet'?balanceSheetView():ledgerSheet(name);
+    BRW.mountGrid('workbookGrid',sheet,{gridId:gridId});
+  }
+  BRW.markDatedRows('workbookGrid');
+  setWorkbookChrome(name);
+  if(name==='Assets'&&!assetsVisited){
+    assetsVisited=true;
+    renderTalk();
+  }
+  if(window.lucide) lucide.createIcons();
+}
+
+var STEPS=[
+  {
+    label:'New repair tool', amount:-400,
+    talk:'First, the <strong>$400 repair tool</strong>. Cash went out, but no expense was recorded. The tool is a lasting thing, so its amount now sits in <strong>Tools &amp; Repair Equipment</strong>.',
+    where:'On the <strong>Assets</strong> tab, expand <strong>Tools &amp; Repair Equipment</strong> to see the new tool row.',
+    button:'Account for the tool'
+  },
+  {
+    label:'Owner\'s draw', amount:-600,
+    talk:'Next, the <strong>$600 owner&rsquo;s draw</strong>. Money was taken out for personal use. That is written in <strong>WITHDRAWN</strong>, never as an expense.',
+    where:'The <strong>Reasons</strong> tab shows the owner&rsquo;s draw in the WITHDRAWN section.',
+    button:'Account for the draw'
+  },
+  {
+    label:'Credit card paid off', amount:-2030,
+    talk:'Then the <strong>$2,030 bike-repair card payoff</strong>. Cash settled what was already owed from June 1. Paying it made the liability zero; it did not create a new expense.',
+    where:'Click <strong>Liabilities</strong>, then expand <strong>Credit Card</strong>: the dated balance moves from $2,030 to $0.',
+    button:'Account for the payoff'
+  },
+  {
+    label:'Ridgeline billed, unpaid', amount:-300,
+    talk:'Ridgeline&rsquo;s <strong>$300</strong> counted as income when the repair was delivered, but no cash came this season. The unpaid bill sits in <strong>Accounts Receivable</strong>.',
+    where:'On the <strong>Assets</strong> tab, expand <strong>Accounts Receivable</strong> to see Ridgeline&rsquo;s unpaid repair.',
+    button:'Account for Ridgeline'
+  },
+  {
+    label:'Smith deposit from last season', amount:-220,
+    talk:'Smith&rsquo;s <strong>$220 frame</strong> counted as income when the finished work went out the door this season. Its cash arrived last season as a deposit, so no cash came with this season&rsquo;s delivery.',
+    where:'The <strong>Liabilities</strong> tab shows Smith&rsquo;s advance at June 1 and the amount no longer owed after delivery.',
+    button:'Account for Smith'
+  },
+  {
+    label:'Depreciation', amount:230,
+    talk:'Finally, <strong>$230 of depreciation</strong>. Wear was recorded as an expense, but no cash went out. For the bridge, that $230 comes back.',
+    where:'The <strong>Reasons</strong> tab shows the three handwritten depreciation rows; the Income Statement folds them into one $230 line.',
+    button:'Account for depreciation'
+  }
+];
+
+function bridgeValue(count){
+  var value=NET_INCOME;
+  for(var i=0;i<count;i++) value+=STEPS[i].amount;
+  return value;
+}
+function signedDollar(amount){
+  return (amount<0?'&minus;':'+')+' '+BRW.dol(Math.abs(amount));
+}
+function renderBridge(){
+  if(!assetsVisited){ document.getElementById('bridge').innerHTML=''; return; }
+  var rows='<li class="bridge-row"><span>Net income generated</span><strong>'+BRW.dol(NET_INCOME)+'</strong></li>';
+  for(var i=0;i<walkStep;i++){
+    rows+='<li class="bridge-row"><span>'+STEPS[i].label+'</span><strong>'+signedDollar(STEPS[i].amount)+'</strong></li>';
+  }
+  if(walkStep===STEPS.length){
+    rows+='<li class="bridge-row bridge-total"><span>Cash change</span><strong>&minus;'+BRW.dol(Math.abs(CASH_CHANGE))+'</strong></li>';
+  } else {
+    rows+='<li class="bridge-row bridge-total"><span>Running amount</span><strong>'+(bridgeValue(walkStep)<0?'&minus;':'')+BRW.dol(Math.abs(bridgeValue(walkStep)))+'</strong></li>';
+  }
+  var check=walkStep===STEPS.length
+    ?'<p class="bridge-check">$2,640 &minus; $400 &minus; $600 &minus; $2,030 &minus; $300 &minus; $220 + $230 = &minus;$680</p>'
+    :'';
+  document.getElementById('bridge').innerHTML=insightBox('The running bridge','<ul class="bridge-list">'+rows+'</ul>'+check);
+}
+
+function renderTalk(){
+  var anna='', controls='';
+  if(!assetsVisited){
+    anna=annaBox('The shop generated <strong>$2,640</strong>. Yet Cash starts at <strong>$1,300</strong> on June 1 and ends at <strong>$620</strong> on August 31. Click the <strong>Assets</strong> tab and find those dated Cash lines.');
+    controls='<div class="next-phase-msg">Open <strong>Assets</strong> above to compare Cash at the two dates.</div>';
+  } else if(walkStep<STEPS.length){
+    var step=STEPS[walkStep];
+    anna=annaBox(walkStep===0
+      ?'There it is: <strong>$1,300 &rarr; $620</strong>. Cash fell by <strong>$680</strong>. Start at net income and follow the reasons for the difference, one row at a time. '+step.talk
+      :step.talk);
+    controls='<div class="tab-cue">'+step.where+'</div>'
+      +'<button class="btn-continue btn-block" onclick="advanceWalk()">'+step.button+' &rarr;</button>';
+  } else {
+    anna=annaBox('The income statement tells what the season <strong>generated</strong>. The cash drawer tells what the season did to <strong>cash</strong>. Both are true, and the difference has reasons you can point to, row by row.');
+    controls=insightBox('The bridge closes exactly',
+      '<p>Net income of <strong>$2,640</strong> becomes a <strong>$680 decrease in Cash</strong> after the six reasons. Parts and rent need no bridge line: parts bought for $1,200 match parts used for $1,200, and rent paid for $1,950 matches rent used for $1,950.</p>')
+      +'<div class="next-phase-msg">A statement that walks this bridge properly is a story for later. For now, every dollar of the difference is visible in the records.</div>'
+      +'<button class="btn-continue btn-block" onclick="nav(\'34-2-module-complete.html\')">Finish the module &rarr;</button>';
+  }
+  document.getElementById('anna').innerHTML=anna;
+  document.getElementById('controls').innerHTML=controls;
+  renderBridge();
+  if(window.lucide) lucide.createIcons();
+}
+
+function advanceWalk(){
+  if(!assetsVisited||walkStep>=STEPS.length) return;
+  playClick();
+  walkStep++;
+  if(walkStep===STEPS.length) playSuccess();
+  renderTalk();
+  window.scrollTo(0,document.body.scrollHeight);
+}
+
+var glossaryTerms=[
+  {term:'Net income',def:'Revenue minus Expenses between the chosen dates. Here, $6,020 minus $3,380 equals $2,640.'},
+  {term:'Draw',def:'Money the owner takes out for personal use. A draw is written in WITHDRAWN, never as an expense.'},
+  {term:'Depreciation',def:'The recorded reduction for wear and obsolescence during the period. Here, $230 was recorded as an expense without cash going out.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){
+  assetsVisited=true;
+  walkStep=STEPS.length;
+  renderTalk();
+  window.scrollTo(0,document.body.scrollHeight);
+};
+showWorkbookTab('Statement');
+renderTalk();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

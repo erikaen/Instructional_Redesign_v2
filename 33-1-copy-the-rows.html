@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Copy the Rows</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+    .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+    .brw-row-copysel { outline:2px dashed var(--primary); outline-offset:-2px; }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Copy the Rows</h1>
+        <p class="tut-header-sub">Build the Statement &middot; ~10 min &middot; Page 1 of 3</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Build the Statement</div>
+
+    <div class="narrative-block">
+      <p>The records are complete. The Reasons tab is open to <strong>GENERATED</strong>, where the two dated lines mark the activity to study. The August 31 dated line reads <strong>2,810</strong>.</p>
+    </div>
+
+    <div id="anna"></div>
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Reasons &middot; GENERATED</div>
+      </div>
+      <div class="wb-grid-wrap" id="wbGridWrap"><div id="wbGrid"></div></div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab" type="button" data-sheet-tab="assets">Assets</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="liabilities">Liabilities</button>
+        <button class="xlwb-tab active" type="button" data-sheet-tab="reasons" aria-current="page">Reasons</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="balance">Balance Sheet</button>
+        <button class="xlwb-tab tk-temp" type="button" data-sheet-tab="working" hidden>Working Tab</button>
+      </div>
+    </div>
+    <div id="controls"></div>
+    <div id="afterPaste"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+document.getElementById('anna').innerHTML=annaBox(
+  'The records are finally worth sorting. Let&rsquo;s set up a working sheet and copy the season&rsquo;s rows into it: everything in <strong>GENERATED</strong> between the two dated lines. Those <strong>46 rows</strong> are the season&rsquo;s story.'
+);
+
+/* ===== extracted workbook views ===== */
+function sheetOf(workbookKey,name){
+  var sheets=BR_STMT_DATA.workbooks[workbookKey].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
+function normalizedSheet(workbookKey,name){
+  var sheet=cloneSheet(sheetOf(workbookKey,name));
+  sheet.cells.forEach(function(cell){
+    if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['’] Capital/g,"Member's Capital");
+  });
+  return sheet;
+}
+
+function rowsOutsideSection(sheet,sectionName){
+  var headers=(sheet.cells||[]).filter(function(cell){
+    return cell.c===2 && cell.bold && /^(CONTRIBUTED|GENERATED|WITHDRAWN)$/.test(String(cell.value||''));
+  }).sort(function(a,b){ return a.r-b.r; });
+  var maxRow=(sheet.cells||[]).reduce(function(max,cell){ return Math.max(max,cell.r||0); },0);
+  var rows=[];
+  for(var i=0;i<headers.length;i++){
+    if(String(headers[i].value)===sectionName) continue;
+    var end=i+1<headers.length ? headers[i+1].r-1 : maxRow;
+    for(var row=headers[i].r;row<=end;row++) rows.push(row);
+  }
+  return rows;
+}
+
+/* The authored June 1 Balance Sheet keeps its amounts in column C; the grid
+   renderer styles its amount column in D. Move those cells in a display clone. */
+function snapshotBalanceSheetView(workbookKey){
+  var sheet=normalizedSheet(workbookKey,'Balance Sheet');
+  sheet.cells.forEach(function(cell){ if(cell.c===3) cell.c=4; });
+  if(sheet.cols && sheet.cols[3] && sheet.cols[2]) sheet.cols[3].width=sheet.cols[2].width;
+  return sheet;
+}
+
+var gridSeq=0;
+function mountOne(containerId,sheet,hiddenRows){
+  BRW.mountGrid(containerId,sheet,{gridId:'wb33-1-copy-'+(++gridSeq),hiddenRows:hiddenRows||[]});
+  BRW.markDatedRows(containerId);
+}
+function expandGroup(containerId,groupId){
+  var container=document.getElementById(containerId);
+  if(!container) return;
+  var toggles=container.getElementsByClassName('brw-og-toggle');
+  var rows=container.getElementsByClassName('brw-og-row');
+  for(var i=0;i<toggles.length;i++){
+    if(toggles[i].getAttribute('data-brw-group')===groupId){
+      toggles[i].setAttribute('aria-expanded','true');
+      toggles[i].textContent='−';
+    }
+  }
+  for(var j=0;j<rows.length;j++){
+    if(rows[j].getAttribute('data-brw-group')===groupId) rows[j].classList.remove('is-collapsed');
+  }
+}
+function expandVisibleGroups(containerId){
+  var container=document.getElementById(containerId);
+  if(!container) return;
+  var toggles=container.getElementsByClassName('brw-og-toggle');
+  for(var i=0;i<toggles.length;i++) expandGroup(containerId,toggles[i].getAttribute('data-brw-group'));
+}
+
+var selected=false, pasted=false, currentSheet='reasons';
+function ledgerKey(){ return pasted?'bike-repair-module-3-3':'bike-repair-module-3-2b'; }
+function generatedSeasonBounds(sheet){
+  var generatedRow=0,withdrawnRow=sheet.rows.length+1;
+  sheet.cells.forEach(function(cell){
+    if(cell.c!==2) return;
+    if(cell.value==='GENERATED') generatedRow=cell.r;
+    if(cell.value==='WITHDRAWN') withdrawnRow=cell.r;
+  });
+  var bounds={start:0,end:0};
+  sheet.cells.forEach(function(cell){
+    if(cell.c!==2 || cell.r<=generatedRow || cell.r>=withdrawnRow) return;
+    if(cell.value==='Balance, June 1, 2026') bounds.start=cell.r;
+    if(cell.value==='Balance, August 31, 2026') bounds.end=cell.r;
+  });
+  return bounds;
+}
+function setActiveTab(name){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+    var active=tab.getAttribute('data-sheet-tab')===name;
+    tab.classList.toggle('active',active);
+    if(active) tab.setAttribute('aria-current','page'); else tab.removeAttribute('aria-current');
+  });
+}
+function highlightSeasonRows(){
+  if(!selected || currentSheet!=='reasons') return;
+  var bounds=generatedSeasonBounds(normalizedSheet(ledgerKey(),'Reasons'));
+  for(var row=bounds.start+1;row<bounds.end;row++){
+    var el=document.querySelector('#wbGrid [data-brw-row="'+row+'"]');
+    if(el) el.classList.add('brw-row-copysel');
+  }
+}
+function paint(name){
+  var wrap=document.getElementById('wbGridWrap');
+  var key=ledgerKey();
+  wrap.classList.remove('bs-centered');
+  if(name==='assets'){
+    mountOne('wbGrid',normalizedSheet(key,'Assets'));
+    document.getElementById('sheetLabel').textContent='Assets';
+  } else if(name==='liabilities'){
+    mountOne('wbGrid',normalizedSheet(key,'Liabilities'));
+    document.getElementById('sheetLabel').textContent='Liabilities';
+  } else if(name==='reasons'){
+    var reasons=normalizedSheet(key,'Reasons');
+    mountOne('wbGrid',reasons,[1].concat(rowsOutsideSection(reasons,'GENERATED')));
+    expandVisibleGroups('wbGrid');
+    document.getElementById('sheetLabel').textContent='Reasons · GENERATED';
+  } else if(name==='balance'){
+    wrap.classList.add('bs-centered');
+    mountOne('wbGrid',snapshotBalanceSheetView(key));
+    document.getElementById('sheetLabel').textContent='Balance Sheet · June 1, 2026';
+  } else if(name==='working' && pasted){
+    mountOne('wbGrid',sheetOf('bike-repair-module-3-3','Working Tab'));
+    document.getElementById('sheetLabel').textContent='Working Tab';
+  } else {
+    return;
+  }
+  currentSheet=name;
+  setActiveTab(name);
+  if(name==='reasons') highlightSeasonRows();
+}
+
+Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+  tab.addEventListener('click',function(){ playClick(); paint(tab.getAttribute('data-sheet-tab')); });
+});
+
+function renderControls(){
+  var action=selected
+    ? '<button class="btn-continue btn-block" onclick="pasteSeasonRows()">Paste these rows into a working sheet &rarr;</button>'
+    : '<button class="btn-continue btn-block" onclick="selectSeasonRows()">Copy the season&rsquo;s rows</button>';
+  document.getElementById('controls').innerHTML=insightBox('The season&rsquo;s rows',
+    '<p>Copy every row after <strong>Balance, June 1, 2026</strong> and before <strong>Balance, August 31, 2026</strong> &mdash; <strong>46 rows</strong> in all.</p>')+action;
+  if(window.lucide) lucide.createIcons();
+}
+function selectSeasonRows(){
+  if(selected || pasted) return;
+  if(currentSheet!=='reasons') paint('reasons');
+  selected=true;
+  highlightSeasonRows();
+  playClick();
+  renderControls();
+}
+function pasteSeasonRows(){
+  if(pasted || !selected) return;
+  pasted=true;
+  playClick();
+  playSuccess();
+  document.getElementById('controls').innerHTML='';
+  document.querySelector('[data-sheet-tab="working"]').hidden=false;
+  paint('working');
+  document.getElementById('afterPaste').innerHTML=annaBox(
+    'Every row here is a copy of a ledger row. The ledger stays where it is; this sheet is where the sorting will happen.'
+  )+'<button class="btn-continue btn-block" onclick="nav(\'33-2-sort-the-rows.html\')">Sort the rows &rarr;</button>';
+  if(window.lucide) lucide.createIcons();
+  document.getElementById('workbookShell').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Working Tab', def:'A temporary working sheet. The statement is built on it, and the tab is renamed when the statement is finished.' },
+  { term:'GENERATED', def:'The part of the Reasons tab for reasons created as the shop operates.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== init ===== */
+window.devFill=function(){
+  if(!selected) selectSeasonRows();
+  if(!pasted) pasteSeasonRows();
+};
+paint('reasons');
+renderControls();
+if(window.lucide) lucide.createIcons();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

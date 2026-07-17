@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Check the Records</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+    .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Check the Records</h1>
+        <p class="tut-header-sub">Complete the Records &middot; ~10 min &middot; Page 1 of 3</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Check the Finished Work</div>
+
+    <div class="narrative-block">
+      <p>Anna asked how the shop did this season. The raw material for that answer sits in the <strong>GENERATED</strong> section of the Reasons tab.</p>
+      <p>The expanded group ends at the August 31 dated line, which reads <strong>2,740</strong>. Before using those rows, check them against the work actually done. Every finished job in the <strong>job log</strong> should have a <strong>Repair collected/delivered</strong> row.</p>
+    </div>
+
+    <div id="anna"></div>
+
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Reasons &middot; GENERATED</div>
+      </div>
+      <div class="wb-grid-wrap" id="wbGridWrap"><div id="wbGrid"></div></div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab" type="button" data-sheet-tab="assets">Assets</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="liabilities">Liabilities</button>
+        <button class="xlwb-tab active" type="button" data-sheet-tab="reasons" aria-current="page">Reasons</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="balance">Balance Sheet</button>
+      </div>
+    </div>
+
+    <button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every finished job this summer</button>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Job-log modal ===== -->
+<div class="glossary-overlay" id="ticketOverlay" onclick="if(event.target===this) closeTicket()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="receipt" class="licon"></i> <span id="ticketTitle">Job log &middot; June&ndash;August 2026</span></div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeTicket()">&times;</button>
+    </div>
+    <div class="glossary-list" id="ticketBody"></div>
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+/* ===== numbers from the job log ===== */
+var allCharges=BR_JOBS.reduce(function(sum,job){ return sum+job.charge; },0);
+var ridge=BR_JOBS.filter(function(job){ return job.collected===false; })[0];
+var deliveredRows=BR_JOBS.filter(function(job){ return job.collected; }).length;
+var totalJobs=BR_JOBS.length;
+
+/* ===== authored workbook snapshot ===== */
+function m31SheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-module-3-1'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
+
+/* The extracted workbook may carry an older plural label. Keep every rendered
+   student-facing label aligned with the LLC agreement's singular wording. */
+(function singularMemberCapital(){
+  var books=BR_STMT_DATA.workbooks;
+  Object.keys(books).forEach(function(key){
+    books[key].sheets.forEach(function(sheet){
+      sheet.cells.forEach(function(cell){
+        if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['’] Capital/g,"Member's Capital");
+      });
+    });
+  });
+})();
+
+var M31_ASSETS=m31SheetOf('Assets');
+var M31_LIABILITIES=m31SheetOf('Liabilities');
+var M31_REASONS=m31SheetOf('Reasons');
+var M31_BALANCE_SHEET=m31SheetOf('Balance Sheet');
+var gridSeq=0;
+var currentSheet='reasons';
+
+/* Rick's authored Balance Sheet keeps its amounts in column C; the grid
+   renderer's amount treatment is tied to column D. Re-home C into D for display. */
+function snapshotBalanceSheetView(){
+  var sheet=cloneSheet(M31_BALANCE_SHEET);
+  sheet.cells.forEach(function(cell){ if(cell.c===3) cell.c=4; });
+  if(sheet.cols && sheet.cols[3] && sheet.cols[2]) sheet.cols[3].width=sheet.cols[2].width;
+  return sheet;
+}
+function mountOne(sheet){
+  BRW.mountGrid('wbGrid',sheet,{gridId:'wb32-1-check-'+(++gridSeq)});
+  BRW.markDatedRows('wbGrid');
+}
+function setActiveTab(name){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+    var active=tab.getAttribute('data-sheet-tab')===name;
+    tab.classList.toggle('active',active);
+    if(active) tab.setAttribute('aria-current','page');
+    else tab.removeAttribute('aria-current');
+  });
+}
+function generatedAugustRow(){
+  var generatedRow=0, withdrawnRow=M31_REASONS.rows.length+1, augustRow=0;
+  M31_REASONS.cells.forEach(function(cell){
+    if(cell.c!==2) return;
+    if(cell.value==='GENERATED') generatedRow=cell.r;
+    if(generatedRow && cell.r>generatedRow && cell.value==='WITHDRAWN') withdrawnRow=Math.min(withdrawnRow,cell.r);
+  });
+  M31_REASONS.cells.forEach(function(cell){
+    if(cell.c===2 && cell.r>generatedRow && cell.r<withdrawnRow && cell.value==='Balance, August 31, 2026') augustRow=cell.r;
+  });
+  return augustRow;
+}
+function expandGenerated(){
+  var row=generatedAugustRow();
+  var toggle=document.querySelector('#wbGrid [data-brw-row="'+row+'"] .brw-og-toggle');
+  if(!toggle) return;
+  toggle.setAttribute('aria-expanded','true');
+  toggle.textContent='−';
+  var group=toggle.getAttribute('data-brw-group');
+  Array.prototype.forEach.call(document.querySelectorAll('#wbGrid .brw-og-row[data-brw-group="'+group+'"]'),function(detail){
+    detail.classList.remove('is-collapsed');
+  });
+}
+function paint(name){
+  var wrap=document.getElementById('wbGridWrap');
+  wrap.classList.remove('bs-centered');
+  if(name==='assets'){
+    mountOne(M31_ASSETS);
+    document.getElementById('sheetLabel').textContent='Assets';
+  } else if(name==='liabilities'){
+    mountOne(M31_LIABILITIES);
+    document.getElementById('sheetLabel').textContent='Liabilities';
+  } else if(name==='reasons'){
+    mountOne(M31_REASONS);
+    document.getElementById('sheetLabel').textContent='Reasons · GENERATED';
+    expandGenerated();
+  } else if(name==='balance'){
+    wrap.classList.add('bs-centered');
+    mountOne(snapshotBalanceSheetView());
+    document.getElementById('sheetLabel').textContent='Balance Sheet · June 1, 2026';
+  }
+  currentSheet=name;
+  setActiveTab(name);
+}
+Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+  tab.addEventListener('click',function(){ playClick(); paint(tab.getAttribute('data-sheet-tab')); });
+});
+
+/* ===== guided discovery ===== */
+var step=0;
+function renderTalk(){
+  var anna='',controls='';
+  if(step===0){
+    anna=annaBox('The <strong>GENERATED</strong> rows are the raw material for answering how the shop did. But check them against the work first. Open the job log and compare its <strong>'+totalJobs+'</strong> finished jobs with the <strong>'+deliveredRows+'</strong> <strong>Repair collected/delivered</strong> rows here. Find the finished job with no delivery row.');
+    controls='<div class="next-phase-msg">Open the job log, then compare each finished job with the expanded GENERATED rows.</div>'
+      +'<button class="btn-continue btn-block" onclick="setStep(1)">I found it &mdash; Ridgeline Trail Crew &rarr;</button>';
+  } else {
+    anna=annaBox('There it is &mdash; <strong>'+ridge.customer+'</strong>, '+ridge.date+'. The log shows the job as finished but unpaid: '+ridge.hours+' hours, <strong>'+BRW.dol(ridge.partsCost)+'</strong> of parts off the shelf, and <strong>'+BRW.dol(ridge.charge)+'</strong> billed net 15. The ledger already carries <strong>Parts used &mdash; Ridgeline Trail Crew</strong> in GENERATED &mdash; the parts left the shelf on that job, so the using-up is recorded. Only the <strong>Repair collected/delivered</strong> row is missing.');
+    controls=insightBox('It counts when the work is delivered, not when the cash comes',
+      '<p>A delivery row never meant &ldquo;cash arrived&rdquo; &mdash; it records the work going out the door, and Ridgeline&rsquo;s did, on Aug 28. The row belongs in GENERATED now; the cash follows on its own schedule.</p>')
+      +'<button class="btn-continue btn-block" onclick="nav(\'32-2-record-the-receivable.html\')">Record what Ridgeline owes &rarr;</button>';
+  }
+  document.getElementById('anna').innerHTML=anna;
+  document.getElementById('controls').innerHTML=controls;
+  if(window.lucide) lucide.createIcons();
+}
+function setStep(next){
+  if(next<=step) return;
+  playClick(); playSuccess(); step=next; renderTalk();
+  window.scrollTo(0,document.body.scrollHeight);
+}
+
+/* ===== job log ===== */
+function payTag(job){
+  if(job.collected && job.pay.indexOf('account')>=0) return '<span class="stmt-tag repair">on account &middot; collected</span>';
+  if(!job.collected) return '<span class="stmt-tag personal">on account &middot; outstanding</span>';
+  if(job.pay.indexOf('Deposit')>=0) return '<span class="stmt-tag personal">deposit applied</span>';
+  return '<span class="stmt-tag repair">paid</span>';
+}
+function openJobLog(){
+  playClick();
+  document.getElementById('ticketTitle').innerHTML='Job log &middot; June&ndash;August 2026';
+  var charged=0,parts=0,hours=0;
+  var rows=BR_JOBS.map(function(job){
+    charged+=job.charge; parts+=job.partsCost; hours+=job.hours;
+    return '<div class="glossary-entry"><div class="glossary-entry-term" style="font-size:var(--font-s)">'+job.date+' &middot; '+job.work+' '+payTag(job)+'</div>'
+      +'<div class="glossary-entry-def"><span class="mono">'+job.id+'</span> &middot; '+job.customer+' &middot; '+job.hours+' hrs &middot; parts used $'+job.partsCost.toLocaleString('en-US')+' &middot; charged <strong>$'+job.charge.toLocaleString('en-US')+'</strong></div></div>';
+  }).join('');
+  rows+='<div class="glossary-entry"><div class="glossary-entry-def"><strong>'+totalJobs+' jobs</strong> &middot; '+hours+' hrs of labor &middot; charged $'+allCharges.toLocaleString('en-US')+' &middot; parts used $'+parts.toLocaleString('en-US')+'</div></div>';
+  document.getElementById('ticketBody').innerHTML=rows;
+  document.getElementById('ticketOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeTicket(){ document.getElementById('ticketOverlay').classList.remove('open'); }
+
+/* ===== glossary / navigation ===== */
+var glossaryTerms=[
+  {term:'On account',def:'Billed, to be paid later (here, net 15 &mdash; within 15 days). The work is done, so the delivery counts now; the cash follows on its own schedule.'},
+  {term:'Job log',def:'The shop&rsquo;s list of finished repair jobs, including the customer, completion date, hours, parts used, charge, and payment status.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape'){ closeGlossary(); closeTicket(); } });
+
+/* ===== init ===== */
+window.devFill=function(){ if(step<1) setStep(1); };
+paint('reasons');
+renderTalk();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>
