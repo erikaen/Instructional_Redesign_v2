@@ -29,24 +29,16 @@
     <div class="phase-title" id="phaseTitle">The Cash Flow Statement</div>
 
     <div class="narrative-block">
-      <p>The workbook opens directly on the completed <strong>Cash Flow Statement</strong>. The copied rows have been grouped, totaled, and formatted on the tab where they began.</p>
+      <p>The sorted <strong>Working Tab</strong> is ready. The copied rows are grouped and totaled; format the result, then give the finished statement its permanent name.</p>
     </div>
 
     <div class="xlwb" id="workbookShell">
       <div class="xlwb-bar">
         <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet">Cash Flow Statement</div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Working Tab</div>
       </div>
       <div class="wb-grid-wrap"><div id="cashFlowGrid"></div></div>
-      <div class="xlwb-tabs" aria-label="Workbook tabs">
-        <button class="xlwb-tab" type="button" aria-disabled="true">Assets</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Reasons</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Income Statement</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Member&rsquo;s Capital</button>
-        <button class="xlwb-tab active" type="button" aria-current="page">Cash Flow Statement</button>
-      </div>
+      <div class="xlwb-tabs" id="workbookTabs" aria-label="Workbook tabs"></div>
     </div>
 
     <div id="anna"></div>
@@ -85,9 +77,49 @@ function sheetOf(workbookKey,namePart){
   return null;
 }
 
-document.getElementById('anna').innerHTML=annaBox('Operating activities provided <strong>$2,350</strong>. Investing used <strong>$400</strong>. Financing used <strong>$2,630</strong>. Together they changed Cash by <strong>&minus;$680</strong>, taking the June 1 balance of <strong>$1,300</strong> to the August 31 balance of <strong>$620</strong>.');
-document.getElementById('controls').innerHTML=insightBox('The ending cash ties twice','<p>The statement&rsquo;s <strong>Cash, August 31: $620</strong> matches the <strong>Balance, August 31</strong> line in the Cash account on Assets and the <strong>Cash $620</strong> line on the Balance Sheet.</p><p>The workbook now has <strong>seven tabs</strong>. Four are statement tabs: <strong>Balance Sheet</strong>, <strong>Income Statement</strong>, <strong>Statement of Member&rsquo;s Capital</strong>, and <strong>Cash Flow Statement</strong>. Assets, Liabilities, and Reasons remain as the three source-record tabs.</p>')
-  +'<div class="btn-row"><button class="btn btn-secondary" type="button" onclick="nav(\'44-2-Three-Buckets.html\')">&larr; Sort the Cash Flows</button><button class="btn-continue" type="button" onclick="nav(\'45-1-What-Cash-Missed.html\')">Reconcile profit and operating cash &rarr;</button></div>';
+var completed=false;
+function setWorkbookChrome(){
+  var tabs=[
+    {key:'Assets',label:'Assets'},
+    {key:'Liabilities',label:'Liabilities'},
+    {key:'Reasons',label:'Reasons'},
+    {key:'Balance Sheet',label:'Balance Sheet'},
+    {key:'Income Statement',label:'Income Statement'},
+    {key:'Statement of Member Capital',label:"Statement of Member's Capital"},
+    {key:'cashFlow',label:completed?'Cash Flow Statement':'Working Tab'}
+  ];
+  document.getElementById('workbookTabs').innerHTML=tabs.map(function(tab){
+    var active=tab.key==='cashFlow';
+    var kind=active?(completed?' tk-stmt':' tk-temp'):'';
+    return '<button class="xlwb-tab'+kind+(active?' active':'')+'" type="button"'
+      +(active?' aria-current="page"':' aria-disabled="true"')+'>'+tab.label+'</button>';
+  }).join('');
+}
+function expandAllGroups(){
+  Array.prototype.forEach.call(document.querySelectorAll('#cashFlowGrid .brw-og-toggle'),function(toggle){
+    toggle.setAttribute('aria-expanded','true');
+    toggle.textContent='−';
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('#cashFlowGrid .brw-og-row'),function(row){
+    row.classList.remove('is-collapsed');
+  });
+}
+function christenStatement(){
+  if(completed) return;
+  completed=true;
+  document.getElementById('sheetLabel').textContent='Cash Flow Statement';
+  setWorkbookChrome();
+  expandAllGroups();
+  document.getElementById('anna').innerHTML=annaBox('Operating activities provided <strong>$2,350</strong>. Investing used <strong>$400</strong>. Financing used <strong>$2,630</strong>. Together they changed Cash by <strong>&minus;$680</strong>, taking the June 1 balance of <strong>$1,300</strong> to the August 31 balance of <strong>$620</strong>.');
+  document.getElementById('controls').innerHTML=insightBox('The ending cash ties twice','<p><strong>Cash, August 31: $620</strong> matches both the <strong>Balance, August 31</strong> line in the Cash account on Assets and <strong>Cash $620</strong> on the Balance Sheet.</p><p>The workbook now has <strong>seven tabs</strong>: Assets, Liabilities, and Reasons are the three source-record tabs; Balance Sheet, Income Statement, Statement of Member&rsquo;s Capital, and Cash Flow Statement are the four statement tabs.</p>')
+    +annaBox('Freddie called it <strong>&ldquo;same shop, two clocks.&rdquo;</strong> He had it right. Net income was <strong>$2,640</strong>; operating cash was <strong>$2,350</strong>. Now those two honest answers can be compared cleanly: the big non-operating cash move &mdash; the <strong>$2,030 credit-card payoff</strong> &mdash; sits under <strong>Financing</strong>, not between net income and operating cash. The <strong>$290</strong> that remains is only the timing items you already bridged in Module 3: the Ridgeline receivable, the Smith deposit, and depreciation added back.')
+    +'<div class="btn-row"><button class="btn btn-secondary" type="button" onclick="nav(\'44-2-Three-Buckets.html\')">&larr; Sort the Cash Flows</button><button class="btn-continue" type="button" onclick="nav(\'46-1-The-Statements-Tie-Out.html\')">Tie the statements together &rarr;</button></div>';
+  if(window.lucide) lucide.createIcons();
+}
+
+document.getElementById('anna').innerHTML=annaBox('The grouped working view is finished. Format the rows, then christen the amber Working Tab as the fourth statement tab.');
+document.getElementById('controls').innerHTML='<button class="btn-continue btn-block" type="button" onclick="christenStatement()">Christen it the Cash Flow Statement &rarr;</button>'
+  +'<div class="btn-row"><button class="btn btn-secondary" type="button" onclick="nav(\'44-2-Three-Buckets.html\')">&larr; Sort the Cash Flows</button></div>';
 
 var glossaryTerms=[
   {term:'Cash Flow Statement',def:'A statement that groups cash flows into Operating, Investing, and Financing activities and reconciles the period&rsquo;s net change to ending Cash.'},
@@ -100,8 +132,10 @@ function nav(url){ playClick(); window.location.href=url; }
 function restart(){ window.location.reload(); }
 document.addEventListener('keydown',function(event){ if(event.key==='Escape')closeGlossary(); });
 
-window.devFill=function(){};
+window.devFill=function(){ christenStatement(); expandAllGroups(); };
 BRW.mountGrid('cashFlowGrid',sheetOf('cash-flow-steps','3 '),{gridId:'cash-flow-final-grid'});
+expandAllGroups();
+setWorkbookChrome();
 if(window.lucide) lucide.createIcons();
 </script>
 <script src="dev.js"></script>

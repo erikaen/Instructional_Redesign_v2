@@ -30,24 +30,20 @@
     <div class="phase-title" id="phaseTitle">Sort the Cash Flows</div>
 
     <div class="narrative-block">
-      <p>Start with a working copy of the Cash account&rsquo;s season rows while the original rows remain on <strong>Assets</strong>. The completed work will become the <strong>Cash Flow Statement</strong> on the next page.</p>
+      <p>Start with the Cash account&rsquo;s season slice on <strong>Assets</strong>: the rows between <strong>Balance, June 1</strong> and <strong>Balance, August 31</strong>. Copy that slice to a temporary sheet; the original rows stay where they are.</p>
     </div>
     <div id="annaIntro"></div>
 
     <div class="xlwb" id="workbookShell">
       <div class="xlwb-bar">
         <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet">Assets &middot; Cash working view</div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Assets &middot; Cash</div>
       </div>
-      <div class="wb-grid-wrap"><div id="statementBuild"></div></div>
-      <div class="xlwb-tabs" aria-label="Workbook tabs">
-        <button class="xlwb-tab active" type="button" aria-current="page">Assets</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Reasons</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Income Statement</button>
-        <button class="xlwb-tab" type="button" aria-disabled="true">Member&rsquo;s Capital</button>
+      <div class="wb-grid-wrap">
+        <div id="assetsGrid"></div>
+        <div id="statementBuild" hidden></div>
       </div>
+      <div class="xlwb-tabs" id="workbookTabs" aria-label="Workbook tabs"></div>
     </div>
 
     <div id="sortWrap" hidden>
@@ -120,7 +116,39 @@ function setAdvanceLabel(label){
   return button;
 }
 
-document.getElementById('annaIntro').innerHTML=annaBox('Just as the Income Statement began by copying <strong>GENERATED&rsquo;s season rows</strong>, this working view begins by copying the <strong>Cash account&rsquo;s season rows</strong> &mdash; the rows between <strong>Balance, June 1</strong> and <strong>Balance, August 31</strong>.');
+var copied=false;
+function setWorkbookChrome(activeKey){
+  var tabs=[
+    {key:'Assets',label:'Assets'},
+    {key:'Liabilities',label:'Liabilities'},
+    {key:'Reasons',label:'Reasons'},
+    {key:'Balance Sheet',label:'Balance Sheet'},
+    {key:'Income Statement',label:'Income Statement'},
+    {key:'Statement of Member Capital',label:"Statement of Member's Capital"}
+  ];
+  if(copied) tabs.push({key:'working',label:'Working Tab'});
+  document.getElementById('workbookTabs').innerHTML=tabs.map(function(tab){
+    var active=tab.key===activeKey;
+    var kind=tab.key==='working'?' tk-temp':'';
+    return '<button class="xlwb-tab'+kind+(active?' active':'')+'" type="button"'
+      +(active?' aria-current="page"':' aria-disabled="true"')+'>'+tab.label+'</button>';
+  }).join('');
+}
+function copyCashRows(){
+  if(copied) return;
+  copied=true;
+  playSuccess();
+  document.getElementById('assetsGrid').hidden=true;
+  document.getElementById('statementBuild').hidden=false;
+  document.getElementById('sheetLabel').textContent='Working Tab';
+  setWorkbookChrome('working');
+  document.getElementById('annaIntro').innerHTML=annaBox('The seventh tab is born as an amber <strong>Working Tab</strong>. It holds a copy of the Cash account&rsquo;s season rows; Assets stays unchanged. Now pick an activity for each cash row.');
+  setAdvanceLabel('Pick the activities &rarr;');
+  document.getElementById('workbookShell').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+document.getElementById('annaIntro').innerHTML=annaBox('Copy the <strong>Cash account&rsquo;s season rows</strong> to a temporary sheet. That copy will become the Cash Flow Statement only after it has been sorted and formatted.')
+  +'<button class="btn-continue btn-block" type="button" onclick="copyCashRows()">Copy the season slice to a Working Tab &rarr;</button>';
 
 var sortComplete=false;
 var cashFlowTitleRows=rowsByLabel(sheetOf('cash-flow-steps','0 '),/^Cash Flow Statement$/i);
@@ -145,6 +173,7 @@ var buildOptions={
       var pick=filteredPickSheet(sheetOf('cash-flow-steps','1 '));
       var card=rowByExactLabel(pick,'Credit card paid off');
       var draw=rowByExactLabel(pick,'Money taken out for personal use');
+      document.getElementById('sorterPanel').classList.remove('brw-sort-done');
       BRW.mountSorter('sorterPanel','sorterGrid',pick,{
         gridId:'cash-flow-sorter-grid',
         instruction:'Sort each featured cash row by activity. The chip counts the rows that will follow the same pattern.',
@@ -185,9 +214,25 @@ var buildOptions={
 };
 
 function renderSortedPayoff(){
-  document.getElementById('anna').innerHTML=annaBox('The sorted view answers Freddie&rsquo;s question. <strong>Operating $2,350</strong>; <strong>Investing ($400)</strong>; <strong>Financing ($2,630)</strong>. The $2,030 card payoff is Financing because it settled a liability, and the $600 owner&rsquo;s draw is Financing too.');
-  document.getElementById('controls').innerHTML=insightBox('The Cash decrease is fully explained','<p><strong>$2,350 &minus; $400 &minus; $2,630 = &minus;$680.</strong> Apply that change to Cash of $1,300 on June 1 and the result is $620 on August 31. Depreciation is not a cash flow.</p><p>One thread left: net income for the season was <strong>$2,640</strong>, but operating cash is <strong>$2,350</strong> &mdash; a <strong>$290</strong> gap. You&rsquo;ll walk that gap down to the dollar next.</p>')
+  document.getElementById('anna').innerHTML=annaBox('There is Freddie&rsquo;s answer: <strong>Operating $2,350</strong>; <strong>Investing ($400)</strong>; <strong>Financing ($2,630)</strong>. The $2,030 card payoff is Financing because it settled a liability, and the $600 owner&rsquo;s draw is Financing too.');
+  document.getElementById('controls').innerHTML=insightBox('The Cash decrease is fully explained','<p><strong>$2,350 &minus; $400 &minus; $2,630 = &minus;$680.</strong> Apply that change to Cash of $1,300 on June 1 and the result is $620 on August 31. Depreciation is not a cash flow.</p><p>One thread remains: net income was <strong>$2,640</strong>, but operating cash is <strong>$2,350</strong> &mdash; a <strong>$290</strong> gap. You&rsquo;ll compare those two honest answers cleanly after formatting.</p>')
     +'<button class="btn-continue btn-block" onclick="nav(\'44-3-The-Cash-Flow-Statement.html\')">Lay out the statement &rarr;</button>';
+}
+
+function devPlaceCashRows(){
+  for(var i=0;i<20;i++){
+    var row=document.querySelector('#sorterPanel [data-brw-sort-row]');
+    if(!row) break;
+    var text=row.textContent||'';
+    var category=/New repair tool/.test(text)?'Investing':(/Credit card paid off|personal use/.test(text)?'Financing':'Operating');
+    row.click();
+    var zones=document.querySelectorAll('#sorterPanel .brw-sort-zone');
+    for(var z=0;z<zones.length;z++){
+      if(zones[z].getAttribute('data-cat')===category){ zones[z].click(); break; }
+    }
+  }
+  var rest=document.querySelector('#sorterPanel .brw-sort-rest');
+  if(rest&&!rest.disabled) rest.click();
 }
 
 var glossaryTerms=[
@@ -202,14 +247,16 @@ function restart(){ window.location.reload(); }
 document.addEventListener('keydown',function(event){ if(event.key==='Escape')closeGlossary(); });
 
 window.devFill=function(){
+  if(!copied) copyCashRows();
   var advance=document.querySelector('#statementBuild .brw-step-advance');
   if(advance) advance.click();
-  sortComplete=true;
+  devPlaceCashRows();
   advance=document.querySelector('#statementBuild .brw-step-advance');
   if(advance){ advance.disabled=false; advance.click(); }
 };
 BR_WB.mountStatementBuild('statementBuild','cash-flow-steps',buildOptions);
-setAdvanceLabel('Pick the activities &rarr;');
+BRW.mountGrid('assetsGrid',sheetOf('bike-repair-end','Assets'),{gridId:'cash-flow-source-assets-grid'});
+setWorkbookChrome('Assets');
 if(window.lucide) lucide.createIcons();
 </script>
 <script src="dev.js"></script>
