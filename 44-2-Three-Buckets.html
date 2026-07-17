@@ -108,7 +108,9 @@ function filteredPickSheet(sheet){
   });
   var copy={};
   Object.keys(sheet).forEach(function(key){ copy[key]=sheet[key]; });
-  copy.cells=(sheet.cells||[]).filter(function(cell){ return !headerRows[cell.r]; });
+  /* Drop header cells (Item/Activity/Amount) but KEEP column-F guidance — the
+     Operating definition shares the header row in Cash-Flow-Steps sheet 1. */
+  copy.cells=(sheet.cells||[]).filter(function(cell){ return !headerRows[cell.r] || cell.c===6; });
   return copy;
 }
 function setAdvanceLabel(label){
