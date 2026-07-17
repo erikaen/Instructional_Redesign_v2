@@ -31,7 +31,7 @@
     '41-1', '42-1',
     '43-1',
     '44-1', '44-2', '44-3',
-    '45-1', '46-1', '46-2',
+    '46-1', '46-2',
     '47-1'
   ];
 
@@ -42,7 +42,6 @@
     '44-1': '44-1-The-Cash-Puzzle',
     '44-2': '44-2-Three-Buckets',
     '44-3': '44-3-The-Cash-Flow-Statement',
-    '45-1': '45-1-What-Cash-Missed',
     '46-1': '46-1-The-Statements-Tie-Out',
     '46-2': '46-2-The-Statement-Map',
     '47-1': '47-1-Freddies-Napkin'

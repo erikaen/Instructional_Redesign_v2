@@ -95,13 +95,6 @@ if (window.lucide) lucide.createIcons();
       });
     });
   });
-  books['bike-repair-end'].sheets.forEach(function(sheet){
-    if(sheet.name!=='Balance Sheet') return;
-    sheet.cells.forEach(function(cell){
-      if(cell.r===19&&cell.c===4&&cell.value===-30) cell.value=2810;
-      if(cell.r===21&&cell.c===4&&cell.value===1660) cell.value=4500;
-    });
-  });
 })();
 
 /* ===== sound ===== */
