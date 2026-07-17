@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Change in Member&rsquo;s Capital</title>
+  <title>Statement of Member&rsquo;s Capital</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -12,6 +12,9 @@
     .wb-grid-wrap { padding:8px; background:white; }
     .build-note { margin-top:14px; }
     .build-hint { margin:8px 2px 0; color:#6b7280; font-family:Inter,sans-serif; font-size:var(--font-xs); text-align:center; }
+    .source-piles { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:12px 0; }
+    .source-pile { padding:12px; border:1px solid var(--border); border-radius:8px; text-align:center; font-family:Inter,sans-serif; font-weight:800; }
+    @media (max-width:640px) { .source-piles { grid-template-columns:1fr; } }
     @media (prefers-color-scheme:dark) {
       .wb-grid-wrap { background:#26242e; }
       .build-hint { color:#9ca3af; }
@@ -24,7 +27,7 @@
 
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>The Change in Member&rsquo;s Capital</h1>
+        <h1>Statement of Member&rsquo;s Capital</h1>
         <p class="tut-header-sub">The Angel Investor &middot; ~10 min &middot; Page 1 of 1</p>
       </div>
       <div class="tut-header-actions">
@@ -32,26 +35,19 @@
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">The Change in Member&rsquo;s Capital</div>
+    <div class="phase-title" id="phaseTitle">Statement of Member&rsquo;s Capital</div>
 
     <div id="annaIntro"></div>
     <div class="xlwb" id="workbookShell">
       <div class="xlwb-bar">
         <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
-        <div class="xlwb-bar-sheet" id="sheetLabel">Member&rsquo;s Capital &middot; building</div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Reasons</div>
       </div>
       <div class="wb-grid-wrap">
         <div id="stmtBuild"></div>
         <div id="tabGrid" hidden></div>
       </div>
-      <div class="xlwb-tabs" aria-label="Workbook tabs">
-        <button class="xlwb-tab" type="button" data-sheet-tab="Assets" onclick="showWorkbookTab('Assets')">Assets</button>
-        <button class="xlwb-tab" type="button" data-sheet-tab="Liabilities" onclick="showWorkbookTab('Liabilities')">Liabilities</button>
-        <button class="xlwb-tab" type="button" data-sheet-tab="Reasons" onclick="showWorkbookTab('Reasons')">Reasons</button>
-        <button class="xlwb-tab" type="button" data-sheet-tab="Balance Sheet" onclick="showWorkbookTab('Balance Sheet')">Balance Sheet</button>
-        <button class="xlwb-tab" type="button" data-sheet-tab="Income Statement" onclick="showWorkbookTab('Income Statement')">Income Statement</button>
-        <button class="xlwb-tab active" type="button" data-sheet-tab="members" onclick="showMemberCapitalTab()">Member&rsquo;s Capital</button>
-      </div>
+      <div class="xlwb-tabs" id="workbookTabs" aria-label="Workbook tabs"></div>
     </div>
 
     <div id="buildNote" class="build-note"></div>
@@ -90,18 +86,6 @@
       });
     });
   });
-  /* TEMPORARY SHIM: Bike-Repair-End.xlsx 'Balance Sheet' D19/D21 carry stale cached
-     values (their formulas =Reasons!D66/=SUM(..D20) point one row short after the
-     depreciation split). Mirror the intended values (Generated Aug-31 2,810; Total
-     4,500) until Rick fixes the source and re-extracts; the guards make this a
-     no-op once the source is fixed. */
-  books['bike-repair-end'].sheets.forEach(function(sheet){
-    if(sheet.name!=='Balance Sheet') return;
-    sheet.cells.forEach(function(cell){
-      if(cell.r===19&&cell.c===4&&cell.value===-30) cell.value=2810;
-      if(cell.r===21&&cell.c===4&&cell.value===1660) cell.value=4500;
-    });
-  });
 })();
 
 if(window.lucide) lucide.createIcons();
@@ -131,10 +115,38 @@ var sheetMap={
   'Income Statement':'Income Statement'
 };
 var gridSeq=0;
-function setActiveTab(name){
-  Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
-    tab.classList.toggle('active',tab.getAttribute('data-sheet-tab')===name);
+var sourceConfirmed=false;
+var completed=false;
+var beginningConfirmed=false;
+var sortConfirmed=false;
+
+function expandAllGroups(containerId){
+  var container=document.getElementById(containerId);
+  if(!container) return;
+  Array.prototype.forEach.call(container.getElementsByClassName('brw-og-toggle'),function(toggle){
+    toggle.setAttribute('aria-expanded','true');
+    toggle.textContent='−';
   });
+  Array.prototype.forEach.call(container.getElementsByClassName('brw-og-row'),function(row){
+    row.classList.remove('is-collapsed');
+  });
+}
+function setWorkbookChrome(activeKey){
+  var tabs=[
+    {key:'Assets',label:'Assets'},
+    {key:'Liabilities',label:'Liabilities'},
+    {key:'Reasons',label:'Reasons'},
+    {key:'Balance Sheet',label:'Balance Sheet'},
+    {key:'Income Statement',label:'Income Statement'}
+  ];
+  if(sourceConfirmed) tabs.push({key:'members',label:completed?"Statement of Member's Capital":'Working Tab'});
+  document.getElementById('workbookTabs').innerHTML=tabs.map(function(tab){
+    var active=tab.key===activeKey;
+    var kind=tab.key==='members'?(completed?' tk-stmt':' tk-temp'):'';
+    var action=tab.key==='members'?'showMemberCapitalTab()':"showWorkbookTab('"+tab.key+"')";
+    return '<button class="xlwb-tab'+kind+(active?' active':'')+'" type="button" data-sheet-tab="'+tab.key+'"'
+      +(active?' aria-current="page"':'')+' onclick="'+action+'">'+tab.label+'</button>';
+  }).join('');
 }
 function showWorkbookTab(name){
   var sheet=sheetOf(sheetMap[name]);
@@ -143,15 +155,18 @@ function showWorkbookTab(name){
   document.getElementById('stmtBuild').hidden=true;
   document.getElementById('tabGrid').hidden=false;
   document.getElementById('sheetLabel').textContent=name;
-  setActiveTab(name);
-  BRW.mountGrid('tabGrid',sheet,{gridId:'capital-page-tab-'+(++gridSeq)});
+  setWorkbookChrome(name);
+  BRW.mountGrid('tabGrid',sheet,{gridId:'capital-page-reference-'+(++gridSeq)});
+  BRW.markDatedRows('tabGrid');
+  if(name==='Reasons') expandAllGroups('tabGrid');
 }
 function showMemberCapitalTab(){
+  if(!sourceConfirmed) return;
   playClick();
   document.getElementById('tabGrid').hidden=true;
   document.getElementById('stmtBuild').hidden=false;
-  document.getElementById('sheetLabel').innerHTML='Member&rsquo;s Capital &middot; building';
-  setActiveTab('members');
+  document.getElementById('sheetLabel').textContent=completed?"Statement of Member's Capital":'Working Tab';
+  setWorkbookChrome('members');
 }
 
 /* ===== build state ===== */
@@ -162,7 +177,7 @@ var gateAttempts=0;
 
 var MCQ_OPTS=[
   {id:'rev',label:'Revenue &mdash; $6,020',fb:'Revenue is the top line, not the addition. Expenses are also part of the season&rsquo;s result, so use the number after Revenue and Expenses are compared.'},
-  {id:'netinc',label:'Net income &mdash; $2,640, from the Income Statement',fb:'Right. The Income Statement says net income is $2,640. That single number is the season&rsquo;s addition recorded in GENERATED.',correct:true},
+  {id:'netinc',label:'Net income &mdash; $2,640, from the Income Statement',fb:'Right. Net income on the Income Statement is $2,640. That single number is the season&rsquo;s addition recorded in GENERATED.',correct:true},
   {id:'cash',label:'The cash change &mdash; &minus;$680',fb:'Cash fell while GENERATED rose. The two clocks do not have to move together; use net income for this change.'}
 ];
 
@@ -203,7 +218,7 @@ function mcqClick(id){
 
 function gateHTML(){
   if(gateDone){
-    return '<div class="gate-card gate-armed-maria"><div class="gate-card-title">Ending total confirmed: <strong>$4,500</strong>. Continue to format the statement.</div></div>';
+    return '<div class="gate-card gate-armed-maria"><div class="gate-card-title">Ending total confirmed: <strong>$4,500</strong>. Continue to format and name the statement.</div></div>';
   }
   return '<div class="mc-card">'
     +'<div class="mc-q">Now walk the three piles: $2,290 + $2,810 &minus; $600. Type the ending total that ties to the balance sheet&rsquo;s August 31 column.</div>'
@@ -243,35 +258,48 @@ function checkGate(){
 function renderBuildNote(){
   var html='';
   if(currentOrder===0){
-    html=annaBox('First, copy the three Reasons piles onto the statement&rsquo;s own new tab: CONTRIBUTED, GENERATED, and WITHDRAWN. The Reasons rows stay where they are; this new tab begins with a copied working view.');
+    html=annaBox('Start with the <strong>BEGINNING</strong> balance in each copied pile: CONTRIBUTED <strong>$2,290</strong>, GENERATED <strong>$170</strong>, and WITHDRAWN <strong>$0</strong>. WITHDRAWN was born mid-season, so there is no June 1 line; treat its beginning as $0.');
   }else if(currentOrder===1){
-    html=annaBox('Now fold each pile into <strong>Beginning</strong>, <strong>Change</strong>, and <strong>Ending</strong>. CONTRIBUTED stays at $2,290. GENERATED moves from $170 to $2,810. WITHDRAWN records ($600).');
+    html=annaBox('Now sort the items for the period in each pile. Only GENERATED has a stack of period activity to sort. CONTRIBUTED is unchanged, and WITHDRAWN has just the single $600 draw.');
   }else if(currentOrder===2){
-    html=annaBox('Column F identifies each change. The $2,640 change in GENERATED is net income from the Income Statement. The ($600) change in WITHDRAWN is the owner&rsquo;s draw.');
+    html=annaBox('Identify GENERATED&rsquo;s change. It is <strong>just the income recognized for the period</strong>, carried over as one number from the Income Statement. Then walk all three ending piles to the total.');
   }else{
-    html=annaBox('There is the <strong>Statement of Changes in Member&rsquo;s Capital</strong>: CONTRIBUTED $2,290 to $2,290; GENERATED $170 plus net income of $2,640 to $2,810; and WITHDRAWN ($600).');
+    html=annaBox('The working sheet is finished. Now call it the <strong>Statement of Member&rsquo;s Capital</strong>: CONTRIBUTED $2,290 to $2,290; GENERATED $170 plus net income of $2,640 to $2,810; and WITHDRAWN ($600).');
   }
   document.getElementById('buildNote').innerHTML=html;
 }
 function renderInteraction(){
   var html='';
-  if(currentOrder===1) html=mcqHTML();
-  if(currentOrder===2) html=gateHTML();
+  if(currentOrder===0&&!beginningConfirmed){
+    html='<button class="btn-continue btn-block" type="button" onclick="confirmBeginnings()">Mark the three beginning balances &rarr;</button>';
+  }else if(currentOrder===0){
+    html=insightBox('Beginnings marked','<p>CONTRIBUTED <strong>$2,290</strong> &middot; GENERATED <strong>$170</strong> &middot; WITHDRAWN <strong>$0</strong></p>');
+  }
+  if(currentOrder===1&&!sortConfirmed){
+    html='<button class="btn-continue btn-block" type="button" onclick="confirmSort()">Sort the period items in each pile &rarr;</button>';
+  }else if(currentOrder===1){
+    html=insightBox('Period items sorted','<p>GENERATED holds the activity to sort. CONTRIBUTED is unchanged; WITHDRAWN holds one draw.</p>');
+  }
+  if(currentOrder===2) html=mcqHTML()+(mcqAnswered?gateHTML():'');
   document.getElementById('interaction').innerHTML=html;
 }
+function confirmBeginnings(){ beginningConfirmed=true; playSuccess(); renderInteraction(); setAdvanceState(); }
+function confirmSort(){ sortConfirmed=true; playSuccess(); renderInteraction(); setAdvanceState(); }
 function setAdvanceState(){
   var advance=document.querySelector('#stmtBuild .brw-step-advance');
-  var disabled=(currentOrder===1&&!mcqAnswered)||(currentOrder===2&&!gateDone);
+  var disabled=(currentOrder===0&&!beginningConfirmed)||(currentOrder===1&&!sortConfirmed)||(currentOrder===2&&(!mcqAnswered||!gateDone));
   if(advance) advance.disabled=disabled;
   var hint='';
-  if(currentOrder===1&&!mcqAnswered) hint='Choose the season&rsquo;s addition to unlock the next build step.';
-  if(currentOrder===2&&!gateDone) hint='Enter the ending total to unlock the formatted statement.';
+  if(currentOrder===0&&!beginningConfirmed) hint='Mark all three beginning balances to continue.';
+  if(currentOrder===1&&!sortConfirmed) hint='Sort the period items to continue.';
+  if(currentOrder===2&&!mcqAnswered) hint='Choose GENERATED&rsquo;s addition to continue.';
+  if(currentOrder===2&&mcqAnswered&&!gateDone) hint='Enter the ending total to unlock the formatted statement.';
   document.getElementById('advanceHint').innerHTML=hint;
 }
 function renderPayoff(){
   var html='';
   if(currentOrder===3){
-    html=annaBox('That is the walk Freddie asked for: <strong>$2,460 to $4,500</strong>. The $600 sits on its own WITHDRAWN line, in parentheses. It is <strong>not an expense; it is a distribution</strong>. The Statement of Changes in Member&rsquo;s Capital tells how each pile changed and ties the ending total to the balance sheet&rsquo;s August 31 column.')
+    html=annaBox('That is the walk Freddie asked for: <strong>$2,460 to $4,500</strong>. The $600 sits on its own WITHDRAWN line, in parentheses. It is <strong>not an expense; it is a distribution</strong>. On the Statement of Member&rsquo;s Capital, the changes in all three piles walk to the same ending total as the balance sheet&rsquo;s August 31 column.')
       +insightBox('One statement, three piles','<p>CONTRIBUTED remains <strong>$2,290</strong>. GENERATED moves from <strong>$170</strong> to <strong>$2,810</strong> with net income of <strong>$2,640</strong>. WITHDRAWN records <strong>($600)</strong>. Together, the total moves from <strong>$2,460</strong> to <strong>$4,500</strong>.</p>');
   }
   document.getElementById('payoff').innerHTML=html;
@@ -284,7 +312,9 @@ function renderControls(){
 }
 function renderStage(order){
   currentOrder=order;
+  if(order===3) completed=true;
   showMemberCapitalTab();
+  expandAllGroups('stmtBuild');
   renderBuildNote();
   renderInteraction();
   setAdvanceState();
@@ -293,15 +323,30 @@ function renderStage(order){
   if(window.lucide) lucide.createIcons();
 }
 
-document.getElementById('annaIntro').innerHTML=annaBox('Freddie left two questions on the table: &ldquo;Member&rsquo;s Capital went from $2,460 to $4,500 &mdash; walk me from one to the other. And show me the $600 that left without being an expense.&rdquo; The answer begins with the three piles on the Reasons trail. Read them another way, the way the Income Statement was a sort of the season&rsquo;s rows back when you built it.');
+function sourceBeatHTML(){
+  return annaBox('Yesterday Freddie asked for the walk from $2,460 to $4,500. Build the <strong>Statement of Member&rsquo;s Capital</strong> by reading all three piles on the Reasons trail &mdash; not only GENERATED.')
+    +'<div class="section-card"><div class="card-title">The raw material on the Reasons tab</div>'
+    +'<div class="source-piles"><div class="source-pile">CONTRIBUTED</div><div class="source-pile">GENERATED</div><div class="source-pile">WITHDRAWN</div></div>'
+    +'<p>Copy all three sections to one temporary sheet before sorting anything.</p></div>'
+    +'<button class="btn-continue btn-block" type="button" onclick="copyAllPiles()">Copy all three piles to a Working Tab &rarr;</button>';
+}
+function copyAllPiles(){
+  if(sourceConfirmed) return;
+  sourceConfirmed=true;
+  playSuccess();
+  document.getElementById('annaIntro').innerHTML=annaBox('The sixth tab is born as an amber <strong>Working Tab</strong>. Every row is a copy; the Reasons trail stays where it is. Begin by finding each pile&rsquo;s starting point.');
+  renderStage(0);
+  document.getElementById('workbookShell').scrollIntoView({behavior:'smooth',block:'start'});
+}
 
 var buildOptions={
   startAt:0,
   stopAt:3,
   gridOpts:{gridId:'members-capital-build-grid'},
   gateAdvance:function(order){
-    if(order===1) return mcqAnswered;
-    if(order===2) return gateDone;
+    if(order===0) return beginningConfirmed;
+    if(order===1) return sortConfirmed;
+    if(order===2) return mcqAnswered&&gateDone;
     return true;
   },
   beforeAdvance:function(){ playClick(); return true; },
@@ -311,7 +356,7 @@ BR_WB.mountStatementBuild('stmtBuild','members-capital-steps',buildOptions);
 
 /* ===== glossary / nav ===== */
 var glossaryTerms=[
-  {term:'Statement of Changes in Member&rsquo;s Capital',def:'A statement that shows each pile&rsquo;s Beginning, Change, and Ending. Here CONTRIBUTED, GENERATED, and WITHDRAWN walk the total from $2,460 on June 1 to $4,500 on August 31.'},
+  {term:'Statement of Member&rsquo;s Capital',def:'A report with each pile&rsquo;s Beginning, Change, and Ending. Here CONTRIBUTED, GENERATED, and WITHDRAWN walk the total from $2,460 on June 1 to $4,500 on August 31.'},
   {term:'Distribution (draw)',def:'Cash withdrawn by an owner for personal use and recorded in WITHDRAWN. It reduces Member&rsquo;s Capital but is not an expense. Here it is ($600), shown in parentheses.'},
   {term:'Generated',def:'The part of Member&rsquo;s Capital built from running the work, not from contributions. GENERATED moves with net income. Here: Beginning $170 + net income $2,640 = Ending $2,810.'}
 ];
@@ -328,14 +373,20 @@ document.addEventListener('keydown',function(event){ if(event.key==='Escape') cl
 
 /* ===== init ===== */
 window.devFill=function(){
+  if(!sourceConfirmed) copyAllPiles();
+  beginningConfirmed=true;
+  sortConfirmed=true;
   mcqAnswered=true;
   gateDone=true;
   for(var i=0;i<3;i++){
     var advance=document.querySelector('#stmtBuild .brw-step-advance');
     if(advance){ advance.disabled=false; advance.click(); }
   }
+  expandAllGroups('stmtBuild');
 };
-renderStage(0);
+document.getElementById('annaIntro').innerHTML=sourceBeatHTML();
+setWorkbookChrome('Reasons');
+showWorkbookTab('Reasons');
 </script>
   <script src="dev.js"></script>
 </body>
