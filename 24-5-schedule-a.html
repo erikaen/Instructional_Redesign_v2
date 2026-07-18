@@ -68,7 +68,7 @@ function playPen(){ tone(520,0.18,'triangle',0.12); }
 var glossaryTerms = [
   { term:"Schedule A", def:"The Operating Agreement&rsquo;s list of what the member contributes &mdash; assets, liabilities assumed, and the difference. You complete it from the Company&rsquo;s books, after the contributing is done." },
   { term:"Capital contribution", def:"What an owner puts into the company. Here: the whole repair business at book amounts, plus the $1,300 cash that opened the account." },
-  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. Split into Contributed ($2,290) and Generated ($170): $2,460 on June 1." },
+  { term:"Member&rsquo;s Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. Split into Contributed ($2,290) and Generated ($170): $2,460 on June 1." },
   { term:"Execute (a document)", def:"To sign it and make it operative. You execute the Operating Agreement here &mdash; after Schedule A is complete, because the schedule attests to facts." }
 ];
 function openGlossary(){
@@ -123,7 +123,7 @@ function balanceSheet(cid, snap){
   h += xr('xl-cat', '', '<strong>Liabilities</strong>', '');
   LINES.filter(function(l){ return l.sec==='l'; }).forEach(function(l){ h += bsRowClickable(l); });
   h += xr('xl-total', '', 'Total liabilities', BRW.dol(2250));
-  h += xr('xl-cat', '', '<strong>Members&rsquo; Capital</strong> (Assets &minus; Liabilities)', BRW.dol(2460));
+  h += xr('xl-cat', '', '<strong>Member&rsquo;s Capital</strong> (Assets &minus; Liabilities)', BRW.dol(2460));
   LINES.filter(function(l){ return l.sec==='c'; }).forEach(function(l){ h += bsRowClickable(l); });
   return h;
 }
@@ -198,7 +198,7 @@ function scheduleHtml(){
   LINES.filter(function(l){ return l.sec==='l'; }).forEach(function(l){ h += entered[l.id] ? schedRow(l.sched, '('+l.amt.toLocaleString('en-US')+')') : blankRow(); });
   h += schedRow('Total liabilities assumed', secDone('l') ? '(2,250)' : '', {b:true});
   LINES.filter(function(l){ return l.sec==='c'; }).forEach(function(l){ h += entered[l.id] ? schedRow(l.sched, l.amt.toLocaleString('en-US')) : blankRow(); });
-  h += schedRow('Members&rsquo; Capital (A &minus; L)', secDone('c') ? '2,460' : '', {b:true,top:'2px solid #374151'});
+  h += schedRow('Member&rsquo;s Capital (A &minus; L)', secDone('c') ? '2,460' : '', {b:true,top:'2px solid #374151'});
   h += '</div>';
   if(allEntered()){
     h += '<div style="padding-left:10px;border-left:3px solid var(--accent);margin-top:10px;margin-bottom:8px"><span style="font-weight:700">9. Capital Contributions.</span> &hellip;as set forth on Schedule A. Net book value contributed: <strong>$2,460</strong>.</div>';

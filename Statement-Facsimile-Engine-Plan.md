@@ -113,7 +113,7 @@ Workbook keys are kebab-cased filenames. Sheets stay in workbook tab order.
    - Cash-Flow ending cash **620** = `Assets` Cash Aug-31 balance = `Balance Sheet` Cash Aug-31.
    - Depreciation **230** total = per-class in `Assets` (160 + 40 + 30) = the itemized dep reasons.
    - `Balance Sheet` Aug-31 balances: Total Assets **4500** = Total Liabilities 0 + Total
-     Members' Capital 4500.
+     Member's Capital 4500.
    - Indirect check: **2640 − 300 − 220 + 230 = 2350** = Cash-Flow operating total.
 
    `--verify` reads the extracted data (not a second source); it catches a bad Excel edit before
@@ -343,10 +343,10 @@ migrates the pages that use them.
 ## Open items carried alongside (not part of the engine, tracked so they aren't lost)
 
 - **Singular "Member's Capital" course-wide** — a separate mechanical sweep across M1 prework +
-  M2–M4 tutorials + specs + `lint-language.sh` + memory. `Members' Capital` → `Member's Capital`
+  M2–M4 tutorials + specs + `lint-language.sh` + memory. The former plural spelling becomes `Member's Capital`
   everywhere, **including the student's own LLC Operating Agreement** (the one the course creates —
   a single-member LLC). **Sole carve-out (RULED 2026-07-14 session 3):** the Operating Agreement
-  in **Anna's example from her old job** stays **plural "Members' Capital"** — that firm is
+  in **Anna's example from her old job** stays **in its plural form** — that firm is
   multi-member. The sweep is fully specified and unblocked. Not in this engine plan.
 - **Depreciation split to three — DONE 2026-07-14** (tools & repair equipment 160 / fixtures 40 /
   laptop 30 in all 7 itemized places; formatted income statement stays one line 230). Executed by

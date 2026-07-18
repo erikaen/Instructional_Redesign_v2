@@ -15,12 +15,12 @@
 > - **Numbers contract (M3):** Revenue 6,020 − Expenses 3,380 (Parts 1,200 · Rent 1,950 ·
 >   Depreciation 200 + 30) = **Net income 2,640**; pre-receivable Revenue 5,720; pre-dep
 >   Expenses 3,150; GENERATED continuous subtotal **170 (June 1) → 2,810 (Aug 31)**;
->   Members' Capital = Contributed 2,290 + Generated 2,810 + **Withdrawn (600)** = 4,500.
+>   Member's Capital = Contributed 2,290 + Generated 2,810 + **Withdrawn (600)** = 4,500.
 >   The balance-sheet renderers carry Withdrawn as its own line (never folded into Generated).
 
 **Status:** Draft v2 (2026-07-11) — **restructured (Rick's ruling):** everything after the production
 of the income statement moved to Module 4. Tutorials 3.4 (`34-`) and 3.5 (`35-`) — the cash-flow
-statement, the statement of changes in Members' Capital, the first close, and the tie-out — now arrive
+statement, the statement of changes in Member's Capital, the first close, and the tie-out — now arrive
 in Module 4 **at the investor's request**; their specs live in `Module-4-Design.md` (tutorials 4.3–4.6).
 Module 3 ends at the completed income statement plus a new module-complete page. A planning doc, not an
 embedded page. Built here in `Instructional_Redesign_v2` (the `Rick` branch) in v2 conventions.
@@ -33,7 +33,7 @@ statements arrive at his request; then pricing → limited recognition → outsi
 
 **Opens on M2's close** — no M1/M2 numbers are re-derived; the season layers on top:
 
-> Assets **$4,710** − Liabilities **$2,250** = members' capital **$2,460**
+> Assets **$4,710** − Liabilities **$2,250** = member's capital **$2,460**
 > (cash $1,300; contributed $2,290 + generated $170). The owner's repair **skill is off the books.**
 
 **File naming (v2).** Module 3 tutorials are `3X-Y-Title.html` = Module 3, Tutorial X, Page Y
@@ -63,7 +63,7 @@ outside reader asks for them.
 
 Follows `accounting-pedagogy`; the points that bite hardest here:
 
-- **A − L = Equities** (plural). Members' capital is the definitional residual — never `A = L + E`, never
+- **A − L = Equities** (plural). Member's capital is the definitional residual — never `A = L + E`, never
   "what's left for the owner."
 - **Experience-first.** Feel the problem, then name it — exactly the M1 1.4→1.5 discipline.
 - **Records *show* vs entity *has*.** No "measurement" — depreciation is **allocation**.
@@ -95,7 +95,7 @@ Follows `accounting-pedagogy`; the points that bite hardest here:
   gap** M4 blows open.
 - **Operations feed the *generated* slice.** Net income closes into **Generated**; **contributed**
   capital ($2,290) is untouched by operations — M2's split finally does work. An owner's **draw** reduces
-  members' capital but is **not an expense** (a distribution), so it sorts itself *out* of the operating
+  member's capital but is **not an expense** (a distribution), so it sorts itself *out* of the operating
   tallies and onto the equity statement.
 
 ---
@@ -147,7 +147,7 @@ complete.
 
 ### Tutorials 3.4 and 3.5 — MOVED TO MODULE 4 (restructured 2026-07-11)
 
-The cash-flow statement, the statement of changes in Members' Capital, the **first-ever close**, and
+The cash-flow statement, the statement of changes in Member's Capital, the **first-ever close**, and
 the tie-out now arrive in Module 4 **at the investor's request**. Full specs (with the reframing each
 page needs) are in `Module-4-Design.md`. File mapping:
 
@@ -162,7 +162,7 @@ page needs) are in `Module-4-Design.md`. File mapping:
 | `35-3-The-Statements-Tie-Out.html` | `46-1` (Tutorial 4.6) |
 | `35-4-Module-Complete.html` | rebuilt in place as `33-4-Module-Complete.html` (below) |
 
-Note the request **order** in M4 reverses the old teaching order: Members' Capital first (4.3), then
+Note the request **order** in M4 reverses the old teaching order: Member's Capital first (4.3), then
 cash (4.4), then the reconciliation (4.5). The **first close** — 3.5's keystone discovery in the old
 design — is now **4.3's discovery**; the Reasons-tab design ("the first close is the discovery") is
 unchanged in substance, only in address.
@@ -216,9 +216,9 @@ working figures for the summer:
 | Expenses — parts/COGS $1,200 · rent $1,950 · depreciation $230 (tools $200 + laptop $30) | **$3,380** |
 | **Net income** | **$2,640** |
 | Cash flow — operating **+$320** · investing **−$400** (new tool) · financing **−$600** (draw) → net **−$680** | ending cash **$620** (opened at $1,300) |
-| Closing balance sheet — Assets **$4,500** − Liabilities **$0** = members' capital | **$4,500** (contributed 2,290 + generated 2,210) |
+| Closing balance sheet — Assets **$4,500** − Liabilities **$0** = member's capital | **$4,500** (contributed 2,290 + generated 2,210) |
 
-> **Terminology (locked 2026-07-07; tightened 2026-07-09):** "Retained"/"Retained Earnings" is retired course-wide. The **Generated** pile keeps its name through the close; the **total** picks up the legal term **Members' Capital** at the M2 Operating Agreement (subparts stay *Contributed* / *Generated*). **GAAP vocabulary is dropped from the course entirely** (2026-07-09 — supersedes the earlier "M4 aside" plan): "Retained Earnings" and "Contributed Capital" appear nowhere, ever. Full rationale + the OA draft→finalize→sign resequencing in **Module-2-Design.md**.
+> **Terminology (locked 2026-07-07; tightened 2026-07-09):** "Retained"/"Retained Earnings" is retired course-wide. The **Generated** pile keeps its name through the close; the **total** picks up the legal term **Member's Capital** at the M2 Operating Agreement (subparts stay *Contributed* / *Generated*). **GAAP vocabulary is dropped from the course entirely** (2026-07-09 — supersedes the earlier "M4 aside" plan): "Retained Earnings" and "Contributed Capital" appear nowhere, ever. Full rationale + the OA draft→finalize→sign resequencing in **Module-2-Design.md**.
 
 **Rent treatment:** the season's rent (**$1,950 = 3 × $650**) is **paid and used this period** — routed through
 Prepaid Rent as a booking convenience, then expired in full to Rent Expense, so in substance it's a **straight

@@ -95,7 +95,7 @@ the very assets across the aisle). Customer Deposit expands to its single advanc
 | **Customer Deposit** | **$220** | Smith — paid $220 up front for a custom frame, not yet built |
 | **Total Liabilities** | **$2,250** | |
 
-So **A − L = $4,710 − $2,250 = $2,460** opening members' capital.
+So **A − L = $4,710 − $2,250 = $2,460** opening member's capital.
 
 ---
 
@@ -113,7 +113,7 @@ off-screen by the designer.
 | Pile | Blurb | Matures into | Born |
 |---|---|---|---|
 | **CONTRIBUTED** | what you put in | Contributed Capital (named 1.5) | 1.4 |
-| **GENERATED** | what the work produced | keeps its name; part of **Members' Capital** (the legal *total*, picked up at the M2 OA). GAAP synonym *Retained Earnings* = M4 literacy aside only | 1.4 |
+| **GENERATED** | what the work produced | keeps its name; part of **Member's Capital** (the legal *total*, picked up at the M2 OA). GAAP synonym *Retained Earnings* = M4 literacy aside only | 1.4 |
 | **WITHDRAWN** | what you took for yourself | Draws / distributions | M3, at the season's draw |
 
 ### The piles at Aug 31 (each expandable to its rows)
@@ -171,7 +171,7 @@ cash, collect a billed repair, pay the rent, buy a new tool, pay off the card.
 7. **The novice's recognition gaps (not recorded in `31-2`):** Ridgeline's completed-but-uncollected
    **$300** (no cash, no record → the **A/R** discovery of Tutorial 3.2) and **depreciation** ($200
    tools + $30 laptop = **$230** → Tutorial 3.3). Neither is recorded as a season event, so the
-   novice books close at members' capital **$4,430** (Assets $4,430 − Liabilities $0) — exactly **$70**
+   novice books close at member's capital **$4,430** (Assets $4,430 − Liabilities $0) — exactly **$70**
    short of the true **$4,500**. The reconciliation: **+$300** uncollected receivable − **$230**
    untaken depreciation = **+$70**, surfacing in 3.2 and 3.3.
    *(Smith's $220 advance **does** earn out in `31-2`: his custom frame is finished and delivered in
@@ -238,8 +238,8 @@ page sits.
 | `officeEquip` | the laptop | **Office Equipment** | ~1.3 |
 | `creditCard` | what you owe on the card | **Credit Card** | ~1.3 |
 | `unearned` | what you owe Smith (his deposit) | **Customer Deposit** (trade name: Unearned Revenue) | M3 (3.4 earns it out) |
-| `contributedCapital` | what you put in (*Contributed*) | label stays **Contributed**; part of **Members' Capital** total (M2 OA). GAAP synonym *Contributed Capital* = M4 aside. *(Data key unchanged.)* | 1.5 |
-| `retainedEarnings` | what the work generated (*Generated*) | label stays **Generated**; part of **Members' Capital** total (M2 OA). GAAP synonym *Retained Earnings* = M4 aside. *(Data key unchanged.)* | 1.5 |
+| `contributedCapital` | what you put in (*Contributed*) | label stays **Contributed**; part of **Member's Capital** total (M2 OA). GAAP synonym *Contributed Capital* = M4 aside. *(Data key unchanged.)* | 1.5 |
+| `retainedEarnings` | what the work generated (*Generated*) | label stays **Generated**; part of **Member's Capital** total (M2 OA). GAAP synonym *Retained Earnings* = M4 aside. *(Data key unchanged.)* | 1.5 |
 | `drawn` | what you took for yourself (*Withdrawn*) | **Draws** (a distribution) | M3, at the season's draw |
 
 The current M1 pages use other plain labels (`EQUIPMENT`, `COMPUTER EQUIPMENT`, `SUPPLIES`) — migrate
@@ -259,7 +259,7 @@ feature is earned it stays (the Reasons tab is **continuous** after its beat).
 2. **Every line drills down** to its detail (single-item lines included). Same `xl-cat`/`xl-toggle`
    idiom; no inline styles; shared classes only.
 3. **Cash is a position** that expands to its ledger — never a cash-flow statement (that's 3.4).
-4. **Numbers tie to the period's manifest** at every snapshot; `A − L = members' capital` holds.
+4. **Numbers tie to the period's manifest** at every snapshot; `A − L = member's capital` holds.
 5. **Preserve detail; name and fold later.** No pre-closing, no revenue/expense buckets, no
    premature formal terms. Discovery (identity 1.5; temporary accounts / income statement / closing
    / cash-flow / articulation in M3) is the payoff, never front-run.
@@ -272,7 +272,7 @@ feature is earned it stays (the Reasons tab is **continuous** after its beat).
 | **1.2 Insurance and Maria** | Assets framed as **insurable property** (Maria's form). Cash is deliberately *not* on it — not insurable. |
 | **1.3 Anna and the Bank Statement** | The bank statement brings **cash** into view as its own list — **not yet folded into Assets.** |
 | **1.4 Keeping the Reasons** *(CMU team title: "Why Keep the Reasons")* | ★★ **Two beats, both here.** **(a) Cash-fold** — Cash is folded into the Assets list, decided off the insurable-property framing ("is cash a right to future benefits?" — it's not insurable, but it's still the work's). **(b) Reasons tab is *born*** — log net-movers, cross the pairs, sort into *Contributed* / *Generated* (plain). |
-| **1.5 Naming What You Built** | The piles' worksheet names settle — *Contributed*, *Generated*. The **total (A − L) stays unnamed in M1** (named **Members' Capital** only at the M2 OA). No GAAP names land here; *Contributed Capital* / *Retained Earnings* are wider-world synonyms held for an M4 literacy aside. *(Beat's purpose likely needs revisiting — its old job of landing GAAP names is gone.)* |
+| **1.5 Naming What You Built** | The piles' worksheet names settle — *Contributed*, *Generated*. The **total (A − L) stays unnamed in M1** (named **Member's Capital** only at the M2 OA). No GAAP names land here; *Contributed Capital* / *Retained Earnings* are wider-world synonyms held for an M4 literacy aside. *(Beat's purpose likely needs revisiting — its old job of landing GAAP names is gone.)* |
 | **Module 2 (no workbook on screen)** | Off-screen events still move it: **+$1,300 contributed** (Contributed Capital 990 → **2,290**), LLC formed, bank account opened. M3 must open consistent with this. |
 | **Module 3 — 3.1 (`31-x`)** | **This locked snapshot.** Opening Assets $4,710 / Liabilities $2,250; the Reasons list runs unbroken from May — piles read **CONTRIBUTED $2,290 / GENERATED $170** at June 1; the season's rows accumulate below (un-closed). |
 | **Module 3 — 3.2–3.5** | Discoveries build *on top of* this snapshot: income statement, depreciation, cash-flow, the articulated set. |

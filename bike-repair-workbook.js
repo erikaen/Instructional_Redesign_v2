@@ -291,7 +291,7 @@ var BR_WB = (function () {
       return h;
     });
     BRW.registerSheet('bridge', function (cid, snap) {
-      var h = xr('xl-head', 'Statement of Changes in Members&rsquo; Capital &middot; June&ndash;August 2026', 'Amount');
+      var h = xr('xl-head', 'Statement of Member&rsquo;s Capital &middot; June&ndash;August 2026', 'Amount');
       h += xr('xl-cat', '<strong>Contributed</strong>', '');
       h += xr('xl-item', 'Beginning &mdash; June 1', BRW.dol(2290));
       h += xr('xl-item', 'No changes this season', '');
@@ -304,19 +304,19 @@ var BR_WB = (function () {
       h += xr('xl-item', 'Beginning &mdash; June 1', '&mdash;');
       h += xr('xl-item', 'Owner&rsquo;s draw', paren(600));
       h += xr('xl-total', 'Ending &mdash; August 31', paren(600));
-      h += xr('xl-item', '<strong>Total Members&rsquo; Capital &mdash; June 1</strong>', BRW.dol(2460));
-      h += xr('xl-total', '<strong>Total Members&rsquo; Capital &mdash; August 31</strong> <span class="xl-new-tag">ties to the balance sheet</span>', BRW.dol(4500));
+      h += xr('xl-item', '<strong>Total Member&rsquo;s Capital &mdash; June 1</strong>', BRW.dol(2460));
+      h += xr('xl-total', '<strong>Total Member&rsquo;s Capital &mdash; August 31</strong> <span class="xl-new-tag">ties to the balance sheet</span>', BRW.dol(4500));
       return h;
     });
     BRW.registerSheet('balance', function (cid, snap) {
       var h = xr('xl-head', 'Balance Sheet &middot; August 31, 2026', 'Amount');
       h += xr('xl-item', 'Assets', BRW.dol(4500));
       h += xr('xl-item', 'Liabilities', BRW.dol(0));
-      h += xr('xl-cat', '<strong>Members&rsquo; Capital</strong>', BRW.dol(4500));
+      h += xr('xl-cat', '<strong>Member&rsquo;s Capital</strong>', BRW.dol(4500));
       h += xr('xl-item', 'Contributed', BRW.dol(2290));
       h += xr('xl-item', 'Generated (170 + 2,640)', BRW.dol(2810));
       h += xr('xl-item', 'Withdrawn', paren(600));
-      h += xr('xl-total', '<strong>Total Members&rsquo; Capital</strong>', BRW.dol(4500));
+      h += xr('xl-total', '<strong>Total Member&rsquo;s Capital</strong>', BRW.dol(4500));
       return h;
     });
   };
@@ -375,11 +375,11 @@ var BR_WB = (function () {
     ['item',  'Credit Card', 2030, 0],
     ['item',  'Customer Deposit', 220, 0],
     ['total', '<strong>Total Liabilities</strong>', 2250, 0],
-    ['cat',   '<strong>Members&rsquo; Capital</strong>', null, null],
+    ['cat',   '<strong>Member&rsquo;s Capital</strong>', null, null],
     ['item',  'Contributed', 2290, 2290],
     ['item',  'Generated', 170, 2810],
     ['item',  'Withdrawn', null, -600],
-    ['total', '<strong>Total Members&rsquo; Capital</strong>', 2460, 4500]
+    ['total', '<strong>Total Member&rsquo;s Capital</strong>', 2460, 4500]
   ];
   var BS_DATES = { jun1: 'June 1, 2026', aug31: 'August 31, 2026' };
 

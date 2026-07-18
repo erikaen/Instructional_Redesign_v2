@@ -4,7 +4,7 @@
 > anything below conflicts with this block, THIS block governs:
 > - **Tutorial 4.3 is one page.** `43-2-The-First-Close.html` is **DELETED** — there is no
 >   close in these materials (the word may not appear student-facing). `43-1` rebuilds as the
->   **fold-the-piles** development of the per-pile Statement of Changes in Members' Capital:
+>   **fold-the-piles** development of the per-pile Statement of Changes in Member's Capital:
 >   each pile folds Beginning → Change → Ending (Contributed 2,290 → 2,290 · Generated 170
 >   +2,640 → 2,810 · Withdrawn — → (600)); totals 2,460 → 4,500. The engine 'bridge' sheet
 >   carries this per-pile form everywhere, including the 46-2 map.
@@ -17,11 +17,11 @@
 >   standing questions (no Freddie dialog on 43-1–45-1). 44-2 sorts cash rows with the shared
 >   **`BRW.tagger`** (per-row Operating/Investing/Financing pills; the mis-tagged card payoff
 >   is the discovery beat, via the tagger's `onMiss` hook).
-> - **41-1's handed-over balance sheet** shows Members' Capital as Contributed 2,290 /
+> - **41-1's handed-over balance sheet** shows Member's Capital as Contributed 2,290 /
 >   Generated 2,810 / Withdrawn (600) at Aug 31 (June 1: 2,290 / 170 / —).
 
 **Status:** Draft v2 (2026-07-11) — **restructured (Rick's ruling):** Module 3's post-income-statement
-content (old 34-x/35-x) moves into this module; the statement of changes in Members' Capital, the
+content (old 34-x/35-x) moves into this module; the statement of changes in Member's Capital, the
 cash-flow statement, and the NI↔CFO reconciliation now arrive **at Freddie's request**. The new arc
 (4.1–4.7, with 4.8/4.9 sketched) and the per-tutorial reframing contract are below and are
 authoritative; earlier section text is kept where still true, with superseded lines marked. A planning
@@ -71,17 +71,17 @@ builds on having watched the set get built for a reader who asked.
 ## The arc — Module 4 tutorials (restructured 2026-07-11; all rulings Rick's)
 
 **The ruling (verbatim intent):** everything in Module 3 after the production of the income statement
-moves here — the statement of changes in Members' Capital, the cash-flow statement, and the
+moves here — the statement of changes in Member's Capital, the cash-flow statement, and the
 reconciliation of net income and operating cash arrive **at Freddie's request**. Sequencing rulings:
 the missing-wage discovery comes **first** (Freddie reads the income statement, finds no wage line,
-then starts asking for statements); **Members' Capital before cash**; the reconciliation is **its own
+then starts asking for statements); **Member's Capital before cash**; the reconciliation is **its own
 tutorial**; the Statement Map becomes the **capstone**; the napkin moves **next to the deal**.
 
 | Tutorial | Pages | Source | One idea |
 |---|---|---|---|
 | 4.1 The Investor Asks | `41-1` (rebuilt) | 41-1 | An outside reader receives only what exists: two balance sheets + the income statement |
 | 4.2 The Missing Wage | `42-1` (ending reworked) | 42-1 | The shop's biggest input cost it nothing; a draw is not pay — and the $600 is nowhere on the income statement either |
-| 4.3 The Change in Members' Capital | `43-1`, `43-2` | 35-1, 35-2 | The bridge, and the first-ever close |
+| 4.3 The Change in Member's Capital | `43-1`, `43-2` | 35-1, 35-2 | The bridge, and the first-ever close |
 | 4.4 The Cash-Flow Statement | `44-1`, `44-2`, `44-3` | 34-1, 34-2, 34-4 | Where the cash actually went — three buckets, laid out as a statement |
 | 4.5 What Cash Missed | `45-1` | 34-3 | Net income 2,640 → operating cash 320, item by item |
 | 4.6 The Statements Tie Out | `46-1`, `46-2` | 35-3, 41-2 | Articulation matched, then the whole map seen |
@@ -94,7 +94,7 @@ tutorial**; the Statement Map becomes the **capstone**; the napkin moves **next 
   that exists**: the June 1 and August 31 balance sheets and the income statement — no promise of
   other statements (they don't exist yet; his requests bring them into being). This is the student's
   **first sighting of the Aug 31 balance sheet as a statement** — every line traceable to the workbook
-  they built. Deliberate consequence: **Generated 2,210 / Members' Capital 4,500 appear as lines
+  they built. Deliberate consequence: **Generated 2,210 / Member's Capital 4,500 appear as lines
   before any statement has walked their path** — that unexplained change IS the module's engine.
   Ends with Freddie turning to the income statement → 4.2.
 - **4.2 (`42-1`, ending reworked).** Beats 1–2 stand as built (the five-option hunt including "There
@@ -104,7 +104,7 @@ tutorial**; the Statement Map becomes the **capstone**; the napkin moves **next 
   sat in WITHDRAWN on the Reasons trail, never in Expenses) is carried by the Reasons-trail callback
   the student built in 31-2, with no statement render. **(b)** the closing "I have a proposal" line
   moves to 4.7; the two-hats naming stays, and the page now ends on **Freddie's first request**: $600
-  left the shop and it is not an expense — where do the statements show it? and Members' Capital went
+  left the shop and it is not an expense — where do the statements show it? and Member's Capital went
   2,460 → 4,500 — walk me from one to the other. → 4.3.
 - **4.3 (`43-1`←35-1, `43-2`←35-2).** New opening beat: Freddie's request lands; Anna still teaches.
   `43-1`: the statement-tab render trims to **income only** before the bridge builds (the source page
@@ -147,7 +147,7 @@ bridge (43-1) → cashflows (44-3) → balance (46-1). Consequences: `43-1` show
 bridge builds (never cashflows); `43-2` onward every workbook snapshot is **closed**; `44-2` keeps
 its page-local Season Cash sort tab; `46-1` shows all four in arrival order (income, bridge,
 cashflows, balance); any page's narration counting the statements must count what exists at that
-point (at 44-3: four — income, changes in Members' Capital, cash flows, balance sheet). `45-1` and
+point (at 44-3: four — income, changes in Member's Capital, cash flows, balance sheet). `45-1` and
 `46-2` render statement sheets without the workbook; `41-1`/`42-1` render statements via
 `BRW.sheetHTML` only.
 
@@ -211,24 +211,24 @@ React/Babel), Bike-Repair numbers, v2 vocabulary.
    The balance sheets show the **real workbook line items** — do not adapt 06's Cash/Non-Cash
    aggregation.
 4. **Opening snapshot is June 1, 2026** (MC $2,460) — the season the statements bridge.
-5. **Three paths, as in 06:** Cash, Members' Capital, Net income. Other changes (the liabilities'
+5. **Three paths, as in 06:** Cash, Member's Capital, Net income. Other changes (the liabilities'
    fall to zero, the receivable appearing) stay visible on the sheets and get a pointing note —
    their stories were told in M3 — but no fourth path is walked. (Confirmed 2026-07-09: the
    liability movement needs no special handling — "just a credit card bill that got paid.")
 6. **The investor speaks** — a dialogue character (boxes like Anna's), not a mere framing device.
-   And the investor **uses the course's vocabulary** (Members' Capital, Contributed, Generated) —
+   And the investor **uses the course's vocabulary** (Member's Capital, Contributed, Generated) —
    they do not arrive speaking outside terms.
 
 ### Terminology port (06 → v2)
 
 | 06-structure says | This build says |
 |---|---|
-| Equity / Total Equity | **Members' Capital** |
+| Equity / Total Equity | **Member's Capital** |
 | Retained Earnings | **Generated** |
 | Contributed Capital | **Contributed** |
-| Statement of Changes in Equity | **Statement of Changes in Members' Capital** |
+| Statement of Changes in Equity | **Statement of Changes in Member's Capital** |
 | Distributions to owners | **Owner's draw** |
-| A − L = Equity identity bar | **A − L = Members' Capital**, shown holding at both dates |
+| A − L = Equity identity bar | **A − L = Member's Capital**, shown holding at both dates |
 
 ("Equity"/"equities", "Net Assets", "the residual" as a label, "accounting equation" — all remain
 banned student-facing; see repo `CLAUDE.md`.)
@@ -237,8 +237,8 @@ banned student-facing; see repo `CLAUDE.md`.)
 
 - **Cash:** $1,300 → $620, **down $680** — explained by the **Statement of Cash Flows**:
   Operating **+$320** · Investing **−$400** · Financing **−$600**.
-- **Members' Capital:** $2,460 → $4,500, **up $2,040** — explained by the **Statement of Changes
-  in Members' Capital**: 2,460 + 2,640 − 600 = 4,500. Contributed ($2,290) never moves — the
+- **Member's Capital:** $2,460 → $4,500, **up $2,040** — explained by the **Statement of Changes
+  in Member's Capital**: 2,460 + 2,640 − 600 = 4,500. Contributed ($2,290) never moves — the
   whole path runs through Generated (170 → 2,210).
 - **Net income:** **$2,640** — the bridge statement's biggest line, explained by the **Income
   Statement**: 6,020 − 3,380, opened *from* the Net income row so the nesting is seen, with the
@@ -249,10 +249,10 @@ banned student-facing; see repo `CLAUDE.md`.)
 1. **The ask.** *(Repositioned 2026-07-11: this step's substance now belongs to Tutorial 4.1 —
    the hand-over of the two balance sheets and the income statement. 46-2 re-opens on the two
    snapshots as a reprise, not a first sighting.)* The two balance sheets stand side by side —
-   June 1 and August 31 — with A − L = Members' Capital holding at both dates.
+   June 1 and August 31 — with A − L = Member's Capital holding at both dates.
 2. **The Cash path.** Cash highlighted on both sheets (other lines faded, 06's idiom); the
    Statement of Cash Flows appears between them.
-3. **The Members' Capital path.** MC highlighted; the bridge statement between the sheets.
+3. **The Member's Capital path.** MC highlighted; the bridge statement between the sheets.
 4. **The Net income path.** The Income Statement opens from the bridge's Net income row.
 5. **The whole map.** Everything at once: two snapshots, three explaining statements, each hung on
    the line it explains. Articulation re-named from 46-1, now *seen*. A pointing note covers the
@@ -282,7 +282,7 @@ map; one continuous interaction, unfragmented.
 | **Total Liabilities** | **2,250** | **0** |
 | Contributed | 2,290 | 2,290 |
 | Generated | 170 | 2,210 |
-| **Members' Capital** | **2,460** | **4,500** |
+| **Member's Capital** | **2,460** | **4,500** |
 
 Closing equipment lines are carrying amounts after the season's depreciation (1,600+400−160 /
 750−40 / 610−30) — matching the workbook the student left at the end of M3 (graduated, not yet
@@ -300,7 +300,7 @@ depiction shown**).
 - **Statement of Cash Flows:** Operating +320 (Repairs collected +5,500 · Parts bought −1,200 ·
   Rent paid −1,950 · Credit-card payoff −2,030) · Investing −400 (New repair tool) · Financing
   −600 (Owner's draw) · Net change −680 · Cash, June 1 1,300 · **Cash, August 31 620**.
-- **Statement of Changes in Members' Capital:** Opening 2,460 · + Net income 2,640 · − Owner's
+- **Statement of Changes in Member's Capital:** Opening 2,460 · + Net income 2,640 · − Owner's
   draw 600 · **Closing 4,500**.
 
 ---
@@ -386,7 +386,7 @@ Page files: `42-1-The-Missing-Wage.html` (Tutorial 4.2), `47-1-Freddies-Napkin.h
 What the investor is actually buying — the skill at the bench, the name on Whalley Ave, the
 customer relationships — appears **nowhere** on the map the student just laid out. 33-4 poses
 this; the laptop's book-below-eBay in 33-2 was the small first sighting. The investor's price
-minus book Members' Capital ($4,500) *is* the gap. Frame per the pedagogy skill: the exclusion is
+minus book Member's Capital ($4,500) *is* the gap. Frame per the pedagogy skill: the exclusion is
 a **feature of the recognition convention** (an evidence test, drawn by people with interests),
 never "we can't measure it" — and the gap is **path dependence**, not "the books are out of date."
 
@@ -448,7 +448,7 @@ Discoverable from the deal's own arithmetic; never pre-told.
 The GAAP-literacy aside is **dropped from the course entirely.** "Retained Earnings,"
 "Contributed Capital," and the outside world's name for the A−L difference appear **nowhere**
 in any module — this supersedes the 2026-07-07 plan (Module-2-Design.md) that had them
-surviving as an M4 aside. The course's names are Members' Capital / Contributed / Generated,
+surviving as an M4 aside. The course's names are Member's Capital / Contributed / Generated,
 full stop. 15-2's "already know some accounting?" rabbit-hole (which treats the name's
 historical instability without writing the banned words) is the only nod the course gives.
 

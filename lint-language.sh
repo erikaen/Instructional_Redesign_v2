@@ -21,7 +21,7 @@ check () {  # $1 = grep -E pattern, $2 = explanation
   fi
 }
 
-check 'equit'                    '"equity/equities" is banned in student-facing pages. The A-L difference stays unnamed in Module 1; from Module 2 on its only name is "Members Capital".'
+check 'equit'                    '"equity/equities" is banned in student-facing pages. The A-L difference stays unnamed in Module 1; from Module 2 on its only name is "Member'"'"'s Capital".'
 check 'residual'                 '"residual" is instructor-side vocabulary only; in student-facing text say "the difference" (code comments exempt).'
 check 'what I (have|owe)'        'First-person workbook labels are banned: the records belong to the repair work, not the student.'
 check "what(.{0,7})s left (after|when|once)" 'Leftover/possession framing for A-L is banned: it is a definitional difference, not a thing left over.'
@@ -35,6 +35,16 @@ check 'repair work (pays|paid|buys|bought|signs|signed|hires|hired|bears|sells|s
 check 'repair work (is|was|must be|would be|will be) (better|worse) off|repair work (is|was|must be) doing (fine|well|badly)' 'Activities have no welfare — the repair work cannot be better/worse off or doing fine. Recast: "a good month / a bad month for the repair work", or name what the records show.'
 check 'books of (its|their) own'  'Books are ABOUT a subject, not its property; say "a set of books about it".'
 check 'belongs? to the repair work' 'Ownership framing — the repair work cannot own. For sorting say "belongs with"; for lists say "tied up in", "still owed because of", or "recorded for" the repair work.'
+
+# Ruling 2026-07-14, reconfirmed 2026-07-18: City Cycle's embedded old-job
+# agreement is the only plural carve-out; plural-matching normalizers stay exempt.
+plural_capital_hits=$(grep -nE "Members(&rsquo;|&#8217;|['’]) [Cc]apital" *.html 2>/dev/null | grep -vE '^(23-1-welcome|23-2-agreement)\.html:' | grep -vF 'replace(/Members')
+if [ -n "$plural_capital_hits" ]; then
+  echo 'BANNED — plural Members-Capital is reserved for Anna'"'"'s City Cycle agreement; use "Member'"'"'s Capital" for the single-member LLC.'
+  echo "$plural_capital_hits"
+  echo
+  fail=1
+fi
 
 # "the net / your net / net-mover" as a name for A-L, with standard-vocab exemptions.
 net_hits=$(grep -rniE '(your|our|the) net\b|net[ -]movers?' $FILES 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)' | grep -viE 'net cash flow|net income|net 15|net-worth')

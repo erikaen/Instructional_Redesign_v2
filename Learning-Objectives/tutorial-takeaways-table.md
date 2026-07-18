@@ -147,7 +147,7 @@
 **Light Bulb ideas**
 
 - **"A draft, on purpose"** — The agreement is complete except Schedule A; you can't honestly fill it in until the contributing is done.
-- **"Not one number changed"** — The same balance sheet is now the Company's, legally contributed in; "the difference" became Members' Capital (Contributed $990 + Generated $170 = $1,160).
+- **"Not one number changed"** — The same balance sheet is now the Company's, legally contributed in; "the difference" became Member's Capital (Contributed $990 + Generated $170 = $1,160).
 - **"The wall"** — Limited liability is a legal fact — it changes who can be pursued, not what the records show; the balance sheet didn't move, the exposure did.
 - **"The keystone"** — Accounting-entity ≠ legal-entity; the accounting entity came first and can exist without any legal body; the LLC is a legal wrapper placed around it.
 - **"The deeper point"** — The same machine runs all the way up; a giant company draws one accounting boundary around dozens of separate legal companies.
@@ -156,7 +156,7 @@
 
 - You wrote your own Operating Agreement — City Cycle's was only an example.
 - It stays a draft until Schedule A is complete (the contributing isn't finished).
-- The whole business was contributed in at book carryover — not one number changed; "the difference" became Members' Capital ($1,160).
+- The whole business was contributed in at book carryover — not one number changed; "the difference" became Member's Capital ($1,160).
 - Limited liability put a wall between the Company's debts and your personal life — who can be pursued, not what the records show.
 - The keystone: the accounting entity (since 1.1) is not the legal entity (days old); a legal body was wrapped around a boundary that already existed.
 
@@ -183,7 +183,7 @@
 
 **Light Bulb ideas**
 
-- **"Assets − Liabilities = Members' Capital"** — $4,710 − $2,250 = $2,460; the difference from Module 1 now carries the LLC's name; the identity holds by definition every time.
+- **"Assets − Liabilities = Member's Capital"** — $4,710 − $2,250 = $2,460; the difference from Module 1 now carries the LLC's name; the identity holds by definition every time.
 - **"What the line was hiding"** — Parts bought $1,200 and used $1,200, lands back at $200; the flat number hides a season of movement (same for Right of use, Cash, Credit card, Customer deposit).
 - **"The season, in your own piles"** — Reasons tab: CONTRIBUTED $2,290, WITHDRAWN −$600, GENERATED +$2,740; Cash down $680 — a long true list, still no answer to how the season went.
 - **"A workbook, not yet a statement"** — The three tabs show where things stand and why each balance moved, but never line up in one place what the work delivered against what it used up.
@@ -291,7 +291,7 @@
 
 **Light Bulb ideas**
 
-- **"Articulation"** — A balance sheet cannot show a new number without the story filed beside it; the difference travels through the income statement, the statement of changes in Members' Capital, and the statement of cash flows.
+- **"Articulation"** — A balance sheet cannot show a new number without the story filed beside it; the difference travels through the income statement, the Statement of Member's Capital, and the statement of cash flows.
 - **"The rest of the map"** — Every other line that moved has its story in these same statements too (Credit Card to $0, Customer Deposit to $0, Accounts Receivable appearing).
 
 **What you discovered**

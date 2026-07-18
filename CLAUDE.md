@@ -16,8 +16,10 @@ entity type supplies one:
   "have minus owe" gloss were retired 2026-07-05 — say "the difference."
   ("Net cash flow" on the Cash sheet, "net income" (M3+), and trade terms
   like "net 15" are standard vocabulary and stay.)
-- **Module 2 on (2x-x, 3x-x):** its one name is **"Members' Capital"**, because
-  that is the word the Operating Agreement uses. No other name.
+- **Module 2 on (2x-x, 3x-x):** its one name is **"Member's Capital"**, because
+  the LLC has one member and that is the term its Operating Agreement uses. No
+  other name. Anna's City Cycle old-job agreement retains its plural wording
+  because it is a different company's document.
 - **Banned in student-facing text:**
   - "equity" / "equities" (purged 2026-07, commit 6e0cb67)
   - "Net Assets"

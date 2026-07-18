@@ -9,7 +9,7 @@ non-negotiable language rules to the repo **CLAUDE.md**.
 **Where it sits.** M2 turns the pre-LLC repair work (M1) into a legal body — **[Your Name]'s
 Bike Repairs, LLC** — and hands M3 a single opening balance sheet (June 1, 2026):
 
-> Assets **$4,710** − Liabilities **$2,250** = Members' Capital **$2,460**
+> Assets **$4,710** − Liabilities **$2,250** = Member's Capital **$2,460**
 > (cash $1,300; **Contributed $2,290 + Generated $170**).
 
 **File naming (v2).** `2X-Y-Title.html` = Module 2, Activity X, Page Y. Five activities:
@@ -18,7 +18,7 @@ Bike Repairs, LLC** — and hands M3 a single opening balance sheet (June 1, 202
 
 ---
 
-## Ruling 1 — Terminology handoff: worksheet terms until the OA, then Members' Capital
+## Ruling 1 — Terminology handoff: worksheet terms until the OA, then Member's Capital
 
 **Locked 2026-07-07.** Standardize on **Generated**; **"Retained" / "Retained Earnings" is
 retired course-wide** (the lock changed from Retained → Generated at the M3 close too — see
@@ -30,7 +30,7 @@ retired course-wide** (the lock changed from Retained → Generated at the M3 cl
   In M1 the **total stays unnamed** (per CLAUDE.md); the piles are named where the Reasons list
   is built.
 - **At the moment the numbers move onto the OA → pick up the legal *total* name
-  "Members' Capital,"** explained on-page as adopting the legal term. **Members' Capital =
+  "Member's Capital,"** explained on-page as adopting the legal term. **Member's Capital =
   Contributed + Generated.** Only the *total* takes the legal label; the subparts keep their
   worksheet names.
 - **GAAP synonyms are a literacy aside, M4 only.** Students meet "Retained Earnings" (for
@@ -39,7 +39,7 @@ retired course-wide** (the lock changed from Retained → Generated at the M3 cl
   Unearned Revenue)" idiom.
 
 **The $170 is Generated** (May's pre-LLC work), not a contribution — it keeps its Generated
-identity inside the LLC. Opening total: Members' Capital 2,460 = Contributed 2,290 + Generated 170.
+identity inside the LLC. Opening total: Member's Capital 2,460 = Contributed 2,290 + Generated 170.
 
 ---
 
@@ -91,7 +91,7 @@ not the amount — the card is already $2,030 at 23-3.
 | 23-4 The Wall | limited-liability wall | unchanged (see open item on 23-5) |
 | 23-5 When Did It Become Real? | keystone (which act made it real) | **re-point to the Certificate filing (2.2)** as legal existence; OA is internal governance executed later — *needs Rick's final nod* |
 | 24-3 Opening the Account | $1,300 deposit; card | + **NEW: finalize Schedule A** = balance-sheet numbers |
-| 25-2 Capstone balance sheet | full lay-out; introduces "Members' Capital" | **final two-sided signing** beat; balance sheet = signed Schedule A |
+| 25-2 Capstone balance sheet | full lay-out; introduces "Member's Capital" | **final two-sided signing** beat; balance sheet = signed Schedule A |
 
 ---
 
