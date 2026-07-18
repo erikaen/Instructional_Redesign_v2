@@ -106,11 +106,14 @@ var PLAN = [
    ['deleted intermediate cash page is absent and flow links directly to 46-1', d=>!hasTarget(d,'45-1-'+'What-Cash-Missed.html') && hasTarget(d,'46-1-The-Statements-Tie-Out.html')]]},
 
  {file:'46-1-The-Statements-Tie-Out.html', asserts:[
-   ['exactly three matching-question cards', d=>d.querySelectorAll('.mc-card').length===3],
-   ['completion reveals the articulation payoff', d=>visibleBeat(d,'#anna',['articulation'])],
+   ['exactly three question cards', d=>d.querySelectorAll('#questionBank .mc-card').length===3],
+   ['completed map has two balance-sheet columns and at least two mounted statement panels', d=>d.querySelectorAll('#mainGrid .acct-col').length===2 && d.querySelectorAll('#mainGrid .statement-panel .brw-grid').length>=2],
+   ['completed map has its nested Income Statement open', d=>{var n=d.querySelector('#mainGrid .sce-is-nested[data-income-open="true"] #incomeGridFinal'); return notCollapsed(n) && !!n.querySelector('.brw-grid');}],
+   ['completion reveals the articulation payoff', d=>visibleBeat(d,'#beats',['articulation'])],
+   ['identity bars show 4,710 / 2,250 / 2,460 and 4,500', d=>visibleBeat(d,'#mainGrid .dual-identity-bar',['4,710','2,250','2,460','4,500'])],
    ['back links to 44-3 and forward links to 47-1', d=>hasTarget(d,'44-3-The-Cash-Flow-Statement.html') && hasTarget(d,'47-1-Freddies-Napkin.html')],
-   ['no deleted cash page or bypassed statement-map references', d=>!hasTarget(d,'45-1-'+'What-Cash-Missed.html') && !hasTarget(d,'46-2-'+'The-Statement-Map.html')],
-   ['no TEMPORARY SHIM source', d=>src(d).indexOf('TEMPORARY SHIM')<0]]},
+   ['subtitle says Page 1 of 1', d=>visibleBeat(d,'.tut-header-sub',['Page 1 of 1'])],
+   ['no stale promise or retired page references', d=>{var s=src(d); return s.indexOf('walk the whole picture')<0 && s.indexOf('45-1')<0 && s.indexOf('46-2')<0 && s.indexOf('52-1')<0;}]]},
 
  {file:'47-1-Freddies-Napkin.html', asserts:[
    ['back links to 46-1 and forward links to 48-1', d=>hasTarget(d,'46-1-The-Statements-Tie-Out.html') && hasTarget(d,'48-1-The-Deal.html')],
