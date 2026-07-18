@@ -21,7 +21,19 @@ check () {  # $1 = grep -E pattern, $2 = explanation
   fi
 }
 
-check 'equit'                    '"equity/equities" is banned in student-facing pages. The A-L difference stays unnamed in Module 1; from Module 2 on its only name is "Member'"'"'s Capital".'
+# Ruling 2026-07-18: the CVS 10-K walk pages (53-*) quote another entity's
+# document — a corporation's statements keep their own vocabulary ("Total
+# shareholders' equity"), same principle as the City Cycle plural carve-out.
+# The equity ban still applies to every other student-facing file, and every
+# other check below still scans the 53-* pages.
+equity_files=$(echo "$FILES" | grep -v '^53-')
+equity_hits=$(grep -rniE 'equit' $equity_files 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)')
+if [ -n "$equity_hits" ]; then
+  echo 'BANNED — "equity/equities" is banned in student-facing pages outside the CVS 10-K walk (53-*). The A-L difference stays unnamed in Module 1; from Module 2 on its only name is "Member'"'"'s Capital".'
+  echo "$equity_hits"
+  echo
+  fail=1
+fi
 check 'residual'                 '"residual" is instructor-side vocabulary only; in student-facing text say "the difference" (code comments exempt).'
 check 'what I (have|owe)'        'First-person workbook labels are banned: the records belong to the repair work, not the student.'
 check "what(.{0,7})s left (after|when|once)" 'Leftover/possession framing for A-L is banned: it is a definitional difference, not a thing left over.'
