@@ -113,8 +113,8 @@
     {f:'44-2-Three-Buckets.html',              g:'Module 4', m:'Tutorial 4: The Cash-Flow Statement',   t:'Three Buckets'},
     {f:'44-3-The-Cash-Flow-Statement.html',    g:'Module 4', m:'Tutorial 4: The Cash-Flow Statement',   t:'Laying It Out'},
     {f:'46-1-The-Statements-Tie-Out.html',     g:'Module 4', m:'Tutorial 6: The Statements Tie Out',    t:'The Statements Tie Out'},
-    {f:'46-2-The-Statement-Map.html',          g:'Module 4', m:'Tutorial 6: The Statements Tie Out',    t:'Three Paths and the Map'},
     {f:'47-1-Freddies-Napkin.html',            g:'Module 4', m:'Tutorial 7: Freddie’s Napkin',          t:'Freddie’s Napkin'},
+    {f:'48-1-The-Deal.html',                   g:'Module 4', m:'Tutorial 8: The Deal',                  t:'The Deal'},
   ];
 
   function qp(name){
@@ -155,16 +155,31 @@
   }
   function closeMenu(){ menu.hidden = true; idxBtn.setAttribute('aria-expanded', 'false'); }
 
-  function render(){
+  function updateChrome(){
     var pg = PAGES[idx];
-    frame.src = pg.f;
     titleEl.innerHTML = '<span class="mod">' + pg.g + ' &middot; ' + pg.m + '</span><span class="pg">&middot; ' + pg.t + ' &middot; ' + (idx+1) + ' / ' + PAGES.length + '</span>';
     prevB.disabled = (idx === 0);
     nextB.disabled = (idx === PAGES.length - 1);
     document.title = pg.g + ' — ' + pg.m + ' — ' + pg.t;
     try { history.replaceState(null, '', 'view.html?i=' + idx); } catch (e) { /* file:// preview */ }
   }
+  function render(){
+    frame.src = PAGES[idx].f;
+    updateChrome();
+  }
   function go(d){ var n = idx + d; if (n>=0 && n<PAGES.length){ idx = n; render(); } }
+  /* Pages also navigate themselves via their own bottom buttons (nav() sets the
+     iframe's location directly). Resync the shell's pointer whenever the frame
+     lands on a registered page, so Back/Next/Index stay truthful in mixed use.
+     Chrome-only update — never touches frame.src here, or it would loop. */
+  frame.addEventListener('load', function(){
+    try {
+      var f = frame.contentWindow.location.pathname.split('/').pop();
+      for (var k = 0; k < PAGES.length; k++){
+        if (PAGES[k].f === f){ if (k !== idx){ idx = k; updateChrome(); } return; }
+      }
+    } catch (e) { /* cross-origin or file:// — leave idx alone */ }
+  });
   prevB.onclick = function(){ go(-1); };
   nextB.onclick = function(){ go(1); };
   idxBtn.onclick = function(e){ e.stopPropagation(); if (menu.hidden) openMenu(); else closeMenu(); };
