@@ -52,8 +52,10 @@ that system, or the new page will behave wrong (see "If you skip this").
 
 5. **Module 5 pages register in `course-m5.js`, not `shared.js`.** Module 5 introduces the
    corporate vocabulary (Equity, Net assets) that `lint-language.sh` bans on M1-M4 surfaces,
-   and `shared.js` is lint-scanned. `course-m5.js` (loaded right after `shared.js` on every
-   page) appends the M5 tutorials, COURSE_DONE/COURSE_STEPS entries, and glossary section.
+   and `shared.js` is lint-scanned. `course-m5.js` appends the M5 tutorials,
+   COURSE_DONE/COURSE_STEPS entries, and glossary section.
+   **Currently PARKED (2026-07-19): Module 5 is not wired into the course.** To enable it,
+   add `<script src="course-m5.js"></script>` right after the `shared.js` tag on every page.
 
 ## If you skip step 2
 
