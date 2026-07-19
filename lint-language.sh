@@ -27,8 +27,11 @@ check () {  # $1 = grep -E pattern, $2 = explanation
 # therefore carved out for all Module 5 pages (5[0-9]-*), same principle as the
 # City Cycle plural carve-out (a corporation's statements keep their vocabulary).
 # The ban still applies to every M1–M4 student-facing file, and every other
-# check below still scans the 5x-x pages.
-equity_files=$(echo "$FILES" | grep -vE '^5[0-9]-')
+# check below still scans the 5x-x pages. view.html (the navigation shell) is
+# also exempt from the equity check only: its page registry must mirror Module 5
+# page titles verbatim (e.g. "The Equity Question"), which is a reference to a
+# page, not tutorial prose.
+equity_files=$(echo "$FILES" | grep -vE '^5[0-9]-|^view\.html$')
 equity_hits=$(grep -rniE 'equit' $equity_files 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)')
 if [ -n "$equity_hits" ]; then
   echo 'BANNED — "equity/equities" is banned in student-facing pages outside Module 5 (5x-x). The A-L difference stays unnamed in Module 1; from Module 2 on its only name is "Member'"'"'s Capital".'

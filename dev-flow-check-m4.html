@@ -131,7 +131,7 @@ var PLAN = [
    ['articulation is present', d=>/articulation/i.test(text(d.body))],
    ['offer remains under consideration with no signing language', d=>/under consideration|remain(?:s|ed)? under consideration/i.test(text(d.body)) && !/\bsign(?:s|ed|ing)?\b/i.test(text(d.body))],
    ['back links to 48-1 and course map links to index', d=>hasTarget(d,'48-1-The-Deal.html') && hasTarget(d,'index.html')],
-   ['no Module 5 or 5x-x reference', d=>!/(Module 5|5[0-9]-[0-9])/i.test(src(d))]]}
+   ['links forward to Module 5 introduction (51-1)', d=>hasTarget(d,'51-1-Module-5-Introduction.html')]]}
 ];
 
 var frame = document.getElementById('frame'), tbl = document.getElementById('results');
