@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Statement of Financial Position</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6-scope {
+      --m6-paper:#ffffff;
+      --m6-panel:#f8fafc;
+      --m6-ink:#263746;
+      --m6-muted:#657583;
+      --m6-primary:#155b86;
+      --m6-rule:#c8d4dc;
+      --m6-rule-strong:#708592;
+      --m6-warm:#fff8df;
+      --m6-accent:#d5a528;
+      --m6-shadow:rgba(32,55,72,0.09);
+    }
+    .m6-doc-wrap { overflow-x:auto; padding:2px 2px 8px; }
+    .m6-doc-card, .m6-snapshot {
+      background:var(--m6-paper);
+      color:var(--m6-ink);
+      border:1px solid var(--m6-rule);
+      border-radius:12px;
+      box-shadow:0 8px 24px var(--m6-shadow);
+    }
+    .m6-doc-card { max-width:820px; min-width:610px; margin:0 auto; padding:24px; }
+    .m6-kicker {
+      margin:0 0 5px;
+      color:var(--m6-muted);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .m6-doc-title, .m6-snapshot-title { margin:0; color:var(--m6-primary); }
+    .m6-doc-title { font-size:20px; }
+    .m6-snapshot-title { font-size:17px; }
+    .m6-subline { margin:3px 0 0; color:var(--m6-muted); font-size:12px; font-style:italic; }
+    .m6-table { margin-top:18px; font-size:13px; }
+    .m6-row {
+      display:grid;
+      grid-template-columns:minmax(300px,1fr) 7rem 7rem;
+      column-gap:10px;
+      align-items:baseline;
+      padding:3px 0;
+    }
+    .m6-row-head { border-bottom:1px solid var(--m6-rule); color:var(--m6-primary); font-weight:700; }
+    .m6-value { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m6-section { grid-column:1 / -1; margin-top:10px; color:var(--m6-primary); font-weight:800; }
+    .m6-indent { padding-left:.75rem; }
+    .m6-subtotal { font-weight:600; }
+    .m6-total { margin-top:4px; padding-top:6px; border-top:1px solid var(--m6-rule-strong); color:var(--m6-primary); font-weight:800; }
+    .m6-identity {
+      margin-top:18px;
+      padding:13px 15px;
+      border:1px solid var(--m6-accent);
+      border-radius:9px;
+      background:var(--m6-warm);
+      color:var(--m6-ink);
+    }
+    .m6-identity-title { margin:0 0 6px; font-weight:800; }
+    .m6-identity-line { margin:3px 0; font-family:"JetBrains Mono",monospace; font-size:12px; }
+    .m6-identity-foot { margin:7px 0 0; color:var(--m6-muted); font-family:"JetBrains Mono",monospace; font-size:11px; font-style:italic; }
+    .m6-not-card {
+      max-width:820px;
+      margin:0 auto;
+      padding:24px;
+      border:2px solid var(--m6-accent);
+      border-radius:12px;
+      background:var(--m6-warm);
+      color:var(--m6-ink);
+      box-shadow:0 8px 24px var(--m6-shadow);
+    }
+    .m6-not-kicker { color:var(--m6-accent); }
+    .m6-not-title { margin:2px 0 17px; color:var(--m6-primary); font-size:20px; }
+    .m6-not-item { margin:0 0 14px; }
+    .m6-not-item-title { margin:0 0 3px; color:var(--m6-primary); font-size:14px; font-weight:800; }
+    .m6-not-item p { margin:0; font-size:14px; line-height:1.58; }
+    .m6-not-close { margin:18px 0 0; color:var(--m6-muted); font-size:14px; font-style:italic; line-height:1.58; }
+    .m6-split.main-grid { align-items:stretch; }
+    .m6-split.main-grid > * { min-width:0; }
+    .m6-snapshot-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
+    .m6-snapshot { min-width:285px; height:100%; padding:18px; box-sizing:border-box; }
+    .m6-snapshot-table { margin-top:15px; font-size:12px; }
+    .m6-snapshot-row {
+      display:grid;
+      grid-template-columns:minmax(185px,1fr) 6rem;
+      column-gap:8px;
+      align-items:baseline;
+      padding:3px 0;
+    }
+    .m6-snapshot-row.m6-section { display:block; }
+    .m6-gap {
+      min-height:230px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-sizing:border-box;
+      padding:24px 18px;
+      border:2px dashed var(--m6-accent);
+      border-radius:12px;
+      background:var(--m6-warm);
+      color:var(--m6-muted);
+      text-align:center;
+      font-size:13px;
+      font-style:italic;
+      line-height:1.55;
+    }
+    @media (max-width:760px) {
+      .m6-split.main-grid { grid-template-columns:1fr; }
+      .m6-gap { min-height:170px; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6-scope {
+        --m6-paper:#26242e;
+        --m6-panel:#211f28;
+        --m6-ink:#e8edf1;
+        --m6-muted:#b4c0c8;
+        --m6-primary:#7dc8f3;
+        --m6-rule:#4b5361;
+        --m6-rule-strong:#8797a2;
+        --m6-warm:#332f20;
+        --m6-accent:#d8ad3e;
+        --m6-shadow:rgba(0,0,0,0.28);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Statement of Financial Position</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~6 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Statement of Financial Position</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="yale-fy2025-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+var step=0;
+var TOTAL_STEPS=5;
+
+function escapeHTML(value){
+  return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmt(v){
+  if(v===0) return '&mdash;';
+  var a=Math.abs(v).toLocaleString('en-US');
+  return v<0 ? '('+a+')' : a;
+}
+function wantedRows(showAll){
+  return window.YALE_FY2025.sfp.filter(function(row){
+    return showAll || row.type==='section' || row.type==='total';
+  });
+}
+function rowClass(row,base){
+  var cls=base;
+  if(row.type==='subtotal') cls+=' m6-subtotal';
+  if(row.type==='total') cls+=' m6-total';
+  return cls;
+}
+function labelCell(row){
+  return '<div'+(row.indent?' class="m6-indent"':'')+'>'+escapeHTML(row.label)+'</div>';
+}
+function documentRows(showAll){
+  return wantedRows(showAll).map(function(row){
+    if(row.type==='section') return '<div class="m6-section">'+escapeHTML(row.label)+'</div>';
+    return '<div class="'+rowClass(row,'m6-row')+'">'+labelCell(row)
+      +'<div class="m6-value">'+fmt(row.y2025)+'</div>'
+      +'<div class="m6-value">'+fmt(row.y2024)+'</div></div>';
+  }).join('');
+}
+function totalByLabel(label){
+  var rows=window.YALE_FY2025.sfp;
+  for(var i=0;i<rows.length;i++) if(rows[i].type==='total' && rows[i].label===label) return rows[i];
+  return null;
+}
+function lineByPrefix(prefix){
+  var rows=window.YALE_FY2025.sfp;
+  for(var i=0;i<rows.length;i++) if(rows[i].type==='line' && rows[i].label.indexOf(prefix)===0) return rows[i];
+  return null;
+}
+function money(v){ return '$'+Math.abs(v).toLocaleString('en-US'); }
+function identityCheck(){
+  var assets=totalByLabel('Total assets');
+  var liabilities=totalByLabel('Total liabilities');
+  var netAssets=totalByLabel('Total net assets');
+  return '<div class="m6-identity"><p class="m6-identity-title">Identity check at both dates</p>'
+    +'<p class="m6-identity-line">2025: '+money(assets.y2025)+' &minus; '+money(liabilities.y2025)+' = '+money(netAssets.y2025)+' &#10003;</p>'
+    +'<p class="m6-identity-line">2024: '+money(assets.y2024)+' &minus; '+money(liabilities.y2024)+' = '+money(netAssets.y2024)+' &#10003;</p>'
+    +'<p class="m6-identity-foot">A &minus; L = Net Assets &middot; the identity holds at both dates</p></div>';
+}
+function documentForm(showAll){
+  return '<div class="m6-scope"><div class="m6-doc-wrap"><div class="m6-doc-card">'
+    +'<p class="m6-kicker">Yale University &middot; from the report &middot; page 21</p>'
+    +'<h2 class="m6-doc-title">Consolidated Statements of Financial Position</h2>'
+    +'<p class="m6-subline">as of June 30, 2025 and 2024</p>'
+    +'<p class="m6-subline">In $ millions</p>'
+    +'<div class="m6-table"><div class="m6-row m6-row-head"><div></div><div class="m6-value">2025</div><div class="m6-value">2024</div></div>'
+    +documentRows(showAll)+'</div>'+(showAll?'':identityCheck())+'</div></div></div>';
+}
+function whatsNotCard(){
+  var buildings=lineByPrefix('Land, buildings and equipment');
+  return '<div class="m6-scope"><div class="m6-not-card">'
+    +'<p class="m6-kicker m6-not-kicker">What&rsquo;s NOT on this Statement</p>'
+    +'<h2 class="m6-not-title">Recorded &ne; everything Yale holds</h2>'
+    +'<div class="m6-not-item"><h3 class="m6-not-item-title">Collections &mdash; billions in fair value, zero on the books</h3><p>Yale&rsquo;s collections are excluded under the ASC 958-360 election. It applies to collections held for public exhibition, education, or research when they are protected, preserved, and covered by a policy that reinvests any sale proceeds in the collections. Yale makes that election, and the footnotes disclose it.</p></div>'
+    +'<div class="m6-not-item"><h3 class="m6-not-item-title">Human capital &mdash; the faculty, students, and staff</h3><p>These people are central to Yale&rsquo;s mission, yet the recognition convention excludes human capital for every organization, nonprofit and for-profit alike.</p></div>'
+    +'<div class="m6-not-item"><h3 class="m6-not-item-title">The Yale name</h3><p>The name is decisive for admissions, donations, and hiring. It stays off the books under the rule that excludes internally developed intangibles from any balance sheet &mdash; the same reason CVS&rsquo;s brand is off CVS&rsquo;s books.</p></div>'
+    +'<div class="m6-not-item"><h3 class="m6-not-item-title">Old buildings at cost</h3><p>The recorded '+money(buildings.y2025)+'M is cost less accumulated depreciation. For stone buildings acquired or built generations ago, that figure does not describe what the campus would command today.</p></div>'
+    +'<p class="m6-not-close">Each is a <strong>feature of the recognition convention</strong> &mdash; a deliberate choice with identifiable trade-offs, not a failure of ability. The identity still works on whatever the convention captures.</p>'
+    +'</div></div>';
+}
+function snapshotRows(year,showAll){
+  return wantedRows(showAll).map(function(row){
+    if(row.type==='section') return '<div class="m6-section">'+escapeHTML(row.label)+'</div>';
+    return '<div class="'+rowClass(row,'m6-snapshot-row')+'">'+labelCell(row)
+      +'<div class="m6-value">'+fmt(row[year])+'</div></div>';
+  }).join('');
+}
+function snapshot(year,label,showAll){
+  var yearText=year==='y2025'?'2025':'2024';
+  return '<div class="m6-snapshot-wrap"><div class="m6-snapshot"><p class="m6-kicker">'+label+'</p>'
+    +'<h3 class="m6-snapshot-title">Statement of Financial Position</h3>'
+    +'<p class="m6-subline">June 30, '+yearText+' &middot; in $ millions</p>'
+    +'<div class="m6-snapshot-table">'+snapshotRows(year,showAll)+'</div></div></div>';
+}
+function splitView(showAll){
+  return '<div class="m6-scope"><div class="main-grid m6-split">'
+    +snapshot('y2024','Beginning',showAll)
+    +'<div class="m6-gap"><p>A fiscal year between them.<br><br>The Cash Flow Statement and the Statement of Activities belong in this space.</p></div>'
+    +snapshot('y2025','Ending',showAll)+'</div></div>';
+}
+function render(){
+  renderBeats(step);
+  renderGrid(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='Here is Yale&rsquo;s Consolidated Statements of Financial Position as it appears on page 21 of the FY2025 financial report. One table, two date columns &mdash; June 30, 2025 on the left, June 30, 2024 on the right &mdash; exactly as Yale presents it. The architecture is the one you know: a snapshot of recorded assets, recorded liabilities, and the difference between them. Yale&rsquo;s name for that difference is <strong>Net Assets</strong>, because a nonprofit has no owners; the identity is still A &minus; L = Net Assets. (Figures rounded to $ millions; the report states thousands.)';
+  } else if(currentStep===1){
+    text='Before narrowing to the architecture, pause on what this statement does <em>not</em> show. Yale&rsquo;s collections &mdash; the Beinecke&rsquo;s rare books and manuscripts, the Art Gallery, the Center for British Art, the Peabody&rsquo;s specimens &mdash; are deliberately excluded under FASB ASC 958-360, which lets a nonprofit decline to record collections held for public exhibition, education, or research, provided they are protected, preserved, and covered by a policy that reinvests any sale proceeds in the collections. Yale takes that option; the footnotes disclose it; the statement itself is silent. The same recognition convention keeps the Yale name and the faculty&rsquo;s expertise off the books &mdash; for the same reason CVS&rsquo;s brand is off CVS&rsquo;s books. What is recorded is what the convention captures; what is missing is a deliberate choice with identifiable trade-offs, not a failure of ability.';
+  } else if(currentStep===2){
+    text='The architecture works on three numbers per date &mdash; Total assets, Total liabilities, and Total net assets &mdash; because that is what the identity uses: Assets minus Liabilities equals Net Assets. Set the non-total rows aside to expose just those three, and the identity checks at both dates.';
+  } else if(currentStep===3){
+    text='Now rearrange. The June 30, 2024 column becomes the Beginning Statement of Financial Position on the left; the June 30, 2025 column becomes the Ending Statement of Financial Position on the right. A fiscal year sits between them &mdash; the Cash Flow Statement and the Statement of Activities will account for what happened in it.';
+  } else if(currentStep===4){
+    text='The line-item detail returns, now in two independent snapshots &mdash; Beginning on the left, Ending on the right, with a gap in the middle ready for the two explanatory statements.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div>';
+}
+function renderGrid(currentStep){
+  var html='';
+  if(currentStep===0) html=documentForm(true);
+  else if(currentStep===1) html=whatsNotCard();
+  else if(currentStep===2) html=documentForm(false);
+  else html=splitView(currentStep===4);
+  document.getElementById('mainGrid').innerHTML=html;
+}
+function renderTail(currentStep){
+  document.getElementById('tail').innerHTML=currentStep===4
+    ? '<div class="insight-box"><strong>Two snapshots of the identity, one fiscal year apart.</strong> The gap is ready for the two statements that explain the year &mdash; the rest of Module 6.</div>'
+    : '';
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep>0) h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else h+='<button class="btn-continue" onclick="playClick();nav(\'63-2-The-Cash-Question.html\')">The Cash Question &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function advance(){
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Statement of Financial Position',def:'A nonprofit&rsquo;s snapshot of recorded assets, liabilities, and net assets at a single date.'},
+  {term:'Net Assets',def:'Recorded assets minus recorded liabilities. This nonprofit term fills the role that equity fills for an owner-held company.'},
+  {term:'Recognition',def:'The convention that determines whether an item qualifies to appear in the financial statements.'},
+  {term:'Collections (ASC 958-360)',def:'Art, historical treasures, and similar holdings that a nonprofit may leave unrecorded when specified preservation, public-purpose, and sale-proceeds conditions are met.'},
+  {term:'Consolidated',def:'Yale University and the entities it controls, reported together as one organization.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){
+  step=TOTAL_STEPS-1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
