@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Net Assets Question</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6-scope {
+      --m6-paper:#ffffff;
+      --m6-panel:#f8fafc;
+      --m6-ink:#263746;
+      --m6-muted:#657583;
+      --m6-primary:#155b86;
+      --m6-rule:#c8d4dc;
+      --m6-rule-strong:#708592;
+      --m6-warm:#fff8df;
+      --m6-highlight:#fff8df;
+      --m6-accent:#d5a528;
+      --m6-success:#167447;
+      --m6-shadow:rgba(32,55,72,0.09);
+    }
+    .m6-doc-wrap, .m6-snapshot-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
+    .m6-doc-card, .m6-snapshot, .m6-question-card, .m6-reference-strip {
+      background:var(--m6-paper);
+      color:var(--m6-ink);
+      border:1px solid var(--m6-rule);
+      border-radius:12px;
+      box-shadow:0 8px 24px var(--m6-shadow);
+    }
+    .m6-kicker {
+      margin:0 0 5px;
+      color:var(--m6-muted);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .m6-doc-title, .m6-snapshot-title { margin:0; color:var(--m6-primary); }
+    .m6-doc-title { font-size:20px; }
+    .m6-snapshot-title { font-size:17px; }
+    .m6-subline { margin:3px 0 0; color:var(--m6-muted); font-size:12px; font-style:italic; }
+    .m6-question-grid.main-grid {
+      grid-template-columns:minmax(270px,1fr) minmax(300px,1.12fr) minmax(270px,1fr);
+      align-items:stretch;
+    }
+    .m6-question-grid.main-grid > * { min-width:0; }
+    .m6-snapshot { min-width:270px; height:100%; padding:18px; box-sizing:border-box; }
+    .m6-snapshot-table { margin-top:15px; font-size:12px; }
+    .m6-compact-row {
+      display:grid;
+      grid-template-columns:minmax(168px,1fr) 5.5rem;
+      column-gap:8px;
+      align-items:baseline;
+      padding:4px 5px;
+      border-left:3px solid transparent;
+      color:var(--m6-ink);
+    }
+    .m6-compact-lit {
+      border-left-color:var(--m6-accent);
+      border-radius:3px;
+      background:var(--m6-highlight);
+      color:var(--m6-primary);
+      font-weight:700;
+    }
+    .m6-compact-total { margin-top:3px; padding-top:6px; border-top:1px solid var(--m6-rule-strong); color:var(--m6-primary); font-weight:800; }
+    .m6-compact-gap { height:8px; }
+    .m6-compact-sub { padding-top:1px; padding-bottom:1px; padding-left:17px; color:var(--m6-muted); font-size:10px; font-style:italic; }
+    .m6-value { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m6-identity-note { margin:12px 2px 0; color:var(--m6-muted); font:italic 10px/1.4 "JetBrains Mono",monospace; text-align:right; }
+    .m6-question-card {
+      min-height:100%;
+      padding:22px;
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      border:2px dashed var(--m6-accent);
+      background:var(--m6-warm);
+      text-align:center;
+    }
+    .m6-question-card h2 { margin:2px 0 13px; color:var(--m6-primary); font-size:21px; }
+    .m6-question-lead { margin:0; color:var(--m6-ink); font-size:13px; }
+    .m6-question-figure { margin:7px 0 3px; color:var(--m6-success); font:700 28px/1.2 "JetBrains Mono",monospace; }
+    .m6-question-range { margin:0 0 14px; color:var(--m6-muted); font:500 12px/1.4 "JetBrains Mono",monospace; }
+    .m6-question-setup { margin:0; color:var(--m6-ink); font-size:13px; font-style:italic; line-height:1.55; }
+    .m6-question-footer { margin:15px 0 0; padding-top:12px; border-top:1px solid var(--m6-rule); color:var(--m6-primary); font-size:12px; font-weight:700; line-height:1.45; }
+    .m6-reference-strip {
+      display:grid;
+      grid-template-columns:.9fr 1fr 1fr 1fr;
+      gap:0;
+      align-items:stretch;
+      max-width:1020px;
+      margin:0 auto 14px;
+      padding:12px;
+      box-sizing:border-box;
+    }
+    .m6-reference-cell { min-width:0; padding:3px 11px; }
+    .m6-reference-cell + .m6-reference-cell { border-left:1px solid var(--m6-rule); }
+    .m6-reference-lead { display:flex; flex-direction:column; justify-content:center; }
+    .m6-reference-label { margin:0; color:var(--m6-primary); font-size:10px; font-weight:800; letter-spacing:.07em; text-transform:uppercase; }
+    .m6-reference-copy { margin:4px 0 0; color:var(--m6-muted); font-size:10px; font-style:italic; line-height:1.4; }
+    .m6-reference-range { margin:4px 0 0; color:var(--m6-ink); font:500 11px/1.4 "JetBrains Mono",monospace; }
+    .m6-reference-delta { margin:2px 0 0; color:var(--m6-success); font:700 11px/1.4 "JetBrains Mono",monospace; }
+    .m6-doc-card { max-width:1020px; min-width:760px; margin:0 auto; padding:24px; box-sizing:border-box; }
+    .m6-doc-card.m6-three-column { max-width:900px; min-width:680px; }
+    .m6-soa-table { margin-top:18px; font-size:12px; }
+    .m6-soa-row {
+      display:grid;
+      grid-template-columns:minmax(310px,1fr) repeat(4,6.7rem);
+      column-gap:9px;
+      align-items:baseline;
+      padding:3px 5px;
+      border-left:3px solid transparent;
+    }
+    .m6-three-column .m6-soa-row { grid-template-columns:minmax(310px,1fr) repeat(3,7rem); }
+    .m6-soa-head { padding-bottom:7px; border-bottom:1px solid var(--m6-rule); color:var(--m6-primary); font-size:10px; font-weight:700; line-height:1.2; }
+    .m6-soa-label { color:var(--m6-ink); line-height:1.35; }
+    .m6-soa-section { margin-top:11px; color:var(--m6-primary); font-size:14px; font-weight:800; }
+    .m6-soa-subsection { margin-top:6px; color:var(--m6-muted); font-style:italic; font-weight:600; }
+    .m6-soa-subtotal { margin-top:3px; padding-top:6px; border-top:1px solid var(--m6-rule-strong); font-weight:600; }
+    .m6-soa-major, .m6-soa-total { margin-top:5px; padding-top:7px; border-top:3px double var(--m6-rule-strong); color:var(--m6-primary); font-weight:800; }
+    .m6-soa-highlight { border-left-color:var(--m6-accent); border-radius:3px; background:var(--m6-highlight); }
+    .m6-prior-dim { opacity:.16; }
+    .m6-doc-note { max-width:1020px; margin:7px auto 0; color:var(--m6-muted); font-size:11px; font-style:italic; line-height:1.5; }
+    .m6-doc-note strong { color:var(--m6-primary); }
+    @media (max-width:900px) {
+      .m6-question-grid.main-grid { grid-template-columns:1fr; }
+      .m6-question-card { min-height:260px; }
+      .m6-reference-strip { grid-template-columns:1fr 1fr; }
+      .m6-reference-cell:nth-child(3) { border-left:0; }
+      .m6-reference-cell:nth-child(n+3) { margin-top:9px; padding-top:9px; border-top:1px solid var(--m6-rule); }
+    }
+    @media (max-width:600px) {
+      .m6-reference-strip { grid-template-columns:1fr; }
+      .m6-reference-cell + .m6-reference-cell { margin-top:8px; padding-top:8px; border-top:1px solid var(--m6-rule); border-left:0; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6-scope {
+        --m6-paper:#26242e;
+        --m6-panel:#211f28;
+        --m6-ink:#e8edf1;
+        --m6-muted:#b4c0c8;
+        --m6-primary:#7dc8f3;
+        --m6-rule:#4b5361;
+        --m6-rule-strong:#8797a2;
+        --m6-warm:#332f20;
+        --m6-highlight:#332f20;
+        --m6-accent:#d8ad3e;
+        --m6-success:#70d6a3;
+        --m6-shadow:rgba(0,0,0,0.28);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Net Assets Question</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~7 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Net Assets Question</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="yale-fy2025-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+var step=0;
+var TOTAL_STEPS=6;
+
+function escapeHTML(value){
+  return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmt(v){
+  if(v===0) return '&mdash;';
+  var a=Math.abs(v).toLocaleString('en-US');
+  return v<0 ? '('+a+')' : a;
+}
+function money(v){ return '$'+Math.abs(v).toLocaleString('en-US'); }
+function sfp(year){ return window.YALE_FY2025.compactSFP[year]; }
+function soa(){ return window.YALE_FY2025.soaRows; }
+function rowByRole(role){
+  var rows=soa();
+  for(var i=0;i<rows.length;i++) if(rows[i].role===role) return rows[i];
+  return null;
+}
+function totalFor(row){ return (row.wo||0)+(row.wi||0); }
+function compactRow(label,value,extraClass){
+  return '<div class="m6-compact-row'+(extraClass?' '+extraClass:'')+'"><div>'+label+'</div><div class="m6-value">'+fmt(value)+'</div></div>';
+}
+function compactSnapshot(year,label){
+  var d=sfp(year);
+  var yearText=year==='y2025'?'2025':'2024';
+  var noncash=d.totalAssets-d.cash;
+  var rows=compactRow('Cash and cash equivalents',d.cash,'')
+    +compactRow('Noncash assets <em>(incl. '+fmt(d.investments)+' investments)</em>',noncash,'')
+    +compactRow('Total assets',d.totalAssets,'m6-compact-total')
+    +'<div class="m6-compact-gap"></div>'
+    +compactRow('&minus; Total liabilities',d.totalLiab,'')
+    +compactRow('= NA without donor restrictions',d.naWithout,'m6-compact-total m6-compact-lit')
+    +compactRow('&#8627; of which Yale University',d.naWithoutYale,'m6-compact-sub')
+    +compactRow('&#8627; of which noncontrolling interests',d.naWithoutNCI,'m6-compact-sub')
+    +compactRow('+ NA with donor restrictions',d.naWith,'m6-compact-lit')
+    +compactRow('= Total net assets',d.totalNA,'m6-compact-total m6-compact-lit');
+  return '<div class="m6-snapshot-wrap"><div class="m6-snapshot"><p class="m6-kicker">'+label+'</p>'
+    +'<h3 class="m6-snapshot-title">Statement of Financial Position</h3>'
+    +'<p class="m6-subline">June 30, '+yearText+' &middot; in $ millions</p>'
+    +'<div class="m6-snapshot-table">'+rows+'</div>'
+    +'<p class="m6-identity-note">'+fmt(d.totalAssets)+' &minus; '+fmt(d.totalLiab)+' = '+fmt(d.totalNA)+' &#10003;</p></div></div>';
+}
+function questionCard(){
+  var beginning=sfp('y2024');
+  var ending=sfp('y2025');
+  var delta=ending.totalNA-beginning.totalNA;
+  var deltaBillions=(delta/1000).toFixed(1);
+  return '<div class="m6-question-card"><p class="m6-kicker">The question</p><h2>What happened to net assets?</h2>'
+    +'<p class="m6-question-lead">Total net assets increased by</p>'
+    +'<p class="m6-question-figure">'+money(delta)+' million</p>'
+    +'<p class="m6-question-range">'+money(beginning.totalNA)+' &rarr; '+money(ending.totalNA)+'</p>'
+    +'<p class="m6-question-setup">Net assets rose $'+deltaBillions+' billion in a single year. But a nonprofit&rsquo;s bottom line is not net income, and an increase is not automatically spendable &mdash; was it earned, given, or released from an old restriction, and in which bucket did it land?</p>'
+    +'<p class="m6-question-footer">The Statement of Activities traces every change in net assets, in both donor-restriction categories.</p></div>';
+}
+function questionView(){
+  return '<div class="m6-scope"><div class="main-grid m6-question-grid">'
+    +compactSnapshot('y2024','Beginning')+questionCard()+compactSnapshot('y2025','Ending')+'</div></div>';
+}
+function referenceCell(label,beg,end){
+  var delta=end-beg;
+  return '<div class="m6-reference-cell"><p class="m6-reference-label">'+label+'</p>'
+    +'<p class="m6-reference-range">'+fmt(beg)+' &rarr; '+fmt(end)+'</p>'
+    +'<p class="m6-reference-delta">&Delta; '+fmt(delta)+'</p></div>';
+}
+function referenceStrip(){
+  var beginning=sfp('y2024');
+  var ending=sfp('y2025');
+  return '<div class="m6-reference-strip">'
+    +'<div class="m6-reference-cell m6-reference-lead"><p class="m6-reference-label">What the SoA explains</p><p class="m6-reference-copy">net asset changes between Jun 30, 2024 and Jun 30, 2025</p></div>'
+    +referenceCell('Without donor restrictions',beginning.naWithout,ending.naWithout)
+    +referenceCell('With donor restrictions',beginning.naWith,ending.naWith)
+    +referenceCell('Total net assets',beginning.totalNA,ending.totalNA)+'</div>';
+}
+function isHighlighted(index,currentStep){
+  var row=soa()[index];
+  if(currentStep===4) return index>=0 && index<=18 && row.role!=='op-releases';
+  if(currentStep===5) return index>=19 && index<=27 && row.role!=='nonop-releases';
+  return false;
+}
+function soaCell(value,priorDim){
+  return '<div class="m6-value'+(priorDim?' m6-prior-dim':'')+'">'+fmt(value)+'</div>';
+}
+function soaRow(row,index,showPrior,dimPrior,currentStep){
+  var cls='m6-soa-row';
+  if(row.type==='section-header') cls+=' m6-soa-section';
+  else if(row.type==='subsection-header') cls+=' m6-soa-subsection';
+  else if(row.type==='subtotal') cls+=' m6-soa-subtotal';
+  else if(row.type==='subtotal-major') cls+=' m6-soa-major';
+  else if(row.type==='total') cls+=' m6-soa-total';
+  if(isHighlighted(index,currentStep)) cls+=' m6-soa-highlight';
+  if(row.type==='section-header' || row.type==='subsection-header'){
+    return '<div class="'+cls+'"><div>'+escapeHTML(row.label)+'</div><div></div><div></div><div></div>'+(showPrior?'<div></div>':'')+'</div>';
+  }
+  return '<div class="'+cls+'"><div class="m6-soa-label">'+escapeHTML(row.label)+'</div>'
+    +soaCell(row.wo,false)+soaCell(row.wi,false)+soaCell(totalFor(row),false)
+    +(showPrior?soaCell(row.prior,dimPrior):'')+'</div>';
+}
+function soaDocument(currentStep){
+  var showPrior=currentStep<3;
+  var dimPrior=currentStep===2;
+  var rows=soa();
+  var h='<div class="m6-scope">'+referenceStrip()+'<div class="m6-doc-wrap"><div class="m6-doc-card'+(showPrior?'':' m6-three-column')+'">'
+    +'<p class="m6-kicker">Yale University &middot; from the report &middot; page 22</p>'
+    +'<h2 class="m6-doc-title">Consolidated Statement of Activities</h2>'
+    +'<p class="m6-subline">for the year ended June 30, 2025'+(showPrior?', with summarized comparative totals for 2024':'')+'</p>'
+    +'<p class="m6-subline">In $ millions</p>'
+    +'<div class="m6-soa-table"><div class="m6-soa-row m6-soa-head"><div></div>'
+    +'<div class="m6-value">Without Donor Restrictions</div><div class="m6-value">With Donor Restrictions</div><div class="m6-value">2025 Total</div>'
+    +(showPrior?'<div class="m6-value'+(dimPrior?' m6-prior-dim':'')+'">2024 Total</div>':'')+'</div>';
+  for(var i=0;i<rows.length;i++) h+=soaRow(rows[i],i,showPrior,dimPrior,currentStep);
+  h+='</div></div></div>';
+  if(currentStep===3){
+    h+='<p class="m6-doc-note">Per-row totals are the two bucket columns added; rounding to $ millions can move a sum by a million against the printed report (the exact-thousands base ties exactly).</p>';
+  }
+  if(currentStep===4 || currentStep===5){
+    h+='<p class="m6-doc-note">The two <em>Net assets released from restrictions</em> rows stay un-highlighted on purpose &mdash; they are the next page&rsquo;s subject.</p>';
+  }
+  return h+'</div>';
+}
+function render(){
+  renderBeats(step);
+  renderGrid(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function renderBeats(currentStep){
+  var beginning=sfp('y2024');
+  var ending=sfp('y2025');
+  var delta=ending.totalNA-beginning.totalNA;
+  var op=rowByRole('op-net');
+  var nonop=rowByRole('nonop-net');
+  var endowment=null;
+  var contribution=null;
+  var allocation=null;
+  var rows=soa();
+  for(var i=0;i<rows.length;i++){
+    if(rows[i].label==='Total endowment return') endowment=rows[i];
+    if(rows[i].role==='nonop' && rows[i].label==='Contributions') contribution=rows[i];
+    if(rows[i].label==='Allocation of endowment spending to operations') allocation=rows[i];
+  }
+  var texts=[
+    'The cash story is told. Now the highlights move to the rows the whole module is about: <strong>Net Assets</strong>. Total net assets rose from '+money(beginning.totalNA)+'M to '+money(ending.totalNA)+'M &mdash; up '+money(delta)+' million in one year. Was that earned? Given? Or merely <em>released</em> from an old restriction? And who is allowed to spend it? One statement answers all of it.',
+    'Here is Yale&rsquo;s Statement of Activities, as presented on page 22 of the report. Four columns: <strong>Without Donor Restrictions</strong>, <strong>With Donor Restrictions</strong>, the 2025 Total (Without + With), and a 2024 Total for comparison. This one statement does the combined work of CVS&rsquo;s Income Statement AND its Statement of Shareholders&rsquo; Equity &mdash; for a nonprofit, every change in net assets flows through here. Two main sections &mdash; Operating and Non-operating &mdash; and between them a uniquely nonprofit move, <em>Net assets released from restrictions</em>, that the next page takes up on its own.',
+    'Same move as the Cash Flow Statement: the 2025 columns cover the period between the two Statements of Financial Position (July 1, 2024 to June 30, 2025) &mdash; the year being explained. The 2024 column is a prior-year comparison that connects neither snapshot. Set it aside.',
+    'The 2024 column drops away. What remains is the bucket structure: Without donor restrictions, With donor restrictions, and the 2025 total. These columns are exactly the net asset buckets on each Statement of Financial Position. Every row of activity lands in one or both.',
+    'The Operating section. Revenues &mdash; tuition, research grants and contracts, medical services, contributions, the allocation of endowment spending, other income &mdash; minus expenses &mdash; salaries, benefits, depreciation, other operating costs &mdash; yield the increase in net assets from operating activities: '+money(op.wo)+'M Without and '+money(op.wi)+'M With. Notice how the revenues split across both columns while the expenses sit entirely in <em>Without</em>: donor-restricted dollars do not pay salaries directly; they pay only after their restrictions are released.',
+    'The Non-operating section &mdash; where the endowment story lives. Total endowment return of '+money(totalFor(endowment))+'M ('+money(endowment.wo)+'M Without, '+money(endowment.wi)+'M With: the bulk of the gain is restricted by donor intent), new endowment contributions of '+money(totalFor(contribution))+'M, the allocation of endowment spending back to operations of $('+fmt(Math.abs(totalFor(allocation)))+')M mirroring the operating revenue line, the pension funding change, and other items &mdash; netting to '+money(nonop.wo)+'M Without and '+money(nonop.wi)+'M With. Add the operating result and the year&rsquo;s total increase lands where the question began: net assets up '+money(delta)+' million.'
+  ];
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+texts[currentStep]+'</p></div>';
+}
+function renderGrid(currentStep){
+  document.getElementById('mainGrid').innerHTML=currentStep===0?questionView():soaDocument(currentStep);
+}
+function renderTail(currentStep){
+  document.getElementById('tail').innerHTML=currentStep===5
+    ? '<div class="insight-box">Operating gave $347M of the increase; the endowment&rsquo;s non-operating engine gave nearly $3.0 billion &mdash; and most of that landed in the restricted bucket.</div>'
+    : '';
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep>0) h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else h+='<button class="btn-continue" onclick="playClick();nav(\'63-5-Releases-and-the-Endowment.html\')">Releases and the Endowment &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function advance(){
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Statement of Activities',def:'The nonprofit statement that reports operating and non-operating changes in each net-asset bucket during a period.'},
+  {term:'Operating / Non-operating',def:'The two main sections: mission-related revenues and expenses, and activity outside operations such as endowment return and pension changes.'},
+  {term:'Endowment return',def:'Investment income and gains or losses generated by endowment assets before the spending allocation.'},
+  {term:'Allocation of endowment spending',def:'The amount drawn from the endowment under Yale&rsquo;s spending policy and directed to operations.'},
+  {term:'Change in net assets',def:'The period&rsquo;s combined increase or decrease across the Without and With donor restrictions buckets.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){ step=TOTAL_STEPS-1; render(); };
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
