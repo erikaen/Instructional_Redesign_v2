@@ -96,7 +96,12 @@ if [ -n "$plural_capital_hits" ]; then
 fi
 
 # "the net / your net / net-mover" as a name for A-L, with standard-vocab exemptions.
-net_hits=$(grep -rniE '(your|our|the) net\b|net[ -]movers?' $FILES 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)' | grep -viE 'net cash flow|net income|net 15|net-worth')
+# 2026-07-19 (M6 build): "net asset(s)" added to the exemptions — "the net
+# assets" is legitimate NFP statement vocabulary (e.g. the 63-4 page title "The
+# Net Assets Question"), and M1–M4 remain protected because "net assets" itself
+# is banned there by the dedicated netassets check above. Flagged in the M6
+# build morning report (one line beyond lock #7's exact wording).
+net_hits=$(grep -rniE '(your|our|the) net\b|net[ -]movers?' $FILES 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)' | grep -viE 'net cash flow|net income|net 15|net-worth|net assets?')
 if [ -n "$net_hits" ]; then
   echo 'BANNED — "the net / your net / net-mover" as a name for the A-L difference is banned; say "the difference" ("net cash flow", "net income", "net 15", "net-worth" are exempt).'
   echo "$net_hits"
