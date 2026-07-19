@@ -23,7 +23,7 @@ var GLOSSARY = [
   { term: "Assets", def: "Present rights to economic benefits held by the entity. Not physical things \u2014 rights. A building is an asset because the entity holds the right to use, rent, or sell it. Cash is an asset because it embodies the right to acquire other things. No future benefit, no asset." },
   { term: "Liabilities", def: "Present obligations of the entity to transfer economic benefits. The entity owes something and cannot avoid the transfer. The obligation must be compelling \u2014 not optional, not merely possible." },
   { term: "Double-entry bookkeeping", def: "A recording method in which every economic event is entered in two places, maintaining the balance of the accounting identity. Evolved in medieval Italy; now used by most accounting systems worldwide." },
-  { term: "Financial statements", def: "The four output channels of the accounting system: the balance sheet, income statement, statement of changes in Members’ capital, and statement of cash flows. The flow statements are not separate reports that happen to agree with the balance sheets \u2014 they are decompositions of the change between two balance sheets." },
+  { term: "Financial statements", def: "The four output channels of the accounting system: the balance sheet, income statement, statement of changes in Member's Capital, and statement of cash flows. The flow statements are not separate reports that happen to agree with the balance sheets \u2014 they are decompositions of the change between two balance sheets." },
   { term: "US GAAP", def: "Generally Accepted Accounting Principles. The instance of the accounting architecture written by FASB for US for-profit entities. The instance studied in this prework." },
   { term: "IFRS", def: "International Financial Reporting Standards. The instance written by the IASB for entities in most countries outside the United States." },
   { term: "FASB", def: "Financial Accounting Standards Board. The body that writes US GAAP \u2014 the accounting rules for US for-profit entities." },
@@ -34,7 +34,7 @@ var GLOSSARY = [
   { term: "Journal entry notation", def: "The language of debits and credits used to analyze and record transactions. The first step in accounting for any transaction is to analyze it: what changed, where do the effects land, does everything still balance?" },
   { term: "Historical cost", def: "The amount recorded at the time of an arm\u2019s-length transaction \u2014 the strongest epistemic anchor for worth, because two independent parties looked at the same thing and agreed on a price." },
   { term: "Balance sheet", def: "The financial statement that shows the accounting identity at a date: Assets \u2212 Liabilities. What the entity has recorded as resources, what it owes, and the difference between them. A snapshot of position, not an explanation of how the entity got there." },
-  { term: "Income statement", def: "A decomposition of the operating portion of the change in Members’ capital between two balance sheets. Shows revenues (gross inflows of worth from the entity\u2019s activities) and expenses (resources consumed in generating those revenues). The income statement does not \u201cagree with\u201d the change in retained earnings \u2014 it is an explanation of part of that change." },
+  { term: "Income statement", def: "A decomposition of the operating portion of the change in Member's Capital between two balance sheets. Shows revenues (gross inflows of worth from the entity\u2019s activities) and expenses (resources consumed in generating those revenues). The income statement does not \u201cagree with\u201d the change in retained earnings \u2014 it is an explanation of part of that change." },
   { term: "Statement of cash flows", def: "A decomposition of the change in one particular asset \u2014 cash \u2014 between two balance sheets. Groups cash movements into operating, investing, and financing categories. Under the indirect method, it begins with net income and adjusts for everything that affected income but not cash, and vice versa." },
   { term: "Revenue", def: "The gross inflows of worth resulting from an entity\u2019s activities \u2014 selling goods, providing services, earning fees. Revenue is recognized when earned, which may be before or after cash is collected." },
   { term: "Expense", def: "The resources consumed in generating revenues. Like revenue, expenses are recognized when incurred, not necessarily when cash is paid. The conventions governing when to recognize an expense are among the most consequential in the system." },
@@ -349,7 +349,7 @@ var BRW = (function () {
           if (open) l.items.forEach(function (it) { html += detailRow(it.name, it.amt); });
         } else { html += flatRow(i + 1, l.label + ' &mdash; ' + l.note, l.amount); }
       });
-      html += totalRow('Members&rsquo; capital', ctot);
+      html += totalRow('Member&rsquo;s Capital', ctot);
     }
     if (r.mode === 'sorted') {
       html += sub(r.pilesTitle || 'This season&rsquo;s reasons', r.pilesSub || 'sorted into your familiar piles &mdash; in full, and not folded into capital yet');
@@ -380,7 +380,7 @@ var BRW = (function () {
 
   function shell(cid, snap, activeLabel, body) {
     var tabs = snap.tabs.map(function (t) {
-      return '<button class="xlwb-tab' + (t.id === _reg[cid].ui.tab ? ' active' : '') + '" onclick="BRW.tab(\'' + cid + '\',\'' + t.id + '\')">' + t.label + '</button>';
+      return '<button class="xlwb-tab' + (t.kind ? ' tk-' + t.kind : '') + (t.id === _reg[cid].ui.tab ? ' active' : '') + '" onclick="BRW.tab(\'' + cid + '\',\'' + t.id + '\')">' + t.label + '</button>';
     }).join('');
     return '<div class="xlwb">'
       + '<div class="xlwb-bar"><span class="xlwb-bar-title"><i data-lucide="file-spreadsheet" class="licon"></i> <span class="mono">' + (snap.file || 'Bike-Repair.xlsx') + '</span></span><span class="xlwb-bar-sheet">' + activeLabel + ' sheet</span></div>'
@@ -1630,4 +1630,979 @@ function courseGlossaryFilter(q){
     g.style.display = any ? '' : 'none';
   });
 }
+
+/* ============================================================================
+ * MERGED FROM RICK'S BRANCH (2026-07-19): statement-facsimile engine —
+ * BRW.tagger / BRW.fmt / BRW.renderGrid / BRW sorter / curated sorter list.
+ * ========================================================================== */
+
+/* ===== BRW.tagger — per-row category tagger (approved addition 2026-07-13) =====
+   Shared by the income-statement sort (32-x) and the cash-flow activity sort (44-2).
+   BRW.tagger(containerId, {
+     rows:       [{ id, label, amt, cat }],   // cat = the CORRECT category key
+     categories: [{ key, label }],
+     sortLabel:  'Sort the rows &rarr;',      // optional
+     onSorted:   function(){}                 // fires once the sorted view renders
+   })
+   Every row starts untagged; picking a pill tags it. The Sort button appears once
+   all rows are tagged. On Sort, wrong tags flash .miss and revert to untagged
+   (retry until clean — forgiving, never punitive). When every tag is right, the
+   list re-renders as category bands with subtotals and onSorted fires. */
+BRW.tagger = function (cid, opts) {
+  var el = document.getElementById(cid);
+  var tags = {}, missed = {}, sorted = false;
+
+  function fmt(n) { return n < 0 ? '(' + BRW.dol(-n) + ')' : BRW.dol(n); }
+
+  function render() {
+    var h = '';
+    if (!sorted) {
+      opts.rows.forEach(function (r) {
+        h += '<div class="tagger-row"><div class="tagger-label">' + r.label + '</div>'
+           + '<div class="tagger-amt">' + BRW.signed(r.amt) + '</div>'
+           + '<div class="tagger-choices">' + opts.categories.map(function (c) {
+               var cls = 'tagger-choice' + (tags[r.id] === c.key ? ' on' : '') + (missed[r.id] ? ' miss' : '');
+               return '<button class="' + cls + '" onclick="BRW._tagPick(\'' + cid + '\',\'' + r.id + '\',\'' + c.key + '\')">' + c.label + '</button>';
+             }).join('') + '</div></div>';
+      });
+      var all = opts.rows.every(function (r) { return tags[r.id]; });
+      if (all) h += '<div class="tagger-actions"><button class="btn-continue" onclick="BRW._tagSort(\'' + cid + '\')">' + (opts.sortLabel || 'Sort the rows &rarr;') + '</button></div>';
+    } else {
+      opts.categories.forEach(function (c) {
+        var rows = opts.rows.filter(function (r) { return r.cat === c.key; });
+        var sub = rows.reduce(function (s, r) { return s + r.amt; }, 0);
+        h += '<div class="tagger-band"><span>' + c.label + '</span></div>';
+        rows.forEach(function (r) {
+          h += '<div class="tagger-row"><div class="tagger-label">' + r.label + '</div><div class="tagger-amt">' + BRW.signed(r.amt) + '</div><div></div></div>';
+        });
+        h += '<div class="tagger-subtotal"><div>' + c.label + ' subtotal</div><div class="tagger-amt">' + fmt(sub) + '</div><div></div></div>';
+      });
+    }
+    el.innerHTML = h;
+  }
+
+  BRW._taggers = BRW._taggers || {};
+  BRW._taggers[cid] = {
+    pick: function (rid, key) { tags[rid] = key; delete missed[rid]; if (window.playClick) playClick(); render(); },
+    sort: function () {
+      var wrong = opts.rows.filter(function (r) { return tags[r.id] !== r.cat; });
+      if (wrong.length) {
+        wrong.forEach(function (r) { missed[r.id] = true; delete tags[r.id]; });
+        if (window.playSoftNope) playSoftNope(); else if (window.playClick) playClick();
+        render();
+        if (opts.onMiss) opts.onMiss(wrong);
+      } else {
+        sorted = true;
+        if (window.playSuccess) playSuccess();
+        render();
+        if (opts.onSorted) opts.onSorted();
+      }
+    }
+  };
+  render();
+};
+BRW._tagPick = function (cid, rid, key) { BRW._taggers[cid].pick(rid, key); };
+BRW._tagSort = function (cid) { BRW._taggers[cid].sort(); };
+
+/* ===== BRW.fmt — Excel number-format renderer (approved engine plan, Part 2) ===== */
+BRW.fmt = function (value, numFmt) {
+  function escapeHTML(text) {
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  if (typeof value === 'string') return escapeHTML(value);
+  if (!numFmt || numFmt === 'General') return escapeHTML(String(value));
+
+  var sections = String(numFmt).split(';').slice(0, 4);
+  var section = value > 0 ? sections[0]
+    : value < 0 ? (sections.length > 1 ? sections[1] : sections[0])
+    : (sections.length > 2 ? sections[2] : sections[0]);
+
+  var rendered = section
+    .replace(/_./g, '')
+    .replace(/\*./g, '')
+    .replace(/\?\?/g, '')
+    .replace(/\\/g, '')
+    .replace(/"/g, '');
+  var absoluteInteger = Math.abs(Math.trunc(Number(value))).toLocaleString('en-US');
+  rendered = rendered.replace(/[#0][#,0]*/, absoluteInteger);
+
+  return escapeHTML(rendered.trim());
+};
+
+/* ===== BRW.renderGrid (PART 3) =====
+   Generic renderer for the extracted Excel-facsimile sheet objects. renderGrid
+   is deliberately DOM-free; mountGrid owns the small amount of UI state used
+   by outline expand/collapse controls. */
+BRW.renderGrid = function (sheetObj, opts) {
+  opts = opts || {};
+  sheetObj = sheetObj || {};
+
+  var rows = sheetObj.rows || [];
+  var cols = sheetObj.cols || [];
+  var cells = sheetObj.cells || [];
+  var gridId = opts.gridId === undefined ? 'g' : String(opts.gridId);
+  var hidden = {};
+  var byRow = {};
+  var byRef = {};
+  var covered = {};
+  var anchors = {};
+  var groups = [];
+  var summaryGroups = {};
+  var detailGroups = {};
+  var maxRow = rows.length;
+  var i;
+
+  function escapeHTML(text) {
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function escapeAttr(text) {
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function escapeJSString(text) {
+    return String(text)
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, "\\'")
+      .replace(/\r/g, '\\r')
+      .replace(/\n/g, '\\n')
+      .replace(/\u2028/g, '\\u2028')
+      .replace(/\u2029/g, '\\u2029');
+  }
+
+  function colLetters(number) {
+    var out = '';
+    while (number > 0) {
+      number--;
+      out = String.fromCharCode(65 + (number % 26)) + out;
+      number = Math.floor(number / 26);
+    }
+    return out;
+  }
+
+  function colNumber(letters) {
+    var out = 0;
+    letters = String(letters).toUpperCase();
+    for (var n = 0; n < letters.length; n++) out = out * 26 + letters.charCodeAt(n) - 64;
+    return out;
+  }
+
+  function cellRef(cell) {
+    return colLetters(cell.c) + cell.r;
+  }
+
+  function parseMerge(range) {
+    if (!range) return null;
+    var match = /^\$?([A-Z]+)\$?(\d+):\$?([A-Z]+)\$?(\d+)$/i.exec(String(range));
+    if (!match) return null;
+    return {
+      c1: colNumber(match[1]), r1: parseInt(match[2], 10),
+      c2: colNumber(match[3]), r2: parseInt(match[4], 10)
+    };
+  }
+
+  function widthBucket(width) {
+    width = Number(width) || 0;
+    if (width <= 3.5) return 'xs';
+    if (width <= 9.5) return 'sm';
+    if (width <= 17) return 'md';
+    if (width <= 36) return 'lg';
+    return 'xl';
+  }
+
+  function columnWidth(columnNumber) {
+    return cols[columnNumber - 1] && cols[columnNumber - 1].width;
+  }
+
+  function rowMeta(rowNumber) {
+    return rows[rowNumber - 1] || {};
+  }
+
+  function rowHasRenderableCell(rowNumber) {
+    var rowCells = byRow[rowNumber] || [];
+    for (var n = 0; n < rowCells.length; n++) {
+      var cell = rowCells[n];
+      if (cell.c < 2 || cell.c > 6 || covered[cellRef(cell)]) continue;
+      if (cell.value !== null && cell.value !== undefined && cell.value !== '') return true;
+      if (cell.ruleTop || cell.ruleBottom) return true;
+    }
+    return false;
+  }
+
+  function sourceRow(ref) {
+    var match = /\$?[A-Z]+\$?(\d+)$/i.exec(String(ref));
+    return match ? parseInt(match[1], 10) : 0;
+  }
+
+  function displayedValue(cell) {
+    var sources = cell.sumSources || [];
+    var recalculate = false;
+    var total = 0;
+    var n;
+
+    if ((cell.ruleTop || cell.ruleBottom) && sources.length) {
+      for (n = 0; n < sources.length; n++) {
+        if (hidden[sourceRow(sources[n])]) { recalculate = true; break; }
+      }
+      if (recalculate) {
+        for (n = 0; n < sources.length; n++) {
+          var ref = String(sources[n]).replace(/\$/g, '').toUpperCase();
+          if (hidden[sourceRow(ref)]) continue;
+          var source = byRef[ref];
+          if (source && typeof source.value === 'number' && isFinite(source.value)) total += source.value;
+        }
+        return total;
+      }
+    }
+    return cell.value;
+  }
+
+  function renderValue(cell) {
+    var value = displayedValue(cell);
+    if (value === null || value === undefined) return '';
+    if (typeof value === 'number') return BRW.fmt(value, cell.numFmt);
+    return escapeHTML(value);
+  }
+
+  for (i = 0; i < (opts.hiddenRows || []).length; i++) {
+    hidden[parseInt(opts.hiddenRows[i], 10)] = true;
+  }
+
+  for (i = 0; i < cells.length; i++) {
+    var indexedCell = cells[i];
+    if (indexedCell.r > maxRow) maxRow = indexedCell.r;
+    (byRow[indexedCell.r] = byRow[indexedCell.r] || []).push(indexedCell);
+    byRef[cellRef(indexedCell).toUpperCase()] = indexedCell;
+  }
+
+  /* Mark the non-anchor coordinates of every merge before deciding whether a
+     row has content. That keeps merged-away values out of both markup and the
+     row-presence test. */
+  for (i = 0; i < cells.length; i++) {
+    var merge = parseMerge(cells[i].merge);
+    if (!merge) continue;
+    anchors[cellRef(cells[i])] = merge;
+    for (var mr = merge.r1; mr <= merge.r2; mr++) {
+      for (var mc = merge.c1; mc <= merge.c2; mc++) {
+        if (mr !== cells[i].r || mc !== cells[i].c) covered[colLetters(mc) + mr] = true;
+      }
+    }
+  }
+
+  /* A group is a contiguous outline-level-1 run and the first level-0 row
+     after it. Group ids follow sheet order, so markup remains deterministic. */
+  i = 1;
+  while (i <= maxRow) {
+    if (Number(rowMeta(i).outlineLevel) !== 1) { i++; continue; }
+    var start = i;
+    while (i <= maxRow && Number(rowMeta(i).outlineLevel) === 1) i++;
+    if (i <= maxRow) {
+      var group = { id: 'og-' + (groups.length + 1), start: start, end: i - 1, summary: i };
+      groups.push(group);
+      summaryGroups[group.summary] = group;
+      for (var gr = group.start; gr <= group.end; gr++) detailGroups[gr] = group;
+    }
+  }
+
+  var cWidth = Number(columnWidth(3)) || 0;
+  var fWidth = Number(columnWidth(6)) || 0;
+  var layout = cWidth >= 12 && fWidth >= 24 ? 'pick-note'
+    : cWidth >= 12 ? 'pick'
+    : fWidth >= 24 ? 'note'
+    : 'standard';
+  var html = '<div class="brw-grid brw-layout-' + layout + '" data-brw-grid="' + escapeAttr(gridId) + '">';
+
+  for (var rowNumber = 1; rowNumber <= maxRow; rowNumber++) {
+    if (hidden[rowNumber] || !rowHasRenderableCell(rowNumber)) continue;
+
+    var detailGroup = detailGroups[rowNumber];
+    var summaryGroup = summaryGroups[rowNumber];
+    var rowClasses = 'brw-row';
+    if (detailGroup) rowClasses += ' brw-og-row is-collapsed';
+    if (summaryGroup) rowClasses += ' brw-og-summary';
+    html += '<div class="' + rowClasses + '" data-brw-row="' + rowNumber + '"';
+    if (detailGroup) html += ' data-brw-group="' + detailGroup.id + '"';
+    if (summaryGroup) html += ' data-brw-group="' + summaryGroup.id + '"';
+    html += '>';
+
+    var rowCells = (byRow[rowNumber] || []).slice().sort(function (a, b) { return a.c - b.c; });
+    for (var cellIndex = 0; cellIndex < rowCells.length; cellIndex++) {
+      var cell = rowCells[cellIndex];
+      var ref = cellRef(cell);
+      if (cell.c < 2 || cell.c > 6 || covered[ref]) continue;
+
+      var classes = 'brw-cell brw-col-' + colLetters(cell.c).toLowerCase()
+        + ' brw-w-' + widthBucket(columnWidth(cell.c));
+      if (cell.c === 2) classes += ' brw-label';
+      if (cell.c === 3) classes += ' brw-hint';
+      if (cell.c === 4) classes += ' brw-amount';
+      if (cell.bold) classes += ' brw-bold';
+      if (cell.italic) classes += ' brw-italic';
+      if (cell.indent) classes += ' brw-ind-' + Math.max(0, Math.min(8, parseInt(cell.indent, 10) || 0));
+      if (cell.ruleTop) classes += ' brw-rule-top';
+      if (cell.ruleBottom) classes += ' brw-rule-bottom';
+
+      var anchorMerge = anchors[ref];
+      if (anchorMerge) {
+        var span = Math.max(1, Math.min(5, anchorMerge.c2 - anchorMerge.c1 + 1));
+        classes += ' brw-span-' + span;
+      }
+
+      html += '<div class="' + classes + '" data-brw-cell="' + ref + '">';
+      if (summaryGroup && cell.c === 2) {
+        var onclick = "BRW._gridToggle('" + escapeJSString(gridId) + "','" + summaryGroup.id + "')";
+        html += '<button class="brw-og-toggle" type="button" data-brw-grid="' + escapeAttr(gridId)
+          + '" data-brw-group="' + summaryGroup.id + '" aria-expanded="false" onclick="'
+          + escapeAttr(onclick) + '">+</button>';
+      }
+      html += renderValue(cell) + '</div>';
+    }
+    html += '</div>';
+  }
+
+  return html + '</div>';
+};
+
+BRW._grids = BRW._grids || {};
+
+BRW.mountGrid = function (containerId, sheetObj, opts) {
+  opts = opts || {};
+  var gridId = opts.gridId === undefined ? 'g' : String(opts.gridId);
+  var renderOpts = {};
+  for (var key in opts) if (Object.prototype.hasOwnProperty.call(opts, key)) renderOpts[key] = opts[key];
+  renderOpts.gridId = gridId;
+
+  var container = document.getElementById(containerId);
+  if (!container) return '';
+  BRW._grids[gridId] = { containerId: containerId };
+  var html = BRW.renderGrid(sheetObj, renderOpts);
+  container.innerHTML = html;
+  return html;
+};
+
+BRW._gridToggle = function (gridId, groupId) {
+  var mounted = BRW._grids[String(gridId)];
+  if (!mounted) return;
+  var container = document.getElementById(mounted.containerId);
+  if (!container) return;
+
+  var toggles = container.getElementsByClassName('brw-og-toggle');
+  var rows = container.getElementsByClassName('brw-og-row');
+  var expanded = false;
+  var i;
+  for (i = 0; i < toggles.length; i++) {
+    if (toggles[i].getAttribute('data-brw-group') === String(groupId)) {
+      expanded = toggles[i].getAttribute('aria-expanded') !== 'true';
+      toggles[i].setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      toggles[i].textContent = expanded ? '−' : '+';
+    }
+  }
+  for (i = 0; i < rows.length; i++) {
+    if (rows[i].getAttribute('data-brw-group') !== String(groupId)) continue;
+    if (expanded) rows[i].classList.remove('is-collapsed');
+    else rows[i].classList.add('is-collapsed');
+  }
+  if (typeof window !== 'undefined' && window.playClick) window.playClick();
+};
+
+/* ===== BRW sorter (PART 5) =====
+   The sorter is the thinking surface; renderGridWithPick is the live record.
+   The render helpers below are deliberately DOM-free. mountSorter owns the
+   event wiring and the small amount of selected-item UI state. */
+BRW.sorterConfigFromPick = function (sheet, opts) {
+  sheet = sheet || {};
+  opts = opts || {};
+
+  var labelColumn = Number(opts.labelColumn) || 2;
+  var answerColumn = Number(opts.answerColumn) || 3;
+  var amountColumn = Number(opts.amountColumn) || 4;
+  var guidanceColumn = Number(opts.guidanceColumn) || 6;
+  var byRow = {};
+  var cells = sheet.cells || [];
+  var items = [];
+  var categories = [];
+  var guidance = [];
+  var seenCategories = {};
+  var i;
+
+  function present(value) {
+    return value !== null && value !== undefined && String(value).trim() !== '';
+  }
+
+  for (i = 0; i < cells.length; i++) {
+    var cell = cells[i];
+    if (!byRow[cell.r]) byRow[cell.r] = {};
+    byRow[cell.r][cell.c] = cell;
+  }
+
+  var rowNumbers = Object.keys(byRow).map(function (row) {
+    return parseInt(row, 10);
+  }).sort(function (a, b) { return a - b; });
+
+  for (i = 0; i < rowNumbers.length; i++) {
+    var row = rowNumbers[i];
+    var rowCells = byRow[row];
+    var labelCell = rowCells[labelColumn];
+    var answerCell = rowCells[answerColumn];
+    var amountCell = rowCells[amountColumn];
+    var guidanceCell = rowCells[guidanceColumn];
+
+    /* Pick answers are workbook rows, not headings such as C6 "Kind". The
+       companion label and amount are part of the documented Pick-row shape. */
+    if (answerCell && present(answerCell.value)
+        && labelCell && present(labelCell.value)
+        && amountCell && present(amountCell.value)) {
+      var answer = String(answerCell.value).trim();
+      items.push({
+        row: row,
+        label: String(labelCell.value),
+        amount: amountCell.value,
+        numFmt: amountCell.numFmt || 'General',
+        answer: answer
+      });
+      if (!seenCategories[answer]) {
+        seenCategories[answer] = true;
+        categories.push(answer);
+      }
+    }
+
+    if (guidanceCell && present(guidanceCell.value)) {
+      guidance.push({ row: row, text: String(guidanceCell.value) });
+    }
+  }
+
+  /* categoryOrder option added under Rick's one-time append-only exception, 2026-07-16 (point 3: Revenue above Expenses). */
+  if (Array.isArray(opts.categoryOrder) && opts.categoryOrder.length) {
+    var orderedCategories = [];
+    var remainingCategories = categories.slice();
+    for (i = 0; i < opts.categoryOrder.length; i++) {
+      var categoryIndex = remainingCategories.indexOf(opts.categoryOrder[i]);
+      if (categoryIndex !== -1) {
+        orderedCategories.push(remainingCategories.splice(categoryIndex, 1)[0]);
+      }
+    }
+    categories = orderedCategories.concat(remainingCategories);
+  }
+
+  return { items: items, categories: categories, guidance: guidance };
+};
+
+BRW.makeSorter = function (config) {
+  config = config || {};
+  var items = (config.items || []).map(function (item) {
+    return {
+      row: Number(item.row),
+      label: item.label,
+      amount: item.amount,
+      numFmt: item.numFmt,
+      answer: String(item.answer)
+    };
+  });
+  var categories = (config.categories || []).map(function (category) {
+    return String(category);
+  });
+  var diagnosticRows = (config.diagnosticRows || []).map(function (row) {
+    return Number(row);
+  });
+  var minPerCategory = config.minPerCategory === undefined
+    ? 1 : Math.max(0, Math.floor(Number(config.minPerCategory) || 0));
+  var byRow = {};
+  var categorySet = {};
+  var placed = {};
+  var handPlaced = {};
+  var attempts = {};
+  var i;
+
+  for (i = 0; i < items.length; i++) byRow[String(items[i].row)] = items[i];
+  for (i = 0; i < categories.length; i++) categorySet[categories[i]] = true;
+
+  function handCount(category) {
+    var count = 0;
+    for (var row in handPlaced) {
+      if (Object.prototype.hasOwnProperty.call(handPlaced, row)
+          && placed[row] === category) count++;
+    }
+    return count;
+  }
+
+  var sorter = {
+    items: items,
+    categories: categories,
+
+    attempt: function (row, category) {
+      var key = String(Number(row));
+      category = String(category);
+      var item = byRow[key];
+      if (!item || !categorySet[category]) return { correct: false };
+      if (placed[key] !== undefined) return { correct: placed[key] === category };
+
+      attempts[key] = (attempts[key] || 0) + 1;
+      if (item.answer !== category) return { correct: false };
+      placed[key] = category;
+      handPlaced[key] = true;
+      return { correct: true };
+    },
+
+    attemptsFor: function (row) {
+      return attempts[String(Number(row))] || 0;
+    },
+
+    placedCount: function () {
+      return Object.keys(placed).length;
+    },
+
+    isPlaced: function (row) {
+      return placed[String(Number(row))] !== undefined;
+    },
+
+    placedCategory: function (row) {
+      return placed[String(Number(row))];
+    },
+
+    placedItems: function (category) {
+      return items.filter(function (item) {
+        return placed[String(item.row)] === String(category);
+      });
+    },
+
+    wasHandSorted: function (row) {
+      return !!handPlaced[String(Number(row))];
+    },
+
+    restUnlocked: function () {
+      for (var c = 0; c < categories.length; c++) {
+        if (handCount(categories[c]) < minPerCategory) return false;
+      }
+      if (diagnosticRows.length) {
+        var diagnosticMet = false;
+        for (var d = 0; d < diagnosticRows.length; d++) {
+          if (handPlaced[String(diagnosticRows[d])]) diagnosticMet = true;
+        }
+        if (!diagnosticMet) return false;
+      }
+      return true;
+    },
+
+    sortRest: function () {
+      if (!sorter.restUnlocked()) return [];
+      var rows = [];
+      for (var n = 0; n < items.length; n++) {
+        var item = items[n];
+        var key = String(item.row);
+        if (placed[key] !== undefined) continue;
+        placed[key] = item.answer;
+        rows.push(item.row);
+      }
+      return rows;
+    },
+
+    done: function () {
+      return sorter.placedCount() === items.length;
+    }
+  };
+
+  return sorter;
+};
+
+BRW.renderSortPanel = function (sorter, opts) {
+  opts = opts || {};
+  var selectedRow = opts.selectedRow === undefined || opts.selectedRow === null
+    ? null : Number(opts.selectedRow);
+  var guidance = opts.guidance || [];
+
+  function escapeHTML(text) {
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function escapeAttr(text) {
+    return escapeHTML(text).replace(/`/g, '&#96;');
+  }
+
+  function itemMarkup(item, placedItem) {
+    var classes = placedItem ? 'brw-sort-placed-item' : 'brw-sort-item';
+    if (!placedItem && selectedRow === item.row) classes += ' brw-sort-selected';
+    var html = '<div class="' + classes + '" data-row="' + item.row + '"';
+    if (!placedItem) {
+      html += ' data-brw-sort-row="' + item.row + '" draggable="true" tabindex="0" role="button"'
+        + ' aria-pressed="' + (selectedRow === item.row ? 'true' : 'false') + '"';
+    }
+    html += '><span class="brw-sort-item-label">' + escapeHTML(item.label) + '</span>';
+    if (item.amount !== null && item.amount !== undefined && item.amount !== '') {
+      html += '<span class="brw-sort-item-amount">' + BRW.fmt(item.amount, item.numFmt) + '</span>';
+    }
+    return html + '</div>';
+  }
+
+  var doneClass = sorter.done() ? ' brw-sort-done' : '';
+  var html = '<section class="brw-sort-panel' + doneClass + '" aria-label="Sort workbook rows">'
+    + '<p class="brw-sort-instruction">'
+    + escapeHTML(opts.instruction || 'Drag each row to its category, or select a row and then select a category.')
+    + '</p><div class="brw-sort-layout"><div class="brw-sort-source">'
+    + '<h3 class="brw-sort-heading">Rows to sort</h3><div class="brw-sort-items">';
+
+  for (var i = 0; i < sorter.items.length; i++) {
+    if (!sorter.isPlaced(sorter.items[i].row)) html += itemMarkup(sorter.items[i], false);
+  }
+  if (sorter.placedCount() === sorter.items.length) {
+    html += '<p class="brw-sort-empty">All rows are sorted.</p>';
+  }
+  html += '</div></div><div class="brw-sort-targets"><h3 class="brw-sort-heading">Categories</h3>';
+
+  for (var c = 0; c < sorter.categories.length; c++) {
+    var category = sorter.categories[c];
+    var seated = sorter.placedItems(category);
+    html += '<section class="brw-sort-category"><h4 class="brw-sort-category-label">'
+      + escapeHTML(category) + '</h4><div class="brw-sort-zone' + (seated.length ? ' brw-sort-zone-filled' : '')
+      + '" data-cat="' + escapeAttr(category) + '" tabindex="0" role="button" aria-label="Place selected row in '
+      + escapeAttr(category) + '">';
+    if (!seated.length) html += '<span class="brw-sort-zone-empty">Drop or click to place</span>';
+    for (var p = 0; p < seated.length; p++) html += itemMarkup(seated[p], true);
+    html += '</div></section>';
+  }
+
+  html += '</div></div><div class="brw-sort-actions"><button type="button" class="brw-sort-rest"'
+    + (sorter.restUnlocked() ? '' : ' disabled') + '>Sort the rest</button></div>';
+
+  if (guidance.length) {
+    html += '<aside class="brw-sort-guidance" aria-label="Workbook guidance"><h3 class="brw-sort-guidance-title">Guidance</h3>';
+    for (var g = 0; g < guidance.length; g++) {
+      html += '<p class="brw-sort-guidance-text" data-row="' + Number(guidance[g].row) + '">'
+        + escapeHTML(guidance[g].text) + '</p>';
+    }
+    html += '</aside>';
+  }
+
+  return html + '</section>';
+};
+
+BRW.renderGridWithPick = function (sheet, opts) {
+  sheet = sheet || {};
+  opts = opts || {};
+  var reveal = {};
+  var flash = {};
+  var i;
+  for (i = 0; i < (opts.revealRows || []).length; i++) {
+    reveal[String(Number(opts.revealRows[i]))] = true;
+  }
+  if (opts.flashRow !== undefined && opts.flashRow !== null) {
+    flash[String(Number(opts.flashRow))] = true;
+  }
+  for (i = 0; i < (opts.flashRows || []).length; i++) {
+    flash[String(Number(opts.flashRows[i]))] = true;
+  }
+
+  var answerRows = {};
+  var config = BRW.sorterConfigFromPick(sheet, opts);
+  for (i = 0; i < config.items.length; i++) answerRows[String(config.items[i].row)] = true;
+
+  var clone = {};
+  for (var key in sheet) {
+    if (Object.prototype.hasOwnProperty.call(sheet, key) && key !== 'cells') clone[key] = sheet[key];
+  }
+  clone.cells = (sheet.cells || []).map(function (cell) {
+    var copy = {};
+    for (var cellKey in cell) {
+      if (!Object.prototype.hasOwnProperty.call(cell, cellKey)) continue;
+      var value = cell[cellKey];
+      copy[cellKey] = Object.prototype.toString.call(value) === '[object Array]' ? value.slice() : value;
+    }
+    if (copy.c === 3 && answerRows[String(copy.r)] && !reveal[String(copy.r)]) copy.value = null;
+    return copy;
+  });
+
+  var html = BRW.renderGrid(clone, opts);
+  for (var row in flash) {
+    if (!Object.prototype.hasOwnProperty.call(flash, row) || !reveal[row]) continue;
+    var pattern = new RegExp('(<div class=")([^"]*)(" data-brw-cell="C' + row + '")');
+    html = html.replace(pattern, '$1$2 brw-c-flash$3');
+  }
+  return html;
+};
+
+BRW.mountSorter = function (containerId, gridContainerId, sheet, opts) {
+  opts = opts || {};
+  var container = document.getElementById(containerId);
+  var gridContainer = document.getElementById(gridContainerId);
+  if (!container || !gridContainer) return null;
+
+  var config = BRW.sorterConfigFromPick(sheet, opts);
+  var sorter = BRW.makeSorter({
+    items: config.items,
+    categories: config.categories,
+    diagnosticRows: opts.diagnosticRows || [],
+    minPerCategory: opts.minPerCategory
+  });
+  var selectedRow = null;
+  var completed = false;
+
+  function revealedRows() {
+    return sorter.items.filter(function (item) {
+      return sorter.isPlaced(item.row);
+    }).map(function (item) { return item.row; });
+  }
+
+  function addDoneClass() {
+    if (container.classList && container.classList.add) container.classList.add('brw-sort-done');
+    else if ((' ' + (container.className || '') + ' ').indexOf(' brw-sort-done ') < 0) {
+      container.className = ((container.className || '') + ' brw-sort-done').replace(/^\s+/, '');
+    }
+  }
+
+  function finishIfDone() {
+    if (!sorter.done()) return;
+    addDoneClass();
+    if (!completed) {
+      completed = true;
+      if (typeof opts.onComplete === 'function') opts.onComplete();
+    }
+  }
+
+  function renderGrid(flashRow, flashRows) {
+    var gridOpts = {};
+    for (var key in opts) if (Object.prototype.hasOwnProperty.call(opts, key)) gridOpts[key] = opts[key];
+    gridOpts.revealRows = revealedRows();
+    if (flashRow !== undefined && flashRow !== null) gridOpts.flashRow = flashRow;
+    if (flashRows) gridOpts.flashRows = flashRows;
+    gridContainer.innerHTML = BRW.renderGridWithPick(sheet, gridOpts);
+  }
+
+  function act(row, category) {
+    var result = sorter.attempt(row, category);
+    var count = sorter.attemptsFor(row);
+    if (typeof opts.onAttempt === 'function') opts.onAttempt(row, category, result.correct, count);
+    if (!result.correct) {
+      if (typeof window !== 'undefined' && window.playSoftNope) window.playSoftNope();
+      if (typeof opts.onWrong === 'function') opts.onWrong(row, category, count);
+      return;
+    }
+    selectedRow = null;
+    renderGrid(row);
+    if (typeof window !== 'undefined' && window.playSuccess) window.playSuccess();
+    renderPanel();
+    finishIfDone();
+  }
+
+  function renderPanel() {
+    var panelOpts = {};
+    for (var key in opts) if (Object.prototype.hasOwnProperty.call(opts, key)) panelOpts[key] = opts[key];
+    panelOpts.guidance = config.guidance;
+    panelOpts.selectedRow = selectedRow;
+    container.innerHTML = BRW.renderSortPanel(sorter, panelOpts);
+
+    var items = container.querySelectorAll('[data-brw-sort-row]');
+    for (var i = 0; i < items.length; i++) {
+      items[i].addEventListener('click', function () {
+        var row = Number(this.getAttribute('data-brw-sort-row'));
+        selectedRow = selectedRow === row ? null : row;
+        renderPanel();
+      });
+      items[i].addEventListener('keydown', function (event) {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        var row = Number(this.getAttribute('data-brw-sort-row'));
+        selectedRow = selectedRow === row ? null : row;
+        renderPanel();
+      });
+      items[i].addEventListener('dragstart', function (event) {
+        selectedRow = null;
+        event.dataTransfer.setData('text/plain', this.getAttribute('data-brw-sort-row'));
+        event.dataTransfer.effectAllowed = 'move';
+      });
+    }
+
+    var zones = container.querySelectorAll('.brw-sort-zone');
+    for (var z = 0; z < zones.length; z++) {
+      zones[z].addEventListener('dragover', function (event) {
+        event.preventDefault();
+        if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+      });
+      zones[z].addEventListener('drop', function (event) {
+        event.preventDefault();
+        var row = Number(event.dataTransfer.getData('text/plain'));
+        if (row) act(row, this.getAttribute('data-cat'));
+      });
+      zones[z].addEventListener('click', function () {
+        if (selectedRow !== null) act(selectedRow, this.getAttribute('data-cat'));
+      });
+      zones[z].addEventListener('keydown', function (event) {
+        if ((event.key !== 'Enter' && event.key !== ' ') || selectedRow === null) return;
+        event.preventDefault();
+        act(selectedRow, this.getAttribute('data-cat'));
+      });
+    }
+
+    var rest = container.querySelector('.brw-sort-rest');
+    if (rest) rest.addEventListener('click', function () {
+      if (!sorter.restUnlocked()) return;
+      var rows = sorter.sortRest();
+      selectedRow = null;
+      renderGrid(null, rows);
+      if (typeof window !== 'undefined' && window.playSuccess) window.playSuccess();
+      renderPanel();
+      finishIfDone();
+    });
+  }
+
+  renderGrid();
+  renderPanel();
+  finishIfDone();
+  return sorter;
+};
+
+/* ===== Curated BRW sorter source list — approved amendment (2026-07-14) =====
+   mountSorter already copies every caller option into panelOpts on each render,
+   so showRows reaches this renderer without changing the sorter state machine. */
+BRW.renderSortPanel = function (sorter, opts) {
+  opts = opts || {};
+  var selectedRow = opts.selectedRow === undefined || opts.selectedRow === null
+    ? null : Number(opts.selectedRow);
+  var guidance = opts.guidance || [];
+  var curate = Object.prototype.toString.call(opts.showRows) === '[object Array]';
+  var featured = {};
+  var categoryFeatured = {};
+  var itemByRow = {};
+  var i;
+
+  function escapeHTML(text) {
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function escapeAttr(text) {
+    return escapeHTML(text).replace(/`/g, '&#96;');
+  }
+
+  function featureRow(row) {
+    var key = String(Number(row));
+    var item = itemByRow[key];
+    if (!item) return;
+    featured[key] = true;
+    categoryFeatured[String(item.answer)] = true;
+  }
+
+  function itemMarkup(item, placedItem) {
+    var classes = placedItem ? 'brw-sort-placed-item' : 'brw-sort-item';
+    if (!placedItem && selectedRow === item.row) classes += ' brw-sort-selected';
+    var html = '<div class="' + classes + '" data-row="' + item.row + '"';
+    if (!placedItem) {
+      html += ' data-brw-sort-row="' + item.row + '" draggable="true" tabindex="0" role="button"'
+        + ' aria-pressed="' + (selectedRow === item.row ? 'true' : 'false') + '"';
+    }
+    html += '><span class="brw-sort-item-label">' + escapeHTML(item.label) + '</span>';
+    if (item.amount !== null && item.amount !== undefined && item.amount !== '') {
+      html += '<span class="brw-sort-item-amount">' + BRW.fmt(item.amount, item.numFmt) + '</span>';
+    }
+    return html + '</div>';
+  }
+
+  for (i = 0; i < sorter.items.length; i++) {
+    itemByRow[String(sorter.items[i].row)] = sorter.items[i];
+  }
+  if (curate) {
+    for (i = 0; i < opts.showRows.length; i++) featureRow(opts.showRows[i]);
+
+    /* Every named diagnostic stays hand-sortable, even if a page accidentally
+       leaves it out of showRows. */
+    for (i = 0; i < (opts.diagnosticRows || []).length; i++) {
+      featureRow(opts.diagnosticRows[i]);
+    }
+
+    /* Ensure the unchanged per-category coverage gate can always be reached. */
+    for (var c0 = 0; c0 < sorter.categories.length; c0++) {
+      var neededCategory = String(sorter.categories[c0]);
+      if (categoryFeatured[neededCategory]) continue;
+      for (i = 0; i < sorter.items.length; i++) {
+        if (String(sorter.items[i].answer) === neededCategory) {
+          featureRow(sorter.items[i].row);
+          break;
+        }
+      }
+    }
+  }
+
+  var doneClass = sorter.done() ? ' brw-sort-done' : '';
+  var html = '<section class="brw-sort-panel' + doneClass + '" aria-label="Sort workbook rows">'
+    + '<p class="brw-sort-instruction">'
+    + escapeHTML(opts.instruction || 'Drag each row to its category, or select a row and then select a category.')
+    + '</p><div class="brw-sort-layout"><div class="brw-sort-source">'
+    + '<h3 class="brw-sort-heading">Rows to sort</h3><div class="brw-sort-items">';
+  var hiddenUnplaced = 0;
+
+  for (i = 0; i < sorter.items.length; i++) {
+    var sourceItem = sorter.items[i];
+    if (sorter.isPlaced(sourceItem.row)) continue;
+    if (!curate || featured[String(sourceItem.row)]) html += itemMarkup(sourceItem, false);
+    else hiddenUnplaced++;
+  }
+  if (curate && hiddenUnplaced > 0) {
+    html += '<div class="brw-sort-more">+' + hiddenUnplaced + ' others to be sorted</div>';
+  }
+  if (sorter.placedCount() === sorter.items.length) {
+    html += '<p class="brw-sort-empty">All rows are sorted.</p>';
+  }
+  html += '</div></div><div class="brw-sort-targets"><h3 class="brw-sort-heading">Categories</h3>';
+
+  for (var c = 0; c < sorter.categories.length; c++) {
+    var category = sorter.categories[c];
+    var seated = sorter.placedItems(category);
+    html += '<section class="brw-sort-category"><h4 class="brw-sort-category-label">'
+      + escapeHTML(category) + '</h4><div class="brw-sort-zone' + (seated.length ? ' brw-sort-zone-filled' : '')
+      + '" data-cat="' + escapeAttr(category) + '" tabindex="0" role="button" aria-label="Place selected row in '
+      + escapeAttr(category) + '">';
+    if (!seated.length) html += '<span class="brw-sort-zone-empty">Drop or click to place</span>';
+    for (var p = 0; p < seated.length; p++) html += itemMarkup(seated[p], true);
+    html += '</div></section>';
+  }
+
+  html += '</div></div><div class="brw-sort-actions"><button type="button" class="brw-sort-rest"'
+    + (sorter.restUnlocked() ? '' : ' disabled') + '>Sort the rest</button></div>';
+
+  if (guidance.length) {
+    html += '<aside class="brw-sort-guidance" aria-label="Workbook guidance"><h3 class="brw-sort-guidance-title">Guidance</h3>';
+    for (var g = 0; g < guidance.length; g++) {
+      html += '<p class="brw-sort-guidance-text" data-row="' + Number(guidance[g].row) + '">'
+        + escapeHTML(guidance[g].text) + '</p>';
+    }
+    html += '</aside>';
+  }
+
+  return html + '</section>';
+};
+
+/* Dated balance lines are blue by rule (Rick 2026-07-16): after mounting a grid, mark every row whose label cell reads 'Balance, ...' — including group-summary rows whose label starts with the +/− toggle. */
+BRW.markDatedRows = function (containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+  var rows = container.querySelectorAll('[data-brw-row]');
+  for (var i = 0; i < rows.length; i++) {
+    var label = rows[i].querySelector('.brw-col-b');
+    if (!label) continue;
+    var text = label.textContent.replace(/^[+\u2212-]\s*/, '').trim();
+    if (text.indexOf('Balance,') === 0) rows[i].classList.add('brw-dated');
+  }
+};
 

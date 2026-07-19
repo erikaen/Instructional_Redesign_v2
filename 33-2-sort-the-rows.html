@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sort the Rows</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+    .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+    #sorterPanel { margin:18px 0 14px; }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Sort the Rows</h1>
+        <p class="tut-header-sub">Build the Statement &middot; ~10 min &middot; Page 2 of 3</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Revenue or Expense?</div>
+
+    <div class="narrative-block" id="narrative">
+      <p>All <strong>46 season rows</strong> are copied onto the amber Working Tab. Nothing is set aside. First sort every row into <strong>Revenue</strong> or <strong>Expenses</strong>.</p>
+    </div>
+
+    <div id="annaIntro"></div>
+
+    <!-- The thinking panel stays outside the workbook facsimile. -->
+    <div id="sorterPanel" hidden></div>
+
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Working Tab</div>
+      </div>
+      <div class="wb-grid-wrap" id="wbGridWrap">
+        <div id="statementBuild"></div>
+        <div id="sorterGrid" hidden></div>
+        <div id="wanderGrid" hidden></div>
+      </div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab" type="button" data-sheet-tab="assets">Assets</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="liabilities">Liabilities</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="reasons">Reasons</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="balance">Balance Sheet</button>
+        <button class="xlwb-tab tk-temp active" type="button" data-sheet-tab="working" aria-current="page">Working Tab</button>
+      </div>
+    </div>
+
+    <div id="gate"></div>
+    <div id="anna"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+/* ===== sound and small page helpers ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playSoftNope(){ tone(360,0.10,'sine',0.04); setTimeout(function(){tone(280,0.10,'sine',0.04);},110); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+document.getElementById('annaIntro').innerHTML=annaBox(
+  'Every reason records one of two things. <strong>Revenue</strong> is the value of work delivered during the season, whichever way the cash runs. ' +
+  '<strong>Expenses</strong> are what got used up delivering it. Sort the rows by those two names. Watch Ridgeline, Smith, and depreciation: none depends on cash moving now.'
+);
+
+/* ===== generated workbook helpers ===== */
+function sheetOf(workbookKey,namePart){
+  var sheets=BR_STMT_DATA.workbooks[workbookKey].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name.indexOf(namePart)>=0){
+    var copy=JSON.parse(JSON.stringify(sheets[i]));
+    (copy.cells||[]).forEach(function(cell){
+      if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['\u2019]? Capital/g,"Member's Capital");
+    });
+    return copy;
+  }
+  return null;
+}
+function rowForLabel(sheet,label){
+  var row=0;
+  (sheet.cells||[]).forEach(function(cell){
+    if(cell.c===2 && String(cell.value||'').replace(/^\s+/,'')===label) row=cell.r;
+  });
+  return row;
+}
+function filteredPickSheet(sheet,headerWord){
+  var headers={},copy={};
+  (sheet.cells||[]).forEach(function(cell){
+    if(cell.c===3 && cell.value===headerWord) headers[cell.r]=true;
+  });
+  Object.keys(sheet).forEach(function(key){ copy[key]=sheet[key]; });
+  copy.cells=(sheet.cells||[]).filter(function(cell){ return !headers[cell.r]; });
+  return copy;
+}
+function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
+
+var MODULE_KEY='bike-repair-module-3-3';
+var WORKBOOK_KEY='income-statement-steps';
+var moduleSheets={
+  assets:sheetOf(MODULE_KEY,'Assets'),
+  liabilities:sheetOf(MODULE_KEY,'Liabilities'),
+  reasons:sheetOf(MODULE_KEY,'Reasons'),
+  balance:sheetOf(MODULE_KEY,'Balance Sheet')
+};
+
+/* The authored Balance Sheet places amounts in C. Re-home C into D for the
+   renderer's amount alignment, without changing the extracted source data. */
+function balanceSheetView(){
+  var sheet=cloneSheet(moduleSheets.balance);
+  (sheet.cells||[]).forEach(function(cell){ if(cell.c===3) cell.c=4; });
+  if(sheet.cols && sheet.cols[3] && sheet.cols[2]) sheet.cols[3].width=sheet.cols[2].width;
+  return sheet;
+}
+
+/* ===== workbook wandering: hide/show preserves both sorter passes ===== */
+var activeTab='working';
+var wanderGridSeq=0;
+var activeOrder=0;
+var activePass=1;
+function sorterIsLive(){ return activeOrder===1 || activeOrder===3; }
+function setActiveTab(name){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+    var active=tab.getAttribute('data-sheet-tab')===name;
+    tab.classList.toggle('active',active);
+    if(active) tab.setAttribute('aria-current','page'); else tab.removeAttribute('aria-current');
+  });
+}
+function mountWander(sheet,name){
+  BRW.mountGrid('wanderGrid',sheet,{gridId:'sort-rows-'+name+'-'+(++wanderGridSeq)});
+  BRW.markDatedRows('wanderGrid');
+}
+function paint(name){
+  var build=document.getElementById('statementBuild');
+  var sorterGrid=document.getElementById('sorterGrid');
+  var sorterPanel=document.getElementById('sorterPanel');
+  var wander=document.getElementById('wanderGrid');
+  var wrap=document.getElementById('wbGridWrap');
+  activeTab=name;
+  wrap.classList.remove('bs-centered');
+  if(name==='working'){
+    build.hidden=false;
+    wander.hidden=true;
+    sorterGrid.hidden=!sorterIsLive();
+    sorterPanel.hidden=!sorterIsLive();
+    document.getElementById('sheetLabel').textContent='Working Tab';
+  } else {
+    build.hidden=true;
+    sorterGrid.hidden=true;
+    sorterPanel.hidden=true;
+    wander.hidden=false;
+    var sheet=moduleSheets[name];
+    if(name==='balance'){
+      sheet=balanceSheetView();
+      wrap.classList.add('bs-centered');
+      document.getElementById('sheetLabel').textContent='Balance Sheet';
+    } else {
+      document.getElementById('sheetLabel').textContent=name.charAt(0).toUpperCase()+name.slice(1);
+    }
+    mountWander(sheet,name);
+  }
+  setActiveTab(name);
+  if(window.lucide) lucide.createIcons();
+}
+
+Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+  tab.addEventListener('click',function(){ playClick(); paint(tab.getAttribute('data-sheet-tab')); });
+});
+
+/* Statement builds render grids directly. Re-register the live container
+   page-side (point 6) after every staged render. */
+function registerBuildGrid(gridId){
+  BRW._grids[gridId]={containerId:'statementBuild'};
+  BRW.markDatedRows('statementBuild');
+}
+function hideBuildGrid(){
+  var grid=document.querySelector('#statementBuild .brw-grid');
+  if(grid) grid.style.display='none';
+}
+function lockAdvance(){
+  var advance=document.querySelector('#statementBuild .brw-step-advance');
+  if(advance) advance.disabled=true;
+}
+function unlockAdvance(){
+  var advance=document.querySelector('#statementBuild .brw-step-advance');
+  if(advance) advance.disabled=false;
+}
+function requireEveryShown(sorter,shownRows){
+  sorter.restUnlocked=function(){
+    for(var i=0;i<shownRows.length;i++) if(!sorter.wasHandSorted(shownRows[i])) return false;
+    return true;
+  };
+}
+
+/* ===== pass 1: all 46 rows, Revenue above Expenses ===== */
+var pass1Complete=false;
+var pass1Options={
+  startAt:0,
+  stopAt:2,
+  gridOpts:{gridId:'sort-rows-build-pass1-0'},
+  gateAdvance:function(order){ return order!==1 || pass1Complete; },
+  beforeAdvance:function(order){
+    pass1Options.gridOpts.gridId='sort-rows-build-pass1-'+(order+1);
+    return true;
+  },
+  onStep:function(order){
+    activeOrder=order;
+    registerBuildGrid('sort-rows-build-pass1-'+order);
+    document.getElementById('gate').innerHTML='';
+    if(order===1) mountPass1Sorter();
+    if(order===2) renderPass1Result();
+    if(activeTab==='working') paint('working');
+  }
+};
+
+function mountPass1Sorter(){
+  var pick=sheetOf(WORKBOOK_KEY,'1 ');
+  /* The extracted Pick sheet stores the singular answer token. This tutorial's
+     first sorter names the destination band exactly as the result does. */
+  (pick.cells||[]).forEach(function(cell){
+    if(cell.c===3 && cell.value==='Expense') cell.value='Expenses';
+  });
+  var shown=[
+    rowForLabel(pick,'Repair collected — Dana R.'),
+    rowForLabel(pick,'Rent used — June'),
+    rowForLabel(pick,'Repair delivered — Ridgeline Trail Crew, billed net 15 (unpaid)'),
+    rowForLabel(pick,'Frame delivered — J. Smith (deposit earned)'),
+    rowForLabel(pick,'Depreciation — tools & repair equipment, Summer 2026')
+  ];
+  var diagnostics=[shown[2],shown[3],shown[4]];
+  hideBuildGrid();
+  lockAdvance();
+  var sorter=BRW.mountSorter('sorterPanel','sorterGrid',filteredPickSheet(pick,'Category'),{
+    gridId:'sort-rows-sorter-pass1',
+    categoryOrder:['Revenue','Expenses'],
+    showRows:shown,
+    diagnosticRows:diagnostics,
+    onComplete:function(){
+      pass1Complete=true;
+      unlockAdvance();
+      document.getElementById('gate').innerHTML='<div class="gate-card gate-armed-maria"><div class="gate-card-title">All 46 rows are sorted. Continue to see Revenue above Expenses.</div></div>';
+      if(window.lucide) lucide.createIcons();
+    }
+  });
+  if(sorter) requireEveryShown(sorter,shown);
+}
+
+function renderPass1Result(){
+  document.getElementById('sorterPanel').hidden=true;
+  document.getElementById('sorterGrid').hidden=true;
+  document.getElementById('anna').innerHTML=annaBox(
+    'There — the same rows, no longer jumbled. <strong>Revenue is $6,020</strong>, above Expenses. ' +
+    'Ridgeline is Revenue even though payment has not arrived. Smith is Revenue even though the cash arrived last period. ' +
+    'Depreciation is an Expense even though no transaction recorded the using-up.'
+  );
+  document.getElementById('controls').innerHTML=
+    insightBox('The first shape',
+      '<p>The sort follows what each row records, not when cash moved. Every source row remains in the records; the Working Tab only groups them.</p>')+
+    '<button id="beginPass2" class="btn-continue btn-block" onclick="startPass2()">Sort Expenses by kind &rarr;</button>';
+  if(window.lucide) lucide.createIcons();
+  document.getElementById('anna').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+BR_WB.mountStatementBuild('statementBuild',WORKBOOK_KEY,pass1Options);
+registerBuildGrid('sort-rows-build-pass1-0');
+
+/* ===== pass 2: Parts Used, Rent, and Depreciation ===== */
+var pass2Complete=false;
+var pass2Options={
+  startAt:3,
+  stopAt:4,
+  gridOpts:{gridId:'sort-rows-build-pass2-3'},
+  gateAdvance:function(order){ return order!==3 || pass2Complete; },
+  beforeAdvance:function(order){
+    pass2Options.gridOpts.gridId='sort-rows-build-pass2-'+(order+1);
+    return true;
+  },
+  onStep:function(order){
+    activeOrder=order;
+    registerBuildGrid('sort-rows-build-pass2-'+order);
+    document.getElementById('gate').innerHTML='';
+    if(order===4) renderGroupedResult();
+    if(activeTab==='working') paint('working');
+  }
+};
+
+function startPass2(){
+  playClick();
+  activePass=2;
+  activeOrder=3;
+  /* Pass 1's completion leaves brw-sort-done on the shared container, which
+     collapses any panel mounted inside it — clear it before remounting. */
+  document.getElementById('sorterPanel').classList.remove('brw-sort-done');
+  document.getElementById('phaseTitle').textContent='Three Kinds of Used Up';
+  document.getElementById('narrative').innerHTML='<p>Revenue is grouped. Now sort every expense row by what was used up: <strong>Parts Used</strong>, <strong>Rent</strong>, or <strong>Depreciation</strong>.</p>';
+  document.getElementById('annaIntro').innerHTML=annaBox(
+    'The expense rows record three different kinds of used-up. <strong>Parts Used</strong> were metered by the shelf. <strong>Rent</strong> was used as months passed. ' +
+    '<strong>Depreciation</strong> records wear and aging written by hand. Watch Ridgeline: payment has not arrived, but the parts used on the finished job are still used up.'
+  );
+  document.getElementById('anna').innerHTML='';
+  document.getElementById('controls').innerHTML='';
+  document.getElementById('gate').innerHTML='';
+  BR_WB.mountStatementBuild('statementBuild',WORKBOOK_KEY,pass2Options);
+  registerBuildGrid('sort-rows-build-pass2-3');
+  mountPass2Sorter();
+  paint('working');
+  document.getElementById('sorterPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function mountPass2Sorter(){
+  var pick=sheetOf(WORKBOOK_KEY,'3 ');
+  var shown=[
+    rowForLabel(pick,'Parts used — Dana R.'),
+    rowForLabel(pick,'Rent used — June'),
+    rowForLabel(pick,'Parts used — Ridgeline Trail Crew'),
+    rowForLabel(pick,'Depreciation — tools & repair equipment, Summer 2026')
+  ];
+  var diagnostics=[shown[2],shown[3]];
+  hideBuildGrid();
+  lockAdvance();
+  var sorter=BRW.mountSorter('sorterPanel','sorterGrid',filteredPickSheet(pick,'Kind'),{
+    gridId:'sort-rows-sorter-pass2',
+    categoryOrder:['Parts Used','Rent','Depreciation'],
+    showRows:shown,
+    diagnosticRows:diagnostics,
+    onComplete:function(){
+      pass2Complete=true;
+      unlockAdvance();
+      document.getElementById('gate').innerHTML='<div class="gate-card gate-armed-maria"><div class="gate-card-title">Every expense row is sorted, including Ridgeline and depreciation. Continue to see the three groups.</div></div>';
+      if(window.lucide) lucide.createIcons();
+    }
+  });
+  if(sorter) requireEveryShown(sorter,shown);
+}
+
+function renderGroupedResult(){
+  document.getElementById('sorterPanel').hidden=true;
+  document.getElementById('sorterGrid').hidden=true;
+  document.getElementById('anna').innerHTML=annaBox(
+    'There — the shape is here: <strong>Parts Used, $1,200</strong>; <strong>Rent, $1,950</strong>; and <strong>Depreciation, $230</strong>. ' +
+    'The same expense rows are grouped by kind. Aggregate the lines and format the statement next.'
+  );
+  document.getElementById('controls').innerHTML=
+    insightBox('The grouped Working Tab',
+      '<p>Revenue is <strong>$6,020</strong>. Below it, Expenses are grouped into the three ways value was used up. No row disappeared and no row moved out of the source records.</p>')+
+    '<button class="btn-continue btn-block" onclick="nav(\'33-3-format-the-statement.html\')">Format the statement &rarr;</button>';
+  if(window.lucide) lucide.createIcons();
+  document.getElementById('anna').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  {term:'Revenue',def:'The value of work delivered during a period. It is recorded when the work is delivered, whether cash comes before, after, or at the same time.'},
+  {term:'Expense',def:'Value used up while delivering the period&rsquo;s work. The row records the using-up, not the paying.'},
+  {term:'Parts Used',def:'The cost of parts used on completed jobs. The shelf records that use job by job.'},
+  {term:'Rent',def:'The cost of the workspace right used as each month passed.'},
+  {term:'Depreciation',def:'The recorded reduction for wear and obsolescence during the period. Here, the three detailed rows total $230.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== dev hook: exercise both hand-sort gates, then finish both passes ===== */
+function devPlaceShown(categoryForText){
+  for(var i=0;i<20;i++){
+    var row=document.querySelector('#sorterPanel [data-brw-sort-row]');
+    if(!row) break;
+    var category=categoryForText(row.textContent||'');
+    row.click();
+    var zones=document.querySelectorAll('#sorterPanel .brw-sort-zone');
+    for(var z=0;z<zones.length;z++) if(zones[z].getAttribute('data-cat')===category){ zones[z].click(); break; }
+  }
+  var rest=document.querySelector('#sorterPanel .brw-sort-rest');
+  if(rest && !rest.disabled) rest.click();
+}
+window.devFill=function(){
+  var advance=document.querySelector('#statementBuild .brw-step-advance');
+  if(advance) advance.click();
+  devPlaceShown(function(text){ return /Repair|Frame/.test(text)?'Revenue':'Expenses'; });
+  advance=document.querySelector('#statementBuild .brw-step-advance');
+  if(advance) advance.click();
+  startPass2();
+  devPlaceShown(function(text){ return /Depreciation/.test(text)?'Depreciation':(/Rent/.test(text)?'Rent':'Parts Used'); });
+  advance=document.querySelector('#statementBuild .brw-step-advance');
+  if(advance) advance.click();
+};
+
+paint('working');
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

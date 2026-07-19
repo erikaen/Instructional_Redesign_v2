@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DEV — Module 4 flow check</title>
+<style>
+  body { font-family: sans-serif; margin: 2rem; }
+  table { border-collapse: collapse; margin-top: 1rem; }
+  td, th { border: 1px solid #ccc; padding: 4px 10px; font-size: 14px; }
+  .pass { background: #e6f7e6; } .fail { background: #fde3e3; font-weight: bold; }
+  #frame { width: 1200px; height: 500px; border: 1px solid #ddd; margin-top: 1rem; }
+  #banner { font-size: 20px; font-weight: bold; margin-top: 1rem; }
+</style>
+</head>
+<body>
+<h1>Module 4 flow check (instructor-side)</h1>
+<p>Drives every page's activities via its own devFill and asserts the ten-page Freddie arc.</p>
+<div id="banner">running…</div>
+<table id="results"><tr><th>page</th><th>assert</th><th>result</th></tr></table>
+<iframe id="frame"></iframe>
+<script>
+function src(d){ return d.documentElement.outerHTML; }
+function text(el){ return el ? el.textContent.replace(/\s+/g,' ').trim() : ''; }
+function hasTarget(d,file){ return src(d).indexOf(file)>=0; }
+function notCollapsed(el){ return !!el && !el.classList.contains('is-collapsed') && !el.closest('.is-collapsed'); }
+function visibleBeat(d,selector,needles){
+  var el=d.querySelector(selector), t=text(el);
+  return notCollapsed(el) && needles.every(function(x){ return t.indexOf(x)>=0; });
+}
+function visibleRow(d,scope,label,amount){
+  var rows=d.querySelectorAll(scope+' [data-brw-row]');
+  label=label.replace(/[$,\s]/g,'');
+  amount=amount.replace(/[$,\s]/g,'');
+  for(var i=0;i<rows.length;i++){
+    var t=text(rows[i]).replace(/[$,\s]/g,'');
+    if(t.indexOf(label)>=0 && t.indexOf(amount)>=0 && notCollapsed(rows[i])) return true;
+  }
+  return false;
+}
+function workbookRow(d,bookKey,label,value){
+  var data=d.defaultView.BR_STMT_DATA, book=data&&data.workbooks&&data.workbooks[bookKey];
+  if(!book) return false;
+  return book.sheets.some(function(sheet){
+    return sheet.cells.some(function(cell){
+      if(typeof cell.value!=='string' || cell.value.indexOf(label)<0) return false;
+      return sheet.cells.some(function(peer){ return peer.r===cell.r && peer.value===value; });
+    });
+  });
+}
+function styleAlignsHintRight(d){
+  for(var i=0;i<d.styleSheets.length;i++){
+    var rules;
+    try { rules=d.styleSheets[i].cssRules||[]; } catch(e) { rules=[]; }
+    for(var j=0;j<rules.length;j++){
+      if(rules[j].selectorText==='.stmt-paper .brw-hint' && rules[j].style.textAlign==='right') return true;
+    }
+  }
+  return /\.stmt-paper\s+\.brw-hint\s*\{[^}]*text-align\s*:\s*right/i.test(src(d));
+}
+function navTargets(d){
+  var out=[], re=/nav\(\\?['\"]([^'\"]+\.html)\\?['\"]\)/g, m, s=src(d);
+  while((m=re.exec(s))) out.push(m[1]);
+  return out;
+}
+
+var PLAN = [
+ {file:'41-1-The-Investor-Asks.html', asserts:[
+   ['after fill: exactly two visible statement-paper figures', d=>{var fs=d.querySelectorAll('figure.stmt-paper'); return fs.length===2 && Array.prototype.every.call(fs,notCollapsed);}],
+   ['both print captions identify the Balance Sheet and Income Statement tabs', d=>{var caps=d.querySelectorAll('figure.stmt-paper figcaption.stmt-paper-cap'); return caps.length===2 && text(caps[0]).indexOf('Printed from Bike-Repair.xlsx')>=0 && text(caps[0]).indexOf('Balance Sheet tab')>=0 && text(caps[1]).indexOf('Printed from Bike-Repair.xlsx')>=0 && text(caps[1]).indexOf('Income Statement tab')>=0;}],
+   ['completed statement handoff carries 2,460 and 4,500', d=>visibleBeat(d,'#beats',['2,460','4,500'])],
+   ['statement-paper hints are right aligned in page CSS', styleAlignsHintRight],
+   ['links forward to 42-1', d=>hasTarget(d,'42-1-The-Missing-Wage.html')],
+   ['no PDF handout wording', d=>src(d).indexOf('PDF handout')<0]]},
+
+ {file:'42-1-The-Missing-Wage.html', asserts:[
+   ['no workbook shell chrome (.xlwb / .xlwb-bar / .xlwb-tabs)', d=>d.querySelectorAll('.xlwb, .xlwb-bar, .xlwb-tabs').length===0],
+   ['exactly one visible statement-paper figure', d=>{var fs=d.querySelectorAll('figure.stmt-paper'); return fs.length===1 && notCollapsed(fs[0]);}],
+   ['print caption identifies the Income Statement tab', d=>{var c=d.querySelector('figure.stmt-paper figcaption.stmt-paper-cap'); return notCollapsed(c) && text(c).indexOf('Income Statement tab')>=0;}],
+   ['ending beat names both missing statements and tomorrow', d=>visibleBeat(d,'#beats',['Statement of Member’s Capital','Cash Flow Statement','tomorrow'])],
+   ['links forward to 43-1', d=>hasTarget(d,'43-1-The-Capital-Bridge.html')]]},
+
+ {file:'43-1-The-Capital-Bridge.html', asserts:[
+   ['completed payoff carries 2,290 / 170 / 2,810 / 600 / 2,460 / 4,500', d=>visibleBeat(d,'#payoff',['2,290','170','2,810','600','2,460','4,500'])],
+   ['source authors an amber Working Tab beat', d=>src(d).indexOf('Working Tab')>=0 && src(d).indexOf('tk-temp')>=0],
+   ["completed tab is christened Statement of Member's Capital", d=>{var t=d.querySelector('[data-sheet-tab="members"]'); return notCollapsed(t) && t.classList.contains('tk-stmt') && text(t)==="Statement of Member's Capital";}],
+   ['completed statement rows are revealed, not collapsed', d=>visibleBeat(d,'#stmtBuild',['GENERATED','WITHDRAWN']) && visibleRow(d,'#stmtBuild','Net income','2640') && visibleRow(d,'#stmtBuild','Balance, August 31','2810') && visibleRow(d,'#stmtBuild','Owner','600')],
+   ['links forward to 44-1', d=>hasTarget(d,'44-1-The-Cash-Puzzle.html')]]},
+
+ {file:'44-1-The-Cash-Puzzle.html', asserts:[
+   ['completed cash-question answer shows net income 2,640 and cash 1,300 to 620', d=>visibleBeat(d,'#anna',['2,640','1,300','620'])],
+   ['page frames the exact 680 cash decrease as compatible with profit', d=>visibleBeat(d,'#freddie',['2,640','1,300','620']) && text(d.body).indexOf('680')>=0],
+   ['links forward to 44-2', d=>hasTarget(d,'44-2-Three-Buckets.html')]]},
+
+ {file:'44-2-Three-Buckets.html', asserts:[
+   ['sorterPanel precedes workbookShell in DOM order', d=>{var a=d.getElementById('sorterPanel'),b=d.getElementById('workbookShell'); return !!a&&!!b&&!!(a.compareDocumentPosition(b)&d.defaultView.Node.DOCUMENT_POSITION_FOLLOWING);}],
+   ['sorterGrid is inside wb-grid-wrap', d=>{var g=d.getElementById('sorterGrid'); return !!g&&!!g.closest('.wb-grid-wrap');}],
+   ["source resets brw-sort-done before a new sort", d=>src(d).indexOf("classList.remove('brw-sort-done')")>=0],
+   ['completed payoff shows 2,350 / 2,630 / 680 / 620', d=>visibleBeat(d,'#controls',['2,350','2,630','680','620'])],
+   ['links forward to 44-3', d=>hasTarget(d,'44-3-The-Cash-Flow-Statement.html')]]},
+
+ {file:'44-3-The-Cash-Flow-Statement.html', asserts:[
+   ['revealed statement totals Operating 2,350 / Investing (400) / Financing (2,630) / net (680)', d=>visibleRow(d,'#cashFlowGrid','Cashfromoperatingactivities','2350') && visibleRow(d,'#cashFlowGrid','Cashusedininvestingactivities','(400)') && visibleRow(d,'#cashFlowGrid','Cashusedinfinancingactivities','(2630)') && visibleRow(d,'#cashFlowGrid','Netchangeincash','(680)')],
+   ['revealed statement reconciles Cash 1,300 to 620', d=>visibleRow(d,'#cashFlowGrid','Cash,June1,2026','1300') && visibleRow(d,'#cashFlowGrid','Cash,August31,2026','620')],
+   ['folded payoff says same shop, two clocks and isolates the 290 gap', d=>visibleBeat(d,'#controls',['same shop, two clocks','290','Ridgeline receivable','Smith deposit','depreciation added back'])],
+   ['loaded record data grounds the 290 bridge as 300 / 220 / 230', d=>workbookRow(d,'bike-repair-end','Ridgeline Trail Crew, billed net 15',300) && workbookRow(d,'bike-repair-end','Frame delivered — J. Smith',220) && workbookRow(d,'bike-repair-end','Depreciation',230)],
+   ['deleted intermediate cash page is absent and flow links directly to 46-1', d=>!hasTarget(d,'45-1-'+'What-Cash-Missed.html') && hasTarget(d,'46-1-The-Statements-Tie-Out.html')]]},
+
+ {file:'46-1-The-Statements-Tie-Out.html', asserts:[
+   ['exactly three question cards', d=>d.querySelectorAll('#questionBank .mc-card').length===3],
+   ['completed map has two balance-sheet columns and at least two mounted statement panels', d=>d.querySelectorAll('#mainGrid .acct-col').length===2 && d.querySelectorAll('#mainGrid .statement-panel .brw-grid').length>=2],
+   ['completed map has its nested Income Statement open', d=>{var n=d.querySelector('#mainGrid .sce-is-nested[data-income-open="true"] #incomeGridFinal'); return notCollapsed(n) && !!n.querySelector('.brw-grid');}],
+   ['completion reveals the articulation payoff', d=>visibleBeat(d,'#beats',['articulation'])],
+   ['identity bars show 4,710 / 2,250 / 2,460 and 4,500', d=>visibleBeat(d,'#mainGrid .dual-identity-bar',['4,710','2,250','2,460','4,500'])],
+   ['back links to 44-3 and forward links to 47-1', d=>hasTarget(d,'44-3-The-Cash-Flow-Statement.html') && hasTarget(d,'47-1-Freddies-Napkin.html')],
+   ['subtitle says Page 1 of 1', d=>visibleBeat(d,'.tut-header-sub',['Page 1 of 1'])],
+   ['no stale promise or retired page references', d=>{var s=src(d); return s.indexOf('walk the whole picture')<0 && s.indexOf('45-1')<0 && s.indexOf('46-2')<0 && s.indexOf('52-1')<0;}]]},
+
+ {file:'47-1-Freddies-Napkin.html', asserts:[
+   ['back links to 46-1 and forward links to 48-1', d=>hasTarget(d,'46-1-The-Statements-Tie-Out.html') && hasTarget(d,'48-1-The-Deal.html')],
+   ['completed napkin shows its actual 10,000 / 2,000 / 650 / 350 / 5,000 amounts', d=>visibleBeat(d,'#beats',['10,000','2,000','650','350','5,000'])],
+   ['completed napkin includes Salary and expectation-not-record guardrail', d=>visibleBeat(d,'#beats',['Salary','expectation, not a record'])]]},
+
+ {file:'48-1-The-Deal.html', asserts:[
+   ['completed terms remain under consideration: 20,000 / 30 / 70 / 2,000 salary', d=>visibleBeat(d,'#beats',['still being considered','20,000','30%','70%','2,000','salary'])],
+   ['no signed or signing completion anywhere on the page', d=>!(/\bsign(ed|ing)?\b/i.test(text(d.body)))],
+   ['module ends without a forward page target', d=>{var targets=navTargets(d); return !d.querySelector('.btn-next') && targets.length>0 && targets.every(function(x){return x==='47-1-Freddies-Napkin.html';});}],
+   ['back links to 47-1', d=>hasTarget(d,'47-1-Freddies-Napkin.html')]]}
+
+ ,{file:'48-2-Module-Complete.html', asserts:[
+   ['recap carries 4,500 / 2,350 / 620 / 20,000', d=>visibleBeat(d,'#phase-complete',['4,500','2,350','620','20,000'])],
+   ['articulation is present', d=>/articulation/i.test(text(d.body))],
+   ['offer remains under consideration with no signing language', d=>/under consideration|remain(?:s|ed)? under consideration/i.test(text(d.body)) && !/\bsign(?:s|ed|ing)?\b/i.test(text(d.body))],
+   ['back links to 48-1 and course map links to index', d=>hasTarget(d,'48-1-The-Deal.html') && hasTarget(d,'index.html')],
+   ['links forward to Module 5 introduction (51-1)', d=>hasTarget(d,'51-1-Module-5-Introduction.html')]]}
+];
+
+var frame = document.getElementById('frame'), tbl = document.getElementById('results');
+var idx = 0, failures = 0, runtimeErrors = [];
+function row(page, name, ok){
+  var tr = document.createElement('tr');
+  tr.className = ok ? 'pass' : 'fail';
+  tr.innerHTML = '<td>' + page + '</td><td>' + name + '</td><td>' + (ok ? 'PASS' : 'FAIL') + '</td>';
+  tbl.appendChild(tr);
+  if (!ok) failures++;
+}
+function step(){
+  if (idx >= PLAN.length){
+    var ok = failures === 0 && runtimeErrors.length === 0;
+    var msg = failures === 0 ? 'ALL FLOW CHECKS PASS (10 pages)'
+                             : failures + ' FLOW CHECK FAILURE(S)';
+    if (runtimeErrors.length) msg += ' · ' + runtimeErrors.length + ' runtime error(s): ' + runtimeErrors.join(' | ');
+    document.getElementById('banner').textContent = msg;
+    document.title = ok ? 'FLOWCHECK-M4 PASS' : 'FLOWCHECK-M4 FAIL ' + failures + '+' + runtimeErrors.length;
+    console.log('FLOWCHECK: ' + (ok ? 'PASS' : 'FAIL ' + failures));
+    return;
+  }
+  var p = PLAN[idx];
+  frame.onload = function(){
+    var w = frame.contentWindow, d = frame.contentDocument;
+    w.onerror = function(m){ runtimeErrors.push(p.file + ': ' + m); };
+    try { if (typeof w.devFill === 'function') w.devFill(); } catch(e){ runtimeErrors.push(p.file + ' devFill: ' + e.message); }
+    setTimeout(function(){
+      p.asserts.forEach(function(a){
+        var ok = false;
+        try { ok = !!a[1](d); } catch(e){ ok = false; }
+        row(p.file, a[0], ok);
+      });
+      idx++; step();
+    }, 900);
+  };
+  frame.src = p.file + '?flowcheck=' + Date.now();
+}
+step();
+</script>
+</body>
+</html>

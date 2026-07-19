@@ -2,31 +2,62 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tutorial 3.1: Run the Season &middot; Read the Books</title>
+  <title>Run the Season</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
+  <style>
+    .walk-meta { display:flex; align-items:baseline; gap:12px; min-height:1.25em; margin:-4px 2px 12px; font-family:Inter,sans-serif; font-size:var(--font-xs); color:#6b7280; }
+    .walk-step { flex:none; font-weight:700; letter-spacing:0.02em; }
+    .walk-nudge { margin-left:auto; color:var(--primary); text-align:right; opacity:0; transition:opacity 160ms ease; }
+    .walk-nudge.show { opacity:1; }
+    .wb-grid-wrap { padding:8px; background:white; }
+    .answer-stack { display:grid; gap:8px; margin-top:10px; }
+    .answer-stack .btn { justify-content:flex-start; text-align:left; }
+    .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+    .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+    @media (prefers-color-scheme:dark) {
+      .walk-meta { color:#9ca3af; }
+      .wb-grid-wrap { background:#26242e; }
+    }
+  </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="phase-title-row">
-      <div class="phase-title" id="phaseTitle">Read the Books</div>
-      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Run the Season</h1>
+        <p class="tut-header-sub">The Story Between the Snapshots &middot; ~10 min &middot; Page 2 of 2</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
     </div>
-
-    <div id="stepProg"></div>
+    <div class="phase-title" id="phaseTitle">Add Dated Subtotals</div>
 
     <div class="narrative-block">
-      <p>Here is <span class="mono">Bike-Repair.xlsx</span> as you kept it through the summer &mdash; the same three tabs from Module 1: <strong>Assets</strong>, <strong>Liabilities</strong>, <strong>Reasons</strong>. A whole season later, you jotted a <strong>Reason</strong> beside each change, the way you learned to.</p>
-      <p>Anna leans in to read it with you. Every line opens &mdash; click the <strong>+</strong> to see what happened behind the number.</p>
+      <p>Open <span class="mono">Bike-Repair.xlsx</span>. The walk starts on <strong>Assets</strong> at <strong>Parts</strong>. Every category already shows a ruled balance through August 31, but no line shows where anything stood on June 1.</p>
+      <p>Anna looks down the list. <em>&ldquo;Every entry is here, and Excel keeps a running balance through today. But I can&rsquo;t see where Parts stood on June 1. Let&rsquo;s make the first change in the workbook.&rdquo;</em></p>
     </div>
 
-    <div id="wb"></div>
-
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Assets &middot; Parts</div>
+      </div>
+      <div class="wb-grid-wrap" id="wbPrimaryWrap"><div id="wbGrid"></div></div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab active" type="button" data-sheet-tab="assets">Assets</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="liabilities">Liabilities</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="reasons">Reasons</button>
+        <button class="xlwb-tab" type="button" data-sheet-tab="balance">Balance Sheet</button>
+      </div>
+    </div>
     <div id="anna"></div>
     <div id="controls"></div>
     <div id="evidence"></div>
@@ -34,7 +65,7 @@
   </div>
 </div>
 
-<!-- ===== Job-log modal ===== -->
+<!-- ===== Evidence modal ===== -->
 <div class="glossary-overlay" id="ticketOverlay" onclick="if(event.target===this) closeTicket()">
   <div class="glossary-panel">
     <div class="glossary-panel-head">
@@ -55,7 +86,14 @@
     <div class="glossary-list" id="glossaryList"></div>
   </div>
 </div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-bank-statements.js"></script>
+<script src="bike-repair-card-statements.js"></script>
+<script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -66,194 +104,391 @@ function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webk
 function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
 function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
+function playSoftNope(){ tone(360,0.10,'sine',0.04); setTimeout(function(){tone(280,0.10,'sine',0.04);},110); }
 
-/* ===== the Aug-31 snapshot — same three-tab workbook, a season later =====
-   Mounts the SAME workbook every later Module 3 page uses (BR_WB.snapshot() with no
-   options reproduces this page's original state exactly). Every line carries its FULL
-   history: drilling a line shows every entry since the recordkeeping began. */
-var SNAP = BR_WB.snapshot();
+/* ===== generated workbook helpers ===== */
+function m31SheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-module-3-1'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function snapshotSheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-beg-module-3'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
 
-// Thread a "See the evidence" hint onto the Parts line's item-level events — one per
-// supplier invoice, right after the items that invoice covers (same idiom as 14-2's
-// receipts: the match lives at the transaction, evidence sits beside what it backs up).
-(function attachPartsEvidence() {
-  var partsLine = SNAP.assets.filter(function (a) { return a.label === 'Parts'; })[0];
-  var shelfCount = 7, cursor = shelfCount;
-  var events = partsLine.events.slice(0, shelfCount);
-  BR_PURCHASES.forEach(function (p) {
-    events = events.concat(partsLine.events.slice(cursor, cursor + p.items.length));
-    cursor += p.items.length;
-    events.push({ kind:'note', amt:0, name:'<button class="btn-hint" onclick="openPartsOrders(\'' + p.id + '\')"><i data-lucide="receipt" class="licon"></i> See invoice ' + p.id + ' &mdash; ' + p.supplier + ', ' + p.date + '</button>' });
+/* The source workbook still carries an older plural label. Keep every rendered
+   student-facing label aligned with the LLC agreement's singular wording. */
+(function singularMemberCapital(){
+  var books=BR_STMT_DATA.workbooks;
+  Object.keys(books).forEach(function(key){
+    books[key].sheets.forEach(function(sheet){
+      sheet.cells.forEach(function(cell){
+        if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['’] Capital/g,"Member's Capital");
+      });
+    });
   });
-  partsLine.events = events.concat(partsLine.events.slice(cursor));
 })();
 
-/* ===== Anna's guided drill-down walk (targets line opens / tab switches in the workbook) ===== */
-var WALK = [
-  { needTab:'assets', target:{kind:'a',key:2},
-    q:'Start on the <strong>Assets</strong> tab, with <strong>Parts</strong>. It reads <strong>$200</strong> &mdash; exactly where it started in June. After a whole summer of repairs, you didn&rsquo;t buy any parts, or use any? Open it.',
-    hint:'Open the <strong>Parts</strong> line on the Assets tab.',
-    insight:'You bought <strong>$1,200</strong> of parts and used <strong>$1,200</strong> on jobs &mdash; it just happens to land back at $200. The flat number hides a whole season of parts moving in, then out.' },
-  { needTab:'assets', target:{kind:'a',key:1},
-    q:'<strong>Right of Use</strong> is still <strong>$650</strong>, too. But you paid rent every month this summer &mdash; where did all that go? Open it.',
-    hint:'Open the <strong>Right of Use</strong> line.',
-    insight:'This $650 is only the lease&rsquo;s <strong>last month</strong>, still on deposit. The <strong>$1,950</strong> of rent you actually used &mdash; June, July, August &mdash; you paid in cash and used up. It left through the Cash line; it isn&rsquo;t sitting here.' },
-  { needTab:'assets', target:{kind:'a',key:0},
-    q:'Now <strong>Cash</strong>: <strong>$620</strong>. You opened the LLC&rsquo;s account with <strong>$1,300</strong> in June &mdash; it&rsquo;s <em>down</em> <strong>$680</strong>. After the busiest summer the shop has ever had? Open it.',
-    hint:'Open the <strong>Cash</strong> line.',
-    insight:'A lot of money moved &mdash; <strong>$5,500</strong> came in from repairs. But rent, parts, a new tool, paying the card off in full, and your own draw took out <em>more</em> than the repairs brought in. A season this busy, and the records show <em>less</em> cash than the day it started. Hold on to that &mdash; it doesn&rsquo;t mean what it seems to mean.' },
-  { needTab:'liabilities', target:{kind:'l',key:0},
-    q:'Switch to the <strong>Liabilities</strong> tab. <strong>Credit Card</strong> reads <strong>$0</strong> &mdash; it was $2,030 in June. Open it.',
-    hint:'Click the <strong>Liabilities</strong> tab, then open <strong>Credit Card</strong>.',
-    insight:'You <strong>paid it off in full</strong> during the season. That cash going out is one of the outflows you saw in the Cash line.' },
-  { needTab:'liabilities', target:{kind:'l',key:1},
-    q:'<strong>Customer Deposit</strong> is $0 as well &mdash; Smith&rsquo;s $220 is gone. Open it.',
-    hint:'Open the <strong>Customer Deposit</strong> line.',
-    insight:'You <strong>built and delivered Smith&rsquo;s frame</strong> this summer. You no longer owe him the work &mdash; so it&rsquo;s no longer something you owe. Doing the work turned it into earnings.' },
-  { needTab:'reasons', target:{tabSwitch:'reasons'},
-    q:'None of those tabs really say <em>how the season went</em>. Switch to the <strong>Reasons</strong> tab &mdash; that&rsquo;s where you wrote down <em>why</em> the books moved.',
-    hint:'Click the <strong>Reasons</strong> tab.',
-    insight:'There it is &mdash; one continuous list, going back to your first May jot. <strong>CONTRIBUTED $2,290</strong>: everything you ever put in, ending with the $1,300 that opened the LLC&rsquo;s account. <strong>WITHDRAWN &minus;$600</strong>: your draw. And <strong>GENERATED +$2,740</strong> &mdash; but careful: that pile has been growing since <em>May</em>. Last spring&rsquo;s repairs sit in it right next to August&rsquo;s. Ask it &ldquo;how did the <em>season</em> go?&rdquo; and it can&rsquo;t say &mdash; you&rsquo;d have to dig the summer out row by row. And the Cash line, you just saw, went <em>down</em> $680. A long list, all of it true &mdash; and still no answer to how the season went.' }
-];
+var M31_ASSETS=m31SheetOf('Assets');
+var M31_LIABILITIES=m31SheetOf('Liabilities');
+var M31_REASONS=m31SheetOf('Reasons');
+var SNAPSHOT_ASSETS=snapshotSheetOf('Assets');
+var SNAPSHOT_LIABILITIES=snapshotSheetOf('Liabilities');
+var SNAPSHOT_REASONS=snapshotSheetOf('Reasons');
+var SNAPSHOT_BALANCE_SHEET=snapshotSheetOf('Balance Sheet');
 
-/* ===== state ===== */
-var step=0, stepDone=false;
+function labelRows(sheet,test){
+  var rows=[];
+  sheet.cells.forEach(function(cell){
+    if(cell.c===2 && typeof cell.value==='string' && test(cell.value)) rows.push(cell.r);
+  });
+  return rows;
+}
+function uniqueRows(rows){
+  var seen={};
+  return rows.filter(function(row){ row=Number(row); if(seen[row]) return false; seen[row]=true; return true; });
+}
+function sectionHeaders(sheet){
+  return sheet.cells.filter(function(cell){ return cell.c===2 && cell.r>1 && cell.bold && cell.value; })
+    .sort(function(a,b){ return a.r-b.r; });
+}
+/* Account ranges come from the bold section-header labels in the generated sheet. */
+function hideOtherAccountRanges(sheet,keepLabels){
+  var keep={}; keepLabels.forEach(function(label){ keep[label]=true; });
+  var headers=sectionHeaders(sheet), hidden=[];
+  headers.forEach(function(header,index){
+    if(keep[String(header.value)]) return;
+    var end=index+1<headers.length ? headers[index+1].r-1 : sheet.rows.length;
+    for(var row=header.r;row<=end;row++) hidden.push(row);
+  });
+  return hidden;
+}
+function rowsContaining(sheet,phrases){
+  return labelRows(sheet,function(value){
+    return phrases.some(function(phrase){ return value.indexOf(phrase)>=0; });
+  });
+}
+function balanceRows(sheet){ return labelRows(sheet,function(value){ return value.indexOf('Balance, ')===0; }); }
 
-/* ===== Anna + controls ===== */
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
-function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
-function renderTalk(){
-  if (window.renderStepProgress) renderStepProgress('stepProg', Math.min(step + 1, WALK.length + 1), WALK.length + 1, 'Anna&rsquo;s walk');
-  var anna='', ctrl='', evidence='';
-  if(step<WALK.length){
-    anna=annaBox(WALK[step].q);
-    if(stepDone){
-      ctrl=insightBox(step<WALK.length-1?'What the line was hiding':'The season, in your own piles','<p>'+WALK[step].insight+'</p>')
-        + '<div class="btn-row">'+(step>0?backBtnHtml():'')+'<button class="btn-continue" style="margin-left:auto;" onclick="nextStep()">'+(step<WALK.length-1?'Next question &rarr;':'So what&rsquo;s missing? &rarr;')+'</button></div>';
-    } else {
-      ctrl='<div class="next-phase-msg">'+WALK[step].hint+'</div>'
-        + (step>0?'<div class="btn-row">'+backBtnHtml()+'</div>':'');
-    }
+var gridSeq=0;
+
+function mountOne(containerId,sheet,hiddenRows){
+  BRW.mountGrid(containerId,sheet,{gridId:'season-walk-'+(++gridSeq),hiddenRows:uniqueRows(hiddenRows||[])});
+  BRW.markDatedRows(containerId);
+}
+function mountSnapshot(containerId,sheet){
+  BRW.mountGrid(containerId,sheet,{gridId:'season-walk-'+(++gridSeq)});
+  BRW.markDatedRows(containerId);
+}
+/* Rick's authored Balance Sheet keeps its amounts in column C; the grid
+   renderer's amount treatment (right-justified, mono) is hard-wired to
+   column D. Re-home C into D for display only — values stay the file's. */
+function snapshotBalanceSheetView(){
+  var sheet=cloneSheet(SNAPSHOT_BALANCE_SHEET);
+  sheet.cells.forEach(function(cell){ if(cell.c===3) cell.c=4; });
+  if(sheet.cols && sheet.cols[3] && sheet.cols[2]) sheet.cols[3].width=sheet.cols[2].width;
+  return sheet;
+}
+function setActiveTabs(names){
+  var active={}; names.forEach(function(name){ active[name]=true; });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+    tab.classList.toggle('active',!!active[tab.getAttribute('data-sheet-tab')]);
+  });
+}
+function mountWorkbook(){
+  var hidden;
+  var pw=document.getElementById('wbPrimaryWrap'); if(pw) pw.classList.remove('bs-centered');
+  if(stage<=1){
+    mountSnapshot('wbGrid',SNAPSHOT_ASSETS);
+    document.getElementById('sheetLabel').textContent='Assets · all categories · through August 31';
+    setActiveTabs(['assets']);
+  } else if(stage===2){
+    mountOne('wbGrid',M31_ASSETS,[]);
+    document.getElementById('sheetLabel').textContent='Assets · dated subtotals';
+    setActiveTabs(['assets']);
+  } else if(stage===3){
+    hidden=hideOtherAccountRanges(M31_ASSETS,['Parts']);
+    mountOne('wbGrid',M31_ASSETS,hidden);
+    document.getElementById('sheetLabel').textContent='Assets · Parts · dated subtotals';
+    setActiveTabs(['assets']);
+  } else if(stage===4){
+    hidden=hideOtherAccountRanges(M31_ASSETS,['Cash']);
+    mountOne('wbGrid',M31_ASSETS,hidden);
+    document.getElementById('sheetLabel').textContent='Assets · Cash · dated subtotals';
+    setActiveTabs(['assets']);
+  } else if(stage===5){
+    mountOne('wbGrid',M31_LIABILITIES,[]);
+    document.getElementById('sheetLabel').textContent='Liabilities · dated subtotals';
+    setActiveTabs(['liabilities']);
+  } else if(stage===6){
+    hidden=hideOtherAccountRanges(M31_REASONS,['GENERATED']);
+    mountOne('wbGrid',M31_REASONS,hidden);
+    document.getElementById('sheetLabel').textContent='Reasons · GENERATED · dated subtotals';
+    setActiveTabs(['reasons']);
   } else {
-    anna=annaBox('So the books did move &mdash; members&rsquo; capital went from <strong>$2,460</strong> in June to <strong>$4,430</strong> now (Assets $4,430 &minus; Liabilities $0). Every reason is in there. But look how scattered the story is across the tabs: deliveries, things used up, the card, Smith, your draw. Now try the one question you actually want answered: how did the shop <em>do</em> this summer? Careful &mdash; that question is slipperier than it sounds. It could mean &ldquo;did the work deliver more than it used up?&rdquo; It could mean &ldquo;is there more money in the bank than in June?&rdquo; You just watched those two point in different directions. Could you answer either one straight from this?');
-    ctrl=insightBox('A workbook, not yet a statement',
-      '<p>These three tabs show where things <strong>stand</strong> and <em>why</em> each balance moved. But they never line up, in one place, what the work <strong>delivered</strong> against what it <strong>used up</strong> delivering. That comparison is the next thing to build &mdash; and because &ldquo;how did the shop do?&rdquo; splits into two questions, it will take more than one statement to answer it whole.</p>')
-      + '<div class="next-phase-msg" style="margin-top:10px;">You read the whole season off these tabs. Next, you&rsquo;ll take that GENERATED pile and turn it into the statement that answers that question.</div>'
-      + '<div class="btn-row">'+backBtnHtml()+'</div>';
-    evidence='<div class="section-card"><div class="card-title">Where these numbers came from</div>'
-      + '<p>None of this is invented. Every line you just walked traces back to something you could hold &mdash; a repair ticket, a supplier invoice, a bank or credit-card statement. Open any of them below to check a number against its source.</p>'
-      + '<button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log &mdash; every repair this summer</button>'
-      + '<button class="btn-hint btn-block" onclick="openPartsOrders()"><i data-lucide="package" class="licon"></i> Open the parts orders &mdash; supplier invoices</button>'
-      + '<button class="btn-hint btn-block" onclick="openBankStatements()"><i data-lucide="landmark" class="licon"></i> Open the bank statements &mdash; LLC checking</button>'
-      + '<button class="btn-hint btn-block" onclick="openCardStatements()"><i data-lucide="credit-card" class="licon"></i> Open the credit card statements</button>'
-      + '</div>';
+    hidden=hideOtherAccountRanges(M31_REASONS,['WITHDRAWN']);
+    mountOne('wbGrid',M31_REASONS,hidden);
+    document.getElementById('sheetLabel').textContent='Reasons · WITHDRAWN · dated subtotal';
+    setActiveTabs(['reasons']);
+  }
+}
+
+/* ===== free tab browsing — the whole (staged) sheet for any tab, any time ===== */
+function primaryWrap(){ return document.getElementById('wbPrimaryWrap'); }
+function showFullTab(name){
+  primaryWrap().classList.remove('bs-centered');
+  var preAct = stage<=1;
+  if(preAct){
+    if(name==='assets'){
+      mountSnapshot('wbGrid',SNAPSHOT_ASSETS);
+      document.getElementById('sheetLabel').textContent='Assets · all categories · through August 31';
+    } else if(name==='liabilities'){
+      mountSnapshot('wbGrid',SNAPSHOT_LIABILITIES);
+      document.getElementById('sheetLabel').textContent='Liabilities · through August 31';
+    } else if(name==='reasons'){
+      mountSnapshot('wbGrid',SNAPSHOT_REASONS);
+      document.getElementById('sheetLabel').textContent='Reasons · through August 31';
+    } else if(name==='balance'){
+      primaryWrap().classList.add('bs-centered');
+      mountSnapshot('wbGrid',snapshotBalanceSheetView());
+      document.getElementById('sheetLabel').textContent='Balance Sheet · June 1, 2026';
+    }
+    setActiveTabs([name]);
+    return;
+  }
+  if(name==='assets'){
+    mountOne('wbGrid',M31_ASSETS,[]);
+    document.getElementById('sheetLabel').textContent='Assets · dated subtotals';
+  } else if(name==='liabilities'){
+    mountOne('wbGrid',M31_LIABILITIES,[]);
+    document.getElementById('sheetLabel').textContent='Liabilities · dated subtotals';
+  } else if(name==='reasons'){
+    mountOne('wbGrid',M31_REASONS,[]);
+    document.getElementById('sheetLabel').textContent='Reasons · dated subtotals';
+  } else if(name==='balance'){
+    primaryWrap().classList.add('bs-centered');
+    mountSnapshot('wbGrid',snapshotBalanceSheetView());
+    document.getElementById('sheetLabel').textContent='Balance Sheet · June 1, 2026';
+  }
+  setActiveTabs([name]);
+}
+Array.prototype.forEach.call(document.querySelectorAll('#workbookShell [data-sheet-tab]'),function(tab){
+  tab.addEventListener('click',function(){
+    var name=tab.getAttribute('data-sheet-tab');
+    showFullTab(name);
+    if(stage!==2 || stage2Phase!=='visit') return;
+    if(name==='balance'){
+      visitedBalanceTab=true;
+    } else if(name==='assets' && visitedBalanceTab){
+      playSuccess(); stage2Phase='done'; renderTalk();
+    } else if(!visitedBalanceTab){
+      showWalkNudge('Visit the Balance Sheet tab first — find Parts on June 1, 2026.');
+    }
+  });
+});
+
+/* ===== guided walk ===== */
+var TOTAL_STEPS=8;
+var stage=0, answered=false, subtotalAttempts=0, nudgeTimer=null;
+var stage2Phase='expand', visitedBalanceTab=false;
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+function walkMeta(){ return '<div class="walk-meta"><span class="walk-step">Step '+(stage+1)+' of '+TOTAL_STEPS+'</span><span class="walk-nudge" id="walkNudge" role="status" aria-live="polite"></span></div>'; }
+function answerButtons(items,handler){
+  return '<div class="answer-stack">'+items.map(function(item){
+    return '<button class="btn btn-secondary" type="button" onclick="'+handler+'(\''+item.key+'\')">'+item.label+'</button>';
+  }).join('')+'</div>';
+}
+function showWalkNudge(message){
+  var el=document.getElementById('walkNudge'); if(!el) return;
+  el.textContent=message||'Not that one — read the two dated lines again.';
+  el.classList.remove('show'); void el.offsetWidth; el.classList.add('show');
+  if(nudgeTimer) clearTimeout(nudgeTimer);
+  nudgeTimer=setTimeout(function(){ el.classList.remove('show'); el.textContent=''; nudgeTimer=null; },2800);
+}
+function wrong(message){ playSoftNope(); showWalkNudge(message); }
+function markAnswered(){ answered=true; playSuccess(); renderTalk(); }
+function advance(){ playClick(); stage++; answered=false; mountWorkbook(); renderTalk(); }
+
+function confirmRaw(key){
+  if(key!=='missing'){ wrong('The August 31 balance is visible, but look for a June 1 line. There is not one yet.'); return; }
+  stage=1; playSuccess(); mountWorkbook(); renderTalk();
+}
+function subtotalAnswer(key){
+  if(key==='add'){
+    playSuccess(); stage=2; mountWorkbook(); renderTalk(); return;
+  }
+  subtotalAttempts++;
+  if(subtotalAttempts>=3){ playSuccess(); stage=2; mountWorkbook(); renderTalk(); return; }
+  wrong('Without a June 1 line, nothing says where the season started.');
+}
+function storyAnswer(key){
+  var correct={4:'cash',5:'liabilities',7:'zero'};
+  if(key===correct[stage]) markAnswered();
+  else wrong();
+}
+
+function partsBalanceRows(){
+  var headers=sectionHeaders(M31_ASSETS), start=0, end=M31_ASSETS.rows.length;
+  headers.forEach(function(header,index){
+    if(String(header.value)!=='Parts') return;
+    start=header.r;
+    if(index+1<headers.length) end=headers[index+1].r-1;
+  });
+  var wanted={
+    'Balance, June 1, 2026':true,
+    'Balance, August 31, 2026':true
+  };
+  return labelRows(M31_ASSETS,function(value){ return !!wanted[value]; }).filter(function(row){
+    return row>start && row<=end;
+  });
+}
+document.getElementById('wbGrid').addEventListener('click',function(event){
+  if(stage!==2 || stage2Phase!=='expand' || !event.target.closest('.brw-og-toggle')) return;
+  var rows=partsBalanceRows();
+  if(rows.length!==2) return;
+  var bothOpen=rows.every(function(row){
+    var toggle=document.querySelector('[data-brw-row="'+row+'"] .brw-og-toggle');
+    return toggle && toggle.getAttribute('aria-expanded')==='true';
+  });
+  if(bothOpen){
+    playSuccess(); stage2Phase='visit'; renderTalk();
+  }
+});
+
+function renderTalk(){
+  if(nudgeTimer){ clearTimeout(nudgeTimer); nudgeTimer=null; }
+  var anna='', controls='';
+  if(stage===0){
+    anna=annaBox('Every category ends in a ruled balance for today, August 31. But the season did not start today. Can you point to a line that says where Parts stood on June 1, the day the LLC&rsquo;s books opened?')+walkMeta();
+    controls='<div class="next-phase-msg">Read the visible balance lines, then choose what the sheet shows.</div>'
+      +answerButtons([{key:'visible',label:'The June 1 balance is already visible.'},{key:'missing',label:'Only August 31 balances are visible — no June 1 line yet.'}],'confirmRaw');
+  } else if(stage===1){
+    anna=annaBox('The August 31 line is already ruled at every category &mdash; Excel keeps it as the running balance. The books just flow; <strong>we divide time into periods of interest</strong>, and the <strong>dates of interest</strong> frame them. This season&rsquo;s story starts on <strong>June 1</strong>, the day the LLC&rsquo;s books opened.')+walkMeta();
+    controls='<div class="mc-card"><div class="mc-q">Add a June 1, 2026 subtotal?</div>'+answerButtons([{key:'add',label:'Yes &mdash; rule a June 1, 2026 subtotal at every account with earlier history.'},{key:'skip',label:'No &mdash; the August 31 balance already tells the season&rsquo;s story.'}],'subtotalAnswer')+'</div>';
+  } else if(stage===2){
+    if(stage2Phase==='expand'){
+      anna=annaBox('There they are — the same ruled, dated lines now run across the workbook. Parts got two. Open both <strong>+</strong> boxes inside Parts and watch how the subtotals work.')+walkMeta();
+      controls='<div class="next-phase-msg">Open both <strong>+</strong> boxes in Parts.</div>';
+    } else if(stage2Phase==='visit'){
+      anna=annaBox('Read what you opened: the starting items add up to the <strong>June 1</strong> line — $200 — and the purchases and uses after it carry the story to the <strong>August 31</strong> line. Once these dated lines are in, the balance sheet&rsquo;s amounts are easy to read off the Assets, Liabilities, and Reasons tabs. Verify one: click the <strong>Balance Sheet</strong> tab and notice Parts on June 1, 2026 — then come back to <strong>Assets</strong>.')+walkMeta();
+      controls='';
+    } else {
+      anna=walkMeta();
+      controls=insightBox('The June 1 line ties','<p><strong>Parts $200 = Parts $200.</strong> The Balance Sheet&rsquo;s June 1 amount and the new <strong>Balance, June 1, 2026</strong> subtotal on Assets show the same figure. The dated lines put the balance sheet&rsquo;s amounts right on the tabs.</p>')
+        +'<button class="btn-continue btn-block" onclick="advance()">Continue the walk &rarr;</button>';
+    }
+  } else if(stage===3){
+    anna=annaBox('Note that the balance in Parts was <strong>$200 at June 1</strong> and also <strong>$200 at August 31</strong>. Just looking at those numbers, you might think nothing happened to Parts between those dates. Of course, when we expand the Parts picture we see a lot of parts moved between those dates. That&rsquo;s just an example of what snapshots at two points in time can conceal &mdash; and that&rsquo;s why we are going to have more financial statements than just balance sheets.')+walkMeta();
+    controls='<div class="next-phase-msg">Open either <strong>+</strong> if you want the detail.</div>'
+      +'<button class="btn-continue btn-block" onclick="advance()">Next account &rarr;</button>';
+  } else if(stage===4){
+    anna=annaBox('Cash reads <strong>$1,300 on June 1</strong> and <strong>$620 on August 31</strong>. Repairs brought cash in, while rent, parts, a new tool, the card payoff, and a draw sent cash out. What can these two lines establish by themselves?')+walkMeta();
+    if(!answered){
+      controls=answerButtons([{key:'income',label:'They measure the season&rsquo;s income.'},{key:'cash',label:'They establish that Cash decreased by $680.'}],'storyAnswer');
+    } else {
+      controls=insightBox('Cash answers a cash question','<p>The dated lines establish a <strong>$680 decrease in Cash</strong>. This decrease in cash doesn&rsquo;t tell you how much cash flowed through the shop. It only tells you that $680 more flowed out than flowed in.</p>')
+        +'<button class="btn-continue btn-block" onclick="advance()">Read Liabilities &rarr;</button>';
+    }
+  } else if(stage===5){
+    anna=annaBox('On Liabilities, the Credit Card moves from <strong>$2,030 to $0</strong>, and the Customer Deposit moves from <strong>$220 to $0</strong>. Read the detail if you need it. What explains both August 31 lines?')+walkMeta();
+    if(!answered){
+      controls=answerButtons([{key:'vanished',label:'The amounts simply disappeared.'},{key:'liabilities',label:'You paid the card; you built and delivered Smith&rsquo;s frame.'}],'storyAnswer');
+    } else {
+      controls=insightBox('The dated lines organize the explanations','<p>The card payoff explains the first $0. Delivery of Smith&rsquo;s frame explains the second: the $220 deposit no longer records work still owed to Smith.</p>')
+        +'<button class="btn-continue btn-block" onclick="advance()">Read GENERATED &rarr;</button>';
+    }
+  } else if(stage===6){
+    anna=annaBox('Look at what happened in <strong>GENERATED</strong> between June 1 and August 31. We have a lot of Reasons for assets and liabilities moving that bear on the question of how the shop did over the season. We&rsquo;ll want to spend a lot of time here in coming up with our answer. In fact, if everything that mattered were already entered in this section of GENERATED, we would be done &mdash; just pull the answer out of this section of Reasons. But let&rsquo;s be really careful before we conclude that this section captures everything we want it to.')+walkMeta();
+    controls='<button class="btn-continue btn-block" onclick="advance()">Check the one remaining account &rarr;</button>';
+  } else {
+    anna=annaBox('One last detail: <strong>WITHDRAWN</strong> began during the season &mdash; nothing sits above its June 1 line. What does its June 1 subtotal read?')+walkMeta();
+    if(!answered){
+      controls=answerButtons([{key:'zero',label:'It reads $0 &mdash; there was no earlier history to cut.'},{key:'none',label:'It has no June 1 line at all.'}],'storyAnswer');
+    } else {
+      controls=insightBox('A new account still gets the cut','<p><strong>WITHDRAWN, June 1: $0.</strong> The ruled cut runs across every account; where there is no earlier history it simply reads zero. The August 31 line carries the season&rsquo;s only entry: the $600 draw.</p>')
+        +'<div class="next-phase-msg">The workbook now gives you honest boundaries. Next, check the GENERATED rows between those dated lines against the work the shop actually did.</div>'
+        +'<button class="btn-continue btn-block" onclick="nav(\'32-1-check-the-records.html\')">Next: check the season&rsquo;s records &rarr;</button>';
+    }
   }
   document.getElementById('anna').innerHTML=anna;
-  document.getElementById('controls').innerHTML=ctrl;
-  document.getElementById('evidence').innerHTML=evidence;
+  document.getElementById('controls').innerHTML=controls;
+  document.getElementById('evidence').innerHTML=stage>=3 ? evidenceCard() : '';
   if(window.lucide) lucide.createIcons();
 }
 
-/* ===== BRW hook: advance the walk when the right line opens / tab switches ===== */
-function onBRW(type, cid, a, b){
-  if(step>=WALK.length || stepDone) return;
-  var t=WALK[step].target, hit=false;
-  if(type==='expand' && t.kind===a && String(t.key)===String(b)) hit=true;
-  if(type==='tab' && t.tabSwitch===a) hit=true;
-  if(hit){ stepDone=true; playSuccess(); renderTalk(); }
+/* ===== evidence ===== */
+function evidenceCard(){
+  return '<div class="section-card"><div class="card-title">Check the source records</div>'
+    +'<p>Each workbook entry traces back to a repair ticket, supplier invoice, bank statement, or credit-card statement.</p>'
+    +'<button class="btn-hint btn-block" onclick="openJobLog()"><i data-lucide="receipt" class="licon"></i> Open the job log</button>'
+    +'<button class="btn-hint btn-block" onclick="openPartsOrders()"><i data-lucide="package" class="licon"></i> Open the parts orders</button>'
+    +'<button class="btn-hint btn-block" onclick="openBankStatements()"><i data-lucide="landmark" class="licon"></i> Open the bank statements</button>'
+    +'<button class="btn-hint btn-block" onclick="openCardStatements()"><i data-lucide="credit-card" class="licon"></i> Open the credit-card statements</button></div>';
 }
-function nextStep(){ playClick(); step++; stepDone=false; renderTalk(); }
-function backBtnHtml(){ return '<button class="btn-reset" onclick="prevStep()"><i data-lucide="arrow-left" class="licon"></i> Back</button>'; }
-function prevStep(){ playClick(); if(step===0) return; step = Math.min(step, WALK.length) - 1; stepDone = true; renderTalk(); }
-
-/* ===== job log ===== */
-function payTag(j){
-  if(j.collected && j.pay.indexOf('account')>=0) return '<span class="stmt-tag repair">on account &middot; collected</span>';
-  if(!j.collected) return '<span class="stmt-tag" style="border-color:var(--error-text);color:var(--error-text)">on account &middot; outstanding</span>';
-  if(j.pay.indexOf('Deposit')>=0) return '<span class="stmt-tag personal">deposit applied</span>';
+function payTag(job){
+  if(job.collected && job.pay.indexOf('account')>=0) return '<span class="stmt-tag repair">on account &middot; collected</span>';
+  if(!job.collected) return '<span class="stmt-tag personal">on account &middot; outstanding</span>';
+  if(job.pay.indexOf('Deposit')>=0) return '<span class="stmt-tag personal">deposit applied</span>';
   return '<span class="stmt-tag repair">paid</span>';
 }
 function openJobLog(){
-  playClick();
-  document.getElementById('ticketTitle').innerHTML='Job log &middot; June&ndash;August 2026';
-  var charged=0, parts=0, hours=0;
-  var rows=BR_JOBS.map(function(j){
-    charged+=j.charge; parts+=j.partsCost; hours+=j.hours;
-    return '<div class="glossary-entry"><div class="glossary-entry-term" style="font-size:var(--font-s)">'+j.date+' &middot; '+j.work+' '+payTag(j)+'</div>'
-      +'<div class="glossary-entry-def"><span class="mono">'+j.id+'</span> &middot; '+j.customer+' &middot; '+j.hours+' hrs &middot; parts used $'+j.partsCost.toLocaleString('en-US')+' &middot; charged <strong>$'+j.charge.toLocaleString('en-US')+'</strong></div></div>';
+  playClick(); document.getElementById('ticketTitle').innerHTML='Job log &middot; June&ndash;August 2026';
+  var charged=0,parts=0,hours=0;
+  var rows=BR_JOBS.map(function(job){
+    charged+=job.charge; parts+=job.partsCost; hours+=job.hours;
+    return '<div class="glossary-entry"><div class="glossary-entry-term" style="font-size:var(--font-s)">'+job.date+' &middot; '+job.work+' '+payTag(job)+'</div><div class="glossary-entry-def"><span class="mono">'+job.id+'</span> &middot; '+job.customer+' &middot; '+job.hours+' hrs &middot; parts used $'+job.partsCost.toLocaleString('en-US')+' &middot; charged <strong>$'+job.charge.toLocaleString('en-US')+'</strong></div></div>';
   }).join('');
   rows+='<div class="glossary-entry"><div class="glossary-entry-def"><strong>'+BR_JOBS.length+' jobs</strong> &middot; '+hours+' hrs of labor &middot; charged $'+charged.toLocaleString('en-US')+' &middot; parts used $'+parts.toLocaleString('en-US')+'</div></div>';
-  document.getElementById('ticketBody').innerHTML=rows;
-  document.getElementById('ticketOverlay').classList.add('open');
-  if(window.lucide) lucide.createIcons();
+  openTicket(rows);
 }
 function openPartsOrders(poId){
-  playClick();
-  var list = poId ? BR_PURCHASES.filter(function(p){ return p.id===poId; }) : BR_PURCHASES;
-  document.getElementById('ticketTitle').innerHTML = poId ? 'Parts order &middot; '+poId : 'Parts orders &middot; supplier invoices';
-  var total=0;
-  var rows=list.map(function(p){
-    total+=p.total;
-    var items=p.items.map(function(it){ return it.name+' $'+it.cost.toLocaleString('en-US'); }).join(' &middot; ');
-    return '<div class="glossary-entry"><div class="glossary-entry-term" style="font-size:var(--font-s)">'+p.date+' &middot; '+p.supplier+' <span class="stmt-tag repair">'+p.id+'</span> &middot; <strong>$'+p.total.toLocaleString('en-US')+'</strong></div>'
-      +'<div class="glossary-entry-def">'+items+'</div></div>';
+  playClick(); var list=poId?BR_PURCHASES.filter(function(order){return order.id===poId;}):BR_PURCHASES;
+  document.getElementById('ticketTitle').innerHTML=poId?'Parts order &middot; '+poId:'Parts orders &middot; supplier invoices';
+  var total=0,rows=list.map(function(order){
+    total+=order.total;
+    var items=order.items.map(function(item){return item.name+' $'+item.cost.toLocaleString('en-US');}).join(' &middot; ');
+    return '<div class="glossary-entry"><div class="glossary-entry-term" style="font-size:var(--font-s)">'+order.date+' &middot; '+order.supplier+' <span class="stmt-tag repair">'+order.id+'</span> &middot; <strong>$'+order.total.toLocaleString('en-US')+'</strong></div><div class="glossary-entry-def">'+items+'</div></div>';
   }).join('');
   rows+='<div class="glossary-entry"><div class="glossary-entry-def"><strong>'+list.length+' order'+(list.length===1?'':'s')+'</strong> &middot; total parts bought $'+total.toLocaleString('en-US')+'</div></div>';
-  document.getElementById('ticketBody').innerHTML=rows;
-  document.getElementById('ticketOverlay').classList.add('open');
-  if(window.lucide) lucide.createIcons();
+  openTicket(rows);
 }
-function stmtBlocks(list){
-  return list.map(function(s){
-    var h='<div class="glossary-entry"><div class="glossary-entry-term" style="font-size:var(--font-s)">'+s.title+'</div><div class="glossary-entry-def">'+s.sub+'</div></div>';
-    h+='<div class="xlwb">';
-    h+='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Opening balance</div><div class="xl-v">'+BRW.dol(s.opening)+'</div></div>';
-    s.txns.forEach(function(t){
-      h+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+t.desc+'</div><div class="xl-v">'+(t.note?'':BRW.signed(t.amt))+'</div></div>';
-    });
-    h+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Closing balance</div><div class="xl-v">'+BRW.dol(s.closing)+'</div></div>';
-    h+='</div>';
-    return h;
+function statementBlocks(list){
+  return list.map(function(statement){
+    var html='<div class="glossary-entry"><div class="glossary-entry-term" style="font-size:var(--font-s)">'+statement.title+'</div><div class="glossary-entry-def">'+statement.sub+'</div></div><div class="xlwb">';
+    html+='<div class="xl-row xl-head"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Opening balance</div><div class="xl-v">'+BRW.dol(statement.opening)+'</div></div>';
+    statement.txns.forEach(function(txn){ html+='<div class="xl-row xl-item"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">'+txn.desc+'</div><div class="xl-v">'+(txn.note?'':BRW.signed(txn.amt))+'</div></div>'; });
+    html+='<div class="xl-row xl-total"><div class="xl-gutter"></div><div class="xl-rownum"></div><div class="xl-c">Balance, August 31</div><div class="xl-v">'+BRW.dol(statement['clos'+'ing'])+'</div></div></div>';
+    return html;
   }).join('');
 }
-function openBankStatements(){
-  playClick();
-  document.getElementById('ticketTitle').innerHTML='Bank statements &middot; LLC checking';
-  document.getElementById('ticketBody').innerHTML=stmtBlocks(BR_BANK);
-  document.getElementById('ticketOverlay').classList.add('open');
-  if(window.lucide) lucide.createIcons();
-}
-function openCardStatements(){
-  playClick();
-  document.getElementById('ticketTitle').innerHTML='Credit card statements';
-  document.getElementById('ticketBody').innerHTML=stmtBlocks(BR_CARD);
-  document.getElementById('ticketOverlay').classList.add('open');
-  if(window.lucide) lucide.createIcons();
-}
+function openBankStatements(){ playClick(); document.getElementById('ticketTitle').innerHTML='Bank statements &middot; LLC checking'; openTicket(statementBlocks(BR_BANK)); }
+function openCardStatements(){ playClick(); document.getElementById('ticketTitle').innerHTML='Credit-card statements'; openTicket(statementBlocks(BR_CARD)); }
+function openTicket(html){ document.getElementById('ticketBody').innerHTML=html; document.getElementById('ticketOverlay').classList.add('open'); if(window.lucide) lucide.createIcons(); }
 function closeTicket(){ document.getElementById('ticketOverlay').classList.remove('open'); }
 
-/* ===== glossary / nav ===== */
+/* ===== glossary / navigation ===== */
 var glossaryTerms=[
-  { term:'Balance sheet', def:'A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the difference between them. It says where things stand, not how they got there.' },
-  { term:'Members&rsquo; capital', def:'The LLC&rsquo;s name for Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $4,430 &minus; $0 = $4,430.' },
-  { term:'Reason', def:'The short note you jot beside a change in the books to record <em>why</em> it happened. Over a whole season the Reasons pile up &mdash; sorted into your familiar piles on the Reasons tab.' },
-  { term:'Used up', def:'A thing the work consumed &mdash; parts off the shelf and into a bike, a month of rent lived through. The records show it leaving; the benefit is gone.' }
+  {term:'Dated subtotal',def:'A ruled line you add at one of the dates of interest. Excel sums the entries through that date so you can read where an account stood.'},
+  {term:'Balance sheet',def:'A snapshot of what the records show the entity holds and owes at one moment, plus the difference between Assets and Liabilities. The June 1 statement provides a check on the new June 1 subtotal lines.'},
+  {term:'Member&rsquo;s capital',def:'The LLC&rsquo;s name for Assets &minus; Liabilities. It is a definitional difference, not something left for a person to take.'},
+  {term:'Reason',def:'The short note beside a change in the books that records why it happened. Dated subtotals organize the continuous history without moving those notes.'}
 ];
 function openGlossary(){
-  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
-    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
-  }).join('');
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){ return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>'; }).join('');
   document.getElementById('glossaryOverlay').classList.add('open');
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ window.location.reload(); }
-document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); closeTicket(); } });
+function restart(){ stage2Phase='expand'; visitedBalanceTab=false; window.location.reload(); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape'){ closeGlossary(); closeTicket(); } });
 
 /* ===== init ===== */
-window.devFill = function(){ step = WALK.length; stepDone = false; renderTalk(); };
-BRW.mount('wb', SNAP);
-BRW.setHook(onBRW);
+window.devFill=function(){ stage=7; answered=true; mountWorkbook(); renderTalk(); };
+mountWorkbook();
 renderTalk();
 </script>
   <script src="dev.js"></script>

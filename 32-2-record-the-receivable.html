@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Record the Receivable</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    .two-panel { display:flex; gap:12px; align-items:flex-start; }
+    .two-panel > .xlwb { flex:1 1 0; min-width:0; }
+    .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+    .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+    @media (max-width:860px) { .two-panel { flex-direction:column; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Record the Receivable</h1>
+        <p class="tut-header-sub">Complete the Records &middot; ~10 min &middot; Page 2 of 3</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">A Finished Job, Still Unpaid</div>
+
+    <div class="narrative-block">
+      <p>Two complete windows on <span class="mono">Bike-Repair.xlsx</span> sit side by side, the way Excel shows one workbook with <em>View Side by Side</em>. The <strong>Assets</strong> sheet is open on the left. On the right, the <strong>Reasons</strong> sheet is open to <strong>GENERATED</strong>.</p>
+      <p>The records are one step short of the facts: Ridgeline Trail Crew&rsquo;s finished job has no delivery row yet.</p>
+    </div>
+
+    <div class="two-panel">
+      <div class="xlwb" id="leftPanel">
+        <div class="xlwb-bar">
+          <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+          <div class="xlwb-bar-sheet" id="leftLabel">Assets</div>
+        </div>
+        <div class="wb-grid-wrap" id="leftWrap"><div id="leftGrid"></div></div>
+        <div class="xlwb-tabs" aria-label="Left workbook tabs">
+          <button class="xlwb-tab active" type="button" data-panel="left" data-sheet-tab="assets" aria-current="page">Assets</button>
+          <button class="xlwb-tab" type="button" data-panel="left" data-sheet-tab="liabilities">Liabilities</button>
+          <button class="xlwb-tab" type="button" data-panel="left" data-sheet-tab="reasons">Reasons</button>
+          <button class="xlwb-tab" type="button" data-panel="left" data-sheet-tab="balance">Balance Sheet</button>
+        </div>
+      </div>
+      <div class="xlwb" id="rightPanel">
+        <div class="xlwb-bar">
+          <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+          <div class="xlwb-bar-sheet" id="rightLabel">Reasons &middot; GENERATED</div>
+        </div>
+        <div class="wb-grid-wrap" id="rightWrap"><div id="rightGrid"></div></div>
+        <div class="xlwb-tabs" aria-label="Right workbook tabs">
+          <button class="xlwb-tab" type="button" data-panel="right" data-sheet-tab="assets">Assets</button>
+          <button class="xlwb-tab" type="button" data-panel="right" data-sheet-tab="liabilities">Liabilities</button>
+          <button class="xlwb-tab active" type="button" data-panel="right" data-sheet-tab="reasons" aria-current="page">Reasons</button>
+          <button class="xlwb-tab" type="button" data-panel="right" data-sheet-tab="balance">Balance Sheet</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="anna"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+/* ===== extracted workbook views ===== */
+function sheetOf(workbookKey,name){
+  var sheets=BR_STMT_DATA.workbooks[workbookKey].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function snapshotSheetOf(name){ return sheetOf('bike-repair-beg-module-3',name); }
+function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
+
+/* The source workbook still carries an older plural label. Keep every rendered
+   student-facing label aligned with the LLC agreement's singular wording. */
+(function singularMemberCapital(){
+  var books=BR_STMT_DATA.workbooks;
+  Object.keys(books).forEach(function(key){
+    books[key].sheets.forEach(function(sheet){
+      sheet.cells.forEach(function(cell){
+        if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['’] Capital/g,"Member's Capital");
+      });
+    });
+  });
+})();
+
+var currentWorkbookKey='bike-repair-module-3-1';
+var SNAPSHOT_BALANCE_SHEET=snapshotSheetOf('Balance Sheet');
+
+/* Rick's authored Balance Sheet keeps its amounts in column C; the grid
+   renderer's amount treatment (right-justified, mono) is hard-wired to
+   column D. Re-home C into D for display only — values stay the file's. */
+function snapshotBalanceSheetView(){
+  var sheet=cloneSheet(SNAPSHOT_BALANCE_SHEET);
+  sheet.cells.forEach(function(cell){ if(cell.c===3) cell.c=4; });
+  if(sheet.cols && sheet.cols[3] && sheet.cols[2]) sheet.cols[3].width=sheet.cols[2].width;
+  return sheet;
+}
+
+function rowsOutsideSection(sheet,sectionName){
+  var headers=(sheet.cells||[]).filter(function(cell){
+    return cell.c===2 && cell.bold && /^(CONTRIBUTED|GENERATED|WITHDRAWN)$/.test(String(cell.value||''));
+  }).sort(function(a,b){ return a.r-b.r; });
+  var maxRow=(sheet.cells||[]).reduce(function(max,cell){ return Math.max(max,cell.r||0); },0);
+  var rows=[];
+  for(var i=0;i<headers.length;i++){
+    if(String(headers[i].value)===sectionName) continue;
+    var end=i+1<headers.length ? headers[i+1].r-1 : maxRow;
+    for(var row=headers[i].r;row<=end;row++) rows.push(row);
+  }
+  return rows;
+}
+function uniqueRows(rows){
+  var seen={},out=[];
+  (rows||[]).forEach(function(row){ row=Number(row); if(!seen[row]){ seen[row]=true; out.push(row); } });
+  return out;
+}
+
+var gridSeq=0;
+var panelTab={ left:'assets', right:'reasons' };
+function mountOne(cid,sheet,hidden){
+  BRW.mountGrid(cid,sheet,{gridId:'wb32-2-receivable-'+(++gridSeq),hiddenRows:uniqueRows(hidden)});
+}
+function expandVisibleGroups(containerId){
+  var container=document.getElementById(containerId);
+  if(!container) return;
+  var toggles=container.getElementsByClassName('brw-og-toggle');
+  for(var i=0;i<toggles.length;i++){
+    var groupId=toggles[i].getAttribute('data-brw-group');
+    toggles[i].setAttribute('aria-expanded','true');
+    toggles[i].textContent='−';
+    var rows=container.getElementsByClassName('brw-og-row');
+    for(var j=0;j<rows.length;j++){
+      if(rows[j].getAttribute('data-brw-group')===groupId) rows[j].classList.remove('is-collapsed');
+    }
+  }
+}
+function setActiveTab(panel,name){
+  Array.prototype.forEach.call(document.querySelectorAll('[data-panel="'+panel+'"][data-sheet-tab]'),function(tab){
+    var on=tab.getAttribute('data-sheet-tab')===name;
+    tab.classList.toggle('active',on);
+    if(on) tab.setAttribute('aria-current','page'); else tab.removeAttribute('aria-current');
+  });
+}
+function paint(panel,name){
+  panelTab[panel]=name;
+  var gridId=panel==='left' ? 'leftGrid' : 'rightGrid';
+  var labelId=panel==='left' ? 'leftLabel' : 'rightLabel';
+  var wrap=document.getElementById(panel==='left' ? 'leftWrap' : 'rightWrap');
+  var sheet,label,hidden=[];
+  wrap.classList.remove('bs-centered');
+  if(name==='balance'){
+    sheet=snapshotBalanceSheetView();
+    label='Balance Sheet · June 1, 2026';
+    wrap.classList.add('bs-centered');
+  } else {
+    var sheetName=name.charAt(0).toUpperCase()+name.slice(1);
+    sheet=sheetOf(currentWorkbookKey,sheetName);
+    label=sheetName;
+    if(name==='reasons'){
+      hidden=[1].concat(rowsOutsideSection(sheet,'GENERATED'));
+      label='Reasons · GENERATED';
+    }
+  }
+  mountOne(gridId,sheet,hidden);
+  if(panel==='right' && name==='reasons') expandVisibleGroups(gridId);
+  document.getElementById(labelId).textContent=label;
+  setActiveTab(panel,name);
+  BRW.markDatedRows(gridId);
+}
+Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),function(tab){
+  tab.addEventListener('click',function(){
+    playClick();
+    paint(tab.getAttribute('data-panel'),tab.getAttribute('data-sheet-tab'));
+  });
+});
+
+/* ===== state ===== */
+var step=0;
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+function renderTalk(){
+  var anna='',ctrl='';
+  if(step===0){
+    anna=annaBox('Ridgeline&rsquo;s work went out the door on <strong>Aug 28</strong>, and they owe <strong>$300</strong>. The right to be paid is real. It gets a line of its own in <strong>Assets</strong>, called <strong>Accounts Receivable</strong>, and the delivery gets its reason row in <strong>GENERATED</strong>.');
+    ctrl='<button class="btn-continue btn-block" onclick="recordReceivable()">Put it on the books &rarr;</button>';
+  } else {
+    anna=annaBox('There it is. On the left, <strong>Accounts Receivable</strong> now shows Ridgeline Trail Crew&rsquo;s <strong>$300</strong> unpaid bill. On the right, <strong>Repair delivered &mdash; Ridgeline Trail Crew, billed net 15 (unpaid)</strong> sits in GENERATED at <strong>$300</strong>. The August 31 dated line now reads <strong>$3,040</strong>, where it read <strong>$2,740</strong> &mdash; a <strong>$300</strong> movement.<br><br>Now compare J. Smith. The cash arrived <em>last</em> period as a deposit, and the work went out the door <em>this</em> summer, so <strong>Frame delivered &mdash; J. Smith (deposit earned)</strong> sits in GENERATED at <strong>$220</strong>. Ridgeline: work now, cash later. Smith: cash earlier, work now. Neither row is timed to the cash &mdash; both are timed to the <strong>work</strong>.');
+    ctrl=insightBox('The work is what counts',
+      '<p>Ridgeline&rsquo;s recorded assets went up <strong>$300</strong>, and GENERATED went up <strong>$300</strong>. The records remain balanced. The delivery is recorded when the work is done, even though the cash will arrive later.</p>')
+      +'<div class="next-phase-msg">The receivable is recorded. Next, look immediately for problems with the recorded expenses.</div>'
+      +'<button class="btn-continue btn-block" onclick="nav(\'32-3-the-third-kind.html\')">Now check the expenses &rarr;</button>';
+  }
+  document.getElementById('anna').innerHTML=anna;
+  document.getElementById('controls').innerHTML=ctrl;
+  if(window.lucide) lucide.createIcons();
+}
+function recordReceivable(){
+  if(step===1) return;
+  playClick();
+  playSuccess();
+  step=1;
+  currentWorkbookKey='bike-repair-module-3-2a';
+  paint('left','assets');
+  paint('right','reasons');
+  renderTalk();
+  window.scrollTo(0,document.body.scrollHeight);
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Accounts Receivable', def:'A right to be paid later for work already done &mdash; an asset. Ridgeline Trail Crew owes $300 for a finished job; the line remains in Assets until payment.' },
+  { term:'On account', def:'Billed, to be paid later. Here, net 15 means payment is due within 15 days. The delivery is recorded when the work is done; the cash follows on its own schedule.' },
+  { term:'Customer Deposit', def:'Cash received before the work is done. The delivery is recorded once the work is finished &mdash; which is why J. Smith&rsquo;s frame is recorded this summer, not last period.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+/* ===== init ===== */
+window.devFill=function(){ recordReceivable(); };
+paint('left','assets');
+paint('right','reasons');
+renderTalk();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

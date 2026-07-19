@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three Paths and the Map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    .map-workbook-stack .xlwb + .xlwb { margin-top:16px; }
+    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Three Paths and the Map</h1>
+        <p class="tut-header-sub">The Angel Investor &middot; ~8 min &middot; Page 2 of 2</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Three Paths and the Map</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+(function normalizeCapitalLabels(){
+  var books=BR_STMT_DATA.workbooks;
+  Object.keys(books).forEach(function(key){
+    books[key].sheets.forEach(function(sheet){
+      sheet.cells.forEach(function(cell){
+        if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['’] Capital/g,"Member’s Capital");
+      });
+    });
+  });
+  /* TEMPORARY SHIM: Bike-Repair-End.xlsx 'Balance Sheet' D19/D21 carry stale cached
+     values (their formulas =Reasons!D66/=SUM(..D20) point one row short after the
+     depreciation split). Mirror the intended values (Generated Aug-31 2,810; Total
+     4,500) until Rick fixes the source and re-extracts; the guards make this a
+     no-op once the source is fixed. */
+  books['bike-repair-end'].sheets.forEach(function(sheet){
+    if(sheet.name!=='Balance Sheet') return;
+    sheet.cells.forEach(function(cell){
+      if(cell.r===19&&cell.c===4&&cell.value===-30) cell.value=2810;
+      if(cell.r===21&&cell.c===4&&cell.value===1660) cell.value=4500;
+    });
+  });
+})();
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+
+var IDENTITY_HTML =
+  '<div class="dual-identity-bar">'
+  + '<div class="dib-side"><span class="dib-tag">Opening &mdash; June 1</span><div class="dib-eq">'
+    + '<div class="dib-group"><span class="dib-label">Assets</span><span class="dib-val">$4,710</span></div>'
+    + '<span class="dib-op">&minus;</span>'
+    + '<div class="dib-group"><span class="dib-label">Liabilities</span><span class="dib-val">$2,250</span></div>'
+    + '<span class="dib-op">=</span>'
+    + '<div class="dib-group"><span class="dib-label">Member&rsquo;s Capital</span><span class="dib-val">$2,460</span></div>'
+  + '</div></div>'
+  + '<div class="dib-divider"></div>'
+  + '<div class="dib-side"><span class="dib-tag">August 31 &mdash;</span><div class="dib-eq">'
+    + '<div class="dib-group"><span class="dib-label">Assets</span><span class="dib-val">$4,500</span></div>'
+    + '<span class="dib-op">&minus;</span>'
+    + '<div class="dib-group"><span class="dib-label">Liabilities</span><span class="dib-val">$0</span></div>'
+    + '<span class="dib-op">=</span>'
+    + '<div class="dib-group"><span class="dib-label">Member&rsquo;s Capital</span><span class="dib-val">$4,500</span></div>'
+  + '</div></div>'
+  + '</div>';
+
+/* ===== step state ===== */
+var step = 0;              // 0 the two sheets, 1 Cash path, 2 MC path, 3 Net income path, 4 the whole map
+var TOTAL_STEPS = 5;
+var incomeOpen = false;    // display toggle for the nested Income Statement
+var incomeSeen = false;    // sticky gate: has the student opened it at least once
+
+/* ===== extracted workbook helpers ===== */
+function sheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-end'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+var WORKBOOK_SHEETS={
+  assets:{name:'Assets',label:'Assets'},
+  liabilities:{name:'Liabilities',label:'Liabilities'},
+  reasons:{name:'Reasons',label:'Reasons'},
+  balance:{name:'Balance Sheet',label:'Balance Sheet'},
+  income:{name:'Income Statement',label:'Income Statement'},
+  members:{name:'St_Members_Capital',label:'Member&rsquo;s Capital'},
+  cash:{name:'Cash_Flow_Statement',label:'Cash Flow Statement'}
+};
+var WORKBOOK_TABS=['assets','liabilities','reasons','balance','income','members','cash'];
+var gridSeq=0;
+function workbookHTML(containerId,activeKey){
+  var active=WORKBOOK_SHEETS[activeKey];
+  var tabs=WORKBOOK_TABS.map(function(key){
+    var tab=WORKBOOK_SHEETS[key];
+    return '<button class="xlwb-tab'+(key===activeKey?' active':'')+'" type="button" '
+      +(key===activeKey?'aria-current="page"':'aria-disabled="true"')+'>'+tab.label+'</button>';
+  }).join('');
+  return '<div class="xlwb">'
+    +'<div class="xlwb-bar"><div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div><div class="xlwb-bar-sheet">'+active.label+'</div></div>'
+    +'<div class="wb-grid-wrap"><div id="'+containerId+'"></div></div>'
+    +'<div class="xlwb-tabs" aria-label="Workbook tabs">'+tabs+'</div></div>';
+}
+function mountWorkbookGrid(containerId,key){
+  BRW.mountGrid(containerId,sheetOf(WORKBOOK_SHEETS[key].name),{gridId:'statement-map-'+key+'-'+(++gridSeq)});
+}
+
+/* Wires the capital statement's Net income row after the extracted grid mounts.
+   The existing clickable-row idiom supplies the cursor, chevron, and open state. */
+function wireCapitalRow(containerId, clickable){
+  var container = document.getElementById(containerId);
+  if(!container) return;
+  var rows = container.querySelectorAll('.brw-row');
+  rows.forEach(function(row){
+    var c = row.querySelector('.brw-label');
+    if(!c || c.textContent.indexOf('Net income') === -1) return;
+    if(!clickable) return;
+    row.classList.add('sce-ni-clickable');
+    if(incomeOpen) row.classList.add('sce-ni-open');
+    row.setAttribute('role','button');
+    row.setAttribute('tabindex','0');
+    row.setAttribute('aria-expanded', incomeOpen ? 'true':'false');
+    var icon = document.createElement('span');
+    icon.className = 'sce-expand-icon' + (incomeSeen ? '' : ' hint-pulse');
+    icon.innerHTML = '<i data-lucide="' + (incomeOpen ? 'chevron-up' : 'chevron-down') + '" class="licon"></i>';
+    c.appendChild(icon);
+    row.onclick = function(){ toggleIncome(); };
+    row.onkeydown = function(e){ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); toggleIncome(); } };
+  });
+}
+
+function toggleIncome(){
+  playClick();
+  incomeOpen = !incomeOpen;
+  if(incomeOpen) incomeSeen = true;
+  render();
+}
+
+/* ===== render ===== */
+function render(){
+  renderBeats();
+  renderGrid();
+  renderTail();
+  renderControls();
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderBeats(){
+  var h = '';
+  if(step === 0){
+    h += '<div class="narrative-block"><p>Here are the two balance-sheet snapshots again &mdash; June 1 and August 31. The set Freddie asked for has been built around them. Three numbers show the season&rsquo;s whole story: <strong>Cash</strong>, <strong>Member&rsquo;s Capital</strong>, and the <strong>Net income</strong> figure within the Member&rsquo;s Capital detail. Follow them one at a time, then see the whole picture at once.</p></div>';
+    h += freddieBox('I have seen each statement. Walk me through how the set fits.');
+  } else if(step === 1){
+    h += freddieBox('Start with Cash. I saw it fell $680 &mdash; walk me through that path.');
+    h += '<div class="narrative-block"><p>Cash fell from <strong>$1,300</strong> to <strong>$620</strong> &mdash; down <strong>$680</strong>. On the <strong>Statement of Cash Flows</strong>, that change appears as Operating <strong>+$2,350</strong>, Investing <strong>&minus;$400</strong>, and Financing <strong>&minus;$2,630</strong>. Financing includes both the card payoff (repaying a borrowing) and the owner&rsquo;s draw.</p></div>';
+  } else if(step === 2){
+    h += freddieBox('Now Member&rsquo;s Capital. I saw it rose $2,040 &mdash; show me the path.');
+    h += '<div class="narrative-block"><p>Member&rsquo;s Capital rose from <strong>$2,460</strong> to <strong>$4,500</strong> &mdash; up <strong>$2,040</strong>. The <strong>Statement of Changes in Member&rsquo;s Capital</strong> tells it pile by pile. <strong>Contributed</strong>: Beginning $2,290, no changes, Ending $2,290. <strong>Generated</strong>: Beginning $170, plus Net income $2,640 from the Income Statement, Ending $2,810. <strong>Withdrawn</strong>: Beginning &mdash;, Owner&rsquo;s draw ($600), Ending ($600). The withdrawn entry records the distribution separately. The totals tie: $2,460 to $4,500.</p></div>';
+  } else if(step === 3){
+    h += freddieBox('Net income&rsquo;s the biggest line in that statement. I remember that one &mdash; show me what&rsquo;s behind it.');
+    h += '<div class="narrative-block"><p>Click the <strong>Net income</strong> line below to open the <strong>Income Statement</strong> behind it.</p></div>';
+  } else if(step === 4){
+    h += '<div class="narrative-block"><p>That is the word Anna just gave it: <strong>articulation</strong> &mdash; now laid out as one picture. The accounting identity holds in both snapshots; the change between them appears on the other statements.</p></div>';
+  }
+  document.getElementById('beats').innerHTML = h;
+}
+
+function renderGrid(){
+  var h='<div class="map-workbook-stack">';
+  if(step === 0){
+    h += workbookHTML('balanceGrid','balance');
+  } else if(step === 1){
+    h += workbookHTML('cashGrid','cash');
+  } else if(step === 2){
+    h += workbookHTML('capitalGrid','members');
+  } else if(step === 3){
+    h += workbookHTML('capitalGrid','members');
+    if(incomeOpen){
+      h += '<p class="sce-is-intro">The Income Statement says more about this Net income amount: Revenue $6,020 minus Expenses $3,380.</p>'
+        +workbookHTML('incomeGrid','income')
+        +'<p class="stage-text"><span class="activity-desc">In actual financial reporting these are two distinct statements: the Net income detail is on the Income Statement, and the resulting line is on the Statement of Changes in Member&rsquo;s Capital.</span></p>';
+    }
+  } else if(step === 4){
+    h += workbookHTML('cashGridFinal','cash')
+      + '<p class="panel-footnote">Cash path: $1,300 &rarr; $620.</p>'
+      + workbookHTML('capitalGridFinal','members')
+      + '<p class="panel-footnote">Member&rsquo;s Capital path: $2,460 &rarr; $4,500.</p>'
+      + workbookHTML('incomeGridFinal','income')
+      + '<p class="panel-footnote">Net income detail: Revenue $6,020 minus Expenses $3,380 equals $2,640.</p>';
+  }
+  h += '</div>';
+  if(step===0||step===4) h += IDENTITY_HTML;
+  document.getElementById('mainGrid').innerHTML = h;
+
+  if(step===0){
+    mountWorkbookGrid('balanceGrid','balance');
+  } else if(step===1){
+    mountWorkbookGrid('cashGrid','cash');
+  } else if(step===2){
+    mountWorkbookGrid('capitalGrid','members');
+  } else if(step===3){
+    mountWorkbookGrid('capitalGrid','members');
+    if(incomeOpen) mountWorkbookGrid('incomeGrid','income');
+    wireCapitalRow('capitalGrid',true);
+  } else if(step===4){
+    mountWorkbookGrid('cashGridFinal','cash');
+    mountWorkbookGrid('capitalGridFinal','members');
+    mountWorkbookGrid('incomeGridFinal','income');
+  }
+}
+
+function renderTail(){
+  var h = '';
+  if(step === 4){
+    h += '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The rest of the map</div>'
+      + '<p>The same statements tell what happened to every other line that moved. The Credit Card fell to $0 &mdash; a borrowing repaid in Financing on the cash-flow statement. The Customer Deposit fell to $0 &mdash; Smith&rsquo;s frame was delivered, inside Revenue. Accounts Receivable appeared &mdash; work finished, not yet collected, inside Revenue.</p></div>';
+    h += freddieBox('Now I see where things stand &mdash; and how they got there.');
+    h += annaBox('The balance-sheet snapshots show where things stand. The flow statements explain the changes between them.');
+    h += "<button class=\"btn-continue btn-block\" onclick=\"nav('47-1-Freddies-Napkin.html')\">Continue &rarr;</button>";
+  }
+  document.getElementById('tail').innerHTML = h;
+}
+
+function renderControls(){
+  var nextDisabled = (step === 3 && !incomeSeen);
+  var c = nextDisabled ? '<div class="next-phase-msg">Open the Net income line to unlock Next.</div>' : '';
+  c += '<div class="nav-buttons">';
+  c += '<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(step < TOTAL_STEPS - 1){
+    c += '<button class="btn-next"' + (nextDisabled ? ' disabled' : '') + ' onclick="advance()">Next &rarr;</button>';
+  }
+  c += '</div>';
+  document.getElementById('controls').innerHTML = c;
+}
+
+function advance(){
+  if(step === 3 && !incomeSeen) return;
+  playClick();
+  step = Math.min(step + 1, TOTAL_STEPS - 1);
+  if(step === 4) incomeOpen = true; // the whole map always shows the Income Statement nested open
+  render();
+  window.scrollTo(0, 0);
+}
+function back(){
+  playClick();
+  if(step === 0){ nav('46-1-The-Statements-Tie-Out.html'); return; }
+  step = Math.max(step - 1, 0);
+  render();
+  window.scrollTo(0, 0);
+}
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  { term:'Articulation', def:'The figures on the statements tie to each other: each balance-sheet change has an explanation in one of the flow statements.' },
+  { term:'Statement of Cash Flows', def:'The statement says how Cash changed across Operating, Investing, and Financing. Here: +$2,350, &minus;$400, &minus;$2,630 = &minus;$680, tying $1,300 to $620.' },
+  { term:'Statement of Changes in Member&rsquo;s Capital', def:'The statement tells how Member&rsquo;s Capital changed pile by pile: Contributed (Beginning $2,290, no changes, Ending $2,290), Generated (Beginning $170 + Net income $2,640 = Ending $2,810), Withdrawn (Beginning &mdash;, Owner&rsquo;s draw ($600), Ending ($600)). Totals: $2,460 to $4,500.' },
+  { term:'Income Statement', def:'Revenue minus Expenses for the season. Here: $6,020 &minus; $3,380 = $2,640 net income &mdash; the same figure that enters the Statement of Changes in Member&rsquo;s Capital.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+
+/* ===== init ===== */
+window.devFill = function(){
+  step = TOTAL_STEPS - 1;
+  incomeOpen = true;
+  incomeSeen = true;
+  render();
+};
+render();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

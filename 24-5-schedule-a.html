@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Activity 2.4: The Entity's Own Number &middot; Complete Schedule A</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,20 +14,25 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="phase-title-row">
-      <div class="phase-title" id="phaseTitle">Complete Schedule A</div>
-      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Activity 2.4: The Entity&rsquo;s Own Number</h1>
+        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 5 of 6</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
     </div>
-
+    <div class="phase-title" id="phaseTitle">Complete Schedule A</div>
 
     <!-- ===== schedule ===== -->
     <div class="phase active" id="phase-schedule">
       <div class="narrative-block">
-        <p>The contributing is done: the cash is in the Company&rsquo;s account, the card is in the Company&rsquo;s name. Time to complete the draft you left blank in 2.3 &mdash; from the books, line by line. <strong>Click each line on the Balance Sheet tab</strong> to enter it on Schedule A.</p>
+        <p>The contributing is done: the cash is in the Company&rsquo;s account, the card is in the Company&rsquo;s name. In 2.3, you copied the books to the Working Tab, organized what the Company receives against what it takes on, found the two Reasons piles, and only then named the statement the Balance Sheet. Now, with the June 1 deposit and the card move recorded, <strong>click each line on the Balance Sheet tab</strong> to complete the draft you left blank &mdash; line by line.</p>
       </div>
       <div id="wb"></div>
       <div id="schedArea"></div>
-      <div class="btn-row" id="schedResetRow" style="justify-content:flex-end; margin-bottom:12px; display:none;"><button class="btn-reset" onclick="resetSched()">Reset</button></div>
       <div id="controls"></div>
     </div>
 
@@ -44,6 +49,8 @@
     <div class="glossary-list" id="glossaryList"></div>
   </div>
 </div>
+
+<script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -61,7 +68,7 @@ function playPen(){ tone(520,0.18,'triangle',0.12); }
 var glossaryTerms = [
   { term:"Schedule A", def:"The Operating Agreement&rsquo;s list of what the member contributes &mdash; assets, liabilities assumed, and the difference. You complete it from the Company&rsquo;s books, after the contributing is done." },
   { term:"Capital contribution", def:"What an owner puts into the company. Here: the whole repair business at book amounts, plus the $1,300 cash that opened the account." },
-  { term:"Members&rsquo; Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. Split into Contributed ($2,290) and Generated ($170): $2,460 on June 1." },
+  { term:"Member&rsquo;s Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. Split into Contributed ($2,290) and Generated ($170): $2,460 on June 1." },
   { term:"Execute (a document)", def:"To sign it and make it operative. You execute the Operating Agreement here &mdash; after Schedule A is complete, because the schedule attests to facts." }
 ];
 function openGlossary(){
@@ -116,7 +123,7 @@ function balanceSheet(cid, snap){
   h += xr('xl-cat', '', '<strong>Liabilities</strong>', '');
   LINES.filter(function(l){ return l.sec==='l'; }).forEach(function(l){ h += bsRowClickable(l); });
   h += xr('xl-total', '', 'Total liabilities', BRW.dol(2250));
-  h += xr('xl-cat', '', '<strong>Members&rsquo; Capital</strong> (Assets &minus; Liabilities)', BRW.dol(2460));
+  h += xr('xl-cat', '', '<strong>Member&rsquo;s Capital</strong> (Assets &minus; Liabilities)', BRW.dol(2460));
   LINES.filter(function(l){ return l.sec==='c'; }).forEach(function(l){ h += bsRowClickable(l); });
   return h;
 }
@@ -180,22 +187,22 @@ function schedRow(l, v, opts){
 }
 function blankRow(){ return '<div style="border-bottom:1px solid #d8d8d8;height:22px"></div>'; }
 function scheduleHtml(){
-  var h = '<div class="doc-modal" style="margin:14px auto"><div style="font-family:Georgia,\'Times New Roman\',serif;font-size:16px;color:#374151">';
-  h += '<div style="font-weight:700;font-size:16px;text-transform:uppercase;letter-spacing:0.04em;color:#6b6b6b;margin-bottom:2px">Schedule A &mdash; Contributed Property</div>';
+  var h = '<div class="doc-modal" style="margin:14px auto"><div style="font-family:Georgia,\'Times New Roman\',serif;font-size:13px;color:#374151">';
+  h += '<div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;color:#6b6b6b;margin-bottom:2px">Schedule A &mdash; Contributed Property</div>';
   h += allEntered()
-    ? '<div style="margin-bottom:8px"><span style="font-family:Inter,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.06em;color:#15803d;border:1px solid #15803d;border-radius:6px;padding:1px 8px">COMPLETE &mdash; June 1, 2026</span></div>'
-    : '<div style="margin-bottom:8px"><span style="font-family:Inter,sans-serif;font-size:16px;font-weight:700;letter-spacing:0.08em;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:1px 8px">IN PROGRESS &mdash; '+LINES.filter(function(l){return entered[l.id];}).length+' of '+LINES.length+' lines entered</span></div>';
+    ? '<div style="margin-bottom:8px"><span style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.06em;color:#15803d;border:1px solid #15803d;border-radius:6px;padding:1px 8px">COMPLETE &mdash; June 1, 2026</span></div>'
+    : '<div style="margin-bottom:8px"><span style="font-family:Inter,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.08em;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:1px 8px">IN PROGRESS &mdash; '+LINES.filter(function(l){return entered[l.id];}).length+' of '+LINES.length+' lines entered</span></div>';
   h += '<div style="max-width:380px">';
   LINES.filter(function(l){ return l.sec==='a'; }).forEach(function(l){ h += entered[l.id] ? schedRow(l.sched, l.amt.toLocaleString('en-US')) : blankRow(); });
   h += schedRow('Total assets', secDone('a') ? '4,710' : '', {b:true,top:'1px solid #d8d8d8'});
   LINES.filter(function(l){ return l.sec==='l'; }).forEach(function(l){ h += entered[l.id] ? schedRow(l.sched, '('+l.amt.toLocaleString('en-US')+')') : blankRow(); });
   h += schedRow('Total liabilities assumed', secDone('l') ? '(2,250)' : '', {b:true});
   LINES.filter(function(l){ return l.sec==='c'; }).forEach(function(l){ h += entered[l.id] ? schedRow(l.sched, l.amt.toLocaleString('en-US')) : blankRow(); });
-  h += schedRow('Members&rsquo; Capital (A &minus; L)', secDone('c') ? '2,460' : '', {b:true,top:'2px solid #374151'});
+  h += schedRow('Member&rsquo;s Capital (A &minus; L)', secDone('c') ? '2,460' : '', {b:true,top:'2px solid #374151'});
   h += '</div>';
   if(allEntered()){
     h += '<div style="padding-left:10px;border-left:3px solid var(--accent);margin-top:10px;margin-bottom:8px"><span style="font-weight:700">9. Capital Contributions.</span> &hellip;as set forth on Schedule A. Net book value contributed: <strong>$2,460</strong>.</div>';
-    h += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;color:#6b6b6b;font-size:16px">&mdash; signature page &mdash;</div>';
+    h += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;color:#6b6b6b;font-size:12px">&mdash; signature page &mdash;</div>';
     h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">';
     h += sigBlock('For the Company','company') + sigBlock('As an individual','member');
     h += '</div>';
@@ -207,12 +214,12 @@ function sigBlock(label, which){
   var isSigned = which==='company' ? signedCompany : signedMember;
   var inner = isSigned
     ? '<span style="font-family:\'Segoe Script\',\'Snell Roundhand\',\'Brush Script MT\',cursive;font-size:22px;color:#1a2b6b">'+esc(memberDisplay())+'</span>'
-    : '<button onclick="'+(which==='company'?'signCompany()':'signMember()')+'" style="background:#e8dcc8;color:#a08050;border:0;border-radius:6px;padding:4px 12px;font-weight:600;font-size:16px;cursor:pointer;font-family:Inter,sans-serif">&#9997; Sign here</button>';
+    : '<button onclick="'+(which==='company'?'signCompany()':'signMember()')+'" style="background:#e8dcc8;color:#a08050;border:0;border-radius:6px;padding:4px 12px;font-weight:600;font-size:13px;cursor:pointer;font-family:Inter,sans-serif">&#9997; Sign here</button>';
   var roleSub = which==='company' ? esc(memberDisplay())+', Managing Member' : esc(memberDisplay())+', as an individual';
-  return '<div><div style="font-size:16px;text-transform:uppercase;color:#6b6b6b">'+label+'</div>'+
+  return '<div><div style="font-size:11px;text-transform:uppercase;color:#6b6b6b">'+label+'</div>'+
     '<div style="min-height:34px;border-bottom:1px solid #374151;display:flex;align-items:flex-end;padding-bottom:2px">'+inner+'</div>'+
-    '<div style="font-size:16px;color:#6b6b6b;margin-top:2px">'+roleSub+'</div>'+
-    '<div style="font-size:16px;color:#6b6b6b">Dated: June 1, 2026</div></div>';
+    '<div style="font-size:11px;color:#6b6b6b;margin-top:2px">'+roleSub+'</div>'+
+    '<div style="font-size:11px;color:#6b6b6b">Dated: June 1, 2026</div></div>';
 }
 
 /* ===== interaction ===== */
@@ -221,12 +228,6 @@ function enterLine(id){
   entered[id] = true;
   playClick(); playSuccess();
   renderAll();
-}
-function resetSched(){
-  playClick();
-  entered = {}; signedCompany = false; signedMember = false;
-  renderAll();
-  window.scrollTo(0,0);
 }
 function signCompany(){ signedCompany=true; playPen(); if(signedMember) playSuccess(); renderAll(); }
 function signMember(){ signedMember=true; playPen(); if(signedCompany) playSuccess(); renderAll(); }
@@ -243,11 +244,10 @@ function renderAll(){
     ctrl = '<div class="insight-box"><div class="insight-label"><i data-lucide="pen-line" class="licon"></i> Two signatures, one hand</div>'+
       '<p>Your own name, signed twice &mdash; once <strong>for the Company</strong> (as its manager), once <strong>as yourself</strong> (the Sole Member). The two roles you recognized in 2.1 are now <strong>legal and literal</strong>: the law recognizes both, on one page.</p></div>'+
       '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> The schedule equals the sheet</div>'+
-      '<p>You didn&rsquo;t copy a finished schedule &mdash; you built it, line for line, from the Company&rsquo;s books. That is why Schedule A and the opening balance sheet agree exactly: you completed the paper from the facts, after the facts were in. Drafted in 2.3, completed and executed today.</p></div>'+
-      '';
+      '<p>You didn&rsquo;t copy a finished schedule &mdash; you built it, line for line, from the Company&rsquo;s books. The statement you assembled in 2.3 was built precisely to answer what is being contributed, so Schedule A and the opening balance sheet agree exactly: you completed the paper from the facts, after the facts were in. Drafted in 2.3, completed and executed today.</p></div>'+
+      '<button class="btn-continue btn-block" onclick="nav(\'24-6-complete.html\')">Finish Module 2 &rarr;</button>';
   }
   document.getElementById('controls').innerHTML = ctrl;
-  document.getElementById('schedResetRow').style.display = Object.keys(entered).length ? '' : 'none';
   if(window.lucide) lucide.createIcons();
 }
 

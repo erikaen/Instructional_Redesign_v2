@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Statement of Member&rsquo;s Capital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    .build-note { margin-top:14px; }
+    .build-hint { margin:8px 2px 0; color:#6b7280; font-family:Inter,sans-serif; font-size:var(--font-xs); text-align:center; }
+    .source-piles { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:12px 0; }
+    .source-pile { padding:12px; border:1px solid var(--border); border-radius:8px; text-align:center; font-family:Inter,sans-serif; font-weight:800; }
+    @media (max-width:640px) { .source-piles { grid-template-columns:1fr; } }
+    @media (prefers-color-scheme:dark) {
+      .wb-grid-wrap { background:#26242e; }
+      .build-hint { color:#9ca3af; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Statement of Member&rsquo;s Capital</h1>
+        <p class="tut-header-sub">The Angel Investor &middot; ~10 min &middot; Page 1 of 1</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Statement of Member&rsquo;s Capital</div>
+
+    <div id="annaIntro"></div>
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet" id="sheetLabel">Reasons</div>
+      </div>
+      <div class="wb-grid-wrap">
+        <div id="stmtBuild"></div>
+        <div id="tabGrid" hidden></div>
+      </div>
+      <div class="xlwb-tabs" id="workbookTabs" aria-label="Workbook tabs"></div>
+    </div>
+
+    <div id="buildNote" class="build-note"></div>
+    <div id="interaction"></div>
+    <div id="advanceHint" class="build-hint" role="status" aria-live="polite"></div>
+    <div id="payoff"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+(function normalizeCapitalLabels(){
+  var books=BR_STMT_DATA.workbooks;
+  Object.keys(books).forEach(function(key){
+    books[key].sheets.forEach(function(sheet){
+      sheet.cells.forEach(function(cell){
+        if(typeof cell.value==='string') cell.value=cell.value.replace(/Members['’] Capital/g,"Member’s Capital");
+      });
+    });
+  });
+})();
+
+if(window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+
+/* ===== extracted workbook helpers ===== */
+function sheetOf(name){
+  var sheets=BR_STMT_DATA.workbooks['bike-repair-end'].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+var sheetMap={
+  'Assets':'Assets',
+  'Liabilities':'Liabilities',
+  'Reasons':'Reasons',
+  'Balance Sheet':'Balance Sheet',
+  'Income Statement':'Income Statement'
+};
+var gridSeq=0;
+var sourceConfirmed=false;
+var completed=false;
+var beginningConfirmed=false;
+var sortConfirmed=false;
+
+function expandAllGroups(containerId){
+  var container=document.getElementById(containerId);
+  if(!container) return;
+  Array.prototype.forEach.call(container.getElementsByClassName('brw-og-toggle'),function(toggle){
+    toggle.setAttribute('aria-expanded','true');
+    toggle.textContent='−';
+  });
+  Array.prototype.forEach.call(container.getElementsByClassName('brw-og-row'),function(row){
+    row.classList.remove('is-collapsed');
+  });
+}
+function setWorkbookChrome(activeKey){
+  var tabs=[
+    {key:'Assets',label:'Assets'},
+    {key:'Liabilities',label:'Liabilities'},
+    {key:'Reasons',label:'Reasons'},
+    {key:'Balance Sheet',label:'Balance Sheet'},
+    {key:'Income Statement',label:'Income Statement'}
+  ];
+  if(sourceConfirmed) tabs.push({key:'members',label:completed?"Statement of Member's Capital":'Working Tab'});
+  document.getElementById('workbookTabs').innerHTML=tabs.map(function(tab){
+    var active=tab.key===activeKey;
+    var kind=tab.key==='members'?(completed?' tk-stmt':' tk-temp'):'';
+    var action=tab.key==='members'?'showMemberCapitalTab()':"showWorkbookTab('"+tab.key+"')";
+    return '<button class="xlwb-tab'+kind+(active?' active':'')+'" type="button" data-sheet-tab="'+tab.key+'"'
+      +(active?' aria-current="page"':'')+' onclick="'+action+'">'+tab.label+'</button>';
+  }).join('');
+}
+function showWorkbookTab(name){
+  var sheet=sheetOf(sheetMap[name]);
+  if(!sheet) return;
+  playClick();
+  document.getElementById('stmtBuild').hidden=true;
+  document.getElementById('tabGrid').hidden=false;
+  document.getElementById('sheetLabel').textContent=name;
+  setWorkbookChrome(name);
+  BRW.mountGrid('tabGrid',sheet,{gridId:'capital-page-reference-'+(++gridSeq)});
+  BRW.markDatedRows('tabGrid');
+  if(name==='Reasons') expandAllGroups('tabGrid');
+}
+function showMemberCapitalTab(){
+  if(!sourceConfirmed) return;
+  playClick();
+  document.getElementById('tabGrid').hidden=true;
+  document.getElementById('stmtBuild').hidden=false;
+  document.getElementById('sheetLabel').textContent=completed?"Statement of Member's Capital":'Working Tab';
+  setWorkbookChrome('members');
+}
+
+/* ===== build state ===== */
+var currentOrder=0;
+var mcqAnswered=false;
+var gateDone=false;
+var gateAttempts=0;
+
+var MCQ_OPTS=[
+  {id:'rev',label:'Revenue &mdash; $6,020',fb:'Revenue is the top line, not the addition. Expenses are also part of the season&rsquo;s result, so use the number after Revenue and Expenses are compared.'},
+  {id:'netinc',label:'Net income &mdash; $2,640, from the Income Statement',fb:'Right. Net income on the Income Statement is $2,640. That single number is the season&rsquo;s addition recorded in GENERATED.',correct:true},
+  {id:'cash',label:'The cash change &mdash; &minus;$680',fb:'Cash fell while GENERATED rose. The two clocks do not have to move together; use net income for this change.'}
+];
+
+function mcqHTML(){
+  var html='<div class="mc-card"><div class="mc-q">Which single number is the season&rsquo;s addition to GENERATED?</div><div class="mc-opts" id="mcqOpts">';
+  MCQ_OPTS.forEach(function(option,index){
+    var cls='mc-opt';
+    if(mcqAnswered){ cls+=' locked'; if(option.correct) cls+=' correct'; }
+    html+='<div class="'+cls+'" data-mcq="'+option.id+'"'+(mcqAnswered?'':' onclick="mcqClick(\''+option.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+index)+'</span><span>'+option.label+'</span></div>';
+  });
+  html+='</div>';
+  if(mcqAnswered){
+    html+='<div class="feedback ok show">'+MCQ_OPTS[1].fb+'</div>';
+  }else{
+    html+='<div class="feedback" id="mcqFb"></div>';
+  }
+  return html+'</div>';
+}
+function mcqClick(id){
+  if(mcqAnswered) return;
+  var option=MCQ_OPTS.filter(function(item){ return item.id===id; })[0];
+  var choice=document.querySelector('[data-mcq="'+id+'"]');
+  var feedback=document.getElementById('mcqFb');
+  if(!option||!choice||!feedback) return;
+  if(option.correct){
+    mcqAnswered=true;
+    playSuccess();
+    renderInteraction();
+    setAdvanceState();
+  }else{
+    choice.classList.add('wrong','locked');
+    choice.removeAttribute('onclick');
+    feedback.className='feedback err show';
+    feedback.innerHTML=option.fb;
+    playNope();
+  }
+}
+
+function gateHTML(){
+  if(gateDone){
+    return '<div class="gate-card gate-armed-maria"><div class="gate-card-title">Ending total confirmed: <strong>$4,500</strong>. Continue to format and name the statement.</div></div>';
+  }
+  return '<div class="mc-card">'
+    +'<div class="mc-q">Now walk the three piles: $2,290 + $2,810 &minus; $600. Type the ending total that ties to the balance sheet&rsquo;s August 31 column.</div>'
+    +'<div class="btn-row">'
+    +'<input id="gateInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Ending total Member&rsquo;s Capital" onkeydown="if(event.key===\'Enter\'){checkGate();}">'
+    +'<button class="btn btn-primary" type="button" onclick="checkGate()">Check</button>'
+    +'</div><div class="feedback" id="gateFb"></div></div>';
+}
+function checkGate(){
+  if(gateDone) return;
+  var input=document.getElementById('gateInput');
+  var feedback=document.getElementById('gateFb');
+  if(!input||!feedback) return;
+  var value=parseInt(String(input.value).replace(/[^0-9-]/g,''),10);
+  if(value===4500){
+    gateDone=true;
+    playSuccess();
+    renderInteraction();
+    setAdvanceState();
+    return;
+  }
+  gateAttempts++;
+  if(gateAttempts>=3){
+    gateDone=true;
+    playNope();
+    renderInteraction();
+    setAdvanceState();
+    var advance=document.querySelector('#stmtBuild .brw-step-advance');
+    if(advance) advance.click();
+    return;
+  }
+  feedback.className='feedback err show';
+  feedback.innerHTML='Not quite &mdash; add 2,290 and 2,810, then subtract 600.';
+  playNope();
+}
+
+function renderBuildNote(){
+  var html='';
+  if(currentOrder===0){
+    html=annaBox('Start with the <strong>BEGINNING</strong> balance in each copied pile: CONTRIBUTED <strong>$2,290</strong>, GENERATED <strong>$170</strong>, and WITHDRAWN <strong>$0</strong>. WITHDRAWN was born mid-season, so there is no June 1 line; treat its beginning as $0.');
+  }else if(currentOrder===1){
+    html=annaBox('Now sort the items for the period in each pile. Only GENERATED has a stack of period activity to sort. CONTRIBUTED is unchanged, and WITHDRAWN has just the single $600 draw.');
+  }else if(currentOrder===2){
+    html=annaBox('Identify GENERATED&rsquo;s change. It is <strong>just the income recognized for the period</strong>, carried over as one number from the Income Statement. Then walk all three ending piles to the total.');
+  }else{
+    html=annaBox('The working sheet is finished. Now call it the <strong>Statement of Member&rsquo;s Capital</strong>: CONTRIBUTED $2,290 to $2,290; GENERATED $170 plus net income of $2,640 to $2,810; and WITHDRAWN ($600).');
+  }
+  document.getElementById('buildNote').innerHTML=html;
+}
+function renderInteraction(){
+  var html='';
+  if(currentOrder===0&&!beginningConfirmed){
+    html='<button class="btn-continue btn-block" type="button" onclick="confirmBeginnings()">Mark the three beginning balances &rarr;</button>';
+  }else if(currentOrder===0){
+    html=insightBox('Beginnings marked','<p>CONTRIBUTED <strong>$2,290</strong> &middot; GENERATED <strong>$170</strong> &middot; WITHDRAWN <strong>$0</strong></p>');
+  }
+  if(currentOrder===1&&!sortConfirmed){
+    html='<button class="btn-continue btn-block" type="button" onclick="confirmSort()">Sort the period items in each pile &rarr;</button>';
+  }else if(currentOrder===1){
+    html=insightBox('Period items sorted','<p>GENERATED holds the activity to sort. CONTRIBUTED is unchanged; WITHDRAWN holds one draw.</p>');
+  }
+  if(currentOrder===2) html=mcqHTML()+(mcqAnswered?gateHTML():'');
+  document.getElementById('interaction').innerHTML=html;
+}
+function confirmBeginnings(){ beginningConfirmed=true; playSuccess(); renderInteraction(); setAdvanceState(); }
+function confirmSort(){ sortConfirmed=true; playSuccess(); renderInteraction(); setAdvanceState(); }
+function setAdvanceState(){
+  var advance=document.querySelector('#stmtBuild .brw-step-advance');
+  var disabled=(currentOrder===0&&!beginningConfirmed)||(currentOrder===1&&!sortConfirmed)||(currentOrder===2&&(!mcqAnswered||!gateDone));
+  if(advance) advance.disabled=disabled;
+  var hint='';
+  if(currentOrder===0&&!beginningConfirmed) hint='Mark all three beginning balances to continue.';
+  if(currentOrder===1&&!sortConfirmed) hint='Sort the period items to continue.';
+  if(currentOrder===2&&!mcqAnswered) hint='Choose GENERATED&rsquo;s addition to continue.';
+  if(currentOrder===2&&mcqAnswered&&!gateDone) hint='Enter the ending total to unlock the formatted statement.';
+  document.getElementById('advanceHint').innerHTML=hint;
+}
+function renderPayoff(){
+  var html='';
+  if(currentOrder===3&&!completed){
+    html='<div class="narrative-block"><p>The statement is formatted, but the amber tab still carries its working name. Christen it to mark the statement as done.</p></div>'
+      +'<button class="btn-continue btn-block" type="button" onclick="christen()">Christen it the Statement of Member&rsquo;s Capital &rarr;</button>';
+  }else if(currentOrder===3){
+    html=annaBox('That is the walk Freddie asked for: <strong>$2,460 to $4,500</strong>. The $600 sits on its own WITHDRAWN line, in parentheses. It is <strong>not an expense; it is a distribution</strong>. On the Statement of Member&rsquo;s Capital, the changes in all three piles walk to the same ending total as the balance sheet&rsquo;s August 31 column.')
+      +insightBox('One statement, three piles','<p>CONTRIBUTED remains <strong>$2,290</strong>. GENERATED moves from <strong>$170</strong> to <strong>$2,810</strong> with net income of <strong>$2,640</strong>. WITHDRAWN records <strong>($600)</strong>. Together, the total moves from <strong>$2,460</strong> to <strong>$4,500</strong>.</p>');
+  }
+  document.getElementById('payoff').innerHTML=html;
+}
+function christen(){
+  if(completed) return;
+  completed=true;
+  playSuccess();
+  showMemberCapitalTab();
+  renderPayoff();
+  renderControls();
+  if(window.lucide) lucide.createIcons();
+  document.getElementById('payoff').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function renderControls(){
+  var html='<div class="nav-buttons"><button class="btn-back" type="button" onclick="nav(\'42-1-The-Missing-Wage.html\')">&larr; Back</button>';
+  if(currentOrder===3&&completed) html+='<button class="btn-next" type="button" onclick="nav(\'44-1-The-Cash-Puzzle.html\')">On to the cash question &rarr;</button>';
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+function renderStage(order){
+  currentOrder=order;
+  showMemberCapitalTab();
+  expandAllGroups('stmtBuild');
+  renderBuildNote();
+  renderInteraction();
+  setAdvanceState();
+  renderPayoff();
+  renderControls();
+  if(window.lucide) lucide.createIcons();
+}
+
+function sourceBeatHTML(){
+  return annaBox('Yesterday Freddie asked for the walk from $2,460 to $4,500. Build the <strong>Statement of Member&rsquo;s Capital</strong> by reading all three piles on the Reasons trail &mdash; not only GENERATED.')
+    +'<div class="section-card"><div class="card-title">The raw material on the Reasons tab</div>'
+    +'<div class="source-piles"><div class="source-pile">CONTRIBUTED</div><div class="source-pile">GENERATED</div><div class="source-pile">WITHDRAWN</div></div>'
+    +'<p>Copy all three sections to one temporary sheet before sorting anything.</p></div>'
+    +'<button class="btn-continue btn-block" type="button" onclick="copyAllPiles()">Copy all three piles to a Working Tab &rarr;</button>';
+}
+function copyAllPiles(){
+  if(sourceConfirmed) return;
+  sourceConfirmed=true;
+  playSuccess();
+  document.getElementById('annaIntro').innerHTML=annaBox('The sixth tab is born as an amber <strong>Working Tab</strong>. Every row is a copy; the Reasons trail stays where it is. Begin by finding each pile&rsquo;s starting point.');
+  renderStage(0);
+  document.getElementById('workbookShell').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+var buildOptions={
+  startAt:0,
+  stopAt:3,
+  gridOpts:{gridId:'members-capital-build-grid'},
+  gateAdvance:function(order){
+    if(order===0) return beginningConfirmed;
+    if(order===1) return sortConfirmed;
+    if(order===2) return mcqAnswered&&gateDone;
+    return true;
+  },
+  beforeAdvance:function(){ playClick(); return true; },
+  onStep:function(order){ renderStage(order); if(order===3) playSuccess(); }
+};
+BR_WB.mountStatementBuild('stmtBuild','members-capital-steps',buildOptions);
+
+/* ===== glossary / nav ===== */
+var glossaryTerms=[
+  {term:'Statement of Member&rsquo;s Capital',def:'A report with each pile&rsquo;s Beginning, Change, and Ending. Here CONTRIBUTED, GENERATED, and WITHDRAWN walk the total from $2,460 on June 1 to $4,500 on August 31.'},
+  {term:'Distribution (draw)',def:'Cash withdrawn by an owner for personal use and recorded in WITHDRAWN. It reduces Member&rsquo;s Capital but is not an expense. Here it is ($600), shown in parentheses.'},
+  {term:'Generated',def:'The part of Member&rsquo;s Capital built from running the work, not from contributions. GENERATED moves with net income. Here: Beginning $170 + net income $2,640 = Ending $2,810.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') closeGlossary(); });
+
+/* ===== init ===== */
+window.devFill=function(){
+  if(!sourceConfirmed) copyAllPiles();
+  beginningConfirmed=true;
+  sortConfirmed=true;
+  mcqAnswered=true;
+  gateDone=true;
+  for(var i=0;i<3;i++){
+    var advance=document.querySelector('#stmtBuild .brw-step-advance');
+    if(advance){ advance.disabled=false; advance.click(); }
+  }
+  christen();
+  expandAllGroups('stmtBuild');
+};
+document.getElementById('annaIntro').innerHTML=sourceBeatHTML();
+setWorkbookChrome('Reasons');
+showWorkbookTab('Reasons');
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

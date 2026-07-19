@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 4 Complete</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Module 4 Complete</h1>
+        <p class="tut-header-sub">The Angel Investor &middot; ~4 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Module 4 Complete</div>
+
+    <div class="phase active" id="phase-complete">
+      <div class="complete-head">
+        <div class="trophy-badge"><i data-lucide="flag"></i></div>
+        <div class="complete-title">The statements now read as one map</div>
+      </div>
+
+      <div class="section-card">
+        <div class="card-title">What You Built</div>
+        <ul class="bullet-list check">
+          <li><strong>The Statement of Member&rsquo;s Capital</strong> &mdash; Freddie&rsquo;s walk from <strong>$2,460</strong> to <strong>$4,500</strong>: Contributed <strong>$2,290</strong> unchanged; Generated <strong>$170</strong> + net income <strong>$2,640</strong> = <strong>$2,810</strong>; Withdrawn <strong>($600)</strong>. You built it like every statement: copy, sort, format, christen.</li>
+          <li><strong>The Cash Flow Statement</strong> &mdash; Operating <strong>$2,350</strong>, Investing <strong>$(400)</strong>, Financing <strong>$(2,630)</strong>; Cash from <strong>$1,300</strong> to <strong>$620</strong>. With the card payoff under Financing, net income and operating cash finally compare cleanly.</li>
+          <li><strong>The tie-out</strong> &mdash; articulation: each balance-sheet change has its explaining statement, so the whole set reads as one map.</li>
+        </ul>
+      </div>
+
+      <div class="section-card">
+        <div class="card-title">Where the Story Stands</div>
+        <p>Freddie&rsquo;s offer sits on the table: <strong>$20,000 for 30 percent</strong>, with the student keeping <strong>70 percent</strong> plus a salary. The records put Member&rsquo;s Capital at <strong>$4,500</strong>; the offer prices something the records do not carry. The terms remain under consideration.</p>
+      </div>
+
+      <div class="insight-box">
+        <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The deeper point</div>
+        <p>The statements report the recorded past &mdash; amounts that earned their way in under the recording conventions. Freddie&rsquo;s number prices an expected future, including things the records leave out by convention: the skill at the bench and the customers who come back. The gap between <strong>$4,500</strong> and the offer is not an error in either number; the two answer different questions.</p>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="nav('48-1-The-Deal.html')">&larr; Back</button>
+        <button class="btn-back" onclick="nav('index.html')">Course map</button>
+        <button class="btn-continue" onclick="nav('51-1-Module-5-Introduction.html')">Begin Module 5 &rarr;</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+var glossaryTerms=[
+  { term:'Statement of Member&rsquo;s Capital', def:'The statement that explains the change in Member&rsquo;s Capital from one balance-sheet date to the next.' },
+  { term:'Cash Flow Statement', def:'The statement that groups cash changes as operating, investing, or financing activities and reconciles the period&rsquo;s beginning and ending Cash.' },
+  { term:'Articulation', def:'The way each balance-sheet change connects to an explaining statement, so the statements read as one map.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'<\/div><div class="glossary-entry-def">'+g.def+'<\/div><\/div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ playClick(); window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+window.devFill = function(){};
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

@@ -25,20 +25,41 @@
     '24-1-welcome', '24-2-ein', '24-3-account', '24-4-statements', '24-5-complete',
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
-    '32-1-the-income-statement', '32-2-two-kinds', '32-3-revenue-follows-the-work', '32-4-name-the-income-statement', '32-5-what-the-season-kept',
-    '33-1-Two-Kinds-of-Used-Up', '33-2-The-Third-Kind', '33-3-The-Bottom-Line',
-    '34-1-The-Cash-Puzzle', '34-2-Three-Buckets', '34-3-What-Cash-Missed', '34-4-The-Cash-Flow-Statement',
-    '35-1-The-Capital-Bridge', '35-2-The-First-Close', '35-3-The-Statements-Tie-Out', '35-4-Module-Complete'
+    '32-1-check-the-records', '32-2-record-the-receivable', '32-3-the-third-kind',
+    '33-1-copy-the-rows', '33-2-sort-the-rows', '33-3-format-the-statement',
+    '34-1-what-cash-missed', '34-2-module-complete',
+    '41-1', '42-1',
+    '43-1',
+    '44-1', '44-2', '44-3',
+    '46-1', '46-2',
+    '47-1'
   ];
+
+  var URLS = {
+    '41-1': '41-1-The-Investor-Asks',
+    '42-1': '42-1-The-Missing-Wage',
+    '43-1': '43-1-The-Capital-Bridge',
+    '44-1': '44-1-The-Cash-Puzzle',
+    '44-2': '44-2-Three-Buckets',
+    '44-3': '44-3-The-Cash-Flow-Statement',
+    '46-1': '46-1-The-Statements-Tie-Out',
+    '46-2': '46-2-The-Statement-Map',
+    '47-1': '47-1-Freddies-Napkin'
+  };
 
   function urlDev() { return /[?&]dev(=|&|$)/.test(location.search); }
   function active() { try { return urlDev() || localStorage.getItem('__dev') === '1'; } catch (e) { return urlDev(); } }
   if (!active()) return;
   var autoFill = urlDev();
 
-  function curFile() { return (location.pathname.split('/').pop() || '').replace(/\.html$/, ''); }
+  function curFile() {
+    var stem = (location.pathname.split('/').pop() || '').replace(/\.html$/, '');
+    if (ORDER.indexOf(stem) >= 0) return stem;
+    var m = stem.match(/^(\d\d-\d+)/);
+    return (m && ORDER.indexOf(m[1]) >= 0) ? m[1] : stem;
+  }
   function nextFile() { var i = ORDER.indexOf(curFile()); return (i >= 0 && i < ORDER.length - 1) ? ORDER[i + 1] : null; }
-  function go(f) { if (f) location.href = f + '.html?dev'; }
+  function go(f) { if (f) location.href = (URLS[f] || f) + '.html?dev'; }
   function fill() { try { if (typeof window.devFill === 'function') window.devFill(); } catch (e) { console.warn('[dev] devFill error:', e); } }
   function next() { var f = nextFile(); if (f) go(f); else console.info('[dev] end of sequence (' + curFile() + ')'); }
 

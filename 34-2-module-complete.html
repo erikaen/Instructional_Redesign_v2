@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 3 Complete</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Story Between the Snapshots</h1>
+        <p class="tut-header-sub">Module 3 &middot; Income and Cash &middot; ~5 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Module 3 Complete</div>
+
+    <div class="phase active" id="phase-complete">
+      <div class="complete-head">
+        <div class="trophy-badge"><i data-lucide="flag"></i></div>
+        <div class="complete-title">Module 3 complete &mdash; the records tell the season&rsquo;s story</div>
+      </div>
+      <div class="section-card">
+        <div class="card-title">What You Built Across Module 3</div>
+        <ul class="bullet-list check">
+          <li>You chose the period and added the June 1 dated subtotals &mdash; periods are chosen, and dated lines mark their boundaries.</li>
+          <li>You checked the records against the work and completed them: Ridgeline&rsquo;s Accounts Receivable was recorded, then you wrote the three depreciation reasons by hand.</li>
+          <li>You set up a Working tab and copied all 46 season rows.</li>
+          <li>You sorted everything at once: Revenue from Expenses, then expenses by kind.</li>
+          <li>You aggregated and formatted the rows, and the tab earned its name: <strong>Income Statement</strong>, with Net income of <strong>$2,640</strong>.</li>
+          <li>You saw what Cash missed: the repair work generated <strong>$2,640</strong> while Cash fell <strong>$680</strong>, with every reason for the difference pointable in the records.</li>
+        </ul>
+      </div>
+      <div class="insight-box">
+        <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> One period, two readings</div>
+        <p>The Income Statement explains the work performed during the chosen period. The Cash account shows money held at each date. The two can move differently without either number being wrong.</p>
+      </div>
+      <div class="next-card">
+        <div class="next-card-label">Coming Next &mdash; An Investor Asks</div>
+        <p>An investor is about to ask for these statements.</p>
+      </div>
+      <div id="anna"></div>
+      <div class="btn-row">
+        <button class="btn-reset" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"></i> Reset this page</button>
+        <button class="btn-continue" onclick="nav('41-1-The-Investor-Asks.html')">Meet the investor &rarr;</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+
+/* ===== glossary ===== */
+var glossaryTerms=[
+  { term:'Income statement', def:'A report that sorts and formats Revenue and Expenses between chosen dates.' },
+  { term:'Net income', def:'Revenue $6,020 minus Total expenses $3,380 = $2,640 between the chosen dates.' },
+  { term:'Depreciation', def:'The recorded reduction for wear and obsolescence during the period.' },
+  { term:'Carrying value', def:'Cost minus depreciation recorded so far &mdash; a path in the records, not what a buyer will pay.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ playClick(); window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+document.getElementById('anna').innerHTML=annaBox('The records now explain how the work performed and why Cash moved differently. An investor will want to see the statements.');
+if(window.lucide) lucide.createIcons();
+</script>
+  <script src="dev.js"></script>
+</body>
+</html>

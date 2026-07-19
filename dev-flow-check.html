@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DEV — Module 3 flow check</title>
+<style>
+  body { font-family: sans-serif; margin: 2rem; }
+  table { border-collapse: collapse; margin-top: 1rem; }
+  td, th { border: 1px solid #ccc; padding: 4px 10px; font-size: 14px; }
+  .pass { background: #e6f7e6; } .fail { background: #fde3e3; font-weight: bold; }
+  #frame { width: 1200px; height: 500px; border: 1px solid #ddd; margin-top: 1rem; }
+  #banner { font-size: 20px; font-weight: bold; margin-top: 1rem; }
+</style>
+</head>
+<body>
+<h1>Module 3 flow check (instructor-side)</h1>
+<p>Drives every page's activities via its own devFill and asserts the flow's beats.</p>
+<div id="banner">running…</div>
+<table id="results"><tr><th>page</th><th>assert</th><th>result</th></tr></table>
+<iframe id="frame"></iframe>
+<script>
+var PLAN = [
+ {file:'31-1-welcome.html', asserts:[
+   ['header counter honest (1 of 2)', d=>/(Phase|Page) 1 of 2/.test(d.body.textContent)],
+   ['links to 31-2', d=>d.documentElement.outerHTML.includes('31-2-work-the-season.html')]]},
+ {file:'31-2-work-the-season.html', skipFill:true, asserts:[
+   ['opening Assets includes all six categories', d=>{var t=(d.querySelector('.brw-grid')||{textContent:''}).textContent; return ['Cash','Right of Use','Parts','Tools & Repair Equipment','Fixtures','Laptop'].every(x=>t.includes(x));}],
+   ['opening grid includes August 31 balances', d=>(d.querySelector('.brw-grid')||{textContent:''}).textContent.includes('Balance, August 31, 2026')],
+   ['opening grid has no June 1 balance yet', d=>!(d.querySelector('.brw-grid')||{textContent:''}).textContent.includes('Balance, June 1')],
+   ['opening grid has no receivable or depreciation', d=>{var t=(d.querySelector('.brw-grid')||{textContent:''}).textContent; return !t.includes('Accounts Receivable') && !t.includes('Depreciation');}],
+   ['opening grid has a collapsed outline toggle', d=>!!d.querySelector('.brw-og-toggle[aria-expanded="false"]')],
+   ['page source names the authored snapshot', d=>d.documentElement.outerHTML.includes('bike-repair-beg-module-3')]]},
+ {file:'31-2-work-the-season.html', asserts:[
+   ['dates-of-interest wording on page', d=>d.body.textContent.includes('dates of interest')],
+   ['dated subtotal lines present after fill', d=>d.body.textContent.includes('Balance, June 1')],
+   ['August 31 lines present', d=>d.body.textContent.includes('Balance, August 31')],
+   ['ties to the June 1 balance sheet (Parts 200)', d=>/balance sheet/i.test(d.body.textContent)],
+   ['aux workbook shell removed', d=>!d.getElementById('wbAuxShell')],
+   ['Parts Aug-31 stages at 200 — Ridgeline parts row stays visible', d=>{var bad=false; d.querySelectorAll('.brw-grid').forEach(g=>{ if(g.textContent.includes('275')) bad=true; }); return !bad;}],
+   ['post-act mounts authored M31', d=>d.documentElement.outerHTML.includes('bike-repair-module-3-1')],
+   ['WITHDRAWN June 1 reads $0 beat', d=>d.body.textContent.includes('June 1: $0')],
+   ['links to 32-1', d=>d.documentElement.outerHTML.includes('32-1-check-the-records.html')]]},
+ {file:'32-1-check-the-records.html', asserts:[
+   ['job-log control present', d=>!!d.querySelector('button[onclick="openJobLog()"]')],
+   ['opening GENERATED amount 2,740', d=>d.body.textContent.includes('2,740')],
+   ['Ridgeline named', d=>d.body.textContent.includes('Ridgeline Trail Crew')],
+   ['Ridgeline parts row present and visible', d=>{var rows=d.querySelectorAll('#wbGrid [data-brw-row]'); for(var i=0;i<rows.length;i++) if(rows[i].textContent.includes('Parts used — Ridgeline Trail Crew')) return !rows[i].classList.contains('is-collapsed'); return false;}],
+   ['links to 32-2', d=>d.documentElement.outerHTML.includes('32-2-record-the-receivable.html')]]},
+ {file:'32-2-record-the-receivable.html', asserts:[
+   ['two workbook panels', d=>d.querySelectorAll('.xlwb').length===2],
+   ['both tab bars complete and no Working Tab', d=>d.querySelectorAll('[data-sheet-tab]').length>=8 && !Array.prototype.some.call(d.querySelectorAll('[data-sheet-tab]'),function(t){return t.textContent.trim()==='Working Tab';})],
+   ['Ridgeline delivery row present and visible after fill', d=>{var rows=d.querySelectorAll('#rightGrid [data-brw-row]'); for(var i=0;i<rows.length;i++) if(rows[i].textContent.includes('Repair delivered — Ridgeline Trail Crew')) return !rows[i].classList.contains('is-collapsed'); return false;}],
+   ['GENERATED reaches 3,040', d=>d.body.textContent.includes('3,040')],
+   ['source includes Put it on the books', d=>d.documentElement.outerHTML.includes('Put it on the books')],
+   ['links to 32-3', d=>d.documentElement.outerHTML.includes('32-3-the-third-kind.html')]]},
+ {file:'32-3-the-third-kind.html', asserts:[
+   ["Anna's wording (we write it ourselves)", d=>d.documentElement.outerHTML.includes('we write it ourselves')],
+   ['three depreciation rows visible in left panel', d=>{var rows=d.querySelectorAll('#leftGrid [data-brw-row]'),found=[]; for(var i=0;i<rows.length;i++) if(rows[i].textContent.includes('Depreciation — ')) found.push(rows[i]); return found.length===3 && found.every(function(row){return !row.classList.contains('is-collapsed');});}],
+   ['GENERATED settles at 2,810 after fill', d=>d.body.textContent.includes('2,810')],
+   ['two workbook panels', d=>d.querySelectorAll('.xlwb').length===2],
+   ['links to 33-1', d=>d.documentElement.outerHTML.includes('33-1-copy-the-rows.html')]]},
+ {file:'33-1-copy-the-rows.html', asserts:[
+   ['Working Tab displayed amber and active after fill', d=>{var t=d.querySelector('[data-sheet-tab="working"]'); return !!t && t.textContent.trim()==='Working Tab' && !t.hidden && d.defaultView.getComputedStyle(t).display!=='none' && t.classList.contains('tk-temp') && t.classList.contains('active');}],
+   ['raw copied laptop depreciation row present', d=>d.body.textContent.includes('Depreciation — laptop, Summer 2026')],
+   ['dated line 2,810 present', d=>d.body.textContent.includes('2,810')],
+   ['links to 33-2', d=>d.documentElement.outerHTML.includes('33-2-sort-the-rows.html')]]},
+ {file:'33-2-sort-the-rows.html', asserts:[
+   ['grouped totals 6,020, 1,200, 1,950, and 230', d=>['6,020','1,200','1,950','230'].every(function(x){return d.body.textContent.includes(x);})],
+   ['Revenue appears before Expenses in statement grid', d=>{var g=d.querySelector('#statementBuild .brw-grid'),t=g?g.textContent:''; var r=t.search(/revenue/i); return r>=0 && t.indexOf('Expenses')>r;}],
+   ['no sorter drop zone named Category or Kind', d=>!Array.prototype.some.call(d.querySelectorAll('.brw-sort-zone'),function(z){return /^(Category|Kind)$/i.test(z.textContent.trim());})],
+   ['Working Tab remains amber', d=>{var t=d.querySelector('[data-sheet-tab="working"]'); return !!t && t.textContent.trim()==='Working Tab' && t.classList.contains('tk-temp');}],
+   ['links to 33-3', d=>d.documentElement.outerHTML.includes('33-3-format-the-statement.html')]]},
+ {file:'33-3-format-the-statement.html', asserts:[
+   ['title is not The Bottom Line', d=>d.title!=='The Bottom Line'],
+   ['fifth tab is purple Income Statement', d=>{var tabs=d.querySelectorAll('.xlwb-tab'),t=tabs[4]; return tabs.length===5 && t.textContent.trim()==='Income Statement' && t.classList.contains('tk-stmt');}],
+   ['exactly one Depreciation line in statement grid', d=>{var g=d.querySelector('#statementBuild .brw-grid'); return !!g && (g.textContent.match(/Depreciation/g)||[]).length===1;}],
+   ['total expenses 3,380 and net income 2,640', d=>d.body.textContent.includes('3,380') && d.body.textContent.includes('2,640')],
+   ['the tie reads 170', d=>d.body.textContent.includes('170')],
+   ['never says lands', d=>!/\blands\b/i.test(d.body.textContent)],
+   ['links to 34-1', d=>d.documentElement.outerHTML.includes('34-1-what-cash-missed.html')]]},
+ {file:'34-1-what-cash-missed.html', asserts:[
+   ['opens on purple Income Statement tab', d=>{var t=d.querySelector('[data-workbook-tab="Statement"]'); return !!t && t.textContent.trim()==='Income Statement' && t.classList.contains('tk-stmt') && t.classList.contains('active');}],
+   ['completed cash bridge carries every amount', d=>['2,640','680','400','600','2,030','300','220','230'].every(function(x){return d.body.textContent.includes(x);})],
+   ['does not name cash-flow activity categories', d=>!/(operating|investing|financing) activities/i.test(d.body.textContent)],
+   ['links to 34-2', d=>d.documentElement.outerHTML.includes('34-2-module-complete.html')]]},
+ {file:'34-2-module-complete.html', asserts:[
+   ['forward link to Module 4', d=>d.documentElement.outerHTML.includes('41-1-The-Investor-Asks.html')],
+   ['restart control', d=>/restart/i.test(d.documentElement.outerHTML)],
+   ['recap net income 2,640', d=>d.body.textContent.includes('2,640')]]},
+];
+var frame = document.getElementById('frame'), tbl = document.getElementById('results');
+var idx = 0, failures = 0, runtimeErrors = [];
+function row(page, name, ok){
+  var tr = document.createElement('tr');
+  tr.className = ok ? 'pass' : 'fail';
+  tr.innerHTML = '<td>' + page + '</td><td>' + name + '</td><td>' + (ok ? 'PASS' : 'FAIL') + '</td>';
+  tbl.appendChild(tr);
+  if (!ok) failures++;
+}
+function step(){
+  if (idx >= PLAN.length){
+    var msg = failures === 0 ? 'ALL FLOW CHECKS PASS (' + PLAN.length + ' pages)'
+                             : failures + ' FLOW CHECK FAILURE(S)';
+    if (runtimeErrors.length) msg += ' · ' + runtimeErrors.length + ' runtime error(s): ' + runtimeErrors.join(' | ');
+    document.getElementById('banner').textContent = msg;
+    console.log('FLOWCHECK: ' + (failures === 0 && runtimeErrors.length === 0 ? 'PASS' : 'FAIL ' + failures));
+    return;
+  }
+  var p = PLAN[idx];
+  frame.onload = function(){
+    var w = frame.contentWindow, d = frame.contentDocument;
+    w.onerror = function(m){ runtimeErrors.push(p.file + ': ' + m); };
+    try { if (!p.skipFill && typeof w.devFill === 'function') w.devFill(); } catch(e){ runtimeErrors.push(p.file + ' devFill: ' + e.message); }
+    setTimeout(function(){
+      p.asserts.forEach(function(a){
+        var ok = false;
+        try { ok = !!a[1](d); } catch(e){ ok = false; }
+        row(p.file, a[0], ok);
+      });
+      idx++; step();
+    }, 900);
+  };
+  frame.src = p.file + '?flowcheck=' + Date.now();
+}
+step();
+</script>
+</body>
+</html>

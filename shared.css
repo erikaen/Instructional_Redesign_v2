@@ -2268,3 +2268,397 @@ body.has-course-footer { padding-bottom: 62px; }
 .xl-head, .xl-rownum { font-size: 11px; }
 .xlsx-cell, .xl-cat .xl-c, .xl-cat .xl-v, .xl-item .xl-c, .xl-item .xl-v,
 .xl-total .xl-c, .xl-total .xl-v { font-size: 13px; }
+
+/* ============================================================================
+   MERGED FROM RICK'S BRANCH (2026-07-19): napkin, statement-facsimile engine,
+   pick-sheet sorter, working-tab styles, dated-line rule, CVS walk styles.
+   ========================================================================== */
+
+/* ===================================================================
+   MODULE 4.2 — Freddie's napkin (approved additions 2026-07-10)
+   Scratch figures, deliberately NOT the workbook idiom: dashed border,
+   mono numerals, a permanent "expectation, not a record" footer.
+   Used by 42-2-Freddies-Napkin.html (and 4.4 if the napkin returns).
+   =================================================================== */
+.napkin { border: 2px dashed var(--border-strong); border-radius: 10px; padding: 18px 22px; max-width: 420px; margin: 16px auto; background: var(--page-bg); }
+.napkin-title { font-family: Inter, sans-serif; font-size: var(--font-xs); font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #888; margin-bottom: 10px; }
+.napkin-line { display: flex; justify-content: space-between; align-items: baseline; padding: 5px 0; font-size: var(--font-m); color: #374151; }
+.napkin-line .napkin-val { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.napkin-total { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0 2px; margin-top: 6px; border-top: 2px solid var(--border-strong); font-size: var(--font-m); font-weight: 700; color: #1f2937; }
+.napkin-total .napkin-val { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.napkin-note { margin-top: 10px; font-size: var(--font-s); font-style: italic; color: #888; }
+
+/* ===== Workbook tab kinds + dated balance-sheet columns — approved additions (2026-07-11) =====
+   Tabs are color-coded by account type where a page opts in via BR_WB.tagTabKinds():
+   permanent (Assets/Liabilities/Reasons) blue · temporary (Revenue/Expenses) amber ·
+   statements (Income/Cash Flows/Changes in Capital/Balance Sheet) purple. Untagged
+   tabs (Modules 1-2) render unchanged. .xl-cols2 is the two-period balance sheet. */
+.xlwb-tab.tk-perm { box-shadow: inset 0 -3px 0 #2563eb; }
+.xlwb-tab.tk-temp { box-shadow: inset 0 -3px 0 #d97706; }
+.xlwb-tab.tk-stmt { box-shadow: inset 0 -3px 0 #7c3aed; }
+.xl-row.xl-cols2 { grid-template-columns: 22px 34px 1fr 110px 110px; }
+.xl-row.xl-cols2 .xl-v { border-left: 1px solid #e2e8f0; }
+
+/* ===================================================================
+   CATEGORY TAGGER — approved additions (2026-07-13)
+   Per-row category tagging + sort-into-banded-subtotals component,
+   shared by the income-statement sort (32-x) and the cash-flow sort
+   (44-2). Rendered by BRW.tagger() in shared.js. .tagger-actions is
+   the Sort-button footer strip (structural part of the wrapper).
+   =================================================================== */
+.tagger { border: 1px solid var(--border); border-radius: 10px; background: var(--page-bg); font-family: Inter, sans-serif; overflow: hidden; margin: 14px 0; }
+.tagger-row { display: grid; grid-template-columns: 1fr 92px auto; gap: 10px; align-items: center; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.tagger-row:last-child { border-bottom: 0; }
+.tagger-label { font-size: var(--font-s); color: #374151; }
+.tagger-amt { font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; font-size: var(--font-s); text-align: right; color: #1f2937; }
+.tagger-choices { display: flex; gap: 6px; justify-content: flex-end; }
+.tagger-choice { font-family: Inter, sans-serif; font-size: var(--font-xs); font-weight: 600; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border-strong); background: transparent; color: #4b5563; cursor: pointer; }
+.tagger-choice:hover { background: var(--primary-faint); }
+.tagger-choice.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+.tagger-choice.miss { background: var(--error-bg); border-color: var(--error-border); color: var(--error-text); }
+.tagger-band { display: flex; justify-content: space-between; align-items: baseline; padding: 7px 12px; background: var(--primary-faint); font-size: var(--font-xs); font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #334155; }
+.tagger-subtotal { display: grid; grid-template-columns: 1fr 92px auto; gap: 10px; padding: 8px 12px; border-top: 2px solid var(--primary); font-weight: 700; font-size: var(--font-s); color: #1f2937; }
+.tagger-subtotal .tagger-amt { font-weight: 700; }
+.tagger-actions { padding: 10px 12px; display: flex; justify-content: flex-end; border-top: 1px solid var(--border); }
+
+/* ===== BRW.renderGrid (PART 3) ===== */
+.brw-grid {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  background: #fff;
+  color: #374151;
+  font-family: Inter, sans-serif;
+}
+.brw-row {
+  display: grid;
+  grid-template-columns: minmax(20rem, 1fr) 2.75rem 7.5rem 4.5rem 4.5rem;
+  min-width: 41rem;
+  min-height: 27px;
+  border-bottom: 1px solid #eef2f7;
+  align-items: stretch;
+}
+.brw-row:last-child { border-bottom: 0; }
+.brw-layout-pick .brw-row {
+  grid-template-columns: minmax(20rem, 1fr) 9rem 7.5rem 4.5rem 4.5rem;
+  min-width: 48rem;
+}
+.brw-layout-note .brw-row {
+  grid-template-columns: minmax(20rem, 1fr) 2.75rem 7.5rem 1.75rem minmax(20rem, 1.2fr);
+  min-width: 55rem;
+}
+.brw-layout-pick-note .brw-row {
+  grid-template-columns: minmax(20rem, 1fr) 9rem 7.5rem 1.75rem minmax(20rem, 1.2fr);
+  min-width: 62rem;
+}
+.brw-cell {
+  min-width: 0;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  font-size: var(--font-s);
+  line-height: 1.25;
+}
+.brw-col-b { grid-column-start: 1; }
+.brw-col-c { grid-column-start: 2; }
+.brw-col-d { grid-column-start: 3; }
+.brw-col-e { grid-column-start: 4; }
+.brw-col-f { grid-column-start: 5; }
+.brw-span-1 { grid-column-end: span 1; }
+.brw-span-2 { grid-column-end: span 2; }
+.brw-span-3 { grid-column-end: span 3; }
+.brw-span-4 { grid-column-end: span 4; }
+.brw-span-5 { grid-column-end: span 5; }
+.brw-w-xs { min-width: 1.75rem; }
+.brw-w-sm { min-width: 4rem; }
+.brw-w-md { min-width: 7.5rem; }
+.brw-w-lg { min-width: 12rem; }
+.brw-w-xl { min-width: 20rem; }
+.brw-label { white-space: pre-wrap; }
+.brw-hint { color: #64748b; font-size: var(--font-xs); }
+.brw-amount {
+  justify-content: flex-end;
+  text-align: right;
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  border-left: 1px solid #f1f5f9;
+}
+.brw-bold { font-weight: 700; }
+.brw-italic { font-style: italic; }
+.brw-ind-1 { padding-left: 20px; }
+.brw-ind-2 { padding-left: 32px; }
+.brw-ind-3 { padding-left: 44px; }
+.brw-ind-4 { padding-left: 56px; }
+.brw-ind-5 { padding-left: 68px; }
+.brw-ind-6 { padding-left: 80px; }
+.brw-ind-7 { padding-left: 92px; }
+.brw-ind-8 { padding-left: 104px; }
+.brw-rule-top { border-top: 2px solid #0e6b3a; }
+.brw-rule-bottom { border-bottom: 1px solid #0e6b3a; }
+.brw-og-summary { background: var(--primary-faint); }
+.brw-og-row.is-collapsed { display: none; }
+.brw-og-toggle {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  margin: 0 7px 0 0;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #6b7280;
+  border-radius: 2px;
+  background: #fff;
+  color: #374151;
+  font: 700 11px/1 Inter, sans-serif;
+  cursor: pointer;
+}
+.brw-og-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+
+/* ===== BRW sorter (PART 5) ===== */
+.brw-sort-panel {
+  margin: 18px 0;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid #d9e3dc;
+  border-radius: 12px;
+  background: #f8fbf9;
+  color: #24312a;
+  transition: max-height 260ms ease, opacity 220ms ease, margin 260ms ease, padding 260ms ease;
+}
+.brw-sort-instruction {
+  margin: 0 0 14px;
+  color: #526158;
+  font-size: var(--font-s);
+}
+.brw-sort-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, .9fr) minmax(280px, 1.25fr);
+  gap: 18px;
+  align-items: start;
+}
+.brw-sort-source,
+.brw-sort-targets { min-width: 0; }
+.brw-sort-heading,
+.brw-sort-guidance-title {
+  margin: 0 0 8px;
+  color: #2e4738;
+  font-size: var(--font-xs);
+  font-weight: 750;
+  letter-spacing: .055em;
+  text-transform: uppercase;
+}
+.brw-sort-items { display: grid; gap: 7px; }
+.brw-sort-item,
+.brw-sort-placed-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 9px 11px;
+  border: 1px solid #d4ddd7;
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(21, 55, 34, .06);
+  font-size: var(--font-s);
+}
+.brw-sort-item { cursor: grab; user-select: none; }
+.brw-sort-item:hover {
+  border-color: #78a88c;
+  box-shadow: 0 2px 7px rgba(21, 85, 45, .12);
+}
+.brw-sort-item:active { cursor: grabbing; }
+.brw-sort-item:focus-visible,
+.brw-sort-zone:focus-visible,
+.brw-sort-rest:focus-visible {
+  outline: 3px solid rgba(14, 107, 58, .25);
+  outline-offset: 2px;
+}
+.brw-sort-selected {
+  border-color: #0e6b3a;
+  background: #edf8f1;
+  box-shadow: 0 0 0 2px rgba(14, 107, 58, .14);
+}
+.brw-sort-item-label { min-width: 0; }
+.brw-sort-item-amount {
+  color: #435249;
+  font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.brw-sort-category + .brw-sort-category { margin-top: 11px; }
+.brw-sort-category-label {
+  margin: 0 0 5px;
+  color: #244230;
+  font-size: var(--font-s);
+  font-weight: 700;
+}
+.brw-sort-zone {
+  min-height: 54px;
+  padding: 7px;
+  display: grid;
+  gap: 6px;
+  align-content: start;
+  border: 2px dashed #a8bdb0;
+  border-radius: 9px;
+  background: rgba(255, 255, 255, .7);
+  cursor: pointer;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+.brw-sort-zone:hover { border-color: #4d8d67; background: #f0f8f3; }
+.brw-sort-zone-filled { border-style: solid; border-color: #bad0c1; }
+.brw-sort-zone-empty,
+.brw-sort-empty {
+  margin: auto;
+  color: #75837a;
+  font-size: var(--font-xs);
+  font-style: italic;
+}
+.brw-sort-actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+}
+.brw-sort-rest {
+  min-height: 40px;
+  padding: 8px 16px;
+  border: 0;
+  border-radius: 7px;
+  background: #0e6b3a;
+  color: #fff;
+  font: 700 var(--font-s)/1.2 Inter, sans-serif;
+  cursor: pointer;
+}
+.brw-sort-rest:hover:not(:disabled) { background: #09582f; }
+.brw-sort-rest:disabled {
+  background: #c4ccc7;
+  color: #69736d;
+  cursor: not-allowed;
+}
+.brw-sort-guidance {
+  margin-top: 15px;
+  padding: 11px 13px;
+  border-left: 3px solid #7ea98d;
+  border-radius: 0 7px 7px 0;
+  background: #eef5f0;
+}
+.brw-sort-guidance-text {
+  margin: 4px 0;
+  color: #4c5c52;
+  font-size: var(--font-xs);
+}
+.brw-c-flash { animation: brw-c-flash 1150ms ease-out; }
+@keyframes brw-c-flash {
+  0% { background: #b9f2c9; box-shadow: inset 0 0 0 2px #36a65a; }
+  100% { background: transparent; box-shadow: inset 0 0 0 0 rgba(54, 166, 90, 0); }
+}
+.brw-sort-done .brw-sort-panel,
+.brw-sort-panel.brw-sort-done {
+  max-height: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 720px) {
+  .brw-sort-layout { grid-template-columns: 1fr; }
+}
+
+
+/* ===== Curated sorter + statement step controls — approved amendment (2026-07-14) ===== */
+.brw-sort-more {
+  margin-top: 1px;
+  padding: 6px 8px;
+  border: 1px dashed var(--border-strong);
+  border-radius: 6px;
+  background: var(--primary-faint);
+  color: #888;
+  font-size: var(--font-xs);
+  font-style: italic;
+  cursor: default;
+  user-select: none;
+}
+
+.brw-step-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 14px;
+}
+.brw-step {
+  padding: 5px 11px;
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
+  background: var(--primary-faint);
+  color: #64748b;
+  font: 600 var(--font-xs)/1.25 Inter, sans-serif;
+}
+.brw-step.is-active {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #fff;
+}
+.brw-step-advance {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: var(--primary);
+  color: white;
+  font-family: Inter, sans-serif;
+  font-size: var(--font-m);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.brw-step-advance:hover { background: var(--primary-light); }
+.brw-step-advance:disabled { background: #c8d0e0; color: #fff; cursor: default; }
+
+
+/* ===== Dated balance lines are blue by rule (Rick 2026-07-16). A + toggle appears only where a collapsed detail group exists; the blue marks every ruled dated line regardless. ===== */
+.brw-dated { background: var(--primary-faint); }
+
+/* ===== M4 paper/PDF idiom - diegetic "statement printed on paper" frame (Rick-approved 2026-07-16). ===== */
+.stmt-paper {
+  width: 100%;
+  max-width: 760px;
+  margin: 16px auto;
+  padding: clamp(18px, 4vw, 38px);
+  overflow: hidden;
+  border: 1px solid #d8d5cc;
+  border-radius: 3px;
+  background: #fff;
+  color: #374151;
+  box-shadow: 0 12px 30px rgba(34, 40, 52, .14), 0 2px 5px rgba(34, 40, 52, .08);
+}
+.stmt-paper-sheet { min-width: 0; overflow-x: auto; }
+.stmt-paper-cap {
+  margin-top: 14px;
+  padding-top: 9px;
+  border-top: 1px solid #e5e2da;
+  color: #6b7280;
+  font: 500 var(--font-xs)/1.4 Inter, sans-serif;
+  letter-spacing: .015em;
+  text-align: right;
+}
+
+@media (max-width: 560px) {
+  .stmt-paper { padding: 14px; }
+}
+
+

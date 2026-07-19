@@ -1,17 +1,39 @@
 # Module 3 — Design: *The Story Between the Snapshots*
 
-**Status:** Draft v1 (2026-06-22) — captures the plot agreed in design discussion. A planning doc, not an
+> **SUPERSESSION — 2026-07-14 (Rick's 2026-07-13 rulings, EXECUTED).** The statement-construction
+> fold-in is built. Where anything below conflicts with this block, THIS block governs:
+> - **GENERATED is continuous; there are no Revenue/Expenses tabs and no close — ever.** The
+>   income statement is a **sort-view**: the season's rows are *copied* to a working sheet
+>   (32-2), tagged **Revenue** (the value of the work delivered, whichever way the cash runs)
+>   or **Expense** (used up delivering it), sorted into banded subtotals, and laid out as the
+>   statement (32-4) — while the original rows never leave the Reasons tab. "Temporary
+>   accounts," the 32-4 graduation-to-tabs, DELIVERED/USED UP, and the first close are all
+>   retired. Names-first (Rick): Anna defines Revenue/Expenses *before* the sort.
+> - **Engine:** `snapshot()` ignores the retired `tabbed`/`closed` opts; `withDepreciation`
+>   lands the two Depreciation reasons (−200, −30) in GENERATED; the shared **`BRW.tagger`**
+>   component (shared.js/shared.css, approved 2026-07-13) does the Pick→Sort idiom.
+> - **Numbers contract (M3):** Revenue 6,020 − Expenses 3,380 (Parts 1,200 · Rent 1,950 ·
+>   Depreciation 200 + 30) = **Net income 2,640**; pre-receivable Revenue 5,720; pre-dep
+>   Expenses 3,150; GENERATED continuous subtotal **170 (June 1) → 2,810 (Aug 31)**;
+>   Member's Capital = Contributed 2,290 + Generated 2,810 + **Withdrawn (600)** = 4,500.
+>   The balance-sheet renderers carry Withdrawn as its own line (never folded into Generated).
+
+**Status:** Draft v2 (2026-07-11) — **restructured (Rick's ruling):** everything after the production
+of the income statement moved to Module 4. Tutorials 3.4 (`34-`) and 3.5 (`35-`) — the cash-flow
+statement, the statement of changes in Member's Capital, the first close, and the tie-out — now arrive
+in Module 4 **at the investor's request**; their specs live in `Module-4-Design.md` (tutorials 4.3–4.6).
+Module 3 ends at the completed income statement plus a new module-complete page. A planning doc, not an
 embedded page. Built here in `Instructional_Redesign_v2` (the `Rick` branch) in v2 conventions.
 Pedagogy defers to the **`accounting-pedagogy`** skill; page/style rules to **`instructional-shared-styles`**.
 
 **Where it sits.** The pre-work is **four modules**: **M1** the foundations (balance sheet, the identity,
 double-entry — Tutorials 1–5), **M2** the LLC ("Getting Formal" — Tutorials 1–5), **M3 = this** (the shop's
-first operating season; the articulated statement set emerges), **M4** the angel investor
-(pricing → limited recognition → outside capital).
+first operating season; the **income statement** emerges), **M4** the angel investor (the remaining
+statements arrive at his request; then pricing → limited recognition → outside capital).
 
 **Opens on M2's close** — no M1/M2 numbers are re-derived; the season layers on top:
 
-> Assets **$4,710** − Liabilities **$2,250** = members' capital **$2,460**
+> Assets **$4,710** − Liabilities **$2,250** = member's capital **$2,460**
 > (cash $1,300; contributed $2,290 + generated $170). The owner's repair **skill is off the books.**
 
 **File naming (v2).** Module 3 tutorials are `3X-Y-Title.html` = Module 3, Tutorial X, Page Y
@@ -28,8 +50,12 @@ statements**:
 
 > the balance sheet is a **photo**; the business needs the **movie between the photos.**
 
-No investor is needed to motivate them — **operations** do. (The investor, and what the records *leave out*,
-is M4.)
+**Restructured 2026-07-11:** operations motivate — and M3 answers — only the season's own question,
+*how did the season go?* (the income statement, complete at 33-3). The other felt questions are
+**planted and deliberately left open**: the cash fell $680 over a profitable season (31-2's cash walk,
+restated as 33-3's "loose thread"), and the difference moved with no statement walking the path. Those
+are answered in **Module 4, at the investor's request** — the movie's remaining reels arrive when an
+outside reader asks for them.
 
 ---
 
@@ -37,7 +63,7 @@ is M4.)
 
 Follows `accounting-pedagogy`; the points that bite hardest here:
 
-- **A − L = Equities** (plural). Members' capital is the definitional residual — never `A = L + E`, never
+- **A − L = Equities** (plural). Member's capital is the definitional residual — never `A = L + E`, never
   "what's left for the owner."
 - **Experience-first.** Feel the problem, then name it — exactly the M1 1.4→1.5 discipline.
 - **Records *show* vs entity *has*.** No "measurement" — depreciation is **allocation**.
@@ -48,8 +74,14 @@ Follows `accounting-pedagogy`; the points that bite hardest here:
   statement is just their organized display. Name them **only after** the bucketing is felt (names-last).
   **The Reasons list is one continuous list from May** (redesigned 2026-07-02): no carried-in balances,
   nothing pre-settled — the pile spanning periods is what makes the period-cut, and later the reset,
-  *felt*; the **first-ever close is 3.5's discovery**. Standing pile vocabulary everywhere:
+  *felt*; the **first-ever close is the discovery** (originally 3.5's; since the 2026-07-11
+  restructure it is Module 4's — tutorial 4.3). Standing pile vocabulary everywhere:
   **CONTRIBUTED / GENERATED / WITHDRAWN**, each pile born when first used (WITHDRAWN at the season's draw).
+  **Deferred (Rick, 2026-07-11 — do not start unprompted):** the close as built is fine (Rick is
+  comfortable with how little the docs make of "closing temporary accounts"); Revenue/Expenses keep
+  their own tabs. A possible later change: the Reasons tab could carry a closed period as **one net-income
+  line under GENERATED (period specified)** rather than filed period rows. Reasons-tab design to be
+  discussed later as its own conversation.
 - **★ Assets become expenses — and *how* you allocate is a spectrum.** The income statement is the story of
   **assets consumed to earn revenue**, and the opening balance sheet conveniently carries three kinds:
   **parts/supplies** — consumption can be **metered** (count what went into repairs); **prepaid rent** — consumed
@@ -63,15 +95,15 @@ Follows `accounting-pedagogy`; the points that bite hardest here:
   gap** M4 blows open.
 - **Operations feed the *generated* slice.** Net income closes into **Generated**; **contributed**
   capital ($2,290) is untouched by operations — M2's split finally does work. An owner's **draw** reduces
-  members' capital but is **not an expense** (a distribution), so it sorts itself *out* of the operating
+  member's capital but is **not an expense** (a distribution), so it sorts itself *out* of the operating
   tallies and onto the equity statement.
 
 ---
 
-## The arc — Module 3 tutorials (spine; page splits adjustable)
+## The arc — Module 3 tutorials (restructured 2026-07-11)
 
-Five tutorials, mirroring M2's cadence. Depreciation earns its **own** tutorial (your call). Page titles below
-are indicative.
+**Three tutorials** since the restructure (originally five; 3.4 and 3.5 moved to Module 4 — see the
+stub below). Depreciation earns its **own** tutorial. Page titles below are indicative.
 
 ### Tutorial 3.1 — Run the Season  (`31-`)
 The shop operates a **summer** (June–Aug 2026, the busy season). You keep jotting **Reasons** (M1 1.4): repairs
@@ -90,7 +122,7 @@ discovery ("the pile follows the work, not the cash"). Name the piles **Revenue*
 the period they answer for.* The tabs fill for one season, answer its question, then close; the Reasons tab
 stays the continuous trail — and the **draw stays on it**, an owner move, not part of how the work did
 (quietly seeding draw ≠ expense for M4). GENERATED will accumulate **one row per closed period** (the close
-itself is 3.5's discovery). The income statement is read straight off the two tabs; the bottom line stays
+itself is now Module 4's discovery — tutorial 4.3). The income statement is read straight off the two tabs; the bottom line stays
 open pending 3.3.
 *Pages:* the pile of reasons → sort DELIVERED / USED UP → the missing delivery (A/R) → name + graduate to
 period tabs + lay out the statement → where net income lands.
@@ -113,20 +145,46 @@ the depreciation rows land on the Expenses tab; the income statement is complete
 → allocation as a convention (May took none) → carrying value declines, book ≠ market → income statement
 complete.
 
-### Tutorial 3.4 — The Cash-Flow Statement  (`34-`)
-**Profit ≠ cash.** The season was plainly profitable — and the cash balance is **lighter than the day the LLC opened** (cash $1,300 → $620, **down $680**). That felt contradiction, planted as a cliffhanger in `31-2`'s cash walk, is the tutorial's engine. Where the cash *actually* went: **operating** (repairs, parts, rent, the **credit-card payoff**)
-vs **investing** (the new tool) vs **financing** (the draw). The timing / non-cash gaps make it concrete: **Smith's
-$220 advance** (earned this season — revenue, **no new cash**, the cash arrived in M1), **depreciation** ($230,
-expense, no cash — added back), and the **credit-card payoff** ($2,030 — cash out that is **not** an expense, it
-settles an M2 liability). Net income **$2,640** vs operating cash **$320** — and total cash **fell $680**.
-*Pages:* the profit-vs-cash puzzle → the three buckets → the non-cash / non-expense items (Smith's advance, depreciation, credit-card payoff) → reconcile to the cash line.
+### Tutorials 3.4 and 3.5 — MOVED TO MODULE 4 (restructured 2026-07-11)
 
-### Tutorial 3.5 — Changes in Equities & the Articulated Set  (`35-`)
-The **statement of changes in equities** bridges the two balance sheets: opening members' capital **+ net
-income − draws =** closing. Set all four side by side — they **tie out**. Name the lesson: **statement-path
-dependence** — the residual can only move *through* these statements; you can't jump it. Capstone. Close clean;
-gesture toward M4 without pre-empting.
-*Pages:* the equity bridge → net income closes in / draw out → the four statements tie out (articulation) → capstone + clean M4 hand-off.
+The cash-flow statement, the statement of changes in Member's Capital, the **first-ever close**, and
+the tie-out now arrive in Module 4 **at the investor's request**. Full specs (with the reframing each
+page needs) are in `Module-4-Design.md`. File mapping:
+
+| Old (Module 3) | New (Module 4) |
+|---|---|
+| `35-1-The-Capital-Bridge.html` | `43-1` (Tutorial 4.3) |
+| `35-2-The-First-Close.html` | `43-2` (Tutorial 4.3) |
+| `34-1-The-Cash-Puzzle.html` | `44-1` (Tutorial 4.4) |
+| `34-2-Three-Buckets.html` | `44-2` (Tutorial 4.4) |
+| `34-4-The-Cash-Flow-Statement.html` | `44-3` (Tutorial 4.4) |
+| `34-3-What-Cash-Missed.html` | `45-1` (Tutorial 4.5 — the NI↔CFO reconciliation, its own tutorial) |
+| `35-3-The-Statements-Tie-Out.html` | `46-1` (Tutorial 4.6) |
+| `35-4-Module-Complete.html` | rebuilt in place as `33-4-Module-Complete.html` (below) |
+
+Note the request **order** in M4 reverses the old teaching order: Member's Capital first (4.3), then
+cash (4.4), then the reconciliation (4.5). The **first close** — 3.5's keystone discovery in the old
+design — is now **4.3's discovery**; the Reasons-tab design ("the first close is the discovery") is
+unchanged in substance, only in address.
+
+### Module close — `33-4-Module-Complete.html` (new page, rebuilt from old 35-4's shell)
+
+Module 3 now ends when the income statement is complete. `33-3`'s closing "loose thread" beat keeps its
+substance (profitable season, Cash $1,300 → $620, "both true") but its button goes to `33-4` instead of
+the old 34-1, and "the next tutorial pulls that apart" becomes a hand-off that leaves the thread
+**open** (plain narration may say Module 4; characters never break the fourth wall). The new page:
+
+- Trophy + "Module 3 complete", recap trimmed to what M3 now actually contains: the season run and the
+  reasons pile; DELIVERED/USED UP sorted into period tabs; Revenue/Expenses named and graduated; the
+  receivable discovery; depreciation as an open, chosen convention; carrying value as a path, not a
+  price; the income statement complete — Net income **$2,640**.
+- **Coming Next hangs two questions, unanswered:** a profitable season whose cash went *down* $680, and
+  a difference that moved $2,460 → (its period-end level) with nothing yet walking the path — plus the
+  old 35-4 tease kept: an outside reader is coming, someone deciding whether to put money in. No
+  numbers pre-told beyond what 31-2/33-3 already showed; discover-don't-tell holds.
+- End state of the workbook at the module boundary (matters for M4 look-continuity): **graduated
+  (tabbed, receivable, depreciation) and NOT closed**; statement tabs shown so far: **income only**.
+  The Aug 31 balance sheet has never been laid out as a statement — that first sighting is 4.1's.
 
 ---
 
@@ -158,9 +216,9 @@ working figures for the summer:
 | Expenses — parts/COGS $1,200 · rent $1,950 · depreciation $230 (tools $200 + laptop $30) | **$3,380** |
 | **Net income** | **$2,640** |
 | Cash flow — operating **+$320** · investing **−$400** (new tool) · financing **−$600** (draw) → net **−$680** | ending cash **$620** (opened at $1,300) |
-| Closing balance sheet — Assets **$4,500** − Liabilities **$0** = members' capital | **$4,500** (contributed 2,290 + generated 2,210) |
+| Closing balance sheet — Assets **$4,500** − Liabilities **$0** = member's capital | **$4,500** (contributed 2,290 + generated 2,210) |
 
-> **Terminology (locked 2026-07-07):** "Retained"/"Retained Earnings" is retired course-wide. The **Generated** pile keeps its name through the close; the **total** picks up the legal term **Members' Capital** at the M2 Operating Agreement (subparts stay *Contributed* / *Generated*). "Retained Earnings" (and "Contributed Capital") survive only as a wider-world GAAP literacy aside in M4. Full rationale + the OA draft→finalize→sign resequencing in **Module-2-Design.md**.
+> **Terminology (locked 2026-07-07; tightened 2026-07-09):** "Retained"/"Retained Earnings" is retired course-wide. The **Generated** pile keeps its name through the close; the **total** picks up the legal term **Member's Capital** at the M2 Operating Agreement (subparts stay *Contributed* / *Generated*). **GAAP vocabulary is dropped from the course entirely** (2026-07-09 — supersedes the earlier "M4 aside" plan): "Retained Earnings" and "Contributed Capital" appear nowhere, ever. Full rationale + the OA draft→finalize→sign resequencing in **Module-2-Design.md**.
 
 **Rent treatment:** the season's rent (**$1,950 = 3 × $650**) is **paid and used this period** — routed through
 Prepaid Rent as a booking convenience, then expired in full to Rent Expense, so in substance it's a **straight
@@ -211,26 +269,32 @@ shell.
 An **angel investor**, impressed by the season, wants him to go **full-time** and open a **second location** — and
 to invest must **price the business.** Two threads open (both **seeded in M3**, surfaced only in M4):
 
-- **Roles — owner vs employee.** Part-time, he takes **draws** (owner distributions) and his labor is **unpaid**,
-  so M3's profit *overstates* the business's own earning power. Full-time, he'd draw a **salary** — and salary is
-  an **expense** where a draw was a distribution. *Same person, two roles, two treatments* — the payoff of M3's
-  "a draw is not an expense," and an extension of M2's "two you's" (person vs operation) to **owner vs employee.**
-  Going on payroll finally puts a number on the labor that built the shop.
+- **Roles — owner vs employee (angle refined 2026-07-11, Rick).** As long as the same person did the work
+  **and** was the shop's sole owner, he felt **no inclination to separate his compensation into a labor part
+  and a capital part** — the draw was one undifferentiated take-out, and his labor carried no price of its
+  own (so M3's profit *overstates* the business's own earning power). **Freddie's appearance is what makes
+  the distinction relevant:** a second owner who doesn't work the bench can't share what the shop produces
+  until the bench is paid as labor — a **salary, an expense**, where the draw was a distribution. *Same
+  person, two roles, two treatments* — the payoff of M3's "a draw is not an expense," and an extension of
+  M2's "two you's" (person vs operation) to **owner vs employee.** Going on payroll finally puts a number on
+  the labor that built the shop.
 - **The most important asset isn't recorded.** Even with salary on the books, his **skill / reputation / customer
   relationships** — what the investor is actually buying — never appear as an asset (limited recognition). The
   investor's price minus **book equity ($4,500)** *is* that gap; the **laptop's** book-below-market in 3.3 was the
   small first sighting, now writ large for the whole business (**book-vs-market**). This leads into **outside
   capital.**
 
-M3 ends clean on the articulated set — the "what's missing?" question is **M4's** to open.
+**Restructured 2026-07-11:** M3 ends on the **completed income statement** — the articulated set is
+now itself M4's, built piece by piece at the investor's request (4.3–4.6). Three things carry across
+the module boundary deliberately open: the profit-≠-cash thread (31-2, 33-3), the unwalked path of the
+difference ($2,460 → period-end), and the first-ever close (now 4.3's discovery). The "what's
+missing?" question remains **M4's** to open (4.8+).
 
 ---
 
 ## Open questions
 
-1. **Tutorial/page breakdown** — five tutorials as drafted (3.1–3.5)? Page counts per tutorial?
-2. **The season's numbers** — the actual revenue/expense/depreciation/draw figures (anchored to $2,460 opening).
-3. **Scope of 3.5** — a full statement of changes in equities, or a lighter bridge? Is the articulation capstone
-   its own tutorial or merged into 3.5?
-4. **Where the gap appears** — keep depreciation's "book ≠ value" hint *quiet* in M3 (seed only), with the full
-   book-vs-market reveal saved for M4? (Current plan: yes.)
+*All resolved.* (1) Tutorial breakdown: built as 3.1–3.5, then restructured 2026-07-11 to 3.1–3.3 +
+module-complete, with 3.4/3.5 moved to Module 4. (2) Numbers: locked — see the contract above.
+(3) Scope of old 3.5: built full, now Module 4's 4.3/4.6. (4) The book-vs-market hint stays quiet in
+M3 (33-3's carrying-value beat); the full reveal is M4's.

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profit and Cash</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .wb-grid-wrap { padding:8px; background:white; }
+    .source-beat { border-left:4px solid #2563eb; }
+    .source-kicker { display:block; margin-bottom:4px; color:#1d4ed8; font-family:Inter,sans-serif; font-size:var(--font-xs); font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    #assetsGrid .season-source-row { background:#eff6ff; border-left:3px solid #60a5fa; }
+    #assetsGrid .season-source-row.brw-dated { background:#dbeafe; }
+    @media (prefers-color-scheme:dark) {
+      .wb-grid-wrap { background:#26242e; }
+      .source-kicker { color:#93c5fd; }
+      #assetsGrid .season-source-row { background:#1e293b; border-left-color:#60a5fa; }
+      #assetsGrid .season-source-row.brw-dated { background:#263a59; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Profit and Cash</h1>
+        <p class="tut-header-sub">The Angel Investor &middot; ~10 min &middot; Page 1 of 3</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Profit and Cash</div>
+
+    <div id="freddie"></div>
+
+    <div class="narrative-block">
+      <p>On the <strong>Income Statement</strong>, net income is <strong>$2,640</strong>. In the <strong>Cash</strong> account on the <strong>Assets</strong> tab, the two dated balances are <strong>Balance, June 1, 2026: $1,300</strong> and <strong>Balance, August 31, 2026: $620</strong>.</p>
+    </div>
+    <div class="narrative-block source-beat">
+      <p><span class="source-kicker">Identify the source</span>The raw material for the <strong>Cash Flow Statement</strong> is the <strong>Cash ledger&rsquo;s season slice</strong>: every Cash transaction row between those two dated balance lines. The expanded rows below are that source. The blue balance lines stay visible and frame the slice. On the next page, you copy these rows.</p>
+    </div>
+
+    <div class="xlwb" id="workbookShell">
+      <div class="xlwb-bar">
+        <div class="xlwb-bar-title"><i data-lucide="sheet" class="licon"></i> <span class="mono">Bike-Repair.xlsx</span></div>
+        <div class="xlwb-bar-sheet">Assets &middot; Cash</div>
+      </div>
+      <div class="wb-grid-wrap"><div id="assetsGrid"></div></div>
+      <div class="xlwb-tabs" aria-label="Workbook tabs">
+        <button class="xlwb-tab active" type="button" aria-current="page">Assets</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Liabilities</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Reasons</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Balance Sheet</button>
+        <button class="xlwb-tab" type="button" aria-disabled="true">Income Statement</button>
+        <button class="xlwb-tab tk-stmt" type="button" aria-disabled="true">Statement of Member&rsquo;s Capital</button>
+      </div>
+    </div>
+
+    <div id="anna"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-repair-job-records.js"></script>
+<script src="bike-repair-parts-purchases.js"></script>
+<script src="bike-repair-workbook.js"></script>
+<script src="shared.js"></script>
+<script src="bike-repair-statement-steps.generated.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
+function sheetOf(workbookKey,name){
+  var sheets=BR_STMT_DATA.workbooks[workbookKey].sheets;
+  for(var i=0;i<sheets.length;i++) if(sheets[i].name===name) return sheets[i];
+  return null;
+}
+function cashLedgerOnly(sheet){
+  var balanceRows=[];
+  (sheet.cells||[]).forEach(function(cell){
+    if(cell.c===2&&/^Balance, /.test(String(cell.value||''))) balanceRows.push(cell.r);
+  });
+  var endRow=balanceRows.length>1?balanceRows[1]:0;
+  var copy={};
+  Object.keys(sheet).forEach(function(key){ copy[key]=sheet[key]; });
+  copy.cells=endRow?(sheet.cells||[]).filter(function(cell){ return cell.r<=endRow; }):(sheet.cells||[]).slice();
+  copy.rows=endRow?(sheet.rows||[]).slice(0,endRow):(sheet.rows||[]).slice();
+  return copy;
+}
+function revealSeasonSlice(containerId){
+  var container=document.getElementById(containerId);
+  if(!container) return;
+  BRW.markDatedRows(containerId);
+  var dated=container.querySelectorAll('.brw-dated');
+  if(dated.length<2) return;
+  var start=Number(dated[0].getAttribute('data-brw-row'));
+  var end=Number(dated[1].getAttribute('data-brw-row'));
+  var endToggle=dated[1].querySelector('.brw-og-toggle');
+  if(endToggle&&endToggle.getAttribute('aria-expanded')!=='true'){
+    BRW._gridToggle(endToggle.getAttribute('data-brw-grid'),endToggle.getAttribute('data-brw-group'));
+  }
+  Array.prototype.forEach.call(container.querySelectorAll('[data-brw-row]'),function(row){
+    var rowNumber=Number(row.getAttribute('data-brw-row'));
+    if(rowNumber>=start&&rowNumber<=end) row.classList.add('season-source-row');
+  });
+}
+
+var NET_INCOME=2640, CASH_OPEN=1300, CASH_NOW=620, CASH_FALL=680;
+var MCQ=[
+  {text:'One of the two numbers must be wrong &mdash; profit or cash, not both.',fb:'Neither number is wrong. Net income $2,640 is on the Income Statement, and the Cash account falls from $1,300 to $620. The two records answer different questions.'},
+  {text:'Someone must have taken the missing $680 &mdash; a theft or an error to track down.',fb:'Nothing is missing. Every dollar that moved is recorded between the Cash account&rsquo;s dated lines. The $680 decrease needs an explanation, not a replacement.'},
+  {text:'Both are true: the season was profitable, and it still ended with less cash than it started &mdash; they answer different questions.',ok:true,fb:'Right. Net income is $2,640, while Cash decreased by $680. Profit is not cash, so both readings can be true at the same time.'}
+];
+var mcqSel=null, mcqSubmitted=false;
+
+function renderMcq(){
+  var correct=mcqSubmitted&&MCQ[mcqSel].ok;
+  var html='<div class="mc-card"><div class="mc-q">Cash fell from '+BRW.dol(CASH_OPEN)+' to '+BRW.dol(CASH_NOW)+', while net income on the Income Statement is '+BRW.dol(NET_INCOME)+'. What is the honest read?</div><div class="mc-opts">';
+  MCQ.forEach(function(option,index){
+    var cls='mc-opt'+(!mcqSubmitted&&mcqSel===index?' selected':'')+(mcqSubmitted&&mcqSel===index?(option.ok?' correct':' wrong'):'')+(mcqSubmitted?' locked':'');
+    html+='<div class="'+cls+'" onclick="selectMcq('+index+')"><div class="mc-letter">'+String.fromCharCode(65+index)+'</div><div>'+option.text+'</div></div>';
+  });
+  html+='</div><div class="feedback'+(mcqSubmitted?(correct?' ok':' err')+' show':'')+'">'+(mcqSubmitted?MCQ[mcqSel].fb:'')+'</div></div>';
+  html+='<div class="btn-row">'+(mcqSubmitted?'<button class="btn-reset" onclick="resetMcq()" style="margin-left:auto;">Reset</button>':'<button class="btn-continue" onclick="submitMcq()"'+(mcqSel===null?' disabled':'')+'>Submit</button>')+'</div>';
+  return html;
+}
+function selectMcq(index){ if(mcqSubmitted)return; mcqSel=index; renderAll(); }
+function submitMcq(){ if(mcqSel===null||mcqSubmitted)return; mcqSubmitted=true; if(MCQ[mcqSel].ok)playSuccess(); else playNope(); renderAll(); window.scrollTo(0,document.body.scrollHeight); }
+function resetMcq(){ mcqSel=null; mcqSubmitted=false; renderAll(); }
+function renderAll(){
+  var controls=renderMcq(), anna='';
+  if(mcqSubmitted&&MCQ[mcqSel].ok){
+    anna=annaBox('On the Income Statement, <strong>net income is '+BRW.dol(NET_INCOME)+'</strong>. In the Cash account, the dated balances are <strong>'+BRW.dol(CASH_OPEN)+'</strong> on June 1 and <strong>'+BRW.dol(CASH_NOW)+'</strong> on August 31. Both readings come straight from the workbook you built.');
+    controls+=insightBox('Two honest answers to two different questions','<p>Net income measures how the work performed. A Cash balance measures money held at a date. On the next page, you copy the highlighted season slice from the Cash ledger and sort those rows by purpose.</p>')
+      +'<button class="btn-back" onclick="nav(\'43-1-The-Capital-Bridge.html\')">&larr; Back</button>'
+      +'<button class="btn-continue btn-block" onclick="nav(\'44-2-Three-Buckets.html\')">Sort the cash flows &rarr;</button>';
+  }
+  document.getElementById('anna').innerHTML=anna;
+  document.getElementById('controls').innerHTML=controls;
+  if(window.lucide) lucide.createIcons();
+}
+
+var glossaryTerms=[
+  {term:'Net income',def:'Revenue minus Expenses for the period: $6,020 minus $3,380 = $2,640. It reports how the work performed, not the change in Cash.'},
+  {term:'Cash',def:'Money held by the shop. On the Assets tab, Cash is $1,300 on June 1 and $620 on August 31, a decrease of $680.'},
+  {term:'Season slice',def:'The Cash ledger rows between Balance, June 1, 2026 and Balance, August 31, 2026. These rows are the raw material for the Cash Flow Statement.'}
+];
+function openGlossary(){ document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';}).join(''); document.getElementById('glossaryOverlay').classList.add('open'); }
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape')closeGlossary(); });
+
+window.devFill=function(){ mcqSel=2; mcqSubmitted=true; renderAll(); };
+BRW.mountGrid('assetsGrid',cashLedgerOnly(sheetOf('bike-repair-end','Assets')),{gridId:'cash-puzzle-assets-grid'});
+revealSeasonSlice('assetsGrid');
+document.getElementById('freddie').innerHTML=annaBox('Net income was '+BRW.dol(NET_INCOME)+'. But Cash fell from '+BRW.dol(CASH_OPEN)+' to '+BRW.dol(CASH_NOW)+'. How can a profitable season finish with less cash?');
+renderAll();
+if(window.lucide) lucide.createIcons();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
