@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Read the Labels</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .cvs-scope {
+      --cvs-paper:#ffffff;
+      --cvs-panel:#f8fafc;
+      --cvs-ink:#263746;
+      --cvs-muted:#657583;
+      --cvs-primary:#155b86;
+      --cvs-rule:#c8d4dc;
+      --cvs-rule-strong:#708592;
+      --cvs-warm:#fff8df;
+      --cvs-accent:#d5a528;
+      --cvs-shadow:rgba(32,55,72,0.09);
+      --cvs-success:#167447;
+      --cvs-success-bg:#edf9f1;
+      --cvs-danger:#a53d3d;
+      --cvs-info-bg:#eaf4fb;
+      --cvs-hover:#f1f5f8;
+    }
+    .cvs-doc-wrap { overflow-x:auto; padding:2px 2px 8px; }
+    .cvs-doc-card, .cvs-snapshot {
+      background:var(--cvs-paper);
+      color:var(--cvs-ink);
+      border:1px solid var(--cvs-rule);
+      border-radius:12px;
+      box-shadow:0 8px 24px var(--cvs-shadow);
+    }
+    .cvs-doc-card { max-width:820px; min-width:610px; margin:0 auto; padding:24px; }
+    .cvs-kicker {
+      margin:0 0 5px;
+      color:var(--cvs-muted);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .cvs-doc-title, .cvs-snapshot-title { margin:0; color:var(--cvs-primary); }
+    .cvs-doc-title { font-size:20px; }
+    .cvs-snapshot-title { font-size:17px; }
+    .cvs-subline { margin:3px 0 0; color:var(--cvs-muted); font-size:12px; font-style:italic; }
+    .cvs-table { margin-top:18px; font-size:13px; }
+    .cvs-row {
+      display:grid;
+      grid-template-columns:minmax(300px,1fr) 7rem 7rem;
+      column-gap:10px;
+      align-items:baseline;
+      padding:3px 0;
+    }
+    .cvs-row-head { border-bottom:1px solid var(--cvs-rule); color:var(--cvs-primary); font-weight:700; }
+    .cvs-value { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .cvs-section { grid-column:1 / -1; margin-top:10px; color:var(--cvs-primary); font-weight:800; }
+    .cvs-subtotal { font-weight:600; }
+    .cvs-total { margin-top:4px; padding-top:6px; border-top:1px solid var(--cvs-rule-strong); color:var(--cvs-primary); font-weight:800; }
+    .cvs-snapshot-wrap { min-width:0; padding:2px 2px 8px; }
+    .cvs-snapshot { min-width:0; height:100%; padding:18px; box-sizing:border-box; }
+    .cvs-snapshot-table { margin-top:15px; font-size:12px; }
+    .cvs-snapshot-row {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 5.5rem;
+      column-gap:8px;
+      align-items:baseline;
+      padding:4px 0;
+    }
+    .cvs-compact-gap { margin-top:9px; }
+    .cvs-restricted-row {
+      margin:5px -7px 0;
+      padding:6px 7px;
+      border-left:3px solid var(--cvs-success);
+      border-radius:4px;
+      background:var(--cvs-success-bg);
+    }
+    .cvs-restricted-note {
+      margin:2px 0 4px 7px;
+      color:var(--cvs-success);
+      font-family:"JetBrains Mono",monospace;
+      font-size:10px;
+      font-style:italic;
+      line-height:1.35;
+    }
+    .cvs-equity-bucket { color:var(--cvs-ink); }
+    .cvs-identity-note { margin:11px 0 0; color:var(--cvs-muted); font-family:"JetBrains Mono",monospace; font-size:10px; text-align:right; }
+    .cvs-strip-stack { max-width:850px; margin:0 auto; }
+    .cvs-strip {
+      display:grid;
+      grid-template-columns:1fr auto 1fr auto 1fr;
+      align-items:center;
+      gap:12px;
+      margin-bottom:12px;
+      padding:15px 18px;
+      border:1px solid var(--cvs-rule);
+      border-radius:12px;
+      background:var(--cvs-paper);
+      color:var(--cvs-ink);
+      box-shadow:0 8px 24px var(--cvs-shadow);
+    }
+    .cvs-strip-cell { min-width:0; text-align:center; }
+    .cvs-strip-label { margin:0; color:var(--cvs-muted); font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .cvs-strip-name { margin:3px 0; color:var(--cvs-ink); font-size:11px; line-height:1.35; }
+    .cvs-strip-number { color:var(--cvs-primary); font-family:"JetBrains Mono",monospace; font-size:18px; font-weight:800; }
+    .cvs-strip-change .cvs-strip-number { color:var(--cvs-danger); }
+    .cvs-strip-arrow { color:var(--cvs-muted); font-size:18px; }
+    .cvs-question-card {
+      margin-top:14px;
+      padding:13px 16px;
+      border:2px dashed var(--cvs-accent);
+      border-radius:10px;
+      background:var(--cvs-warm);
+      color:var(--cvs-ink);
+      text-align:center;
+      font-size:13px;
+      font-weight:700;
+    }
+    .cvs-recon-card {
+      max-width:820px;
+      min-width:610px;
+      margin:0 auto;
+      padding:22px;
+      border:2px solid var(--cvs-success);
+      border-radius:12px;
+      background:var(--cvs-success-bg);
+      color:var(--cvs-ink);
+      box-shadow:0 8px 24px var(--cvs-shadow);
+    }
+    .cvs-recon-head, .cvs-recon-row {
+      display:grid;
+      grid-template-columns:minmax(280px,1fr) 7rem 7rem;
+      gap:12px;
+      align-items:baseline;
+      padding:4px 0;
+    }
+    .cvs-recon-head { color:var(--cvs-muted); font-size:11px; font-weight:700; }
+    .cvs-recon-total { margin-top:5px; padding-top:8px; border-top:1px solid var(--cvs-rule-strong); color:var(--cvs-primary); font-weight:800; }
+    .cvs-recon-match { margin:12px 0 0; color:var(--cvs-success); font-size:12px; font-weight:700; text-align:center; }
+    .cvs-architecture-wrap { overflow-x:auto; padding:2px 2px 8px; }
+    .cvs-architecture.main-grid {
+      grid-template-columns:minmax(245px,1fr) minmax(300px,1.15fr) minmax(245px,1fr);
+      align-items:stretch;
+      min-width:850px;
+    }
+    .cvs-architecture.main-grid > * { min-width:0; }
+    .cvs-cfs-card { min-width:0; height:100%; padding:18px; box-sizing:border-box; }
+    .cvs-recon-mini {
+      margin-top:14px;
+      padding:10px;
+      border:1px solid var(--cvs-accent);
+      border-radius:7px;
+      background:var(--cvs-warm);
+      color:var(--cvs-ink);
+      font-size:11px;
+    }
+    .cvs-recon-mini-row, .cvs-cfs-section-row, .cvs-running-row, .cvs-detail-row {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 5.5rem;
+      gap:8px;
+      align-items:baseline;
+    }
+    .cvs-recon-mini-row { padding:2px 0; }
+    .cvs-cfs-list { margin-top:16px; }
+    .cvs-cfs-section-row {
+      padding:8px 5px;
+      border-bottom:1px solid var(--cvs-rule);
+      color:var(--cvs-ink);
+      font-size:12px;
+      font-weight:600;
+    }
+    .cvs-running-row {
+      padding:4px 5px 7px;
+      color:var(--cvs-muted);
+      font-size:10px;
+      font-style:italic;
+    }
+    .cvs-running-final { border-top:2px solid var(--cvs-primary); color:var(--cvs-primary); font-size:12px; font-style:normal; font-weight:800; }
+    .cvs-expandable-row { cursor:pointer; user-select:none; border-radius:5px; }
+    .cvs-expandable-row:hover, .cvs-expandable-row:focus { background:var(--cvs-hover); outline:2px solid var(--cvs-accent); outline-offset:-2px; }
+    .cvs-expand-label { display:grid; grid-template-columns:18px minmax(0,1fr); gap:3px; align-items:center; }
+    .cvs-expand-label svg { width:14px; height:14px; color:var(--cvs-muted); }
+    .cvs-hint-pulse { animation:cvs-hint-pulse 1.3s ease-in-out 2; }
+    @keyframes cvs-hint-pulse { 0%,100% { box-shadow:none; } 50% { box-shadow:inset 0 0 0 2px var(--cvs-accent); } }
+    .cvs-detail-panel { padding:7px 7px 9px 25px; border-bottom:1px solid var(--cvs-rule); background:var(--cvs-panel); }
+    .cvs-detail-row { padding:3px 0; color:var(--cvs-ink); font-size:10px; line-height:1.35; }
+    .cvs-detail-total { margin-top:4px; padding-top:6px; border-top:1px solid var(--cvs-rule-strong); color:var(--cvs-primary); font-weight:800; }
+    .cvs-direct-note {
+      margin:14px 0 0;
+      padding:10px 11px;
+      border-left:3px solid var(--cvs-accent);
+      background:var(--cvs-warm);
+      color:var(--cvs-ink);
+      font-size:11px;
+      line-height:1.45;
+    }
+    @media (max-width:760px) {
+      .cvs-strip { grid-template-columns:1fr; gap:7px; }
+      .cvs-strip-arrow { transform:rotate(90deg); }
+      .cvs-architecture.main-grid { grid-template-columns:1fr; min-width:0; }
+      .cvs-recon-card { min-width:570px; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .cvs-scope {
+        --cvs-paper:#26242e;
+        --cvs-panel:#211f28;
+        --cvs-ink:#e8edf1;
+        --cvs-muted:#b4c0c8;
+        --cvs-primary:#7dc8f3;
+        --cvs-rule:#4b5361;
+        --cvs-rule-strong:#8797a2;
+        --cvs-warm:#332f20;
+        --cvs-accent:#d8ad3e;
+        --cvs-shadow:rgba(0,0,0,0.28);
+        --cvs-success:#70d6a3;
+        --cvs-success-bg:#1d3329;
+        --cvs-danger:#ff9a9a;
+        --cvs-info-bg:#20323d;
+        --cvs-hover:#34333d;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Read the Labels</h1>
+        <p class="tut-header-sub">Module 5 &middot; ~5 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Read the Labels</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="cvs-10k-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+var step=0;
+var TOTAL_STEPS=4;
+var revealN=0;
+var revealTimer=null;
+var stepTwoSeen=false;
+var expansionEncountered=false;
+var openSections={operating:false,investing:false,financing:false};
+
+function escapeHTML(value){
+  return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmt(v){
+  if(v===0) return '—';
+  var a=Math.abs(v).toLocaleString('en-US');
+  return v<0 ? '('+a+')' : a;
+}
+function money(v){ return (v<0?'&minus;$':'$')+Math.abs(v).toLocaleString('en-US'); }
+function strip(title,name,beg,change,end){
+  return '<div class="cvs-strip"><div class="cvs-strip-cell"><p class="cvs-strip-label">Beginning</p><p class="cvs-strip-name">'+escapeHTML(title)+'</p><div class="cvs-strip-number">'+money(beg)+'</div></div>'
+    +'<div class="cvs-strip-arrow" aria-hidden="true">&rarr;</div>'
+    +'<div class="cvs-strip-cell cvs-strip-change"><p class="cvs-strip-label">Change</p><p class="cvs-strip-name">'+escapeHTML(name)+'</p><div class="cvs-strip-number">'+money(change)+'</div></div>'
+    +'<div class="cvs-strip-arrow" aria-hidden="true">&rarr;</div>'
+    +'<div class="cvs-strip-cell"><p class="cvs-strip-label">Ending</p><p class="cvs-strip-name">'+escapeHTML(title)+'</p><div class="cvs-strip-number">'+money(end)+'</div></div></div>';
+}
+function mismatchView(){
+  var r=window.CVS_10K.cashRecon;
+  return '<div class="cvs-scope"><div class="cvs-strip-stack">'
+    +strip('Balance Sheet','Cash and cash equivalents',r.beg.ccEquiv,r.end.ccEquiv-r.beg.ccEquiv,r.end.ccEquiv)
+    +strip('Cash Flow Statement','Cash, cash equivalents and restricted cash',r.beg.total,r.end.total-r.beg.total,r.end.total)
+    +'<div class="cvs-question-card">Same year, two changes in cash. What does each label include?</div></div></div>';
+}
+function reconciliationView(){
+  var r=window.CVS_10K.cashRecon;
+  return '<div class="cvs-scope"><div class="cvs-doc-wrap"><div class="cvs-recon-card">'
+    +'<p class="cvs-kicker">Restricted-cash reconciliation</p><h2 class="cvs-doc-title">Read the labels at both dates</h2>'
+    +'<p class="cvs-subline">In $ millions</p><div class="cvs-table">'
+    +'<div class="cvs-recon-head"><div></div><div class="cvs-value">Beginning</div><div class="cvs-value">Ending</div></div>'
+    +'<div class="cvs-recon-row"><div>Cash and cash equivalents</div><div class="cvs-value">'+fmt(r.beg.ccEquiv)+'</div><div class="cvs-value">'+fmt(r.end.ccEquiv)+'</div></div>'
+    +'<div class="cvs-recon-row"><div>+ Restricted cash in Other current assets</div><div class="cvs-value">'+fmt(r.beg.restrCurr)+'</div><div class="cvs-value">'+fmt(r.end.restrCurr)+'</div></div>'
+    +'<div class="cvs-recon-row"><div>+ Restricted cash in Other assets</div><div class="cvs-value">'+fmt(r.beg.restrOther)+'</div><div class="cvs-value">'+fmt(r.end.restrOther)+'</div></div>'
+    +'<div class="cvs-recon-row cvs-recon-total"><div>= Cash, cash equivalents and restricted cash</div><div class="cvs-value">'+fmt(r.beg.total)+'</div><div class="cvs-value">'+fmt(r.end.total)+'</div></div>'
+    +'</div><p class="cvs-recon-match">Both dates now match the Cash Flow Statement strip exactly. &#10003;</p></div></div></div>';
+}
+function compactRow(label,value,cls){
+  return '<div class="cvs-snapshot-row'+(cls?' '+cls:'')+'"><div>'+label+'</div><div class="cvs-value">'+fmt(value)+'</div></div>';
+}
+function compactSnapshot(year,label,bucketed,highlightRestricted){
+  var d=window.CVS_10K.compactBS[year];
+  var yearText=year==='y2025'?'2025':'2024';
+  var other=d.totalAssets-d.cash-d.otherCurrent-d.otherAssets;
+  var rows=compactRow('Cash and cash equivalents',d.cash,'cvs-subtotal');
+  rows+=compactRow('Other current assets',d.otherCurrent,highlightRestricted?'cvs-restricted-row':'');
+  if(highlightRestricted) rows+='<div class="cvs-restricted-note">&#8627; of which restricted cash: '+fmt(d.restrCurr)+'</div>';
+  rows+=compactRow('Other assets',d.otherAssets,highlightRestricted?'cvs-restricted-row':'');
+  if(highlightRestricted) rows+='<div class="cvs-restricted-note">&#8627; of which restricted cash: '+fmt(d.restrOther)+'</div>';
+  rows+=compactRow('All other noncash assets',other,'');
+  rows+=compactRow('Total assets',d.totalAssets,'cvs-total');
+  rows+=compactRow('&minus; Total liabilities',d.totalLiab,'cvs-compact-gap');
+  if(bucketed){
+    rows+=compactRow('= Contributed',d.contributed,'cvs-equity-bucket');
+    rows+=compactRow('+ Earned and retained',d.earnedRetained,'cvs-equity-bucket');
+    rows+=compactRow('+ Noncontrolling interests',d.nci,'cvs-equity-bucket');
+  }
+  rows+=compactRow('= Total shareholders&rsquo; equity',d.totalEq,'cvs-total');
+  return '<div class="cvs-snapshot-wrap"><div class="cvs-snapshot"><p class="cvs-kicker">'+label+'</p>'
+    +'<h3 class="cvs-snapshot-title">Balance Sheet</h3><p class="cvs-subline">December 31, '+yearText+' &middot; in $ millions</p>'
+    +'<div class="cvs-snapshot-table">'+rows+'</div><p class="cvs-identity-note">'+fmt(d.totalAssets)+' &minus; '+fmt(d.totalLiab)+' = '+fmt(d.totalEq)+' &#10003;</p></div></div>';
+}
+function miniReconciliation(){
+  var d=window.CVS_10K.cfs2025;
+  return '<div class="cvs-recon-mini"><p class="cvs-kicker">What this statement reconciles</p>'
+    +'<p class="cvs-subline">Cash, cash equivalents and restricted cash</p>'
+    +'<div class="cvs-recon-mini-row"><div>Beginning of period</div><div class="cvs-value">'+fmt(d.beginning)+'</div></div>'
+    +'<div class="cvs-recon-mini-row"><div>+ Change in cash</div><div class="cvs-value">'+fmt(d.netChange)+'</div></div>'
+    +'<div class="cvs-recon-mini-row cvs-total"><div>End of period</div><div class="cvs-value">'+fmt(d.ending)+'</div></div></div>';
+}
+function sectionOrder(){ return ['operating','investing','financing']; }
+function sectionName(key){ return key.charAt(0).toUpperCase()+key.slice(1); }
+function detailPanel(key,data){
+  if(!openSections[key]) return '';
+  var h='<div class="cvs-detail-panel">';
+  for(var i=0;i<data.items.length;i++){
+    var item=data.items[i];
+    h+='<div class="cvs-detail-row"><div>'+escapeHTML(item.label)+'</div><div class="cvs-value">'+(item.dash?'—':fmt(item.value))+'</div></div>';
+  }
+  h+='<div class="cvs-detail-row cvs-detail-total"><div>'+escapeHTML(data.label)+'</div><div class="cvs-value">'+fmt(data.subtotal)+'</div></div></div>';
+  return h;
+}
+function cfsSections(expandable){
+  var d=window.CVS_10K.cfs2025;
+  var keys=sectionOrder();
+  var visible=expandable?keys.length:revealN;
+  var running=0;
+  var h='<div class="cvs-cfs-list"><p class="cvs-kicker">The three sections</p>';
+  for(var i=0;i<visible;i++){
+    var key=keys[i];
+    var data=d[key];
+    running+=data.subtotal;
+    if(expandable){
+      var pulse=!expansionEncountered?' cvs-hint-pulse':'';
+      h+='<div class="cvs-cfs-section-row cvs-expandable-row'+pulse+'" role="button" tabindex="0" aria-expanded="'+(openSections[key]?'true':'false')+'" onclick="toggleSection(\''+key+'\')" onkeydown="handleSectionKey(event,\''+key+'\')">'
+        +'<div class="cvs-expand-label"><i data-lucide="'+(openSections[key]?'chevron-up':'chevron-down')+'"></i><span>'+escapeHTML(data.label)+'</span></div><div class="cvs-value">'+fmt(data.subtotal)+'</div></div>'
+        +detailPanel(key,data);
+    } else {
+      h+='<div class="cvs-cfs-section-row"><div>'+escapeHTML(data.label)+'</div><div class="cvs-value">'+fmt(data.subtotal)+'</div></div>';
+    }
+    h+='<div class="cvs-running-row"><div>Running total after '+sectionName(key)+'</div><div class="cvs-value">'+fmt(running)+'</div></div>';
+  }
+  if(visible===keys.length){
+    h+='<div class="cvs-running-row cvs-running-final"><div>Change in cash, cash equivalents and restricted cash</div><div class="cvs-value">'+fmt(d.netChange)+'</div></div>';
+  }
+  return h+'</div>';
+}
+function cfsCard(expandable){
+  return '<div class="cvs-doc-card cvs-cfs-card"><p class="cvs-kicker">From the 10-K &middot; page 96</p>'
+    +'<h2 class="cvs-doc-title">Cash Flow Statement</h2><p class="cvs-subline">Year ended December 31, 2025 &middot; in $ millions</p>'
+    +miniReconciliation()+cfsSections(expandable)
+    +(expandable?'<p class="cvs-direct-note"><strong>Direct method:</strong> actual cash receipts and payments appear by category. About 98% of US public companies use the indirect method; CVS is unusual.</p>':'')+'</div>';
+}
+function architectureView(expandable){
+  return '<div class="cvs-scope"><div class="cvs-architecture-wrap"><div class="main-grid cvs-architecture">'
+    +compactSnapshot('y2024','Beginning',false,true)+cfsCard(expandable)+compactSnapshot('y2025','Ending',false,true)
+    +'</div></div></div>';
+}
+function scheduleReveal(){
+  if(step!==2 || revealN>=3 || revealTimer) return;
+  revealTimer=setTimeout(function(){
+    revealTimer=null;
+    if(step!==2) return;
+    revealN=Math.min(revealN+1,3);
+    if(revealN===3) playSuccess();
+    render();
+  },500);
+}
+function render(){
+  renderBeats(step);
+  renderGrid(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+  scheduleReveal();
+}
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='Pull the Cash Flow Statement&rsquo;s bottom line into its own strip &mdash; beginning, change, ending &mdash; and place it directly under the Balance Sheet&rsquo;s cash question. The Balance Sheet says cash fell by $133. The Cash Flow Statement says $172. The labels are different &mdash; read them carefully &mdash; but the numbers don&rsquo;t match. Something is off.';
+  } else if(currentStep===1){
+    text='The Balance Sheet line reports "Cash and cash equivalents." The Cash Flow Statement reports "Cash, cash equivalents and restricted cash" &mdash; a broader category. The difference is restricted cash that sits inside Other current assets and Other assets on the Balance Sheet face. Add it back at both dates and the two strips reconcile exactly. Each explanatory statement accounts for a specific change defined by its own scope. Read the labels.';
+  } else if(currentStep===2){
+    text='Strips give way to the architecture. Beginning Balance Sheet on the left, ending Balance Sheet on the right, the 2025 Cash Flow Statement between them. The restricted-cash-bearing rows on the Balance Sheets stay highlighted so the connection is visible. The three Cash Flow sections appear &mdash; Operating, Investing, Financing &mdash; summing to the change in cash.';
+  } else if(currentStep===3){
+    text='Each Cash Flow section is now expandable. Click any section to see the line items behind its subtotal. CVS uses the direct method for operating activities &mdash; actual cash receipts and payments by category, not a back-calculation from Net income. (Roughly 98% of US public companies use the indirect method; CVS is unusual.)';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div>';
+}
+function renderGrid(currentStep){
+  var h='';
+  if(currentStep===0) h=mismatchView();
+  else if(currentStep===1) h=reconciliationView();
+  else h=architectureView(currentStep===3);
+  document.getElementById('mainGrid').innerHTML=h;
+}
+function renderTail(currentStep){ document.getElementById('tail').innerHTML=''; }
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(step>0) h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(step<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function prepareStep(target){
+  if(revealTimer){ clearTimeout(revealTimer); revealTimer=null; }
+  if(target===2){
+    if(stepTwoSeen) revealN=3;
+    else { revealN=0; stepTwoSeen=true; }
+  } else if(target===3){
+    revealN=3;
+  }
+}
+function advance(){
+  playClick();
+  var target=Math.min(step+1,TOTAL_STEPS-1);
+  prepareStep(target);
+  step=target;
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  var target=Math.max(step-1,0);
+  prepareStep(target);
+  step=target;
+  render();
+  window.scrollTo(0,0);
+}
+function toggleSection(key){
+  expansionEncountered=true;
+  openSections[key]=!openSections[key];
+  playClick();
+  render();
+}
+function handleSectionKey(event,key){
+  if(event.key==='Enter' || event.key===' '){
+    event.preventDefault();
+    toggleSection(key);
+  }
+}
+
+var glossaryTerms=[
+  {term:'Restricted cash',def:'Cash the company holds but cannot freely spend; it sits inside other Balance Sheet lines (here, Other current assets and Other assets), not in Cash and cash equivalents.'},
+  {term:'Direct method',def:'A Cash Flow Statement that lists actual cash receipts and payments by category. About 98% of US public companies use the indirect method; CVS is unusual.'},
+  {term:'Scope of a statement',def:'Each statement accounts for a change defined by its own labels &mdash; read the label to know exactly what changed.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){
+  if(revealTimer){ clearTimeout(revealTimer); revealTimer=null; }
+  step=TOTAL_STEPS-1;
+  revealN=3;
+  stepTwoSeen=true;
+  expansionEncountered=true;
+  openSections={operating:true,investing:true,financing:true};
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

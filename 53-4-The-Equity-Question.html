@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Equity Question</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .cvs-scope {
+      --cvs-paper:#ffffff;
+      --cvs-panel:#f8fafc;
+      --cvs-ink:#263746;
+      --cvs-muted:#657583;
+      --cvs-primary:#155b86;
+      --cvs-rule:#c8d4dc;
+      --cvs-rule-strong:#708592;
+      --cvs-warm:#fff8df;
+      --cvs-accent:#d5a528;
+      --cvs-shadow:rgba(32,55,72,0.09);
+      --cvs-success:#247a4d;
+    }
+    .cvs-doc-wrap { overflow-x:auto; padding:2px 2px 8px; }
+    .cvs-doc-card, .cvs-snapshot, .cvs-question, .cvs-note {
+      background:var(--cvs-paper);
+      color:var(--cvs-ink);
+      border:1px solid var(--cvs-rule);
+      border-radius:12px;
+      box-shadow:0 8px 24px var(--cvs-shadow);
+    }
+    .cvs-doc-card { max-width:1040px; min-width:610px; margin:0 auto; padding:24px; box-sizing:border-box; }
+    .cvs-kicker {
+      margin:0 0 5px;
+      color:var(--cvs-muted);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .cvs-doc-title, .cvs-snapshot-title { margin:0; color:var(--cvs-primary); }
+    .cvs-doc-title { font-size:20px; }
+    .cvs-snapshot-title { font-size:17px; }
+    .cvs-subline { margin:3px 0 0; color:var(--cvs-muted); font-size:12px; font-style:italic; }
+    .cvs-table { margin-top:18px; font-size:13px; }
+    .cvs-row {
+      display:grid;
+      grid-template-columns:minmax(300px,1fr) 7rem 7rem;
+      column-gap:10px;
+      align-items:baseline;
+      padding:3px 0;
+    }
+    .cvs-row-head { border-bottom:1px solid var(--cvs-rule); color:var(--cvs-primary); font-weight:700; }
+    .cvs-value { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .cvs-section { grid-column:1 / -1; margin-top:10px; color:var(--cvs-primary); font-weight:800; }
+    .cvs-subtotal { font-weight:600; }
+    .cvs-total { margin-top:4px; padding-top:6px; border-top:1px solid var(--cvs-rule-strong); color:var(--cvs-primary); font-weight:800; }
+    .cvs-split.main-grid { align-items:stretch; grid-template-columns:minmax(245px,.9fr) minmax(290px,1.2fr) minmax(245px,.9fr); }
+    .cvs-split.main-grid > * { min-width:0; }
+    .cvs-snapshot-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
+    .cvs-snapshot { min-width:245px; height:100%; padding:18px; box-sizing:border-box; }
+    .cvs-snapshot-table { margin-top:15px; font-size:12px; }
+    .cvs-snapshot-row {
+      display:grid;
+      grid-template-columns:minmax(155px,1fr) 5.4rem;
+      column-gap:8px;
+      align-items:baseline;
+      padding:4px 7px;
+      border-left:3px solid transparent;
+    }
+    .cvs-snapshot-row.cvs-total { margin-top:3px; }
+    .cvs-snapshot-row.cvs-lit {
+      border-left-color:var(--cvs-accent);
+      border-radius:4px;
+      background:var(--cvs-warm);
+      color:var(--cvs-primary);
+      font-weight:700;
+    }
+    .cvs-compact-gap { height:9px; }
+    .cvs-restricted-note { margin:1px 7px 4px 15px; color:var(--cvs-success); font-size:10px; font-style:italic; }
+    .cvs-question {
+      height:100%;
+      min-height:300px;
+      padding:24px 20px;
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      border:2px dashed var(--cvs-accent);
+      background:var(--cvs-warm);
+      text-align:center;
+    }
+    .cvs-question h2 { margin:2px 0 10px; color:var(--cvs-primary); font-size:21px; }
+    .cvs-question-delta { margin:4px 0; color:var(--cvs-primary); font:500 29px/1.2 "JetBrains Mono",monospace; }
+    .cvs-question-range { margin:2px 0 13px; color:var(--cvs-muted); font:500 12px/1.4 "JetBrains Mono",monospace; }
+    .cvs-question-setup { margin:0; color:var(--cvs-ink); font-size:13px; font-style:italic; line-height:1.55; }
+    .cvs-question-footer { margin:15px 0 0; padding-top:12px; border-top:1px solid var(--cvs-rule); color:var(--cvs-primary); font-size:12px; font-weight:700; line-height:1.45; }
+    .cvs-note { height:100%; min-height:250px; padding:22px; box-sizing:border-box; display:flex; align-items:center; justify-content:center; background:var(--cvs-panel); text-align:center; }
+    .cvs-note p { margin:0; color:var(--cvs-muted); font-size:13px; line-height:1.6; }
+    .cvs-note strong { color:var(--cvs-primary); }
+    .cvs-soce-grid { min-width:1135px; }
+    .cvs-soce-grid.cvs-bucket-grid { min-width:720px; }
+    .cvs-soce-row {
+      display:grid;
+      grid-template-columns:minmax(250px,1fr) repeat(9,5.2rem);
+      column-gap:8px;
+      align-items:baseline;
+      padding:3px 0;
+      color:var(--cvs-ink);
+    }
+    .cvs-soce-row.cvs-bucket-grid { grid-template-columns:minmax(250px,1fr) repeat(4,6.8rem); }
+    .cvs-soce-head { padding-bottom:7px; border-bottom:1px solid var(--cvs-rule); color:var(--cvs-primary); font-size:10px; font-weight:700; line-height:1.2; }
+    .cvs-soce-label { font-size:11px; line-height:1.35; }
+    .cvs-soce-balance { margin-top:7px; padding-top:7px; border-top:1px solid var(--cvs-rule-strong); color:var(--cvs-primary); font-weight:800; }
+    .cvs-soce-movement { color:var(--cvs-ink); }
+    .cvs-soce-section { margin:12px 0 2px; color:var(--cvs-primary); font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; }
+    .cvs-running { margin-top:9px; padding-top:8px; border-top:2px dashed var(--cvs-accent); color:var(--cvs-primary); font-weight:800; }
+    .cvs-running .cvs-soce-label { color:var(--cvs-accent); font-style:italic; }
+    .cvs-bucket-head {
+      width:100%;
+      padding:3px 2px;
+      border:0;
+      background:transparent;
+      color:var(--cvs-primary);
+      font:inherit;
+      font-weight:700;
+      text-align:right;
+    }
+    .cvs-bucket-head[role="button"] { cursor:pointer; border-radius:4px; }
+    .cvs-bucket-head[role="button"]:focus-visible { outline:2px solid var(--cvs-accent); outline-offset:2px; }
+    .cvs-expand-area { margin-top:16px; padding-top:12px; border-top:1px solid var(--cvs-rule); }
+    .cvs-expand-title { margin:0 0 8px; color:var(--cvs-primary); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+    .cvs-expand-row { border-bottom:1px solid var(--cvs-rule); }
+    .cvs-expand-toggle {
+      width:100%;
+      display:grid;
+      grid-template-columns:1.2rem 1fr;
+      gap:5px;
+      align-items:center;
+      padding:8px 5px;
+      border:0;
+      background:transparent;
+      color:var(--cvs-ink);
+      font:600 12px/1.3 Inter,sans-serif;
+      text-align:left;
+      cursor:pointer;
+    }
+    .cvs-expand-toggle:focus-visible { outline:2px solid var(--cvs-accent); outline-offset:-2px; }
+    .cvs-expand-panel { padding:4px 8px 9px 25px; background:var(--cvs-panel); }
+    .cvs-detail-row { display:grid; grid-template-columns:minmax(170px,1fr) repeat(3,5.5rem); gap:7px; padding:3px 0; font-size:11px; }
+    .cvs-detail-head { color:var(--cvs-muted); font-weight:700; }
+    .cvs-center-card { min-width:610px; padding:18px; }
+    .cvs-center-card .cvs-soce-row.cvs-bucket-grid { grid-template-columns:minmax(175px,1fr) repeat(4,4.5rem); }
+    .cvs-center-card .cvs-soce-grid.cvs-bucket-grid { min-width:555px; }
+    .cvs-center-card .cvs-soce-label { font-size:10px; }
+    @keyframes cvs-hint-pulse { 0%,100%{box-shadow:0 0 0 0 var(--cvs-shadow)} 50%{box-shadow:0 0 0 4px var(--cvs-warm)} }
+    .cvs-hint-pulse { animation:cvs-hint-pulse 1.2s ease-in-out 2; }
+    @media (max-width:900px) {
+      .cvs-split.main-grid { grid-template-columns:1fr; }
+      .cvs-question, .cvs-note { min-height:180px; }
+      .cvs-center-card { min-width:610px; }
+    }
+    @media (prefers-reduced-motion:reduce) { .cvs-hint-pulse { animation:none; } }
+    @media (prefers-color-scheme:dark) {
+      .cvs-scope {
+        --cvs-paper:#26242e;
+        --cvs-panel:#211f28;
+        --cvs-ink:#e8edf1;
+        --cvs-muted:#b4c0c8;
+        --cvs-primary:#7dc8f3;
+        --cvs-rule:#4b5361;
+        --cvs-rule-strong:#8797a2;
+        --cvs-warm:#332f20;
+        --cvs-accent:#d8ad3e;
+        --cvs-shadow:rgba(0,0,0,0.28);
+        --cvs-success:#72d49a;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Equity Question</h1>
+        <p class="tut-header-sub">Module 5 &middot; ~8 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Equity Question</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="cvs-10k-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+var step=0;
+var TOTAL_STEPS=8;
+var revealN=0;
+var revealVisited=false;
+var revealTimer=null;
+var bucketOpen={contributed:false,earnedRetained:false,nci:false};
+var bucketHintSeen=false;
+
+function escapeHTML(value){
+  return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmt(v){
+  if(v===0) return '—';
+  var a=Math.abs(v).toLocaleString('en-US');
+  return v<0 ? '('+a+')' : a;
+}
+function money(v){ return (v<0?'&minus;$':'$')+Math.abs(v).toLocaleString('en-US'); }
+function data(){ return window.CVS_10K; }
+function compact(year){ return data().compactBS[year]; }
+function soce(){ return data().soce3Year; }
+function openingRow(){
+  var rows=soce().rows;
+  for(var i=0;i<rows.length;i++) if(rows[i].type==='balance' && rows[i].year===2024) return rows[i];
+  return null;
+}
+function closingRow(){
+  var rows=soce().rows;
+  for(var i=0;i<rows.length;i++) if(rows[i].type==='balance' && rows[i].year===2025) return rows[i];
+  return null;
+}
+function bucketValue(row,bucket){
+  var cols=soce().columns;
+  var total=0;
+  for(var i=0;i<cols.length;i++) if(cols[i].bucket===bucket && typeof row[cols[i].key]==='number') total+=row[cols[i].key];
+  return total;
+}
+function displayCell(row,col){
+  if(row.dashFor && row.dashFor.indexOf(col.key)>=0) return '—';
+  var v=col.isTotal?row.total:row[col.key];
+  return typeof v==='number'?fmt(v):'—';
+}
+function snapshotRow(label,value,classes,note){
+  var h='<div class="cvs-snapshot-row'+(classes?' '+classes:'')+'"><div>'+label+'</div><div class="cvs-value">'+fmt(value)+'</div></div>';
+  if(note) h+='<div class="cvs-restricted-note">'+note+'</div>';
+  return h;
+}
+function compactSnapshot(year,label,bucketed,highlight){
+  var d=compact(year);
+  var yearText=year==='y2025'?'2025':'2024';
+  var allOther=d.totalAssets-d.cash-d.otherCurrent-d.otherAssets;
+  var restricted=highlight==='restricted';
+  var h='<div class="cvs-snapshot-wrap"><div class="cvs-snapshot"><p class="cvs-kicker">'+label+'</p>'
+    +'<h3 class="cvs-snapshot-title">Balance Sheet</h3>'
+    +'<p class="cvs-subline">December 31, '+yearText+' &middot; in $ millions</p><div class="cvs-snapshot-table">';
+  h+=snapshotRow('Cash and cash equivalents',d.cash,'','');
+  h+=snapshotRow('Other current assets',d.otherCurrent,restricted?'cvs-lit':'',restricted?'&#8627; of which restricted cash: '+fmt(d.restrCurr):'');
+  h+=snapshotRow('Other assets',d.otherAssets,restricted?'cvs-lit':'',restricted?'&#8627; of which restricted cash: '+fmt(d.restrOther):'');
+  h+=snapshotRow('All other noncash assets',allOther,'','');
+  h+=snapshotRow('Total assets',d.totalAssets,'cvs-total','');
+  h+='<div class="cvs-compact-gap"></div>';
+  h+=snapshotRow('&minus; Total liabilities',d.totalLiab,'','');
+  if(bucketed){
+    h+=snapshotRow('= Contributed',d.contributed,'cvs-lit','');
+    h+=snapshotRow('+ Earned and retained',d.earnedRetained,'cvs-lit','');
+    h+=snapshotRow('+ Noncontrolling interests',d.nci,'cvs-lit','');
+    h+=snapshotRow('= Total shareholders&rsquo; equity',d.totalEq,'cvs-total','');
+  } else {
+    h+=snapshotRow('= Total shareholders&rsquo; equity',d.totalEq,'cvs-total'+(highlight==='equity'?' cvs-lit':''),'');
+  }
+  return h+'</div></div></div>';
+}
+function questionCard(){
+  /* The displayed 348 change is derived from the two compactBS equity values below. */
+  var beg=compact('y2024').totalEq;
+  var end=compact('y2025').totalEq;
+  var delta=end-beg;
+  return '<div class="cvs-question"><p class="cvs-kicker">The question</p><h2>What happened to equity?</h2>'
+    +'<p class="cvs-question-delta">'+money(delta)+' million</p>'
+    +'<p class="cvs-question-range">'+money(beg)+' &rarr; '+money(end)+'</p>'
+    +'<p class="cvs-question-setup">CVS reported Net income of about $1.7 billion this year &mdash; yet total shareholders&rsquo; equity went down. What moved it?</p>'
+    +'<p class="cvs-question-footer">The Statement of Shareholders&rsquo; Equity traces every change in equity, from any source.</p></div>';
+}
+function splitView(bucketed,center,highlight){
+  return '<div class="cvs-scope"><div class="main-grid cvs-split">'
+    +compactSnapshot('y2024','Beginning',bucketed,highlight)+center+compactSnapshot('y2025','Ending',bucketed,highlight)
+    +'</div></div>';
+}
+function connectiveNote(){
+  var b=compact('y2024'),e=compact('y2025');
+  return '<div class="cvs-note"><p><strong>Three equity buckets, one identity.</strong><br><br>'
+    +'Contributed: '+fmt(b.contributed)+' &rarr; '+fmt(e.contributed)+'<br>'
+    +'Earned &amp; retained: '+fmt(b.earnedRetained)+' &rarr; '+fmt(e.earnedRetained)+'<br>'
+    +'NCI: '+fmt(b.nci)+' &rarr; '+fmt(e.nci)+'</p></div>';
+}
+function rawSoceRows(only2025){
+  var rows=soce().rows;
+  if(!only2025) return rows;
+  return rows.filter(function(row){ return (row.type==='balance' && (row.year===2024 || row.year===2025)) || (row.type==='movement' && row.year===2025); });
+}
+function rawSoceDocument(only2025){
+  var cols=soce().columns;
+  var rows=rawSoceRows(only2025);
+  var h='<div class="cvs-scope"><div class="cvs-doc-wrap"><div class="cvs-doc-card"><p class="cvs-kicker">Index to Consolidated Financial Statements</p>'
+    +'<h2 class="cvs-doc-title">Consolidated Statements of Shareholders&rsquo; Equity</h2><p class="cvs-subline">In millions</p>'
+    +'<div class="cvs-table cvs-soce-grid"><div class="cvs-soce-row cvs-soce-head"><div></div>';
+  for(var c=0;c<cols.length;c++) h+='<div class="cvs-value">'+escapeHTML(cols[c].label)+'</div>';
+  h+='</div>';
+  var priorYear=null;
+  for(var i=0;i<rows.length;i++){
+    var row=rows[i];
+    if(row.type==='movement' && row.year!==priorYear){ h+='<div class="cvs-soce-section">Fiscal '+row.year+' activity</div>'; priorYear=row.year; }
+    var cls=row.type==='balance'?'cvs-soce-balance':'cvs-soce-movement';
+    h+='<div class="cvs-soce-row '+cls+'"><div class="cvs-soce-label">'+escapeHTML(row.label)+'</div>';
+    for(c=0;c<cols.length;c++) h+='<div class="cvs-value">'+displayCell(row,cols[c])+'</div>';
+    h+='</div>';
+  }
+  return h+'</div></div></div></div>';
+}
+function bucketColumns(){
+  return [
+    {key:'contributed',label:'Contributed'},
+    {key:'earnedRetained',label:'Earned &amp; Retained'},
+    {key:'nci',label:'NCI'},
+    {key:'total',label:'Total',isTotal:true}
+  ];
+}
+function bucketCell(row,col){ return col.isTotal?(typeof row.total==='number'?row.total:0):bucketValue(row,col.key); }
+function bucketHeader(col,expandable){
+  if(!expandable || col.isTotal) return '<div class="cvs-value">'+col.label+'</div>';
+  var open=bucketOpen[col.key];
+  return '<div><button class="cvs-bucket-head'+(!bucketHintSeen?' cvs-hint-pulse':'')+'" role="button" aria-expanded="'+open+'" onclick="toggleBucket(\''+col.key+'\')" onkeydown="bucketKey(event,\''+col.key+'\')">'
+    +col.label+' <i data-lucide="chevron-'+(open?'up':'down')+'"></i></button></div>';
+}
+function bucketRow(row,cls){
+  var cols=bucketColumns();
+  var h='<div class="cvs-soce-row cvs-bucket-grid '+cls+'"><div class="cvs-soce-label">'+escapeHTML(row.label)+'</div>';
+  for(var i=0;i<cols.length;i++) h+='<div class="cvs-value">'+fmt(bucketCell(row,cols[i]))+'</div>';
+  return h+'</div>';
+}
+function runningRow(count,movements){
+  var open=openingRow();
+  var acc={contributed:bucketValue(open,'contributed'),earnedRetained:bucketValue(open,'earnedRetained'),nci:bucketValue(open,'nci'),total:open.total};
+  for(var i=0;i<count;i++){
+    acc.contributed+=bucketValue(movements[i],'contributed');
+    acc.earnedRetained+=bucketValue(movements[i],'earnedRetained');
+    acc.nci+=bucketValue(movements[i],'nci');
+    acc.total+=movements[i].total||0;
+  }
+  var label='Running total ('+count+' of '+movements.length+')';
+  return bucketRow({label:label,commonStock:acc.contributed,retainedEarnings:acc.earnedRetained,nci:acc.nci,total:acc.total},'cvs-running');
+}
+function expansionPanels(){
+  var groups=[{key:'contributed',label:'Contributed'},{key:'earnedRetained',label:'Earned &amp; Retained'},{key:'nci',label:'NCI'}];
+  var labels={commonStock:'Common Stock & Capital Surplus',treasuryStock:'Treasury Stock',retainedEarnings:'Retained Earnings',aoci:'AOCI',nci:'Noncontrolling Interests'};
+  var open=openingRow(),close=closingRow(),cols=soce().columns;
+  var h='<div class="cvs-expand-area"><p class="cvs-expand-title">Underlying 10-K columns</p>';
+  for(var i=0;i<groups.length;i++){
+    var g=groups[i],isOpen=bucketOpen[g.key];
+    h+='<div class="cvs-expand-row"><button class="cvs-expand-toggle'+(!bucketHintSeen?' cvs-hint-pulse':'')+'" role="button" aria-expanded="'+isOpen+'" onclick="toggleBucket(\''+g.key+'\')" onkeydown="bucketKey(event,\''+g.key+'\')"><i data-lucide="chevron-'+(isOpen?'up':'down')+'"></i><span>'+g.label+'</span></button>';
+    if(isOpen){
+      h+='<div class="cvs-expand-panel"><div class="cvs-detail-row cvs-detail-head"><div>Original column</div><div class="cvs-value">2024</div><div class="cvs-value">Change</div><div class="cvs-value">2025</div></div>';
+      for(var c=0;c<cols.length;c++) if(cols[c].bucket===g.key){
+        var key=cols[c].key,beg=typeof open[key]==='number'?open[key]:0,end=typeof close[key]==='number'?close[key]:0;
+        h+='<div class="cvs-detail-row"><div>'+escapeHTML(labels[key]||cols[c].label)+'</div><div class="cvs-value">'+fmt(beg)+'</div><div class="cvs-value">'+fmt(end-beg)+'</div><div class="cvs-value">'+fmt(end)+'</div></div>';
+      }
+      h+='</div>';
+    }
+    h+='</div>';
+  }
+  return h+'</div>';
+}
+function bucketedSoce(options){
+  var movements=options.aggregated?data().soce2025Aggregated:rawSoceRows(true).filter(function(row){ return row.type==='movement'; });
+  var visible=typeof options.visible==='number'?Math.min(options.visible,movements.length):movements.length;
+  var cols=bucketColumns();
+  var cardClass=options.center?' cvs-center-card':'';
+  var h='<div class="cvs-doc-wrap"><div class="cvs-doc-card'+cardClass+'"><p class="cvs-kicker">'+(options.center?'From the 10-K &middot; page 98':'Index to Consolidated Financial Statements')+'</p>'
+    +'<h2 class="cvs-doc-title">'+(options.center?'Statement':'Consolidated Statements')+' of Shareholders&rsquo; Equity</h2>'
+    +'<p class="cvs-subline">Year ended December 31, 2025 &middot; bucketed &middot; in $ millions</p>'
+    +'<div class="cvs-table cvs-soce-grid cvs-bucket-grid"><div class="cvs-soce-row cvs-bucket-grid cvs-soce-head"><div></div>';
+  for(var c=0;c<cols.length;c++) h+=bucketHeader(cols[c],options.expandable);
+  h+='</div>'+bucketRow(openingRow(),'cvs-soce-balance');
+  for(var i=0;i<visible;i++) h+=bucketRow(movements[i],'cvs-soce-movement');
+  if(options.running) h+=runningRow(visible,movements);
+  if(!options.running || visible===movements.length) h+=bucketRow(closingRow(),'cvs-soce-balance');
+  if(options.expandable) h+=expansionPanels();
+  return h+'</div></div></div>';
+}
+function bucketDocument(options){ return '<div class="cvs-scope">'+bucketedSoce(options)+'</div>'; }
+function architectureView(expandable){
+  return splitView(true,bucketedSoce({aggregated:true,center:true,expandable:expandable}),'');
+}
+function render(){
+  renderBeats(step);
+  renderGrid(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function renderBeats(currentStep){
+  var texts=[
+    'The three Cash Flow sections collapse away. The architecture stays &mdash; beginning Balance Sheet, ending Balance Sheet &mdash; but the highlight moves to the Total shareholders&rsquo; equity rows. A second question.',
+    'The single Total shareholders&rsquo; equity row on each Balance Sheet expands into three buckets: Contributed (Common Stock &amp; Capital Surplus net of Treasury), Earned &amp; Retained (Retained Earnings plus AOCI), and Noncontrolling Interests (the minority equity in consolidated subsidiaries). The identity still holds. Between beginning and end: Contributed rose by $769, Earned &amp; Retained fell by $1,115, and NCI fell by $2. The Statement of Shareholders&rsquo; Equity accounts for all three.',
+    'Here is the Statement of Shareholders&rsquo; Equity, as it appears on page 98 of the 10-K. The Balance Sheets step aside. CVS reports three years of equity activity &mdash; nine columns: share counts, five equity components, two subtotals, NCI, and the total. Every change in equity, from any source &mdash; earnings, dividends, stock-based compensation, share repurchases, OCI, NCI activity &mdash; flows through this statement, organized by component and period.',
+    'Like the Cash Flow Statement, the Statement of Shareholders&rsquo; Equity shows three fiscal years. Each year is a horizontal band of activity bracketed by a beginning and an ending balance row. The 2023 and 2024 bands cover earlier spans that don&rsquo;t connect our two Balance Sheets. Drop them out of the picture. What remains is the December 31, 2024 balance, the 2025 activity, and the December 31, 2025 balance.',
+    'The five equity-component columns &mdash; plus the share-count columns and the CVS-only subtotal &mdash; collapse into the same three buckets as the Balance Sheet: Contributed, Earned &amp; Retained, and NCI, plus a Total column. Every row of 2025 activity now lands cleanly in one or two buckets.',
+    'The four aggregated 2025 movement rows fire one at a time. Watch the running total under each bucket update with every row. Comprehensive income &mdash; Net income plus OCI &mdash; lands in Earned &amp; Retained, with a &minus;$40 slice in NCI (the loss attributable to subsidiary minority owners; we return to it at the Income Statement). Stock option activity, awards, and ESPP land in Contributed. Dividends pull Earned &amp; Retained down. A further increase lands in NCI. The bottom line per bucket equals exactly what the Balance Sheets show: Contributed +769, Earned &amp; Retained &minus;1,115, NCI &minus;2.',
+    'Strips give way to the architecture again. The 2025 Statement of Shareholders&rsquo; Equity slots into the middle, between the two Balance Sheets. Each Balance Sheet shows its bucketed equity rows; each row connects to the corresponding bucket column in the statement. The Cash Flow Statement we explored earlier still belongs in this middle column &mdash; but the Statement of Shareholders&rsquo; Equity is the focus now.',
+    'Click any bucket header to see the original 10-K columns underneath: Contributed splits into Common Stock &amp; Capital Surplus and Treasury Stock; Earned &amp; Retained splits into Retained Earnings and AOCI. The bucket framing makes the architecture clear; the original columns preserve the granularity of CVS&rsquo;s actual presentation.'
+  ];
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+texts[currentStep]+'</p></div>';
+}
+function renderGrid(currentStep){
+  var h='';
+  if(currentStep===0) h=splitView(false,questionCard(),'equity');
+  else if(currentStep===1) h=splitView(true,connectiveNote(),'');
+  else if(currentStep===2) h=rawSoceDocument(false);
+  else if(currentStep===3) h=rawSoceDocument(true);
+  else if(currentStep===4) h=bucketDocument({aggregated:false});
+  else if(currentStep===5) h=bucketDocument({aggregated:true,visible:revealN,running:true});
+  else if(currentStep===6) h=architectureView(false);
+  else h=architectureView(true);
+  document.getElementById('mainGrid').innerHTML=h;
+}
+function renderTail(currentStep){ document.getElementById('tail').innerHTML=''; }
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(step>0) h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(step<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function clearRevealTimer(){ if(revealTimer){ clearTimeout(revealTimer); revealTimer=null; } }
+function scheduleReveal(){
+  clearRevealTimer();
+  if(step!==5 || revealN>=data().soce2025Aggregated.length) return;
+  revealTimer=setTimeout(function(){
+    revealN++;
+    render();
+    if(revealN===data().soce2025Aggregated.length) playSuccess();
+    else scheduleReveal();
+  },500);
+}
+function enterStep(nextStep){
+  clearRevealTimer();
+  step=nextStep;
+  if(step===5){
+    if(revealVisited) revealN=data().soce2025Aggregated.length;
+    else { revealVisited=true; revealN=0; }
+  }
+  if(step===7 && !bucketHintSeen) bucketHintSeen=false;
+  render();
+  if(step===5 && revealN<data().soce2025Aggregated.length) scheduleReveal();
+  window.scrollTo(0,0);
+}
+function advance(){ playClick(); enterStep(Math.min(step+1,TOTAL_STEPS-1)); }
+function back(){ playClick(); enterStep(Math.max(step-1,0)); }
+function toggleBucket(key){
+  playClick();
+  bucketOpen[key]=!bucketOpen[key];
+  bucketHintSeen=true;
+  render();
+}
+function bucketKey(event,key){
+  if(event.key==='Enter' || event.key===' '){ event.preventDefault(); toggleBucket(key); }
+}
+
+var glossaryTerms=[
+  {term:'Statement of Shareholders&rsquo; Equity',def:'The statement that accounts for every change in equity during a period &mdash; earnings, dividends, stock-based compensation, share repurchases, OCI, and NCI activity.'},
+  {term:'Contributed',def:'Equity put in by owners: Common Stock &amp; Capital Surplus, net of Treasury Stock.'},
+  {term:'Earned &amp; Retained',def:'Equity built up by the business: Retained Earnings plus Accumulated Other Comprehensive Income (AOCI).'},
+  {term:'Noncontrolling interests',def:'The equity in consolidated subsidiaries owned by outside minority holders, not by CVS.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){
+  clearRevealTimer();
+  step=TOTAL_STEPS-1;
+  revealVisited=true;
+  revealN=data().soce2025Aggregated.length;
+  bucketOpen={contributed:true,earnedRetained:true,nci:true};
+  bucketHintSeen=true;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

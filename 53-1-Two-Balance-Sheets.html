@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Two Balance Sheets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .cvs-scope {
+      --cvs-paper:#ffffff;
+      --cvs-panel:#f8fafc;
+      --cvs-ink:#263746;
+      --cvs-muted:#657583;
+      --cvs-primary:#155b86;
+      --cvs-rule:#c8d4dc;
+      --cvs-rule-strong:#708592;
+      --cvs-warm:#fff8df;
+      --cvs-accent:#d5a528;
+      --cvs-shadow:rgba(32,55,72,0.09);
+    }
+    .cvs-doc-wrap { overflow-x:auto; padding:2px 2px 8px; }
+    .cvs-doc-card, .cvs-snapshot {
+      background:var(--cvs-paper);
+      color:var(--cvs-ink);
+      border:1px solid var(--cvs-rule);
+      border-radius:12px;
+      box-shadow:0 8px 24px var(--cvs-shadow);
+    }
+    .cvs-doc-card { max-width:820px; min-width:610px; margin:0 auto; padding:24px; }
+    .cvs-kicker {
+      margin:0 0 5px;
+      color:var(--cvs-muted);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .cvs-doc-title, .cvs-snapshot-title { margin:0; color:var(--cvs-primary); }
+    .cvs-doc-title { font-size:20px; }
+    .cvs-snapshot-title { font-size:17px; }
+    .cvs-subline { margin:3px 0 0; color:var(--cvs-muted); font-size:12px; font-style:italic; }
+    .cvs-table { margin-top:18px; font-size:13px; }
+    .cvs-row {
+      display:grid;
+      grid-template-columns:minmax(300px,1fr) 7rem 7rem;
+      column-gap:10px;
+      align-items:baseline;
+      padding:3px 0;
+    }
+    .cvs-row-head { border-bottom:1px solid var(--cvs-rule); color:var(--cvs-primary); font-weight:700; }
+    .cvs-value { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .cvs-section { grid-column:1 / -1; margin-top:10px; color:var(--cvs-primary); font-weight:800; }
+    .cvs-subtotal { font-weight:600; }
+    .cvs-total { margin-top:4px; padding-top:6px; border-top:1px solid var(--cvs-rule-strong); color:var(--cvs-primary); font-weight:800; }
+    .cvs-identity {
+      margin-top:18px;
+      padding:13px 15px;
+      border:1px solid var(--cvs-accent);
+      border-radius:9px;
+      background:var(--cvs-warm);
+      color:var(--cvs-ink);
+    }
+    .cvs-identity-title { margin:0 0 6px; font-weight:800; }
+    .cvs-identity-line { margin:3px 0; font-family:"JetBrains Mono",monospace; font-size:12px; }
+    .cvs-split.main-grid { align-items:stretch; }
+    .cvs-split.main-grid > * { min-width:0; }
+    .cvs-snapshot-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
+    .cvs-snapshot { min-width:285px; height:100%; padding:18px; box-sizing:border-box; }
+    .cvs-snapshot-table { margin-top:15px; font-size:12px; }
+    .cvs-snapshot-row {
+      display:grid;
+      grid-template-columns:minmax(185px,1fr) 6rem;
+      column-gap:8px;
+      align-items:baseline;
+      padding:3px 0;
+    }
+    .cvs-snapshot-row.cvs-section { display:block; }
+    .cvs-gap {
+      min-height:230px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      box-sizing:border-box;
+      padding:24px 18px;
+      border:2px dashed var(--cvs-accent);
+      border-radius:12px;
+      background:var(--cvs-warm);
+      color:var(--cvs-muted);
+      text-align:center;
+      font-size:13px;
+      font-style:italic;
+      line-height:1.55;
+    }
+    @media (max-width:760px) {
+      .cvs-split.main-grid { grid-template-columns:1fr; }
+      .cvs-gap { min-height:170px; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .cvs-scope {
+        --cvs-paper:#26242e;
+        --cvs-panel:#211f28;
+        --cvs-ink:#e8edf1;
+        --cvs-muted:#b4c0c8;
+        --cvs-primary:#7dc8f3;
+        --cvs-rule:#4b5361;
+        --cvs-rule-strong:#8797a2;
+        --cvs-warm:#332f20;
+        --cvs-accent:#d8ad3e;
+        --cvs-shadow:rgba(0,0,0,0.28);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Two Balance Sheets</h1>
+        <p class="tut-header-sub">Module 5 &middot; ~4 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Two Balance Sheets</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<!-- ===== Glossary overlay ===== -->
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="cvs-10k-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+/* ===== sound ===== */
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+var step=0;
+var TOTAL_STEPS=4;
+
+function escapeHTML(value){
+  return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmt(v){
+  if(v===0) return '—';
+  var a=Math.abs(v).toLocaleString('en-US');
+  return v<0 ? '('+a+')' : a;
+}
+function displayValue(row,year){
+  if(row.dashOnly) return '—';
+  if(row.dashIf===year && row[year]===0) return '—';
+  return fmt(row[year]);
+}
+function wantedRows(showAll){
+  return window.CVS_10K.bs.filter(function(row){
+    return showAll || row.type==='section' || row.type==='total';
+  });
+}
+function rowClass(row,base){
+  var cls=base;
+  if(row.type==='subtotal') cls+=' cvs-subtotal';
+  if(row.type==='total') cls+=' cvs-total';
+  return cls;
+}
+function documentRows(showAll){
+  return wantedRows(showAll).map(function(row){
+    if(row.type==='section') return '<div class="cvs-section">'+escapeHTML(row.label)+'</div>';
+    return '<div class="'+rowClass(row,'cvs-row')+'"><div>'+escapeHTML(row.label)+'</div>'
+      +'<div class="cvs-value">'+displayValue(row,'y2025')+'</div>'
+      +'<div class="cvs-value">'+displayValue(row,'y2024')+'</div></div>';
+  }).join('');
+}
+function totalByLabel(label){
+  var rows=window.CVS_10K.bs;
+  for(var i=0;i<rows.length;i++) if(rows[i].type==='total' && rows[i].label===label) return rows[i];
+  return null;
+}
+function identityCheck(){
+  var assets=totalByLabel('Total assets');
+  var liabilities=totalByLabel('Total liabilities');
+  var equity=totalByLabel("Total shareholders' equity");
+  function money(v){ return '$'+Math.abs(v).toLocaleString('en-US'); }
+  return '<div class="cvs-identity"><p class="cvs-identity-title">Identity check at both dates</p>'
+    +'<p class="cvs-identity-line">2025: '+money(assets.y2025)+' &minus; '+money(liabilities.y2025)+' = '+money(equity.y2025)+' &#10003;</p>'
+    +'<p class="cvs-identity-line">2024: '+money(assets.y2024)+' &minus; '+money(liabilities.y2024)+' = '+money(equity.y2024)+' &#10003;</p></div>';
+}
+function documentForm(showAll){
+  return '<div class="cvs-scope"><div class="cvs-doc-wrap"><div class="cvs-doc-card">'
+    +'<p class="cvs-kicker">Index to Consolidated Financial Statements</p>'
+    +'<h2 class="cvs-doc-title">Consolidated Balance Sheets</h2>'
+    +'<p class="cvs-subline">At December 31,</p>'
+    +'<p class="cvs-subline">In millions, except per share amounts</p>'
+    +'<div class="cvs-table"><div class="cvs-row cvs-row-head"><div></div><div class="cvs-value">2025</div><div class="cvs-value">2024</div></div>'
+    +documentRows(showAll)+'</div>'+(showAll?'':identityCheck())+'</div></div></div>';
+}
+function snapshotRows(year,showAll){
+  return wantedRows(showAll).map(function(row){
+    if(row.type==='section') return '<div class="cvs-section">'+escapeHTML(row.label)+'</div>';
+    return '<div class="'+rowClass(row,'cvs-snapshot-row')+'"><div>'+escapeHTML(row.label)+'</div>'
+      +'<div class="cvs-value">'+displayValue(row,year)+'</div></div>';
+  }).join('');
+}
+function snapshot(year,label,showAll){
+  var yearText=year==='y2025'?'2025':'2024';
+  return '<div class="cvs-snapshot-wrap"><div class="cvs-snapshot"><p class="cvs-kicker">'+label+'</p>'
+    +'<h3 class="cvs-snapshot-title">Balance Sheet</h3>'
+    +'<p class="cvs-subline">December 31, '+yearText+' &middot; in $ millions</p>'
+    +'<div class="cvs-snapshot-table">'+snapshotRows(year,showAll)+'</div></div></div>';
+}
+function splitView(showAll){
+  return '<div class="cvs-scope"><div class="main-grid cvs-split">'
+    +snapshot('y2024','Beginning',showAll)
+    +'<div class="cvs-gap"><p>A year between them.<br><br>The Income Statement, the Statement of Shareholders&rsquo; Equity, and the Cash Flow Statement belong in this space.</p></div>'
+    +snapshot('y2025','Ending',showAll)+'</div></div>';
+}
+function render(){
+  renderBeats(step);
+  renderGrid(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='Here is the Consolidated Balance Sheets table as it appears in CVS&rsquo;s 10-K (page 95). One table, two date columns &mdash; 2025 and 2024 &mdash; and item-level detail across roughly thirty rows. The accounting identity holds at both dates.';
+  } else if(currentStep===1){
+    text='The architecture works on three numbers per date &mdash; Total assets, Total liabilities, and Total shareholders&rsquo; equity &mdash; because that is what the identity uses: Assets minus Liabilities equals shareholders&rsquo; equity. Set the non-total rows aside to expose just those three, and the identity checks at both dates.';
+  } else if(currentStep===2){
+    text='Now rearrange. The 2024 column becomes the beginning Balance Sheet on the left; the 2025 column becomes the ending Balance Sheet on the right. A year sits between them &mdash; three explanatory statements will account for what happened in it.';
+  } else if(currentStep===3){
+    text='The line-item detail returns, now in two independent snapshot Balance Sheets &mdash; beginning on the left, ending on the right, with a gap in the middle ready for the Income Statement, the Statement of Shareholders&rsquo; Equity, and the Cash Flow Statement.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div>';
+}
+function renderGrid(currentStep){
+  document.getElementById('mainGrid').innerHTML=currentStep<2 ? documentForm(currentStep===0) : splitView(currentStep===3);
+}
+function renderTail(currentStep){ document.getElementById('tail').innerHTML=''; }
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(step>0) h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(step<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function advance(){
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Accounting identity',def:'Assets minus Liabilities equals shareholders&rsquo; equity. It holds at every Balance Sheet date.'},
+  {term:'Balance Sheet',def:'A snapshot of what a company holds and owes at a single date. CVS reports two, one year apart.'},
+  {term:'Consolidated',def:'The parent company and the subsidiaries it controls, reported together as one company.'},
+  {term:'In millions',def:'Every figure on these statements is stated in millions of dollars.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){
+  step=TOTAL_STEPS-1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
