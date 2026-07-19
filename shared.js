@@ -1379,11 +1379,13 @@ function initCourseChrome(){
   /* --- footer controller: fixed bottom bar with page-level Back / Next --- */
   var flat = courseFlatPages();
   var pi = flat.indexOf(file);
+  var titles = {};
+  COURSE_TUTORIALS.forEach(function(t){ t.pages.forEach(function(p){ titles[p.f] = p.t; }); });
   var foot = document.createElement('div');
   foot.className = 'course-page-footer';
   foot.innerHTML =
-    (pi > 0 ? '<button class="btn-reset course-banner-btn" onclick="location.href=\''+flat[pi-1]+'\'">&larr; Back'+coursePageCheck(flat[pi-1])+'</button>' : '') +
-    (pi < flat.length-1 ? '<button class="btn-continue course-banner-btn" style="margin-left:auto;" onclick="location.href=\''+flat[pi+1]+'\'">Next'+coursePageCheck(flat[pi+1])+' &rarr;</button>' : '');
+    (pi > 0 ? '<button class="btn-reset course-banner-btn" onclick="location.href=\''+flat[pi-1]+'\'">&larr; '+titles[flat[pi-1]]+coursePageCheck(flat[pi-1])+'</button>' : '') +
+    (pi < flat.length-1 ? '<button class="btn-continue course-banner-btn" style="margin-left:auto;" onclick="location.href=\''+flat[pi+1]+'\'">'+titles[flat[pi+1]]+coursePageCheck(flat[pi+1])+' &rarr;</button>' : '');
   document.body.appendChild(foot);
   document.body.classList.add('has-course-footer');
 }
