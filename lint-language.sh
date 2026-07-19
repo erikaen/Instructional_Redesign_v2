@@ -21,24 +21,47 @@ check () {  # $1 = grep -E pattern, $2 = explanation
   fi
 }
 
-# Ruling 2026-07-18: the CVS 10-K walk pages (53-*) quote another entity's
-# document — a corporation's statements keep their own vocabulary ("Total
-# shareholders' equity"), same principle as the City Cycle plural carve-out.
-# The equity ban still applies to every other student-facing file, and every
-# other check below still scans the 53-* pages.
-equity_files=$(echo "$FILES" | grep -v '^53-')
+# Ruling 2026-07-18/19: Module 5 is the vocabulary turn — "Equities",
+# "shareholders' equity" are formally INTRODUCED on the Module-5 welcome page
+# (51-1) and used henceforth (52-*, the CVS 10-K walk 53-*). The equity ban is
+# therefore carved out for all Module 5 pages (5[0-9]-*), same principle as the
+# City Cycle plural carve-out (a corporation's statements keep their vocabulary).
+# The ban still applies to every M1–M4 student-facing file, and every other
+# check below still scans the 5x-x pages.
+equity_files=$(echo "$FILES" | grep -vE '^5[0-9]-')
 equity_hits=$(grep -rniE 'equit' $equity_files 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)')
 if [ -n "$equity_hits" ]; then
-  echo 'BANNED — "equity/equities" is banned in student-facing pages outside the CVS 10-K walk (53-*). The A-L difference stays unnamed in Module 1; from Module 2 on its only name is "Member'"'"'s Capital".'
+  echo 'BANNED — "equity/equities" is banned in student-facing pages outside Module 5 (5x-x). The A-L difference stays unnamed in Module 1; from Module 2 on its only name is "Member'"'"'s Capital".'
   echo "$equity_hits"
   echo
   fail=1
 fi
-check 'residual'                 '"residual" is instructor-side vocabulary only; in student-facing text say "the difference" (code comments exempt).'
+# Ruling 2026-07-19: "residual" stays banned as a student-facing name everywhere
+# EXCEPT the Module-5 welcome page (51-1), where the expandable Equities note
+# quotes the standard-setters' definition ("the residual interest in the assets
+# ... after deducting its liabilities") with attribution. Carve out 51-* only.
+residual_files=$(echo "$FILES" | grep -vE '^51-')
+residual_hits=$(grep -rniE 'residual' $residual_files 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)')
+if [ -n "$residual_hits" ]; then
+  echo 'BANNED — "residual" is instructor-side vocabulary only; in student-facing text say "the difference" (code comments exempt; the 51-1 attributed quote is carved out).'
+  echo "$residual_hits"
+  echo
+  fail=1
+fi
 check 'what I (have|owe)'        'First-person workbook labels are banned: the records belong to the repair work, not the student.'
 check "what(.{0,7})s left (after|when|once)" 'Leftover/possession framing for A-L is banned: it is a definitional difference, not a thing left over.'
 check 'accounting equation'      'Say "accounting identity", never "accounting equation".'
-check 'net assets'               '"Net Assets" was removed in the equity purge; do not reintroduce it in student-facing pages.'
+# Ruling 2026-07-19: "net assets" is part of the Module 5 vocabulary turn
+# (introduced on 51-1: changes in net assets = Revenues − Expenses etc.), so it
+# is carved out for all Module 5 pages (5[0-9]-*); still banned for M1–M4.
+netassets_files=$(echo "$FILES" | grep -vE '^5[0-9]-')
+netassets_hits=$(grep -rniE 'net assets' $netassets_files 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)')
+if [ -n "$netassets_hits" ]; then
+  echo 'BANNED — "Net Assets" was removed in the equity purge; do not reintroduce it in M1–M4 student-facing pages (Module 5 pages are carved out).'
+  echo "$netassets_hits"
+  echo
+  fail=1
+fi
 check 'what the repair work ha(s|d)|repair work ha(s|d) (a|an|its|the) |repair work (owns|owes|owed|holds|agreed|promised|decided)' '"the repair work" is an activity, not an actor — it cannot have, own, owe, agree, or promise. Say "tied up in / still owed because of the repair work", or make the records the subject.'
 check 'have minus owe|has minus owes|have and owe|has and owes' 'The have/owe idiom for the A-L difference is banned; say "Assets minus Liabilities" or "the difference".'
 check '(agreement|document|schedule a|certificate|paperwork|the paper) (waits?|waited|is waiting|wants?|wanted|writes?|wrote|catches up|caught up|decides?|decided|has to wait|needs? to wait)' 'Documents are not actors — an agreement/schedule/certificate cannot wait, want, write, or decide. Give the action to a person: "you complete the schedule after the facts are in", "you sign last".'
