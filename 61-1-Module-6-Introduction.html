@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 6 Introduction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6-intro { max-width: 900px; margin: 0 auto; }
+    .m6-section { scroll-margin-top: 1rem; }
+    .m6-section + .m6-section { margin-top: 24px; }
+    .m6-kicker { margin: 0 0 7px; color: #64748b; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.11em; text-transform: uppercase; }
+    .m6-section h2 { margin: 0 0 12px; color: #183153; font-family: Inter, sans-serif; font-size: clamp(1.35rem, 3vw, 1.75rem); line-height: 1.2; }
+    .m6-section p { line-height: 1.68; }
+    .m6-point-list { display: grid; gap: 14px; margin-top: 14px; }
+    .m6-point { border-left: 4px solid #c41230; }
+    .m6-point-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+    .m6-point-number { display: inline-grid; flex: 0 0 30px; width: 30px; height: 30px; border-radius: 50%; place-items: center; background: #c41230; color: #fff; font-family: Inter, sans-serif; font-size: 0.84rem; font-weight: 800; }
+    .m6-point-title { padding-top: 3px; color: #183153; font-family: Inter, sans-serif; font-weight: 800; line-height: 1.35; }
+    .m6-subpoints { margin: 8px 0 0 22px; padding-left: 18px; }
+    .m6-subpoints li + li { margin-top: 8px; }
+    .m6-bridge-link { display: inline-flex; align-items: center; gap: 8px; margin: 4px 0 16px; text-decoration: none; }
+    .m6-accordion { display: grid; gap: 8px; }
+    .m6-expand { overflow: hidden; border: 1px solid #d9e0e8; border-radius: 10px; background: #fff; }
+    .m6-expand-button { display: flex; width: 100%; align-items: center; gap: 10px; border: 0; padding: 13px 15px; background: #f5f7fa; color: #183153; cursor: pointer; text-align: left; font: 700 0.95rem/1.35 Inter, sans-serif; }
+    .m6-expand-button:hover { background: #edf1f6; }
+    .m6-expand-button:focus-visible { outline: 3px solid #2d6cdf; outline-offset: -3px; }
+    .m6-expand-index { color: #c41230; font-weight: 800; }
+    .m6-expand-label { flex: 1; }
+    .m6-chevron { display: inline-flex; transition: transform 160ms ease; }
+    .m6-expand-button[aria-expanded="true"] .m6-chevron { transform: rotate(180deg); }
+    .m6-expand-panel { padding: 0 15px 15px 49px; color: #334155; line-height: 1.62; }
+    .m6-bridge-row { margin: 6px 0 0; }
+    .m6-bridge-row:first-child { margin-top: 0; }
+    .m6-bridge-who { color: #183153; font-weight: 800; }
+    .m6-note { margin-top: 14px; border-color: #d8b45b; }
+    .m6-note .m6-expand-button { background: #fff7df; }
+    .m6-note .m6-expand-button:hover { background: #ffefbd; }
+    .m6-note .m6-expand-panel { padding: 3px 18px 18px; }
+    .m6-note .m6-expand-panel p { margin: 12px 0 0; }
+    .m6-preview-list { margin-top: 12px; }
+    .m6-preview-list li + li { margin-top: 10px; }
+    .m6-lo-list { display: grid; gap: 11px; margin: 14px 0 0; padding: 0; list-style: none; }
+    .m6-lo { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; align-items: start; border-bottom: 1px solid #e2e8f0; padding: 0 0 11px; line-height: 1.55; }
+    .m6-lo:last-child { border-bottom: 0; padding-bottom: 0; }
+    .m6-lo-code { border-radius: 5px; padding: 4px 6px; background: #183153; color: #fff; font: 700 0.76rem/1.3 "JetBrains Mono", monospace; text-align: center; }
+    .m6-close { margin-top: 20px; }
+    @media (max-width: 650px) {
+      .m6-lo { grid-template-columns: 1fr; gap: 7px; }
+      .m6-lo-code { width: max-content; }
+      .m6-expand-panel { padding-left: 15px; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .m6-intro { color: #d7deea; }
+      .m6-section { color: #d7deea; }
+      .m6-kicker { color: #aebbd0; }
+      .m6-section h2, .m6-point-title, .m6-expand-button, .m6-bridge-who { color: #e7eef9; }
+      .m6-point-list { color: #d7deea; }
+      .m6-point { border-left-color: #e43b58; }
+      .m6-point-head { color: #e7eef9; }
+      .m6-point-number { background: #c41230; color: #fff; }
+      .m6-subpoints { color: #d7deea; }
+      .m6-bridge-link { color: #fff; }
+      .m6-accordion { color: #d7deea; }
+      .m6-expand { border-color: #4b5567; background: #252a35; }
+      .m6-expand-button { background: #303744; }
+      .m6-expand-button:hover { background: #3a4352; }
+      .m6-expand-button:focus-visible { outline-color: #8bb4ff; }
+      .m6-expand-index { color: #ff6b82; }
+      .m6-expand-label { color: #e7eef9; }
+      .m6-chevron { color: #e7eef9; }
+      .m6-expand-panel { color: #d7deea; }
+      .m6-bridge-row { color: #d7deea; }
+      .m6-note { border-color: #8e7436; }
+      .m6-note .m6-expand-button { background: #443a23; }
+      .m6-note .m6-expand-button:hover { background: #514528; }
+      .m6-note .m6-expand-panel { color: #e7e1d2; }
+      .m6-preview-list { color: #d7deea; }
+      .m6-lo-list { color: #d7deea; }
+      .m6-lo { border-bottom-color: #455064; }
+      .m6-lo-code { background: #c41230; color: #fff; }
+      .m6-close { color: #d7deea; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Module 6 Introduction</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~7 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Module 6 Introduction</div>
+
+    <div class="phase active m6-intro" id="phase-introduction">
+      <section class="m6-section" aria-labelledby="m6-turn-title">
+        <p class="m6-kicker">The turn</p>
+        <div class="section-card">
+          <h2 id="m6-turn-title">Same map, a different kind of entity</h2>
+          <p>Module 5 took the map you built in the bike shop and held it up against a real, complex company &mdash; <strong>CVS Health</strong>. The map applied. CVS is owned by shareholders; its Reasons side carried the label <em>shareholders&rsquo; equity</em>; and the whole architecture &mdash; two balance sheets with three explanatory statements between them &mdash; held at the scale of a $250-billion company.</p>
+          <p>Module 6 holds the same map against a different kind of entity: <strong>Yale University</strong>. Yale is a <em>nonprofit</em> &mdash; a not-for-profit corporation that <strong>nobody owns</strong>. There are no shares, no shareholders, and no dividends. Hold that fact next to the map and a natural question follows: if the whole right side of the balance sheet was about owners and their claims, what happens to it when there are no owners?</p>
+          <p>The answer is the module. The map still applies &mdash; Assets minus Liabilities still computes to a difference, the difference still needs explaining, and the explaining statements still connect one balance sheet to the next. But the <em>names</em> change, the difference gets classified a different way, and the nonprofit world adds its own real complications. The map survives contact with an entity whose owners are absent &mdash; and the details are where the accounting lives.</p>
+        </div>
+      </section>
+
+      <section class="m6-section" aria-labelledby="m6-cvs-title">
+        <p class="m6-kicker">What CVS confirmed</p>
+        <h2 id="m6-cvs-title">Six claims that survived contact with a real company</h2>
+        <div class="m6-point-list">
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">1</span><div class="m6-point-title">The identity holds at any scale.</div></div>
+            <p>On CVS&rsquo;s balance sheets, recorded assets minus recorded liabilities equalled total shareholders&rsquo; equity exactly, at both dates: <strong>$253,538 &minus; $178,156 = $75,382</strong> (2025) and <strong>$253,215 &minus; $177,485 = $75,730</strong> (2024), in millions. A &minus; L equals the recorded difference, on a company a hundred thousand times the size of the bike shop (53-1).</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">2</span><div class="m6-point-title">Cash gets its own explanation &mdash; read the labels.</div></div>
+            <p>CVS&rsquo;s balance-sheet Cash line barely moved (<strong>$8,586 &rarr; $8,453, down $133M</strong>) against roughly $400 billion of revenue. The Cash Flow Statement explained the change &mdash; but only once you read the labels: the balance sheet reports &ldquo;Cash and cash equivalents,&rdquo; while the Cash Flow Statement reconciles a broader figure that includes restricted cash (<strong>$8,884 &rarr; $8,712, down $172M</strong>). Each statement explains a change defined by its own scope (53-2, 53-3).</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">3</span><div class="m6-point-title">Equity changes only through the statements.</div></div>
+            <p>CVS&rsquo;s shareholders&rsquo; equity went <em>down</em> <strong>$348M ($75,730 &rarr; $75,382)</strong> in a year with positive net income &mdash; and the Statement of Shareholders&rsquo; Equity traced every mover: contributed <strong>+$769M</strong>, earned &amp; retained <strong>&minus;$1,115M</strong>, noncontrolling interests <strong>&minus;$2M</strong>, summing to the <strong>&minus;$348M</strong> (53-4). Equity cannot jump to a new balance; it must show the path.</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">4</span><div class="m6-point-title">The income statement explains the generated part.</div></div>
+            <p>Behind the single &ldquo;Net income&rdquo; mover of <strong>$1,768M = $1,728M + $40M</strong> ($1,728M to CVS shareholders plus $40M to noncontrolling interests) sat a $402-billion year of operations. Add other comprehensive income and comprehensive income reconciled: <strong>$1,768 + $526 = $2,294M</strong> attributable to CVS (53-5).</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">5</span><div class="m6-point-title">The whole architecture is one connected system.</div></div>
+            <p>Two balance sheets, three explanatory statements between them, every change accounted for (53-6).</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">6</span><div class="m6-point-title">Restrictive recognition still draws its line.</div></div>
+            <p>CVS&rsquo;s own brand &mdash; decisive to its business &mdash; is nowhere on CVS&rsquo;s balance sheet, off the books by the same convention that kept the bike shop&rsquo;s owner-skill and customer base off its ledger. Recorded does not mean everything the entity has.</p>
+          </article>
+        </div>
+        <div class="insight-box">
+          <div class="insight-label"><i data-lucide="map" class="licon"></i> The map, in one line</div>
+          <p><strong>A &minus; L = a difference whose name depends on the entity; a series of balance sheets connected by statements that explain every change in it; and a recording convention that draws a restrictive line around what gets in.</strong> All six claims are about to hold again &mdash; for an entity with no owners at all.</p>
+        </div>
+      </section>
+
+      <section class="m6-section" aria-labelledby="m6-changes-title">
+        <p class="m6-kicker">What changes when nobody owns the place</p>
+        <h2 id="m6-changes-title">New names, new classifications, same architecture</h2>
+        <p>Everything that changes traces back to one fact: <strong>no owners.</strong> Walk it through in the order the map is built.</p>
+        <div class="m6-point-list">
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">1</span><div class="m6-point-title">The identity is untouched.</div></div>
+            <p>Yale&rsquo;s balance sheet still sets recorded assets against recorded liabilities, and the difference still falls out of the arithmetic. On Yale&rsquo;s FY2025 statements: <strong>$59,043 &minus; $9,672 = $49,371</strong> (millions), and it held the year before too: <strong>$55,315 &minus; $9,278 = $46,037</strong>. The difference is still definitional: recorded assets minus recorded liabilities &mdash; no more, no less.</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">2</span><div class="m6-point-title">The difference gets a new name, for a real reason.</div></div>
+            <p>The labels <em>equities</em> and <em>shareholders&rsquo; equity</em> arose in a for-profit context where ownership exists. Yale has no owners, so that naming convention does not fit. The difference is instead called <strong>Net Assets</strong>. The change is in the <em>name</em>, not in the nature of the thing: Net Assets is still that definitional difference, not a pool of cash and not anyone&rsquo;s ownership claim.</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">3</span><div class="m6-point-title">Net Assets is classified by donor restriction, not by source.</div></div>
+            <p>In the bike shop and at CVS, the difference was split by where it came from &mdash; <em>contributed</em> by owners versus <em>generated</em> by operations. A nonprofit has no owner contributions, so that split does not apply. Instead, Net Assets is split into two categories that track the status of <strong>donor restrictions</strong>:</p>
+            <ul class="m6-subpoints">
+              <li><strong>Net Assets Without Donor Restrictions</strong> &mdash; contributions that never carried a donor restriction, or that did and have since had the restriction satisfied.</li>
+              <li><strong>Net Assets With Donor Restrictions</strong> &mdash; contributions that came in with a donor-imposed purpose or time restriction that has not yet been met.</li>
+            </ul>
+            <p>At Yale, most of the difference is restricted: <strong>$38,609M with donor restrictions</strong> against <strong>$10,762M without</strong> &mdash; about <strong>78%</strong> of net assets bound by donor intent.</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">4</span><div class="m6-point-title">Only donors create binding restrictions.</div></div>
+            <p>Yale&rsquo;s board can designate resources for a purpose &mdash; including <strong>$7,734M</strong> it intends to treat as endowment &mdash; but a <strong>board designation</strong> is a statement of intent the board can change at any meeting. It is <strong>not</strong> a restriction, and it stays in Without Donor Restrictions. Only an outside donor can impose a binding constraint that lands a dollar in the With category.</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">5</span><div class="m6-point-title">The statements are renamed &mdash; and there are only two explaining ones, not three.</div></div>
+            <p>The balance sheet is called the <strong>Statement of Financial Position</strong> (SFP). The income statement&rsquo;s job is done by the <strong>Statement of Activities</strong>, whose bottom line is <strong>change in net assets</strong>, not net income. It does the work of both CVS&rsquo;s income statement and its statement of changes in equity, because for a nonprofit every change in net assets flows through this one statement. The cash story is still told by a <strong>Statement of Cash Flows</strong>. Yale&rsquo;s architecture is two balance sheets with <strong>two</strong> explanatory statements between them, where CVS had three.</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">6</span><div class="m6-point-title">Restrictions release &mdash; a move with no for-profit equivalent.</div></div>
+            <p>When a donor&rsquo;s purpose or time restriction is finally met, the dollars are <strong>released from restrictions</strong> and reclassified from With Donor Restrictions to Without. No new resources arrive; total net assets do not change; the amount simply moves from one category to the other. Yale reclassified <strong>$1,615M</strong> this way in FY2025.</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">7</span><div class="m6-point-title">The endowment is the elephant in the room.</div></div>
+            <p>Yale holds <strong>$49,708M</strong> of investments at fair value &mdash; the <strong>endowment</strong> &mdash; which dominates the $59-billion asset side. Its return, its spending allocation, and the contributions that feed it drive most of what the Statement of Activities reports. The endowment&rsquo;s mechanics &mdash; a spending rule and a total-return concept &mdash; are a nonprofit-specific complication this course introduces at an awareness level, not for mastery.</p>
+          </article>
+          <article class="section-card m6-point">
+            <div class="m6-point-head"><span class="m6-point-number">8</span><div class="m6-point-title">A total is not a spending account.</div></div>
+            <p>Large Net Assets do not mean large spendable resources. Net Assets is the difference the accounting identity computes, not a pile of cash; the resources behind it can be tied up in buildings or locked inside a donor-restricted endowment. &ldquo;How much can Yale actually spend soon?&rdquo; is an <em>asset-side, liquidity</em> question, answered in a required footnote. Yale reports about <strong>$5,029M</strong> of financial assets available within one year, against $59 billion of total assets. Read the total for what it is: a classification of the difference, not a bank balance.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="m6-section" aria-labelledby="m6-bridge-title">
+        <p class="m6-kicker">The bridge exercise</p>
+        <div class="section-card">
+          <h2 id="m6-bridge-title">The map, revisited for a nonprofit</h2>
+          <p>Review the statement map &mdash; now three columns deep: the bike shop, CVS, and Yale. Open each item below to compare the three entries.</p>
+          <a class="btn-continue m6-bridge-link" href="52-1-The-Statement-Map.html" onclick="playClick()">Open the statement map <span aria-hidden="true">&rarr;</span></a>
+          <div class="m6-accordion">
+            <div class="m6-expand">
+              <button class="m6-expand-button" type="button" aria-expanded="false" aria-controls="m6-bridge-1" onclick="toggleExpand(this)"><span class="m6-expand-index">1</span><span class="m6-expand-label">The entity</span><span class="m6-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m6-expand-panel" id="m6-bridge-1" hidden>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Bike shop:</span> Bike-Repair.xlsx &mdash; one activity, then one LLC.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">CVS:</span> A consolidation of many legal entities, shareholder-owned.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Yale:</span> Yale plus its consolidated subsidiaries &mdash; a nonprofit corporation nobody owns.</p>
+              </div>
+            </div>
+            <div class="m6-expand">
+              <button class="m6-expand-button" type="button" aria-expanded="false" aria-controls="m6-bridge-2" onclick="toggleExpand(this)"><span class="m6-expand-index">2</span><span class="m6-expand-label">Architecture: A &minus; L = ?</span><span class="m6-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m6-expand-panel" id="m6-bridge-2" hidden>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Bike shop:</span> Member&rsquo;s Capital.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">CVS:</span> (Shareholders&rsquo;) Equities.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Yale:</span> Net Assets.</p>
+              </div>
+            </div>
+            <div class="m6-expand">
+              <button class="m6-expand-button" type="button" aria-expanded="false" aria-controls="m6-bridge-3" onclick="toggleExpand(this)"><span class="m6-expand-index">3</span><span class="m6-expand-label">What the difference&rsquo;s split tracks</span><span class="m6-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m6-expand-panel" id="m6-bridge-3" hidden>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Bike shop:</span> Source: Contributed versus Generated.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">CVS:</span> Source: Contributed versus Earned &amp; Retained, plus noncontrolling interests.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Yale:</span> Donor restriction status: Without versus With donor restrictions.</p>
+              </div>
+            </div>
+            <div class="m6-expand">
+              <button class="m6-expand-button" type="button" aria-expanded="false" aria-controls="m6-bridge-4" onclick="toggleExpand(this)"><span class="m6-expand-index">4</span><span class="m6-expand-label">Balance sheet</span><span class="m6-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m6-expand-panel" id="m6-bridge-4" hidden>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Bike shop:</span> Balance Sheet.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">CVS:</span> Consolidated Balance Sheet.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Yale:</span> Statement of Financial Position.</p>
+              </div>
+            </div>
+            <div class="m6-expand">
+              <button class="m6-expand-button" type="button" aria-expanded="false" aria-controls="m6-bridge-5" onclick="toggleExpand(this)"><span class="m6-expand-index">5</span><span class="m6-expand-label">Statement of changes</span><span class="m6-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m6-expand-panel" id="m6-bridge-5" hidden>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Bike shop:</span> Statement of Member&rsquo;s Capital.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">CVS:</span> Statement of Shareholders&rsquo; Equity.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Yale:</span> Folded into the Statement of Activities.</p>
+              </div>
+            </div>
+            <div class="m6-expand">
+              <button class="m6-expand-button" type="button" aria-expanded="false" aria-controls="m6-bridge-6" onclick="toggleExpand(this)"><span class="m6-expand-index">6</span><span class="m6-expand-label">Income statement</span><span class="m6-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m6-expand-panel" id="m6-bridge-6" hidden>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Bike shop:</span> Anna&rsquo;s income statement.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">CVS:</span> Consolidated Statement of Operations.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Yale:</span> Statement of Activities &mdash; operating plus non-operating.</p>
+              </div>
+            </div>
+            <div class="m6-expand">
+              <button class="m6-expand-button" type="button" aria-expanded="false" aria-controls="m6-bridge-7" onclick="toggleExpand(this)"><span class="m6-expand-index">7</span><span class="m6-expand-label">Bottom line</span><span class="m6-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m6-expand-panel" id="m6-bridge-7" hidden>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Bike shop:</span> Net income.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">CVS:</span> Net income &mdash; two of them.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Yale:</span> Change in net assets.</p>
+              </div>
+            </div>
+            <div class="m6-expand">
+              <button class="m6-expand-button" type="button" aria-expanded="false" aria-controls="m6-bridge-8" onclick="toggleExpand(this)"><span class="m6-expand-index">8</span><span class="m6-expand-label">Cash flow statement</span><span class="m6-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m6-expand-panel" id="m6-bridge-8" hidden>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Bike shop:</span> Cash Flow Statement.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">CVS:</span> Consolidated Statement of Cash Flows.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Yale:</span> Statement of Cash Flows &mdash; indirect, opening from change in net assets.</p>
+              </div>
+            </div>
+            <div class="m6-expand">
+              <button class="m6-expand-button" type="button" aria-expanded="false" aria-controls="m6-bridge-9" onclick="toggleExpand(this)"><span class="m6-expand-index">9</span><span class="m6-expand-label">The unique move</span><span class="m6-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m6-expand-panel" id="m6-bridge-9" hidden>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Bike shop:</span> None.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">CVS:</span> None.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Yale:</span> Net assets released from restrictions &mdash; a reclassification, With &rarr; Without.</p>
+              </div>
+            </div>
+            <div class="m6-expand">
+              <button class="m6-expand-button" type="button" aria-expanded="false" aria-controls="m6-bridge-10" onclick="toggleExpand(this)"><span class="m6-expand-index">10</span><span class="m6-expand-label">Restrictive recognition</span><span class="m6-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m6-expand-panel" id="m6-bridge-10" hidden>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Bike shop:</span> Owner skill and customer base &mdash; off the books.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">CVS:</span> The CVS brand &mdash; off the books.</p>
+                <p class="m6-bridge-row"><span class="m6-bridge-who">Yale:</span> Collections (ASC 958-360), human capital, and the Yale name &mdash; off the books.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="m6-section" aria-labelledby="m6-yale-title">
+        <p class="m6-kicker">Where we are going</p>
+        <div class="section-card">
+          <h2 id="m6-yale-title">Yale University</h2>
+          <p>Yale&rsquo;s FY2025 financial report, for the year ended June 30, 2025, is the map made real for a nonprofit. The walk will show:</p>
+          <ul class="bullet-list m6-preview-list">
+            <li><strong>The Statement of Financial Position.</strong> $59,043M of recorded assets, $9,672M of recorded liabilities, and $49,371M of net assets &mdash; split $10,762M without donor restrictions and $38,609M with. Then comes a hard look at <strong>what the statement does NOT show</strong>: Yale&rsquo;s collections &mdash; the Beinecke, the Art Gallery, and the Peabody specimens &mdash; sit at billions in fair value and zero on the books. They are not expensed and not recorded anywhere: a convention under ASC 958-360, not an oversight. The Yale name and its faculty are off the books for the same reason CVS&rsquo;s brand is.</li>
+            <li><strong>The cash question, again &mdash; with a nonprofit twist.</strong> Balance-sheet cash fell <strong>$293M ($1,058 &rarr; $765)</strong> while the Cash Flow Statement reports a <strong>$380M decrease</strong> &mdash; a label difference involving cash held inside the investment pool, reconciled in the footnotes. Same lesson as CVS&rsquo;s restricted cash: read the labels.</li>
+            <li><strong>The change-in-net-assets question.</strong> Net assets rose <strong>$3,334M</strong> in the year &mdash; but the Statement of Activities shows most of that increase is restricted through endowment return and donor gifts, and $1,615M of it is not new money at all but restrictions releasing. Was the change earned, given, or released? The bottom line is change in net assets, and its composition matters more than its size.</li>
+            <li><strong>Two statements, not three.</strong> The Statement of Activities does the combined work of an income statement and a statement of changes in equity; the Statement of Cash Flows tells the cash story. Between the two Statements of Financial Position, they explain the whole year.</li>
+          </ul>
+          <div class="insight-box">
+            <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The promise of the module</div>
+            <p>These are examples, not the whole list &mdash; the endowment&rsquo;s spending rule, the functional classification of expenses, and the collections election each carry further complication. <strong>The map survives contact with reality; the details are where the expertise lives.</strong></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="m6-section" aria-labelledby="m6-name-title">
+        <p class="m6-kicker">About the name Net Assets</p>
+        <div class="section-card">
+          <h2 id="m6-name-title">Why the nonprofit label fits</h2>
+          <div class="m6-expand m6-note">
+            <button class="m6-expand-button" type="button" aria-expanded="false" aria-controls="m6-name-note" onclick="toggleExpand(this)"><span class="m6-expand-label">A note on the name</span><span class="m6-chevron"><i data-lucide="chevron-down"></i></span></button>
+            <div class="m6-expand-panel" id="m6-name-note" hidden>
+              <p>Module 5 warned you that the word <em>equity</em> promises more than the number can deliver: it is a definitional difference &mdash; assets minus liabilities &mdash; not a stake anyone could collect. A nonprofit makes the point unavoidable. Yale has <em>no owners</em>. There is no one whose stake this could be, no share to price, and no distribution that could ever be paid. So the profession does not call the difference &ldquo;equity&rdquo; here at all; it calls it <strong>Net Assets</strong>.</p>
+              <p>Do not let the plainer words fool you either. &ldquo;Net Assets&rdquo; can sound like &ldquo;the assets, netted down&rdquo; &mdash; a spendable amount. It is not. It is the same definitional difference: recorded assets minus recorded liabilities, whatever that difference happens to be. At Yale it is <strong>$49.4 billion</strong> &mdash; and most of it is either restricted by donors or tied up in the endowment and the buildings, not sitting in an account waiting to be spent.</p>
+              <p>What the name <em>does</em> buy you is a better fit to the accountability structure. A company answers to owners, so its difference is split by who <em>put money in</em> versus what operations <em>generated</em>. A nonprofit answers to donors and to its mission, so its difference is split by whether donors have <em>restricted</em> the money and whether those restrictions have been <em>met</em>. Same difference; different question asked of it. Read &ldquo;Net Assets&rdquo; the way Module 5 taught you to read &ldquo;Equities&rdquo; &mdash; as a <em>classification of a computed difference</em>, never as a pot of money with your name on it.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="m6-section" aria-labelledby="m6-lo-title">
+        <p class="m6-kicker">The learning objectives</p>
+        <div class="section-card">
+          <h2 id="m6-lo-title">By the end of Module 6, you will be able to:</h2>
+          <ol class="m6-lo-list">
+            <li class="m6-lo"><span class="m6-lo-code">M6-LO1</span><span>Identify the accounting entity in Yale&rsquo;s consolidated statements and explain how a nonprofit consolidated entity resembles and differs from CVS&rsquo;s &mdash; same map, no owners.</span></li>
+            <li class="m6-lo"><span class="m6-lo-code">M6-LO2</span><span>Locate Yale&rsquo;s three statements and map each onto the architecture built in the bike shop (Statement of Financial Position; Statement of Activities; Statement of Cash Flows), and explain why a nonprofit has <strong>two</strong> explanatory statements where CVS had three &mdash; i.e., why the Statement of Activities does the work of both the income statement and the statement of changes in equity.</span></li>
+            <li class="m6-lo"><span class="m6-lo-code">M6-LO3</span><span>Explain why a nonprofit calls the difference <strong>Net Assets</strong> (no owners), how it is classified <strong>with / without donor restrictions</strong>, and why <strong>board designations remain Without</strong> &mdash; only donors create binding restrictions.</span></li>
+            <li class="m6-lo"><span class="m6-lo-code">M6-LO4</span><span>Explain <strong>net assets released from restrictions</strong> as a reclassification (With &rarr; Without) that leaves total net assets unchanged, and locate it on the Statement of Activities.</span></li>
+            <li class="m6-lo"><span class="m6-lo-code">M6-LO5 (awareness)</span><span>Begin to develop an awareness of how nonprofit conventions create complications &mdash; endowment spending allocation, the functional classification of expenses, the collections capitalization election. (Real understanding of these involves close encounters with the standard-setting process and the pressures interested parties exert on it &mdash; beyond this course&rsquo;s scope; the objective here is awareness, not mastery. Mirrors M5-LO5.)</span></li>
+            <li class="m6-lo"><span class="m6-lo-code">M6-LO6</span><span>Distinguish net-asset <em>classification</em> from <em>liquidity</em>: explain why a large Net Assets total does not indicate spendable resources, and use Yale&rsquo;s required liquidity footnote to assess what is actually available within one year.</span></li>
+            <li class="m6-lo"><span class="m6-lo-code">M6-LO7</span><span>Apply restrictive recognition to Yale: give examples of things relevant to Yale&rsquo;s economic substance that its statements do not recognize &mdash; collections (ASC 958-360), human capital, the Yale name.</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <div class="btn-row m6-close">
+        <button class="btn-back" onclick="nav('53-6-The-Full-Architecture.html')">&larr; Back</button>
+        <button class="btn-continue" onclick="nav('62-1-A-Nonprofit-Statement-Map.html')">A Nonprofit Statement Map &rarr;</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+var glossaryTerms=[
+  { term:'Net Assets', def:'Recorded assets minus recorded liabilities for a nonprofit. It is a computed difference, not a pool of cash or an ownership claim.' },
+  { term:'Donor restriction', def:'A binding purpose or time constraint imposed by an outside donor.' },
+  { term:'Board designation', def:'A statement of intent the board can change. It is not a donor restriction, so the amount remains Without Donor Restrictions.' },
+  { term:'Released from restrictions', def:'Amounts reclassified from With to Without when a donor&rsquo;s purpose or time condition is met; total net assets stay unchanged.' },
+  { term:'Endowment', def:'Invested resources held to support the institution over time, often subject to donor restrictions or board designations and a spending policy.' },
+  { term:'Statement of Financial Position', def:'A nonprofit&rsquo;s balance sheet: recorded assets, liabilities, and Net Assets at a date.' },
+  { term:'Statement of Activities', def:'The nonprofit statement that explains change in net assets and combines the work of a for-profit income statement and statement of changes in equity.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'<\/div><div class="glossary-entry-def">'+g.def+'<\/div><\/div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function toggleExpand(button){
+  var panel=document.getElementById(button.getAttribute('aria-controls'));
+  var isOpen=button.getAttribute('aria-expanded')==='true';
+  playClick();
+  button.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+  panel.hidden=isOpen;
+}
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ playClick(); window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
+window.devFill=function(){};
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
