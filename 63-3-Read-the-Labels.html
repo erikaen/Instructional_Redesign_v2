@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Read the Labels</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6-scope {
+      --m6-paper:#ffffff;
+      --m6-panel:#f8fafc;
+      --m6-ink:#263746;
+      --m6-muted:#657583;
+      --m6-primary:#155b86;
+      --m6-error:#b43b3b;
+      --m6-error-bg:#fef2f2;
+      --m6-rule:#c8d4dc;
+      --m6-rule-strong:#708592;
+      --m6-warm:#fff8df;
+      --m6-cash:#e7f1fb;
+      --m6-accent:#d5a528;
+      --m6-success:#167447;
+      --m6-success-bg:#edf9f1;
+      --m6-hover:#f1f5f8;
+      --m6-shadow:rgba(32,55,72,0.09);
+    }
+    .m6-doc-wrap, .m6-snapshot-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
+    .m6-doc-card, .m6-snapshot, .m6-reference-strip {
+      background:var(--m6-paper);
+      color:var(--m6-ink);
+      border:1px solid var(--m6-rule);
+      border-radius:12px;
+      box-shadow:0 8px 24px var(--m6-shadow);
+    }
+    .m6-kicker {
+      margin:0 0 5px;
+      color:var(--m6-muted);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .m6-doc-title, .m6-snapshot-title { margin:0; color:var(--m6-primary); }
+    .m6-doc-title { font-size:20px; }
+    .m6-snapshot-title { font-size:17px; }
+    .m6-subline { margin:3px 0 0; color:var(--m6-muted); font-size:12px; font-style:italic; }
+    .m6-snapshot { min-width:285px; height:100%; padding:18px; box-sizing:border-box; }
+    .m6-snapshot-table { margin-top:15px; font-size:12px; }
+    .m6-compact-row {
+      display:grid;
+      grid-template-columns:minmax(178px,1fr) 5.5rem;
+      column-gap:8px;
+      align-items:baseline;
+      padding:4px 5px;
+      border-left:3px solid transparent;
+      color:var(--m6-ink);
+    }
+    .m6-compact-lit {
+      border-left-color:var(--m6-accent);
+      border-radius:3px;
+      background:var(--m6-cash);
+      color:var(--m6-primary);
+      font-weight:700;
+    }
+    .m6-compact-total { margin-top:3px; padding-top:6px; border-top:1px solid var(--m6-rule-strong); color:var(--m6-primary); font-weight:800; }
+    .m6-compact-gap { height:8px; }
+    .m6-compact-sub { padding-top:1px; padding-bottom:1px; padding-left:17px; color:var(--m6-muted); font-size:10px; font-style:italic; }
+    .m6-value { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m6-identity-note { margin:12px 2px 0; color:var(--m6-muted); font:italic 10px/1.4 "JetBrains Mono",monospace; text-align:right; }
+    .m6-strip-stack { max-width:850px; margin:0 auto; }
+    .m6-reference-strip {
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+      align-items:stretch;
+      max-width:850px;
+      margin:0 auto 14px;
+      padding:12px;
+      box-sizing:border-box;
+    }
+    .m6-reference-cell { min-width:0; padding:2px 8px; text-align:center; }
+    .m6-reference-cell + .m6-reference-cell { border-left:1px solid var(--m6-rule); }
+    .m6-reference-label { margin:0; color:var(--m6-muted); font-size:10px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+    .m6-reference-date { margin:2px 0 0; color:var(--m6-ink); font-size:11px; line-height:1.35; }
+    .m6-reference-value { margin:5px 0 0; color:var(--m6-primary); font:700 14px/1.35 "JetBrains Mono",monospace; }
+    .m6-reference-question .m6-reference-label, .m6-reference-question .m6-reference-value { color:var(--m6-error); }
+    .m6-reference-question .m6-reference-date { color:var(--m6-muted); font-style:italic; }
+    .m6-strip-annotation { margin:6px 0 0; color:var(--m6-success); font:italic 10px/1.4 "JetBrains Mono",monospace; }
+    .m6-notice-card, .m6-solution-card {
+      max-width:850px;
+      margin:0 auto;
+      padding:17px 19px;
+      border-radius:12px;
+      box-sizing:border-box;
+      color:var(--m6-ink);
+      box-shadow:0 8px 24px var(--m6-shadow);
+    }
+    .m6-notice-card { border:2px solid var(--m6-error); background:var(--m6-error-bg); }
+    .m6-solution-card { border:2px solid var(--m6-success); background:var(--m6-success-bg); }
+    .m6-notice-card .m6-kicker { color:var(--m6-error); }
+    .m6-solution-card .m6-kicker { color:var(--m6-success); }
+    .m6-callout-copy { margin:8px 0 0; font-size:13px; line-height:1.6; }
+    .m6-callout-copy p { margin:4px 0; }
+    .m6-mono-strong { font-family:"JetBrains Mono",monospace; font-weight:800; }
+    .m6-recon-table { min-width:590px; margin-top:13px; font:11px/1.45 "JetBrains Mono",monospace; }
+    .m6-recon-row {
+      display:grid;
+      grid-template-columns:minmax(300px,1fr) 7.4rem 7.4rem;
+      gap:10px;
+      align-items:baseline;
+      padding:4px 0;
+    }
+    .m6-recon-head { color:var(--m6-muted); font-weight:700; }
+    .m6-recon-total { margin-top:4px; padding-top:7px; border-top:1px solid var(--m6-rule-strong); color:var(--m6-primary); font-weight:800; }
+    .m6-recon-foot { margin:11px 0 0; color:var(--m6-muted); font-size:10px; font-style:italic; line-height:1.5; }
+    .m6-solution-close { margin:11px 0 0; font-size:12px; font-style:italic; line-height:1.5; }
+    .m6-architecture-wrap { overflow-x:auto; padding:2px 2px 8px; }
+    .m6-architecture.main-grid {
+      grid-template-columns:minmax(270px,1fr) minmax(330px,1.18fr) minmax(270px,1fr);
+      align-items:stretch;
+      min-width:930px;
+    }
+    .m6-architecture.main-grid > * { min-width:0; }
+    .m6-cfs-card { min-width:0; height:100%; padding:18px; box-sizing:border-box; }
+    .m6-recon-mini {
+      margin-top:14px;
+      padding:11px;
+      border:1px solid var(--m6-accent);
+      border-radius:7px;
+      background:var(--m6-warm);
+      color:var(--m6-ink);
+    }
+    .m6-recon-mini-row, .m6-section-row, .m6-detail-row, .m6-net-row {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) 5.6rem;
+      gap:8px;
+      align-items:baseline;
+    }
+    .m6-recon-mini-row { padding:2px 0; font-size:11px; }
+    .m6-recon-mini-total { margin-top:3px; padding-top:5px; border-top:1px solid var(--m6-rule-strong); color:var(--m6-primary); font-weight:800; }
+    .m6-cfs-list { margin-top:17px; }
+    .m6-section-row {
+      padding:9px 6px;
+      border-bottom:1px solid var(--m6-rule);
+      color:var(--m6-ink);
+      font-size:12px;
+      font-weight:600;
+    }
+    .m6-section-row .m6-value { color:var(--m6-primary); }
+    .m6-section-row .m6-negative { color:var(--m6-error); }
+    .m6-expandable-row { cursor:pointer; user-select:none; border-radius:5px; }
+    .m6-expandable-row:hover, .m6-expandable-row:focus { background:var(--m6-hover); outline:2px solid var(--m6-accent); outline-offset:-2px; }
+    .m6-expand-label { display:grid; grid-template-columns:18px minmax(0,1fr); gap:3px; align-items:center; }
+    .m6-expand-label svg { width:14px; height:14px; color:var(--m6-muted); }
+    .m6-hint-pulse { animation:m6-hint-pulse 1.3s ease-in-out 2; }
+    @keyframes m6-hint-pulse { 0%,100% { box-shadow:none; } 50% { box-shadow:inset 0 0 0 2px var(--m6-accent); } }
+    .m6-detail-panel {
+      padding:7px 7px 9px 25px;
+      border-bottom:1px solid var(--m6-rule);
+      background:var(--m6-panel);
+      animation:m6-detail-open .18s ease-out;
+    }
+    @keyframes m6-detail-open { from { opacity:0; } to { opacity:1; } }
+    .m6-detail-row { padding:3px 0; color:var(--m6-ink); font-size:10px; line-height:1.35; }
+    .m6-detail-total { margin-top:4px; padding-top:6px; border-top:1px solid var(--m6-rule-strong); color:var(--m6-primary); font-weight:800; }
+    .m6-net-row { margin-top:8px; padding:9px 6px 2px; border-top:2px solid var(--m6-primary); color:var(--m6-primary); font-size:12px; font-weight:800; }
+    .m6-net-row .m6-value { color:var(--m6-error); }
+    .m6-expand-hint { margin:12px 0 0; color:var(--m6-muted); font-size:10px; font-style:italic; line-height:1.45; }
+    @media (max-width:760px) {
+      .m6-reference-strip { grid-template-columns:1fr; }
+      .m6-reference-cell + .m6-reference-cell { padding-top:10px; border-top:1px solid var(--m6-rule); border-left:0; }
+      .m6-architecture.main-grid { grid-template-columns:1fr; min-width:0; }
+      .m6-recon-table { min-width:570px; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      .m6-hint-pulse, .m6-detail-panel { animation:none; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6-scope {
+        --m6-paper:#26242e;
+        --m6-panel:#211f28;
+        --m6-ink:#e8edf1;
+        --m6-muted:#b4c0c8;
+        --m6-primary:#7dc8f3;
+        --m6-error:#ff8f8f;
+        --m6-error-bg:#3a2428;
+        --m6-rule:#4b5361;
+        --m6-rule-strong:#8797a2;
+        --m6-warm:#332f20;
+        --m6-cash:#263847;
+        --m6-accent:#d8ad3e;
+        --m6-success:#70d6a3;
+        --m6-success-bg:#1d3329;
+        --m6-hover:#34333d;
+        --m6-shadow:rgba(0,0,0,0.28);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Read the Labels</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~5 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Read the Labels</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="yale-fy2025-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+var step=0;
+var TOTAL_STEPS=4;
+var revealN=0;
+var revealTimer=null;
+var stepTwoSeen=false;
+var expansionEncountered=false;
+var openSections={operating:false,investing:false,financing:false};
+
+function escapeHTML(value){
+  return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmt(v){
+  if(v===0) return '&mdash;';
+  var a=Math.abs(v).toLocaleString('en-US');
+  return v<0 ? '('+a+')' : a;
+}
+function hasYear(list,year){
+  if(!list) return false;
+  for(var i=0;i<list.length;i++) if(list[i]===year) return true;
+  return false;
+}
+function compactRow(label,value,extraClass){
+  return '<div class="m6-compact-row'+(extraClass?' '+extraClass:'')+'"><div>'+label+'</div><div class="m6-value">'+fmt(value)+'</div></div>';
+}
+function compactSnapshot(year,label){
+  var d=window.YALE_FY2025.compactSFP[year];
+  var yearText=year==='y2025'?'2025':'2024';
+  var noncash=d.totalAssets-d.cash;
+  var rows=compactRow('Cash and cash equivalents',d.cash,'m6-compact-lit')
+    +compactRow('Noncash assets <em>(incl. '+fmt(d.investments)+' investments)</em>',noncash,'')
+    +compactRow('Total assets',d.totalAssets,'m6-compact-total')
+    +'<div class="m6-compact-gap"></div>'
+    +compactRow('&minus; Total liabilities',d.totalLiab,'')
+    +compactRow('= NA without donor restrictions',d.naWithout,'m6-compact-total')
+    +compactRow('&#8627; of which Yale University',d.naWithoutYale,'m6-compact-sub')
+    +compactRow('&#8627; of which noncontrolling interests',d.naWithoutNCI,'m6-compact-sub')
+    +compactRow('+ NA with donor restrictions',d.naWith,'')
+    +compactRow('= Total net assets',d.totalNA,'m6-compact-total');
+  return '<div class="m6-snapshot-wrap"><div class="m6-snapshot"><p class="m6-kicker">'+label+'</p>'
+    +'<h3 class="m6-snapshot-title">Statement of Financial Position</h3>'
+    +'<p class="m6-subline">June 30, '+yearText+' &middot; in $ millions</p>'
+    +'<div class="m6-snapshot-table">'+rows+'</div>'
+    +'<p class="m6-identity-note">'+fmt(d.totalAssets)+' &minus; '+fmt(d.totalLiab)+' = '+fmt(d.totalNA)+' &#10003;</p></div></div>';
+}
+function sfpStrip(){
+  var beginning=window.YALE_FY2025.compactSFP.y2024.cash;
+  var ending=window.YALE_FY2025.compactSFP.y2025.cash;
+  var delta=ending-beginning;
+  return '<div class="m6-reference-strip">'
+    +'<div class="m6-reference-cell"><p class="m6-reference-label">Beginning Cash</p><p class="m6-reference-date">SFP &middot; June 30, 2024</p><p class="m6-reference-value">'+fmt(beginning)+'</p></div>'
+    +'<div class="m6-reference-cell m6-reference-question"><p class="m6-reference-label">Question</p><p class="m6-reference-value">'+fmt(delta)+'</p><p class="m6-reference-date">Cash and cash equivalents</p></div>'
+    +'<div class="m6-reference-cell"><p class="m6-reference-label">Ending Cash</p><p class="m6-reference-date">SFP &middot; June 30, 2025</p><p class="m6-reference-value">'+fmt(ending)+'</p></div></div>';
+}
+function cfsStrip(withSolution){
+  var d=window.YALE_FY2025.socf2Year;
+  var r=window.YALE_FY2025.cashRecon;
+  var begNote=withSolution?'<p class="m6-strip-annotation">= '+fmt(r.beg.ccEquiv)+' + cash in investments '+fmt(r.beg.cashInInvestments)+'</p>':'';
+  var endNote=withSolution?'<p class="m6-strip-annotation">= '+fmt(r.end.ccEquiv)+' + cash in investments '+fmt(r.end.cashInInvestments)+'</p>':'';
+  return '<div class="m6-reference-strip">'
+    +'<div class="m6-reference-cell"><p class="m6-reference-label">Beginning CFS</p><p class="m6-reference-date">July 1, 2024</p><p class="m6-reference-value">Cash '+fmt(r.beg.total)+'</p>'+begNote+'</div>'
+    +'<div class="m6-reference-cell m6-reference-question"><p class="m6-reference-label">CFS net change</p><p class="m6-reference-value">'+fmt(d.netChange.y2025)+'</p><p class="m6-reference-date">&ldquo;Cash and cash equivalents&rdquo; (CFS scope)</p></div>'
+    +'<div class="m6-reference-cell"><p class="m6-reference-label">Ending CFS</p><p class="m6-reference-date">June 30, 2025</p><p class="m6-reference-value">Cash '+fmt(r.end.total)+'</p>'+endNote+'</div></div>';
+}
+function mismatchNotice(){
+  var sfp=window.YALE_FY2025.compactSFP;
+  var r=window.YALE_FY2025.cashRecon;
+  var sfpDelta=sfp.y2025.cash-sfp.y2024.cash;
+  var cfsDelta=r.end.total-r.beg.total;
+  return '<div class="m6-notice-card"><p class="m6-kicker">Notice &mdash; something is off</p>'
+    +'<div class="m6-callout-copy"><p>The Statement of Financial Position says <strong>Cash and cash equivalents</strong> decreased by <strong class="m6-mono-strong">$'+fmt(Math.abs(sfpDelta))+'</strong>: from $'+fmt(sfp.y2024.cash)+' to $'+fmt(sfp.y2025.cash)+'.</p>'
+    +'<p>The Cash Flow Statement says cash decreased by <strong class="m6-mono-strong">$'+fmt(Math.abs(cfsDelta))+'</strong>: from $'+fmt(r.beg.total)+' to $'+fmt(r.end.total)+'.</p>'
+    +'<p><em>Different numbers, different balances. Read the labels.</em></p></div></div>';
+}
+function solutionCard(){
+  var r=window.YALE_FY2025.cashRecon;
+  return '<div class="m6-doc-wrap"><div class="m6-solution-card"><p class="m6-kicker">The solution &mdash; Note c reconciliation</p>'
+    +'<div class="m6-recon-table">'
+    +'<div class="m6-recon-row m6-recon-head"><div></div><div class="m6-value">Beg (Jul 1, &rsquo;24)</div><div class="m6-value">End (Jun 30, &rsquo;25)</div></div>'
+    +'<div class="m6-recon-row"><div>Cash &amp; cash equivalents (SFP face)</div><div class="m6-value">'+fmt(r.beg.ccEquiv)+'</div><div class="m6-value">'+fmt(r.end.ccEquiv)+'</div></div>'
+    +'<div class="m6-recon-row"><div>+ Cash included in investments, at fair value</div><div class="m6-value">'+fmt(r.beg.cashInInvestments)+'</div><div class="m6-value">'+fmt(r.end.cashInInvestments)+'</div></div>'
+    +'<div class="m6-recon-row m6-recon-total"><div>= Total cash &amp; cash equivalents (per CFS)</div><div class="m6-value">'+fmt(r.beg.total)+'</div><div class="m6-value">'+fmt(r.end.total)+'</div></div></div>'
+    +'<p class="m6-recon-foot">Figures rounded to $ millions &mdash; in the report&rsquo;s thousands the tie is exact at both dates (1,058,065 + 146,776 = 1,204,841; 764,569 + 60,558 = 825,127).</p>'
+    +'<p class="m6-solution-close">The SFP Cash line and the CFS bottom line are not tracking the same thing &mdash; the label difference carries real information about cash parked in the investment pool.</p>'
+    +'</div></div>';
+}
+function mismatchView(withSolution){
+  return '<div class="m6-scope"><div class="m6-strip-stack">'+sfpStrip()+cfsStrip(withSolution)+(withSolution?solutionCard():mismatchNotice())+'</div></div>';
+}
+function miniReconciliation(){
+  var d=window.YALE_FY2025.socf2Year;
+  return '<div class="m6-recon-mini"><p class="m6-kicker">What the CFS reconciles</p>'
+    +'<div class="m6-recon-mini-row"><div>Beginning</div><div class="m6-value">'+fmt(d.beginning.y2025)+'</div></div>'
+    +'<div class="m6-recon-mini-row"><div>+ Net change</div><div class="m6-value">'+fmt(d.netChange.y2025)+'</div></div>'
+    +'<div class="m6-recon-mini-row m6-recon-mini-total"><div>End</div><div class="m6-value">'+fmt(d.ending.y2025)+'</div></div></div>';
+}
+function sectionOrder(){ return ['operating','investing','financing']; }
+function detailPanel(key,data){
+  if(!openSections[key]) return '';
+  var h='<div class="m6-detail-panel">';
+  for(var i=0;i<data.items.length;i++){
+    var item=data.items[i];
+    var value=hasYear(item.dashFor,'y2025')?'&mdash;':fmt(item.y2025);
+    h+='<div class="m6-detail-row"><div>'+escapeHTML(item.label)+'</div><div class="m6-value">'+value+'</div></div>';
+  }
+  h+='<div class="m6-detail-row m6-detail-total"><div>'+escapeHTML(data.label)+'</div><div class="m6-value">'+fmt(data.subtotal.y2025)+'</div></div></div>';
+  return h;
+}
+function cfsSections(expandable){
+  var d=window.YALE_FY2025.socf2Year;
+  var keys=sectionOrder();
+  var visible=expandable?keys.length:revealN;
+  var h='<div class="m6-cfs-list"><p class="m6-kicker">The three sections</p>';
+  for(var i=0;i<visible;i++){
+    var key=keys[i];
+    var data=d[key];
+    var valueClass=data.subtotal.y2025<0?' m6-negative':'';
+    if(expandable){
+      var pulse=!expansionEncountered?' m6-hint-pulse':'';
+      h+='<div class="m6-section-row m6-expandable-row'+pulse+'" role="button" tabindex="0" aria-expanded="'+(openSections[key]?'true':'false')+'" onclick="toggleSection(\''+key+'\')" onkeydown="handleSectionKey(event,\''+key+'\')">'
+        +'<div class="m6-expand-label"><i data-lucide="'+(openSections[key]?'chevron-up':'chevron-down')+'"></i><span>'+escapeHTML(data.label)+'</span></div><div class="m6-value'+valueClass+'">'+fmt(data.subtotal.y2025)+'</div></div>'
+        +detailPanel(key,data);
+    } else {
+      h+='<div class="m6-section-row"><div>'+escapeHTML(data.label)+'</div><div class="m6-value'+valueClass+'">'+fmt(data.subtotal.y2025)+'</div></div>';
+    }
+  }
+  if(visible===keys.length){
+    h+='<div class="m6-net-row"><div>Net change in cash (CFS scope)</div><div class="m6-value">'+fmt(d.netChange.y2025)+'</div></div>';
+    if(expandable) h+='<p class="m6-expand-hint">Click any section to expand the line items behind its subtotal.</p>';
+  }
+  return h+'</div>';
+}
+function cfsCard(expandable){
+  return '<div class="m6-doc-card m6-cfs-card"><p class="m6-kicker">From the report &middot; page 23</p>'
+    +'<h2 class="m6-doc-title">Cash Flow Statement</h2><p class="m6-subline">Year ended June 30, 2025 &middot; in $ millions</p>'
+    +miniReconciliation()+cfsSections(expandable)+'</div>';
+}
+function architectureView(expandable){
+  return '<div class="m6-scope"><div class="m6-architecture-wrap"><div class="main-grid m6-architecture">'
+    +compactSnapshot('y2024','Beginning')+cfsCard(expandable)+compactSnapshot('y2025','Ending')
+    +'</div></div></div>';
+}
+function scheduleReveal(){
+  if(step!==2 || revealN>=3 || revealTimer) return;
+  revealTimer=setTimeout(function(){
+    revealTimer=null;
+    if(step!==2) return;
+    revealN=Math.min(revealN+1,3);
+    if(revealN===3) playSuccess();
+    render();
+  },600);
+}
+function render(){
+  renderBeats(step);
+  renderGrid(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+  scheduleReveal();
+}
+function renderBeats(currentStep){
+  var d=window.YALE_FY2025.socf2Year;
+  var sfp=window.YALE_FY2025.compactSFP;
+  var r=window.YALE_FY2025.cashRecon;
+  var text='';
+  if(currentStep===0){
+    text='Two strips, one mismatch. The Statement of Financial Position says <strong>Cash and cash equivalents</strong> decreased by $'+fmt(sfp.y2024.cash-sfp.y2025.cash)+' million: from $'+fmt(sfp.y2024.cash)+'M to $'+fmt(sfp.y2025.cash)+'M. The Cash Flow Statement says cash decreased by <strong>$'+fmt(r.beg.total-r.end.total)+' million</strong>: from $'+fmt(r.beg.total)+'M to $'+fmt(r.end.total)+'M. Different numbers, different beginning and ending balances. Look closely at the two labels before moving on &mdash; the difference is not an error.';
+  } else if(currentStep===1){
+    text='Note c, on page 27 of the report, reconciles the two. The Statement of Financial Position reports <em>Cash and cash equivalents</em> &mdash; $'+fmt(r.end.ccEquiv)+'M at year-end, $'+fmt(r.beg.ccEquiv)+'M at the start. The Cash Flow Statement reconciles a broader figure that adds <em>cash included in investments, at fair value</em>: cash sitting inside Yale&rsquo;s long-term investment pool awaiting deployment &mdash; $'+fmt(r.end.cashInInvestments)+'M at year-end, $'+fmt(r.beg.cashInInvestments)+'M at the start. Add it at both dates and the strips reconcile: in the report&rsquo;s thousands the tie is exact (764,569 + 60,558 = 825,127), and rounding to millions leaves the $1M remainder visible at the year-end date. Each explanatory statement explains a change defined by its own scope. <strong>Read the labels.</strong>';
+  } else if(currentStep===2){
+    text='Strips give way to the architecture. The 2025 Cash Flow Statement slots between the two Statements of Financial Position. The three sections appear in turn &mdash; Operating $'+fmt(d.operating.subtotal.y2025)+'M, Investing $'+fmt(d.investing.subtotal.y2025)+'M, Financing $'+fmt(d.financing.subtotal.y2025)+'M &mdash; and sum to the n&#101;t change of $'+fmt(d.netChange.y2025)+'M. The architecture from the bike shop holds on the $'+Math.round(sfp.y2025.totalAssets/1000)+'-billion university.';
+  } else if(currentStep===3){
+    text='Each section is now expandable &mdash; click one to see the line items behind its subtotal. Operating shows the indirect-method reconciliation: Change in net assets $'+fmt(d.operating.items[0].y2025)+'M, less the Net endowment investment gain $'+fmt(d.operating.items[3].y2025)+'M (a huge non-cash item &mdash; most of the endowment&rsquo;s gain was appreciation, not cash), less Non-operating contributions $'+fmt(d.operating.items[6].y2025)+'M (those belong to Financing), plus Depreciation $'+fmt(d.operating.items[1].y2025)+'M, plus the working-capital changes &mdash; landing at Net cash used in operating activities of $'+fmt(d.operating.subtotal.y2025)+'M.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div>';
+}
+function renderGrid(currentStep){
+  var h='';
+  if(currentStep===0) h=mismatchView(false);
+  else if(currentStep===1) h=mismatchView(true);
+  else h=architectureView(currentStep===3);
+  document.getElementById('mainGrid').innerHTML=h;
+}
+function renderTail(currentStep){
+  document.getElementById('tail').innerHTML=currentStep===3
+    ? '<div class="insight-box">One label difference, one real fact: Yale includes some cash parked in its investment pool in the CFS scope. The statements agree once each scope is read.</div>'
+    : '';
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep>0) h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else h+='<button class="btn-continue" onclick="playClick();nav(\'63-4-The-Net-Assets-Question.html\')">The Net Assets Question &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function prepareStep(target){
+  if(revealTimer){ clearTimeout(revealTimer); revealTimer=null; }
+  if(target===2){
+    if(stepTwoSeen) revealN=3;
+    else { revealN=0; stepTwoSeen=true; }
+  } else if(target===3){
+    revealN=3;
+  }
+}
+function advance(){
+  playClick();
+  var target=Math.min(step+1,TOTAL_STEPS-1);
+  prepareStep(target);
+  step=target;
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  var target=Math.max(step-1,0);
+  prepareStep(target);
+  step=target;
+  render();
+  window.scrollTo(0,0);
+}
+function toggleSection(key){
+  expansionEncountered=true;
+  openSections[key]=!openSections[key];
+  playClick();
+  render();
+}
+function handleSectionKey(event,key){
+  if(event.key==='Enter' || event.key===' '){
+    event.preventDefault();
+    toggleSection(key);
+  }
+}
+
+var glossaryTerms=[
+  {term:'Note c',def:'The report note that reconciles cash and cash equivalents on the Statement of Financial Position to the broader cash figure used by the Cash Flow Statement.'},
+  {term:'Cash included in investments',def:'Cash held inside Yale&rsquo;s investments, at fair value, awaiting deployment in the long-term investment pool.'},
+  {term:'Scope (of a statement&rsquo;s cash figure)',def:'The items included in the cash amount a statement tracks. Labels define that boundary.'},
+  {term:'Indirect method',def:'A Cash Flow Statement presentation that starts with change in net assets and adjusts for non-cash items and changes in operating assets and liabilities to reach operating cash flow.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){
+  if(revealTimer){ clearTimeout(revealTimer); revealTimer=null; }
+  step=TOTAL_STEPS-1;
+  revealN=3;
+  stepTwoSeen=true;
+  expansionEncountered=true;
+  openSections={operating:true,investing:true,financing:true};
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
