@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Nonprofit Statement Map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6-map-scope {
+      --m6-paper:#ffffff;
+      --m6-ink:#263746;
+      --m6-muted:#657583;
+      --m6-primary:#155b86;
+      --m6-rule:#c8d4dc;
+      --m6-rule-strong:#708592;
+      --m6-accent:#d5a528;
+      --m6-shadow:rgba(32,55,72,0.09);
+      --m6-soft:#f3f8fb;
+    }
+    .m6-map-scroll { overflow-x:auto; padding:2px 2px 8px; }
+    .m6-map-grid {
+      display:grid;
+      grid-template-columns:minmax(245px,.9fr) minmax(390px,1.45fr) minmax(245px,.9fr);
+      gap:14px;
+      align-items:start;
+      min-width:920px;
+    }
+    .m6-map-grid > * { min-width:0; }
+    .m6-snapshot-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
+    .m6-snapshot, .m6-mini-panel {
+      box-sizing:border-box;
+      border:1px solid var(--m6-rule);
+      background:var(--m6-paper);
+      color:var(--m6-ink);
+      box-shadow:0 8px 24px var(--m6-shadow);
+    }
+    .m6-snapshot { min-width:235px; padding:17px; border-radius:12px; }
+    .m6-kicker {
+      margin:0 0 5px;
+      color:var(--m6-muted);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .m6-snapshot-title { margin:0; color:var(--m6-primary); font-size:17px; line-height:1.25; }
+    .m6-subline { margin:3px 0 0; color:var(--m6-muted); font-size:12px; font-style:italic; }
+    .m6-snapshot-table { margin-top:14px; font-size:11.5px; }
+    .m6-compact-row {
+      display:grid;
+      grid-template-columns:minmax(145px,1fr) 5.2rem;
+      column-gap:7px;
+      align-items:baseline;
+      padding:3px 0;
+    }
+    .m6-value { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m6-compact-total {
+      margin-top:3px;
+      padding-top:5px;
+      border-top:1px solid var(--m6-rule-strong);
+      color:var(--m6-primary);
+      font-weight:800;
+    }
+    .m6-compact-gap { height:8px; }
+    .m6-net-assets {
+      margin-top:5px;
+      padding:7px 7px 5px;
+      border-left:2px solid var(--m6-accent);
+      border-radius:3px;
+      background:var(--m6-soft);
+    }
+    .m6-compact-indent {
+      display:grid;
+      grid-template-columns:minmax(145px,1fr) 5.2rem;
+      column-gap:7px;
+      padding:1px 0 1px 10px;
+      color:var(--m6-muted);
+      font-size:9.5px;
+      font-style:italic;
+    }
+    .m6-identity {
+      margin:9px 0 0;
+      color:var(--m6-muted);
+      font-family:"JetBrains Mono",monospace;
+      font-size:9.5px;
+      font-style:italic;
+      text-align:center;
+    }
+    .m6-center-stack { display:grid; gap:10px; }
+    .m6-mini-panel { overflow-x:auto; padding:13px 14px; border-radius:10px; box-shadow:0 5px 16px var(--m6-shadow); }
+    .m6-mini-title {
+      margin:0;
+      color:var(--m6-primary);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.07em;
+      text-transform:uppercase;
+    }
+    .m6-mini-subline { margin:3px 0 8px; color:var(--m6-muted); font-size:10px; font-style:italic; }
+    .m6-mini-row {
+      display:grid;
+      grid-template-columns:minmax(225px,1fr) 5.1rem;
+      gap:7px;
+      align-items:baseline;
+      padding:2px 0;
+      font-size:10.5px;
+    }
+    .m6-mini-total {
+      margin-top:3px;
+      padding-top:4px;
+      border-top:1px solid var(--m6-rule-strong);
+      color:var(--m6-primary);
+      font-weight:800;
+    }
+    .m6-mini-note { margin:6px 0 0; color:var(--m6-muted); font-size:9.5px; font-style:italic; line-height:1.45; }
+    .m6-bucket-grid {
+      display:grid;
+      grid-template-columns:minmax(175px,1fr) repeat(3,4.5rem);
+      gap:4px 6px;
+      align-items:baseline;
+      min-width:390px;
+      font-size:10px;
+    }
+    .m6-bucket-head { color:var(--m6-muted); font-size:9px; font-weight:700; text-align:right; }
+    .m6-bucket-opening { color:var(--m6-primary); font-weight:700; }
+    .m6-bucket-reclass { color:var(--m6-muted); font-size:9.5px; font-style:italic; }
+    .m6-bucket-closing {
+      margin-top:4px;
+      padding-top:5px;
+      border-top:1px solid var(--m6-rule-strong);
+      color:var(--m6-primary);
+      font-weight:800;
+    }
+    .m6-insight-wrap { margin-top:18px; }
+    @media (max-width:900px) {
+      .m6-map-grid { min-width:860px; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6-map-scope {
+        --m6-paper:#26242e;
+        --m6-ink:#e8edf1;
+        --m6-muted:#b4c0c8;
+        --m6-primary:#7dc8f3;
+        --m6-rule:#4b5361;
+        --m6-rule-strong:#8797a2;
+        --m6-accent:#d8ad3e;
+        --m6-shadow:rgba(0,0,0,0.28);
+        --m6-soft:#25313a;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>A Nonprofit Statement Map</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~4 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart" aria-label="Restart this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">A Nonprofit Statement Map</div>
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="yale-fy2025-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+function fmt(v){
+  if(v===0) return '&mdash;';
+  var a=Math.abs(v).toLocaleString('en-US');
+  return v<0 ? '('+a+')' : a;
+}
+function compactRow(label,value,className){
+  return '<div class="m6-compact-row'+(className?' '+className:'')+'"><div>'+label+'</div><div class="m6-value">'+fmt(value)+'</div></div>';
+}
+function compactIndent(label,value){
+  return '<div class="m6-compact-indent"><div>'+label+'</div><div class="m6-value">'+fmt(value)+'</div></div>';
+}
+function compactSnapshot(year,kicker,dateText){
+  var d=window.YALE_FY2025.compactSFP[year];
+  var noncash=d.totalAssets-d.cash;
+  var rows=compactRow('Cash and cash equivalents',d.cash,'');
+  rows+=compactRow('Noncash assets',noncash,'');
+  rows+='<div class="m6-compact-indent"><div>(including investments of '+fmt(d.investments)+')</div><div></div></div>';
+  rows+=compactRow('Total assets',d.totalAssets,'m6-compact-total');
+  rows+='<div class="m6-compact-gap"></div>';
+  rows+=compactRow('&minus; Total liabilities',d.totalLiab,'');
+  rows+='<div class="m6-net-assets">';
+  rows+=compactRow('Net assets without donor restrictions',d.naWithout,'');
+  rows+=compactIndent('of which Yale University',d.naWithoutYale);
+  rows+=compactIndent('of which noncontrolling interests',d.naWithoutNCI);
+  rows+=compactRow('+ Net assets with donor restrictions',d.naWith,'');
+  rows+=compactRow('= Total net assets',d.totalNA,'m6-compact-total');
+  rows+='</div>';
+  rows+='<p class="m6-identity">'+fmt(d.totalAssets)+' &minus; '+fmt(d.totalLiab)+' = '+fmt(d.totalNA)+' &#10003;</p>';
+  return '<div class="m6-snapshot-wrap"><div class="m6-snapshot"><p class="m6-kicker">'+kicker+'</p>'
+    +'<h3 class="m6-snapshot-title">Statement of Financial Position</h3>'
+    +'<p class="m6-subline">'+dateText+' &middot; in $ millions</p>'
+    +'<div class="m6-snapshot-table">'+rows+'</div></div></div>';
+}
+function findSoARow(role){
+  var rows=window.YALE_FY2025.soaRows;
+  for(var i=0;i<rows.length;i++) if(rows[i].role===role) return rows[i];
+  return null;
+}
+function cashFlowPanel(){
+  var d=window.YALE_FY2025.socf2Year;
+  return '<div class="m6-mini-panel"><p class="m6-mini-title">Cash Flow Statement (FY2025)</p>'
+    +'<p class="m6-mini-subline">Fiscal year ended June 30, 2025 &middot; in $ millions</p>'
+    +'<div class="m6-mini-row"><div>Net cash used in operating activities</div><div class="m6-value">'+fmt(d.operating.subtotal.y2025)+'</div></div>'
+    +'<div class="m6-mini-row"><div>Net cash (used in) provided by investing activities</div><div class="m6-value">'+fmt(d.investing.subtotal.y2025)+'</div></div>'
+    +'<div class="m6-mini-row"><div>Net cash provided by financing activities</div><div class="m6-value">'+fmt(d.financing.subtotal.y2025)+'</div></div>'
+    +'<div class="m6-mini-row m6-mini-total"><div>Net change in cash (CFS scope)</div><div class="m6-value">'+fmt(d.netChange.y2025)+'</div></div>'
+    +'<div class="m6-mini-row m6-mini-note"><div>Beginning '+fmt(d.beginning.y2025)+' &rarr; ending '+fmt(d.ending.y2025)+'</div><div></div></div>'
+    +'<p class="m6-mini-note">The CFS&rsquo;s cash includes cash held within the investment pool. Its label differs from the SFP&rsquo;s Cash line; 63-3 resolves the difference.</p></div>';
+}
+function bucketCells(label,row,className){
+  var total=row.wo+row.wi;
+  var c=className?' '+className:'';
+  return '<div class="'+(className||'')+'">'+label+'</div>'
+    +'<div class="m6-value'+c+'">'+fmt(row.wo)+'</div>'
+    +'<div class="m6-value'+c+'">'+fmt(row.wi)+'</div>'
+    +'<div class="m6-value'+c+'">'+fmt(total)+'</div>';
+}
+function activitiesPanel(){
+  var opening=findSoARow('balance-beg');
+  var operating=findSoARow('op-net');
+  var nonoperating=findSoARow('nonop-net');
+  var opRelease=findSoARow('op-releases');
+  var nonopRelease=findSoARow('nonop-releases');
+  var nci=findSoARow('nci');
+  var totalChange=findSoARow('total-incl-nci');
+  var closing=findSoARow('balance-end');
+  var releases=opRelease.wo+nonopRelease.wo;
+  var html='<div class="m6-mini-panel"><p class="m6-mini-title">Statement of Activities (FY2025)</p>'
+    +'<p class="m6-mini-subline">Fiscal year ended June 30, 2025 &middot; in $ millions</p><div class="m6-bucket-grid">'
+    +'<div></div><div class="m6-bucket-head">Without</div><div class="m6-bucket-head">With</div><div class="m6-bucket-head">Total</div>';
+  html+=bucketCells('Opening balances',opening,'m6-bucket-opening');
+  html+=bucketCells('Operating activities net',operating,'');
+  html+=bucketCells('Non-operating activities net',nonoperating,'');
+  html+='<div class="m6-bucket-reclass">(of which releases from restrictions, a reclassification)</div>'
+    +'<div class="m6-value m6-bucket-reclass">+'+fmt(releases)+'</div>'
+    +'<div class="m6-value m6-bucket-reclass">'+fmt(-releases)+'</div>'
+    +'<div class="m6-value m6-bucket-reclass">'+fmt(opRelease.wo+opRelease.wi+nonopRelease.wo+nonopRelease.wi)+'</div>';
+  html+=bucketCells('NCI change',nci,'');
+  html+=bucketCells('Closing balances',closing,'m6-bucket-closing');
+  var exactChange=(window.YALE_FY2025.compactSFP.y2025.totalNA-window.YALE_FY2025.compactSFP.y2024.totalNA);
+  html+='</div><p class="m6-mini-note">Closing balances match the Ending SFP&rsquo;s net-asset buckets. Total FY2025 change: '+fmt(exactChange)+' (rows above, rounded to $ millions, sum to '+fmt(totalChange.wo+totalChange.wi)+').</p></div>';
+  return html;
+}
+function architectureView(){
+  return '<div class="m6-map-scope"><div class="m6-map-scroll"><div class="m6-map-grid">'
+    +compactSnapshot('y2024','Beginning','June 30, 2024')
+    +'<div class="m6-center-stack">'+cashFlowPanel()+activitiesPanel()+'</div>'
+    +compactSnapshot('y2025','Ending','June 30, 2025')
+    +'</div></div></div>';
+}
+function render(){
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p><strong>Yale&rsquo;s map at a glance:</strong> two Statements of Financial Position, one fiscal year apart &mdash; June 30, 2024 and June 30, 2025 &mdash; with the year&rsquo;s story told between them.</p><p>A for-profit needed three explanatory statements; a nonprofit needs <strong>two statements</strong>. The Statement of Cash Flows still tells the cash story. The Statement of Activities does the combined work of an income statement and a statement of changes in equity, because every change in net assets flows through it. The walk ahead (63-x) steps through each piece; this page is the map.</p></div>';
+  document.getElementById('mainGrid').innerHTML=architectureView();
+  document.getElementById('tail').innerHTML='<div class="m6-map-scope m6-insight-wrap"><div class="insight-box">The architecture from the bike shop, on a $59-billion nonprofit: two balance-sheet snapshots, two explanatory statements between them, every change in net assets accounted for. Two statements, not three: the Statement of Activities carries both the income-statement story and the changes-in-the-difference story.</div></div>';
+  document.getElementById('controls').innerHTML='<div class="nav-buttons"><button class="btn-back" onclick="nav(\'61-1-Module-6-Introduction.html\')">&larr; Back</button><button class="btn-continue" onclick="nav(\'63-1-The-Statement-of-Financial-Position.html\')">The Statement of Financial Position &rarr;</button></div>';
+  if(window.lucide) lucide.createIcons();
+}
+
+var glossaryTerms=[
+  {term:'Statement of Financial Position',def:'A nonprofit&rsquo;s balance sheet: recorded assets, liabilities, and Net Assets at a date.'},
+  {term:'Statement of Activities',def:'The nonprofit statement that explains change in net assets and combines the work of a for-profit income statement and statement of changes in equity.'},
+  {term:'Statement of Cash Flows',def:'The statement that traces cash from operating, investing, and financing activities during a period.'},
+  {term:'Net Assets',def:'Recorded assets minus recorded liabilities for a nonprofit. It is a computed difference, not a pool of cash or an ownership claim.'},
+  {term:'Released from restrictions',def:'Amounts reclassified from With to Without when a donor&rsquo;s purpose or time condition is met; total net assets stay unchanged.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ playClick(); window.scrollTo(0,0); render(); }
+function nav(url){ playClick(); window.location.href=url; }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+window.devFill=function(){};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
