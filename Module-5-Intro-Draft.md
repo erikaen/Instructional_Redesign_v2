@@ -151,23 +151,76 @@ By the end of Module 5, the student will be able to:
   the definition matters to the cash flow statement.
 - **M5-LO4:** Explain what noncontrolling interests represent and where
   their effects appear.
-- **M5-LO5:** Distinguish net income from comprehensive income and describe
-  the relationship between the two.
+- **M5-LO5:** Begin to develop an awareness of how accounting conventions
+  can create complications such as Other Comprehensive Income. (Real
+  understanding of these issues involves close encounters with the process
+  of setting accounting standards and conventions and the various pressures
+  interested parties exert on that process — beyond this course's scope; the
+  objective here is awareness, not mastery.)
 - **M5-LO6:** Apply restrictive recognition to a real entity: give examples
   of things relevant to CVS's value that its statements do not recognize.
 
+## Ruled (2026-07-18)
+
+- **Vocabulary turn:** Equities, shareholders' equity, net assets,
+  gains/losses are formally introduced **on the welcome page**, each with
+  its bike-shop antecedent named at first use. The 53-x lint carve-out
+  already anticipates this.
+- **Assessments:** both — per-tutorial quizzes AND a single module
+  assessment against the LOs.
+- **The equities name:** the welcome page carries an **expandable note** on
+  the name and its shortcomings (draft below), distilled from Rick's think
+  piece *The Residual Has Too Many Names: What the Word "Equities" Smuggles
+  In* (Courses repo, `Think-Pieces/Equities-Label/Equities-Label-Draft-v1.md`).
+  The plural-on-purpose convention folds into the same note.
+
+## Draft expandable note: "About the word Equities" (near-student voice)
+
+> **A note on the name — click to expand.**
+>
+> The course made you wait a long time for a name. In Module 1 the
+> difference between Assets and Liabilities stayed just "the difference";
+> in Module 2 it earned the Operating Agreement's own word, Member's
+> Capital. That patience was deliberate, because the word you are about to
+> meet everywhere — **equity** — promises more than the number can deliver.
+>
+> Here is what the rule-makers themselves say equity is: "the residual
+> interest in the assets of an entity that remains after deducting its
+> liabilities." A subtraction. The conventions decide what counts as an
+> asset and a liability, and the difference falls out of the arithmetic —
+> nobody counted it, and nobody could go collect it.
+>
+> But the *word* arrived from places where you could collect it. In law, a
+> borrower's "equity of redemption" was a right you could actually enforce.
+> "Home equity" is a house's price minus the mortgage — close to what a
+> sale would put in your pocket. And the market calls shares "equities" —
+> things with a live price at every moment. Borrowed from those homes, the
+> word whispers *this is what the owners would get*. It is not. Apple's
+> balance sheet recently showed about $57 billion of shareholders' equity
+> while the market priced its shares near $3.4 trillion; McDonald's has
+> reported *negative* shareholders' equity for years while being one of the
+> most valuable restaurant companies on earth. Neither is an error. The
+> book number and the market number answer different questions — you
+> learned exactly this when Freddie offered $20,000 for 30% of a shop whose
+> recorded capital was $4,500.
+>
+> The profession has retired misleading labels before — "surplus" (it
+> implied a distributable excess) and "unrestricted" (it implied no
+> restrictions at all) both fell when their connotations outran their
+> definitions. "Equity" has so far kept its seat. So read it the way this
+> course taught you to read the bike shop's piles: a **category of
+> accounts** recording where the recorded difference came from — what
+> owners put in, what operations generated, what was paid back out. That is
+> also why these materials write it in the plural, **Equities**: the small
+> jolt of unfamiliarity is a reminder that you are looking at a section of
+> a statement, not a stake with a price.
+
 ## Open questions for Rick
 
-1. The vocabulary turn: Module 5 introduces **Equities**, **shareholders'
-   equity**, **net assets**, **gains/losses** — terms deliberately withheld
-   (or banned) in Modules 1–4. The 53-x lint carve-out already anticipates
-   this. Confirm the welcome page is where each is formally introduced, with
-   its bike-shop antecedent named at first use.
-2. Does the bridge exercise (the map review against the eight points) live
+1. Does the bridge exercise (the map review against the eight points) live
    on the welcome page, on 52-1's map page, or as the module's first
    assessment?
-3. "Reasons are labeled Equities" — should the welcome page also surface the
-   plural-on-purpose convention (Equities as a category of accounts, not one
-   thing)?
-4. Assessment shape for the new pattern: per-tutorial quizzes, a single
-   module assessment against the LOs, or both?
+2. The expandable note quotes the FASB/IASB residual definition and the
+   Apple/McDonald's contrasts from the think piece — confirm you want the
+   named-company figures on a student-facing page, or prefer the note
+   generic ("a large technology company," "a famous restaurant chain").
