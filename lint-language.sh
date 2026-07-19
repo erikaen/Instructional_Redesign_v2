@@ -31,7 +31,13 @@ check () {  # $1 = grep -E pattern, $2 = explanation
 # also exempt from the equity check only: its page registry must mirror Module 5
 # page titles verbatim (e.g. "The Equity Question"), which is a reference to a
 # page, not tutorial prose.
-equity_files=$(echo "$FILES" | grep -vE '^5[0-9]-|^view\.html$')
+# Ruling 2026-07-19 (M6 build, Rick's lock #7): Module 6 extends the same
+# vocabulary turn to the nonprofit side — the for-profit→nonprofit bridge
+# (equities/shareholders' equity as CVS's vocabulary, net assets as Yale's) is
+# introduced on 61-1 and used across 62-*/63-* (the Yale FY2025 walk). The
+# equity ban is therefore carved out for Module 6 pages (6[0-9]-*) on the same
+# another-entity's-vocabulary principle. All other checks still scan 6x-x.
+equity_files=$(echo "$FILES" | grep -vE '^[56][0-9]-|^view\.html$')
 equity_hits=$(grep -rniE 'equit' $equity_files 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)')
 if [ -n "$equity_hits" ]; then
   echo 'BANNED — "equity/equities" is banned in student-facing pages outside Module 5 (5x-x). The A-L difference stays unnamed in Module 1; from Module 2 on its only name is "Member'"'"'s Capital".'
@@ -57,7 +63,12 @@ check 'accounting equation'      'Say "accounting identity", never "accounting e
 # Ruling 2026-07-19: "net assets" is part of the Module 5 vocabulary turn
 # (introduced on 51-1: changes in net assets = Revenues − Expenses etc.), so it
 # is carved out for all Module 5 pages (5[0-9]-*); still banned for M1–M4.
-netassets_files=$(echo "$FILES" | grep -vE '^5[0-9]-')
+# Ruling 2026-07-19 (M6 build, Rick's lock #7): "Net Assets" is Yale's own
+# statement vocabulary and the spine of Module 6 — carved out for 6[0-9]-* too.
+# (61-* is NOT added to the residual carve-out above: the M6 welcome page does
+# not carry the attributed standard-setters' quotation; its prose says "the
+# definitional difference" instead.)
+netassets_files=$(echo "$FILES" | grep -vE '^[56][0-9]-')
 netassets_hits=$(grep -rniE 'net assets' $netassets_files 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)')
 if [ -n "$netassets_hits" ]; then
   echo 'BANNED — "Net Assets" was removed in the equity purge; do not reintroduce it in M1–M4 student-facing pages (Module 5 pages are carved out).'
