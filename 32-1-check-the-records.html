@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Check the Records</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,24 +12,17 @@
     .wb-grid-wrap { padding:8px; background:white; }
     .xlwb-tab[data-sheet-tab] { cursor:pointer; }
     .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
-    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
-  </style>
+      </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Check the Records</h1>
-        <p class="tut-header-sub">Complete the Records &middot; ~10 min &middot; Page 1 of 3</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Check the Finished Work</div>
+    <div class="phase-sub" id="phaseTitle">Check the Finished Work</div>
 
     <div class="narrative-block">
       <p>Anna asked how the shop did this season. The raw material for that answer sits in the <strong>GENERATED</strong> section of the Reasons tab.</p>
@@ -84,6 +77,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -96,7 +90,7 @@ function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c
 function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 /* ===== numbers from the job log ===== */
@@ -213,7 +207,7 @@ function renderTalk(){
     anna=annaBox('There it is &mdash; <strong>'+ridge.customer+'</strong>, '+ridge.date+'. The log shows the job as finished but unpaid: '+ridge.hours+' hours, <strong>'+BRW.dol(ridge.partsCost)+'</strong> of parts off the shelf, and <strong>'+BRW.dol(ridge.charge)+'</strong> billed net 15. The ledger already carries <strong>Parts used &mdash; Ridgeline Trail Crew</strong> in GENERATED &mdash; the parts left the shelf on that job, so the using-up is recorded. Only the <strong>Repair collected/delivered</strong> row is missing.');
     controls=insightBox('It counts when the work is delivered, not when the cash comes',
       '<p>A delivery row never meant &ldquo;cash arrived&rdquo; &mdash; it records the work going out the door, and Ridgeline&rsquo;s did, on Aug 28. The row belongs in GENERATED now; the cash follows on its own schedule.</p>')
-      +'<button class="btn-continue btn-block" onclick="nav(\'32-2-record-the-receivable.html\')">Record what Ridgeline owes &rarr;</button>';
+      +'';
   }
   document.getElementById('anna').innerHTML=anna;
   document.getElementById('controls').innerHTML=controls;

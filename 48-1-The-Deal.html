@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Deal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,17 +13,10 @@
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>The Deal</h1>
-        <p class="tut-header-sub">The Angel Investor &middot; ~5 min &middot; Page 2 of 2</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Deal</div>
 
     <div id="beats"></div>
     <div id="controls"></div>
@@ -45,6 +38,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -57,8 +51,8 @@ function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},9
 function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA<\/div><div class="dialog-text">&ldquo;'+inner+'&rdquo;<\/div><\/div>'; }
-function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE<\/div><div class="dialog-text">&ldquo;'+inner+'&rdquo;<\/div><\/div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA<\/div><div class="dialog-text">'+inner+'<\/div><\/div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE<\/div><div class="dialog-text">'+inner+'<\/div><\/div>'; }
 
 var step = 0;
 var TOTAL_STEPS = 4;
@@ -167,7 +161,7 @@ function advance(){
 
 function back(){
   playClick();
-  if(step === 0){ nav('47-1-Freddies-Napkin.html'); return; }
+  if(step === 0) return;   /* page-level Back lives in the course footer */
   step = Math.max(step - 1, 0);
   render();
   window.scrollTo(0, 0);

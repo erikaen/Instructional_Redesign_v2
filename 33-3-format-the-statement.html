@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Format the Statement</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,24 +10,16 @@
   <link rel="stylesheet" href="shared.css">
   <style>
     .wb-grid-wrap { padding:8px; background:white; }
-    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
-  </style>
+      </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Format the Statement</h1>
-        <p class="tut-header-sub">Build the Statement &middot; ~10 min &middot; Page 3 of 3</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Format the Statement</div>
 
     <div class="narrative-block">
       <p>The Working Tab holds the season&rsquo;s GENERATED rows, now grouped: <strong>Revenue $6,020</strong>; <strong>Parts Used $1,200</strong>; <strong>Rent $1,950</strong>; and <strong>Depreciation $230</strong>. The detail is ready. Now format the sheet.</p>
@@ -65,6 +57,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -76,7 +69,7 @@ function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c
 function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 var LEDGER_WORKBOOK_KEY='bike-repair-module-3-3';
@@ -163,7 +156,7 @@ function renderTalk(){
     controls=insightBox('The tab earns its name',
       '<p><strong>Working Tab</strong> becomes <strong>Income Statement</strong>, and its tab changes from amber to purple. The sheet says <strong>'+BRW.dol(NET_INCOME)+'</strong>. The dated GENERATED lines say <strong>'+BRW.dol(2810)+' &minus; '+BRW.dol(170)+' = '+BRW.dol(NET_INCOME)+'</strong>. The formatted sheet summarizes the rows between those dates; it does not move them.</p>')
       +'<div class="next-phase-msg">Net income is <strong>'+BRW.dol(NET_INCOME)+'</strong>, while Cash reads <strong>$620</strong>, down from <strong>$1,300</strong> on June 1. Both numbers are true because they answer different questions.</div>'
-      +'<button class="btn-continue btn-block" onclick="nav(\'34-1-what-cash-missed.html\')">One question remains &rarr;</button>';
+      +'';
   }
   document.getElementById('anna').innerHTML=anna;
   document.getElementById('controls').innerHTML=controls;

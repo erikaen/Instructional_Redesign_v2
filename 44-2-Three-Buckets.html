@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sort the Cash Flows</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,23 +12,15 @@
     .wb-grid-wrap { padding:8px; background:white; }
     .page-nav { margin-top:14px; }
     #sorterPanel { margin:18px 0 14px; }
-    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
-  </style>
+      </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Sort the Cash Flows</h1>
-        <p class="tut-header-sub">The Angel Investor &middot; ~10 min &middot; Page 2 of 3</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Sort the Cash Flows</div>
 
     <div class="narrative-block">
       <p>Start with the Cash account&rsquo;s season slice on <strong>Assets</strong>: the rows between <strong>Balance, June 1</strong> and <strong>Balance, August 31</strong>. Copy that slice to a temporary sheet; the original rows stay where they are.</p>
@@ -55,7 +47,7 @@
     <div id="gate"></div>
     <div id="anna"></div>
     <div id="controls"></div>
-    <div class="btn-row page-nav"><button class="btn btn-secondary" type="button" onclick="nav('44-1-The-Cash-Puzzle.html')">&larr; Profit and Cash</button></div>
+    <div class="btn-row page-nav"></div>
   </div>
 </div>
 
@@ -73,6 +65,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -85,7 +78,7 @@ function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},9
 function playSoftNope(){ tone(360,0.10,'sine',0.04); setTimeout(function(){tone(280,0.10,'sine',0.04);},110); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function sheetOf(workbookKey,namePart){
   var sheets=BR_STMT_DATA.workbooks[workbookKey].sheets;
@@ -224,7 +217,7 @@ var buildOptions={
 function renderSortedPayoff(){
   document.getElementById('anna').innerHTML=annaBox('There is Freddie&rsquo;s answer: <strong>Operating $2,350</strong>; <strong>Investing ($400)</strong>; <strong>Financing ($2,630)</strong>. The $2,030 card payoff is Financing because it settled a liability, and the $600 owner&rsquo;s draw is Financing too.');
   document.getElementById('controls').innerHTML=insightBox('The Cash decrease is fully explained','<p><strong>$2,350 &minus; $400 &minus; $2,630 = &minus;$680.</strong> Apply that change to Cash of $1,300 on June 1 and the result is $620 on August 31. Depreciation is not a cash flow.</p><p>One thread remains: net income was <strong>$2,640</strong>, but operating cash is <strong>$2,350</strong> &mdash; a <strong>$290</strong> gap. You&rsquo;ll compare those two honest answers cleanly after formatting.</p>')
-    +'<button class="btn-continue btn-block" onclick="nav(\'44-3-The-Cash-Flow-Statement.html\')">Lay out the statement &rarr;</button>';
+    +'';
 }
 
 function devPlaceCashRows(){

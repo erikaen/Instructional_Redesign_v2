@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Run the Season</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,27 +18,17 @@
     .answer-stack .btn { justify-content:flex-start; text-align:left; }
     .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
     .xlwb-tab[data-sheet-tab] { cursor:pointer; }
-    @media (prefers-color-scheme:dark) {
-      .walk-meta { color:#9ca3af; }
-      .wb-grid-wrap { background:#26242e; }
-    }
-  </style>
+      </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Run the Season</h1>
-        <p class="tut-header-sub">The Story Between the Snapshots &middot; ~10 min &middot; Page 2 of 2</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Add Dated Subtotals</div>
+    <div class="phase-sub" id="phaseTitle">Add Dated Subtotals</div>
 
     <div class="narrative-block">
       <p>Open <span class="mono">Bike-Repair.xlsx</span>. The walk starts on <strong>Assets</strong> at <strong>Parts</strong>. Every category already shows a ruled balance through August 31, but no line shows where anything stood on June 1.</p>
@@ -93,6 +83,7 @@
 <script src="bike-repair-card-statements.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -294,7 +285,7 @@ Array.prototype.forEach.call(document.querySelectorAll('#workbookShell [data-she
 var TOTAL_STEPS=8;
 var stage=0, answered=false, subtotalAttempts=0, nudgeTimer=null;
 var stage2Phase='expand', visitedBalanceTab=false;
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function walkMeta(){ return '<div class="walk-meta"><span class="walk-step">Step '+(stage+1)+' of '+TOTAL_STEPS+'</span><span class="walk-nudge" id="walkNudge" role="status" aria-live="polite"></span></div>'; }
 function answerButtons(items,handler){
@@ -411,7 +402,7 @@ function renderTalk(){
     } else {
       controls=insightBox('A new account still gets the cut','<p><strong>WITHDRAWN, June 1: $0.</strong> The ruled cut runs across every account; where there is no earlier history it simply reads zero. The August 31 line carries the season&rsquo;s only entry: the $600 draw.</p>')
         +'<div class="next-phase-msg">The workbook now gives you honest boundaries. Next, check the GENERATED rows between those dated lines against the work the shop actually did.</div>'
-        +'<button class="btn-continue btn-block" onclick="nav(\'32-1-check-the-records.html\')">Next: check the season&rsquo;s records &rarr;</button>';
+        +'';
     }
   }
   document.getElementById('anna').innerHTML=anna;

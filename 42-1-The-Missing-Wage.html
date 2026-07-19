@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Missing Wage</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,24 +11,16 @@
   <style>
     .stmt-paper .brw-hint { justify-content: flex-end; text-align: right; white-space: nowrap; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; font-size: var(--font-s); color: inherit; }
     .continue-hint { margin-top:8px; text-align:right; color:#6b7280; font-family:Inter,sans-serif; font-size:var(--font-xs); }
-    @media (prefers-color-scheme:dark) { .continue-hint { color:#9ca3af; } }
-  </style>
+      </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>The Missing Wage</h1>
-        <p class="tut-header-sub">The Angel Investor &middot; ~6 min</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset" aria-label="Reset" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Missing Wage</div>
 
     <div id="beats"></div>
     <div id="controls"></div>
@@ -50,6 +42,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -62,9 +55,9 @@ function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},9
 function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,0.12,'sine',0.05);},120); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
 
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
-function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
-function youBox(inner){ return '<div class="dialog-box you"><div class="dialog-label">YOU</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
+function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="dialog-label">FREDDIE</div><div class="dialog-text">'+inner+'</div></div>'; }
+function youBox(inner){ return '<div class="dialog-box you"><div class="dialog-label">YOU</div><div class="dialog-text">'+inner+'</div></div>'; }
 
 function sheetOf(name){
   var sheets=BR_STMT_DATA.workbooks['bike-repair-end'].sheets;
@@ -168,9 +161,9 @@ function render(){
 
 function renderControls(){
   var disabled=(step===0&&!huntAnswered)||(step===1&&!mcqAnswered);
-  var c='<div class="nav-buttons"><button class="btn-back" onclick="nav(\'41-1-The-Investor-Asks.html\')">&larr; Back</button>';
+  var c='<div class="nav-buttons">';
+  if(step>0) c += '<button class="btn-back" onclick="back()">&larr; Back</button>';
   if(step<2) c += '<button class="btn-next"'+(disabled?' disabled':'')+' onclick="advance()">Continue &rarr;</button>';
-  else c += '<button class="btn-next" onclick="nav(\'43-1-The-Capital-Bridge.html\')">Build the walk &rarr;</button>';
   c += '</div>';
   if(disabled) c += '<div class="continue-hint">Answer the question above to continue.</div>';
   document.getElementById('controls').innerHTML=c;
@@ -179,6 +172,7 @@ function advance(){
   if((step===0&&!huntAnswered)||(step===1&&!mcqAnswered)) return;
   playClick(); step=Math.min(2,step+1); render(); window.scrollTo(0,document.body.scrollHeight);
 }
+function back(){ if(step===0) return; playClick(); step--; render(); window.scrollTo(0,0); }
 var glossaryTerms=[
   { term:'Salary / wages', def:'Pay for work. The records treat it as an expense when the work is done.' },
   { term:'Draw', def:'A WITHDRAWN entry on the Reasons tab. It reduces the Member&rsquo;s Capital total on the balance sheet and is not an expense.' },

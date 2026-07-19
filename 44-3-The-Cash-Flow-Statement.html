@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Cash Flow Statement</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,23 +10,15 @@
   <link rel="stylesheet" href="shared.css">
   <style>
     .wb-grid-wrap { padding:8px; background:white; }
-    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
-  </style>
+      </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>The Cash Flow Statement</h1>
-        <p class="tut-header-sub">The Angel Investor &middot; ~10 min &middot; Page 3 of 3</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Cash Flow Statement</div>
 
     <div class="narrative-block">
       <p>The sorted <strong>Working Tab</strong> is ready. The copied rows are grouped and totaled; format the result, then give the finished statement its permanent name.</p>
@@ -60,6 +52,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -69,7 +62,7 @@ var audioCtx=null;
 function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
 function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 function sheetOf(workbookKey,namePart){
   var sheets=BR_STMT_DATA.workbooks[workbookKey].sheets;
@@ -113,13 +106,13 @@ function christenStatement(){
   document.getElementById('anna').innerHTML=annaBox('Operating activities provided <strong>$2,350</strong>. Investing used <strong>$400</strong>. Financing used <strong>$2,630</strong>. Together they changed Cash by <strong>&minus;$680</strong>, taking the June 1 balance of <strong>$1,300</strong> to the August 31 balance of <strong>$620</strong>.');
   document.getElementById('controls').innerHTML=insightBox('The ending cash ties twice','<p><strong>Cash, August 31: $620</strong> matches both the <strong>Balance, August 31</strong> line in the Cash account on Assets and <strong>Cash $620</strong> on the Balance Sheet.</p><p>The workbook now has <strong>seven tabs</strong>: Assets, Liabilities, and Reasons are the three source-record tabs; Balance Sheet, Income Statement, Statement of Member&rsquo;s Capital, and Cash Flow Statement are the four statement tabs.</p>')
     +annaBox('Freddie called it <strong>&ldquo;same shop, two clocks.&rdquo;</strong> He had it right. Net income was <strong>$2,640</strong>; operating cash was <strong>$2,350</strong>. Now those two honest answers can be compared cleanly: the big non-operating cash move &mdash; the <strong>$2,030 credit-card payoff</strong> &mdash; sits under <strong>Financing</strong>, not between net income and operating cash. The <strong>$290</strong> that remains is only the timing items you already bridged in Module 3: the Ridgeline receivable, the Smith deposit, and depreciation added back.')
-    +'<div class="btn-row"><button class="btn btn-secondary" type="button" onclick="nav(\'44-2-Three-Buckets.html\')">&larr; Sort the Cash Flows</button><button class="btn-continue" type="button" onclick="nav(\'46-1-The-Statements-Tie-Out.html\')">Tie the statements together &rarr;</button></div>';
+    +'<div class="btn-row"></div>';
   if(window.lucide) lucide.createIcons();
 }
 
 document.getElementById('anna').innerHTML=annaBox('The grouped working view is finished. Format the rows, then christen the amber Working Tab as the fourth statement tab.');
 document.getElementById('controls').innerHTML='<button class="btn-continue btn-block" type="button" onclick="christenStatement()">Christen it the Cash Flow Statement &rarr;</button>'
-  +'<div class="btn-row"><button class="btn btn-secondary" type="button" onclick="nav(\'44-2-Three-Buckets.html\')">&larr; Sort the Cash Flows</button></div>';
+  +'<div class="btn-row"></div>';
 
 var glossaryTerms=[
   {term:'Cash Flow Statement',def:'A statement that groups cash flows into Operating, Investing, and Financing activities and reconciles the period&rsquo;s net change to ending Cash.'},

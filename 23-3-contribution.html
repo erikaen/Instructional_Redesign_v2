@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Activity 2.3: The Rules &middot; What You Put In</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,28 +14,18 @@
     .working-copy .xl-row { grid-template-columns:22px 34px 1fr 110px; }
     .working-copy-note { padding:10px 12px 2px; color:var(--muted); font-size:var(--font-s); }
     #contributionSorterPanel { margin:16px 0; }
-    @media (prefers-color-scheme:dark) {
-      .bs-pipeline .xlwb-tab.tk-temp { box-shadow:inset 0 -3px 0 #FFC000; }
-      .bs-pipeline .xlwb-tab.tk-stmt { box-shadow:inset 0 -3px 0 #c4b5fd; }
-    }
-  </style>
+      </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Activity 2.3: The Rules</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~12 min &middot; Phase 3 of 6</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">What You Put In</div>
+    <div class="phase-sub" id="phaseTitle">What You Put In</div>
 
     <!-- ===== contribution ===== -->
     <div class="phase active" id="phase-contribution">
@@ -62,6 +52,7 @@
 
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -73,7 +64,7 @@ function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c
 function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
 function playSoftNope(){ tone(360,0.10,'sine',0.04); setTimeout(function(){tone(280,0.10,'sine',0.04);},110); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 
 /* ===== glossary (shared across all phases of 2.3) ===== */
 var baseGlossaryTerms = [
@@ -325,7 +316,7 @@ function renderContribution(){
     html+='<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="check" class="licon"></i> Not one number changed</div>'+
       '<p>The same Balance Sheet is now the <strong>Company&rsquo;s</strong> &mdash; legally contributed in. The difference became <strong>Member&rsquo;s Capital</strong>, the one name the Operating Agreement uses. <strong>Contributed ($990)</strong> and <strong>Generated ($170)</strong> carried over untouched &mdash; the same $1,160, with the history intact.</p>'+
       '<p><strong>Schedule A</strong> is still <strong>empty</strong>. These are the lines you&rsquo;ll enter in 2.4, after the cash is deposited and the card is moved.</p></div>'+
-      '<button class="btn-continue btn-block" onclick="nav(\'23-4-wall.html\')">Now drill into &sect;17 &mdash; the wall &rarr;</button>';
+      '';
   }
   area.innerHTML=html;
   BRW.mount('bsWb',bsSnap);

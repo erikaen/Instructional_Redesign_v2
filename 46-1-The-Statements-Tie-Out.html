@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Statements Tie Out</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,26 +18,15 @@
     .map-center .sce-is-nested { margin-top:8px; }
     .map-center .mc-card { margin:0 0 10px; }
     .mc-submit-hint { margin-left:10px; color:#6b7280; font-size:var(--font-xs); }
-    @media (prefers-color-scheme:dark) {
-      .map-center .statement-panel, .map-center .wb-grid-wrap { background:#26242e; }
-      .mc-submit-hint { color:#9ca3af; }
-    }
-  </style>
+      </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>The Statements Tie Out</h1>
-        <p class="tut-header-sub">The Angel Investor &middot; ~10 min &middot; Page 1 of 1</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Statements Tie Out</div>
 
     <div id="beats"></div>
     <div id="mainGrid"></div>
@@ -60,6 +49,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -313,10 +303,10 @@ function renderControls(){
   var h='';
   if(step===3&&questionReady&&!incomeSeen)h+='<div class="next-phase-msg">Open the Net income line to unlock Next.</div>';
   h+='<div class="nav-buttons">';
-  if(step===0)h+='<button class="btn-back" onclick="nav(\'44-3-The-Cash-Flow-Statement.html\')">&larr; Back</button>';
+  if(step===0)h+='';
   else h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
   if(step<TOTAL_STEPS-1)h+='<button class="btn-next"'+(nextDisabled?' disabled':'')+' onclick="advance()">Next &rarr;</button>';
-  else h+='<button class="btn-continue btn-block" onclick="nav(\'47-1-Freddies-Napkin.html\')">Continue to Freddie&rsquo;s napkin &rarr;</button>';
+  else h+='';
   h+='</div>';
   document.getElementById('controls').innerHTML=h;
 }

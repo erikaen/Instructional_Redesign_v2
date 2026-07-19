@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sort the Rows</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,24 +13,17 @@
     .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
     .xlwb-tab[data-sheet-tab] { cursor:pointer; }
     #sorterPanel { margin:18px 0 14px; }
-    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
-  </style>
+      </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Sort the Rows</h1>
-        <p class="tut-header-sub">Build the Statement &middot; ~10 min &middot; Page 2 of 3</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Revenue or Expense?</div>
+    <div class="phase-sub" id="phaseTitle">Revenue or Expense?</div>
 
     <div class="narrative-block" id="narrative">
       <p>All <strong>46 season rows</strong> are copied onto the amber Working Tab. Nothing is set aside. First sort every row into <strong>Revenue</strong> or <strong>Expenses</strong>.</p>
@@ -81,6 +74,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -93,7 +87,7 @@ function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c
 function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
 function playSoftNope(){ tone(360,0.10,'sine',0.04); setTimeout(function(){tone(280,0.10,'sine',0.04);},110); }
 function playClick(){ tone(600,0.08,'sine',0.04); }
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 document.getElementById('annaIntro').innerHTML=annaBox(
@@ -379,7 +373,7 @@ function renderGroupedResult(){
   document.getElementById('controls').innerHTML=
     insightBox('The grouped Working Tab',
       '<p>Revenue is <strong>$6,020</strong>. Below it, Expenses are grouped into the three ways value was used up. No row disappeared and no row moved out of the source records.</p>')+
-    '<button class="btn-continue btn-block" onclick="nav(\'33-3-format-the-statement.html\')">Format the statement &rarr;</button>';
+    '';
   if(window.lucide) lucide.createIcons();
   document.getElementById('anna').scrollIntoView({behavior:'smooth',block:'start'});
 }

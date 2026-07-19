@@ -481,7 +481,7 @@ function m1GlossaryClose(){ document.getElementById('glossaryOverlay').classList
    `hours` = labor time spent on the job. Part-time shop (day job + evenings/weekends)
    over ~13 weeks; the 21 jobs total 55.25 hrs of wrenching (~4–5 hrs/week billable).
    Reusable across Module 3 pages (31-2 detail, 3.4 cash flow, recognition beats). */
-var BR_JOBS = [
+var BR_JOBS = window.BR_JOBS || [
   {
     "id": "J-0001",
     "date": "Jun 3",
@@ -741,7 +741,7 @@ var BR_JOBS = [
    The season's parts restock: three supplier orders from Quality Bicycle Products (QBP),
    totaling $1,200 in cash — matching the $1,200 of parts consumed across the 21 jobs, so
    the Parts inventory nets back to its $200 opening. Reusable across Module 3 pages. */
-var BR_PURCHASES = [
+var BR_PURCHASES = window.BR_PURCHASES || [
   {
     "id": "PO-2601",
     "date": "Jun 1",
@@ -788,7 +788,7 @@ var BR_PURCHASES = [
    an Aug 31 closing balance of $620. Deposits are the collected repairs (BR_JOBS);
    withdrawals are rent, the QBP parts orders (BR_PURCHASES), a new tool, the credit-card
    payoff, and the owner's draw. Loads after bike-repair-job-records.js. */
-var BR_BANK = (function () {
+var BR_BANK = window.BR_BANK || (function () {
   function depositsFor(mon) {
     return BR_JOBS
       .filter(function (j) { return j.collected && j.pay.indexOf('Deposit') < 0 && j.date.slice(0, 3) === mon; })
@@ -815,7 +815,7 @@ var BR_BANK = (function () {
    The card carried the startup equipment purchases. Two statements: the setup period
    (charges, nothing paid down → $2,030 carried into the LLC at June 1) and the summer
    (paid off in full → $0). 0% intro APR, so no interest accrues. */
-var BR_CARD = (function () {
+var BR_CARD = window.BR_CARD || (function () {
   var setup = [
     { desc: 'Purchase — hand tools', amt: 300 },
     { desc: 'Purchase — air compressor', amt: 180 },
@@ -872,7 +872,7 @@ var BR_CARD = (function () {
  *   BR_WB.generatedRows()    -> the GENERATED reasons, each tagged flow:'in'|'up'
  *   BR_WB.monthName          -> { Jun:'June', ... }
  * ========================================================================== */
-var BR_WB = (function () {
+var BR_WB = window.BR_WB || (function () {
   'use strict';
 
   var monthName = { Jun: 'June', Jul: 'July', Aug: 'August' };
@@ -1245,18 +1245,29 @@ var COURSE_TUTORIALS = [
     {f:'23-1-welcome.html', t:'The Operating Agreement'}, {f:'23-2-agreement.html', t:'Drafting the Agreement'}, {f:'23-3-contribution.html', t:'What You Put In'}, {f:'23-4-wall.html', t:'The Wall'}, {f:'23-5-keystone.html', t:'When Did It Become Real?'}, {f:'23-6-complete.html', t:'Complete'} ] },
   { id:'m2t4', module:'Module 2 · Getting Formal', num:'Tutorial 4', name:'The Entity&rsquo;s Own Number', title:'2.4 The Entity&rsquo;s Own Number', pages:[
     {f:'24-1-welcome.html', t:'An Identity of Its Own'}, {f:'24-2-ein.html', t:'Form SS-4'}, {f:'24-3-account.html', t:'Opening the Account'}, {f:'24-4-statements.html', t:'The Statements'}, {f:'24-5-schedule-a.html', t:'Complete Schedule A'}, {f:'24-6-complete.html', t:'Module 2 Complete'} ] },
-  { id:'m3t1', module:'Module 3 · The Full Set of Statements', num:'Tutorial 1', name:'Run the Season', title:'3.1 Run the Season', pages:[
+  { id:'m3t1', module:'Module 3 · The Story Between the Snapshots', num:'Tutorial 1', name:'Run the Season', title:'3.1 Run the Season', pages:[
     {f:'31-1-welcome.html', t:'A Season Goes By'}, {f:'31-2-work-the-season.html', t:'Read the Books'} ] },
-  { id:'m3t2', module:'Module 3 · The Full Set of Statements', num:'Tutorial 2', name:'The Income Statement', title:'3.2 The Income Statement', pages:[
-    {f:'32-1-the-income-statement.html', t:'The Pile'}, {f:'32-2-two-kinds.html', t:'Two Kinds of Reason'}, {f:'32-3-revenue-follows-the-work.html', t:'The Work, Not the Cash'}, {f:'32-4-name-the-income-statement.html', t:'Name the Piles'}, {f:'32-5-what-the-season-kept.html', t:'What the Season Kept'} ] },
-  { id:'m3t3', module:'Module 3 · The Full Set of Statements', num:'Tutorial 3', name:'Depreciation', title:'3.3 Depreciation', pages:[
-    {f:'33-1-Two-Kinds-of-Used-Up.html', t:'Two Kinds of Used-Up'}, {f:'33-2-The-Third-Kind.html', t:'The Third Kind'}, {f:'33-3-The-Bottom-Line.html', t:'The Bottom Line'} ] },
-  { id:'m3t4', module:'Module 3 · The Full Set of Statements', num:'Tutorial 4', name:'The Cash-Flow Statement', title:'3.4 The Cash-Flow Statement', pages:[
-    {f:'34-1-The-Cash-Puzzle.html', t:'The Cash Puzzle'}, {f:'34-2-Three-Buckets.html', t:'Three Buckets'}, {f:'34-3-What-Cash-Missed.html', t:'What Cash Missed'}, {f:'34-4-The-Cash-Flow-Statement.html', t:'Laying It Out'} ] },
-  { id:'m3t5', module:'Module 3 · The Full Set of Statements', num:'Tutorial 5', name:'Closing the Season', title:'3.5 Closing the Season', pages:[
-    {f:'35-1-The-Capital-Bridge.html', t:'The Capital Bridge'}, {f:'35-2-The-First-Close.html', t:'The First Close'}, {f:'35-3-The-Statements-Tie-Out.html', t:'The Statements Tie Out'}, {f:'35-4-Module-Complete.html', t:'Module Complete'} ] },
-  { id:'m4t1', module:'Module 4 · Real Statements', num:'Tutorial 1', name:'The Statement Map', title:'4.1 The Statement Map', pages:[
-    {f:'41-1-The-Investor-Asks.html', t:'The Investor Asks'}, {f:'41-2-The-Statement-Map.html', t:'Three Paths and the Map'} ] }
+  { id:'m3t2', module:'Module 3 · The Story Between the Snapshots', num:'Tutorial 2', name:'Complete the Records', title:'3.2 Complete the Records', pages:[
+    {f:'32-1-check-the-records.html', t:'Check the Records'}, {f:'32-2-record-the-receivable.html', t:'Record the Receivable'}, {f:'32-3-the-third-kind.html', t:'The Third Kind'} ] },
+  { id:'m3t3', module:'Module 3 · The Story Between the Snapshots', num:'Tutorial 3', name:'Build the Statement', title:'3.3 Build the Statement', pages:[
+    {f:'33-1-copy-the-rows.html', t:'Copy the Rows'}, {f:'33-2-sort-the-rows.html', t:'Sort the Rows'}, {f:'33-3-format-the-statement.html', t:'Format the Statement'} ] },
+  { id:'m3t4', module:'Module 3 · The Story Between the Snapshots', num:'Tutorial 4', name:'The Season in Cash', title:'3.4 The Season in Cash', pages:[
+    {f:'34-1-what-cash-missed.html', t:'What Cash Missed'}, {f:'34-2-module-complete.html', t:'The Story Between the Snapshots'} ] },
+  { id:'m4t1', module:'Module 4 · The Angel Investor', num:'Tutorial 1', name:'The Investor Asks', title:'4.1 The Investor Asks', pages:[
+    {f:'41-1-The-Investor-Asks.html', t:'The Investor Asks'} ] },
+  { id:'m4t2', module:'Module 4 · The Angel Investor', num:'Tutorial 2', name:'The Missing Wage', title:'4.2 The Missing Wage', pages:[
+    {f:'42-1-The-Missing-Wage.html', t:'The Missing Wage'} ] },
+  { id:'m4t3', module:'Module 4 · The Angel Investor', num:'Tutorial 3', name:'The Change in Member&rsquo;s Capital', title:'4.3 The Change in Member&rsquo;s Capital', pages:[
+    {f:'43-1-The-Capital-Bridge.html', t:'The Capital Bridge'} ] },
+  { id:'m4t4', module:'Module 4 · The Angel Investor', num:'Tutorial 4', name:'The Cash-Flow Statement', title:'4.4 The Cash-Flow Statement', pages:[
+    {f:'44-1-The-Cash-Puzzle.html', t:'The Cash Puzzle'}, {f:'44-2-Three-Buckets.html', t:'Three Buckets'}, {f:'44-3-The-Cash-Flow-Statement.html', t:'Laying It Out'} ] },
+  { id:'m4t6', module:'Module 4 · The Angel Investor', num:'Tutorial 6', name:'The Statements Tie Out', title:'4.6 The Statements Tie Out', pages:[
+    {f:'46-1-The-Statements-Tie-Out.html', t:'The Statements Tie Out'} ] },
+  { id:'m4t7', module:'Module 4 · The Angel Investor', num:'Tutorial 7', name:'Freddie&rsquo;s Napkin', title:'4.7 Freddie&rsquo;s Napkin', pages:[
+    {f:'47-1-Freddies-Napkin.html', t:'Freddie&rsquo;s Napkin'} ] },
+  { id:'m4t8', module:'Module 4 · The Angel Investor', num:'Tutorial 8', name:'The Deal', title:'4.8 The Deal', pages:[
+    {f:'48-1-The-Deal.html', t:'The Deal'}, {f:'48-2-Module-Complete.html', t:'Module 4 Complete'} ] }
+
 ];
 function courseFlatPages(){ var a=[]; COURSE_TUTORIALS.forEach(function(t){ t.pages.forEach(function(p){ a.push(p.f); }); }); return a; }
 function courseTutorialOf(file){ for(var i=0;i<COURSE_TUTORIALS.length;i++) for(var j=0;j<COURSE_TUTORIALS[i].pages.length;j++) if(COURSE_TUTORIALS[i].pages[j].f===file) return i; return -1; }
@@ -1314,7 +1325,8 @@ function initCourseChrome(){
   var ti = courseTutorialOf(file);
   if (ti < 0) return;
   var tut = COURSE_TUTORIALS[ti];
-  courseMarkPageDone(file);                                                   /* visiting a page checks it off */
+  /* completion is decided by the COURSE_DONE poller below (PROGRESS.md):
+     reading pages complete on visit, activity pages when finished. */
 
   /* --- one glossary everywhere: the full course glossary replaces each page's local one --- */
   if (typeof courseGlossaryOpen === 'function' && document.getElementById('glossaryOverlay')) {
@@ -1438,33 +1450,39 @@ var COURSE_DONE = {
   // 31-1: bsDone (set on answer OR after 3 attempts — correctness-free)
   '31-1-welcome.html': function(){ return typeof bsDone !== 'undefined' && bsDone === true; },
   // 31-2: step reached end of walk — step + WALK[]
-  '31-2-work-the-season.html': function(){ return typeof step !== 'undefined' && Array.isArray(window.WALK) && step >= WALK.length; },
-  // 32-2: checked (set by checkSort regardless of correctness; NOT done)
-  '32-2-two-kinds.html': function(){ return typeof checked !== 'undefined' && checked === true; },
-  // 32-3: step reached final step (max 2)
-  '32-3-revenue-follows-the-work.html': function(){ return typeof step !== 'undefined' && step >= 2; },
-  // 32-4: step reached final step (max 2)
-  '32-4-name-the-income-statement.html': function(){ return typeof step !== 'undefined' && step >= 2; },
-  // 33-1: mcqSubmitted (MCQ only shown at final step)
-  '33-1-Two-Kinds-of-Used-Up.html': function(){ return typeof mcqSubmitted !== 'undefined' && mcqSubmitted === true; },
-  // 33-2: mcqSubmitted (any submit; NOT recorded)
-  '33-2-The-Third-Kind.html': function(){ return typeof mcqSubmitted !== 'undefined' && mcqSubmitted === true; },
-  // 33-3: step reached final step (max 1)
-  '33-3-The-Bottom-Line.html': function(){ return typeof step !== 'undefined' && step >= 1; },
-  // 34-1: mcqSubmitted (any submit)
-  '34-1-The-Cash-Puzzle.html': function(){ return typeof mcqSubmitted !== 'undefined' && mcqSubmitted === true; },
-  // 34-2: checked (set by checkSort regardless of correctness; NOT done)
-  '34-2-Three-Buckets.html': function(){ return typeof checked !== 'undefined' && checked === true; },
-  // 34-3: step reached end — step + STEPS[]
-  '34-3-What-Cash-Missed.html': function(){ return typeof step !== 'undefined' && Array.isArray(window.STEPS) && step >= STEPS.length; },
-  // 34-4: step reached final step (max 1)
-  '34-4-The-Cash-Flow-Statement.html': function(){ return typeof step !== 'undefined' && step >= 1; },
-  // 35-1: bridgeDone (set on answer OR after 3 attempts — correctness-free)
-  '35-1-The-Capital-Bridge.html': function(){ return typeof bridgeDone !== 'undefined' && bridgeDone === true; },
-  // 35-2: step reached final step (max 1)
-  '35-2-The-First-Close.html': function(){ return typeof step !== 'undefined' && step >= 1; },
-  // 35-3: every move answered — MOVES[] + answered{} (value may be index 0 → !== undefined; correctness-free; NOT allCorrect())
-  '35-3-The-Statements-Tie-Out.html': function(){ return Array.isArray(window.MOVES) && typeof answered !== 'undefined' && MOVES.every(function(m){ return answered[m.id] !== undefined; }); }
+  '31-2-work-the-season.html': function(){ return typeof stage !== 'undefined' && stage >= 7; },
+  // ---- Rick's new M3 arc (2026-07-19) ----
+  // 32-1: the missing-job check is confirmed (setStep(1))
+  '32-1-check-the-records.html': function(){ return typeof step !== 'undefined' && step >= 1; },
+  // 32-2: the receivable row is recorded
+  '32-2-record-the-receivable.html': function(){ return typeof step !== 'undefined' && step >= 1; },
+  // 32-3: the wear rows are written to Reasons
+  '32-3-the-third-kind.html': function(){ return typeof recorded !== 'undefined' && recorded === true; },
+  // 33-1: season rows selected then pasted to the Working Tab
+  '33-1-copy-the-rows.html': function(){ return typeof pasted !== 'undefined' && pasted === true; },
+  // 33-2: both sorter passes complete
+  '33-2-sort-the-rows.html': function(){ return typeof pass2Complete !== 'undefined' && pass2Complete === true; },
+  // 33-3: the statement is christened
+  '33-3-format-the-statement.html': function(){ return typeof completed !== 'undefined' && completed === true; },
+  // 34-1: the bridge walk reached its last beat
+  '34-1-what-cash-missed.html': function(){ return typeof walkStep !== 'undefined' && Array.isArray(window.STEPS) && walkStep >= STEPS.length; },
+  // ---- Rick's M4 Angel Investor arc ----
+  // 41-1: the reading walk reached its last beat
+  '41-1-The-Investor-Asks.html': function(){ return typeof step !== 'undefined' && step >= 2; },
+  // 42-1: hunt + MCQ answered, walk closed
+  '42-1-The-Missing-Wage.html': function(){ return typeof step !== 'undefined' && step >= 2; },
+  // 43-1: the Member's-Capital statement build completed (christen)
+  '43-1-The-Capital-Bridge.html': function(){ return typeof completed !== 'undefined' && completed === true; },
+  // 44-1: the profit-vs-cash MCQ submitted (any answer)
+  '44-1-The-Cash-Puzzle.html': function(){ return typeof mcqSubmitted !== 'undefined' && mcqSubmitted === true; },
+  // 44-2: all cash rows sorted into the three buckets
+  '44-2-Three-Buckets.html': function(){ return typeof sortComplete !== 'undefined' && sortComplete === true; },
+  // 44-3: the cash-flow statement christened
+  '44-3-The-Cash-Flow-Statement.html': function(){ return typeof completed !== 'undefined' && completed === true; },
+  // 46-1 / 47-1 / 48-1 / 52-1 / 53-x: Rick's uniform step walk — done at the last step
+  '46-1-The-Statements-Tie-Out.html': function(){ return typeof step !== 'undefined' && step >= 4; },
+  '47-1-Freddies-Napkin.html': function(){ return typeof step !== 'undefined' && step >= 4; },
+  '48-1-The-Deal.html': function(){ return typeof step !== 'undefined' && step >= 3; }
 };
 
 /* Multi-step activity pages that lacked their own step bar and were stuck on the flat
@@ -1486,21 +1504,74 @@ var COURSE_STEPS = {
   // 22-4: sort the cards (1) → figure (2) → done (3)  — the sort is ONE stage
   '22-4-whatChanged.html': function(){ var mi = Array.isArray(window.movedItems) ? window.movedItems : []; var allPlaced = mi.length > 0 && typeof placed !== 'undefined' && mi.every(function(m){ return placed[m.id] !== undefined; }); var fs = (typeof figStage !== 'undefined') ? figStage : 0; return { at: allPlaced ? (fs >= 2 ? 3 : 2) : 1, total: 3 }; },
   // 24-5: fill the schedule (1) → signing (2) → both signed / done (3)  — the fill is ONE stage
-  '24-5-schedule-a.html': function(){ var allEnt = (typeof allEntered === 'function') ? allEntered() : false; var both = (typeof signedCompany !== 'undefined' && signedCompany) && (typeof signedMember !== 'undefined' && signedMember); return { at: allEnt ? (both ? 3 : 2) : 1, total: 3 }; }
+  '24-5-schedule-a.html': function(){ var allEnt = (typeof allEntered === 'function') ? allEntered() : false; var both = (typeof signedCompany !== 'undefined' && signedCompany) && (typeof signedMember !== 'undefined' && signedMember); return { at: allEnt ? (both ? 3 : 2) : 1, total: 3 }; },
+  // 23-3 (Rick's statement-pipeline rebuild): step 0..6, contributed at step 6
+  '23-3-contribution.html': function(){ return { at: Math.min(((typeof step !== 'undefined') ? step : 0) + 1, 7), total: 7 }; },
+  // ---- Rick's new M3/M4/M5 arc (2026-07-19). His pages cap step at TOTAL_STEPS-1,
+  //      so at = step+1 hits total exactly when COURSE_DONE fires. ----
+  '31-1-welcome.html': function(){ return { at: (typeof bsDone !== 'undefined' && bsDone) ? 2 : 1, total: 2 }; },
+  '31-2-work-the-season.html': function(){ return { at: Math.min(((typeof stage !== 'undefined') ? stage : 0) + 1, 8), total: 8 }; },
+  '32-1-check-the-records.html': function(){ return { at: (typeof step !== 'undefined' && step >= 1) ? 2 : 1, total: 2 }; },
+  '32-2-record-the-receivable.html': function(){ return { at: (typeof step !== 'undefined' && step >= 1) ? 2 : 1, total: 2 }; },
+  '32-3-the-third-kind.html': function(){ var w = (typeof walkStep !== 'undefined') ? walkStep : 0; var rec = (typeof recorded !== 'undefined' && recorded); return { at: rec ? 4 : Math.min(w + 1, 3), total: 4 }; },
+  '33-1-copy-the-rows.html': function(){ var sel = (typeof selected !== 'undefined' && selected), pas = (typeof pasted !== 'undefined' && pasted); return { at: pas ? 3 : (sel ? 2 : 1), total: 3 }; },
+  '33-2-sort-the-rows.html': function(){ var p1 = (typeof pass1Complete !== 'undefined' && pass1Complete), p2 = (typeof pass2Complete !== 'undefined' && pass2Complete); return { at: p2 ? 3 : (p1 ? 2 : 1), total: 3 }; },
+  '33-3-format-the-statement.html': function(){ return { at: (typeof completed !== 'undefined' && completed) ? 2 : 1, total: 2 }; },
+  '34-1-what-cash-missed.html': function(){ var w = (typeof walkStep !== 'undefined') ? walkStep : 0; var n = Array.isArray(window.STEPS) ? STEPS.length : 1; return { at: Math.min(w + 1, n + 1), total: n + 1 }; },
+  '41-1-The-Investor-Asks.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 3 }; },
+  '42-1-The-Missing-Wage.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 3 }; },
+  '43-1-The-Capital-Bridge.html': function(){ var comp = (typeof completed !== 'undefined' && completed), gate = (typeof gateDone !== 'undefined' && gateDone), mcq = (typeof mcqAnswered !== 'undefined' && mcqAnswered), srt = (typeof sortConfirmed !== 'undefined' && sortConfirmed) || (typeof beginningConfirmed !== 'undefined' && beginningConfirmed) || (typeof sourceConfirmed !== 'undefined' && sourceConfirmed); return { at: comp ? 5 : (gate ? 4 : (mcq ? 3 : (srt ? 2 : 1))), total: 5 }; },
+  '44-1-The-Cash-Puzzle.html': function(){ return { at: (typeof mcqSubmitted !== 'undefined' && mcqSubmitted) ? 2 : 1, total: 2 }; },
+  '44-2-Three-Buckets.html': function(){ var cp = (typeof copied !== 'undefined' && copied), sc = (typeof sortComplete !== 'undefined' && sortComplete); return { at: sc ? 3 : (cp ? 2 : 1), total: 3 }; },
+  '44-3-The-Cash-Flow-Statement.html': function(){ return { at: (typeof completed !== 'undefined' && completed) ? 2 : 1, total: 2 }; },
+  '46-1-The-Statements-Tie-Out.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; },
+  '47-1-Freddies-Napkin.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; },
+  '48-1-The-Deal.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 4 }; }
 };
 
 (function(){
+  /* Gated Reset (2026-07-19): activity pages that expose a top-level restart()
+     get a Reset row injected below the content, shown only once the student has
+     taken an action (step bar past 1, or the finish condition already true) —
+     PROGRESS.md rule 4, applied in one place for Rick's M3-M5 pages. */
+  var RESET_SCOPE = /^(23-3-|24-5-|3[1-4]-|4[1-8]-|5[1-3]-)/;   // Rick's rebuilt/new pages; older pages carry their own in-page Resets
+  function resetRow(f){
+    if (!RESET_SCOPE.test(f)) return null;
+    if (typeof window.restart !== 'function') return null;
+    if (document.getElementById('courseResetRow')) return document.getElementById('courseResetRow');
+    var wrap = document.querySelector('.prework-wrap');
+    if (!wrap) return null;
+    var row = document.createElement('div');
+    row.className = 'btn-row'; row.id = 'courseResetRow';
+    row.style.cssText = 'justify-content:flex-end; margin-top:14px; display:none;';
+    row.innerHTML = '<button class="btn-reset" onclick="restart()">Reset</button>';
+    wrap.appendChild(row);
+    return row;
+  }
+  function courseStarted(f, cond){
+    try {
+      if (typeof COURSE_STEPS !== 'undefined' && COURSE_STEPS[f]) { var s = COURSE_STEPS[f](); if (s && s.at > 1) return true; }
+      if (cond && cond()) return true;
+    } catch(e){}
+    return false;
+  }
   function run(){
     var f = location.pathname.split('/').pop() || '';
     if (typeof courseTutorialOf === 'function' && courseTutorialOf(f) < 0) return;   // not a tracked lesson page
     var cond = (typeof COURSE_DONE !== 'undefined') ? COURSE_DONE[f] : null;
     if (!cond) { courseMarkComplete(f); return; }              // reading page → complete on visit
-    if (coursePageDone(f)) { courseRenderBar(f); return; }     // finished on a previous visit → full bar
+    var row = resetRow(f);
+    if (coursePageDone(f)) {                                   // finished on a previous visit → full bar
+      courseRenderBar(f);
+      if (row) row.style.display = '';
+      return;
+    }
     courseRenderBar(f);                                        // initial bar (empty / first step)
     var t = setInterval(function(){
       courseRenderBar(f);                                      // keep a multi-step bar current as the student works
+      if (row && row.style.display === 'none' && courseStarted(f, cond)) row.style.display = '';
       var done = false; try { done = !!cond(); } catch(e){ done = false; }
-      if (done) { clearInterval(t); courseMarkComplete(f); }
+      if (done) { clearInterval(t); courseMarkComplete(f); if (row) row.style.display = ''; }
     }, 300);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
@@ -1554,50 +1625,49 @@ var COURSE_GLOSSARY = [
     { term:"Schedule A", def:"The Operating Agreement&rsquo;s list of what the member contributes &mdash; assets, liabilities assumed, and the difference. You complete it from the Company&rsquo;s books, after the contributing is done." },
     { term:"Execute (a document)", def:"To sign it and make it operative. You execute the Operating Agreement here &mdash; after Schedule A is complete, because the schedule attests to facts." },
   ] },
-  { module:'Module 3 · The Full Set of Statements', tutorial:'Tutorial 1 · Run the Season', terms:[
-    { term:"Balance sheet", def:"A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the difference between them. It says where things stand, not how they got there." },
-    { term:'Used up', def:'A thing the work consumed &mdash; parts off the shelf and into a bike, a month of rent lived through. The records show it leaving; the benefit is gone.' },
+  { module:'Module 3 · The Story Between the Snapshots', tutorial:'', terms:[
+    { term:'Member&rsquo;s capital', def:'The LLC&rsquo;s name for Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; Here, $4,710 &minus; $2,250 = $2,460.' },
+    { term:'Reason', def:'The short note you jot beside a change in the books to record <em>why</em> it happened. You started the practice earlier; over a whole season the Reasons pile up.' },
+    { term:'Balance sheet', def:'A single snapshot of what the records show the entity holds and owes at one moment &mdash; assets, liabilities, and the difference between them. It says where things stand, not how they got there.' },
+    { term:'Dated subtotal', def:'A ruled line you add at one of the dates of interest. Excel sums the entries through that date so you can read where an account stood.' },
+    { term:'On account', def:'Billed, to be paid later (here, net 15 &mdash; within 15 days). The work is done, so the delivery counts now; the cash follows on its own schedule.' },
+    { term:'Job log', def:'The shop&rsquo;s list of finished repair jobs, including the customer, completion date, hours, parts used, charge, and payment status.' },
+    { term:'Accounts Receivable', def:'A right to be paid later for work already done &mdash; an asset. Ridgeline Trail Crew owes $300 for a finished job; the line remains in Assets until payment.' },
+    { term:'Customer Deposit', def:'Cash received before the work is done. The delivery is recorded once the work is finished &mdash; which is why J. Smith&rsquo;s frame is recorded this summer, not last period.' },
+    { term:'Depreciation', def:'A reason written when wear or obsolescence reduces an asset&rsquo;s recorded amount and no sale, bill, or other transaction recorded that change.' },
+    { term:'Working Tab', def:'A temporary working sheet. The statement is built on it, and the tab is renamed when the statement is finished.' },
+    { term:'Revenue', def:'The value of work delivered during a period. It is recorded when the work is delivered, whether cash comes before, after, or at the same time.' },
+    { term:'Expense', def:'Value used up while delivering the period&rsquo;s work. The row records the using-up, not the paying.' },
+    { term:'Parts Used', def:'The cost of parts used on completed jobs. The shelf records that use job by job.' },
+    { term:'Rent', def:'The cost of the workspace right used as each month passed.' },
+    { term:'Income Statement', def:'A report that summarizes Revenue and Expenses between chosen dates. Here, it formats the season&rsquo;s GENERATED rows on the Income Statement tab.' },
+    { term:'Net income', def:'Revenue minus Expenses between the chosen dates: $6,020 minus $3,380 = $2,640.' },
+    { term:'Draw', def:'Money the owner takes out for personal use. A draw is written in WITHDRAWN, never as an expense.' },
+    { term:'Carrying value', def:'Cost minus depreciation recorded so far &mdash; a path in the records, not what a buyer will pay.' },
   ] },
-  { module:'Module 3 · The Full Set of Statements', tutorial:'Tutorial 2 · The Income Statement', terms:[
-    { term:'Reasons pile', def:'The running list on the Reasons tab where you jot <em>why</em> each balance moved. Kept job by job, in the order things happened &mdash; a true record, but not organized to answer &ldquo;how did the season go?&rdquo;' },
-    { term:'Delivered', def:'A reason recording work handed to a customer &mdash; a repair finished, a frame delivered against a deposit. Not about cash: Smith&rsquo;s delivery settled a promise; cash can come before, after, or with the work. The plain word used before the term <em>revenue</em>.' },
-    { term:'Accounts Receivable', def:'A right to be paid later for work already done &mdash; an asset. Ridgeline owes $300 for a finished job; until they pay, the shop holds the promise.' },
-    { term:'On account', def:'Billed, to be paid later (here, net 15 &mdash; within 15 days). The work is done, so the delivery counts <em>now</em> &mdash; the cash follows on its own schedule.' },
-    { term:'Customer Deposit', def:'Cash taken before the work is done. The delivery counts only once the work is finished &mdash; which is why Smith&rsquo;s frame lands this season, not last.' },
-    { term:'Revenue', def:'The value of the work delivered over a period &mdash; counted when the work goes out the door, not when the cash moves. The formal name for the DELIVERED pile.' },
-    { term:'Expenses', def:'What got used up delivering the period&rsquo;s work &mdash; parts, rent, and (soon) the wear on the tools and laptop. The formal name for the USED UP pile.' },
-    { term:'Temporary account', def:'A tally scoped to one period: it fills for a season, answers for it, then closes and starts the next at zero. Revenue and Expenses get their own sheets for exactly this reason. Contrast Cash or Parts, which carry on.' },
-    { term:'Income Statement', def:'The short sheet that lays Revenue over Expenses; the difference is Net income &mdash; how the season went. Not a snapshot of what you hold, but the story of one period.' },
-    { term:'Net income', def:'Revenue &minus; Expenses for the period. Here it stays open until the last expense &mdash; the wear on the tools and laptop &mdash; is added next tutorial.' },
-    { term:'Draw (distribution)', def:'Money the owner takes out for personal use. It reduces what the work kept, but it is not an expense &mdash; it&rsquo;s a distribution, shown on its own statement, not on the income statement.' },
-  ] },
-  { module:'Module 3 · The Full Set of Statements', tutorial:'Tutorial 3 · Depreciation', terms:[
-    { term:'Directly observed use', def:'Used-up you can watch: each part that leaves the shelf is a dollar you can point to. &ldquo;Parts used&rdquo; records use somebody could watch happen, not a guess.' },
-    { term:'Time-lapsed use', def:'Used-up done by the calendar: a month of the workspace, lived through. &ldquo;Rent used&rdquo; is one month per row; time does the work by itself.' },
-    { term:'Right of Use', def:'The lease&rsquo;s last month, paid in advance and parked in Assets. It becomes used-up only when its month arrives &mdash; the pure-time case, waiting.' },
-    { term:'Depreciation', def:'A season&rsquo;s share of a long-lived thing&rsquo;s cost, charged as an expense by a chosen rule. An allocation &mdash; a convention standing in for time, wear and tear, and judgment together &mdash; not observed use, not mere calendar, not a market price.' },
-    { term:'Allocation', def:'Splitting one cost across the periods it serves, by a rule someone chose. The rule has authors and room to argue &mdash; useful life and method are choices.' },
-    { term:'Useful life', def:'How many seasons the thing is expected to serve &mdash; a judgment, made up front, that sets each season&rsquo;s share.' },
-    { term:'Carrying value (book value)', def:'What the records show is left of a thing&rsquo;s cost: cost minus the depreciation charged so far. A path the books walk down by rule &mdash; not what the thing would fetch. The thing can outlive its path: fully depreciated, still on the bench.' },
-  ] },
-  { module:'Module 3 · The Full Set of Statements', tutorial:'Tutorial 4 · The Cash-Flow Statement', terms:[
-    { term:'Cash', def:'What the Assets tab shows the shop actually holds in the bank right now: $620, down from $1,300 on June 1. A correct read of a different line &mdash; not a contradiction of net income.' },
-    { term:'Operating', def:'Cash in and out from running the season day to day: repairs collected, parts bought, rent paid, the credit-card payoff. Net +$320 this season.' },
-    { term:'Investing', def:'Cash spent on or received from long-lived gear the shop will use for more than one season &mdash; here, the new repair tool, &minus;$400.' },
-    { term:'Financing', def:'Cash moving between the shop and its owner or lenders, not tied to running the work &mdash; here, the owner&rsquo;s draw, &minus;$600.' },
-    { term:'Accounts Receivable (timing gap)', def:'Ridgeline&rsquo;s $300: revenue counted this season because the work was delivered, with the cash still to come. Net income is ahead of cash on this one.' },
-    { term:'Customer Deposit (timing gap)', def:'Smith&rsquo;s $220: revenue counted this season because the frame was delivered now &mdash; but the cash for it arrived last period, as a deposit. Cash was ahead of net income on this one.' },
-    { term:'Depreciation (non-cash expense)', def:'An allocation that lowers net income ($230) with no cash leaving at all. Added back when reconciling net income to cash.' },
-    { term:'Credit-card payoff (non-expense cash)', def:'$2,030 in cash that left the shop but never touched net income &mdash; it settled a Module 2 liability. The costs behind it were expensed earlier, when the things were used.' },
-    { term:'Statement of Cash Flows', def:'The statement that lays Operating, Investing, and Financing cash side by side, totals a season&rsquo;s Net change in cash, and reconciles to the Cash line on the balance sheet: $1,300 &rarr; $620.' },
-  ] },
-  { module:'Module 3 · The Full Set of Statements', tutorial:'Tutorial 5 · Closing the Season', terms:[
-    { term:'Statement of Changes in Members&rsquo; Capital', def:'The bridge between two balance sheets&rsquo; Members&rsquo; Capital lines: opening, plus net income, minus draws, equals closing. Here: $2,460 + $2,640 &minus; $600 = $4,500.' },
-    { term:'Owner&rsquo;s draw', def:'Cash the owner takes out for personal use. It reduces Members&rsquo; Capital but is not an expense &mdash; it never touches the income statement.' },
-    { term:'Close', def:'The act of filing a finished period&rsquo;s Revenue and Expenses into GENERATED as one row, then emptying both tabs so the next period starts at $0. Not a ritual &mdash; a filing.' },
-    { term:'GENERATED (closed periods)', def:'The Reasons-tab pile that, after a close, holds an archive of finished periods &mdash; one row per period &mdash; instead of every individual row: &ldquo;May (pre-LLC) +$170,&rdquo; &ldquo;Summer 2026 +$2,640.&rdquo;' },
-    { term:'Articulation', def:'The statements tie to each other: every change carried on a balance sheet travels through one of the flow statements. A balance sheet cannot show a new number without the story filed beside it.' },
-  ] },
+  { module:'Module 4 · The Angel Investor', tutorial:'', terms:[
+    { term:'Salary / wages', def:'Pay for work. The records treat it as an expense when the work is done.' },
+    { term:'Two roles', def:'One person can work at the bench and also be an owner. Salary and a draw are recorded differently.' },
+    { term:'Statement of Member&rsquo;s Capital', def:'A report with each pile&rsquo;s Beginning, Change, and Ending. Here CONTRIBUTED, GENERATED, and WITHDRAWN walk the total from $2,460 on June 1 to $4,500 on August 31.' },
+    { term:'Distribution (draw)', def:'Cash withdrawn by an owner for personal use and recorded in WITHDRAWN. It reduces Member&rsquo;s Capital but is not an expense. Here it is ($600), shown in parentheses.' },
+    { term:'Cash', def:'Money held by the shop. On the Assets tab, Cash is $1,300 on June 1 and $620 on August 31, a decrease of $680.' },
+    { term:'Season slice', def:'The Cash ledger rows between Balance, June 1, 2026 and Balance, August 31, 2026. These rows are the raw material for the Cash Flow Statement.' },
+    { term:'Operating', def:'Cash collected and paid while running the shop: repairs collected, parts bought, and rent paid. Net cash from operating activities is $2,350.' },
+    { term:'Investing', def:'Cash used to buy tools and equipment. The new repair tool is a $400 investing outflow.' },
+    { term:'Financing', def:'Cash moving between the shop and its funders. The $2,030 card payoff settled a liability, and the $600 owner&rsquo;s draw moved cash to the owner. Net financing cash flow is negative $2,630.' },
+    { term:'Cash Flow Statement', def:'A statement that groups cash flows into Operating, Investing, and Financing activities and reconciles the period&rsquo;s net change to ending Cash.' },
+    { term:'Operating activities', def:'Cash from running the shop. Here, repairs collected minus parts bought and rent paid equals $2,350.' },
+    { term:'Net change in cash', def:'Operating $2,350 minus Investing $400 minus Financing $2,630 equals negative $680. Cash moves from $1,300 to $620.' },
+    { term:'Articulation', def:'The statements tie to each other where their figures meet. Cash has the Cash Flow Statement, and Member&rsquo;s Capital has the Statement of Member&rsquo;s Capital. Changes in other lines are explained by the ledgers&rsquo; dated entries.' },
+    { term:'Withdrawal', def:'An owner move &mdash; money taken by the owner. It is not an expense and does not enter net income.' },
+    { term:'Expectation vs record', def:'A napkin sketch of the future is not a statement. Statements record what happened.' },
+    { term:'Replacement tools &amp; equipment', def:'An investor&rsquo;s cash sketch of gear wearing out and being replaced.' },
+    { term:'Free cash flow', def:'Cash the Company could pay out while keeping the operation going. On Freddie&rsquo;s napkin it is an expectation, never a record.' },
+    { term:'Future cash flows', def:'Cash the operation is expected to produce in future periods. Freddie&rsquo;s napkin estimates about $5,000 a season.' },
+    { term:'Recognition conventions', def:'The rules that determine what the records carry and when. Skill and returning customers can help produce cash without appearing as balance-sheet lines.' },
+    { term:'Ownership share', def:'A stated portion of the LLC. Freddie proposes $20,000 for 30%, leaving 70% with the current owner.' },
+  ] }
+
 ];
 function courseGlossaryOpen(){
   var byModule = {}, order = [];

@@ -45,6 +45,15 @@ that system, or the new page will behave wrong (see "If you skip this").
 
 4. **If the activity has a Reset button**, show it only once the student has taken an action
    (there's nothing to reset before that). Match the existing pages.
+   - **Rick's M3-M5 arc pages (23-3, 24-5, 3x-x, 4x-x, 5x-x)** don't need their own button:
+     the chrome injects a gated Reset row automatically (see `RESET_SCOPE` in `shared.js`)
+     for any registered activity page exposing a top-level `restart()`. It appears once the
+     step bar moves past 1 (or the finish condition is already true).
+
+5. **Module 5 pages register in `course-m5.js`, not `shared.js`.** Module 5 introduces the
+   corporate vocabulary (Equity, Net assets) that `lint-language.sh` bans on M1-M4 surfaces,
+   and `shared.js` is lint-scanned. `course-m5.js` (loaded right after `shared.js` on every
+   page) appends the M5 tutorials, COURSE_DONE/COURSE_STEPS entries, and glossary section.
 
 ## If you skip step 2
 

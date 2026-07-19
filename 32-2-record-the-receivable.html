@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Record the Receivable</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,25 +14,18 @@
     .two-panel > .xlwb { flex:1 1 0; min-width:0; }
     .xlwb-tab[data-sheet-tab] { cursor:pointer; }
     .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
-    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
-    @media (max-width:860px) { .two-panel { flex-direction:column; } }
+        @media (max-width:860px) { .two-panel { flex-direction:column; } }
   </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Record the Receivable</h1>
-        <p class="tut-header-sub">Complete the Records &middot; ~10 min &middot; Page 2 of 3</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">A Finished Job, Still Unpaid</div>
+    <div class="phase-sub" id="phaseTitle">A Finished Job, Still Unpaid</div>
 
     <div class="narrative-block">
       <p>Two complete windows on <span class="mono">Bike-Repair.xlsx</span> sit side by side, the way Excel shows one workbook with <em>View Side by Side</em>. The <strong>Assets</strong> sheet is open on the left. On the right, the <strong>Reasons</strong> sheet is open to <strong>GENERATED</strong>.</p>
@@ -89,6 +82,7 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -216,7 +210,7 @@ Array.prototype.forEach.call(document.querySelectorAll('[data-sheet-tab]'),funct
 
 /* ===== state ===== */
 var step=0;
-function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">&ldquo;'+inner+'&rdquo;</div></div>'; }
+function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
 
 function renderTalk(){
@@ -229,7 +223,7 @@ function renderTalk(){
     ctrl=insightBox('The work is what counts',
       '<p>Ridgeline&rsquo;s recorded assets went up <strong>$300</strong>, and GENERATED went up <strong>$300</strong>. The records remain balanced. The delivery is recorded when the work is done, even though the cash will arrive later.</p>')
       +'<div class="next-phase-msg">The receivable is recorded. Next, look immediately for problems with the recorded expenses.</div>'
-      +'<button class="btn-continue btn-block" onclick="nav(\'32-3-the-third-kind.html\')">Now check the expenses &rarr;</button>';
+      +'';
   }
   document.getElementById('anna').innerHTML=anna;
   document.getElementById('controls').innerHTML=ctrl;

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Run the Season</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -10,8 +10,7 @@
   <link rel="stylesheet" href="shared.css">
   <style>
     .wb-grid-wrap { padding:8px; background:white; }
-    @media (prefers-color-scheme:dark) { .wb-grid-wrap { background:#26242e; } }
-    #openingBS [data-brw-row="3"] .brw-col-d { text-align:center; }
+        #openingBS [data-brw-row="3"] .brw-col-d { text-align:center; }
   </style>
 </head>
 <body>
@@ -19,17 +18,10 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Run the Season</h1>
-        <p class="tut-header-sub">The Story Between the Snapshots &middot; ~10 min &middot; Page 1 of 2</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Run the Season</div>
 
     <!-- ===== welcome ===== -->
     <div class="phase active" id="phase-welcome">
@@ -70,7 +62,6 @@
           <li>Check the new June 1 lines against the opening balance sheet already in the workbook.</li>
         </ul>
       </div>
-      <button class="btn-continue btn-block" id="goBtn" hidden onclick="nav('31-2-work-the-season.html')">Open the workbook and add dated subtotals &rarr;</button>
     </div>
 
   </div>
@@ -89,6 +80,7 @@
 
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>

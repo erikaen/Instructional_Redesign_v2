@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Cash Question</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -148,37 +148,16 @@
       .cvs-cash-grid.main-grid { grid-template-columns:1fr; }
       .cvs-question-card { min-height:260px; }
     }
-    @media (prefers-color-scheme:dark) {
-      .cvs-scope {
-        --cvs-paper:#26242e;
-        --cvs-panel:#211f28;
-        --cvs-ink:#e8edf1;
-        --cvs-muted:#b4c0c8;
-        --cvs-primary:#7dc8f3;
-        --cvs-rule:#4b5361;
-        --cvs-rule-strong:#8797a2;
-        --cvs-warm:#332f20;
-        --cvs-accent:#d8ad3e;
-        --cvs-shadow:rgba(0,0,0,0.28);
-      }
-    }
-  </style>
+      </style>
 </head>
 <body>
 <div class="page">
   <div class="prework-wrap">
 
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>The Cash Question</h1>
-        <p class="tut-header-sub">Module 5 &middot; ~6 min</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">The Cash Question</div>
 
     <div id="beats"></div>
     <div id="mainGrid"></div>
@@ -201,6 +180,7 @@
 
 <script src="cvs-10k-data.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if(window.lucide) lucide.createIcons();

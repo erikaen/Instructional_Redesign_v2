@@ -2662,3 +2662,7 @@ body.has-course-footer { padding-bottom: 62px; }
 }
 
 
+
+/* Stage sub-heading on Rick's M3-M5 pages (2026-07-19): the page title comes
+   from the chrome; this carries the current stage label beneath it. */
+.phase-sub { font-family: Inter, sans-serif; font-size: var(--font-lg); font-weight: 700; color: var(--primary); margin: 2px 0 12px; }

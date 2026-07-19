@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Activity 2.4: The Entity's Own Number &middot; Complete Schedule A</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,17 +14,11 @@
   <div class="prework-wrap">
 
     <!-- ===== Header ===== -->
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>Activity 2.4: The Entity&rsquo;s Own Number</h1>
-        <p class="tut-header-sub">Module 2 &middot; Getting Formal &middot; ~10 min &middot; Phase 5 of 6</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">Complete Schedule A</div>
+    <div class="phase-sub" id="phaseTitle">Complete Schedule A</div>
 
     <!-- ===== schedule ===== -->
     <div class="phase active" id="phase-schedule">
@@ -52,6 +46,7 @@
 
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if (window.lucide) lucide.createIcons();
@@ -245,7 +240,7 @@ function renderAll(){
       '<p>Your own name, signed twice &mdash; once <strong>for the Company</strong> (as its manager), once <strong>as yourself</strong> (the Sole Member). The two roles you recognized in 2.1 are now <strong>legal and literal</strong>: the law recognizes both, on one page.</p></div>'+
       '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> The schedule equals the sheet</div>'+
       '<p>You didn&rsquo;t copy a finished schedule &mdash; you built it, line for line, from the Company&rsquo;s books. The statement you assembled in 2.3 was built precisely to answer what is being contributed, so Schedule A and the opening balance sheet agree exactly: you completed the paper from the facts, after the facts were in. Drafted in 2.3, completed and executed today.</p></div>'+
-      '<button class="btn-continue btn-block" onclick="nav(\'24-6-complete.html\')">Finish Module 2 &rarr;</button>';
+      '';
   }
   document.getElementById('controls').innerHTML = ctrl;
   if(window.lucide) lucide.createIcons();
