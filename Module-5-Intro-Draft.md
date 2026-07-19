@@ -215,12 +215,17 @@ By the end of Module 5, the student will be able to:
 > jolt of unfamiliarity is a reminder that you are looking at a section of
 > a statement, not a stake with a price.
 
-## Open questions for Rick
+## Further rulings (2026-07-18, round 3) — no questions remain open
 
-1. Does the bridge exercise (the map review against the eight points) live
-   on the welcome page, on 52-1's map page, or as the module's first
-   assessment?
-2. The expandable note quotes the FASB/IASB residual definition and the
-   Apple/McDonald's contrasts from the think piece — confirm you want the
-   named-company figures on a student-facing page, or prefer the note
-   generic ("a large technology company," "a famous restaurant chain").
+- **The bridge exercise is part of the welcome page.** The page's shape:
+  the turn → the eight points → the map review against them (working key
+  above becomes the exercise's answer scaffolding) → the vocabulary
+  introductions with the expandable Equities note → the CVS preview → the
+  module learning objectives.
+- **Named companies stay in student-facing pages.** Apple and McDonald's
+  appear by name in the expandable note (figures grounded in the think
+  piece's dated filings); CVS Health is named throughout.
+
+This document is settled and ready to build from. The welcome page itself
+is 5x-x territory (the Module-5 session's, per the 2026-07-18 workstream
+partition).
