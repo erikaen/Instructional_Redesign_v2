@@ -130,6 +130,7 @@ function renderBeats(){
   if(step === 3){
     h += freddieBox('The terms are still being considered: $20,000 for 30%; your $2,000 seasonal salary plus 70% of free cash flow; and 30% of free cash flow for me.');
     h += '<button class="btn-continue btn-block" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"><\/i> Restart this page<\/button>';
+    h += '<button class="btn-continue btn-block" onclick="playClick(); window.location.href=\'48-2-Module-Complete.html\'">Module 4 complete &rarr;<\/button>';
   }
 
   document.getElementById('beats').innerHTML = h;

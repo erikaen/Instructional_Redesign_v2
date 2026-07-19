@@ -14,7 +14,7 @@
 </head>
 <body>
 <h1>Module 4 flow check (instructor-side)</h1>
-<p>Drives every page's activities via its own devFill and asserts the nine-page Freddie arc.</p>
+<p>Drives every page's activities via its own devFill and asserts the ten-page Freddie arc.</p>
 <div id="banner">running…</div>
 <table id="results"><tr><th>page</th><th>assert</th><th>result</th></tr></table>
 <iframe id="frame"></iframe>
@@ -125,6 +125,13 @@ var PLAN = [
    ['no signed or signing completion anywhere on the page', d=>!(/\bsign(ed|ing)?\b/i.test(text(d.body)))],
    ['module ends without a forward page target', d=>{var targets=navTargets(d); return !d.querySelector('.btn-next') && targets.length>0 && targets.every(function(x){return x==='47-1-Freddies-Napkin.html';});}],
    ['back links to 47-1', d=>hasTarget(d,'47-1-Freddies-Napkin.html')]]}
+
+ ,{file:'48-2-Module-Complete.html', asserts:[
+   ['recap carries 4,500 / 2,350 / 620 / 20,000', d=>visibleBeat(d,'#phase-complete',['4,500','2,350','620','20,000'])],
+   ['articulation is present', d=>/articulation/i.test(text(d.body))],
+   ['offer remains under consideration with no signing language', d=>/under consideration|remain(?:s|ed)? under consideration/i.test(text(d.body)) && !/\bsign(?:s|ed|ing)?\b/i.test(text(d.body))],
+   ['back links to 48-1 and course map links to index', d=>hasTarget(d,'48-1-The-Deal.html') && hasTarget(d,'index.html')],
+   ['no Module 5 or 5x-x reference', d=>!/(Module 5|5[0-9]-[0-9])/i.test(src(d))]]}
 ];
 
 var frame = document.getElementById('frame'), tbl = document.getElementById('results');
@@ -139,7 +146,7 @@ function row(page, name, ok){
 function step(){
   if (idx >= PLAN.length){
     var ok = failures === 0 && runtimeErrors.length === 0;
-    var msg = failures === 0 ? 'ALL FLOW CHECKS PASS (9 pages)'
+    var msg = failures === 0 ? 'ALL FLOW CHECKS PASS (10 pages)'
                              : failures + ' FLOW CHECK FAILURE(S)';
     if (runtimeErrors.length) msg += ' · ' + runtimeErrors.length + ' runtime error(s): ' + runtimeErrors.join(' | ');
     document.getElementById('banner').textContent = msg;
