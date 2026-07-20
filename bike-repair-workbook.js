@@ -451,12 +451,16 @@ var BR_WB = (function () {
     var index = Number(stepIndex);
     if (Math.floor(index) !== index || index < 0 || index >= steps.length) return '';
 
+    var labelFor = function (step) {
+      return (opts.stepLabels && opts.stepLabels[step.order] !== undefined)
+        ? opts.stepLabels[step.order] : step.stepLabel;
+    };
     var strip = '<div class="brw-step-strip">';
     steps.forEach(function (step, i) {
       var active = i === index;
       strip += '<div class="brw-step' + (active ? ' is-active' : '') + '"'
         + (active ? ' aria-current="step"' : '')
-        + ' data-step-order="' + step.order + '">' + escapeHTML(step.stepLabel) + '</div>';
+        + ' data-step-order="' + step.order + '">' + escapeHTML(labelFor(step)) + '</div>';
     });
     strip += '</div>';
 
@@ -490,14 +494,48 @@ var BR_WB = (function () {
       }
 
       var html = BR_WB.renderStatementStep(workbookKey, index, opts);
+      var firstIndex = 0;
+      var controlsHtml = '';
       if (index < steps.length - 1) {
-        html += '<button type="button" class="brw-step-advance">Next: '
-          + escapeHTML(steps[index + 1].stepLabel) + ' &rarr;</button>';
+        var nextLabel = (opts.stepLabels && opts.stepLabels[steps[index + 1].order] !== undefined)
+          ? opts.stepLabels[steps[index + 1].order] : steps[index + 1].stepLabel;
+        controlsHtml += '<button type="button" class="brw-step-advance">Next: '
+          + escapeHTML(nextLabel) + ' &rarr;</button>';
       }
-      container.innerHTML = html;
+      if (index > firstIndex) {
+        controlsHtml += '<div class="btn-row" style="margin-top:10px"><button type="button" class="btn-reset brw-step-back"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
+      }
+      /* step controls live BELOW the workbook shell when the page provides
+         <containerId>-controls; otherwise they follow the grid in place. */
+      var controlsHost = document.getElementById(containerId + '-controls');
+      if (controlsHost) {
+        container.innerHTML = html;
+        controlsHost.innerHTML = controlsHtml;
+      } else {
+        container.innerHTML = html + controlsHtml;
+        controlsHost = container;
+      }
+      if (window.lucide && lucide.createIcons) lucide.createIcons();
+      var backControl = controlsHost.getElementsByClassName('brw-step-back')[0];
+      if (backControl) {
+        backControl.addEventListener('click', function () {
+          if (index <= firstIndex) return;
+          index--;
+          if (window.playClick) playClick();
+          render();
+          if (typeof opts.onStep === 'function') opts.onStep(steps[index].order);
+        });
+      }
+      /* register the rendered grid so its outline toggles resolve (fixes
+         dead +/− on build pages that never called a manual register) */
+      if (window.BRW && BRW._grids) {
+        var stepGridId = (opts.gridOpts && opts.gridOpts.gridId !== undefined) ? String(opts.gridOpts.gridId) : 'g';
+        BRW._grids[stepGridId] = { containerId: containerId };
+        if (BRW.markDatedRows) BRW.markDatedRows(containerId);
+      }
 
       if (index < steps.length - 1) {
-        var controls = container.getElementsByClassName('brw-step-advance');
+        var controls = controlsHost.getElementsByClassName('brw-step-advance');
         var advanceControl = controls && controls[0];
         if (advanceControl) {
           var waiting = false;

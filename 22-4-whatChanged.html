@@ -73,7 +73,16 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 
 /* ===== navigation / reset (each phase is its own file) ===== */
 function nav(url){ playClick(); window.location.href = url; }
-function restart(){ window.location.reload(); }
+function restart(){
+  playClick();
+  placed={};
+  figStage=0;
+  renderWhatChanged();
+  var role=document.getElementById('figRole'), ring=document.getElementById('figRing');
+  if(role) role.style.opacity='0';
+  if(ring) ring.style.opacity='0';
+  window.scrollTo(0,0);
+}
 
 /* ===== member name (read from localStorage, set in the name phase) ===== */
 var memberName = '';
@@ -118,12 +127,35 @@ function figureHtml(){
   h += '</div>';
   h += '<div id="figCaption" style="font-size:var(--font-xs);margin-top:8px;opacity:0.85">Every item sits in one undivided life &mdash; exactly what the bank, the credit-card company, Smith, and the law have been seeing.</div>';
   h += '<button class="btn-continue btn-block" id="figBtn" onclick="figAdvance()" style="margin-top:10px">Recognize the role &rarr;</button>';
+  h += '<div class="btn-row" id="figBackRow" style="margin-top:10px" hidden><button class="btn-reset" onclick="figBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   h += '</div>';
   return h;
+}
+function figBack(){
+  if(figStage===0) return;
+  playClick();
+  figStage--;
+  var btn=document.getElementById('figBtn');
+  if(figStage===0){
+    FIG.forEach(function(c){ var el=document.getElementById(c.id); if(el){ el.style.left=c.p[0][0]+'%'; el.style.top=c.p[0][1]+'%'; } });
+    document.getElementById('figRole').style.opacity='0';
+    document.getElementById('figYouLbl').innerHTML = 'You &mdash; one person, everything mingled';
+    document.getElementById('figCaption').innerHTML = 'Every item sits in one undivided life &mdash; exactly what the bank, the credit-card company, Smith, and the law have been seeing.';
+    btn.innerHTML = 'Recognize the role &rarr;';
+  } else if(figStage===1){
+    document.getElementById('figRing').style.opacity='0';
+    document.getElementById('figRingLbl').innerHTML = '';
+    document.getElementById('figCaption').innerHTML = 'This is what you did in Module 1: you <strong>recognized</strong> the bike-repair role and drew a boundary around it in your books. Real &mdash; but only in your records.';
+    btn.innerHTML = 'File the Certificate &rarr;';
+    btn.style.display = '';
+    var cont=document.getElementById('figCont'); if(cont) cont.hidden = true;
+  }
+  var bk=document.getElementById('figBackRow'); if(bk) bk.hidden = (figStage===0);
 }
 function figAdvance(){
   figStage++;
   playClick();
+  var bk=document.getElementById('figBackRow'); if(bk) bk.hidden = false;
   if(figStage===1){
     FIG.forEach(function(c){ var el=document.getElementById(c.id); if(el){ el.style.left=c.p[1][0]+'%'; el.style.top=c.p[1][1]+'%'; } });
     document.getElementById('figRole').style.opacity='1';

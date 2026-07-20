@@ -43,9 +43,10 @@
       </div>
       <div class="mc-card">
         <div class="mc-q">One check before the season starts &mdash; the frame you built earlier should hold. <strong>Assets &minus; Liabilities</strong> = $4,710 &minus; $2,250 =</div>
-        <div class="btn-row">
+        <div class="btn-row fillin-row">
           <input id="bsInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Assets minus Liabilities" onkeydown="if(event.key==='Enter'){checkBS();}">
           <button class="btn btn-primary" onclick="checkBS()">Check</button>
+          <button class="btn-reset" id="bsReset" onclick="resetBS()" style="display:none;">Reset</button>
         </div>
         <div class="feedback" id="bsFb"></div>
       </div>
@@ -107,7 +108,7 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 
 /* ===== cross-phase navigation (each phase is its own file) ===== */
 function nav(url){ playClick(); window.location.href = url; }
-function restart(){ window.location.reload(); }
+/* reset lives on the fill-in row (resetBS) — no page-wide reset */
 
 /* ===== the opening balance sheet (June 1), mounted from the extracted workbook ===== */
 function sheetOf(name){
@@ -121,26 +122,34 @@ var memberName=''; try{ var _n=localStorage.getItem('m2Member'); if(_n) memberNa
 function llcName(){ return (memberName.trim()||'[Your Name]') + '’s Bike Repairs, LLC'; }
 
 var openingGridSeq=0;
-function openingBalanceSheet(showTotal){
-  var sheet=cloneSheet(sheetOf('Balance Sheet'));
-  var futureReceivable='Accounts'+' Receivable', hiddenRows={};
-  sheet.cells.forEach(function(cell){
-    if(cell.c===2 && cell.value===futureReceivable) hiddenRows[cell.r]=true;
-  });
-  sheet.cells=sheet.cells.filter(function(cell){
-    return cell.c!==4 && !hiddenRows[cell.r];
-  }).map(function(cell){
-    if(cell.c===3) cell.c=4; /* re-home the June column into the amount column so it right-aligns and formats */
-    if(cell.r===1 && cell.c===2) cell.value=llcName();
-    if(cell.r===2 && cell.c===2) cell.value='Balance Sheet';
-    if(typeof cell.value==='string') cell.value=cell.value.replace(/Members(?:'|’) Capital/g,"Member's Capital");
-    if(cell.r===21 && cell.c===4 && !showTotal) cell.value='?';
-    return cell;
-  });
-  return sheet;
-}
+function acctLine(label, val){ return '<div class="acct-line"><span>'+label+'</span><span class="acct-val mono">'+val+'</span></div>'; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function buildOpeningBS(showTotal){
-  BRW.mountGrid('openingBS',openingBalanceSheet(showTotal),{gridId:'season-opening-balance-'+(++openingGridSeq)});
+  var mc = showTotal ? '2,460' : '?';
+  document.getElementById('openingBS').innerHTML =
+    '<div style="padding:14px 16px">'
+    +'<div style="text-align:center;font-weight:700;margin-bottom:2px;color:var(--primary)">'+esc(llcName())+'</div>'
+    +'<div class="section-sub" style="text-align:center;margin-bottom:14px">Balance Sheet &middot; June 1, 2026</div>'
+    +'<div class="main-grid two-col">'
+    +'<div class="acct-col"><h4>Assets</h4>'
+      +acctLine('Cash','1,300')
+      +acctLine('Right of Use','650')
+      +acctLine('Parts','200')
+      +acctLine('Tools &amp; Repair Equipment','1,200')
+      +acctLine('Fixtures','750')
+      +acctLine('Laptop','610')
+      +'<div class="acct-total"><span>Total Assets</span><span class="mono">4,710</span></div></div>'
+    +'<div class="acct-col"><h4>Liabilities &amp; Member&rsquo;s Capital</h4>'
+      +acctLine('Credit Card','2,030')
+      +acctLine('Customer Deposit','220')
+      +'<div class="acct-total" style="border-top:1px solid var(--border)"><span>Total Liabilities</span><span class="mono">2,250</span></div>'
+      +'<div style="margin-top:4px">'
+        +acctLine('Contributed','2,290')
+        +acctLine('Generated','170')
+        +acctLine('Withdrawn','&mdash;')
+        +'<div class="acct-total"><span>Total Member&rsquo;s Capital</span><span class="mono">'+mc+'</span></div>'
+      +'</div>'
+    +'</div></div></div>';
 }
 buildOpeningBS(false);
 document.getElementById('llcInline').textContent = llcName();
@@ -151,24 +160,36 @@ function playNope(){ tone(400,0.12,'sine',0.05); setTimeout(function(){tone(300,
 var bsDone=false, bsAttempts=0;
 function checkBS(){
   if(bsDone) return;
+  document.getElementById('bsReset').style.display='';
   var val = parseInt(String(document.getElementById('bsInput').value).replace(/[^0-9-]/g,''),10);
   var fb = document.getElementById('bsFb');
-  if(val===2460){ playSuccess(); revealBS(); }
+  if(val===2460){ playSuccess(); revealBS(true); }
   else{
     bsAttempts++;
-    if(bsAttempts>=3){ playNope(); revealBS(); }
+    if(bsAttempts>=3){ playNope(); revealBS(false); }
     else{ playNope(); fb.className='feedback err show'; fb.innerHTML='Not quite &mdash; subtract Total liabilities from Total assets: $4,710 &minus; $2,250.'; }
   }
 }
-function revealBS(){
+function revealBS(right){
   bsDone=true;
   buildOpeningBS(true);
   document.getElementById('bsInput').disabled=true;
-  var fb=document.getElementById('bsFb'); fb.className='feedback'; fb.classList.remove('show');
+  var fb=document.getElementById('bsFb');
+  if(right===false){ fb.className='feedback err show'; fb.innerHTML='Not quite &mdash; the difference is <strong>$2,460</strong>: $4,710 &minus; $2,250.'; }
+  else{ fb.className='feedback ok show'; fb.innerHTML='You are correct &mdash; $4,710 &minus; $2,250 = <strong>$2,460</strong>.'; }
   var c=document.getElementById('bsClose'); c.hidden=false;
   c.innerHTML='<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Assets &minus; Liabilities = Member&rsquo;s Capital</div><p>$4,710 &minus; $2,250 = <strong>$2,460</strong> &mdash; exactly the <strong>Total member&rsquo;s capital</strong> line. The difference you found earlier now carries the LLC&rsquo;s name, and the balance sheet is built around the same identity &mdash; it holds by definition, every time.</p></div>';
-  document.getElementById('goBtn').hidden=false;
   if(window.lucide) lucide.createIcons();
+}
+function resetBS(){
+  playClick();
+  bsDone=false; bsAttempts=0;
+  buildOpeningBS(false);
+  var inp=document.getElementById('bsInput'); inp.disabled=false; inp.value='';
+  var fb=document.getElementById('bsFb'); fb.className='feedback'; fb.classList.remove('show'); fb.innerHTML='';
+  var c=document.getElementById('bsClose'); c.hidden=true; c.innerHTML='';
+  document.getElementById('bsReset').style.display='none';
+  inp.focus();
 }
 window.devFill = function(){ if(!bsDone) revealBS(); };
 

@@ -170,7 +170,7 @@ function mountOne(containerId,sheet,hiddenRows){
   BRW.markDatedRows(containerId);
 }
 function mountSnapshot(containerId,sheet){
-  BRW.mountGrid(containerId,sheet,{gridId:'season-walk-'+(++gridSeq)});
+  BRW.mountGrid(containerId,sheet,{gridId:'season-walk-'+(++gridSeq),layout:'standard'});
   BRW.markDatedRows(containerId);
 }
 /* Rick's authored Balance Sheet keeps its amounts in column C; the grid
@@ -286,12 +286,31 @@ var stage=0, answered=false, subtotalAttempts=0, nudgeTimer=null;
 var stage2Phase='expand', visitedBalanceTab=false;
 function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">'+inner+'</div></div>'; }
 function insightBox(label,inner){ return '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> '+label+'</div>'+inner+'</div>'; }
-function walkMeta(){ return '<div class="walk-meta"><span class="walk-step">Step '+(stage+1)+' of '+TOTAL_STEPS+'</span><span class="walk-nudge" id="walkNudge" role="status" aria-live="polite"></span></div>'; }
-function answerButtons(items,handler){
-  return '<div class="answer-stack">'+items.map(function(item){
-    return '<button class="btn btn-secondary" type="button" onclick="'+handler+'(\''+item.key+'\')">'+item.label+'</button>';
-  }).join('')+'</div>';
+function walkMeta(){ return '<div class="walk-meta"><span class="walk-nudge" id="walkNudge" role="status" aria-live="polite"></span></div>'; }
+/* canonical MCQ: letter chips, select → Submit → green/red verdict on the card,
+   Reset after any submit, Continue advances — never an instant jump. */
+var mcSel=null, mcSubmitted=false, mcRight=false, mcRevealed=false, mcMsg='';
+function mcResetState(){ mcSel=null; mcSubmitted=false; mcRight=false; mcRevealed=false; mcMsg=''; }
+function answerButtons(items,handler,question){
+  var h='<div class="mc-card">'+(question?'<div class="mc-q">'+question+'</div>':'')+'<div class="mc-opts">';
+  items.forEach(function(item,i){
+    var cls='mc-opt'
+      +(!mcSubmitted&&mcSel===item.key?' selected':'')
+      +(mcSubmitted&&mcSel===item.key?(mcRight?' correct':' wrong'):'')
+      +(mcSubmitted?' locked':'');
+    h+='<div class="'+cls+'"'+(mcSubmitted?'':' onclick="mcPick(\''+item.key+'\')"')+'><div class="mc-letter">'+String.fromCharCode(65+i)+'</div><div>'+item.label+'</div></div>';
+  });
+  h+='</div>';
+  if(mcSubmitted) h+='<div class="feedback '+(mcRight?'ok':'err')+' show">'+(mcRight?('You are correct.'+(mcMsg?' '+mcMsg:'')):(mcMsg||'Not that one &mdash; read the two dated lines again.'))+'</div>';
+  h+='<div class="btn-row">'+(mcSubmitted
+    ? '<button class="btn-reset" onclick="mcRetry()" style="margin-left:auto;">Reset</button>'
+    : '<button class="btn-continue" onclick="mcSubmit(\''+handler+'\')"'+(mcSel===null?' disabled':'')+'>Submit</button>')+'</div></div>';
+  return h;
 }
+function mcPick(key){ if(mcSubmitted) return; mcSel=key; playClick(); renderTalk(); }
+function mcRetry(){ playClick(); var wasRight=mcRight; mcResetState(); if(wasRight) answered=false; renderTalk(); }
+function mcSubmit(handler){ if(mcSel===null||mcSubmitted) return; window[handler](mcSel); }
+function mcContinueBtn(label,fn){ return (mcRight||mcRevealed) ? '<button class="btn-continue btn-block" style="margin-top:12px" onclick="'+fn+'">'+label+' &rarr;</button>' : ''; }
 function showWalkNudge(message){
   var el=document.getElementById('walkNudge'); if(!el) return;
   el.textContent=message||'Not that one — read the two dated lines again.';
@@ -299,22 +318,39 @@ function showWalkNudge(message){
   if(nudgeTimer) clearTimeout(nudgeTimer);
   nudgeTimer=setTimeout(function(){ el.classList.remove('show'); el.textContent=''; nudgeTimer=null; },2800);
 }
-function wrong(message){ playSoftNope(); showWalkNudge(message); }
-function markAnswered(){ answered=true; playSuccess(); renderTalk(); }
-function advance(){ playClick(); stage++; answered=false; mountWorkbook(); renderTalk(); }
+function wrong(message){ playSoftNope(); mcSubmitted=true; mcRight=false; mcMsg=message||''; renderTalk(); }
+function right(message){ playSuccess(); mcSubmitted=true; mcRight=true; mcMsg=message||''; renderTalk(); }
+function markAnswered(){ answered=true; right(); }
+function advance(){ playClick(); stage++; answered=false; mcResetState(); mountWorkbook(); renderTalk(); }
+function stageBack(){
+  if(stage===0) return;
+  playClick();
+  stage--;
+  answered=false; mcResetState();
+  var correct={0:'missing',1:'add',4:'cash',5:'liabilities',7:'zero'};
+  if(correct[stage]!==undefined){
+    mcSel=correct[stage]; mcSubmitted=true; mcRight=true;
+    if(stage===4||stage===5||stage===7) answered=true;
+  }
+  if(stage===2) stage2Phase='done';
+  mountWorkbook(); renderTalk(); window.scrollTo(0,0);
+}
 
 function confirmRaw(key){
   if(key!=='missing'){ wrong('The August 31 balance is visible, but look for a June 1 line. There is not one yet.'); return; }
-  stage=1; playSuccess(); mountWorkbook(); renderTalk();
+  right('Only August 31 balances are ruled &mdash; no June 1 line yet.');
 }
+function goStage1(){ playClick(); stage=1; mcResetState(); mountWorkbook(); renderTalk(); window.scrollTo(0,0); }
 function subtotalAnswer(key){
   if(key==='add'){
-    playSuccess(); stage=2; mountWorkbook(); renderTalk(); return;
+    right('The June 1 line marks where the season starts.');
+    return;
   }
   subtotalAttempts++;
-  if(subtotalAttempts>=3){ playSuccess(); stage=2; mountWorkbook(); renderTalk(); return; }
+  if(subtotalAttempts>=3){ playSoftNope(); mcSubmitted=true; mcRight=false; mcRevealed=true; mcMsg='A June 1 line is required &mdash; without it, nothing says where the story started.'; renderTalk(); return; }
   wrong('Without a June 1 line, nothing says where the season started.');
 }
+function goStage2(){ playClick(); stage=2; mcResetState(); mountWorkbook(); renderTalk(); window.scrollTo(0,0); }
 function storyAnswer(key){
   var correct={4:'cash',5:'liabilities',7:'zero'};
   if(key===correct[stage]) markAnswered();
@@ -354,18 +390,19 @@ function renderTalk(){
   var anna='', controls='';
   if(stage===0){
     anna=annaBox('Every category ends in a ruled balance for today, August 31. But the season did not start today. Can you point to a line that says where Parts stood on June 1, the day the LLC&rsquo;s books opened?')+walkMeta();
-    controls='<div class="next-phase-msg">Read the visible balance lines, then choose what the sheet shows.</div>'
-      +answerButtons([{key:'visible',label:'The June 1 balance is already visible.'},{key:'missing',label:'Only August 31 balances are visible — no June 1 line yet.'}],'confirmRaw');
+    controls=answerButtons([{key:'visible',label:'The June 1 balance is already visible.'},{key:'missing',label:'Only August 31 balances are visible — no June 1 line yet.'}],'confirmRaw','Read the visible balance lines &mdash; what does the sheet show?')
+      +mcContinueBtn('Mark the season&rsquo;s start','goStage1()');
   } else if(stage===1){
     anna=annaBox('The August 31 line is already ruled at every category &mdash; Excel keeps it as the running balance. The books just flow; <strong>we divide time into periods of interest</strong>, and the <strong>dates of interest</strong> frame them. This season&rsquo;s story starts on <strong>June 1</strong>, the day the LLC&rsquo;s books opened.')+walkMeta();
-    controls='<div class="mc-card"><div class="mc-q">Add a June 1, 2026 subtotal?</div>'+answerButtons([{key:'add',label:'Yes &mdash; rule a June 1, 2026 subtotal at every account with earlier history.'},{key:'skip',label:'No &mdash; the August 31 balance already tells the season&rsquo;s story.'}],'subtotalAnswer')+'</div>';
+    controls=answerButtons([{key:'add',label:'Yes &mdash; rule a June 1, 2026 subtotal at every account with earlier history.'},{key:'skip',label:'No &mdash; the August 31 balance already tells the season&rsquo;s story.'}],'subtotalAnswer','Add a June 1, 2026 subtotal?')
+      +mcContinueBtn('Rule the June 1 subtotals','goStage2()');
   } else if(stage===2){
     if(stage2Phase==='expand'){
       anna=annaBox('There they are — the same ruled, dated lines now run across the workbook. Parts got two. Open both <strong>+</strong> boxes inside Parts and watch how the subtotals work.')+walkMeta();
-      controls='<div class="next-phase-msg">Open both <strong>+</strong> boxes in Parts.</div>';
+      controls='<div class="next-phase-msg">Open both <strong>+</strong> boxes on the Parts balance lines in the sheet above &mdash; the walk continues once both are open.</div>';
     } else if(stage2Phase==='visit'){
       anna=annaBox('Read what you opened: the starting items add up to the <strong>June 1</strong> line — $200 — and the purchases and uses after it carry the story to the <strong>August 31</strong> line. Once these dated lines are in, the balance sheet&rsquo;s amounts are easy to read off the Assets, Liabilities, and Reasons tabs. Verify one: click the <strong>Balance Sheet</strong> tab and notice Parts on June 1, 2026 — then come back to <strong>Assets</strong>.')+walkMeta();
-      controls='';
+      controls='<div class="next-phase-msg">Click the <strong>Balance Sheet</strong> tab below the workbook, find Parts on June 1, 2026 &mdash; then click back to <strong>Assets</strong> to continue.</div>';
     } else {
       anna=walkMeta();
       controls=insightBox('The June 1 line ties','<p><strong>Parts $200 = Parts $200.</strong> The Balance Sheet&rsquo;s June 1 amount and the new <strong>Balance, June 1, 2026</strong> subtotal on Assets show the same figure. The dated lines put the balance sheet&rsquo;s amounts right on the tabs.</p>')
@@ -378,17 +415,19 @@ function renderTalk(){
   } else if(stage===4){
     anna=annaBox('Cash reads <strong>$1,300 on June 1</strong> and <strong>$620 on August 31</strong>. Repairs brought cash in, while rent, parts, a new tool, the card payoff, and a draw sent cash out. What can these two lines establish by themselves?')+walkMeta();
     if(!answered){
-      controls=answerButtons([{key:'income',label:'They measure the season&rsquo;s income.'},{key:'cash',label:'They establish that Cash decreased by $680.'}],'storyAnswer');
+      controls=answerButtons([{key:'income',label:'They measure the season&rsquo;s income.'},{key:'cash',label:'They establish that Cash decreased by $680.'}],'storyAnswer','What can the two dated Cash lines establish by themselves?');
     } else {
-      controls=insightBox('Cash answers a cash question','<p>The dated lines establish a <strong>$680 decrease in Cash</strong>. This decrease in cash doesn&rsquo;t tell you how much cash flowed through the shop. It only tells you that $680 more flowed out than flowed in.</p>')
+      controls=answerButtons([{key:'income',label:'They measure the season&rsquo;s income.'},{key:'cash',label:'They establish that Cash decreased by $680.'}],'storyAnswer','What can the two dated Cash lines establish by themselves?')
+        +insightBox('Cash answers a cash question','<p>The dated lines establish a <strong>$680 decrease in Cash</strong>. This decrease in cash doesn&rsquo;t tell you how much cash flowed through the shop. It only tells you that $680 more flowed out than flowed in.</p>')
         +'<button class="btn-continue btn-block" onclick="advance()">Read Liabilities &rarr;</button>';
     }
   } else if(stage===5){
     anna=annaBox('On Liabilities, the Credit Card moves from <strong>$2,030 to $0</strong>, and the Customer Deposit moves from <strong>$220 to $0</strong>. Read the detail if you need it. What explains both August 31 lines?')+walkMeta();
     if(!answered){
-      controls=answerButtons([{key:'vanished',label:'The amounts simply disappeared.'},{key:'liabilities',label:'You paid the card; you built and delivered Smith&rsquo;s frame.'}],'storyAnswer');
+      controls=answerButtons([{key:'vanished',label:'The amounts simply disappeared.'},{key:'liabilities',label:'You paid the card; you built and delivered Smith&rsquo;s frame.'}],'storyAnswer','What explains both August 31 lines?');
     } else {
-      controls=insightBox('The dated lines organize the explanations','<p>The card payoff explains the first $0. Delivery of Smith&rsquo;s frame explains the second: the $220 deposit no longer records work still owed to Smith.</p>')
+      controls=answerButtons([{key:'vanished',label:'The amounts simply disappeared.'},{key:'liabilities',label:'You paid the card; you built and delivered Smith&rsquo;s frame.'}],'storyAnswer','What explains both August 31 lines?')
+        +insightBox('The dated lines organize the explanations','<p>The card payoff explains the first $0. Delivery of Smith&rsquo;s frame explains the second: the $220 deposit no longer records work still owed to Smith.</p>')
         +'<button class="btn-continue btn-block" onclick="advance()">Read GENERATED &rarr;</button>';
     }
   } else if(stage===6){
@@ -397,13 +436,15 @@ function renderTalk(){
   } else {
     anna=annaBox('One last detail: <strong>WITHDRAWN</strong> began during the season &mdash; nothing sits above its June 1 line. What does its June 1 subtotal read?')+walkMeta();
     if(!answered){
-      controls=answerButtons([{key:'zero',label:'It reads $0 &mdash; there was no earlier history to cut.'},{key:'none',label:'It has no June 1 line at all.'}],'storyAnswer');
+      controls=answerButtons([{key:'zero',label:'It reads $0 &mdash; there was no earlier history to cut.'},{key:'none',label:'It has no June 1 line at all.'}],'storyAnswer','What does WITHDRAWN&rsquo;s June 1 subtotal read?');
     } else {
-      controls=insightBox('A new account still gets the cut','<p><strong>WITHDRAWN, June 1: $0.</strong> The ruled cut runs across every account; where there is no earlier history it simply reads zero. The August 31 line carries the season&rsquo;s only entry: the $600 draw.</p>')
+      controls=answerButtons([{key:'zero',label:'It reads $0 &mdash; there was no earlier history to cut.'},{key:'none',label:'It has no June 1 line at all.'}],'storyAnswer','What does WITHDRAWN&rsquo;s June 1 subtotal read?')
+        +insightBox('A new account still gets the cut','<p><strong>WITHDRAWN, June 1: $0.</strong> The ruled cut runs across every account; where there is no earlier history it simply reads zero. The August 31 line carries the season&rsquo;s only entry: the $600 draw.</p>')
         +'<div class="next-phase-msg">The workbook now gives you honest boundaries. Next, check the GENERATED rows between those dated lines against the work the shop actually did.</div>'
         +'';
     }
   }
+  if(stage>0) controls+='<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="stageBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   document.getElementById('anna').innerHTML=anna;
   document.getElementById('controls').innerHTML=controls;
   document.getElementById('evidence').innerHTML=stage>=3 ? evidenceCard() : '';

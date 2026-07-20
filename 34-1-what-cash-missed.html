@@ -16,7 +16,6 @@
     .bridge-row strong { font-family:"JetBrains Mono",monospace; white-space:nowrap; }
     .bridge-total { margin-top:4px; padding-top:12px; border-top:2px solid currentColor; font-weight:800; }
     .bridge-check { margin:10px 0 0; font-family:"JetBrains Mono",monospace; font-size:.9rem; }
-    .tab-cue { margin-top:10px; padding:10px 12px; border-left:3px solid #6f42c1; background:rgba(111,66,193,.08); }
       </style>
 </head>
 <body>
@@ -78,7 +77,8 @@ function insightBox(label,inner){ return '<div class="insight-box"><div class="i
 
 var LEDGER_WORKBOOK_KEY='bike-repair-module-3-3';
 var STATEMENT_WORKBOOK_KEY='income-statement-steps';
-var activeTab='Statement', assetsVisited=false, walkStep=0, mountSerial=0;
+var activeTab='Statement', assetsVisited=false, introDone=false, walkStep=0, mountSerial=0;
+var stepVisited={};   /* walkStep index -> the step's named tab was opened */
 var NET_INCOME=2640, CASH_CHANGE=-680;
 
 function cloneSheet(sheet){ return JSON.parse(JSON.stringify(sheet)); }
@@ -145,6 +145,10 @@ function showWorkbookTab(name){
   }
   BRW.markDatedRows('workbookGrid');
   setWorkbookChrome(name);
+  if(assetsVisited && introDone && walkStep<STEPS.length && STEPS[walkStep].tab===name && !STEPS[walkStep].expand && !stepVisited[walkStep]){
+    stepVisited[walkStep]=true;
+    renderTalk();
+  }
   if(name==='Assets'&&!assetsVisited){
     assetsVisited=true;
     renderTalk();
@@ -157,36 +161,42 @@ var STEPS=[
     label:'New repair tool', amount:-400,
     talk:'First, the <strong>$400 repair tool</strong>. Cash went out, but no expense was recorded. The tool is a lasting thing, so its amount now sits in <strong>Tools &amp; Repair Equipment</strong>.',
     where:'On the <strong>Assets</strong> tab, expand <strong>Tools &amp; Repair Equipment</strong> to see the new tool row.',
+    tab:'Assets', expand:true,
     button:'Account for the tool'
   },
   {
     label:'Owner\'s draw', amount:-600,
     talk:'Next, the <strong>$600 owner&rsquo;s draw</strong>. Money was taken out for personal use. That is written in <strong>WITHDRAWN</strong>, never as an expense.',
     where:'The <strong>Reasons</strong> tab shows the owner&rsquo;s draw in the WITHDRAWN section.',
+    tab:'Reasons',
     button:'Account for the draw'
   },
   {
     label:'Credit card paid off', amount:-2030,
     talk:'Then the <strong>$2,030 bike-repair card payoff</strong>. Cash settled what was already owed from June 1. Paying it made the liability zero; it did not create a new expense.',
     where:'Click <strong>Liabilities</strong>, then expand <strong>Credit Card</strong>: the dated balance moves from $2,030 to $0.',
+    tab:'Liabilities', expand:true,
     button:'Account for the payoff'
   },
   {
     label:'Ridgeline billed, unpaid', amount:-300,
     talk:'Ridgeline&rsquo;s <strong>$300</strong> counted as income when the repair was delivered, but no cash came this season. The unpaid bill sits in <strong>Accounts Receivable</strong>.',
     where:'On the <strong>Assets</strong> tab, expand <strong>Accounts Receivable</strong> to see Ridgeline&rsquo;s unpaid repair.',
+    tab:'Assets', expand:true,
     button:'Account for Ridgeline'
   },
   {
     label:'Smith deposit from last season', amount:-220,
     talk:'Smith&rsquo;s <strong>$220 frame</strong> counted as income when the finished work went out the door this season. Its cash arrived last season as a deposit, so no cash came with this season&rsquo;s delivery.',
     where:'The <strong>Liabilities</strong> tab shows Smith&rsquo;s advance at June 1 and the amount no longer owed after delivery.',
+    tab:'Liabilities',
     button:'Account for Smith'
   },
   {
     label:'Depreciation', amount:230,
     talk:'Finally, <strong>$230 of depreciation</strong>. Wear was recorded as an expense, but no cash went out. For the bridge, that $230 comes back.',
     where:'The <strong>Reasons</strong> tab shows the three handwritten depreciation rows; the Income Statement folds them into one $230 line.',
+    tab:'Reasons',
     button:'Account for depreciation'
   }
 ];
@@ -200,7 +210,7 @@ function signedDollar(amount){
   return (amount<0?'&minus;':'+')+' '+BRW.dol(Math.abs(amount));
 }
 function renderBridge(){
-  if(!assetsVisited){ document.getElementById('bridge').innerHTML=''; return; }
+  if(!assetsVisited||!introDone){ document.getElementById('bridge').innerHTML=''; return; }
   var rows='<li class="bridge-row"><span>Net income generated</span><strong>'+BRW.dol(NET_INCOME)+'</strong></li>';
   for(var i=0;i<walkStep;i++){
     rows+='<li class="bridge-row"><span>'+STEPS[i].label+'</span><strong>'+signedDollar(STEPS[i].amount)+'</strong></li>';
@@ -221,13 +231,16 @@ function renderTalk(){
   if(!assetsVisited){
     anna=annaBox('The shop generated <strong>$2,640</strong>. Yet Cash starts at <strong>$1,300</strong> on June 1 and ends at <strong>$620</strong> on August 31. Click the <strong>Assets</strong> tab and find those dated Cash lines.');
     controls='<div class="next-phase-msg">Open <strong>Assets</strong> above to compare Cash at the two dates.</div>';
+  } else if(!introDone){
+    anna=annaBox('There it is: <strong>$1,300 &rarr; $620</strong>. Cash fell by <strong>$680</strong>. Start at net income and follow the reasons for the difference, one row at a time.');
+    controls='<button class="btn-continue btn-block" onclick="startWalk()">Start the walk &rarr;</button>';
   } else if(walkStep<STEPS.length){
     var step=STEPS[walkStep];
-    anna=annaBox(walkStep===0
-      ?'There it is: <strong>$1,300 &rarr; $620</strong>. Cash fell by <strong>$680</strong>. Start at net income and follow the reasons for the difference, one row at a time. '+step.talk
-      :step.talk);
-    controls='<div class="tab-cue">'+step.where+'</div>'
-      +'<button class="btn-continue btn-block" onclick="advanceWalk()">'+step.button+' &rarr;</button>';
+    anna=annaBox(step.talk);
+    if(!step.expand && activeTab===step.tab && !stepVisited[walkStep]) stepVisited[walkStep]=true;   /* look-steps: being on the tab is the action */
+    var unlocked=!!stepVisited[walkStep];
+    controls=(unlocked?'':'<div class="next-phase-msg">'+step.where+'</div>')
+      +'<button class="btn-continue btn-block"'+(unlocked?' onclick="advanceWalk()"':' disabled')+'>'+step.button+' &rarr;</button>';
   } else {
     anna=annaBox('The income statement tells what the season <strong>generated</strong>. The cash drawer tells what the season did to <strong>cash</strong>. Both are true, and the difference has reasons you can point to, row by row.');
     controls=insightBox('The bridge closes exactly',
@@ -235,19 +248,41 @@ function renderTalk(){
       +'<div class="next-phase-msg">A statement that walks this bridge properly is a story for later. For now, every dollar of the difference is visible in the records.</div>'
       +'';
   }
+  if(assetsVisited) controls+='<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="walkBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   document.getElementById('anna').innerHTML=anna;
   document.getElementById('controls').innerHTML=controls;
   renderBridge();
   if(window.lucide) lucide.createIcons();
 }
 
+document.getElementById('workbookGrid').addEventListener('click',function(e){
+  var t=e.target.closest('.brw-og-toggle');
+  if(!t) return;
+  if(!assetsVisited || !introDone || walkStep>=STEPS.length) return;
+  var step=STEPS[walkStep];
+  if(!step.expand || stepVisited[walkStep]) return;
+  if(activeTab!==step.tab) return;
+  if(t.getAttribute('aria-expanded')!=='true') return;   /* count expansions, not collapses */
+  stepVisited[walkStep]=true;
+  renderTalk();
+});
 function advanceWalk(){
-  if(!assetsVisited||walkStep>=STEPS.length) return;
+  if(!assetsVisited||!introDone||walkStep>=STEPS.length) return;
+  if(!stepVisited[walkStep]) return;
   playClick();
   walkStep++;
   if(walkStep===STEPS.length) playSuccess();
   renderTalk();
-  window.scrollTo(0,document.body.scrollHeight);
+  window.scrollTo(0,0);
+}
+function startWalk(){ playClick(); introDone=true; renderTalk(); window.scrollTo(0,0); }
+function walkBack(){
+  playClick();
+  if(walkStep>0){ walkStep--; }
+  else if(introDone){ introDone=false; }
+  else if(assetsVisited){ assetsVisited=false; }
+  renderTalk();
+  window.scrollTo(0,0);
 }
 
 var glossaryTerms=[
@@ -263,10 +298,10 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ window.location.reload(); }
+function restart(){ playClick(); walkStep=0; assetsVisited=false; introDone=false; stepVisited={}; renderTalk(); window.scrollTo(0,0); }
 document.addEventListener('keydown',function(event){ if(event.key==='Escape') closeGlossary(); });
 
-window.devFill=function(){
+window.devFill=function(){ assetsVisited=true; introDone=true; for(var i=0;i<STEPS.length;i++) stepVisited[i]=true;
   assetsVisited=true;
   walkStep=STEPS.length;
   renderTalk();

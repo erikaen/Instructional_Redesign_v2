@@ -129,19 +129,19 @@ var MOVES=[
     {id:'income',text:'The Income Statement',ok:false},
     {id:'cashflow',text:'The Cash Flow Statement',ok:true},
     {id:'bridge',text:'The Statement of Member&rsquo;s Capital',ok:false}
-  ],fbOk:'Right &mdash; the change in Cash is told on the Cash Flow Statement: Operating +$2,350, Investing &minus;$400, Financing &minus;$2,630, net &minus;$680.',
+  ],fbOk:'You are correct &mdash; the change in Cash is told on the Cash Flow Statement: Operating +$2,350, Investing &minus;$400, Financing &minus;$2,630, net &minus;$680.',
     fbWrong:'Not this one. Member&rsquo;s Capital is told on a different statement; the change in Cash has its own statement.'},
   {id:'mc',prompt:'Member&rsquo;s Capital rose $2,040 (from $2,460 to $4,500).',opts:[
     {id:'bridge',text:'The Statement of Member&rsquo;s Capital',ok:true},
     {id:'cashflow',text:'The Cash Flow Statement',ok:false},
     {id:'income',text:'The Income Statement alone',ok:false}
-  ],fbOk:'Right &mdash; the full reconciliation appears on the Statement of Member&rsquo;s Capital: Contributed $2,290 (unchanged), Generated $170 + net income $2,640 = $2,810, Withdrawn ($600) &mdash; the three piles sum to $4,500.',
+  ],fbOk:'You are correct &mdash; the full reconciliation appears on the Statement of Member&rsquo;s Capital: Contributed $2,290 (unchanged), Generated $170 + net income $2,640 = $2,810, Withdrawn ($600) &mdash; the three piles sum to $4,500.',
     fbWrong:'This is incomplete on its own &mdash; net income is only one piece of this move. The draw also passed through, and all three piles appear together only on the Statement of Member&rsquo;s Capital.'},
   {id:'retained',prompt:'Generated (inside Member&rsquo;s Capital) rose from $170 to $2,810.',opts:[
     {id:'income',text:'The Income Statement',ok:true},
     {id:'bridge',text:'The Statement of Member&rsquo;s Capital alone',ok:false},
     {id:'contrib',text:'Contributed &mdash; new money put in',ok:false}
-  ],fbOk:'Right &mdash; the Income Statement reports net income of $2,640, exactly the increase from Generated $170 to $2,810. That net income then appears as the reason for the change on the Statement of Member&rsquo;s Capital.',
+  ],fbOk:'You are correct &mdash; the Income Statement reports net income of $2,640, exactly the increase from Generated $170 to $2,810. That net income then appears as the reason for the change on the Statement of Member&rsquo;s Capital.',
     fbWrong:'The Statement of Member&rsquo;s Capital displays the change, but the Income Statement explains it: net income of $2,640 is exactly the increase from $170 to $2,810. Contributed did not move this season.'}
 ];
 var step=0;
@@ -171,7 +171,7 @@ function questionBankHTML(activeIndex){
     h+='</div>';
     if(locked) h+='<div class="feedback '+(chosen.ok?'ok':'err')+' show">'+(chosen.ok?m.fbOk:m.fbWrong)+'</div>';
     var needsChoice=!locked&&sel[m.id]===undefined;
-    h+='<div class="btn-row">'+(locked?(chosen.ok?'':'<button class="btn-reset" onclick="resetMove(\''+m.id+'\')" style="margin-left:auto;">Reset</button>')
+    h+='<div class="btn-row">'+(locked?'<button class="btn-reset" onclick="resetMove(\''+m.id+'\')" style="margin-left:auto;">Reset</button>'
       :'<button class="btn-continue" onclick="submitMove(\''+m.id+'\')"'+(needsChoice?' disabled':'')+'>Submit</button>'+(needsChoice?'<span class="mc-submit-hint">Choose an answer to unlock Submit.</span>':''))+'</div></div>';
   });
   return h+'</div>';

@@ -217,9 +217,20 @@ function renderControls(){
   var action=selected
     ? '<button class="btn-continue btn-block" onclick="pasteSeasonRows()">Paste these rows into a working sheet &rarr;</button>'
     : '<button class="btn-continue btn-block" onclick="selectSeasonRows()">Copy the season&rsquo;s rows</button>';
+  if(selected) action+='<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="stepBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   document.getElementById('controls').innerHTML=insightBox('The season&rsquo;s rows',
     '<p>Copy every row after <strong>Balance, June 1, 2026</strong> and before <strong>Balance, August 31, 2026</strong> &mdash; <strong>46 rows</strong> in all.</p>')+action;
   if(window.lucide) lucide.createIcons();
+}
+function stepBack(){
+  if(pasted){
+    playClick(); pasted=false; selected=false;
+    document.querySelector('[data-sheet-tab="working"]').hidden=true;
+    document.getElementById('afterPaste').innerHTML='';
+    paint('reasons'); renderControls(); window.scrollTo(0,0);
+    return;
+  }
+  if(selected){ playClick(); selected=false; paint('reasons'); renderControls(); window.scrollTo(0,0); }
 }
 function selectSeasonRows(){
   if(selected || pasted) return;
@@ -234,7 +245,7 @@ function pasteSeasonRows(){
   pasted=true;
   playClick();
   playSuccess();
-  document.getElementById('controls').innerHTML='';
+  document.getElementById('controls').innerHTML='<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="stepBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   document.querySelector('[data-sheet-tab="working"]').hidden=false;
   paint('working');
   document.getElementById('afterPaste').innerHTML=annaBox(
@@ -257,7 +268,7 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ window.location.reload(); }
+function restart(){ playClick(); pasted=false; selected=false; document.querySelector('[data-sheet-tab="working"]').hidden=true; document.getElementById('afterPaste').innerHTML=''; paint('reasons'); renderControls(); window.scrollTo(0,0); }
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
 
 /* ===== init ===== */

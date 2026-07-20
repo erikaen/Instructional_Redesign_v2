@@ -36,10 +36,10 @@
     </div>
     <div class="mc-card">
       <div class="mc-q">The difference = Assets &minus; Liabilities = $3,410 &minus; $2,250 =</div>
-      <div class="btn-row">
+      <div class="btn-row fillin-row">
         <input id="netInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="The difference" onkeydown="if(event.key==='Enter'){checkNet();}">
         <button class="btn btn-primary" onclick="checkNet()">Check</button>
-        <button class="btn-reset" id="netReset" onclick="resetNet()" style="margin-left:auto; display:none;">Reset</button>
+        <button class="btn-reset" id="netReset" onclick="resetNet()" style="display:none;">Reset</button>
       </div>
       <div class="feedback" id="netFb"></div>
     </div>

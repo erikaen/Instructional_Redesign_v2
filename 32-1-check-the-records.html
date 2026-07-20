@@ -206,7 +206,7 @@ function renderTalk(){
     anna=annaBox('There it is &mdash; <strong>'+ridge.customer+'</strong>, '+ridge.date+'. The log shows the job as finished but unpaid: '+ridge.hours+' hours, <strong>'+BRW.dol(ridge.partsCost)+'</strong> of parts off the shelf, and <strong>'+BRW.dol(ridge.charge)+'</strong> billed net 15. The ledger already carries <strong>Parts used &mdash; Ridgeline Trail Crew</strong> in GENERATED &mdash; the parts left the shelf on that job, so the using-up is recorded. Only the <strong>Repair collected/delivered</strong> row is missing.');
     controls=insightBox('It counts when the work is delivered, not when the cash comes',
       '<p>A delivery row never meant &ldquo;cash arrived&rdquo; &mdash; it records the work going out the door, and Ridgeline&rsquo;s did, on Aug 28. The row belongs in GENERATED now; the cash follows on its own schedule.</p>')
-      +'';
+      +'<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="stepBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   }
   document.getElementById('anna').innerHTML=anna;
   document.getElementById('controls').innerHTML=controls;
@@ -215,8 +215,9 @@ function renderTalk(){
 function setStep(next){
   if(next<=step) return;
   playClick(); playSuccess(); step=next; renderTalk();
-  window.scrollTo(0,document.body.scrollHeight);
+  window.scrollTo(0,0);
 }
+function stepBack(){ if(step===0) return; playClick(); step=0; renderTalk(); window.scrollTo(0,0); }
 
 /* ===== job log ===== */
 function payTag(job){
@@ -254,7 +255,7 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ window.location.reload(); }
+function restart(){ playClick(); step=0; renderTalk(); window.scrollTo(0,0); }
 document.addEventListener('keydown',function(event){ if(event.key==='Escape'){ closeGlossary(); closeTicket(); } });
 
 /* ===== init ===== */

@@ -11,10 +11,8 @@
   <style>
     .bs-pipeline .xlwb-tab.tk-temp { box-shadow:inset 0 -3px 0 #FFC000; }
     .bs-pipeline .xlwb-tab.tk-stmt { box-shadow:inset 0 -3px 0 #7c3aed; }
-    .working-copy .xl-row { grid-template-columns:22px 34px 1fr 110px; }
     .working-copy-note { padding:10px 12px 2px; color:var(--muted); font-size:var(--font-s); }
-    #contributionSorterPanel { margin:16px 0; }
-      </style>
+  </style>
 </head>
 <body>
 <div class="page">
@@ -89,9 +87,7 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 
-/* ===== navigation / reset ===== */
-function nav(url){ playClick(); window.location.href = url; }
-function restart(){ window.location.reload(); }
+/* ===== reset lives inside the sort activity (resetContribSort) — no page-wide reset ===== */
 
 /* ===== member name ===== */
 var memberName = '';
@@ -239,87 +235,168 @@ function organizedHTML(withReasons){
   }
   return html+'</div></div></div></div>';
 }
+/* ===== the contribution sort — same document format as every other sorting activity:
+   chevron expands the row, classify inline, tag lands on the row, "Sort the rest"
+   unlocks as you go, "Check my sort" verifies at the end. ===== */
+var SORT_INFO = {
+  1:'The repair tools &mdash; the stand, hand tools, compressor, and the rest.',
+  2:'Smith paid $220 up front; the frame is still owed as work.',
+  3:'The laptop from home, at its book amount.',
+  4:'Parts still on the shelf.',
+  5:'Still owed on the bike-repair credit card &mdash; the balance moves with the business.',
+  6:'Desk, shelving units, display rack, pegboard.',
+  7:'Repair cash on hand &mdash; zero at the moment of contribution.',
+  8:'The last month of the lease, prepaid &mdash; a present right to use the space.'
+};
+var sortPlaced = {}, sortExpandedId = null, sortChecked = false, sortHintSeen = false, sortAutoActive = false, sortAutoDone = false;
+function rowAnswer(item){ return item.answer==='Company RECEIVES' ? 'r' : 't'; }
+function sortCounts(){
+  var r=0,t=0,c=0,hasR=false,hasT=false;
+  copiedRows.forEach(function(item){
+    var a=sortPlaced[item.row];
+    if(!a) return;
+    if(a==='r') r++; else t++;
+    if(a===rowAnswer(item)){ c++; if(a==='r') hasR=true; else hasT=true; }
+  });
+  return { r:r, t:t, correct:c, hasR:hasR, hasT:hasT, unsorted:copiedRows.length-r-t };
+}
+function sortRowHTML(item, i){
+  var a=sortPlaced[item.row];
+  var right=sortChecked && a && a===rowAnswer(item);
+  var wrong=sortChecked && a && a!==rowAnswer(item);
+  var open=sortExpandedId===item.row;
+  var stripe=wrong ? 'wrong' : (a ? (a==='r'?'shop':'personal') : '');
+  var tag='';
+  if(a) tag='<span class="stmt-tag '+(a==='r'?'shop':'personal')+'">'+(a==='r'?'Receives':'Takes on')+'</span>';
+  if(wrong) tag+='<span class="stmt-tag rethink">Try Again</span>';
+  if(right) tag+='<span style="color:#16a34a;font-weight:600;font-size:16px;margin-left:4px;">&#10003; Correct</span>';
+  var h='<div class="stmt-row stmt-grid-sort'+(i%2?' alt':'')+'">'+
+    '<button class="stmt-info-btn'+(open?' open':'')+(i===0&&!sortHintSeen?' hint-pulse':'')+'" onclick="toggleSortRow('+item.row+')" aria-label="'+(open?'Collapse':'Expand')+'"><i data-lucide="'+(open?'chevron-up':'chevron-down')+'" class="licon"></i></button>'+
+    '<div class="stmt-stripe '+stripe+'"></div>'+
+    '<span>'+item.label+tag+'</span>'+
+    '<span class="stmt-num">'+BRW.dol(item.amount)+'</span></div>';
+  if(open){
+    h+='<div class="stmt-expand"><div class="stmt-expand-info">'+SORT_INFO[item.row]+'</div><div class="classify-row"><span class="classify-label">Classify:</span>'+
+      '<button class="classify-btn'+(sortPlaced[item.row]==='r'?' active-shop':'')+'"'+(right?' disabled':' onclick="classifyRow('+item.row+',\'r\')"')+'>Company receives</button>'+
+      '<button class="classify-btn'+(sortPlaced[item.row]==='t'?' active-personal':'')+'"'+(right?' disabled':' onclick="classifyRow('+item.row+',\'t\')"')+'>Company takes on</button>'+
+      '</div></div>';
+  }
+  return h;
+}
+function sortDocHTML(){
+  var h='<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Copied row</span><span class="stmt-num">Book amount</span></div>';
+  copiedRows.forEach(function(item,i){ h+=sortRowHTML(item,i); });
+  return h;
+}
+function sortProgressHTML(){
+  var s=sortCounts();
+  var gateMet=s.correct>=2 && s.hasR && s.hasT && s.unsorted>0 && !sortAutoActive && !sortAutoDone;
+  var btn=s.unsorted>0
+    ? '<button class="btn-continue btn-block"'+(gateMet?' onclick="sortTheRest()"':' disabled')+'>Sort the rest</button>'
+    : (!sortChecked ? '<button class="btn-continue btn-block" onclick="checkContribSort()">Check my sort</button>' : '');
+  return '<div class="sortprog"><div class="sortprog-title">Sort the copied rows</div>'+
+    '<p class="sortprog-hint">A shortcut to auto-sort the remaining rows will unlock as you go. Get one of each kind right to unlock it.</p>'+
+    '<div class="sortprog-grid">'+
+    '<div class="sortprog-box shop"><div class="sortprog-label">Receives</div><div class="sortprog-num">'+s.r+'</div></div>'+
+    '<div class="sortprog-box personal"><div class="sortprog-label">Takes on</div><div class="sortprog-num">'+s.t+'</div></div>'+
+    '<div class="sortprog-box'+(s.unsorted===0?' done':'')+'"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">'+s.unsorted+'</div></div>'+
+    '</div>'+btn+'</div>';
+}
+function toggleSortRow(row){ if(step!==2) return; sortHintSeen=true; sortExpandedId=(sortExpandedId===row)?null:row; renderContribution(); }
+function classifyRow(row,a){
+  if(step!==2||sortAutoActive) return;
+  sortPlaced[row]=a; sortExpandedId=null; playClick();
+  /* after a check, corrections re-grade live; completion fires when the last row turns correct */
+  if(sortChecked && copiedRows.every(function(item){ return sortPlaced[item.row]===rowAnswer(item); })){
+    playSuccess();
+    renderContribution();
+    setTimeout(function(){ step=3; renderContribution(); window.scrollTo(0,0); }, 700);
+    return;
+  }
+  renderContribution();
+}
+function sortTheRest(){
+  if(sortAutoActive||sortAutoDone) return;
+  playClick(); sortAutoActive=true; sortExpandedId=null; renderContribution();
+  setTimeout(function(){
+    copiedRows.forEach(function(item){ if(!sortPlaced[item.row]) sortPlaced[item.row]=rowAnswer(item); });
+    sortAutoActive=false; sortAutoDone=true; playSuccess(); renderContribution();
+  }, 650);
+}
+function checkContribSort(){
+  sortChecked=true; playClick();
+  var allRight=copiedRows.every(function(item){ return sortPlaced[item.row]===rowAnswer(item); });
+  if(allRight){ playSuccess(); setTimeout(function(){ step=3; renderContribution(); window.scrollTo(0,0); }, 700); }
+  renderContribution();
+}
+function resetContribSort(){
+  playClick();
+  sortPlaced={}; sortExpandedId=null; sortChecked=false; sortAutoActive=false; sortAutoDone=false;
+  renderContribution();
+}
 function workingSheetHTML(){
   if(step===1) return workingCopyHTML();
-  if(step===2) return '<div id="contributionSorterGrid"></div>';
+  if(step===2) return sortDocHTML();
   if(step===3) return organizedHTML(false);
   if(step===4) return organizedHTML(true);
   return '<div style="padding:10px 12px">'+balanceSheetHTML()+'</div>';
 }
 BRW.registerSheet('working',workingSheetHTML);
-
-function contributionPickSheet(){
-  var cells=[];
-  copiedRows.forEach(function(item){
-    cells.push({r:item.row,c:2,value:item.sortLabel||item.label.replace(/&rsquo;/g,"'")});
-    cells.push({r:item.row,c:3,value:item.answer});
-    cells.push({r:item.row,c:4,value:item.amount,numFmt:'$#,##0'});
-  });
-  cells.push({r:1,c:6,value:'RECEIVES: a resource or right that moves into the Company.'});
-  cells.push({r:2,c:6,value:'TAKES ON: an obligation the Company accepts with the contribution.'});
-  return {name:'Contribution sort',cells:cells};
-}
-function requireDiagnosticPicks(sorter,rows){
-  sorter.restUnlocked=function(){
-    for(var i=0;i<rows.length;i++) if(!sorter.wasHandSorted(rows[i])) return false;
-    return true;
-  };
-}
-function mountContributionSorter(){
-  var panel=document.getElementById('contributionSorterPanel');
-  if(!panel) return;
-  panel.classList.remove('brw-sort-done');
-  var diagnostic=[2,8];
-  var sorter=BRW.mountSorter('contributionSorterPanel','contributionSorterGrid',contributionPickSheet(),{
-    gridId:'contribution-sort-grid-23-3',
-    categoryOrder:['Company RECEIVES','Company TAKES ON'],
-    showRows:[1,2,3,4,5,6,7,8],
-    diagnosticRows:diagnostic,
-    instruction:'Sort each copied row by what the Company receives or takes on. Place the two instructive rows, then sort the rest.',
-    onWrong:function(row){
-      var message=row===8
-        ? 'Right of Use is a present right. The Company <strong>receives</strong> that right.'
-        : row===2
-          ? 'Smith&rsquo;s $220 is still owed as work. The Company <strong>takes on</strong> that obligation.'
-          : 'Ask whether the row is a resource or right received, or an obligation taken on.';
-      document.getElementById('sortFeedback').innerHTML=annaBox(message);
-    },
-    onComplete:function(){ step=3; playSuccess(); renderContribution(); }
-  });
-  if(sorter) requireDiagnosticPicks(sorter,diagnostic);
-}
 function activeWorkbookTab(){ return step>=1?'working':'assets'; }
+function backRow(inner){
+  return (inner||'')+'<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="stepBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
+}
+function fwdBtn(label,fn){ return '<button class="btn-continue btn-block" style="margin-top:14px" onclick="'+fn+'">'+label+' &rarr;</button>'; }
+function stepBack(){
+  if(step===0) return;
+  playClick();
+  if(step===6) contributed=false;
+  step--;
+  renderContribution();
+  window.scrollTo(0,0);
+}
 function renderContribution(){
   var area=document.getElementById('contributionArea');
   bsSnap.tabs=workbookTabs();
-  var html='<div class="bs-pipeline" id="bsWb"></div>';
+  var html='';
+  if(step===2){
+    html+=annaBox('Click the <strong><i data-lucide="chevron-down" class="licon"></i></strong> beside a copied row, then decide: is it a resource or right the Company <strong>receives</strong>, or an obligation the Company <strong>takes on</strong>?');
+    html+=sortProgressHTML();
+  }
+  html+='<div class="bs-pipeline" id="bsWb"></div>';
+  if(step===2 && sortAutoActive){
+    html+='<div class="system-banner"><div class="system-banner-title"><i data-lucide="settings" class="licon"></i> Sorting the rest&hellip;</div></div>';
+  }
+  if(step===2 && sortChecked && sortCounts().correct<copiedRows.length){
+    html+='<div class="sort-msg warn">Not all of these look right yet &mdash; the marked rows need another look. Try again.</div>';
+  }
+  if(step===2){
+    html+='<div class="btn-row" style="justify-content:space-between; margin-top:12px;"><button class="btn-reset" onclick="stepBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button><button class="btn-reset" onclick="resetContribSort()">Reset</button></div>';
+  }
   if(step===0){
     html+=annaBox('Under Section 9, you move the business into the Company, and Schedule A &mdash; the list of what the member contributes &mdash; is still empty. The facts live in the <strong>Assets</strong>, <strong>Liabilities</strong>, and <strong>Reasons</strong> tabs you&rsquo;ve kept since Module 1. To figure out what is being contributed, copy the records to a working sheet.');
     html+='<button class="btn-continue btn-block" style="margin-top:14px" onclick="copyRecords()">Copy the records to a Working Tab &rarr;</button>';
   } else if(step===1){
     html+=annaBox('The fourth tab is born as an amber <strong>Working Tab</strong>. Every row is a copy; the ledgers stay where they are. This sheet is where the organizing will happen.');
-    html+='<button class="btn-continue btn-block" style="margin-top:14px" onclick="beginSort()">Sort and organize the copied rows &rarr;</button>';
-  } else if(step===2){
-    html+='<div id="contributionSorterPanel"></div><div id="sortFeedback"></div>';
+    html+=backRow(fwdBtn('Sort and organize the copied rows','beginSort()'));
   } else if(step===3){
     html+=annaBox('Now the two sides are organized: the Company <strong>receives $3,410</strong> and <strong>takes on $2,250</strong>. The calculation on the working sheet produces one difference, <strong>$1,160</strong> &mdash; but it does not explain why that difference exists. Turn to the Reasons tab: its two piles record the why.');
-    html+='<button class="btn-continue btn-block" style="margin-top:14px" onclick="bringReasons()">Bring the two piles in &rarr;</button>';
+    html+=backRow(fwdBtn('Bring the two piles in','bringReasons()'));
   } else if(step===4){
     html+=annaBox('There it is: <strong>CONTRIBUTED $990</strong> and <strong>GENERATED $170</strong>. Together, <strong>$990 + $170 = $1,160</strong>. You can now read the whole story on the completed sheet: what the Company receives, what it takes on, and where the difference came from. A sheet laid out like this &mdash; resources, obligations, and the difference with its history &mdash; has a name.');
-    html+='<button class="btn-continue btn-block" style="margin-top:14px" onclick="christenSheet()">Rename the completed tab &rarr;</button>';
+    html+=backRow(fwdBtn('Rename the completed tab','christenSheet()'));
   } else if(step===5){
     html+=annaBox('You&rsquo;ve built and named the <strong>Balance Sheet</strong>. Read it slowly: Assets, <strong>$3,410</strong>; Liabilities, <strong>$2,250</strong>; and the difference, <strong>$1,160</strong>, in its two piles &mdash; <strong>Contributed $990</strong> and <strong>Generated $170</strong>. This is the business you move into the Company under Section 9 at these amounts, with no revaluation.');
-    html+='<button class="btn-continue btn-block" style="margin-top:14px" onclick="doContribute()">Contribute the business to the LLC &rarr;</button>';
-  } else {
+    html+=backRow(fwdBtn('Contribute the business to the LLC','doContribute()'));
+  } else if(step===6){
     html+='<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="check" class="licon"></i> Not one number changed</div>'+
       '<p>The same Balance Sheet is now the <strong>Company&rsquo;s</strong> &mdash; legally contributed in. The difference became <strong>Member&rsquo;s Capital</strong>, the one name the Operating Agreement uses. <strong>Contributed ($990)</strong> and <strong>Generated ($170)</strong> carried over untouched &mdash; the same $1,160, with the history intact.</p>'+
       '<p><strong>Schedule A</strong> is still <strong>empty</strong>. These are the lines you&rsquo;ll enter in 2.4, after the cash is deposited and the card is moved.</p></div>'+
-      '';
+      backRow('');
   }
   area.innerHTML=html;
   BRW.mount('bsWb',bsSnap);
   if(activeWorkbookTab()==='working') BRW.tab('bsWb','working');
-  if(step===2) mountContributionSorter();
   if(window.lucide) lucide.createIcons();
 }
 function copyRecords(){ step=1; playSuccess(); renderContribution(); }

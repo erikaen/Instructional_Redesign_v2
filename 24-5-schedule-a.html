@@ -74,7 +74,7 @@ function closeGlossary(){ document.getElementById('glossaryOverlay').classList.r
 
 /* ===== navigation / reset ===== */
 function nav(url){ playClick(); window.location.href = url; }
-function restart(){ window.location.reload(); }
+function restart(){ playClick(); entered={}; signedCompany=false; signedMember=false; renderAll(); window.scrollTo(0,0); }
 
 /* ===== member name ===== */
 var memberName = '';

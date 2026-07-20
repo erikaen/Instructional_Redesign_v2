@@ -1271,17 +1271,17 @@ var COURSE_TUTORIALS = [
 ];
 function courseFlatPages(){ var a=[]; COURSE_TUTORIALS.forEach(function(t){ t.pages.forEach(function(p){ a.push(p.f); }); }); return a; }
 function courseTutorialOf(file){ for(var i=0;i<COURSE_TUTORIALS.length;i++) for(var j=0;j<COURSE_TUTORIALS[i].pages.length;j++) if(COURSE_TUTORIALS[i].pages[j].f===file) return i; return -1; }
-function courseTutDone(id){ try{ return localStorage.getItem('tutdone:'+id)==='1'; }catch(e){ return false; } }
-function courseMarkTutDone(id){ try{ localStorage.setItem('tutdone:'+id,'1'); }catch(e){} }
+function courseTutDone(id){ try{ return localStorage.getItem('tutdone2:'+id)==='1'; }catch(e){ return false; } }
+function courseMarkTutDone(id){ try{ localStorage.setItem('tutdone2:'+id,'1'); }catch(e){} }
 function courseCheck(id){ return courseTutDone(id) ? ' <span class="course-done-check">&#10003;</span>' : ''; }
-function coursePageDone(f){ try{ return localStorage.getItem('pagedone:'+f)==='1'; }catch(e){ return false; } }
-function courseMarkPageDone(f){ try{ localStorage.setItem('pagedone:'+f,'1'); }catch(e){} }
+function coursePageDone(f){ try{ return localStorage.getItem('pagedone2:'+f)==='1'; }catch(e){ return false; } }
+function courseMarkPageDone(f){ try{ localStorage.setItem('pagedone2:'+f,'1'); }catch(e){} }
 function coursePageCheck(f){ return coursePageDone(f) ? ' <span class="course-done-check">&#10003;</span>' : ''; }
 
 /* ===== PAGE COMPLETION (activity-aware) ======================================
  * Reading pages complete on VISIT; activity pages complete when the activity is
  * FINISHED (any answer — correctness NOT required). "done" persists as localStorage
- * 'pagedone:' (coursePageDone). On completion we fill the page's fallback progress
+ * 'pagedone2:' (coursePageDone). On completion we fill the page's fallback progress
  * bar and post a 'page_complete' event (server-side progress). The per-page activity
  * predicates live in COURSE_DONE (defined near the end of this file).
  * Runs in the reader iframe AND standalone. ================================= */
@@ -1295,7 +1295,7 @@ function courseBarState(f){
     s = s || { at: 0, total: 1 };
     if (!(s.total > 0)) s.total = 1;
     if (s.at < 0) s.at = 0; if (s.at > s.total) s.at = s.total;
-    return coursePageDone(f) ? { at: s.total, total: s.total } : s;   // finished → full
+    return s;   /* the bar always tracks LIVE state — completion is remembered by the checkmark, not the bar (ruling 2026-07-19) */
   }
   if (coursePageDone(f)) return { at: 1, total: 1 };                   // finished single-step / reading → full
   if (typeof COURSE_DONE !== 'undefined' && COURSE_DONE[f]) return { at: 0, total: 1 };  // unfinished single-step activity → empty
@@ -1463,8 +1463,8 @@ var COURSE_DONE = {
   '32-3-the-third-kind.html': function(){ return typeof recorded !== 'undefined' && recorded === true; },
   // 33-1: season rows selected then pasted to the Working Tab
   '33-1-copy-the-rows.html': function(){ return typeof pasted !== 'undefined' && pasted === true; },
-  // 33-2: both sorter passes complete
-  '33-2-sort-the-rows.html': function(){ return typeof pass2Complete !== 'undefined' && pass2Complete === true; },
+  // 33-2: the walk reaches the grouped result (order 4) — both sorts done
+  '33-2-sort-the-rows.html': function(){ return typeof activeOrder !== 'undefined' && activeOrder >= 4; },
   // 33-3: the statement is christened
   '33-3-format-the-statement.html': function(){ return typeof completed !== 'undefined' && completed === true; },
   // 34-1: the bridge walk reached its last beat
@@ -1478,8 +1478,11 @@ var COURSE_DONE = {
   '43-1-The-Capital-Bridge.html': function(){ return typeof completed !== 'undefined' && completed === true; },
   // 44-1: the profit-vs-cash MCQ submitted (any answer)
   '44-1-The-Cash-Puzzle.html': function(){ return typeof mcqSubmitted !== 'undefined' && mcqSubmitted === true; },
-  // 44-2: all cash rows sorted into the three buckets
-  '44-2-Three-Buckets.html': function(){ return typeof sortComplete !== 'undefined' && sortComplete === true; },
+  // 44-2: the sorted view is reached (order 2 active after the sort completes)
+  '44-2-Three-Buckets.html': function(){
+    if (typeof sortComplete === 'undefined' || !sortComplete) return false;
+    var st = document.querySelector('#statementBuild .brw-step.is-active');
+    return !!st && Number(st.getAttribute('data-step-order')) >= 2; },
   // 44-3: the cash-flow statement christened
   '44-3-The-Cash-Flow-Statement.html': function(){ return typeof completed !== 'undefined' && completed === true; },
   // 46-1 / 47-1 / 48-1 / 52-1 / 53-x: Rick's uniform step walk — done at the last step
@@ -1518,14 +1521,26 @@ var COURSE_STEPS = {
   '32-2-record-the-receivable.html': function(){ return { at: (typeof step !== 'undefined' && step >= 1) ? 2 : 1, total: 2 }; },
   '32-3-the-third-kind.html': function(){ var w = (typeof walkStep !== 'undefined') ? walkStep : 0; var rec = (typeof recorded !== 'undefined' && recorded); return { at: rec ? 4 : Math.min(w + 1, 3), total: 4 }; },
   '33-1-copy-the-rows.html': function(){ var sel = (typeof selected !== 'undefined' && selected), pas = (typeof pasted !== 'undefined' && pasted); return { at: pas ? 3 : (sel ? 2 : 1), total: 3 }; },
-  '33-2-sort-the-rows.html': function(){ var p1 = (typeof pass1Complete !== 'undefined' && pass1Complete), p2 = (typeof pass2Complete !== 'undefined' && pass2Complete); return { at: p2 ? 3 : (p1 ? 2 : 1), total: 3 }; },
+  '33-2-sort-the-rows.html': function(){ return { at: Math.min(((typeof activeOrder !== 'undefined') ? activeOrder : 0) + 1, 5), total: 5 }; },
   '33-3-format-the-statement.html': function(){ return { at: (typeof completed !== 'undefined' && completed) ? 2 : 1, total: 2 }; },
-  '34-1-what-cash-missed.html': function(){ var w = (typeof walkStep !== 'undefined') ? walkStep : 0; var n = Array.isArray(window.STEPS) ? STEPS.length : 1; return { at: Math.min(w + 1, n + 1), total: n + 1 }; },
+  '34-1-what-cash-missed.html': function(){
+    var n = Array.isArray(window.STEPS) ? STEPS.length : 6;
+    var av = (typeof assetsVisited !== 'undefined' && assetsVisited);
+    var intro = (typeof introDone !== 'undefined' && introDone);
+    var w = (typeof walkStep !== 'undefined') ? walkStep : 0;
+    /* prompt(1) → observed(2) → steps(3..n+2) → close(n+3) */
+    return { at: !av ? 1 : (!intro ? 2 : Math.min(w + 3, n + 3)), total: n + 3 }; },
   '41-1-The-Investor-Asks.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 3 }; },
   '42-1-The-Missing-Wage.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 3 }; },
   '43-1-The-Capital-Bridge.html': function(){ var comp = (typeof completed !== 'undefined' && completed), gate = (typeof gateDone !== 'undefined' && gateDone), mcq = (typeof mcqAnswered !== 'undefined' && mcqAnswered), srt = (typeof sortConfirmed !== 'undefined' && sortConfirmed) || (typeof beginningConfirmed !== 'undefined' && beginningConfirmed) || (typeof sourceConfirmed !== 'undefined' && sourceConfirmed); return { at: comp ? 5 : (gate ? 4 : (mcq ? 3 : (srt ? 2 : 1))), total: 5 }; },
   '44-1-The-Cash-Puzzle.html': function(){ return { at: (typeof mcqSubmitted !== 'undefined' && mcqSubmitted) ? 2 : 1, total: 2 }; },
-  '44-2-Three-Buckets.html': function(){ var cp = (typeof copied !== 'undefined' && copied), sc = (typeof sortComplete !== 'undefined' && sortComplete); return { at: sc ? 3 : (cp ? 2 : 1), total: 3 }; },
+  '44-2-Three-Buckets.html': function(){
+    var cp = (typeof copied !== 'undefined' && copied);
+    var sc = (typeof sortComplete !== 'undefined' && sortComplete);
+    var ord = 0;
+    if (cp) { var st = document.querySelector('#statementBuild .brw-step.is-active'); ord = st ? Number(st.getAttribute('data-step-order')) : 0; }
+    /* intro(1) → copied-in(2) → pick(3) → sorted(4) */
+    return { at: !cp ? 1 : (ord >= 2 ? 4 : (ord >= 1 ? 3 : 2)), total: 4 }; },
   '44-3-The-Cash-Flow-Statement.html': function(){ return { at: (typeof completed !== 'undefined' && completed) ? 2 : 1, total: 2 }; },
   '46-1-The-Statements-Tie-Out.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; },
   '47-1-Freddies-Napkin.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; },
@@ -1537,7 +1552,10 @@ var COURSE_STEPS = {
      get a Reset row injected below the content, shown only once the student has
      taken an action (step bar past 1, or the finish condition already true) —
      PROGRESS.md rule 4, applied in one place for Rick's M3-M5 pages. */
-  var RESET_SCOPE = /^(23-3-|24-5-|3[1-4]-|4[1-8]-|5[1-3]-)/;   // Rick's rebuilt/new pages; older pages carry their own in-page Resets
+  /* Chrome-injected Reset ONLY where the page has a real activity but no
+     in-activity Reset of its own. Walk/confirm/reveal pages get NO Reset at
+     all — Back covers them (ruling 2026-07-19). */
+  var RESET_SCOPE = /^(22-4-|24-5-)/;
   function resetRow(f){
     if (!RESET_SCOPE.test(f)) return null;
     if (typeof window.restart !== 'function') return null;
@@ -1564,17 +1582,14 @@ var COURSE_STEPS = {
     var cond = (typeof COURSE_DONE !== 'undefined') ? COURSE_DONE[f] : null;
     if (!cond) { courseMarkComplete(f); return; }              // reading page → complete on visit
     var row = resetRow(f);
-    if (coursePageDone(f)) {                                   // finished on a previous visit → full bar
-      courseRenderBar(f);
-      if (row) row.style.display = '';
-      return;
-    }
-    courseRenderBar(f);                                        // initial bar (empty / first step)
+    var wasDone = coursePageDone(f);
+    if (wasDone && row) row.style.display = '';
+    courseRenderBar(f);                                        // initial bar (live state)
     var t = setInterval(function(){
-      courseRenderBar(f);                                      // keep a multi-step bar current as the student works
+      courseRenderBar(f);                                      // the bar tracks the student's live state
       if (row && row.style.display === 'none' && courseStarted(f, cond)) row.style.display = '';
       var done = false; try { done = !!cond(); } catch(e){ done = false; }
-      if (done) { clearInterval(t); courseMarkComplete(f); if (row) row.style.display = ''; }
+      if (done && !wasDone) { wasDone = true; courseMarkComplete(f); if (row) row.style.display = ''; }
     }, 300);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
@@ -1994,24 +2009,110 @@ BRW.renderGrid = function (sheetObj, opts) {
 
   var cWidth = Number(columnWidth(3)) || 0;
   var fWidth = Number(columnWidth(6)) || 0;
-  var layout = cWidth >= 12 && fWidth >= 24 ? 'pick-note'
+  var layout = opts.layout || (cWidth >= 12 && fWidth >= 24 ? 'pick-note'
     : cWidth >= 12 ? 'pick'
     : fWidth >= 24 ? 'note'
-    : 'standard';
-  var html = '<div class="brw-grid brw-layout-' + layout + '" data-brw-grid="' + escapeAttr(gridId) + '">';
+    : 'standard');
+  /* format fix (2026-07-19): unused trailing columns E/F left a dead zone on the
+     right of statement snapshots — trim them so the sheet fills its shell. */
+  var maxUsedCol = 2;
+  for (i = 0; i < cells.length; i++) {
+    var cc = cells[i];
+    if (cc && cc.value !== null && cc.value !== undefined && cc.value !== '' && Number(cc.c) > maxUsedCol) maxUsedCol = Number(cc.c);
+  }
+  var trim = '';
+  if ((layout === 'standard' || layout === 'pick') && maxUsedCol <= 4) trim = ' brw-trim-2';
+  else if ((layout === 'standard' || layout === 'pick') && maxUsedCol <= 5) trim = ' brw-trim-1';
+  var html = '<div class="brw-grid brw-layout-' + layout + trim + '" data-brw-grid="' + escapeAttr(gridId) + '">';
 
-  for (var rowNumber = 1; rowNumber <= maxRow; rowNumber++) {
-    if (hidden[rowNumber] || !rowHasRenderableCell(rowNumber)) continue;
+  /* M1/M2-standard look: emit the SAME classes Meet Anna's sheets use
+     (.xl-head/.xl-cat/.xl-item/.xl-total, .xl-gutter/.xl-rownum/.xl-toggle),
+     so one stylesheet styles every sheet in the course. A section header
+     (lone bold label) echoes the LAST balance amount found in its section. */
+  function rowCellInfo(r){
+    var cs = byRow[r] || [];
+    var info = { boldB:false, amount:null, other:false, ruleTop:false };
+    for (var q = 0; q < cs.length; q++) {
+      var cq = cs[q];
+      if (cq.c === 2 && cq.bold) info.boldB = true;
+      if (cq.c === 4 && cq.value !== null && cq.value !== undefined && cq.value !== '') { info.amount = cq; if (cq.ruleTop) info.ruleTop = true; }
+      else if (cq.c !== 2 && cq.c !== 4 && cq.value !== null && cq.value !== undefined && cq.value !== '') info.other = true;
+    }
+    return info;
+  }
+  function isSectionHeader(r){
+    var inf = rowCellInfo(r);
+    return inf.boldB && !inf.amount && !inf.other;
+  }
+  var sectionAmount = {};
+  (function(){
+    var currentHeader = null;
+    for (var r = 1; r <= maxRow; r++) {
+      if (hidden[r] || !rowHasRenderableCell(r)) continue;
+      if (isSectionHeader(r)) { currentHeader = (r === 1 ? null : r); continue; }
+      if (!currentHeader) continue;
+      var inf2 = rowCellInfo(r);
+      if (inf2.amount && typeof inf2.amount.value === 'number') sectionAmount[currentHeader] = inf2.amount;
+    }
+  })();
+  var gridHasAmounts = false, firstRendered = 0;
+  for (var rr = 1; rr <= maxRow; rr++) {
+    if (hidden[rr] || !rowHasRenderableCell(rr)) continue;
+    if (!firstRendered) firstRendered = rr;
+    if (rowCellInfo(rr).amount) gridHasAmounts = true;
+  }
+
+  /* Display order (ruling 2026-07-19): a group's detail rows render BELOW the
+     line that carries their toggle (the balance/summary line), everywhere —
+     click a line, the detail opens under it, like the classic category rows. */
+  var displayOrder = [];
+  for (var dr = 1; dr <= maxRow; dr++) {
+    if (hidden[dr] || !rowHasRenderableCell(dr)) continue;
+    if (detailGroups[dr]) continue;                      /* emitted after their summary */
+    displayOrder.push(dr);
+    if (summaryGroups[dr]) {
+      var dg = summaryGroups[dr];
+      for (var di = dg.start; di <= dg.end; di++) {
+        if (!hidden[di] && rowHasRenderableCell(di)) displayOrder.push(di);
+      }
+    }
+  }
+
+  var visibleRowIndex = 0;
+  for (var oi = 0; oi < displayOrder.length; oi++) {
+    var rowNumber = displayOrder[oi];
 
     var detailGroup = detailGroups[rowNumber];
     var summaryGroup = summaryGroups[rowNumber];
-    var rowClasses = 'brw-row';
+    var toggleGroup = summaryGroup;   /* the +/− lives on the balance (summary) line */
+    var inf = rowCellInfo(rowNumber);
+    var kind;
+    if (rowNumber === firstRendered && inf.boldB && !inf.amount) kind = 'xl-head';
+    else if (isSectionHeader(rowNumber)) kind = 'xl-cat';
+    else if (inf.boldB && inf.amount && inf.ruleTop) kind = 'xl-total';
+    else if (inf.boldB && inf.amount && !inf.other) kind = 'xl-cat';
+    else kind = 'xl-item';
+
+    var rowClasses = 'xl-row brw-row ' + kind;
     if (detailGroup) rowClasses += ' brw-og-row is-collapsed';
     if (summaryGroup) rowClasses += ' brw-og-summary';
     html += '<div class="' + rowClasses + '" data-brw-row="' + rowNumber + '"';
     if (detailGroup) html += ' data-brw-group="' + detailGroup.id + '"';
     if (summaryGroup) html += ' data-brw-group="' + summaryGroup.id + '"';
     html += '>';
+
+    /* classic chrome: gutter (outline toggle lives here) + row number */
+    html += '<div class="xl-gutter">';
+    if (toggleGroup) {
+      var gutterClick = "BRW._gridToggle('" + escapeJSString(gridId) + "','" + toggleGroup.id + "')";
+      html += '<button class="xl-toggle brw-og-toggle" type="button" data-brw-grid="' + escapeAttr(gridId)
+        + '" data-brw-group="' + toggleGroup.id + '" aria-expanded="false" onclick="'
+        + escapeAttr(gutterClick) + '">+</button>';
+    }
+    html += '</div>';
+    if (detailGroup) { html += '<div class="xl-rownum brw-rownum"></div>'; }
+    else if (kind === 'xl-head' || kind === 'xl-total') { html += '<div class="xl-rownum brw-rownum"></div>'; }
+    else { visibleRowIndex++; html += '<div class="xl-rownum brw-rownum">' + visibleRowIndex + '</div>'; }
 
     var rowCells = (byRow[rowNumber] || []).slice().sort(function (a, b) { return a.c - b.c; });
     for (var cellIndex = 0; cellIndex < rowCells.length; cellIndex++) {
@@ -2021,9 +2122,9 @@ BRW.renderGrid = function (sheetObj, opts) {
 
       var classes = 'brw-cell brw-col-' + colLetters(cell.c).toLowerCase()
         + ' brw-w-' + widthBucket(columnWidth(cell.c));
-      if (cell.c === 2) classes += ' brw-label';
+      if (cell.c === 2) classes += ' xl-c brw-label';
       if (cell.c === 3) classes += ' brw-hint';
-      if (cell.c === 4) classes += ' brw-amount';
+      if (cell.c === 4) classes += ' xl-v brw-amount';
       if (cell.bold) classes += ' brw-bold';
       if (cell.italic) classes += ' brw-italic';
       if (cell.indent) classes += ' brw-ind-' + Math.max(0, Math.min(8, parseInt(cell.indent, 10) || 0));
@@ -2037,13 +2138,14 @@ BRW.renderGrid = function (sheetObj, opts) {
       }
 
       html += '<div class="' + classes + '" data-brw-cell="' + ref + '">';
-      if (summaryGroup && cell.c === 2) {
-        var onclick = "BRW._gridToggle('" + escapeJSString(gridId) + "','" + summaryGroup.id + "')";
-        html += '<button class="brw-og-toggle" type="button" data-brw-grid="' + escapeAttr(gridId)
-          + '" data-brw-group="' + summaryGroup.id + '" aria-expanded="false" onclick="'
-          + escapeAttr(onclick) + '">+</button>';
-      }
       html += renderValue(cell) + '</div>';
+    }
+    if (kind === 'xl-head' && gridHasAmounts) {
+      html += '<div class="brw-cell xl-v brw-col-d brw-amount">Value</div>';
+    }
+    if (sectionAmount[rowNumber]) {
+      var secCell = sectionAmount[rowNumber];
+      html += '<div class="brw-cell xl-v brw-col-d brw-amount brw-sec-amount">' + BRW.fmt(secCell.value, secCell.numFmt) + '</div>';
     }
     html += '</div>';
   }
@@ -2677,5 +2779,249 @@ BRW.markDatedRows = function (containerId) {
     var text = label.textContent.replace(/^[+\u2212-]\s*/, '').trim();
     if (text.indexOf('Balance,') === 0) rows[i].classList.add('brw-dated');
   }
+};
+
+/* ============================================================================
+ * BRW.mountCanonSort (2026-07-19): the ONE sorting-activity format, applied to
+ * the statement-pipeline pick sheets. Renders the canonical sort document —
+ * chevron expands a row, classify inline, tag pill + stripe land on the row,
+ * "Sort the rest" unlocks once every shown row is placed, "Check my sort"
+ * validates (wrong rows get Try Again), Reset clears the sort. Rows not shown
+ * follow automatically, like every other sorting activity in the course.
+ * ========================================================================== */
+BRW.mountCanonSort = function (containerId, sheet, opts) {
+  opts = opts || {};
+  var host = document.getElementById(containerId);
+  if (!host) return null;
+  var cats = opts.categoryOrder || [];
+  var catCls = ['shop', 'personal', 'repair'];
+  var byRow = {};
+  (sheet.cells || []).forEach(function (c) {
+    if (!byRow[c.r]) byRow[c.r] = {};
+    byRow[c.r][c.c] = c;
+  });
+  var items = [];
+  Object.keys(byRow).forEach(function (r) {
+    var row = byRow[r];
+    if (row[2] && row[3] && cats.indexOf(String(row[3].value)) >= 0) {
+      items.push({ row: Number(r), label: String(row[2].value), answer: String(row[3].value),
+                   amount: row[4] ? row[4].value : null, numFmt: row[4] ? row[4].numFmt : null });
+    }
+  });
+  var shownSet = {};
+  (opts.showRows || []).forEach(function (r) { shownSet[Number(r)] = true; });
+  var shown = items.filter(function (it) { return shownSet[it.row]; });
+  if (!shown.length) shown = items;
+  var hiddenCount = items.length - shown.length;
+
+  var store = opts.persist || {};
+  var placed = store.placed || (store.placed = {});
+  var expanded = null;
+  var checked = !!store.checked, autoDone = !!store.autoDone, hintSeen = !!store.hintSeen;
+  function save(){ store.checked = checked; store.autoDone = autoDone; store.hintSeen = hintSeen; store.complete = api.complete; }
+  /* live sheet sync: the visible workbook mirrors every placement instantly */
+  function syncSheet(){
+    if (!opts.sheetSync) return;
+    items.forEach(function (it) {
+      var cell = document.querySelector('#' + opts.sheetSync + ' [data-brw-row="' + it.row + '"] .brw-col-c');
+      if (!cell) return;
+      var val = placed[it.row] || (autoDone ? it.answer : '');
+      cell.textContent = val;
+      cell.classList.toggle('brw-placed', !!val);
+    });
+  }
+  function counts() {
+    var perCat = {}, placedN = 0, correct = 0;
+    cats.forEach(function (c) { perCat[c] = 0; });
+    shown.forEach(function (it) {
+      var a = placed[it.row];
+      if (!a) return;
+      placedN++; perCat[a]++;
+      if (a === it.answer) correct++;
+    });
+    return { perCat: perCat, placedN: placedN, correct: correct, unsorted: shown.length - placedN };
+  }
+  function catIdx(c) { return cats.indexOf(c); }
+  function rowHTML(it, i) {
+    var a = placed[it.row];
+    var right = checked && a && a === it.answer;
+    var wrong = checked && a && a !== it.answer;
+    var open = expanded === it.row;
+    var stripe = wrong ? 'wrong' : (a ? catCls[catIdx(a) % catCls.length] : '');
+    var tag = '';
+    if (a) tag = '<span class="stmt-tag ' + catCls[catIdx(a) % catCls.length] + '">' + a + '</span>';
+    if (wrong) tag += '<span class="stmt-tag rethink">Try Again</span>';
+    if (right) tag += '<span style="color:#16a34a;font-weight:600;font-size:16px;margin-left:4px;">&#10003; Correct</span>';
+    var h = '<div class="stmt-row stmt-grid-sort' + (i % 2 ? ' alt' : '') + '">' +
+      '<button class="stmt-info-btn' + (open ? ' open' : '') + (i === 0 && !hintSeen ? ' hint-pulse' : '') + '" data-canon-toggle="' + it.row + '" aria-label="' + (open ? 'Collapse' : 'Expand') + '"><i data-lucide="' + (open ? 'chevron-up' : 'chevron-down') + '" class="licon"></i></button>' +
+      '<div class="stmt-stripe ' + stripe + '"></div>' +
+      '<span>' + it.label + tag + '</span>' +
+      '<span class="stmt-num">' + (it.amount === null ? '' : BRW.fmt(it.amount, it.numFmt || '$#,##0')) + '</span></div>';
+    if (open) {
+      h += '<div class="stmt-expand"><div class="classify-row"><span class="classify-label">Classify:</span>' +
+        cats.map(function (c, ci) {
+          var active = a === c ? (' active-' + (catCls[ci % catCls.length] === 'shop' ? 'shop' : 'personal')) : '';
+          return '<button class="classify-btn' + active + '"' + (right ? ' disabled' : ' data-canon-classify="' + it.row + '|' + ci + '"') + '>' + c + '</button>';
+        }).join('') + '</div></div>';
+    }
+    return h;
+  }
+  function progHTML() {
+    var s = counts();
+    var gateMet = s.unsorted === 0 && !autoDone && hiddenCount > 0;
+    var btn;
+    if (hiddenCount > 0 && !autoDone) {
+      btn = '<button class="btn-continue btn-block"' + (gateMet ? ' data-canon-rest="1"' : ' disabled') + '>Sort the rest</button>';
+    } else if (!checked) {
+      btn = (s.unsorted === 0 ? '<button class="btn-continue btn-block" data-canon-check="1">Check my sort</button>' : '<button class="btn-continue btn-block" disabled>Check my sort</button>');
+    } else { btn = ''; }
+    var boxes = cats.map(function (c, ci) {
+      return '<div class="sortprog-box ' + (catCls[ci % catCls.length] === 'shop' ? 'shop' : 'personal') + '"><div class="sortprog-label">' + c + '</div><div class="sortprog-num">' + s.perCat[c] + '</div></div>';
+    }).join('');
+    return '<div class="sortprog"><div class="sortprog-title">' + (opts.title || 'Sort the rows') + '</div>' +
+      '<p class="sortprog-hint">' + (opts.instruction || ('Click the chevron beside a row, then choose its group.' + (hiddenCount > 0 ? ' The remaining ' + hiddenCount + ' rows follow the same patterns once these are sorted.' : ''))) + '</p>' +
+      '<div class="sortprog-grid' + (cats.length > 2 ? ' four' : '') + '">' + boxes +
+      '<div class="sortprog-box' + (s.unsorted === 0 ? ' done' : '') + '"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">' + s.unsorted + '</div></div>' +
+      '</div>' + btn +
+      '<div class="btn-row" style="justify-content:flex-end;margin-top:10px;"><button class="btn-reset" data-canon-reset="1">Reset</button></div></div>';
+  }
+  function docHTML() {
+    var h = '<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Row</span><span class="stmt-num">Amount</span></div>';
+    shown.forEach(function (it, i) { h += rowHTML(it, i); });
+    if (hiddenCount > 0) h += '<div class="stmt-row stmt-grid-sort alt"><span></span><div class="stmt-stripe"></div><span><em>+ ' + hiddenCount + ' more rows like these' + (autoDone ? ', sorted' : ', still to sort') + '</em></span><span></span></div>';
+    return h;
+  }
+  /* remount-safe: replace any previous sorter's listener on this host */
+  if (host._canonSortHandler) host.removeEventListener('click', host._canonSortHandler);
+  var api = { complete: !!(opts.persist && opts.persist.complete) };
+  function fireComplete() {
+    if (api.complete) return;
+    api.complete = true;
+    save();
+    if (typeof opts.onComplete === 'function') opts.onComplete();
+  }
+  function render() {
+    var s = counts();
+    var warn = (checked && s.correct < shown.length) ? '<div class="sort-msg warn">Not all of these look right yet &mdash; the marked rows need another look. Try again.</div>' : '';
+    host.hidden = false;
+    host.innerHTML = progHTML() + '<div class="stmt">' + docHTML() + '</div>' + warn;
+    syncSheet();
+    save();
+    if (window.lucide && lucide.createIcons) lucide.createIcons();
+  }
+  api.sync = syncSheet;
+  host._canonSortHandler = function (e) {
+    var t = e.target.closest('[data-canon-toggle],[data-canon-classify],[data-canon-rest],[data-canon-check],[data-canon-reset]');
+    if (!t) return;
+    if (t.hasAttribute('data-canon-toggle')) {
+      hintSeen = true;
+      var r = Number(t.getAttribute('data-canon-toggle'));
+      expanded = (expanded === r) ? null : r;
+    } else if (t.hasAttribute('data-canon-classify')) {
+      var parts = t.getAttribute('data-canon-classify').split('|');
+      placed[Number(parts[0])] = cats[Number(parts[1])];
+      expanded = null;
+      /* after a check, corrections re-grade LIVE (M1 reference behavior):
+         checked stays true, verdicts recompute on render, and completion
+         fires the moment the last row turns correct — no second check. */
+      if (checked) {
+        var sNow = counts();
+        if (sNow.unsorted === 0 && sNow.correct === shown.length) {
+          if (window.playSuccess) playSuccess();
+          render(); fireComplete(); return;
+        }
+      }
+    } else if (t.hasAttribute('data-canon-rest')) {
+      autoDone = true;
+    } else if (t.hasAttribute('data-canon-check')) {
+      checked = true;
+      var s2 = counts();
+      if (s2.correct === shown.length) { render(); fireComplete(); return; }
+      if (typeof opts.onWrong === 'function') {
+        var firstWrong = null;
+        shown.some(function (it) { if (placed[it.row] && placed[it.row] !== it.answer) { firstWrong = it.row; return true; } return false; });
+        if (firstWrong !== null) opts.onWrong(firstWrong);
+      }
+    } else if (t.hasAttribute('data-canon-reset')) {
+      placed = {}; expanded = null; checked = false; autoDone = false; api.complete = false;
+    }
+    render();
+  };
+  host.addEventListener('click', host._canonSortHandler);
+  render();
+  return api;
+};
+
+/* ============================================================================
+ * BRW.mountMCQ (2026-07-19): the ONE multiple-choice format. Letter chips,
+ * select → Submit (disabled until a choice) → green "Right" / red "Not quite"
+ * verdict with the option's feedback → Reset after any submit. Never advances
+ * on its own: pass onRight to enable the caller's Continue path.
+ *   BRW.mountMCQ('containerId', {
+ *     question: 'Prompt?',
+ *     options: [{ id:'a', label:'…', fb:'why', correct:true }, …],
+ *     revealAfter: 3,            // optional: Nth wrong submit reveals (red verdict, revealMsg)
+ *     revealMsg: '…',
+ *     onRight: function(){},     // fires on correct submit (or reveal) — render your Continue
+ *     onChange: function(api){}  // fires after every state change
+ *   }) → api { right, submitted, revealed, reset() }
+ * ========================================================================== */
+BRW.mountMCQ = function (containerId, opts) {
+  opts = opts || {};
+  var host = document.getElementById(containerId);
+  if (!host) return null;
+  var options = opts.options || [];
+  var sel = null, submitted = false, right = false, revealed = false, attempts = 0;
+  var api = {
+    get right(){ return right; }, get submitted(){ return submitted; }, get revealed(){ return revealed; },
+    reset: function(){ sel = null; submitted = false; right = false; revealed = false; render(); if (opts.onChange) opts.onChange(api); }
+  };
+  function chosen(){ return options.filter(function(o){ return o.id === sel; })[0]; }
+  function render(){
+    var h = '<div class="mc-card">' + (opts.question ? '<div class="mc-q">' + opts.question + '</div>' : '') + '<div class="mc-opts">';
+    options.forEach(function(o, i){
+      var cls = 'mc-opt'
+        + (!submitted && sel === o.id ? ' selected' : '')
+        + (submitted && sel === o.id ? (o.correct ? ' correct' : ' wrong') : '')
+        + (submitted ? ' locked' : '');
+      h += '<div class="' + cls + '"' + (submitted ? '' : ' data-mcq-pick="' + o.id + '"') + '><div class="mc-letter">' + String.fromCharCode(65 + i) + '</div><div>' + o.label + '</div></div>';
+    });
+    h += '</div>';
+    if (submitted) {
+      var c = chosen();
+      var msg = revealed ? (opts.revealMsg || (c && c.fb) || '') : ((c && c.fb) || '');
+      h += '<div class="feedback ' + (right && !revealed ? 'ok' : 'err') + ' show">' + (right && !revealed ? 'You are correct. ' : 'Not quite. ') + msg + '</div>';
+    }
+    h += '<div class="btn-row">' + (submitted
+      ? '<button class="btn-reset" data-mcq-reset="1" style="margin-left:auto;">Reset</button>'
+      : '<button class="btn-continue" data-mcq-submit="1"' + (sel === null ? ' disabled' : '') + '>Submit</button>') + '</div></div>';
+    host.innerHTML = h;
+    if (window.lucide && lucide.createIcons) lucide.createIcons();
+  }
+  host.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-mcq-pick],[data-mcq-submit],[data-mcq-reset]');
+    if (!t) return;
+    if (t.hasAttribute('data-mcq-pick')) {
+      if (submitted) return;
+      sel = t.getAttribute('data-mcq-pick');
+    } else if (t.hasAttribute('data-mcq-submit')) {
+      if (sel === null || submitted) return;
+      submitted = true;
+      var c = chosen();
+      if (c && c.correct) { right = true; if (window.playSuccess) playSuccess(); if (opts.onRight) opts.onRight(); }
+      else {
+        attempts++;
+        if (window.playNope) playNope(); else if (window.playSoftNope) playSoftNope();
+        if (opts.revealAfter && attempts >= opts.revealAfter) { revealed = true; right = true; if (opts.onRight) opts.onRight(); }
+      }
+    } else if (t.hasAttribute('data-mcq-reset')) {
+      sel = null; submitted = false;
+      if (!revealed) right = false;
+    }
+    render();
+    if (opts.onChange) opts.onChange(api);
+  });
+  render();
+  return api;
 };
 

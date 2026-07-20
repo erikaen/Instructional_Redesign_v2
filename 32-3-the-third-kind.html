@@ -259,9 +259,23 @@ function renderTalk(){
       +annaBox('Writing the reason on the <strong>Reasons</strong> tab and the asset coming down on the <strong>Assets</strong> tab are the same act, seen from two tabs.')
       +'';
   }
+  if(walkStep>0||recorded) ctrl+='<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="walkBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   document.getElementById('anna').innerHTML=anna;
   document.getElementById('controls').innerHTML=ctrl;
   if(window.lucide) lucide.createIcons();
+}
+function walkBack(){
+  playClick();
+  if(recorded){
+    recorded=false;
+    paint('left','assets');
+    paint('right','reasons');
+  } else if(walkStep>0){
+    walkStep--;
+    if(walkStep===0) paint('left','assets');
+  }
+  renderTalk();
+  window.scrollTo(0,0);
 }
 function advanceWalk(){
   if(recorded || walkStep>=2) return;
@@ -278,7 +292,7 @@ function writeReasons(){
   paint('left','assets');
   paint('right','reasons');
   renderTalk();
-  window.scrollTo(0,document.body.scrollHeight);
+  window.scrollTo(0,0);
 }
 
 /* ===== glossary / nav ===== */
@@ -295,7 +309,7 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ window.location.reload(); }
+function restart(){ playClick(); recorded=false; walkStep=0; paint('left','assets'); paint('right','reasons'); renderTalk(); window.scrollTo(0,0); }
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
 
 /* ===== init ===== */

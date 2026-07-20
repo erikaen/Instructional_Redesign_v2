@@ -133,7 +133,7 @@ function renderControls(){
   document.getElementById('controls').innerHTML=c;
 }
 
-function advance(){ playClick(); step=Math.min(2,step+1); render(); window.scrollTo(0,document.body.scrollHeight); }
+function advance(){ playClick(); step=Math.min(2,step+1); render(); window.scrollTo(0,0); }
 function back(){ if(step===0) return; playClick(); step--; render(); window.scrollTo(0,0); }
 
 var glossaryTerms=[

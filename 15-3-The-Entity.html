@@ -90,7 +90,7 @@ function renderQuiz(){
       html += '<div class="'+cls+'" onclick="selectEntity('+i+','+o.val+')"><div class="mc-letter">'+String.fromCharCode(65+oi)+'</div><div>'+o.text+'</div></div>';
     });
     html += '</div>';
-    if(sub) html += '<div class="feedback '+(right?'ok':'err')+' show">'+(right?'Right. ':'Not quite. ')+c.fb+'</div>';
+    if(sub) html += '<div class="feedback '+(right?'ok':'err')+' show">'+(right?'You are correct. ':'Not quite. ')+c.fb+'</div>';
     html += '<div class="btn-row">'+(sub
       ? '<button class="btn-reset" onclick="resetEntity('+i+')" style="margin-left:auto;">Reset</button>'
       : '<button class="btn-continue" onclick="submitEntity('+i+')"'+(sel[i]===undefined?' disabled':'')+'>Submit</button>')+'</div>';

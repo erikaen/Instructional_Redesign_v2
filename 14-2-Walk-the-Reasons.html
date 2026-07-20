@@ -446,7 +446,7 @@ function tallyControls(){
     h += '<div class="'+cls+'" onclick="selectTally('+oi+')"><div class="mc-letter">'+String.fromCharCode(65+oi)+'</div><div>'+o.text+'</div></div>';
   });
   h += '</div>';
-  if(tallySubmitted) h += '<div class="feedback '+(right?'ok':'err')+' show">'+(right?'Right. ':'Not quite. ')+TALLY_OPTS[tallySel].fb+'</div>';
+  if(tallySubmitted) h += '<div class="feedback '+(right?'ok':'err')+' show">'+(right?'You are correct. ':'Not quite. ')+TALLY_OPTS[tallySel].fb+'</div>';
   h += '<div class="btn-row">'+(tallySubmitted
     ? '<button class="btn-reset" onclick="resetTally()" style="margin-left:auto;">Reset</button>'
     : '<button class="btn-continue" onclick="submitTally()"'+(tallySel===null?' disabled':'')+'>Submit</button>')+'</div>';

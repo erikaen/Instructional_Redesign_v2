@@ -56,12 +56,11 @@ function freddieBox(inner){ return '<div class="dialog-box freddie"><div class="
 var step = 0;
 var TOTAL_STEPS = 4;
 var mcqAnswered = false;
-var mcqWrong = {};
-var mcqFeedback = '';
+var mcqSel = null, mcqSubmitted = false;
 
 var MCQ_OPTS = [
   { id:'recorded', label:'The recorded $4,500 on the balance sheet', fb:'Not quite. That number reports recognized Assets minus recognized Liabilities at August 31. Freddie&rsquo;s $20,000 offer looks to future cash flows.' },
-  { id:'future', label:'Future cash flows, supported by repair skill and customer relationships', fb:'Right. Freddie would pay $20,000 for 30% of the future cash flows. The skill and customer relationships that help produce them do not sit on the balance sheet under the records&rsquo; own rules.', correct:true },
+  { id:'future', label:'Future cash flows, supported by repair skill and customer relationships', fb:'You are correct. Freddie would pay $20,000 for 30% of the future cash flows. The skill and customer relationships that help produce them do not sit on the balance sheet under the records&rsquo; own rules.', correct:true },
   { id:'kit', label:'Only the tools, equipment, and cash already listed', fb:'Not quite. Those recognized items matter, but Freddie would pay for a share of future cash flows supported by repair skill and customer relationships.' }
 ];
 
@@ -69,37 +68,35 @@ function mcqHTML(){
   var h = '<div class="mc-card">';
   h += '<div class="mc-q">Freddie would put in <strong>$20,000</strong> for 30% of a shop whose August 31 balance sheet shows Total Member&rsquo;s Capital of <strong>$4,500</strong>. What would he be paying for?</div>';
   h += '<div class="mc-opts" id="mcqOpts">';
+  var chosen = mcqSubmitted ? MCQ_OPTS.filter(function(x){ return x.id===mcqSel; })[0] : null;
   MCQ_OPTS.forEach(function(o,i){
-    var cls = 'mc-opt';
-    var dead = mcqAnswered || mcqWrong[o.id];
-    if(mcqAnswered && o.correct) cls += ' correct';
-    if(mcqWrong[o.id]) cls += ' wrong';
-    if(dead) cls += ' locked';
-    h += '<div class="'+cls+'" data-mcq="'+o.id+'"'+(dead?'':' onclick="mcqClick(\''+o.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+i)+'</span><span>'+o.label+'</span></div>';
+    var cls = 'mc-opt'
+      + (!mcqSubmitted && mcqSel===o.id ? ' selected' : '')
+      + (mcqSubmitted && mcqSel===o.id ? (o.correct?' correct':' wrong') : '')
+      + (mcqSubmitted ? ' locked' : '');
+    h += '<div class="'+cls+'" data-mcq="'+o.id+'"'+(mcqSubmitted?'':' onclick="mcqPick(\''+o.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+i)+'</span><span>'+o.label+'</span></div>';
   });
   h += '<\/div>';
-  if(mcqFeedback){
-    h += '<div class="feedback '+(mcqAnswered?'ok':'err')+' show">'+mcqFeedback+'<\/div>';
+  if(mcqSubmitted && chosen){
+    h += '<div class="feedback '+(chosen.correct?'ok':'err')+' show">'+chosen.fb+'<\/div>';
   }
+  h += '<div class="btn-row">'+(mcqSubmitted
+    ? (mcqAnswered?'':'<button class="btn-reset" onclick="mcqReset()" style="margin-left:auto;">Reset<\/button>')
+    : '<button class="btn-continue" onclick="mcqSubmit()"'+(mcqSel===null?' disabled':'')+'>Submit<\/button>')+'<\/div>';
   h += '<\/div>';
   return h;
 }
 
-function mcqClick(id){
-  if(mcqAnswered || mcqWrong[id]) return;
-  var o = MCQ_OPTS.filter(function(x){ return x.id===id; })[0];
-  if(!o) return;
-  if(o.correct){
-    mcqAnswered = true;
-    mcqFeedback = o.fb;
-    playSuccess();
-  } else {
-    mcqWrong[id] = true;
-    mcqFeedback = o.fb;
-    playNope();
-  }
+function mcqPick(id){ if(mcqSubmitted) return; mcqSel=id; playClick(); render(); }
+function mcqReset(){ playClick(); mcqSel=null; mcqSubmitted=false; render(); }
+function mcqSubmit(){
+  if(mcqSel===null||mcqSubmitted) return;
+  mcqSubmitted = true;
+  var o = MCQ_OPTS.filter(function(x){ return x.id===mcqSel; })[0];
+  if(o && o.correct){ mcqAnswered = true; playSuccess(); } else { playNope(); }
   render();
 }
+
 
 function renderBeats(){
   var h = '';
@@ -181,14 +178,12 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ window.location.reload(); }
+function restart(){ playClick(); step=0; mcqAnswered=false; mcqSel=null; mcqSubmitted=false; render(); window.scrollTo(0,0); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
 window.devFill = function(){
   step = TOTAL_STEPS - 1;
-  mcqAnswered = true;
-  mcqWrong = {};
-  mcqFeedback = MCQ_OPTS[1].fb;
+  mcqAnswered = true; mcqSubmitted = true; mcqSel = MCQ_OPTS.filter(function(o){return o.correct;})[0].id;
   render();
 };
 render();

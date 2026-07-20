@@ -105,8 +105,22 @@ function christenStatement(){
   document.getElementById('anna').innerHTML=annaBox('Operating activities provided <strong>$2,350</strong>. Investing used <strong>$400</strong>. Financing used <strong>$2,630</strong>. Together they changed Cash by <strong>&minus;$680</strong>, taking the June 1 balance of <strong>$1,300</strong> to the August 31 balance of <strong>$620</strong>.');
   document.getElementById('controls').innerHTML=insightBox('The ending cash ties twice','<p><strong>Cash, August 31: $620</strong> matches both the <strong>Balance, August 31</strong> line in the Cash account on Assets and <strong>Cash $620</strong> on the Balance Sheet.</p><p>The workbook now has <strong>seven tabs</strong>: Assets, Liabilities, and Reasons are the three source-record tabs; Balance Sheet, Income Statement, Statement of Member&rsquo;s Capital, and Cash Flow Statement are the four statement tabs.</p>')
     +annaBox('Freddie called it <strong>&ldquo;same shop, two clocks.&rdquo;</strong> He had it right. Net income was <strong>$2,640</strong>; operating cash was <strong>$2,350</strong>. Now those two honest answers can be compared cleanly: the big non-operating cash move &mdash; the <strong>$2,030 credit-card payoff</strong> &mdash; sits under <strong>Financing</strong>, not between net income and operating cash. The <strong>$290</strong> that remains is only the timing items you already bridged in Module 3: the Ridgeline receivable, the Smith deposit, and depreciation added back.')
+    +'<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="unChristen()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
+  if(window.lucide) lucide.createIcons();
+}
+function renderStart(){
+  document.getElementById('sheetLabel').textContent='Working Tab';
+  setWorkbookChrome();
+  document.getElementById('anna').innerHTML=annaBox('The grouped working view is finished. Format the rows, then christen the amber Working Tab as the fourth statement tab.');
+  document.getElementById('controls').innerHTML='<button class="btn-continue btn-block" type="button" onclick="christenStatement()">Christen it the Cash Flow Statement &rarr;</button>'
     +'<div class="btn-row"></div>';
   if(window.lucide) lucide.createIcons();
+}
+function unChristen(){
+  if(!completed) return;
+  playClick(); completed=false;
+  renderStart();
+  window.scrollTo(0,0);
 }
 
 document.getElementById('anna').innerHTML=annaBox('The grouped working view is finished. Format the rows, then christen the amber Working Tab as the fourth statement tab.');
@@ -121,7 +135,7 @@ var glossaryTerms=[
 function openGlossary(){ document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';}).join(''); document.getElementById('glossaryOverlay').classList.add('open'); }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ window.location.reload(); }
+function restart(){ if(completed){ completed=false; } renderStart(); window.scrollTo(0,0); }
 document.addEventListener('keydown',function(event){ if(event.key==='Escape')closeGlossary(); });
 
 window.devFill=function(){ christenStatement(); expandAllGroups(); };

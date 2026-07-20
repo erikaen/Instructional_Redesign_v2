@@ -121,7 +121,7 @@ var NET_INCOME=2640, CASH_OPEN=1300, CASH_NOW=620, CASH_FALL=680;
 var MCQ=[
   {text:'One of the two numbers must be wrong &mdash; profit or cash, not both.',fb:'Neither number is wrong. Net income $2,640 is on the Income Statement, and the Cash account falls from $1,300 to $620. The two records answer different questions.'},
   {text:'Someone must have taken the missing $680 &mdash; a theft or an error to track down.',fb:'Nothing is missing. Every dollar that moved is recorded between the Cash account&rsquo;s dated lines. The $680 decrease needs an explanation, not a replacement.'},
-  {text:'Both are true: the season was profitable, and it still ended with less cash than it started &mdash; they answer different questions.',ok:true,fb:'Right. Net income is $2,640, while Cash decreased by $680. Profit is not cash, so both readings can be true at the same time.'}
+  {text:'Both are true: the season was profitable, and it still ended with less cash than it started &mdash; they answer different questions.',ok:true,fb:'You are correct. Net income is $2,640, while Cash decreased by $680. Profit is not cash, so both readings can be true at the same time.'}
 ];
 var mcqSel=null, mcqSubmitted=false;
 
@@ -137,7 +137,7 @@ function renderMcq(){
   return html;
 }
 function selectMcq(index){ if(mcqSubmitted)return; mcqSel=index; renderAll(); }
-function submitMcq(){ if(mcqSel===null||mcqSubmitted)return; mcqSubmitted=true; if(MCQ[mcqSel].ok)playSuccess(); else playNope(); renderAll(); window.scrollTo(0,document.body.scrollHeight); }
+function submitMcq(){ if(mcqSel===null||mcqSubmitted)return; mcqSubmitted=true; if(MCQ[mcqSel].ok)playSuccess(); else playNope(); renderAll(); }
 function resetMcq(){ mcqSel=null; mcqSubmitted=false; renderAll(); }
 function renderAll(){
   var controls=renderMcq(), anna='';

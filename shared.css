@@ -518,9 +518,12 @@ body { background: var(--page-bg); font-family: 'Open Sans', sans-serif; color: 
 
 /* ===== NAV BUTTONS ===== */
 .nav-buttons {
-  display: flex; justify-content: space-between;
-  align-items: center; margin-bottom: 20px;
+  /* step-control layout (ruling 2026-07-19): forward button full-width on top,
+     Back below it, left-aligned */
+  display: flex; flex-direction: column-reverse; align-items: flex-start;
+  gap: 10px; margin-bottom: 20px;
 }
+.nav-buttons .btn-next { width: 100%; }
 .btn-back {
   font-family: Inter, sans-serif; font-size: var(--font-s);
   padding: 8px 20px; border-radius: 4px; cursor: pointer;
@@ -2333,24 +2336,24 @@ body.has-course-footer { padding-bottom: 62px; }
 }
 .brw-row {
   display: grid;
-  grid-template-columns: minmax(20rem, 1fr) 2.75rem 7.5rem 4.5rem 4.5rem;
-  min-width: 41rem;
+  grid-template-columns: 22px 34px minmax(20rem, 1fr) 2.75rem 7.5rem 4.5rem 4.5rem;
+  min-width: 44.5rem;
   min-height: 27px;
   border-bottom: 1px solid #eef2f7;
   align-items: stretch;
 }
 .brw-row:last-child { border-bottom: 0; }
 .brw-layout-pick .brw-row {
-  grid-template-columns: minmax(20rem, 1fr) 9rem 7.5rem 4.5rem 4.5rem;
-  min-width: 48rem;
+  grid-template-columns: 22px 34px minmax(20rem, 1fr) 9rem 7.5rem 4.5rem 4.5rem;
+  min-width: 51.5rem;
 }
 .brw-layout-note .brw-row {
-  grid-template-columns: minmax(20rem, 1fr) 2.75rem 7.5rem 1.75rem minmax(20rem, 1.2fr);
-  min-width: 55rem;
+  grid-template-columns: 22px 34px minmax(20rem, 1fr) 2.75rem 7.5rem 1.75rem minmax(20rem, 1.2fr);
+  min-width: 58.5rem;
 }
 .brw-layout-pick-note .brw-row {
-  grid-template-columns: minmax(20rem, 1fr) 9rem 7.5rem 1.75rem minmax(20rem, 1.2fr);
-  min-width: 62rem;
+  grid-template-columns: 22px 34px minmax(20rem, 1fr) 9rem 7.5rem 1.75rem minmax(20rem, 1.2fr);
+  min-width: 65.5rem;
 }
 .brw-cell {
   min-width: 0;
@@ -2361,11 +2364,11 @@ body.has-course-footer { padding-bottom: 62px; }
   font-size: var(--font-s);
   line-height: 1.25;
 }
-.brw-col-b { grid-column-start: 1; }
-.brw-col-c { grid-column-start: 2; }
-.brw-col-d { grid-column-start: 3; }
-.brw-col-e { grid-column-start: 4; }
-.brw-col-f { grid-column-start: 5; }
+.brw-grid .brw-col-b { grid-column-start: 3; }
+.brw-grid .brw-col-c { grid-column-start: 4; }
+.brw-grid .brw-col-d { grid-column-start: 5; }
+.brw-grid .brw-col-e { grid-column-start: 6; }
+.brw-grid .brw-col-f { grid-column-start: 7; }
 .brw-span-1 { grid-column-end: span 1; }
 .brw-span-2 { grid-column-end: span 2; }
 .brw-span-3 { grid-column-end: span 3; }
@@ -2611,7 +2614,9 @@ body.has-course-footer { padding-bottom: 62px; }
   color: #fff;
 }
 .brw-step-advance {
-  display: inline-flex;
+  display: flex;
+  width: 100%;
+  justify-content: center;
   align-items: center;
   gap: 6px;
   margin-top: 14px;
@@ -2681,3 +2686,33 @@ body.has-course-footer { padding-bottom: 62px; }
 
 /* Page title matches the web app's larger heading (2026-07-19) */
 .phase-title-row .phase-title { font-size: 30px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.3px; }
+
+/* Trimmed facsimile grids (2026-07-19): statement snapshots that never use the
+   trailing E/F columns drop them, so rows fill the sheet edge-to-edge. */
+.brw-layout-standard.brw-trim-2 .brw-row { grid-template-columns: 22px 34px minmax(12rem, 1fr) 2.75rem 7.5rem; min-width: 25.75rem; }
+.brw-layout-standard.brw-trim-1 .brw-row { grid-template-columns: 22px 34px minmax(20rem, 1fr) 2.75rem 7.5rem 4.5rem; min-width: 39.5rem; }
+.brw-layout-pick.brw-trim-2 .brw-row { grid-template-columns: 22px 34px minmax(20rem, 1fr) 9rem 7.5rem; min-width: 40.5rem; }
+.brw-layout-pick.brw-trim-1 .brw-row { grid-template-columns: 22px 34px minmax(20rem, 1fr) 9rem 7.5rem 4.5rem; min-width: 45.5rem; }
+
+/* Fill-in check row (2026-07-19): ONE canonical layout for every
+   fill-in-the-blank — input flexes, Check beside it, Reset appears on the
+   same line after the first check. Matches 15-1 Find the Difference. */
+.fillin-row { display: flex; align-items: center; gap: 10px; }
+.fillin-row .calc-input { flex: 1; min-width: 0; }
+.fillin-row .btn-reset { margin-left: auto; }
+
+/* ===== Facsimile grids wear the SAME classes as the M1/M2 sheets (2026-07-19):
+   renderGrid emits .xl-head/.xl-cat/.xl-item/.xl-total + .xl-gutter/.xl-rownum/
+   .xl-toggle, so one stylesheet styles every sheet. Only structural brw bits
+   (outline groups, dated rules, spans) remain engine-specific. ===== */
+.brw-grid { font-family: 'Open Sans', sans-serif; border: 0; border-radius: 0; }
+.brw-grid .xl-row { min-width: 0; }
+
+/* grid placement for the classic chrome columns inside brw grids */
+.brw-grid .xl-gutter { grid-column-start: 1; }
+.brw-grid .xl-rownum { grid-column-start: 2; }
+
+/* While a pick-sorter is live, the sheet stays on screen with its answer
+   column masked (2026-07-20) — the sort happens beside the visible workbook. */
+.pick-live .brw-col-c { visibility: hidden; }
+.pick-live .brw-col-c.brw-placed { visibility: visible; color: var(--primary); font-weight: 600; }

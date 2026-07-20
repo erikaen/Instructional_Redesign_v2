@@ -53,6 +53,8 @@
       </div>
     </div>
 
+    <div id="statementBuild-controls"></div>
+
     <div id="gate"></div>
     <div id="anna"></div>
     <div id="controls"></div>
@@ -167,14 +169,17 @@ function paint(name){
   var wrap=document.getElementById('wbGridWrap');
   activeTab=name;
   wrap.classList.remove('bs-centered');
+  var buildControls=document.getElementById('statementBuild-controls');
   if(name==='working'){
     build.hidden=false;
+    if(buildControls) buildControls.hidden=false;
     wander.hidden=true;
     sorterGrid.hidden=!sorterIsLive();
     sorterPanel.hidden=!sorterIsLive();
     document.getElementById('sheetLabel').textContent='Working Tab';
   } else {
     build.hidden=true;
+    if(buildControls) buildControls.hidden=true;
     sorterGrid.hidden=true;
     sorterPanel.hidden=true;
     wander.hidden=false;
@@ -203,15 +208,17 @@ function registerBuildGrid(gridId){
   BRW.markDatedRows('statementBuild');
 }
 function hideBuildGrid(){
-  var grid=document.querySelector('#statementBuild .brw-grid');
-  if(grid) grid.style.display='none';
+  /* the sheet STAYS visible during sorting (ruling 2026-07-20) — only the
+     pick sheet's answer column is masked while the sorter is live */
+  document.getElementById('statementBuild').classList.add('pick-live');
 }
+function showBuildAnswers(){ document.getElementById('statementBuild').classList.remove('pick-live'); }
 function lockAdvance(){
-  var advance=document.querySelector('#statementBuild .brw-step-advance');
+  var advance=document.querySelector('#statementBuild-controls .brw-step-advance');
   if(advance) advance.disabled=true;
 }
 function unlockAdvance(){
-  var advance=document.querySelector('#statementBuild .brw-step-advance');
+  var advance=document.querySelector('#statementBuild-controls .brw-step-advance');
   if(advance) advance.disabled=false;
 }
 function requireEveryShown(sorter,shownRows){
@@ -223,6 +230,7 @@ function requireEveryShown(sorter,shownRows){
 
 /* ===== pass 1: all 46 rows, Revenue above Expenses ===== */
 var pass1Complete=false;
+var pass1SortState={}, pass2SortState={};
 var pass1Options={
   startAt:0,
   stopAt:2,
@@ -249,6 +257,7 @@ function mountPass1Sorter(){
   (pick.cells||[]).forEach(function(cell){
     if(cell.c===3 && cell.value==='Expense') cell.value='Expenses';
   });
+  var alreadyDone=pass1Complete;
   var shown=[
     rowForLabel(pick,'Repair collected — Dana R.'),
     rowForLabel(pick,'Rent used — June'),
@@ -258,20 +267,21 @@ function mountPass1Sorter(){
   ];
   var diagnostics=[shown[2],shown[3],shown[4]];
   hideBuildGrid();
-  lockAdvance();
-  var sorter=BRW.mountSorter('sorterPanel','sorterGrid',filteredPickSheet(pick,'Category'),{
-    gridId:'sort-rows-sorter-pass1',
+  if(alreadyDone){ showBuildAnswers(); unlockAdvance(); } else { lockAdvance(); }
+  BRW.mountCanonSort('sorterPanel',filteredPickSheet(pick,'Category'),{
+    title:'Sort the season&rsquo;s rows',
     categoryOrder:['Revenue','Expenses'],
     showRows:shown,
-    diagnosticRows:diagnostics,
+    persist:pass1SortState,
+    sheetSync:'statementBuild',
     onComplete:function(){
       pass1Complete=true;
       unlockAdvance();
-      document.getElementById('gate').innerHTML='<div class="gate-card gate-armed-maria"><div class="gate-card-title">All 46 rows are sorted. Continue to see Revenue above Expenses.</div></div>';
+      showBuildAnswers();
+      document.getElementById('gate').innerHTML='<div class="gate-card gate-armed-maria"><div class="gate-card-title">All 46 rows are sorted. Click <strong>Next</strong> below to see Revenue above Expenses.</div></div>';
       if(window.lucide) lucide.createIcons();
     }
   });
-  if(sorter) requireEveryShown(sorter,shown);
 }
 
 function renderPass1Result(){
@@ -285,7 +295,7 @@ function renderPass1Result(){
   document.getElementById('controls').innerHTML=
     insightBox('The first shape',
       '<p>The sort follows what each row records, not when cash moved. Every source row remains in the records; the Working Tab only groups them.</p>')+
-    '<button id="beginPass2" class="btn-continue btn-block" onclick="startPass2()">Sort Expenses by kind &rarr;</button>';
+    '<button id="beginPass2" class="btn-continue btn-block" onclick="startPass2()">Group expenses by kind &rarr;</button>';
   if(window.lucide) lucide.createIcons();
   document.getElementById('anna').scrollIntoView({behavior:'smooth',block:'start'});
 }
@@ -298,6 +308,7 @@ var pass2Complete=false;
 var pass2Options={
   startAt:3,
   stopAt:4,
+  stepLabels:{4:'Group expenses by kind'},
   gridOpts:{gridId:'sort-rows-build-pass2-3'},
   gateAdvance:function(order){ return order!==3 || pass2Complete; },
   beforeAdvance:function(order){
@@ -338,6 +349,7 @@ function startPass2(){
 
 function mountPass2Sorter(){
   var pick=sheetOf(WORKBOOK_KEY,'3 ');
+  var alreadyDone=pass2Complete;
   var shown=[
     rowForLabel(pick,'Parts used — Dana R.'),
     rowForLabel(pick,'Rent used — June'),
@@ -346,20 +358,21 @@ function mountPass2Sorter(){
   ];
   var diagnostics=[shown[2],shown[3]];
   hideBuildGrid();
-  lockAdvance();
-  var sorter=BRW.mountSorter('sorterPanel','sorterGrid',filteredPickSheet(pick,'Kind'),{
-    gridId:'sort-rows-sorter-pass2',
+  if(alreadyDone){ showBuildAnswers(); unlockAdvance(); } else { lockAdvance(); }
+  BRW.mountCanonSort('sorterPanel',filteredPickSheet(pick,'Kind'),{
+    title:'Group the expense rows by kind',
     categoryOrder:['Parts Used','Rent','Depreciation'],
     showRows:shown,
-    diagnosticRows:diagnostics,
+    persist:pass2SortState,
+    sheetSync:'statementBuild',
     onComplete:function(){
       pass2Complete=true;
       unlockAdvance();
-      document.getElementById('gate').innerHTML='<div class="gate-card gate-armed-maria"><div class="gate-card-title">Every expense row is sorted, including Ridgeline and depreciation. Continue to see the three groups.</div></div>';
+      showBuildAnswers();
+      document.getElementById('gate').innerHTML='<div class="gate-card gate-armed-maria"><div class="gate-card-title">Every expense row is grouped, including Ridgeline and depreciation. Click <strong>Next</strong> below to see the three groups.</div></div>';
       if(window.lucide) lucide.createIcons();
     }
   });
-  if(sorter) requireEveryShown(sorter,shown);
 }
 
 function renderGroupedResult(){
@@ -398,26 +411,39 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGloss
 
 /* ===== dev hook: exercise both hand-sort gates, then finish both passes ===== */
 function devPlaceShown(categoryForText){
-  for(var i=0;i<20;i++){
-    var row=document.querySelector('#sorterPanel [data-brw-sort-row]');
-    if(!row) break;
-    var category=categoryForText(row.textContent||'');
-    row.click();
-    var zones=document.querySelectorAll('#sorterPanel .brw-sort-zone');
-    for(var z=0;z<zones.length;z++) if(zones[z].getAttribute('data-cat')===category){ zones[z].click(); break; }
+  /* drives the canonical sort: classify every shown row, then Sort-the-rest + Check */
+  for(var i=0;i<30;i++){
+    var tg=document.querySelector('#sorterPanel [data-canon-toggle]');
+    var pending=null;
+    document.querySelectorAll('#sorterPanel .stmt-row').forEach(function(r){
+      if(pending) return;
+      var t=r.querySelector('[data-canon-toggle]');
+      if(t && !r.querySelector('.stmt-tag')) pending=t;
+    });
+    if(!pending) break;
+    pending.click();
+    var open=document.querySelector('#sorterPanel .stmt-expand');
+    if(!open) break;
+    var want=categoryForText(pending.closest('.stmt-row').textContent||'');
+    var btns=document.querySelectorAll('#sorterPanel [data-canon-classify]');
+    var hit=null;
+    btns.forEach(function(b){ if(!hit && b.textContent.trim()===want) hit=b; });
+    (hit||btns[0]).click();
   }
-  var rest=document.querySelector('#sorterPanel .brw-sort-rest');
-  if(rest && !rest.disabled) rest.click();
+  var rest=document.querySelector('#sorterPanel [data-canon-rest]');
+  if(rest) rest.click();
+  var chk=document.querySelector('#sorterPanel [data-canon-check]');
+  if(chk) chk.click();
 }
 window.devFill=function(){
-  var advance=document.querySelector('#statementBuild .brw-step-advance');
+  var advance=document.querySelector('#statementBuild-controls .brw-step-advance');
   if(advance) advance.click();
   devPlaceShown(function(text){ return /Repair|Frame/.test(text)?'Revenue':'Expenses'; });
-  advance=document.querySelector('#statementBuild .brw-step-advance');
+  advance=document.querySelector('#statementBuild-controls .brw-step-advance');
   if(advance) advance.click();
   startPass2();
   devPlaceShown(function(text){ return /Depreciation/.test(text)?'Depreciation':(/Rent/.test(text)?'Rent':'Parts Used'); });
-  advance=document.querySelector('#statementBuild .brw-step-advance');
+  advance=document.querySelector('#statementBuild-controls .brw-step-advance');
   if(advance) advance.click();
 };
 

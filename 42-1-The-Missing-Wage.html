@@ -72,17 +72,15 @@ function statementPaper(gridId, caption){
 
 var step=0;
 var huntAnswered=false;
-var huntWrong={};
-var huntFb='';
+var huntSel=null, huntSubmitted=false;
 var mcqAnswered=false;
-var mcqWrong={};
-var mcqFb='';
+var mcqSel=null, mcqSubmitted=false;
 
 var HUNT_OPTS=[
   { id:'parts', label:'Parts used &mdash; $1,200', fb:'That line records parts used for the repair work. It does not pay for the labor the shop uses.' },
   { id:'rent', label:'Rent &mdash; $1,950', fb:'That line records rent for the space. It does not pay for the labor the shop uses.' },
   { id:'dep', label:'Depreciation &mdash; $230', fb:'That line records depreciation. It does not pay for the labor the shop uses.' },
-  { id:'none', label:'There is no wage line.', fb:'Right. The owner completed every repair, but no wage expense appears on the Income Statement for that work.', correct:true }
+  { id:'none', label:'There is no wage line.', fb:'You are correct. The owner completed every repair, but no wage expense appears on the Income Statement for that work.', correct:true }
 ];
 
 var MCQ_OPTS=[
@@ -94,40 +92,44 @@ var MCQ_OPTS=[
     fb:'Not quite. A draw is recorded in the <strong>WITHDRAWN</strong> pile on the Reasons tab. It is not an expense, so it never enters the Income Statement.' }
 ];
 
-function huntHTML(){
-  var h='<div class="mc-card"><div class="mc-q">Where is pay for the owner&rsquo;s work recorded among the expense lines?</div><div class="mc-opts">';
-  HUNT_OPTS.forEach(function(o,i){
-    var locked=huntAnswered||huntWrong[o.id];
-    var cls='mc-opt'+(huntAnswered&&o.correct?' correct':'')+(huntWrong[o.id]?' wrong':'')+(locked?' locked':'');
-    h += '<div class="'+cls+'"'+(locked?'':' onclick="huntClick(\''+o.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+i)+'</span><span>'+o.label+'</span></div>';
+function canonMCQ(qText,opts,sel,submitted,pickFn,submitFn,resetFn){
+  var chosen=submitted?opts.filter(function(x){return x.id===sel;})[0]:null;
+  var h='<div class="mc-card"><div class="mc-q">'+qText+'</div><div class="mc-opts">';
+  opts.forEach(function(o,i){
+    var cls='mc-opt'+(!submitted&&sel===o.id?' selected':'')+(submitted&&sel===o.id?(o.correct?' correct':' wrong'):'')+(submitted?' locked':'');
+    h += '<div class="'+cls+'"'+(submitted?'':' onclick="'+pickFn+'(\''+o.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+i)+'</span><span>'+o.label+'</span></div>';
   });
   h += '</div>';
-  if(huntFb) h += '<div class="feedback '+(huntAnswered?'ok':'err')+' show">'+huntFb+'</div>';
+  if(submitted&&chosen) h += '<div class="feedback '+(chosen.correct?'ok':'err')+' show">'+chosen.fb+'</div>';
+  h += '<div class="btn-row">'+(submitted
+    ? '<button class="btn-reset" onclick="'+resetFn+'()" style="margin-left:auto;">Reset</button>'
+    : '<button class="btn-continue" onclick="'+submitFn+'()"'+(sel===null?' disabled':'')+'>Submit</button>')+'</div>';
   return h+'</div>';
 }
-function huntClick(id){
-  var o=HUNT_OPTS.filter(function(x){return x.id===id;})[0];
-  if(!o||huntAnswered||huntWrong[id]) return;
-  if(o.correct){ huntAnswered=true; playSuccess(); } else { huntWrong[id]=true; playNope(); }
-  huntFb=o.fb; render();
+function huntHTML(){
+  return canonMCQ('Where is pay for the owner&rsquo;s work recorded among the expense lines?',HUNT_OPTS,huntSel,huntSubmitted,'huntPick','huntSubmit','huntReset');
 }
+function huntPick(id){ if(huntSubmitted) return; huntSel=id; playClick(); render(); }
+function huntSubmit(){
+  if(huntSel===null||huntSubmitted) return;
+  huntSubmitted=true;
+  var o=HUNT_OPTS.filter(function(x){return x.id===huntSel;})[0];
+  if(o.correct){ huntAnswered=true; playSuccess(); } else { playNope(); }
+  render();
+}
+function huntReset(){ playClick(); huntSel=null; huntSubmitted=false; render(); }
 
 function mcqHTML(){
-  var h='<div class="mc-card"><div class="mc-q">If the owner had drawn $1,200 instead of $600, what would the season&rsquo;s net income have been?</div><div class="mc-opts">';
-  MCQ_OPTS.forEach(function(o,i){
-    var locked=mcqAnswered||mcqWrong[o.id];
-    var cls='mc-opt'+(mcqAnswered&&o.correct?' correct':'')+(mcqWrong[o.id]?' wrong':'')+(locked?' locked':'');
-    h += '<div class="'+cls+'"'+(locked?'':' onclick="mcqClick(\''+o.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+i)+'</span><span>'+o.label+'</span></div>';
-  });
-  h += '</div>';
-  if(mcqFb) h += '<div class="feedback '+(mcqAnswered?'ok':'err')+' show">'+mcqFb+'</div>';
-  return h+'</div>';
+  return canonMCQ('If the owner had drawn $1,200 instead of $600, what would the season&rsquo;s net income have been?',MCQ_OPTS,mcqSel,mcqSubmitted,'mcqPick','mcqSubmit','mcqReset');
 }
-function mcqClick(id){
-  var o=MCQ_OPTS.filter(function(x){return x.id===id;})[0];
-  if(!o||mcqAnswered||mcqWrong[id]) return;
-  if(o.correct){ mcqAnswered=true; playSuccess(); } else { mcqWrong[id]=true; playNope(); }
-  mcqFb=o.fb; render();
+function mcqPick(id){ if(mcqSubmitted) return; mcqSel=id; playClick(); render(); }
+function mcqReset(){ playClick(); mcqSel=null; mcqSubmitted=false; render(); }
+function mcqSubmit(){
+  if(mcqSel===null||mcqSubmitted) return;
+  mcqSubmitted=true;
+  var o=MCQ_OPTS.filter(function(x){return x.id===mcqSel;})[0];
+  if(o.correct){ mcqAnswered=true; playSuccess(); } else { playNope(); }
+  render();
 }
 
 function render(){
@@ -169,7 +171,7 @@ function renderControls(){
 }
 function advance(){
   if((step===0&&!huntAnswered)||(step===1&&!mcqAnswered)) return;
-  playClick(); step=Math.min(2,step+1); render(); window.scrollTo(0,document.body.scrollHeight);
+  playClick(); step=Math.min(2,step+1); render(); window.scrollTo(0,0);
 }
 function back(){ if(step===0) return; playClick(); step--; render(); window.scrollTo(0,0); }
 var glossaryTerms=[

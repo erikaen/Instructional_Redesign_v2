@@ -222,7 +222,7 @@ function renderTalk(){
     ctrl=insightBox('The work is what counts',
       '<p>Ridgeline&rsquo;s recorded assets went up <strong>$300</strong>, and GENERATED went up <strong>$300</strong>. The records remain balanced. The delivery is recorded when the work is done, even though the cash will arrive later.</p>')
       +'<div class="next-phase-msg">The receivable is recorded. Next, look immediately for problems with the recorded expenses.</div>'
-      +'';
+      +'<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="stepBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
   }
   document.getElementById('anna').innerHTML=anna;
   document.getElementById('controls').innerHTML=ctrl;
@@ -237,7 +237,17 @@ function recordReceivable(){
   paint('left','assets');
   paint('right','reasons');
   renderTalk();
-  window.scrollTo(0,document.body.scrollHeight);
+  window.scrollTo(0,0);
+}
+function stepBack(){
+  if(step===0) return;
+  playClick();
+  step=0;
+  currentWorkbookKey='bike-repair-module-3-1';
+  paint('left','assets');
+  paint('right','reasons');
+  renderTalk();
+  window.scrollTo(0,0);
 }
 
 /* ===== glossary / nav ===== */
@@ -254,7 +264,7 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ window.location.reload(); }
+function restart(){ stepBack(); }
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
 
 /* ===== init ===== */

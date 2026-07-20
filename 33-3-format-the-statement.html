@@ -36,6 +36,8 @@
       </div>
       <div class="xlwb-tabs" id="workbookTabs" aria-label="Workbook tabs"></div>
     </div>
+
+    <div id="statementBuild-controls"></div>
     <div id="anna"></div>
     <div id="tie"></div>
     <div id="controls"></div>
@@ -179,11 +181,11 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ window.location.reload(); }
+function restart(){ playClick(); var b=document.querySelector('#statementBuild-controls .brw-step-back'); for(var i=0;i<6&&b;i++){ b.click(); b=document.querySelector('#statementBuild-controls .brw-step-back'); } window.scrollTo(0,0); }
 document.addEventListener('keydown',function(event){ if(event.key==='Escape') closeGlossary(); });
 
 window.devFill=function(){
-  var advance=document.querySelector('#statementBuild .brw-step-advance');
+  var advance=document.querySelector('#statementBuild-controls .brw-step-advance');
   if(advance) advance.click();
 };
 BR_WB.mountStatementBuild('statementBuild',BUILD_WORKBOOK_KEY,{
@@ -192,11 +194,14 @@ BR_WB.mountStatementBuild('statementBuild',BUILD_WORKBOOK_KEY,{
   gridOpts:{gridId:'format-statement-build-grid'},
   onStep:function(order){
     BRW.markDatedRows('statementBuild');
-    if(order===5){
-      completed=true;
+    var was=completed;
+    completed=(order===5);
+    if(completed&&!was){
       renderTalk();
       playSuccess();
-      window.scrollTo(0,document.body.scrollHeight);
+      window.scrollTo(0,0);
+    } else if(was&&!completed){
+      renderTalk();
     }
   }
 });

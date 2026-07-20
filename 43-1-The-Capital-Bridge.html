@@ -39,6 +39,8 @@
       <div class="xlwb-tabs" id="workbookTabs" aria-label="Workbook tabs"></div>
     </div>
 
+    <div id="stmtBuild-controls"></div>
+
     <div id="buildNote" class="build-note"></div>
     <div id="interaction"></div>
     <div id="advanceHint" class="build-hint" role="status" aria-live="polite"></div>
@@ -141,7 +143,7 @@ function showWorkbookTab(name){
   var sheet=sheetOf(sheetMap[name]);
   if(!sheet) return;
   playClick();
-  document.getElementById('stmtBuild').hidden=true;
+  document.getElementById('stmtBuild').hidden=true; var _c=document.getElementById('stmtBuild-controls'); if(_c) _c.hidden=true;
   document.getElementById('tabGrid').hidden=false;
   document.getElementById('sheetLabel').textContent=name;
   setWorkbookChrome(name);
@@ -153,7 +155,7 @@ function showMemberCapitalTab(){
   if(!sourceConfirmed) return;
   playClick();
   document.getElementById('tabGrid').hidden=true;
-  document.getElementById('stmtBuild').hidden=false;
+  document.getElementById('stmtBuild').hidden=false; var _c=document.getElementById('stmtBuild-controls'); if(_c) _c.hidden=false;
   document.getElementById('sheetLabel').textContent=completed?"Statement of Member's Capital":'Working Tab';
   setWorkbookChrome('members');
 }
@@ -161,59 +163,62 @@ function showMemberCapitalTab(){
 /* ===== build state ===== */
 var currentOrder=0;
 var mcqAnswered=false;
+var mcqSel=null, mcqSubmitted=false;
 var gateDone=false;
 var gateAttempts=0;
+var gateRight=true;
 
 var MCQ_OPTS=[
   {id:'rev',label:'Revenue &mdash; $6,020',fb:'Revenue is the top line, not the addition. Expenses are also part of the season&rsquo;s result, so use the number after Revenue and Expenses are compared.'},
-  {id:'netinc',label:'Net income &mdash; $2,640, from the Income Statement',fb:'Right. Net income on the Income Statement is $2,640. That single number is the season&rsquo;s addition recorded in GENERATED.',correct:true},
+  {id:'netinc',label:'Net income &mdash; $2,640, from the Income Statement',fb:'You are correct. Net income on the Income Statement is $2,640. That single number is the season&rsquo;s addition recorded in GENERATED.',correct:true},
   {id:'cash',label:'The cash change &mdash; &minus;$680',fb:'Cash fell while GENERATED rose. The two clocks do not have to move together; use net income for this change.'}
 ];
 
 function mcqHTML(){
+  var chosen=mcqSubmitted?MCQ_OPTS.filter(function(o){ return o.id===mcqSel; })[0]:null;
   var html='<div class="mc-card"><div class="mc-q">Which single number is the season&rsquo;s addition to GENERATED?</div><div class="mc-opts" id="mcqOpts">';
   MCQ_OPTS.forEach(function(option,index){
-    var cls='mc-opt';
-    if(mcqAnswered){ cls+=' locked'; if(option.correct) cls+=' correct'; }
-    html+='<div class="'+cls+'" data-mcq="'+option.id+'"'+(mcqAnswered?'':' onclick="mcqClick(\''+option.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+index)+'</span><span>'+option.label+'</span></div>';
+    var cls='mc-opt'
+      +(!mcqSubmitted&&mcqSel===option.id?' selected':'')
+      +(mcqSubmitted&&mcqSel===option.id?(option.correct?' correct':' wrong'):'')
+      +(mcqSubmitted?' locked':'');
+    html+='<div class="'+cls+'"'+(mcqSubmitted?'':' onclick="mcqPick(\''+option.id+'\')"')+'><span class="mc-letter">'+String.fromCharCode(65+index)+'</span><span>'+option.label+'</span></div>';
   });
   html+='</div>';
-  if(mcqAnswered){
-    html+='<div class="feedback ok show">'+MCQ_OPTS[1].fb+'</div>';
-  }else{
-    html+='<div class="feedback" id="mcqFb"></div>';
-  }
+  if(mcqSubmitted&&chosen) html+='<div class="feedback '+(chosen.correct?'ok':'err')+' show">'+chosen.fb+'</div>';
+  html+='<div class="btn-row">'+(mcqSubmitted
+    ? (mcqAnswered?'':'<button class="btn-reset" onclick="mcqReset()" style="margin-left:auto;">Reset</button>')
+    : '<button class="btn-continue" onclick="mcqSubmit()"'+(mcqSel===null?' disabled':'')+'>Submit</button>')+'</div>';
   return html+'</div>';
 }
-function mcqClick(id){
-  if(mcqAnswered) return;
-  var option=MCQ_OPTS.filter(function(item){ return item.id===id; })[0];
-  var choice=document.querySelector('[data-mcq="'+id+'"]');
-  var feedback=document.getElementById('mcqFb');
-  if(!option||!choice||!feedback) return;
-  if(option.correct){
+function mcqPick(id){ if(mcqSubmitted) return; mcqSel=id; playClick(); renderInteraction(); }
+function mcqReset(){ playClick(); mcqSel=null; mcqSubmitted=false; renderInteraction(); }
+function mcqSubmit(){
+  if(mcqSel===null||mcqSubmitted) return;
+  mcqSubmitted=true;
+  var option=MCQ_OPTS.filter(function(item){ return item.id===mcqSel; })[0];
+  if(option&&option.correct){
     mcqAnswered=true;
     playSuccess();
-    renderInteraction();
-    setAdvanceState();
   }else{
-    choice.classList.add('wrong','locked');
-    choice.removeAttribute('onclick');
-    feedback.className='feedback err show';
-    feedback.innerHTML=option.fb;
     playNope();
   }
+  renderInteraction();
+  setAdvanceState();
 }
-
 function gateHTML(){
   if(gateDone){
-    return '<div class="gate-card gate-armed-maria"><div class="gate-card-title">Ending total confirmed: <strong>$4,500</strong>. Continue to format and name the statement.</div></div>';
+    return (gateRight
+      ? '<div class="feedback ok show">You are correct &mdash; $2,290 + $2,810 &minus; $600 = <strong>$4,500</strong>.</div>'
+      : '<div class="feedback err show">Not quite &mdash; the ending total is <strong>$4,500</strong>: $2,290 + $2,810 &minus; $600.</div>')
+      +'<div class="gate-card gate-armed-maria"><div class="gate-card-title">Ending total: <strong>$4,500</strong>. Continue to format and name the statement.</div></div>';
   }
   return '<div class="mc-card">'
     +'<div class="mc-q">Now walk the three piles: $2,290 + $2,810 &minus; $600. Type the ending total that ties to the balance sheet&rsquo;s August 31 column.</div>'
-    +'<div class="btn-row">'
+    +'<div class="btn-row fillin-row">'
     +'<input id="gateInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Ending total Member&rsquo;s Capital" onkeydown="if(event.key===\'Enter\'){checkGate();}">'
     +'<button class="btn btn-primary" type="button" onclick="checkGate()">Check</button>'
+    +'<button class="btn-reset" id="gateReset" onclick="resetGate()" style="display:'+(gateAttempts>0?'':'none')+';">Reset</button>'
     +'</div><div class="feedback" id="gateFb"></div></div>';
 }
 function checkGate(){
@@ -221,9 +226,10 @@ function checkGate(){
   var input=document.getElementById('gateInput');
   var feedback=document.getElementById('gateFb');
   if(!input||!feedback) return;
+  var rst=document.getElementById('gateReset'); if(rst) rst.style.display='';
   var value=parseInt(String(input.value).replace(/[^0-9-]/g,''),10);
   if(value===4500){
-    gateDone=true;
+    gateDone=true; gateRight=true;
     playSuccess();
     renderInteraction();
     setAdvanceState();
@@ -231,11 +237,11 @@ function checkGate(){
   }
   gateAttempts++;
   if(gateAttempts>=3){
-    gateDone=true;
+    gateDone=true; gateRight=false;
     playNope();
     renderInteraction();
     setAdvanceState();
-    var advance=document.querySelector('#stmtBuild .brw-step-advance');
+    var advance=document.querySelector('#stmtBuild-controls .brw-step-advance');
     if(advance) advance.click();
     return;
   }
@@ -275,7 +281,7 @@ function renderInteraction(){
 function confirmBeginnings(){ beginningConfirmed=true; playSuccess(); renderInteraction(); setAdvanceState(); }
 function confirmSort(){ sortConfirmed=true; playSuccess(); renderInteraction(); setAdvanceState(); }
 function setAdvanceState(){
-  var advance=document.querySelector('#stmtBuild .brw-step-advance');
+  var advance=document.querySelector('#stmtBuild-controls .brw-step-advance');
   var disabled=(currentOrder===0&&!beginningConfirmed)||(currentOrder===1&&!sortConfirmed)||(currentOrder===2&&(!mcqAnswered||!gateDone));
   if(advance) advance.disabled=disabled;
   var hint='';
@@ -380,7 +386,7 @@ window.devFill=function(){
   mcqAnswered=true;
   gateDone=true;
   for(var i=0;i<3;i++){
-    var advance=document.querySelector('#stmtBuild .brw-step-advance');
+    var advance=document.querySelector('#stmtBuild-controls .brw-step-advance');
     if(advance){ advance.disabled=false; advance.click(); }
   }
   christen();
