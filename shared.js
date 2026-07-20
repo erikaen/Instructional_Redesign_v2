@@ -1353,7 +1353,7 @@ function initCourseChrome(){
   var bar = document.createElement('div');
   bar.className = 'course-banner';
   bar.innerHTML =
-    '<div class="course-banner-mid"><button class="btn-reset course-banner-btn" id="courseIndexBtn">'+(pageObj ? tut.title+' &middot; '+pageObj.t : tut.title)+' &#9662;</button>'+
+    '<div class="course-banner-mid"><button class="course-index-pill" id="courseIndexBtn"><span class="cip-tut">'+tut.title+'</span>'+(pageObj ? ' <span class="cip-dot">&middot;</span> <span class="cip-page">'+pageObj.t+'</span>' : '')+' <i data-lucide="chevron-down" class="licon cip-chev"></i></button>'+
       '<div class="course-index-menu" id="courseIndexMenu" hidden>'+menuHtml+'</div></div>';
   document.body.insertBefore(bar, document.body.firstChild);
   var iBtn = document.getElementById('courseIndexBtn'), iMenu = document.getElementById('courseIndexMenu');
@@ -1384,10 +1384,11 @@ function initCourseChrome(){
   var foot = document.createElement('div');
   foot.className = 'course-page-footer';
   foot.innerHTML =
-    (pi > 0 ? '<button class="btn-reset course-banner-btn" onclick="location.href=\''+flat[pi-1]+'\'">&larr; '+titles[flat[pi-1]]+coursePageCheck(flat[pi-1])+'</button>' : '') +
-    (pi < flat.length-1 ? '<button class="btn-continue course-banner-btn" style="margin-left:auto;" onclick="location.href=\''+flat[pi+1]+'\'">'+titles[flat[pi+1]]+coursePageCheck(flat[pi+1])+' &rarr;</button>' : '');
+    (pi > 0 ? '<button class="course-foot-btn" onclick="location.href=\''+flat[pi-1]+'\'"><i data-lucide="chevron-left" class="licon"></i> '+titles[flat[pi-1]]+coursePageCheck(flat[pi-1])+'</button>' : '') +
+    (pi < flat.length-1 ? '<button class="course-foot-btn" style="margin-left:auto;" onclick="location.href=\''+flat[pi+1]+'\'">'+titles[flat[pi+1]]+coursePageCheck(flat[pi+1])+' <i data-lucide="chevron-right" class="licon"></i></button>' : '');
   document.body.appendChild(foot);
   document.body.classList.add('has-course-footer');
+  if (window.lucide && lucide.createIcons) lucide.createIcons();
 }
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initCourseChrome);
 else initCourseChrome();
