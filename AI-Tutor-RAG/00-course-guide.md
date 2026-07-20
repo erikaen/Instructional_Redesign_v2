@@ -8,7 +8,7 @@ should I help?*
 
 ## Summary
 
-The prework is **four modules** taken in order. Module 1 builds the foundations
+The prework is **six modules** taken in order. Module 1 builds the foundations
 of bookkeeping by hand — a Things list, a Cash list, a Promises list, the
 match-or-reason rule, and the **accounting identity** — and ends with the names
 *entity*, *Assets*, *Liabilities*, *contributed*, *generated*, and *double-entry*.
@@ -20,15 +20,23 @@ Angel Investor") brings an outside reader, Freddie, whose requests pull the rest
 of the statement set into being — the Statement of Changes in Members' Capital,
 the Statement of Cash Flows, the reconciliation, and the Statement Map — and ends
 on a deal. The student builds a single Excel-facsimile workbook, *Bike-Repair.xlsx*,
-that grows tab by tab across all four modules.
+that grows tab by tab across the first four modules. Module 5 then holds the
+bike-shop map against a real company — **CVS Health's** FY2025 10-K — and
+Module 6 holds the same map against an entity nobody owns — **Yale University**,
+a nonprofit, through its FY2025 financial report.
 
-The single most important rule for the tutor: the course teaches by **discovery**.
-The student must experience each idea before it is named, so the tutor never
-announces what a page is about to reveal. "How to help" always means orienting
-questions first, then progressively stronger hints, mirroring the pages' own
-forgiving three-strike pattern (hint → stronger hint → reveal). The full conduct
-rules, the never-blurt list, and the language rules live in `## Tutor conduct`
-below; the interface facts the tutor can rely on live in `## How the pages work`.
+The single most important rule for the tutor in **Modules 1–4**: the course
+teaches by **discovery**. The student must experience each idea before it is
+named, so the tutor never announces what a page is about to reveal. "How to
+help" always means orienting questions first, then progressively stronger
+hints, mirroring the pages' own forgiving three-strike pattern (hint → stronger
+hint → reveal). **Modules 5 and 6 turn to telling mode** — learning objectives
+first, then material, then assessment; the pages announce the turn themselves
+(51-1), and the tutor may state where a page is going — but each walk still
+stages notice-before-resolve beats (a mismatch noticed before it is resolved),
+and those are never resolved before the page does. The full conduct rules, the
+never-blurt list, and the language rules live in `## Tutor conduct` below; the
+interface facts the tutor can rely on live in `## How the pages work`.
 
 ## Course map
 
@@ -253,6 +261,68 @@ the repo root.
   the forward-looking napkin — revenue $10,000 → **free cash flow** $5,000; the student
   computes the bottom line; an expectation is not a record; the deal hangs open.
 
+### Module 5 — Reading a Real Company: CVS Health
+
+- `51-1-Module-5-Introduction.html` — Module 5 Introduction: the turn to telling
+  mode (objectives first); the eight things the bike shop taught; the bridge
+  exercise back to the map; the vocabulary introductions (Equities,
+  shareholders' equity, net assets, Gains/Losses) with the expandable
+  note on the word "Equities"; the CVS preview; M5-LO1…M5-LO6.
+- `52-1-The-Statement-Map.html` — The Statement Map: the bike shop's whole
+  architecture on one screen from the workbook's statement tabs; Cash, Member's
+  Capital, and the nested Net income paths; the one gate (click the Net income
+  row); articulation restated.
+- `53-1-Two-Balance-Sheets.html` — Two Balance Sheets: CVS's Consolidated
+  Balance Sheets (10-K p.95) stripped to totals (identity checks at both
+  dates), split into beginning/ending snapshots, re-expanded.
+- `53-2-The-Cash-Question.html` — The Cash Question: compact BSes, cash
+  highlighted (−$133M); the three-year direct-method Cash Flow Statement
+  collapsed to its bottom line — $172M, not $133 (left unresolved).
+- `53-3-Read-the-Labels.html` — Read the Labels: the mismatch resolved —
+  restricted cash and the scope lesson; architecture restored (timed section
+  reveal); expandable CFS sections.
+- `53-4-The-Equity-Question.html` — The Equity Question: equity fell $348M in a
+  profitable year; the three buckets (Contributed / Earned & Retained / NCI);
+  the Statement of Shareholders' Equity traced with running totals.
+- `53-5-Where-Net-Income-Comes-From.html` — Where Net Income Comes From: the
+  Income Statement behind the single movement row; two net incomes (NCI split);
+  OCI and comprehensive income; each piece lands in its bucket.
+- `53-6-The-Full-Architecture.html` — The Full Architecture: the synthesis —
+  all three explanatory statements between the snapshots; "same map; the
+  territory is a $400-billion company."
+
+### Module 6 — The Nonprofit Turn: Yale University
+
+- `61-1-Module-6-Introduction.html` — Module 6 Introduction: an entity nobody
+  owns; the six claims CVS confirmed; the eight things that change (Net Assets,
+  donor-restriction buckets, releases, two explanatory statements, the
+  endowment, total ≠ spendable); the three-entity bridge exercise; the Yale
+  preview; the "note on the name"; M6-LO1…M6-LO7.
+- `62-1-A-Nonprofit-Statement-Map.html` — A Nonprofit Statement Map: Yale's map
+  at a glance — two Statements of Financial Position flanking the two
+  explanatory statements (Cash Flows + Activities); "two statements, not three."
+- `63-1-The-Statement-of-Financial-Position.html` — The Statement of Financial
+  Position: Yale's SFP in document form (report p.21); the What's-NOT beat
+  (collections under ASC 958-360, human capital, the Yale name — a convention
+  feature, not a failure of ability); identity checked; split into snapshots.
+- `63-2-The-Cash-Question.html` — The Cash Question: Net Assets bucketed
+  (78% With); cash fell $293M; the indirect-method Cash Flow Statement
+  (opens from Change in net assets; endowment gifts are Financing) collapsed to
+  its bottom line — $380M, not $293 (left unresolved).
+- `63-3-Read-the-Labels.html` — Read the Labels: Note c resolves the mismatch —
+  cash held within the investment pool; architecture restored (timed reveal);
+  expandable sections incl. the indirect-method walk.
+- `63-4-The-Net-Assets-Question.html` — The Net Assets Question: net assets up
+  $3,334M — earned, given, or released?; the Statement of Activities bucketed
+  and walked (Operating, then Non-operating where the endowment story lives);
+  releases saved for the next page.
+- `63-5-Releases-and-the-Endowment.html` — Releases and the Endowment: the
+  With → Without reclassification ($1,615M, total change zero); the
+  running-totals trace; expandable sections; the liquidity beat ("How much can
+  Yale actually spend?" — $5,029M within one year; board designation = intent).
+- `63-6-The-Full-Architecture.html` — The Full Architecture: the synthesis —
+  two explanatory statements between the SFPs; "Three entities, one map."
+
 ## Characters
 
 Three named characters carry the story; the student ("You") is the protagonist.
@@ -366,10 +436,21 @@ the page does**:
 
 ### Language rules
 - Say **"accounting identity"** — never "accounting equation."
-- Never use the words **"equity" / "equities"** or **"Net Assets."** The difference's
-  total is *Member's Capital* (after M2); its subparts are *Contributed* and *Generated*
-  (and *Withdrawn* once the draw happens). GAAP synonyms ("Retained Earnings,"
-  "Contributed Capital") appear nowhere in this course.
+- The words **"equity" / "equities"** and **"Net Assets"** are banned **except
+  where Rick has expressly authorized them**. No other exception exists, and the
+  tutor never extends an authorization on its own. The authorizations Rick has
+  granted to date:
+  - **Module 5 pages (5x-x):** *Equities* (plural), *shareholders' equity*,
+    *net assets*, and *Gains/Losses* — formally introduced on 51-1, each with its
+    bike-shop antecedent; CVS's 10-K keeps its own vocabulary.
+  - **Module 6 pages (6x-x):** *Net Assets*, *with / without donor restrictions*,
+    *released from restrictions*, and the rest of the nonprofit vocabulary —
+    introduced on 61-1; *equities / shareholders' equity* appear there only as
+    the for-profit bridge.
+  - On **Module 1–4 pages the ban is absolute**: the difference's total is
+    *Member's Capital* (after M2); its subparts are *Contributed* and *Generated*
+    (and *Withdrawn* once the draw happens). GAAP synonyms ("Retained Earnings,"
+    "Contributed Capital") appear nowhere in Modules 1–4.
 - The **repair work is an activity, not an actor** — it cannot own, owe, or agree.
   **Documents and time periods are not actors** (a receipt does not "say" it is owed; a
   month does not "use" rent). **Records SHOW things; entities HAVE things.**
