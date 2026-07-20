@@ -1532,7 +1532,13 @@ var COURSE_STEPS = {
     return { at: !av ? 1 : (!intro ? 2 : Math.min(w + 3, n + 3)), total: n + 3 }; },
   '41-1-The-Investor-Asks.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 3 }; },
   '42-1-The-Missing-Wage.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 3 }; },
-  '43-1-The-Capital-Bridge.html': function(){ var comp = (typeof completed !== 'undefined' && completed), gate = (typeof gateDone !== 'undefined' && gateDone), mcq = (typeof mcqAnswered !== 'undefined' && mcqAnswered), srt = (typeof sortConfirmed !== 'undefined' && sortConfirmed) || (typeof beginningConfirmed !== 'undefined' && beginningConfirmed) || (typeof sourceConfirmed !== 'undefined' && sourceConfirmed); return { at: comp ? 5 : (gate ? 4 : (mcq ? 3 : (srt ? 2 : 1))), total: 5 }; },
+  '43-1-The-Capital-Bridge.html': function(){
+    var srcOn = (typeof sourceConfirmed !== 'undefined' && sourceConfirmed);
+    var comp = (typeof completed !== 'undefined' && completed);
+    var ord = (typeof currentOrder !== 'undefined') ? currentOrder : 0;
+    /* source beat(1) → order0 beginnings(2) → order1 sort(3) → order2 mcq/gate(4)
+       → order3 format(5) → christened(6) */
+    return { at: !srcOn ? 1 : (comp ? 6 : ord + 2), total: 6 }; },
   '44-1-The-Cash-Puzzle.html': function(){ return { at: (typeof mcqSubmitted !== 'undefined' && mcqSubmitted) ? 2 : 1, total: 2 }; },
   '44-2-Three-Buckets.html': function(){
     var cp = (typeof copied !== 'undefined' && copied);
@@ -1543,7 +1549,7 @@ var COURSE_STEPS = {
     return { at: !cp ? 1 : (ord >= 2 ? 4 : (ord >= 1 ? 3 : 2)), total: 4 }; },
   '44-3-The-Cash-Flow-Statement.html': function(){ return { at: (typeof completed !== 'undefined' && completed) ? 2 : 1, total: 2 }; },
   '46-1-The-Statements-Tie-Out.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; },
-  '47-1-Freddies-Napkin.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; },
+  '47-1-Freddies-Napkin.html': function(){ var s=(typeof step!=='undefined')?step:0, nl=(typeof napkinLines!=='undefined')?napkinLines:0; var pos=(s<2)?s:(s===2?1+nl:6+(s-2)); return { at: pos + 1, total: 9 }; },
   '48-1-The-Deal.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 4 }; }
 };
 
@@ -2887,8 +2893,13 @@ BRW.mountCanonSort = function (containerId, sheet, opts) {
       '<p class="sortprog-hint">' + (opts.instruction || ('Click the chevron beside a row, then choose its group.' + (hiddenCount > 0 ? ' The remaining ' + hiddenCount + ' rows follow the same patterns once these are sorted.' : ''))) + '</p>' +
       '<div class="sortprog-grid' + (cats.length > 2 ? ' four' : '') + '">' + boxes +
       '<div class="sortprog-box' + (s.unsorted === 0 ? ' done' : '') + '"><div class="sortprog-label">Unsorted</div><div class="sortprog-num">' + s.unsorted + '</div></div>' +
-      '</div>' + btn +
-      '<div class="btn-row" style="justify-content:flex-end;margin-top:10px;"><button class="btn-reset" data-canon-reset="1">Reset</button></div></div>';
+      '</div>' + btn + '</div>';
+  }
+  /* Reset sits BELOW the sort rows (bottom of the activity), not in the top
+     progress card — see the "sort Reset placement" note in the
+     instructional-activity-formats skill. */
+  function resetHTML() {
+    return '<div class="btn-row" style="justify-content:flex-end;margin-top:12px;"><button class="btn-reset" data-canon-reset="1">Reset</button></div>';
   }
   function docHTML() {
     var h = '<div class="stmt-colhead stmt-grid-sort"><span></span><span></span><span>Row</span><span class="stmt-num">Amount</span></div>';
@@ -2909,7 +2920,7 @@ BRW.mountCanonSort = function (containerId, sheet, opts) {
     var s = counts();
     var warn = (checked && s.correct < shown.length) ? '<div class="sort-msg warn">Not all of these look right yet &mdash; the marked rows need another look. Try again.</div>' : '';
     host.hidden = false;
-    host.innerHTML = progHTML() + '<div class="stmt">' + docHTML() + '</div>' + warn;
+    host.innerHTML = progHTML() + '<div class="stmt">' + docHTML() + '</div>' + warn + resetHTML();
     syncSheet();
     save();
     if (window.lucide && lucide.createIcons) lucide.createIcons();

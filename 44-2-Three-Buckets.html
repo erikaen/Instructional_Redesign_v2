@@ -8,14 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
-  <style>
-    .wb-grid-wrap { padding:8px; background:white; }
-    .page-nav { margin-top:14px; }
-    #sorterPanel { margin:18px 0 14px; }
-      </style>
 </head>
 <body>
-<div class="page">
+<div class="page pg-44-2">
   <div class="prework-wrap">
     <div class="phase-title-row">
       <div class="phase-title"></div>
@@ -43,7 +38,7 @@
       <div class="xlwb-tabs" id="workbookTabs" aria-label="Workbook tabs"></div>
     </div>
 
-    <div id="statementBuild-controls"></div>
+    <div id="statementBuild-controls" hidden></div>
 
     <div id="missFeedback"></div>
     <div id="gate"></div>
@@ -115,6 +110,41 @@ function setAdvanceLabel(label){
 
 var copied=false;
 var cashSortState={};
+/* cross-navigation restore (ruling 2026-07-20): coming Back from the next page
+   returns to the completed activity, not a fresh render — persist step + sort
+   state to localStorage and replay it on load. See the skill's "restore a
+   completed activity on Back-navigation" note. */
+var currentPageOrder=0, restoring=false, SKEY='brw:44-2:v1';
+function saveState(){
+  try{ localStorage.setItem(SKEY,JSON.stringify({copied:copied,order:currentPageOrder,sort:cashSortState})); }catch(e){}
+}
+function markSortComplete(){
+  sortComplete=true;
+  var next=setAdvanceLabel('Show the sorted view &rarr;');
+  if(next) next.disabled=false;
+  document.getElementById('gate').innerHTML='<div class="gate-card gate-armed-maria"><div class="gate-card-title">Every cash row is sorted by activity. Continue to read the three totals.</div></div>';
+  if(window.lucide) lucide.createIcons();
+  saveState();
+}
+function replayTo(target){
+  restoring=true;
+  if(!copied) copyCashRows(true);
+  var safety=0;
+  while(currentPageOrder<target && safety++<6){
+    var adv=document.querySelector('#statementBuild-controls .brw-step-advance');
+    if(!adv) break;
+    adv.disabled=false;
+    adv.click();
+  }
+  restoring=false;
+}
+function restoreState(){
+  var raw=null; try{ raw=JSON.parse(localStorage.getItem(SKEY)||'null'); }catch(e){}
+  if(!raw||!raw.copied) return false;
+  if(raw.sort) Object.keys(raw.sort).forEach(function(k){ cashSortState[k]=raw.sort[k]; });
+  replayTo(raw.order||0);
+  return true;
+}
 function setWorkbookChrome(activeKey){
   var tabs=[
     {key:'Assets',label:'Assets'},
@@ -132,17 +162,18 @@ function setWorkbookChrome(activeKey){
       +(active?' aria-current="page"':' aria-disabled="true"')+'>'+tab.label+'</button>';
   }).join('');
 }
-function copyCashRows(){
+function copyCashRows(silent){
   if(copied) return;
   copied=true;
-  playSuccess();
+  if(!silent) playSuccess();
   document.getElementById('assetsGrid').hidden=true;
   document.getElementById('statementBuild').hidden=false; var _c=document.getElementById('statementBuild-controls'); if(_c) _c.hidden=false;
   document.getElementById('sheetLabel').textContent='Working Tab';
   setWorkbookChrome('working');
   document.getElementById('annaIntro').innerHTML=annaBox('The seventh tab is born as an amber <strong>Working Tab</strong>. It holds a copy of the Cash account&rsquo;s season rows; Assets stays unchanged. Now pick an activity for each cash row.');
   setAdvanceLabel('Pick the activities &rarr;');
-  document.getElementById('workbookShell').scrollIntoView({behavior:'smooth',block:'start'});
+  if(!silent) document.getElementById('workbookShell').scrollIntoView({behavior:'smooth',block:'start'});
+  saveState();
 }
 
 document.getElementById('annaIntro').innerHTML=annaBox('Copy the <strong>Cash account&rsquo;s season rows</strong> to a temporary sheet. That copy will become the Cash Flow Statement only after it has been sorted and formatted.')
@@ -156,6 +187,7 @@ var buildOptions={
   gridOpts:{gridId:'cash-flow-build-grid',hiddenRows:cashFlowTitleRows},
   gateAdvance:function(order){ return order!==1||sortComplete; },
   onStep:function(order){
+    currentPageOrder=order;
     document.getElementById('missFeedback').innerHTML='';
     document.getElementById('gate').innerHTML='';
     document.getElementById('anna').innerHTML='';
@@ -167,7 +199,8 @@ var buildOptions={
       sorterPanel.hidden=false;
       sorterGrid.hidden=false;
       var buildGrid=document.querySelector('#statementBuild .brw-grid');
-      if(buildGrid) buildGrid.style.display='none';
+      if(buildGrid) buildGrid.style.display='';
+      document.getElementById('statementBuild').classList.add('pick-live');
       var advance=setAdvanceLabel('Show the sorted view &rarr;');
       if(advance) advance.disabled=true;
       var pick=filteredPickSheet(sheetOf('cash-flow-steps','1 '));
@@ -178,6 +211,8 @@ var buildOptions={
         title:'Sort the cash rows by activity',
         categoryOrder:['Operating','Investing','Financing'],
         instruction:'Sort each featured cash row by activity. The remaining rows follow the same patterns once these are sorted.',
+        persist:cashSortState,
+        sheetSync:'statementBuild',
         showRows:[
           rowByExactLabel(pick,'Repair collected — Dana R.'),
           rowByExactLabel(pick,'Parts bought — June'),
@@ -194,24 +229,24 @@ var buildOptions={
               : 'Repairs collected, parts bought, and rent paid are <strong>Operating</strong>. The tools purchase is <strong>Investing</strong>.';
           document.getElementById('missFeedback').innerHTML=annaBox(message);
         },
-        onComplete:function(){
-          sortComplete=true;
-          var next=setAdvanceLabel('Show the sorted view &rarr;');
-          if(next) next.disabled=false;
-          document.getElementById('gate').innerHTML='<div class="gate-card gate-armed-maria"><div class="gate-card-title">Every cash row is sorted by activity. Continue to read the three totals.</div></div>';
-          if(window.lucide) lucide.createIcons();
-        }
+        onComplete:markSortComplete
       });
-      sorterPanel.scrollIntoView({behavior:'smooth',block:'start'});
+      /* remount with an already-complete sort (Back into this step, or a
+         cross-navigation restore): mountCanonSort restores placements from
+         cashSortState but does not re-fire onComplete, so re-arm here. */
+      if(cashSortState.complete) markSortComplete();
+      if(!restoring) sorterPanel.scrollIntoView({behavior:'smooth',block:'start'});
     } else if(order===2){
       sorterPanel.hidden=true;
       sorterGrid.hidden=true;
+      document.getElementById('statementBuild').classList.remove('pick-live');
       var sortedBuildGrid=document.querySelector('#statementBuild .brw-grid');
       if(sortedBuildGrid) sortedBuildGrid.style.display='';
       renderSortedPayoff();
-      document.getElementById('anna').scrollIntoView({behavior:'smooth',block:'start'});
+      if(!restoring) document.getElementById('anna').scrollIntoView({behavior:'smooth',block:'start'});
     }
     if(window.lucide) lucide.createIcons();
+    saveState();
   }
 };
 
@@ -253,7 +288,7 @@ var glossaryTerms=[
 function openGlossary(){ document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';}).join(''); document.getElementById('glossaryOverlay').classList.add('open'); }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ window.location.reload(); }
+function restart(){ try{ localStorage.removeItem(SKEY); }catch(e){} window.location.reload(); }
 document.addEventListener('keydown',function(event){ if(event.key==='Escape')closeGlossary(); });
 
 window.devFill=function(){
@@ -267,6 +302,7 @@ window.devFill=function(){
 BR_WB.mountStatementBuild('statementBuild','cash-flow-steps',buildOptions);
 BRW.mountGrid('assetsGrid',sheetOf('bike-repair-end','Assets'),{gridId:'cash-flow-source-assets-grid'});
 setWorkbookChrome('Assets');
+restoreState();
 if(window.lucide) lucide.createIcons();
 </script>
 <script src="dev.js"></script>

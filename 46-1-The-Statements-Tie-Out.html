@@ -8,20 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
-  <style>
-    .main-grid > *, .map-center { min-width:0; }
-    .map-center .statement-panel { margin:10px 0; overflow-x:auto; background:white; }
-    .map-center .wb-grid-wrap { padding:6px; overflow-x:auto; background:white; }
-    .map-center .brw-row { grid-template-columns:minmax(0,1fr) 2rem 6rem; min-width:0; }
-    .map-center .brw-row > .brw-cell:nth-child(n+4) { display:none; }
-    .map-center .brw-cell { min-width:0; padding:4px 6px; font-size:11px; }
-    .map-center .sce-is-nested { margin-top:8px; }
-    .map-center .mc-card { margin:0 0 10px; }
-    .mc-submit-hint { margin-left:10px; color:#6b7280; font-size:var(--font-xs); }
-      </style>
 </head>
 <body>
-<div class="page">
+<div class="page pg-46-1">
   <div class="prework-wrap">
     <div class="phase-title-row">
       <div class="phase-title"></div>
@@ -116,12 +105,16 @@ function renderCol(title,date,sections,unfaded){
   return h+'</div>';
 }
 function identityHTML(sheet){
-  function group(label,row,col){ return '<div class="dib-group"><span class="dib-label">'+label+'</span><span class="dib-val">'+formatMoney(cellValue(sheet,row,col))+'</span></div>'; }
-  return '<div class="dual-identity-bar"><div class="dib-side"><span class="dib-tag">Opening &mdash; June 1</span><div class="dib-eq">'
-    +group('Assets',12,3)+'<span class="dib-op">&minus;</span>'+group('Liabilities',16,3)+'<span class="dib-op">=</span>'+group('Member&rsquo;s Capital',21,3)
-    +'</div></div><div class="dib-divider"></div><div class="dib-side"><span class="dib-tag">August 31 &mdash;</span><div class="dib-eq">'
-    +group('Assets',12,4)+'<span class="dib-op">&minus;</span>'+group('Liabilities',16,4)+'<span class="dib-op">=</span>'+group('Member&rsquo;s Capital',21,4)
-    +'</div></div></div>';
+  /* the A − L = Member's Capital identity uses the shared .acct-col formula
+     format (Assets / − Liabilities / = Member's Capital), the same one used on
+     41-1 The Investor Asks (bsCol) — not a bespoke bar. See skill §3a. */
+  function col(title,c){
+    return '<div class="acct-col"><h4>'+title+'</h4>'
+      +'<div class="acct-line"><span>Assets</span><span class="acct-val mono">'+formatMoney(cellValue(sheet,12,c))+'</span></div>'
+      +'<div class="acct-line"><span>&minus; Liabilities</span><span class="acct-val mono">'+formatMoney(cellValue(sheet,16,c))+'</span></div>'
+      +'<div class="acct-total"><span>= Member&rsquo;s Capital</span><span class="mono">'+formatMoney(cellValue(sheet,21,c))+'</span></div></div>';
+  }
+  return '<div class="main-grid two-col identity-formula">'+col('Opening &mdash; June 1',3)+col('August 31',4)+'</div>';
 }
 
 var MOVES=[
@@ -211,10 +204,14 @@ function wireCapitalRow(containerId,clickable){
     row.setAttribute('role','button');
     row.setAttribute('tabindex','0');
     row.setAttribute('aria-expanded',incomeOpen?'true':'false');
+    /* the expand chevron lives in the far-LEFT gutter of the sheet row and
+       reuses the sorting activity's .stmt-info-btn chevron look (ruling
+       2026-07-20), not floating after the label text. */
     var icon=document.createElement('span');
-    icon.className='sce-expand-icon'+(incomeSeen?'':' hint-pulse');
+    icon.className='stmt-info-btn sce-gutter-toggle'+(incomeOpen?' open':'')+(incomeSeen?'':' hint-pulse');
     icon.innerHTML='<i data-lucide="'+(incomeOpen?'chevron-up':'chevron-down')+'" class="licon"></i>';
-    c.appendChild(icon);
+    var gutter=row.querySelector('.xl-gutter');
+    if(gutter){ gutter.innerHTML=''; gutter.appendChild(icon); } else { c.appendChild(icon); }
     row.onclick=function(){toggleIncome();};
     row.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleIncome();}};
   });
@@ -232,7 +229,7 @@ function render(){
 function renderBeats(){
   var h='';
   if(step===0){
-    h='<div class="narrative-block"><p>Here are two balance-sheet snapshots: June 1 and August 31. The opening identity is <strong>$4,710 &minus; $2,250 = $2,460</strong>; the closing identity is <strong>$4,500 &minus; $0 = $4,500</strong>. The identity holds at both dates, but the snapshots alone do not say <em>how</em> one became the other.</p></div>';
+    h='<div class="narrative-block"><p>Here are two balance-sheet snapshots: June 1 and August 31. The identity holds at both dates, but the snapshots alone do not say <em>how</em> one became the other.</p></div>';
   }else if(step===1&&moveCorrect(0)){
     h='<div class="narrative-block"><p>Cash fell from <strong>$1,300</strong> to <strong>$620</strong> &mdash; down <strong>$680</strong>. The <strong>Cash Flow Statement</strong> walks that path: Operating <strong>+$2,350</strong>, Investing <strong>&minus;$400</strong>, and Financing <strong>&minus;$2,630</strong>. Financing includes both the card payoff (repaying a borrowing) and the owner&rsquo;s draw.</p></div>';
   }else if(step===2&&moveCorrect(1)){

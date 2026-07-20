@@ -515,8 +515,22 @@ var BR_WB = (function () {
         container.innerHTML = html + controlsHtml;
         controlsHost = container;
       }
+      /* the ← Back always sits at the BOTTOM of the page (ruling 2026-07-20):
+         move its row out of the controls host and pin it as the last child of
+         the .prework-wrap; the forward Next stays below the sheet. */
+      var prewrap = controlsHost.closest ? controlsHost.closest('.prework-wrap') : null;
+      if (prewrap) {
+        var stale = prewrap.querySelector(':scope > .page-back-row');
+        if (stale) stale.remove();
+      }
+      var backRow = controlsHost.querySelector('.brw-step-back');
+      backRow = backRow ? backRow.closest('.btn-row') : null;
+      if (prewrap && backRow) {
+        backRow.classList.add('page-back-row');
+        prewrap.appendChild(backRow);
+      }
       if (window.lucide && lucide.createIcons) lucide.createIcons();
-      var backControl = controlsHost.getElementsByClassName('brw-step-back')[0];
+      var backControl = (prewrap || controlsHost).getElementsByClassName('brw-step-back')[0];
       if (backControl) {
         backControl.addEventListener('click', function () {
           if (index <= firstIndex) return;

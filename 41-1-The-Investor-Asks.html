@@ -8,21 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
-  <style>
-    .statement-step { margin-top:14px; }
-    .stmt-paper .brw-hint {
-      justify-content: flex-end;
-      text-align: right;
-      white-space: nowrap;
-      font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace;
-      font-variant-numeric: tabular-nums;
-      font-size: var(--font-s);
-      color: inherit;
-    }
-  </style>
 </head>
 <body>
-<div class="page">
+<div class="page pg-41-1">
   <div class="prework-wrap">
 
     <div class="phase-title-row">
@@ -77,23 +65,16 @@ function statementPaper(gridId, caption){
     + '</figure>';
 }
 
+function bsCol(title,assets,liab,mc){
+  return '<div class="acct-col"><h4>'+title+'</h4>'
+    +'<div class="acct-line"><span>Assets</span><span class="acct-val mono">'+assets+'</span></div>'
+    +'<div class="acct-line"><span>&minus; Liabilities</span><span class="acct-val mono">'+liab+'</span></div>'
+    +'<div class="acct-total"><span>= Member&rsquo;s Capital</span><span class="mono">'+mc+'</span></div></div>';
+}
 var IDENTITY_HTML =
-  '<div class="dual-identity-bar">'
-  + '<div class="dib-side"><span class="dib-tag">June 1 Balance Sheet</span><div class="dib-eq">'
-    + '<div class="dib-group"><span class="dib-label">Assets</span><span class="dib-val">$4,710</span></div>'
-    + '<span class="dib-op">&minus;</span>'
-    + '<div class="dib-group"><span class="dib-label">Liabilities</span><span class="dib-val">$2,250</span></div>'
-    + '<span class="dib-op">=</span>'
-    + '<div class="dib-group"><span class="dib-label">Member&rsquo;s Capital</span><span class="dib-val">$2,460</span></div>'
-  + '</div></div>'
-  + '<div class="dib-divider"></div>'
-  + '<div class="dib-side"><span class="dib-tag">August 31 Balance Sheet</span><div class="dib-eq">'
-    + '<div class="dib-group"><span class="dib-label">Assets</span><span class="dib-val">$4,500</span></div>'
-    + '<span class="dib-op">&minus;</span>'
-    + '<div class="dib-group"><span class="dib-label">Liabilities</span><span class="dib-val">$0</span></div>'
-    + '<span class="dib-op">=</span>'
-    + '<div class="dib-group"><span class="dib-label">Member&rsquo;s Capital</span><span class="dib-val">$4,500</span></div>'
-  + '</div></div>'
+  '<div class="main-grid two-col">'
+  + bsCol('June 1 Balance Sheet','$4,710','$2,250','$2,460')
+  + bsCol('August 31 Balance Sheet','$4,500','$0','$4,500')
   + '</div>';
 
 var step=0;

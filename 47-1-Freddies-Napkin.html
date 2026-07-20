@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="shared.css">
 </head>
 <body>
-<div class="page">
+<div class="page pg-47-1">
   <div class="prework-wrap">
 
     <div class="phase-title-row">
@@ -70,17 +70,31 @@ var NAPKIN_ROWS = [
 ];
 
 function renderNapkin(){
-  var h = '<div class="napkin">';
-  h += '<div class="napkin-title">FREDDIE&rsquo;S BACK-OF-THE-ENVELOPE &mdash; PER MONTH<\/div>';
+  var h = '<div class="acct-col napkin-statement">';
+  h += '<h4>FREDDIE&rsquo;S BACK-OF-THE-ENVELOPE &mdash; PER MONTH<\/h4>';
   for(var i=0; i<napkinLines; i++){
-    h += '<div class="napkin-line"><span>'+NAPKIN_ROWS[i].label+'<span class="napkin-note" style="display:block;margin-top:2px">'+NAPKIN_ROWS[i].note+'<\/span><\/span><span class="napkin-val">'+NAPKIN_ROWS[i].val+'<\/span><\/div>';
+    h += '<div class="acct-line"><span>'+NAPKIN_ROWS[i].label+'<span class="np-note">'+NAPKIN_ROWS[i].note+'<\/span><\/span><span class="acct-val mono">'+NAPKIN_ROWS[i].val+'<\/span><\/div>';
   }
   if(napkinLines >= NAPKIN_ROWS.length && !profitOK){
-    h += '<div class="napkin-total"><span>Free cash flow<\/span><input class="calc-input" id="profitInput" inputmode="numeric" autocomplete="off" aria-label="Free cash flow"><\/div>';
+    /* the bottom line is the fill-in: input with Check next to it, plus Reset
+       (hidden until the first Check). */
+    h += '<div class="acct-total np-fillin-row"><span>Free cash flow<\/span>'
+      +'<span class="np-fillin">'
+      +'<input class="calc-input" id="profitInput" inputmode="numeric" autocomplete="off" aria-label="Free cash flow" onkeydown="if(event.key===\'Enter\'){checkProfit();}">'
+      +'<button class="btn btn-primary" type="button" onclick="checkProfit()">Check<\/button>'
+      +'<button class="btn-reset" type="button" onclick="resetProfit()" style="display:'+(tries>0?'':'none')+'">Reset<\/button>'
+      +'<\/span><\/div>';
   }
   if(profitOK){
-    h += '<div class="napkin-total"><span>Free cash flow<\/span><span class="napkin-val">$5,000<\/span><\/div>';
-    h += '<div class="napkin-note">an expectation, not a record<\/div>';
+    /* resolved: show the $5,000 answer; on the fill-in step, Check is hidden and
+       ONLY Reset shows beside it (skill §4). Later beats show the clean total. */
+    var showReset = (step === 2);
+    h += '<div class="acct-total'+(showReset?' np-fillin-row':'')+'"><span>Free cash flow<\/span>'
+      +(showReset
+        ? '<span class="np-fillin"><span class="mono">$5,000<\/span><button class="btn-reset" type="button" onclick="resetProfit()">Reset<\/button><\/span>'
+        : '<span class="mono">$5,000<\/span>')
+      +'<\/div>';
+    h += '<div class="np-foot">an expectation, not a record<\/div>';
   }
   h += '<\/div>';
   if(napkinLines >= 5 && !profitOK){
@@ -88,11 +102,11 @@ function renderNapkin(){
   }
   if(napkinLines >= NAPKIN_ROWS.length && !profitOK){
     h += '<div class="narrative-block"><p>Type Freddie&rsquo;s bottom line for a month like this.<\/p><\/div>';
-    h += '<div class="btn-row fillin-row"><button class="btn-continue" onclick="checkProfit()">Check<\/button>'
-      +(tries>0?'<button class="btn-reset" onclick="resetProfit()">Reset<\/button>':'')+'<\/div>';
-    if(feedback){
-      h += '<div class="feedback '+(profitOK?'ok':'err')+' show">'+feedback+'<\/div>';
-    }
+  }
+  /* verdict indicator, on the fill-in step only (green when correct, red when
+     wrong) — don't let the "You are correct" line linger into later beats. */
+  if(feedback && step === 2){
+    h += '<div class="feedback '+(profitOK?'ok':'err')+' show">'+feedback+'<\/div>';
   }
   return h;
 }
@@ -137,7 +151,10 @@ function renderBeats(){
 
 function renderControls(){
   var c = '<div class="nav-buttons">';
-  c += '<button class="btn-back" onclick="back()">&larr; Back<\/button>';
+  /* step 0 has no in-page Back — page-level nav lives in the course footer. */
+  if(step > 0){
+    c += '<button class="btn-back" onclick="back()">&larr; Back<\/button>';
+  }
   if(step < TOTAL_STEPS - 1){
     var disabled = (step === 2 && napkinLines >= NAPKIN_ROWS.length && !profitOK);
     c += '<button class="btn-next"' + (disabled ? ' disabled' : '') + ' onclick="advance()">Continue &rarr;<\/button>';
@@ -228,7 +245,7 @@ function openGlossary(){
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
 function resetProfit(){
-  playClick(); tries=0; feedback='';
+  playClick(); tries=0; feedback=''; profitOK=false;
   render();
   var input=document.getElementById('profitInput');
   if(input){ input.value=''; input.focus(); }

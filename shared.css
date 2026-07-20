@@ -1668,11 +1668,12 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 /* the tail sits at band height, filled with the band color */
 .dialog-box::before { content: ''; position: absolute; top: 15px; left: -7px; width: 14px; height: 14px;
   background: var(--dialog-band-hi); border-radius: 3px; transform: rotate(45deg); }
-.dialog-box.freddie { --dialog-band: var(--accent); --dialog-band-hi: #c25c20;
-  box-shadow: 0 2px 8px rgba(189, 83, 25, 0.10), 0 12px 30px rgba(189, 83, 25, 0.08); }
+.dialog-box.freddie { --dialog-band: #3b82f6; --dialog-band-hi: #2563eb;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12), 0 12px 30px rgba(59, 130, 246, 0.10); }
 /* "you" answers back: quiet gray frame, tail on the right */
-.dialog-box.you { --dialog-band: #9ca3af; --dialog-band-hi: #6b7280; margin: 22px 6px 22px 0; box-shadow: none; }
-.dialog-box.you::before { left: auto; right: -7px; }
+.dialog-box.you { --dialog-band: #16a34a; --dialog-band-hi: #15803d; margin: 22px 6px 22px 0;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.10), 0 12px 30px rgba(22, 163, 74, 0.08); }
+.dialog-box.you::before { left: auto; right: -7px; background: var(--dialog-band); }
 /* the speaker band: a filled strip across the top with avatar + name */
 .dialog-label { font-family: Inter, sans-serif; font-size: var(--font-s); font-weight: 700; letter-spacing: 0.6px;
   color: #fff; margin: 0 0 4px; padding: 8px 18px; display: flex; align-items: center; gap: 10px;
@@ -2721,3 +2722,146 @@ body.has-course-footer { padding-bottom: 62px; }
    column masked (2026-07-20) — the sort happens beside the visible workbook. */
 .pick-live .brw-col-c { visibility: hidden; }
 .pick-live .brw-col-c.brw-placed { visibility: visible; color: var(--primary); font-weight: 600; }
+
+
+/* ============================================================================
+ * PAGE-SCOPED STYLES (relocated from per-page <style> blocks, 2026-07-20)
+ * Each block is scoped to its page via a .pg-NN-N class on the page container,
+ * so these apply only on their own page and never leak to M1/M2 or other pages.
+ * ========================================================================== */
+/* --- 31-1-welcome.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-31-1 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-31-1 #openingBS [data-brw-row="3"] .brw-col-d { text-align:center; }
+
+/* --- 31-2-work-the-season.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-31-2 .walk-meta { display:flex; align-items:baseline; gap:12px; margin:0 2px; font-family:Inter,sans-serif; font-size:var(--font-xs); color:#6b7280; }
+  .pg-31-2 .walk-step { flex:none; font-weight:700; letter-spacing:0.02em; }
+  /* idle nudge collapses entirely so there's no dead gap under the bubble */
+  .pg-31-2 .walk-nudge { margin-left:auto; color:var(--primary); text-align:right; display:none; }
+  .pg-31-2 .walk-nudge.show { display:inline; margin-top:8px; }
+  /* tighten the bubble → button spacing on the walk (was ~42px) */
+  .pg-31-2 #anna .dialog-box { margin-bottom:12px; }
+  .pg-31-2 #controls { margin-top:4px; }
+  .pg-31-2 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-31-2 .answer-stack { display:grid; gap:8px; margin-top:10px; }
+  .pg-31-2 .answer-stack .btn { justify-content:flex-start; text-align:left; }
+  .pg-31-2 .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+  .pg-31-2 .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+
+/* --- 32-1-check-the-records.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-32-1 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-32-1 .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+  .pg-32-1 .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+
+/* --- 32-2-record-the-receivable.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-32-2 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-32-2 .two-panel { display:flex; gap:12px; align-items:flex-start; }
+  .pg-32-2 .two-panel > .xlwb { flex:1 1 0; min-width:0; }
+  .pg-32-2 .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+  .pg-32-2 .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+  @media (max-width:860px) {
+    .pg-32-2 .two-panel { flex-direction:column; }
+  }
+
+/* --- 32-3-the-third-kind.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-32-3 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-32-3 .two-panel { display:flex; gap:12px; align-items:flex-start; }
+  .pg-32-3 .two-panel > .xlwb { flex:1 1 0; min-width:0; }
+  .pg-32-3 .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+  .pg-32-3 .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+  @media (max-width:860px) {
+    .pg-32-3 .two-panel { flex-direction:column; }
+  }
+
+/* --- 33-1-copy-the-rows.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-33-1 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-33-1 .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+  .pg-33-1 .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+  .pg-33-1 .brw-row-copysel { outline:2px dashed var(--primary); outline-offset:-2px; }
+
+/* --- 33-2-sort-the-rows.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-33-2 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-33-2 .bs-centered [data-brw-row="3"] .brw-col-d { text-align:center; justify-content:center; }
+  .pg-33-2 .xlwb-tab[data-sheet-tab] { cursor:pointer; }
+  .pg-33-2 #sorterPanel { margin:18px 0 14px; }
+
+/* --- 33-3-format-the-statement.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-33-3 .wb-grid-wrap { padding:8px; background:white; }
+
+/* --- 34-1-what-cash-missed.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-34-1 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-34-1 .bridge-list { list-style:none; margin:12px 0 0; padding:0; }
+  .pg-34-1 .bridge-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:18px; align-items:baseline; padding:9px 2px; border-bottom:1px solid rgba(128,128,128,.22); }
+  .pg-34-1 .bridge-row:last-child { border-bottom:0; }
+  .pg-34-1 .bridge-row strong { font-family:"JetBrains Mono",monospace; white-space:nowrap; }
+  .pg-34-1 .bridge-total { margin-top:4px; padding-top:12px; border-top:2px solid currentColor; font-weight:800; }
+  .pg-34-1 .bridge-check { margin:10px 0 0; font-family:"JetBrains Mono",monospace; font-size:.9rem; }
+
+/* --- 41-1-The-Investor-Asks.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-41-1 .statement-step { margin-top:14px; }
+  .pg-41-1 .stmt-paper .brw-hint { justify-content: flex-end; text-align: right; white-space: nowrap; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; font-size: var(--font-s); color: inherit; }
+
+/* --- 42-1-The-Missing-Wage.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-42-1 .stmt-paper .brw-hint { justify-content: flex-end; text-align: right; white-space: nowrap; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-variant-numeric: tabular-nums; font-size: var(--font-s); color: inherit; }
+  .pg-42-1 .continue-hint { margin-top:8px; text-align:right; color:#6b7280; font-family:Inter,sans-serif; font-size:var(--font-xs); }
+
+/* --- 43-1-The-Capital-Bridge.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-43-1 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-43-1 .build-note { margin-top:14px; }
+  .pg-43-1 .build-hint { margin:8px 2px 0; color:#6b7280; font-family:Inter,sans-serif; font-size:var(--font-xs); text-align:center; }
+  .pg-43-1 .source-piles { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:12px 0; }
+  .pg-43-1 .source-pile { padding:12px; border:1px solid var(--border); border-radius:8px; text-align:center; font-family:Inter,sans-serif; font-weight:800; }
+  @media (max-width:640px) {
+    .pg-43-1 .source-piles { grid-template-columns:1fr; }
+  }
+
+/* --- 44-1-The-Cash-Puzzle.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-44-1 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-44-1 .source-beat { border-left:4px solid #2563eb; }
+  .pg-44-1 .source-kicker { display:block; margin-bottom:4px; color:#1d4ed8; font-family:Inter,sans-serif; font-size:var(--font-xs); font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+  .pg-44-1 #assetsGrid .season-source-row { background:#eff6ff; border-left:3px solid #60a5fa; }
+  .pg-44-1 #assetsGrid .season-source-row.brw-dated { background:#dbeafe; }
+
+/* --- 44-2-Three-Buckets.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-44-2 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-44-2 .page-nav { margin-top:14px; }
+  .pg-44-2 #sorterPanel { margin:18px 0 14px; }
+
+/* --- 44-3-The-Cash-Flow-Statement.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-44-3 .wb-grid-wrap { padding:8px; background:white; }
+
+/* --- 46-1-The-Statements-Tie-Out.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-46-1 .main-grid > *, .pg-46-1 .map-center { min-width:0; }
+  .pg-46-1 .map-center .statement-panel { margin:10px 0; overflow-x:auto; background:white; }
+  .pg-46-1 .map-center .wb-grid-wrap { padding:6px; overflow-x:auto; background:white; }
+  .pg-46-1 .map-center .brw-row { grid-template-columns:minmax(0,1fr) 2rem 6rem; min-width:0; }
+  .pg-46-1 .map-center .brw-row > .brw-cell:nth-child(n+4) { display:none; }
+  .pg-46-1 .map-center .brw-cell { min-width:0; padding:4px 6px; font-size:11px; }
+  .pg-46-1 .map-center .sce-is-nested { margin-top:8px; }
+  .pg-46-1 .map-center .mc-card { margin:0 0 10px; }
+  .pg-46-1 .mc-submit-hint { margin-left:10px; color:#6b7280; font-size:var(--font-xs); }
+  .pg-46-1 .identity-formula { margin-top:16px; }
+  /* keep the clickable Net-income row flush with the other sheet rows —
+       .sce-ni-clickable's 4px side padding shifts a grid row right. */
+  .pg-46-1 .sce-ni-clickable { padding-left:0; padding-right:0; }
+
+/* --- 46-2-The-Statement-Map.html (relocated from page-local <style> 2026-07-20) --- */
+  .pg-46-2 .wb-grid-wrap { padding:8px; background:white; }
+  .pg-46-2 .map-workbook-stack .xlwb + .xlwb { margin-top:16px; }
+  @media (prefers-color-scheme:dark) {
+    .pg-46-2 .wb-grid-wrap { background:#26242e; }
+  }
+
+/* --- 47-1-Freddies-Napkin.html (relocated from page-local <style> 2026-07-20) --- */
+  /* Freddie's projection renders in the regular balance-sheet/statement
+       format (.acct-col), constrained to a single-statement width. */
+  .pg-47-1 .napkin-statement { max-width:440px; margin:16px auto; }
+  .pg-47-1 .napkin-statement .acct-line { align-items:baseline; }
+  .pg-47-1 .napkin-statement .acct-val { white-space:nowrap; flex-shrink:0; padding-left:16px; }
+  .pg-47-1 .np-note { display:block; margin-top:2px; font-size:var(--font-xs); font-weight:400; font-style:italic; color:#888; }
+  .pg-47-1 .np-foot { margin-top:10px; font-size:var(--font-s); font-style:italic; color:#888; }
+  /* fill-in bottom line: input + Check + Reset inline on the total row */
+  .pg-47-1 .np-fillin-row { flex-wrap:wrap; gap:8px; }
+  .pg-47-1 .np-fillin { display:inline-flex; align-items:center; gap:8px; }
+  .pg-47-1 .np-fillin .calc-input { flex:0 0 120px; width:120px; text-align:right; padding:6px 10px; }
+  .pg-47-1 .np-fillin .btn { padding:6px 16px; }

@@ -81,7 +81,7 @@ function mcqHTML(){
     h += '<div class="feedback '+(chosen.correct?'ok':'err')+' show">'+chosen.fb+'<\/div>';
   }
   h += '<div class="btn-row">'+(mcqSubmitted
-    ? (mcqAnswered?'':'<button class="btn-reset" onclick="mcqReset()" style="margin-left:auto;">Reset<\/button>')
+    ? '<button class="btn-reset" onclick="mcqReset()" style="margin-left:auto;">Reset<\/button>'
     : '<button class="btn-continue" onclick="mcqSubmit()"'+(mcqSel===null?' disabled':'')+'>Submit<\/button>')+'<\/div>';
   h += '<\/div>';
   return h;
@@ -118,9 +118,9 @@ function renderBeats(){
   }
 
   if(step === 3){
+    /* no in-page Restart / "Module 4 complete" buttons — page nav lives only in
+       the course footer's titled Next pill (skill §5, §6). */
     h += freddieBox('The terms are still being considered: $20,000 for 30%; your $2,000 seasonal salary plus 70% of free cash flow; and 30% of free cash flow for me.');
-    h += '<button class="btn-continue btn-block" onclick="restart()"><i data-lucide="rotate-ccw" class="licon"><\/i> Restart this page<\/button>';
-    h += '<button class="btn-continue btn-block" onclick="playClick(); window.location.href=\'48-2-Module-Complete.html\'">Module 4 complete &rarr;<\/button>';
   }
 
   document.getElementById('beats').innerHTML = h;
@@ -178,7 +178,6 @@ function openGlossary(){
 }
 function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function nav(url){ playClick(); window.location.href=url; }
-function restart(){ playClick(); step=0; mcqAnswered=false; mcqSel=null; mcqSubmitted=false; render(); window.scrollTo(0,0); }
 document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeGlossary(); } });
 
 window.devFill = function(){

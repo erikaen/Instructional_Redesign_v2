@@ -8,17 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
-  <style>
-    .wb-grid-wrap { padding:8px; background:white; }
-    .build-note { margin-top:14px; }
-    .build-hint { margin:8px 2px 0; color:#6b7280; font-family:Inter,sans-serif; font-size:var(--font-xs); text-align:center; }
-    .source-piles { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:12px 0; }
-    .source-pile { padding:12px; border:1px solid var(--border); border-radius:8px; text-align:center; font-family:Inter,sans-serif; font-weight:800; }
-    @media (max-width:640px) { .source-piles { grid-template-columns:1fr; } }
-      </style>
 </head>
 <body>
-<div class="page">
+<div class="page pg-43-1">
   <div class="prework-wrap">
 
     <div class="phase-title-row">
@@ -39,11 +31,10 @@
       <div class="xlwb-tabs" id="workbookTabs" aria-label="Workbook tabs"></div>
     </div>
 
-    <div id="stmtBuild-controls"></div>
-
     <div id="buildNote" class="build-note"></div>
     <div id="interaction"></div>
     <div id="advanceHint" class="build-hint" role="status" aria-live="polite"></div>
+    <div id="stmtBuild-controls"></div>
     <div id="payoff"></div>
     <div id="controls"></div>
 
@@ -211,7 +202,7 @@ function gateHTML(){
     return (gateRight
       ? '<div class="feedback ok show">You are correct &mdash; $2,290 + $2,810 &minus; $600 = <strong>$4,500</strong>.</div>'
       : '<div class="feedback err show">Not quite &mdash; the ending total is <strong>$4,500</strong>: $2,290 + $2,810 &minus; $600.</div>')
-      +'<div class="gate-card gate-armed-maria"><div class="gate-card-title">Ending total: <strong>$4,500</strong>. Continue to format and name the statement.</div></div>';
+      +'<div class="gate-card gate-armed-maria"><div class="gate-card-title">Ending total: $4,500.</div></div>';
   }
   return '<div class="mc-card">'
     +'<div class="mc-q">Now walk the three piles: $2,290 + $2,810 &minus; $600. Type the ending total that ties to the balance sheet&rsquo;s August 31 column.</div>'
@@ -283,13 +274,10 @@ function confirmSort(){ sortConfirmed=true; playSuccess(); renderInteraction(); 
 function setAdvanceState(){
   var advance=document.querySelector('#stmtBuild-controls .brw-step-advance');
   var disabled=(currentOrder===0&&!beginningConfirmed)||(currentOrder===1&&!sortConfirmed)||(currentOrder===2&&(!mcqAnswered||!gateDone));
-  if(advance) advance.disabled=disabled;
-  var hint='';
-  if(currentOrder===0&&!beginningConfirmed) hint='Mark all three beginning balances to continue.';
-  if(currentOrder===1&&!sortConfirmed) hint='Sort the period items to continue.';
-  if(currentOrder===2&&!mcqAnswered) hint='Choose GENERATED&rsquo;s addition to continue.';
-  if(currentOrder===2&&mcqAnswered&&!gateDone) hint='Enter the ending total to unlock the formatted statement.';
-  document.getElementById('advanceHint').innerHTML=hint;
+  /* hide (not just disable) the pipeline Next until the step's action is done,
+     so only ONE forward button ever shows at a time */
+  if(advance){ advance.disabled=disabled; advance.style.display=disabled?'none':''; }
+  document.getElementById('advanceHint').innerHTML='';
 }
 function renderPayoff(){
   var html='';
@@ -313,10 +301,28 @@ function christen(){
   document.getElementById('payoff').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function renderControls(){
-  var html='<div class="nav-buttons">';
-  if(currentOrder===3&&completed) html+='';
-  html+='</div>';
+  var html='';
+  /* orders 1-3 get the pipeline's own Back (in #stmtBuild-controls); order 0
+     (first step after the source beat) needs its Back to return to that beat */
+  if(currentOrder===0 && sourceConfirmed && !completed){
+    html='<div class="btn-row" style="margin-top:12px"><button class="btn-reset" onclick="backToSource()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>';
+  }
   document.getElementById('controls').innerHTML=html;
+  if(window.lucide) lucide.createIcons();
+}
+function backToSource(){
+  playClick();
+  sourceConfirmed=false; beginningConfirmed=false;
+  currentOrder=0;
+  document.getElementById('interaction').innerHTML='';
+  document.getElementById('payoff').innerHTML='';
+  document.getElementById('controls').innerHTML='';
+  document.getElementById('advanceHint').innerHTML='';
+  document.getElementById('stmtBuild').hidden=true;
+  var sc=document.getElementById('stmtBuild-controls'); if(sc) sc.hidden=true;
+  document.getElementById('annaIntro').innerHTML=sourceBeatHTML();
+  if(window.lucide) lucide.createIcons();
+  window.scrollTo(0,0);
 }
 function renderStage(order){
   currentOrder=order;
