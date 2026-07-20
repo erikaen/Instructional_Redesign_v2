@@ -109,6 +109,10 @@ shown in the course sequence.
   third wrong attempt reveals with red `feedback err`
   "Not quite — the answer is **X**: <the arithmetic>." Never reveal silently.
 - Reset clears the input, feedback, and any revealed content, and re-hides itself.
+- **Once the answer resolves (correct, or revealed after the 3rd wrong try), HIDE
+  the Check button — only Reset shows.** A disabled input with a dead Check
+  button beside it reads as still-answerable. Check stays only during in-place
+  retry (wrong but not yet resolved, input still live). Reset restores Check.
 - Reference implementations: 15-1 (`netInput`), 31-1 (`bsInput`), 43-1 (`gateInput`).
 
 ## 5. Reset buttons — when a page gets one (decision rule)

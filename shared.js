@@ -2096,6 +2096,11 @@ BRW.renderGrid = function (sheetObj, opts) {
     var rowClasses = 'xl-row brw-row ' + kind;
     if (detailGroup) rowClasses += ' brw-og-row is-collapsed';
     if (summaryGroup) rowClasses += ' brw-og-summary';
+    /* a ruled total line paints once on the whole row — per-cell borders leave
+       hairline seams at empty middle columns (fix 2026-07-20) */
+    var rowCellsForRule = byRow[rowNumber] || [];
+    if (rowCellsForRule.some(function (rc) { return rc.ruleTop; })) rowClasses += ' brw-rowrule-top';
+    if (rowCellsForRule.some(function (rc) { return rc.ruleBottom; })) rowClasses += ' brw-rowrule-bottom';
     html += '<div class="' + rowClasses + '" data-brw-row="' + rowNumber + '"';
     if (detailGroup) html += ' data-brw-group="' + detailGroup.id + '"';
     if (summaryGroup) html += ' data-brw-group="' + summaryGroup.id + '"';

@@ -2401,6 +2401,11 @@ body.has-course-footer { padding-bottom: 62px; }
 .brw-ind-8 { padding-left: 104px; }
 .brw-rule-top { border-top: 2px solid #0e6b3a; }
 .brw-rule-bottom { border-bottom: 1px solid #0e6b3a; }
+/* continuous ruled totals in the facsimile engine: paint the rule on the row,
+   not per cell (per-cell leaves hairline seams at empty middle columns) */
+.brw-grid .brw-rowrule-top { border-top: 2px solid #0e6b3a; }
+.brw-grid .brw-rowrule-bottom { border-bottom: 1px solid #0e6b3a; }
+.brw-grid .brw-rowrule-top > .brw-cell, .brw-grid .brw-rowrule-bottom > .brw-cell { border-top: 0; border-bottom: 0; }
 .brw-og-summary { background: var(--primary-faint); }
 .brw-og-row.is-collapsed { display: none; }
 .brw-og-toggle {
