@@ -283,9 +283,13 @@ pages).
    palette. Precedent: the workbook facsimile engine as its own idiom inside
    course pages. (The flanking-BS layout of ruling 1 is a new build either
    way; the hub-centered layout and its router clearances are superseded.)
-7. **Numbering and page count** — the table above is a working assumption;
-   presentation ruling 2 confirms the two-attempt arc (forward walk now, a
-   given-the-statements guess-the-edges page later).
+7. ~~**Numbering and page count**~~ — **RULED 2026-07-21: deferred to the
+   walk-plan pass.** Numbering is 7x-x (Module 7). The page cut is decided in
+   the walk plan (the Module 5/6 pipeline's next artifact): a full beat-table
+   pass cuts pages at natural arc boundaries under the presentation rulings,
+   and Rick locks the count there. Working assumption: intro · forward walk ·
+   cash · outsider (possibly split at the releases/inference seam) · draw —
+   five to seven pages. Presentation ruling 2 confirms the two-attempt arc.
 8. **Lint carve-out** — extend the equity carve-out to 7x pages (and any new
    vocabulary the rulings admit — give/receive needs none; debit/credit would).
 9. **Scrub list** — retained earnings / dividends / stock / "Business Language
