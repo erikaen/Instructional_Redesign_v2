@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bike Repair LLC · The Outsider's Graph</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=B612:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#E9E6DE; --panel:#F3F1EA; --ink:#1B1714; --ink-soft:#5A534A;
+    --line:#CBC5B8; --crimson:#943638;
+    --asset:#2F6C7C; --liab:#943638; --equity:#5B4B8A; --temp:#C28A2B; --cash:#45A049; --nca:#26332B;
+    --ok:#3F8F5B; --alert:#C0392B;
+    --fact:#2F6C7C; --infer:#C28A2B; --pend:#B08A3A; --open:#943638;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--ground);color:var(--ink);font-family:"B612","Helvetica Neue",Arial,sans-serif;}
+  .wrap{max-width:1500px;margin:0 auto;padding:20px 24px 60px;}
+  header.masthead{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:14px;}
+  .title-block .eyebrow{font-family:"IBM Plex Sans",sans-serif;font-weight:600;letter-spacing:.22em;text-transform:uppercase;font-size:11px;color:var(--crimson);margin:0 0 5px;}
+  .title-block h1{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:24px;line-height:1.05;margin:0;letter-spacing:-.01em;}
+  .title-block .sub{font-size:12.5px;color:var(--ink-soft);margin-top:5px;max-width:70ch;line-height:1.5;}
+
+  .stage{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:18px;align-items:start;}
+  .board{background:var(--panel);border:1px solid var(--line);border-radius:4px;overflow:hidden;position:relative;}
+  .toolbar{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--ground);align-items:center;}
+  .toolbar .steps{display:flex;gap:4px;flex-wrap:wrap;flex:1;}
+  .toolbar .chip{font-size:10.5px;letter-spacing:.04em;padding:3px 9px;border-radius:11px;border:1px solid var(--line);color:var(--ink-soft);background:var(--panel);font-family:inherit;}
+  .toolbar button.chip{cursor:pointer;}
+  .toolbar button.chip:hover:not(:disabled):not(.on){border-color:var(--ink);color:var(--ink);}
+  .toolbar button.chip:disabled{cursor:default;opacity:.5;}
+  .toolbar .chip.on{background:var(--ink);color:var(--ground);border-color:var(--ink);}
+  .toolbar .chip.done{border-color:var(--ok);color:var(--ok);}
+  #back:disabled{opacity:.4;cursor:not-allowed;}
+  .legendbar{display:flex;flex-wrap:wrap;gap:5px 14px;align-items:center;padding:8px 14px;border-bottom:1px solid var(--line);background:var(--panel);}
+  .legendbar .li{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-soft);}
+  .legendbar .sw{width:12px;height:12px;border-radius:3px;flex:0 0 12px;}
+  .legendbar .sw.round{border-radius:50%;}
+  .legendbar .eglyph{flex:0 0 32px;display:block;overflow:visible;}
+  .legendbar .lstyle{color:var(--ink-soft);opacity:.7;}
+  .legendbar .lgroup{font-family:"IBM Plex Sans";font-weight:600;font-size:9px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-soft);opacity:.65;}
+  .legendbar .lsep{width:1px;height:15px;background:var(--line);flex:0 0 1px;margin:0 2px;}
+  svg#canvas{display:block;width:100%;height:auto;touch-action:none;}
+  .hint-float{position:absolute;left:14px;top:118px;font-size:11px;color:var(--ink-soft);background:rgba(243,241,234,.85);padding:3px 8px;border-radius:3px;pointer-events:none;}
+  .canvas-note{margin:0;font-size:11px;color:var(--ink-soft);line-height:1.5;padding:8px 14px;border-top:1px solid var(--line);background:var(--ground);}
+
+  .rail{display:flex;flex-direction:column;gap:14px;position:sticky;top:14px;max-height:calc(100vh - 28px);overflow-y:auto;}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:14px 15px;}
+  .card h2{font-family:"IBM Plex Sans",sans-serif;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 9px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .card h2 .pill{font-family:"B612";letter-spacing:.02em;text-transform:none;font-size:11px;padding:1px 8px;border-radius:10px;border:1px solid var(--line);color:var(--ink-soft);font-weight:400;}
+  .card.step{border-color:var(--ink);}
+
+  .stage-tag{font-family:"IBM Plex Sans";font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--crimson);margin:0 0 4px;}
+  .step-title{font-family:"IBM Plex Sans";font-weight:600;font-size:15px;margin:0 0 8px;line-height:1.2;}
+  .step-body{font-size:12.5px;line-height:1.55;color:var(--ink);margin:0 0 10px;}
+  .step-body .idn{font-variant-numeric:tabular-nums;background:var(--ground);border:1px solid var(--line);border-radius:3px;padding:7px 9px;margin:8px 0;display:block;line-height:1.7;}
+  .step-body .skill{display:inline-block;font-family:"IBM Plex Sans";font-weight:600;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--crimson);padding:2px 7px;border-radius:9px;margin-bottom:7px;}
+  .step-body b{color:var(--ink);}
+  .frm{display:flex;flex-direction:column;gap:7px;}
+  .frm .row{display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap;}
+  .frm label{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:2px;}
+  .frm input{font-family:"B612";font-size:14px;padding:7px 8px;border:1px solid var(--line);border-radius:2px;background:var(--ground);color:var(--ink);width:100%;font-variant-numeric:tabular-nums;}
+  .frm input.wrong{border-color:var(--alert);background:#f6e4e2;}
+  .frm input.right{border-color:var(--ok);background:#e2efe6;}
+  .frm .grow{flex:1;min-width:110px;}
+  .btn{font-family:"B612";font-size:12px;border:1px solid var(--line);background:var(--ground);color:var(--ink);padding:7px 12px;border-radius:2px;cursor:pointer;white-space:nowrap;}
+  .btn:hover{border-color:var(--ink);}
+  .btn.primary{background:var(--ink);color:var(--ground);border-color:var(--ink);}
+  .btn.primary:disabled{opacity:.4;cursor:not-allowed;}
+  .btn.sm{font-size:11px;padding:5px 10px;}
+  .btnrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;}
+  .quizarea{display:flex;flex-direction:column;gap:6px;margin-bottom:4px;}
+  .quiz-q{font-family:"IBM Plex Sans";font-weight:600;font-size:12.5px;line-height:1.45;margin:0 0 4px;}
+  .quiz-opt{text-align:left;white-space:normal;line-height:1.35;font-size:12px;padding:8px 10px;}
+  .quiz-opt:hover{border-color:var(--ink);}
+  .quiz-opt.no{border-color:var(--alert);opacity:.55;}
+  .quiz-opt.yes{border-color:var(--ok);background:#e2efe6;}
+  .feedback{font-size:12px;line-height:1.5;margin-top:9px;padding:8px 10px;border-radius:3px;display:none;}
+  .feedback.show{display:block;}
+  .feedback.miss{background:#f6e4e2;color:var(--alert);}
+  .feedback.hint{background:#f5ecd7;color:#8a6a1f;}
+  .feedback.win{background:#e2efe6;color:var(--ok);}
+
+  .law{padding:8px 0;border-top:1px solid var(--line);font-size:12px;}
+  .law:first-child{border-top:none;padding-top:2px;}
+  .law .lh{font-family:"IBM Plex Sans";font-weight:600;font-size:11px;display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;gap:8px;}
+  .law .lh .flag{font-size:10px;padding:1px 8px;border-radius:10px;font-weight:400;}
+  .flag.good{background:#dcebe0;color:var(--ok);} .flag.bad{background:#f3dada;color:var(--alert);} .flag.wait{background:var(--ground);color:var(--ink-soft);border:1px solid var(--line);} .flag.open{background:#f5ecd7;color:#8a6a1f;}
+  .law .eqn{font-variant-numeric:tabular-nums;color:var(--ink-soft);line-height:1.5;}
+  .law .eqn b{color:var(--ink);}
+  .law .eqn.open{color:#8a6a1f;font-weight:600;background:#f5ecd7;border-radius:3px;padding:3px 7px;margin:3px 0;display:flex;align-items:center;gap:6px;}
+  .law .eqn.open b{color:#7a5f18;}
+  .law .eqn.open .otag{margin-left:auto;font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;background:#e6d6ad;color:#7a5f18;padding:1px 7px;border-radius:8px;}
+
+  .buckets{display:flex;flex-direction:column;gap:0;}
+  .bkt{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-top:1px dotted var(--line);font-size:12px;}
+  .bkt:first-child{border-top:none;}
+  .bkt .dot{width:12px;height:12px;border-radius:3px;flex:0 0 12px;margin-top:2px;}
+  .bkt .bt{flex:1;line-height:1.4;}
+  .bkt .bt b{font-family:"IBM Plex Sans";font-weight:600;}
+  .bkt .ct{font-variant-numeric:tabular-nums;color:var(--ink-soft);font-weight:700;}
+  .edgelist{list-style:none;margin:8px 0 0;padding:0;font-size:11.5px;max-height:190px;overflow-y:auto;}
+  .edgelist li{display:flex;gap:7px;align-items:flex-start;padding:5px 0;border-top:1px dotted var(--line);line-height:1.35;}
+  .edgelist li:first-child{border-top:none;}
+  .edgelist .sw{width:9px;height:9px;border-radius:2px;flex:0 0 9px;margin-top:3px;}
+  .edgelist .en{flex:1;}
+  .edgelist .ev{font-variant-numeric:tabular-nums;color:var(--ink-soft);}
+  .edgelist .cav{display:block;color:var(--ink-soft);font-style:italic;font-size:10.5px;margin-top:1px;}
+
+  .legend{display:flex;flex-wrap:wrap;gap:6px 14px;}
+  .legend .li{display:flex;align-items:center;gap:6px;font-size:11.5px;}
+  .legend .sw{width:12px;height:12px;border-radius:3px;flex:0 0 12px;}
+  .legend .sw.round{border-radius:50%;}
+  .foot{font-size:11px;color:var(--ink-soft);margin-top:8px;line-height:1.5;}
+
+  /* modal frames */
+  .ovl{position:fixed;inset:0;background:rgba(27,23,20,.5);display:flex;align-items:center;justify-content:center;z-index:20;padding:20px;}
+  .ovl[hidden]{display:none;}
+  .ovl .box{background:var(--panel);border:1px solid var(--line);border-radius:6px;max-width:580px;width:100%;max-height:86vh;overflow-y:auto;padding:20px 22px;}
+  .ovl h3{font-family:"IBM Plex Sans";font-size:16px;margin:0 0 12px;}
+  .ovl p{font-size:12.5px;line-height:1.55;margin:10px 0;color:var(--ink-soft);}
+  .ovl p.mid{text-align:center;font-family:"IBM Plex Sans";font-weight:600;font-size:15px;color:var(--ink);background:var(--ground);border:1px solid var(--line);border-radius:3px;padding:9px;}
+  .mtab{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums;margin:4px 0;}
+  .mtab th{text-align:right;font-family:"IBM Plex Sans";font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);padding:4px 8px;border-bottom:1px solid var(--line);}
+  .mtab th:first-child{text-align:left;}
+  .mtab td{padding:4px 8px;border-bottom:1px dotted var(--line);}
+  .mtab td:not(:first-child){text-align:right;}
+  .mtab tr.sub td{font-weight:700;border-top:1px solid var(--ink-soft);border-bottom:2px solid var(--ink-soft);}
+  .mtab .pos{color:var(--asset);font-weight:700;} .mtab .neg{color:var(--liab);font-weight:700;} .mtab .q{color:var(--infer);font-weight:700;}
+  .ovl .mbtn{display:flex;justify-content:flex-end;margin-top:16px;}
+
+  /* svg */
+  .nlabel{font-family:"IBM Plex Sans",sans-serif;font-weight:600;font-size:12px;fill:#fff;pointer-events:none;user-select:none;}
+  .node-g{cursor:grab;} .node-g.drag{cursor:grabbing;}
+  .node-g ellipse{transition:stroke .12s;}
+  .node-g:hover ellipse{stroke:var(--ink);stroke-width:2.4;}
+  .node-g.fresh ellipse{stroke:var(--ink);stroke-width:2.6;}
+  .wbox text{font-family:"B612";font-size:11.5px;font-variant-numeric:tabular-nums;font-weight:700;}
+  .wbox.pend text{fill:var(--pend);}
+  .edge{fill:none;stroke-width:2.2;opacity:.72;}
+  .edge.fact{stroke:var(--fact);}
+  .edge.infer{stroke:var(--infer);stroke-dasharray:7 4;}
+  .edge.open{stroke:var(--open);stroke-dasharray:2 5;opacity:.85;}
+  .edge.pend{stroke:var(--pend);opacity:.5;stroke-dasharray:3 4;}
+  .edge.fresh{opacity:1;stroke-width:3.2;}
+  .elabel{font-family:"B612";font-size:11px;fill:var(--ink);font-variant-numeric:tabular-nums;paint-order:stroke;stroke:var(--panel);stroke-width:3.4px;stroke-linejoin:round;pointer-events:none;font-weight:700;}
+  .elabel.pend{fill:var(--pend);}
+  .flash{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:9px 16px;border-radius:3px;font-size:13px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:9;max-width:90vw;text-align:center;}
+  .flash.show{opacity:1;}
+  #tip{position:fixed;z-index:30;display:none;max-width:300px;background:var(--ink);color:var(--ground);font-size:11.5px;line-height:1.5;padding:9px 11px;border-radius:5px;box-shadow:0 5px 16px rgba(27,23,20,.28);pointer-events:none;}
+  #tip b{color:#fff;font-weight:700;}
+  #tip .tt{font-family:"IBM Plex Sans";font-weight:600;font-size:12px;letter-spacing:.01em;display:block;margin-bottom:4px;color:#fff;font-variant-numeric:tabular-nums;}
+  /* edge tooltip: light body, dark frame (distinct from the dark node tooltip) */
+  #tip.light{background:var(--panel);color:var(--ink);border:1.5px solid var(--ink);box-shadow:0 5px 16px rgba(27,23,20,.20);}
+  #tip.light b{color:var(--ink);}
+  #tip.light .tt{color:var(--ink);border-bottom:1px solid var(--line);padding-bottom:4px;}
+  #tip .etag{display:inline-block;font-family:"IBM Plex Sans";font-weight:600;font-size:9.5px;letter-spacing:.04em;text-transform:uppercase;padding:1px 7px;border-radius:9px;margin:0 4px 3px 0;}
+  #tip .etag.fact{background:#dcebe0;color:#2f6c4a;} #tip .etag.infer{background:#f5ecd7;color:#8a6a1f;}
+  #tip .etag.open{background:#f3dada;color:#943638;} #tip .etag.ask{background:#e6e0f0;color:#5B4B8A;}
+  #tip .ecav{color:var(--ink-soft);font-style:italic;}
+  .edge-hit{fill:none;stroke:transparent;stroke-width:16;pointer-events:stroke;cursor:help;}
+  .edge-g .edge,.edge-g .elabel{pointer-events:none;}
+  @media (max-width:980px){.stage{grid-template-columns:1fr;}.rail{position:static;max-height:none;}}
+  /* fan-out reveal overlay */
+  .fanline{stroke-width:1;opacity:.55;fill:none;}
+  .fanbadge{font-family:"B612";font-size:10.5px;paint-order:stroke;stroke:var(--panel);stroke-width:3px;}
+  svg.revealing .edge{opacity:.06;}
+  svg.revealing .elabel{opacity:.10;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="title-block">
+      <p class="eyebrow">Business Language Analytics · Field Example · Bike Repair LLC · Backward 1 of 2</p>
+      <h1>The Outsider's Graph <span style="color:var(--crimson);font-weight:400">|</span> what the statements let you see</h1>
+      <p class="sub">You're considering joining the shop as a <b>limited partner</b> — your money, the owner's wrench. Before pricing your stake you ask for the books. What arrives is never the ledger: it's <b>statements</b>, in stages. Build the best graph each release allows, tag every edge by how you know it — and at the end, compare your graph with what actually happened.</p>
+    </div>
+  </header>
+
+  <div class="stage">
+    <div class="board">
+      <div class="toolbar">
+        <div class="steps" id="steps"></div>
+        <button class="btn sm" id="back">&larr; Back</button>
+        <button class="btn sm" id="restart">Restart</button>
+      </div>
+      <div class="legendbar" id="legendbar">
+        <span class="lgroup">Nodes</span>
+        <span class="li"><span class="sw round" style="background:var(--asset)"></span>Asset</span>
+        <span class="li"><span class="sw round" style="background:var(--liab)"></span>Liability</span>
+        <span class="li"><span class="sw round" style="background:var(--equity)"></span>Capital</span>
+        <span class="lsep"></span>
+        <span class="lgroup">Edges</span>
+        <span class="li"><svg class="eglyph" viewBox="0 0 32 12" width="32" height="12" aria-hidden="true"><line x1="1" y1="6" x2="23" y2="6" stroke="var(--fact)" stroke-width="2.2"/><path d="M23,1.5 L31,6 L23,10.5 Z" fill="var(--fact)"/></svg>fact <span class="lstyle">(solid)</span></span>
+        <span class="li"><svg class="eglyph" viewBox="0 0 32 12" width="32" height="12" aria-hidden="true"><line x1="1" y1="6" x2="23" y2="6" stroke="var(--infer)" stroke-width="2.2" stroke-dasharray="6 3"/><path d="M23,1.5 L31,6 L23,10.5 Z" fill="var(--infer)"/></svg>inference <span class="lstyle">(dashed)</span></span>
+      </div>
+      <svg id="canvas" viewBox="0 0 1000 620" role="img" aria-label="The outsider's graph of the bike shop"></svg>
+      <p class="canvas-note">An arrow runs <b>credit &rarr; debit</b>. Every box is a <b>season change</b> (assets +, claims &minus;); the statements are post-closing books, so income lives in <b>ΔGenerated</b>. <b>Solid</b> edges are pinned by a statement line; <b>dashed</b> hold only under a stated assumption; a faint <b>?</b> is yours to compute. Hover for details; drag to rearrange.</p>
+    </div>
+
+    <aside class="rail">
+      <div class="card step" id="stepcard">
+        <p class="stage-tag" id="stageTag">Overview</p>
+        <p class="step-title" id="stepTitle">&mdash;</p>
+        <div class="step-body" id="stepBody"></div>
+        <div class="quizarea" id="quizArea" style="display:none"></div>
+        <div class="frm" id="inferFrm" style="display:none">
+          <div class="row">
+            <div class="grow"><label id="inferLbl">Your answer ($)</label><input id="inferIn" type="number" inputmode="numeric" placeholder="type a value"></div>
+            <button class="btn primary" id="checkBtn">Check</button>
+          </div>
+        </div>
+        <div class="feedback" id="fb"></div>
+        <div class="btnrow" id="stepBtns"></div>
+      </div>
+
+      <div class="card">
+        <h2>The three laws <span class="pill">live</span></h2>
+        <div id="lawsBody"></div>
+      </div>
+
+      <div class="card">
+        <h2>Epistemic boundary <span class="pill" id="edgeCount">0 edges</span></h2>
+        <div class="buckets">
+          <div class="bkt"><span class="dot" style="background:var(--fact)"></span><span class="bt"><b>Known fact</b> &mdash; pinned directly by a statement line</span><span class="ct" id="cFact">0</span></div>
+          <div class="bkt"><span class="dot" style="background:var(--infer)"></span><span class="bt"><b>Best inference</b> &mdash; holds only under a stated assumption</span><span class="ct" id="cInfer">0</span></div>
+          <div class="bkt"><span class="dot" style="background:var(--open)"></span><span class="bt"><b>Open</b> &mdash; lawful but pinned by nothing</span><span class="ct" id="cOpen">0</span></div>
+        </div>
+        <ul class="edgelist" id="edgeList"></ul>
+      </div>
+    </aside>
+  </div>
+</div>
+<div class="flash" id="flash"></div>
+<div id="tip"></div>
+<div class="ovl" id="ovl" hidden><div class="box" id="ovlBox"></div></div>
+
+<script>
+/* ===========================================================================
+ * shared/router.js  —  obstacle-aware nested-arc edge router
+ *
+ * The reusable "crown jewel" of the toolset. Given node positions and a set of
+ * directed edges, it routes each edge as a cubic arc that provably clears every
+ * other visible node, choosing sides and nesting parallel/opposing edges so the
+ * drawing stays legible as the graph grows (Topics 2 & 3).
+ *
+ * Design (see docs/ARCHITECTURE.md for the full write-up):
+ *   1. Anchor a normal that always points "up" so the side is absolute.
+ *   2. Try both sides; lift the arc in a short loop until it clears all
+ *      obstacles with a margin; keep whichever side clears with more room.
+ *   3. Nest opposing/parallel edges of a pair on one side at growing height.
+ * The clearance test is LOCAL to each edge, so adding nodes/edges never breaks
+ * existing routes — a new edge simply lifts until it clears whatever is in its way.
+ *
+ * Verified by tests/router.test.js (all edges clear all non-endpoint nodes).
+ * =========================================================================== */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.BLARouter = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+
+  const PAD = 16; // clearance buffer (px) added around every node ellipse
+
+  // point on ellipse `c` in the direction of (tx,ty)
+  function rimPt(c, tx, ty) {
+    const dx = tx - c.x, dy = ty - c.y;
+    const k = Math.hypot(dx / c.rx, dy / c.ry) || 1;
+    return { x: c.x + dx / k, y: c.y + dy / k };
+  }
+  function cubicAt(P0, P1, P2, P3, t) {
+    const u = 1 - t;
+    return {
+      x: u*u*u*P0.x + 3*u*u*t*P1.x + 3*u*t*t*P2.x + t*t*t*P3.x,
+      y: u*u*u*P0.y + 3*u*u*t*P1.y + 3*u*t*t*P2.y + t*t*t*P3.y
+    };
+  }
+  // build a cubic arc between A and B, bowed by `h` on `side` (+1/-1) along `perp`
+  function arc(A, B, perp, h, side) {
+    const dx = B.x - A.x, dy = B.y - A.y;
+    const ox = perp.x * h * side, oy = perp.y * h * side;
+    const P1 = { x: A.x + dx*0.25 + ox, y: A.y + dy*0.25 + oy };
+    const P2 = { x: A.x + dx*0.75 + ox, y: A.y + dy*0.75 + oy };
+    return { P0: rimPt(A, P1.x, P1.y), P1, P2, P3: rimPt(B, P2.x, P2.y) };
+  }
+  // worst (max) penetration of the arc into any obstacle; <0 means fully clear
+  function worstPen(c, obs) {
+    let w = -Infinity;
+    for (let t = 0; t <= 1.0001; t += 0.05) {
+      const p = cubicAt(c.P0, c.P1, c.P2, c.P3, t);
+      for (const o of obs) {
+        const pen = 1 - Math.hypot((p.x - o.x) / (o.rx + PAD), (p.y - o.y) / (o.ry + PAD));
+        if (pen > w) w = pen;
+      }
+    }
+    return w;
+  }
+  function liftClear(A, B, perp, side, h0, obs) {
+    let h = h0, best = null, bp = Infinity;
+    for (let i = 0; i < 22; i++) {
+      const c = arc(A, B, perp, h, side);
+      const w = worstPen(c, obs);
+      if (w < bp) { bp = w; best = { c, h }; }
+      if (w < 0) break;
+      h += 14; if (h > 340) break;
+    }
+    return { c: best.c, h: best.h, pen: bp };
+  }
+
+  // route a single edge between centers A and B, given obstacle centers `obs`
+  // opts.forceSide (+1/-1) and opts.h0Min let routeAll nest sibling edges
+  function routeOne(A, B, obs, opts) {
+    opts = opts || {};
+    const dx = B.x - A.x, dy = B.y - A.y, L = Math.hypot(dx, dy) || 1;
+    let perp = { x: dy / L, y: -dx / L };
+    if (perp.y > 0) perp = { x: -perp.x, y: -perp.y }; // anchor "up"
+    const h0 = Math.max(opts.h0Min || 0, (L > 300 ? 34 + 0.14 * L : 16));
+    const fin = (r, sd) => ({ curve: r.c, h: r.h, side: sd, apex: cubicAt(r.c.P0, r.c.P1, r.c.P2, r.c.P3, 0.5) });
+    if (opts.forceSide) return fin(liftClear(A, B, perp, opts.forceSide, h0, obs), opts.forceSide);
+    const up = liftClear(A, B, perp, +1, h0, obs), dn = liftClear(A, B, perp, -1, h0, obs);
+    const uC = up.pen < 0, dC = dn.pen < 0; let pick, side;
+    if (uC && dC) { if (Math.abs(up.h - dn.h) < 8) { pick = up; side = 1; } else { pick = up.h <= dn.h ? up : dn; side = up.h <= dn.h ? 1 : -1; } }
+    else if (uC) { pick = up; side = 1; }
+    else if (dC) { pick = dn; side = -1; }
+    else { pick = up.pen < dn.pen ? up : dn; side = up.pen < dn.pen ? 1 : -1; }
+    return fin(pick, side);
+  }
+
+  // route a whole edge set. edges: [{from,to,id}]; nodes: {id:{x,y,rx,ry}};
+  // visibleIds: array of node ids currently drawn (obstacles + endpoints).
+  // returns { id: {curve, h, side, apex} }
+  function routeAll(edges, nodes, visibleIds) {
+    const centerOf = id => nodes[id];
+    const obsFor = (f, t) => visibleIds.filter(id => id !== f && id !== t).map(centerOf);
+    const key = e => [e.from, e.to].sort().join('|');
+    const groups = {};
+    edges.forEach(e => { (groups[key(e)] = groups[key(e)] || []).push(e); });
+    const out = {};
+    Object.values(groups).forEach(g => {
+      const lead = routeOne(centerOf(g[0].from), centerOf(g[0].to), obsFor(g[0].from, g[0].to), {});
+      out[g[0].id] = lead;
+      for (let j = 1; j < g.length; j++) {
+        out[g[j].id] = routeOne(centerOf(g[j].from), centerOf(g[j].to), obsFor(g[j].from, g[j].to),
+          { forceSide: lead.side, h0Min: lead.h + 40 + (j - 1) * 30 });
+      }
+    });
+    return out;
+  }
+
+  return { PAD, rimPt, cubicAt, arc, worstPen, liftClear, routeOne, routeAll };
+});
+
+/* ===========================================================================
+ * shared/accounting.js  —  the double-entry / three-laws engine
+ *
+ * Encodes the semantics shared by every tool. Conventions (do NOT drift — see
+ * docs/ARCHITECTURE.md): an edge is one journal entry drawn CREDIT -> DEBIT;
+ * a node's signed weight = (sum of in-edges) - (sum of out-edges), which equals
+ * its change in balance under the sign convention assets +, claims -.
+ *
+ * Account types: asset, liab, equity (permanent) + revenue, expense, dividend
+ * (temporary). Debit-nature accounts (normal debit balance): asset, expense,
+ * dividend. Everything else is credit-nature.
+ *
+ * Data contract: `accounts` is a dict keyed by account id — the KEY is the id
+ * (no .id field is required on the account objects). Entries may only
+ * reference ids present in `accounts`; entries touching unknown ids are left
+ * unmerged by the closing pass rather than crashing.
+ *
+ * Verified by tests/accounting.test.js (FAI holds open & closed; RE closes to 0
+ * on the Topic-1 example; duality; closing merge; entropy).
+ * =========================================================================== */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.BLAAccounting = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+
+  const isTemp = t => t === 'revenue' || t === 'expense' || t === 'dividend';
+  const isDebitNature = t => t === 'asset' || t === 'expense' || t === 'dividend';
+
+  // which equity account temporaries close into: an account explicitly marked
+  // `closingTarget: true` (partnership/LLC books — e.g. a "Generated" capital
+  // section) takes precedence; otherwise the one whose label matches /retain/i
+  // (the corporate convention). Returns null when neither exists — closing is
+  // then unavailable and the tool must say so, rather than silently merging
+  // into an arbitrary equity account. Keys the dict directly (no .id field).
+  function mergeTargetId(accounts) {
+    const eq = Object.keys(accounts).filter(id => accounts[id].type === 'equity');
+    return eq.find(id => accounts[id].closingTarget === true)
+        || eq.find(id => /retain/i.test(accounts[id].label))
+        || null;
+  }
+
+  // entries: [{id,dr,cr,w}]; each is one balanced journal entry.
+  // returns display edges [{from,to,w,id}] (from=credit, to=debit).
+  // If closed, temporaries are merged into the equity target: endpoints remapped,
+  // self-loops (the closing entries themselves) dropped, parallels summed.
+  function activeEdges(entries, accounts, closed) {
+    let list = entries.map(e => ({ from: e.cr, to: e.dr, w: e.w, id: e.id }));
+    if (closed) {
+      const tgt = mergeTargetId(accounts);
+      if (!tgt) return list;
+      const rm = x => { const a = accounts[x]; return a && isTemp(a.type) ? tgt : x; };
+      const agg = {};
+      list.forEach(e => {
+        const f = rm(e.from), t = rm(e.to);
+        if (f === t) return;
+        const k = f + '>' + t;
+        agg[k] = (agg[k] || 0) + e.w;
+      });
+      list = Object.keys(agg).map(k => { const [f, t] = k.split('>'); return { from: f, to: t, w: agg[k], id: k }; });
+    }
+    return list;
+  }
+
+  // ---- graph manipulation: merge & split (Topic 2's "Simplifying Graph") ----
+  // mergeNodes: apply a partition {oldId: groupId} to an edge set. Endpoints
+  // are remapped, edges internal to a group become self-loops and are DROPPED
+  // (a self-loop carries no information), and — optionally — parallel edges
+  // are summed. Ids not in the partition pass through. Closing is the special
+  // case {eachTempId: retainedEarningsId} with sumParallels. The Topic-2
+  // simplification merges (ΔNetFinAssets, OpInc, ΔNetOPAssets) keep parallels
+  // DISTINCT so the lecture's separate arrows (i2, n2, j into NetOPAssets)
+  // survive and the later cash split still has per-entry edges to classify.
+  // Invariant (tested): merging preserves the summed signed weight of a group.
+  function mergeNodes(edges, partition, opts) {
+    const rm = x => (partition[x] !== undefined ? partition[x] : x);
+    const out = [];
+    edges.forEach(e => {
+      const f = rm(e.from), t = rm(e.to);
+      if (f === t) return;                    // internal flow — disappears
+      out.push({ ...e, from: f, to: t });
+    });
+    if (!(opts && opts.sumParallels)) return out;
+    const agg = {};
+    out.forEach(e => { const k = e.from + '>' + e.to; agg[k] = (agg[k] || 0) + e.w; });
+    return Object.keys(agg).map(k => { const [f, t] = k.split('>'); return { from: f, to: t, w: agg[k], id: k }; });
+  }
+
+  // splitNode: the inverse — partition ONE node's edges among sub-nodes via
+  // {edgeId: subNodeId} (e.g. ΔCash's six edges into CFO/CFI/CFF). Edges with
+  // no assignment stay on the original node, so a tool can classify
+  // progressively — the cash-flow-statement quiz reassigns one edge at a time.
+  function splitNode(edges, nodeId, assignment) {
+    return edges.map(e => {
+      const sub = assignment[e.id];
+      if (sub === undefined) return e;
+      const f = e.from === nodeId ? sub : e.from;
+      const t = e.to === nodeId ? sub : e.to;
+      return (f === e.from && t === e.to) ? e : { ...e, from: f, to: t };
+    });
+  }
+
+  // The in/out edge lists behind a node's law of motion. `signedWeight` is their
+  // net (Σ ins − Σ outs); the UI shows the *lists* themselves, and Topic 2's
+  // cash-flow split (CFO/CFI/CFF on ΔCash) is a grouping over exactly these — so
+  // the lists live in shared/ once, not hand-rolled per template.
+  function flowsOf(id, edges) {
+    const ins = [], outs = [];
+    for (const e of edges) { if (e.to === id) ins.push(e); if (e.from === id) outs.push(e); }
+    return { ins, outs };
+  }
+  const sumW = arr => arr.reduce((s, e) => s + e.w, 0);
+  const signedWeight = (id, edges) => { const f = flowsOf(id, edges); return sumW(f.ins) - sumW(f.outs); };
+
+  const levelChange = (id, accounts, edges) => {
+    const w = signedWeight(id, edges);
+    return isDebitNature(accounts[id].type) ? w : -w;
+  };
+
+  // Compute the three laws on the current graph. Returns numbers + a boolean.
+  // FAI uses "effective equity": open income/dividends are folded into equity,
+  // so the identity A = L + E holds whether or not the books are closed.
+  function computeLaws(accounts, entries, closed) {
+    const edges = activeEdges(entries, accounts, closed);
+    const visible = id => !(closed && isTemp(accounts[id].type));
+    const ids = Object.keys(accounts).filter(visible);
+    const perm = ids.filter(id => !isTemp(accounts[id].type));
+    const sum = (arr, f) => arr.reduce((s, x) => s + f(x), 0);
+
+    const A = sum(perm.filter(id => accounts[id].type === 'asset'), id => levelChange(id, accounts, edges));
+    const L = sum(perm.filter(id => accounts[id].type === 'liab'),  id => levelChange(id, accounts, edges));
+    const Eperm = sum(perm.filter(id => accounts[id].type === 'equity'), id => levelChange(id, accounts, edges));
+    const temps = Object.keys(accounts).filter(id => isTemp(accounts[id].type) && !closed);
+    const Etemp = sum(temps, id => {
+      const lc = levelChange(id, accounts, edges);
+      return accounts[id].type === 'revenue' ? lc : -lc; // revenue raises equity; expense/dividend lower it
+    });
+    const E = Eperm + Etemp;
+
+    // duality: total debits == total credits (always true for balanced single entries)
+    const duality = edges.reduce((s, e) => s + e.w, 0); // == total credits by construction
+
+    return {
+      edges, A, L, E, Eperm, Etemp, duality,
+      faiOK: Math.abs(A - (L + E)) < 1e-6 && entries.length > 0,
+      signedWeight: id => signedWeight(id, edges),
+      levelChange: id => levelChange(id, accounts, edges),
+      flowsOf: id => flowsOf(id, edges)
+    };
+  }
+
+  // Shannon edge-share entropy over dollar flows (AGE-style H_Tot), in bits.
+  function edgeEntropy(edges) {
+    const W = edges.reduce((s, e) => s + e.w, 0);
+    if (W <= 0) return { H: 0, Hmax: 0, n: 0 };
+    const H = -edges.reduce((s, e) => { const p = e.w / W; return s + (p > 0 ? p * Math.log2(p) : 0); }, 0);
+    return { H, Hmax: edges.length > 1 ? Math.log2(edges.length) : 0, n: edges.length };
+  }
+
+  return { isTemp, isDebitNature, mergeTargetId, activeEdges, mergeNodes, splitNode, flowsOf, signedWeight, levelChange, computeLaws, edgeEntropy };
+});
+
+/* ===========================================================================
+ * shared/graph-tip.js  —  hover-tooltip plumbing (content-agnostic)
+ *
+ * The show/place/hide + hover-listen machinery, factored out of graph-render so
+ * the forward tools (topic-1, sandbox), whose node/edge markup differs, reuse it
+ * too. The tool supplies the DOM-specific bits: `resolve(evt)` returns
+ * {kind:'node'|'edge', id} | null for what the cursor is over, and
+ * `nodeTip(id)` / `edgeTip(id)` return the bubble HTML (or null to show nothing).
+ * Edge bubbles get the `light` class (light body, dark frame); node bubbles are
+ * the dark default. `blocked()` suppresses the tip (e.g. mid-drag).
+ *
+ * `esc()` escapes user-supplied text for tools that render it in a tip (sandbox).
+ *
+ * Exposes BLAGraphTip (UMD).
+ * =========================================================================== */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.BLAGraphTip = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // Attach hover tooltips to `cfg.svg`. Returns { hide } so the caller can
+  // dismiss the tip (e.g. graph-render hides it on drag-start).
+  function attach(cfg) {
+    const tip = cfg.tip || document.getElementById('tip');
+    if (!tip) return { hide() {} };
+    const blocked = cfg.blocked || (() => false);
+    function hide() { tip.style.display = 'none'; }
+    function place(e) {
+      const pad = 14, w = tip.offsetWidth, h = tip.offsetHeight; let x = e.clientX + pad, y = e.clientY + pad;
+      if (x + w > window.innerWidth - 8) x = e.clientX - w - pad;
+      if (y + h > window.innerHeight - 8) y = e.clientY - h - pad;
+      tip.style.left = Math.max(8, x) + 'px'; tip.style.top = Math.max(8, y) + 'px';
+    }
+    function show(t, e) {
+      if (blocked()) { hide(); return; }
+      const html = t.kind === 'node' ? cfg.nodeTip(t.id) : cfg.edgeTip(t.id);
+      if (!html) { hide(); return; }
+      tip.className = t.kind === 'edge' ? 'light' : '';
+      tip.innerHTML = html; tip.style.display = 'block'; place(e);
+    }
+    cfg.svg.addEventListener('mouseover', e => { const t = cfg.resolve(e); if (t) show(t, e); });
+    cfg.svg.addEventListener('mousemove', e => { if (tip.style.display !== 'block') return; const t = cfg.resolve(e); if (t && !blocked()) place(e); else hide(); });
+    cfg.svg.addEventListener('mouseleave', hide);
+    return { hide };
+  }
+
+  return { attach, esc };
+});
+
+/* ===========================================================================
+ * shared/graph-drag.js  —  node-drag plumbing
+ *
+ * Factored out of graph-render so the forward tools (topic-1, sandbox) get the
+ * same press-hold-to-reposition affordance. `attach({svg, NODES, redraw, …})`
+ * wires pointerdown/move/up on `.node-g[data-id]` elements: on drag it updates
+ * NODES[id].x/y (clamped to `bounds`) and calls `redraw()`; `onStart(id)` fires
+ * on grab (e.g. to hide a tooltip). Returns { isDragging, draggingId } so the
+ * renderer can skip re-routing mid-drag and style the grabbed node.
+ *
+ * Exposes BLAGraphDrag (UMD).
+ * =========================================================================== */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.BLAGraphDrag = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+
+  function attach(cfg) {
+    const svg = cfg.svg, NODES = cfg.NODES, redraw = cfg.redraw;
+    const bounds = cfg.bounds || { minX: 70, maxX: 930, minY: 50, maxY: 560 };
+    let dragId = null, dragDX = 0, dragDY = 0, dragging = false;
+    function toSVG(evt) { const p = svg.createSVGPoint(); p.x = evt.clientX; p.y = evt.clientY; const m = svg.getScreenCTM().inverse(); const q = p.matrixTransform(m); return { x: q.x, y: q.y }; }
+    svg.addEventListener('pointerdown', e => {
+      if (e.button !== 0) return;   // primary button only — a right-click drag can lose pointerup to the context menu and glue the node to the cursor
+      const g = e.target.closest('.node-g'); if (!g || !g.dataset.id) return;
+      dragId = g.dataset.id; dragging = true; if (cfg.onStart) cfg.onStart(dragId);
+      const p = toSVG(e); dragDX = NODES[dragId].x - p.x; dragDY = NODES[dragId].y - p.y;
+      svg.setPointerCapture(e.pointerId); redraw();
+    });
+    svg.addEventListener('pointermove', e => {
+      if (!dragId) return; const p = toSVG(e);
+      NODES[dragId].x = Math.max(bounds.minX, Math.min(bounds.maxX, p.x + dragDX));
+      NODES[dragId].y = Math.max(bounds.minY, Math.min(bounds.maxY, p.y + dragDY));
+      redraw();
+    });
+    svg.addEventListener('pointerup', () => { if (!dragId) return; dragId = null; dragging = false; redraw(); });
+    svg.addEventListener('pointercancel', () => { dragId = null; dragging = false; redraw(); });
+    return { isDragging: () => dragging, draggingId: () => dragId };
+  }
+
+  return { attach };
+});
+
+/* ===========================================================================
+ * shared/graph-render.js  —  the SVG rendering + interaction layer
+ *
+ * Extracted from the per-tool templates (they were near-identical). Owns the
+ * SVG scaffold, node/edge drawing, dragging, and the hover-tooltip system.
+ * Pure over a config: the tool supplies its NODES/EDGES/TYPECOL and a shared
+ * `state` object ({shownN, shownE, pendN, pendE, fresh}) that the stepper also
+ * mutates; the module reads it on every draw(). Edge appearance keys on
+ * `edge.bucket` (fact/open/else) + pending, exactly as before, so a forward
+ * tool that marks its journal-entry edges `bucket:'fact'` gets solid arrows.
+ *
+ * Tooltip content is pluggable: opts.nodeTip(id) / opts.edgeTip(id) return HTML
+ * (defaults provided — the node/edge bubbles the GAAP tools use). `esc()` is
+ * exposed for tools that render user-supplied text (sandbox, issue #4).
+ *
+ * Exposes BLAGraphRender (UMD). Used by every graph tool.
+ * =========================================================================== */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.BLAGraphRender = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+
+  const NS = 'http://www.w3.org/2000/svg';
+  function E(t, a) { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); return e; }
+  function fmtSigned(x) { if (Math.abs(x) < 1e-9) return '+0'; return (x > 0 ? '+' : '−') + Math.abs(x).toLocaleString(); }
+  function sizeFor(n) { const l = n.label.length; return n.type === 'super' ? { rx: 64, ry: 40 } : { rx: Math.max(46, l * 4.2 + 16), ry: 29 }; }
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // create a render context bound to one <svg> + one tool's data/state.
+  function create(cfg) {
+    const svg = cfg.svg, NODES = cfg.NODES, EDGES = cfg.EDGES, TYPECOL = cfg.TYPECOL, state = cfg.state;
+    const bounds = cfg.bounds || { minX: 70, maxX: 930, minY: 50, maxY: 560 };
+
+    // --- scaffold: arrowhead markers + edge/node groups ---
+    const gE = E('g', {}), gN = E('g', {}), defs = E('defs', {});
+    [['ah', '#2F6C7C'], ['ai', '#C28A2B'], ['ap', '#B08A3A'], ['ao', '#943638']].forEach(([id, col]) => {
+      const m = E('marker', { id, viewBox: '0 0 10 10', refX: '8.5', refY: '5', markerWidth: '7', markerHeight: '7', orient: 'auto-start-reverse' });
+      m.appendChild(E('path', { d: 'M0,0 L10,5 L0,10 z', fill: col })); defs.appendChild(m);
+    });
+    svg.appendChild(defs); svg.appendChild(gE); svg.appendChild(gN);
+    Object.values(NODES).forEach(n => { const s = sizeFor(n); n.rx = s.rx; n.ry = s.ry; });
+
+    const edgeMk = (e, pnd) => pnd ? 'ap' : (e.bucket === 'fact' ? 'ah' : e.bucket === 'open' ? 'ao' : 'ai');
+    const edgeCls = (e, pnd) => pnd ? 'pend' : (e.bucket === 'fact' ? 'fact' : e.bucket === 'open' ? 'open' : 'infer');
+
+    function draw() {
+      const shownN = state.shownN, shownE = state.shownE, pendN = state.pendN, pendE = state.pendE, fresh = state.fresh;
+      gE.innerHTML = ''; gN.innerHTML = '';
+      const vis = [...shownE].filter(id => shownN.has(EDGES[id].from) && shownN.has(EDGES[id].to));
+      if (!drag.isDragging()) {
+        const routes = BLARouter.routeAll(vis.map(id => ({ from: EDGES[id].from, to: EDGES[id].to, id })), NODES, [...shownN]);
+        vis.forEach(id => {
+          const e = EDGES[id], r = routes[id]; if (!r) return; const c = r.curve, pnd = pendE.has(id);
+          const d = `M${c.P0.x.toFixed(1)},${c.P0.y.toFixed(1)} C${c.P1.x.toFixed(1)},${c.P1.y.toFixed(1)} ${c.P2.x.toFixed(1)},${c.P2.y.toFixed(1)} ${c.P3.x.toFixed(1)},${c.P3.y.toFixed(1)}`;
+          const eg = E('g', { class: 'edge-g', 'data-eid': id });
+          eg.appendChild(E('path', { class: 'edge-hit', d: d }));            // wide invisible hover target
+          eg.appendChild(E('path', { class: 'edge ' + edgeCls(e, pnd) + (id === fresh.e ? ' fresh' : ''), d: d, 'marker-end': 'url(#' + edgeMk(e, pnd) + ')' }));
+          const ly = r.apex.y + (r.side > 0 ? -7 : 14);
+          const lb = E('text', { x: r.apex.x, y: ly, 'text-anchor': 'middle', class: 'elabel' + (pnd ? ' pend' : '') }); lb.textContent = pnd ? '?' : '$' + e.w.toLocaleString();
+          eg.appendChild(lb); gE.appendChild(eg);
+        });
+      } else {
+        vis.forEach(id => {
+          const e = EDGES[id], A = NODES[e.from], B = NODES[e.to], pnd = pendE.has(id);
+          const S0 = BLARouter.rimPt(A, B.x, B.y), T = BLARouter.rimPt(B, A.x, A.y);
+          gE.appendChild(E('path', { class: 'edge ' + edgeCls(e, pnd), d: `M${S0.x},${S0.y} L${T.x},${T.y}`, 'marker-end': 'url(#' + edgeMk(e, pnd) + ')' }));
+        });
+      }
+      [...shownN].forEach(id => {
+        const n = NODES[id], col = n.color || TYPECOL[n.type], pnd = pendN.has(id);
+        const g = E('g', { class: 'node-g' + (drag.draggingId() === id ? ' drag' : '') + (id === fresh.n ? ' fresh' : '') }); g.dataset.id = id;
+        const isSuper = n.type === 'super';
+        g.appendChild(E('ellipse', { cx: n.x, cy: n.y, rx: n.rx, ry: n.ry, fill: pnd ? '#efe6d2' : col,
+          stroke: pnd ? 'var(--pend)' : (isSuper ? '#fff' : 'rgba(0,0,0,.14)'), 'stroke-width': pnd ? 2 : (isSuper ? 2.4 : 1), 'stroke-dasharray': (pnd || isSuper) ? '6 3' : 'none' }));
+        const disp = (n.type === 'asset' || n.type === 'equity' ? 'Δ' : '') + n.label.replace(/^Δ/, '');
+        const words = disp.split(' '); let lines = [disp];
+        if (disp.length > 12 && words.length > 1) { const m = Math.ceil(words.length / 2); lines = [words.slice(0, m).join(' '), words.slice(m).join(' ')]; }
+        lines.forEach((ln, i) => { const t = E('text', { x: n.x, y: n.y + 4 + (i - (lines.length - 1) / 2) * 13, 'text-anchor': 'middle', class: 'nlabel', fill: pnd ? '#6b5a34' : '#fff' }); t.textContent = ln; g.appendChild(t); });
+        const w = n.weight, ws = pnd ? '?' : fmtSigned(w), bw = Math.max(34, ws.length * 7.6 + 14), by = n.y - n.ry - 14;
+        const wg = E('g', { class: 'wbox' + (pnd ? ' pend' : '') });
+        wg.appendChild(E('rect', { x: n.x - bw / 2, y: by - 11, width: bw, height: 21, rx: 3, fill: 'var(--panel)', stroke: pnd ? 'var(--pend)' : 'var(--ink-soft)', 'stroke-width': 1.2 }));
+        const wt = E('text', { x: n.x, y: by + 4, 'text-anchor': 'middle', fill: pnd ? 'var(--pend)' : (w > 0 ? 'var(--asset)' : w < 0 ? 'var(--liab)' : 'var(--ink-soft)') }); wt.textContent = ws; wg.appendChild(wt);
+        g.appendChild(wg); gN.appendChild(g);
+      });
+    }
+
+    // --- hover tooltip (nodes: dark bubble; edges: light, dark-framed) ---
+    // Plumbing is shared (BLAGraphTip); the default content below stays here.
+    const defNodeTip = id => { const n = NODES[id]; if (!n || !n.tip) return null; const val = state.pendN.has(id) ? '?' : fmtSigned(n.weight); return '<span class="tt">' + n.label + ' · ' + val + '</span>' + n.tip; };
+    const defEdgeTip = id => {
+      const e = EDGES[id]; if (!e) return null; const pnd = state.pendE.has(id);
+      const title = `${NODES[e.from].label} → ${NODES[e.to].label} · ${pnd ? '?' : '$' + e.w.toLocaleString()}`; let tag, body;
+      if (pnd) { tag = '<span class="etag ask">to infer</span>'; body = e.q || 'Infer this edge from a law of motion.'; }
+      else if (e.bucket === 'fact') { tag = '<span class="etag fact">known fact</span>'; body = (e.src || e.cav || '') + ' Its weight is pinned by a reported line.'; }
+      else if (e.bucket === 'open') { tag = '<span class="etag open">open inference</span>'; body = e.proof || e.cav || ''; }
+      else { tag = '<span class="etag infer">best inference</span>'; body = (e.proof || '') + (e.cav ? ` <span class="ecav">Holds under: ${e.cav}.</span>` : ''); }
+      return `<span class="tt">${title}</span>${tag} ${body}`;
+    };
+    const tip = BLAGraphTip.attach({
+      svg,
+      resolve: e => { const g = e.target.closest('.node-g'); if (g) return { kind: 'node', id: g.dataset.id }; const p = e.target.closest('[data-eid]'); if (p) return { kind: 'edge', id: p.getAttribute('data-eid') }; return null; },
+      nodeTip: cfg.nodeTip || defNodeTip,
+      edgeTip: cfg.edgeTip || defEdgeTip,
+      blocked: () => drag.isDragging(),
+    });
+    const hideTip = tip.hide;
+
+    // --- drag (shared plumbing; hides the tooltip on grab, re-routes on release) ---
+    const drag = BLAGraphDrag.attach({ svg, NODES, redraw: draw, bounds, onStart: hideTip });
+
+    return { draw, hideTip, sizeFor, fmtSigned, esc, isDragging: () => drag.isDragging() };
+  }
+
+  return { create, fmtSigned, sizeFor, esc };
+});
+
+/* ===========================================================================
+ * shared/guided-stepper.js  —  the guided-walkthrough step engine
+ *
+ * Extracted from the per-tool templates (near-identical across the four
+ * steppers: topic-1 and GAAP Graph-1/2/3). Owns the step index + navigation,
+ * the declarative step directives (show/hide/pend/setE/infer/flash), the
+ * deterministic gotoStep() replay-rebuild (Back + clickable chips), the
+ * interaction layer (quiz / infer), the intro-modal, and the flash toast.
+ *
+ * Operates on the shared HTML skeleton's fixed element ids (stageTag,
+ * stepTitle, stepBody, back, quizArea, inferFrm, inferIn, inferLbl, checkBtn,
+ * fb, stepBtns, steps, restart, ovl, ovlBox, flash) and a shared `state` object
+ * ({shownN,shownE,pendN,pendE,fresh}) that graph-render also reads. Per-tool
+ * panel rendering (the three-laws panel, whose aggregation line and epistemic
+ * buckets vary) stays tool-side and is injected as refreshPanels(stepObj).
+ *
+ * Exposes BLAStepper (UMD). Used by every guided walkthrough.
+ * =========================================================================== */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.BLAStepper = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+
+  function create(cfg) {
+    const S = cfg.S, NODES = cfg.NODES, EDGES = cfg.EDGES, EDGES0 = cfg.EDGES0,
+          draw = cfg.draw, refreshPanels = cfg.refreshPanels, state = cfg.state;
+    const shownN = state.shownN, shownE = state.shownE, pendN = state.pendN, pendE = state.pendE, fresh = state.fresh;
+    const $ = id => document.getElementById(id);
+    let step = 0, maxStep = 0, quizPassed = false;
+
+    // ---- modal + flash ----
+    function showModal(m) {
+      $('ovlBox').innerHTML = '<h3>' + m.title + '</h3>' + m.html + '<div class="mbtn"><button class="btn primary" id="ovlClose">Got it →</button></div>';
+      $('ovl').hidden = false; $('ovlClose').onclick = hideModal;
+    }
+    function hideModal() { $('ovl').hidden = true; }
+    $('ovl').addEventListener('click', e => { if (e.target.id === 'ovl') hideModal(); });
+    function flash(m) { const f = $('flash'); f.textContent = m; f.classList.add('show'); clearTimeout(f._t); f._t = setTimeout(() => f.classList.remove('show'), 1600); }
+
+    // ---- step directives ----
+    function reveal(nl, el) { (nl || []).forEach(id => shownN.add(id)); (el || []).forEach(id => shownE.add(id)); }
+    // Clear all mutable state and undo edge mutations, for Restart / gotoStep replay.
+    function resetState() {
+      shownN.clear(); shownE.clear(); pendN.clear(); pendE.clear();
+      Object.keys(EDGES0).forEach(id => { EDGES[id].w = EDGES0[id].w; EDGES[id].bucket = EDGES0[id].bucket; });
+    }
+    // Apply a step's reveal/hide/mutate directives (idempotent given prior state).
+    function applyDirectives(s) {
+      if (s.hideN) { s.hideN.forEach(id => shownN.delete(id)); }
+      if (s.hideE) { s.hideE.forEach(id => { shownE.delete(id); pendE.delete(id); }); }
+      reveal(s.show && s.show.n, s.show && s.show.e);
+      if (s.setE) { for (const id in s.setE) Object.assign(EDGES[id], s.setE[id]); }
+      if (s.pend) { reveal(s.pend.n, s.pend.e); (s.pend.n || []).forEach(id => pendN.add(id)); (s.pend.e || []).forEach(id => pendE.add(id)); }
+      if (s.infer) { reveal(s.infer.targetN, s.infer.targetE); (s.infer.targetN || []).forEach(id => pendN.add(id)); (s.infer.targetE || []).forEach(id => pendE.add(id)); }
+    }
+    // Mark a replayed step's inference as already solved (its value lives in EDGES/NODES).
+    function autoSolve(s) { if (s.infer) { (s.infer.targetN || []).forEach(id => pendN.delete(id)); (s.infer.targetE || []).forEach(id => pendE.delete(id)); } }
+
+    // Deterministically rebuild state at step k: reset, replay 0..k-1 fully (auto-solved),
+    // then render step k fresh (as if just arrived). Back / stage-chip navigation use this.
+    function gotoStep(k) {
+      resetState();
+      for (let i = 0; i < k; i++) { applyDirectives(S[i]); autoSolve(S[i]); }
+      step = k; hideModal();
+      renderStep({ noModal: true });   // don't re-pop a stage's intro modal on revisit
+    }
+
+    function renderStep(opts) {
+      const s = S[step];
+      applyDirectives(s);
+      if (s.flash) flash(s.flash);
+      const lastShow = s.show && s.show.n && s.show.n[s.show.n.length - 1];
+      fresh.n = (s.infer && s.infer.targetN && s.infer.targetN[0]) || lastShow || null;
+      fresh.e = (s.infer && s.infer.targetE && s.infer.targetE[0]) || (s.show && s.show.e && s.show.e[s.show.e.length - 1]) || null;
+
+      $('stageTag').innerHTML = s.stage;
+      $('stepTitle').innerHTML = s.title;
+      $('stepBody').innerHTML = s.body;
+      $('back').disabled = step === 0;
+      quizPassed = !s.quiz;   // a direction quiz must be cleared before the value/continue
+      renderInteraction();
+
+      renderChips(); refreshPanels(s); draw();
+      if (s.modal && !(opts && opts.noModal)) showModal(s.modal);
+      setTimeout(() => { fresh.n = null; fresh.e = null; draw(); }, 900);
+    }
+
+    // render the rail's interactive controls for the current step + state
+    function renderInteraction() {
+      const s = S[step];
+      const frm = $('inferFrm'), btns = $('stepBtns'), fb = $('fb'), qa = $('quizArea');
+      fb.className = 'feedback'; fb.innerHTML = '';
+      qa.style.display = 'none'; qa.innerHTML = '';
+      const inp = $('inferIn'); inp.value = ''; inp.className = ''; inp.disabled = false;
+      const refBtn = s.modal ? '<button class="btn sm" id="refBtn">' + s.modal.tab + '</button>' : '';
+      const wireRef = () => { if (s.modal) { const rb = $('refBtn'); if (rb) rb.onclick = () => showModal(s.modal); } };
+
+      if (s.quiz && !quizPassed) {
+        frm.style.display = 'none';
+        qa.style.display = '';
+        qa.innerHTML = '<div class="quiz-q">' + s.quiz.q + '</div>' + s.quiz.options.map((o, i) => '<button class="btn quiz-opt" data-i="' + i + '">' + o.t + '</button>').join('');
+        qa.querySelectorAll('.quiz-opt').forEach(b => b.onclick = () => answerQuiz(+b.dataset.i, b));
+        btns.innerHTML = refBtn; wireRef();
+      } else if (s.infer) {
+        frm.style.display = '';
+        $('inferLbl').textContent = s.infer.label;
+        const cb = $('checkBtn'); cb.disabled = false; cb.onclick = () => solve(false);
+        inp.onkeydown = ev => { if (ev.key === 'Enter') solve(false); };
+        btns.innerHTML = '<button class="btn sm" id="hintBtn">Show a hint</button><button class="btn sm" id="revealBtn">Reveal answer</button>' + refBtn;
+        $('hintBtn').onclick = () => { fb.className = 'feedback hint show'; fb.innerHTML = '<b>Hint.</b> ' + s.infer.hint; };
+        $('revealBtn').onclick = () => solve(true);
+        wireRef();
+      } else {
+        frm.style.display = 'none';
+        btns.innerHTML = (s.finale ? '<button class="btn primary" disabled>Complete</button>' : '<button class="btn primary" id="nextBtn">' + (s.cta || 'Continue →') + '</button>') + refBtn;
+        if (!s.finale) $('nextBtn').onclick = advance;
+        wireRef();
+      }
+    }
+
+    function answerQuiz(i, btn) {
+      const s = S[step], opt = s.quiz.options[i];
+      if (opt.ok) {
+        btn.classList.add('yes');
+        quizPassed = true; renderInteraction();
+        const fb = $('fb'); fb.className = 'feedback win show'; fb.innerHTML = '<b>Correct.</b> ' + opt.why;
+        flash('Correct!');
+      } else {
+        btn.classList.add('no'); btn.disabled = true;
+        const fb = $('fb'); fb.className = 'feedback miss show'; fb.innerHTML = opt.why;
+        flash('Not that one — try again');
+      }
+    }
+
+    function solve(revealed) {
+      const s = S[step], inf = s.infer, inp = $('inferIn'), fb = $('fb');
+      let ok = revealed;
+      if (!revealed) {
+        const v = parseFloat(inp.value.replace(/[, ]/g, ''));
+        if (isNaN(v)) { fb.className = 'feedback miss show'; fb.innerHTML = 'Enter a number first.'; return; }
+        ok = Math.abs(v - inf.answer) <= (inf.tol || 0.5);
+        if (!ok) {
+          inp.className = 'wrong'; fb.className = 'feedback miss show';
+          fb.innerHTML = `Not quite &mdash; <b>${v.toLocaleString()}</b> doesn't satisfy the law. Try again, or use the hint.`;
+          flash('Off — the law is not satisfied yet'); return;
+        }
+      }
+      inp.className = 'right'; inp.value = inf.answer.toLocaleString(); inp.disabled = true;
+      $('checkBtn').disabled = true;
+      (inf.targetN || []).forEach(id => pendN.delete(id));   // activate: value is now known
+      (inf.targetE || []).forEach(id => pendE.delete(id));
+      fresh.n = (inf.targetN && inf.targetN[0]) || null; fresh.e = (inf.targetE && inf.targetE[0]) || null;
+      fb.className = 'feedback win show';
+      fb.innerHTML = (revealed ? 'Revealed: ' : 'Correct — ') + `<b>${inf.answer.toLocaleString()}</b>.` + (inf.proof ? '<br>' + inf.proof : '');
+      const refBtn = s.modal ? '<button class="btn sm" id="refBtn">' + s.modal.tab + '</button>' : '';
+      $('stepBtns').innerHTML = '<button class="btn primary" id="nextBtn">Continue →</button>' + refBtn;
+      $('nextBtn').onclick = advance;
+      if (s.modal) { const rb = $('refBtn'); if (rb) rb.onclick = () => showModal(s.modal); }
+      flash(revealed ? 'Answer revealed' : 'Correct!');
+      refreshPanels(s); draw();
+      setTimeout(() => { fresh.n = null; fresh.e = null; draw(); }, 900);
+    }
+
+    function advance() { if (step < S.length - 1) { step++; maxStep = Math.max(maxStep, step); renderStep(); } }
+
+    function renderChips() {
+      const wrap = $('steps'), stages = [], firstIdx = {};
+      S.forEach((s, i) => { const nm = s.stage.split(' · ')[0]; if (!(nm in firstIdx)) firstIdx[nm] = i; if (!stages.length || stages[stages.length - 1] !== nm) stages.push(nm); });
+      const cur = S[step].stage.split(' · ')[0]; let seen = false;
+      wrap.innerHTML = stages.map(nm => {
+        const on = nm === cur; if (on) seen = true; const done = !seen && !on;
+        const idx = firstIdx[nm], reachable = idx <= maxStep;
+        return `<button class="chip ${on ? 'on' : ''} ${done ? 'done' : ''}" data-i="${idx}"${reachable ? '' : ' disabled'} title="${reachable ? 'Go to ' + nm : nm + ' (not reached yet)'}">${nm}</button>`;
+      }).join('');
+      wrap.querySelectorAll('button.chip[data-i]').forEach(b => { if (!b.disabled) b.onclick = () => { const t = +b.dataset.i; if (t !== step) gotoStep(t); }; });
+    }
+
+    $('restart').onclick = () => { resetState(); step = 0; maxStep = 0; hideModal(); renderStep(); };
+    $('back').onclick = () => { if (step > 0) gotoStep(step - 1); };
+
+    renderStep();   // start
+    return { gotoStep, advance, showModal, flash, getStep: () => step };
+  }
+
+  return { create };
+});
+
+/* ===========================================================================
+ * shared/closing-ui.js  —  closing-as-merge teaching content
+ *
+ * Everything here is DERIVED from the live graph via BLAAccounting: which
+ * temporary accounts close, their balances, the closing journal entries, and
+ * the merge target. The tools render this instead of hard-coding closing
+ * numbers, so the displayed closing entries can never desync from the engine.
+ *
+ * All account labels are HTML-escaped (sandbox labels are user input).
+ * Browser load order: accounting.js must be inlined BEFORE this file (the
+ * UMD factory takes BLAAccounting as an argument at load time).
+ *
+ * Verified by tests/closing-ui.test.js.
+ * =========================================================================== */
+(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./accounting.js'));
+  else root.BLAClosingUI = factory(root.BLAAccounting);
+})(typeof self !== 'undefined' ? self : this, function (ACC) {
+
+  const esc = s => String(s).replace(/\n/g, ' ').replace(/[&<>"']/g,
+    c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const money = n => '$' + Math.abs(n).toLocaleString();
+
+  // What closing will do, computed from the open books.
+  // Returns null when there is no merge target (tools must refuse to close).
+  // { targetId, targetLabel, temps:[{id,label,type,amount}], je:[{dr,cr,drLabel,crLabel,w}] }
+  function previewData(accounts, entries) {
+    const targetId = ACC.mergeTargetId(accounts);
+    if (!targetId) return null;
+    const targetLabel = accounts[targetId].label;
+    const edges = ACC.activeEdges(entries, accounts, false);
+    const temps = Object.keys(accounts)
+      .filter(id => ACC.isTemp(accounts[id].type))
+      .map(id => ({ id, label: accounts[id].label, type: accounts[id].type,
+                    amount: Math.abs(ACC.signedWeight(id, edges)) }));
+    // one closing entry per temporary: credit-nature temps (revenue) are
+    // debited to close (Dr temp / Cr target); debit-nature temps (expense,
+    // dividend) are credited (Dr target / Cr temp)
+    const je = temps.map(t => {
+      const debitTemp = !ACC.isDebitNature(t.type);
+      return {
+        dr: debitTemp ? t.id : targetId,
+        cr: debitTemp ? targetId : t.id,
+        drLabel: debitTemp ? t.label : targetLabel,
+        crLabel: debitTemp ? targetLabel : t.label,
+        w: t.amount,
+      };
+    });
+    return { targetId, targetLabel, temps, je };
+  }
+
+  function jeListHTML(data) {
+    return data.je.map(e =>
+      `<div class="je-line">Dr ${esc(e.drLabel)} &nbsp;${money(e.w)}<br>&nbsp;&nbsp;&nbsp;&nbsp;Cr ${esc(e.crLabel)} &nbsp;${money(e.w)}</div>`
+    ).join('');
+  }
+
+  // Content of the pre-close acknowledgment dialog (the tool appends its own
+  // button row so it can wire the handlers).
+  function dialogHTML(data) {
+    const T = esc(data.targetLabel);
+    const items = data.temps.map(t =>
+      `<li><b>${esc(t.label)}</b> — balance ${money(t.amount)}${t.amount ? '' : ' (already zero)'}</li>`).join('');
+    return `<h3>Close the books?</h3>
+    <p>You're about to close the income-statement and dividend accounts into <b>${T}</b>. Closing <b>resets each temporary account to zero</b> and moves its balance into ${T}:</p>
+    <ul>${items}</ul>
+    <p>In the graph this is simply a <b>merge</b>: the temporary nodes collapse into the ${T} node, and their edges re-route to it.</p>`;
+  }
+
+  // Content of the "How closing works" explainer: closing in journal-entry
+  // form and in graph form, side by side, from the same live numbers.
+  function moreInfoHTML(data) {
+    const T = esc(data.targetLabel);
+    return `<h3>How closing works</h3>
+    <p>At period end, the <b>temporary accounts</b> — revenues, expenses, and dividends — are reset to zero so the next period starts fresh. Their balances don't vanish: each one moves into <b>${T}</b>, the permanent equity account that accumulates the firm's retained results.</p>
+    <h4>In journal entries</h4>
+    <p>One closing entry per temporary account. A revenue account carries a credit balance, so it is <b>debited</b> to zero it out (credit ${T}); expense and dividend accounts carry debit balances, so they are <b>credited</b> (debit ${T}):</p>
+    ${jeListHTML(data)}
+    <h4>In the graph</h4>
+    <p>Each closing entry would be drawn as an edge between ${T} and a temporary node. But closing is easier to see as a <b>merge</b>: collapse the temporary nodes into ${T}. The closing edges become self-loops — an arrow from a node to itself carries no information — so they disappear. Every other edge that touched a temporary simply re-routes to ${T}.</p>
+    <p>Nothing is lost: ${T}'s new balance change equals its old change plus revenues, minus expenses and dividends — the same number the closing entries produce, read straight off the merged node.</p>`;
+  }
+
+  return { esc, money, previewData, jeListHTML, dialogHTML, moreInfoHTML };
+});
+
+
+/* ===========================================================================
+   BIKE REPAIR LLC · BACKWARD 1 — "The Outsider's Graph" (statement-graph family)
+   The limited partner rebuilds the shop's season from staged statement
+   releases. Every number verified by tests/bike-repair.test.js; the reveal's
+   atomic entries come from the workbook's ledgers. The pedagogy: each release
+   refines the graph's partition — and bottoms out far above the ledger.
+   =========================================================================== */
+
+const NS='http://www.w3.org/2000/svg';
+const TYPECOL={asset:'var(--asset)',liab:'var(--liab)',equity:'var(--equity)'};
+
+const NODES={
+  cash:  {label:'ΔCash',           type:'asset',  weight:-680, x:215,y:275, tip:`Cash. From the balance sheet — a fact. Negative: the bank account <b>fell</b> $680 over the season.`},
+  ar:    {label:'ΔReceivables',    type:'asset',  weight:300,  x:120,y:470, tip:`Accounts receivable. From the balance sheet — fact. It began at $0, so +300 is billed-not-yet-collected work.`},
+  rou:   {label:'ΔRight of Use',   type:'asset',  weight:0,    x:105,y:575, tip:`The rent deposit. Δ = 0 — parked all season. <b>Zero activity is information too</b>: this node needed no edges.`},
+  parts: {label:'ΔParts',          type:'asset',  weight:0,    x:490,y:500, tip:`Parts inventory. Δ = 0 — but a zero <em>change</em> is not zero <em>flow</em>. How much moved through will take two statements to pin.`},
+  tools: {label:'ΔTools & Equip',  type:'asset',  weight:240,  x:400,y:105, tip:`Tools & equipment. From the balance sheet — fact. +240 nets an unknown purchase against unknown depreciation… until later releases.`},
+  fix:   {label:'ΔFixtures',       type:'asset',  weight:-40,  x:620,y:65,  tip:`Fixtures. From the balance sheet — fact. Fell $40 with no reported purchases: depreciation, probably. Probably.`},
+  laptop:{label:'ΔLaptop',         type:'asset',  weight:-30,  x:770,y:45,  tip:`The laptop. From the balance sheet — fact.`},
+  cc:    {label:'ΔCredit Card',    type:'liab',   weight:2030, x:200,y:110, tip:`The startup credit card. From the balance sheet — fact. Positive Δ = the claim <b>fell</b> $2,030. Whether the card was USED this season, the balance sheet cannot say.`},
+  dep:   {label:'ΔCustomer\nDeposit', type:'liab', weight:220, x:770,y:485, tip:`Smith's deposit. From the balance sheet — fact. The claim fell $220: earned, or refunded? The balance sheet is silent.`},
+  cap:   {label:'ΔMember\'s\nCapital', type:'equity', weight:-2040, x:720,y:300, tip:`Member's capital, reported as <b>one line</b>. From the balance sheet — fact. It rose $2,040. What kinds of event moved it, one line cannot say.`},
+  contrib:{label:'ΔContributed',   type:'equity', weight:0,    x:905,y:560, tip:`What the owner put in. From the capital statement — fact. Nothing this season.`},
+  gen:   {label:'ΔGenerated',      type:'equity', weight:-2640,x:720,y:300, tip:`The business's earned capital — where income lives after closing. From the capital statement — fact: rose exactly by net income, $2,640.`},
+  wd:    {label:'ΔWithdrawn',      type:'equity', weight:600,  x:905,y:210, tip:`The owner's draw — a capital reason, not an expense. Its amount was invisible until the capital statement arrived.`},
+};
+
+const EDGES={
+  e_draw:  {from:'cash',to:'wd',  w:600, bucket:'infer', cav:'assumed settled in cash — no statement had confirmed it yet',
+    q:`The draw: which direction?`,
+    proof:`Paying the owner consumes cash: ΔCash (source) → ΔWithdrawn (use).`},
+  e_revcash:{from:'gen',to:'cash', w:5500, bucket:'fact', cav:'the CFS line "collected from repair customers"',
+    src:`The CFS reports collections of <b>$5,500</b> — revenue settled in cash, drawn from income's home node (Generated) into Cash.`},
+  e_revar: {from:'gen',to:'ar',  w:300, bucket:'infer', cav:'assumes no receivable was collected this season (beginning AR was $0)',
+    proof:`Revenue 6,020 − collections 5,500 = 520 unaccounted. ΔReceivables +300 absorbs $300 of it — if nothing billed earlier was collected.`},
+  e_revdep:{from:'gen',to:'dep', w:220, bucket:'infer', cav:'assumes the deposit was earned by delivery, not refunded',
+    q:`The deposit fell $220 — earned or refunded?`,
+    proof:`The remaining $220 of the revenue gap matches the deposit exactly: revenue without new cash — the cash arrived <em>last</em> season.`},
+  e_pused: {from:'parts',to:'gen', w:1200, bucket:'fact', cav:'the income-statement line "parts used"',
+    src:`The income statement reports <b>$1,200</b> of parts consumed.`},
+  e_pbuy:  {from:'cash',to:'parts', w:1200, bucket:'fact', cav:'the CFS line "parts purchased"',
+    src:`The CFS reports <b>$1,200</b> paid to restock. In 1,200, out 1,200 — ΔParts 0 confirmed by the law of motion.`},
+  e_rent:  {from:'cash',to:'gen', w:1950, bucket:'fact', cav:'reported on both the IS (rent used) and the CFS (rent paid)',
+    src:`Rent: $1,950 on both statements — paid and used in equal measure.`},
+  e_tool:  {from:'cash',to:'tools', w:400, bucket:'fact', cav:'the CFS investing line',
+    src:`The CFS investing section reports one purchase: a repair tool, <b>$400</b>.`},
+  e_deprT: {from:'tools',to:'gen', w:160, bucket:'infer', cav:'assumes the CFS investing line is the only tools purchase',
+    proof:`Tools' law of motion: Δ +240 = purchase 400 − depreciation ⇒ depreciation 160.`},
+  e_deprF: {from:'fix',to:'gen', w:40, bucket:'infer', cav:'assumes no unreported fixture purchases or disposals',
+    proof:`No fixtures purchase on the CFS, so the whole −40 is depreciation.`},
+  e_deprL: {from:'laptop',to:'gen', w:30, bucket:'infer', cav:'assumes no unreported laptop transactions',
+    proof:`Same logic: −30, all depreciation. The three inferred splits sum to the IS's single 230 line — the aggregation reversed.`},
+  e_cc:    {from:'cash',to:'cc', w:2030, bucket:'fact', cav:'the CFS financing line "paid off credit card" — which also answers the gross-flow question',
+    src:`The CFS reports the payoff, <b>$2,030</b> — and by naming it "paid off", tells you no new charges hid inside the net change.`},
+};
+const EDGES0=JSON.parse(JSON.stringify(EDGES));
+
+// the ledger truth behind four aggregate edges — for the final reveal
+const FAN={
+  e_revcash:{label:'19 repairs collected', color:'#2F6C7C', amts:[120,150,270,300,150,360,225,210,240,240,450,360,270,240,300,240,485,390,500]},
+  e_pused:  {label:'19 jobs consumed parts', color:'#943638', amts:[10,25,95,60,40,65,35,25,125,55,45,100,80,25,129,70,105,75,36]},
+  e_pbuy:   {label:'3 monthly restocks', color:'#C28A2B', amts:[500,400,300]},
+  e_rent:   {label:'3 monthly rent payments', color:'#5B4B8A', amts:[650,650,650]},
+};
+
+// ---- modals ----
+const M_INTRO={ title:'The deal, and the due diligence', tab:'Overview', html:`
+  <p><b>The offer.</b> The owner keeps fixing bikes — the clients come for him. You put in capital and share
+  the profits. Before you price your stake, you need to know what this shop actually earns.</p>
+  <p><b>What you get.</b> Not the ledger. Owners share <em>statements</em> — summaries at some level of
+  aggregation. They'll arrive in stages, and after each you'll build the best graph the release allows,
+  tagging every edge: <b>fact</b>, <b>inference under assumption</b>, or <b>open</b>.</p>
+  <p><b>Keep a private score:</b> at each stage, ask yourself what you know that you didn't before — and
+  what you still can't know.</p>` };
+
+const M_TOT={ title:'Release 1 — the summary totals', tab:'Totals', html:`
+  <p>The owner's first email contains three lines:</p>
+  <table class="mtab"><tr><th></th><th>June 1</th><th>Aug 31</th></tr>
+    <tr><td>Total assets</td><td>4,710</td><td>4,500</td></tr>
+    <tr><td>Total liabilities</td><td>2,250</td><td>0</td></tr>
+    <tr><td>Member's capital</td><td>2,460</td><td>4,500</td></tr></table>
+  <p>The identity holds at both dates. Everything else — what the assets are, what happened, whether the
+  business even <em>earned</em> anything — is aggregated away.</p>` };
+
+const M_BS2={ title:'Release 2 — the balance sheets', tab:'Balance sheet', html:`
+  <table class="mtab"><tr><th></th><th>Jun 1</th><th>Aug 31</th><th>Δ node</th></tr>
+    <tr><td>Cash</td><td>1,300</td><td>620</td><td class="neg">−680</td></tr>
+    <tr><td>Accounts Receivable</td><td>0</td><td>300</td><td class="pos">+300</td></tr>
+    <tr><td>Right of Use</td><td>650</td><td>650</td><td>0</td></tr>
+    <tr><td>Parts</td><td>200</td><td>200</td><td>0</td></tr>
+    <tr><td>Tools &amp; Equip</td><td>1,200</td><td>1,440</td><td class="pos">+240</td></tr>
+    <tr><td>Fixtures</td><td>750</td><td>710</td><td class="neg">−40</td></tr>
+    <tr><td>Laptop</td><td>610</td><td>580</td><td class="neg">−30</td></tr>
+    <tr><td>Credit Card</td><td>2,030</td><td>0</td><td class="pos">+2,030</td></tr>
+    <tr><td>Customer Deposit</td><td>220</td><td>0</td><td class="pos">+220</td></tr>
+    <tr><td>Member's Capital <em>(one line)</em></td><td>2,460</td><td>4,500</td><td class="neg">−2,040</td></tr></table>
+  <p>Ten Δ-nodes, all facts, already summing to zero. Note the equity side arrives as a <b>single line</b> —
+  a common small-business presentation. Nodes are what changed; <b>edges — who transacted with whom — are
+  still entirely unknown.</b></p>` };
+
+const M_IS2={ title:'Release 3 — the income statement', tab:'Income stmt', html:`
+  <table class="mtab"><tr><th>June 1 – August 31</th><th></th></tr>
+    <tr><td>Repair services revenue</td><td class="pos">6,020</td></tr>
+    <tr><td>Parts used</td><td>(1,200)</td></tr>
+    <tr><td>Rent</td><td>(1,950)</td></tr>
+    <tr><td>Depreciation</td><td>(230)</td></tr>
+    <tr class="sub"><td>Net income</td><td class="pos">2,640</td></tr></table>
+  <p>The season's flows — in aggregate. One depreciation line covers three kinds of gear; one revenue line
+  covers every customer. And one number should bother you: income says <b>2,640</b>, but the balance sheet's
+  capital line moved only <b>2,040</b>.</p>` };
+
+const M_CAP={ title:'The owner\'s reply — Statement of Member\'s Capital', tab:'Capital stmt', html:`
+  <p>You asked about the missing $600. The owner sends one more page:</p>
+  <table class="mtab">
+    <tr><td>Contributed &nbsp;(2,290 → 2,290)</td><td>+0</td></tr>
+    <tr><td>Generated &nbsp;(170 + net income 2,640)</td><td class="pos">+2,640</td></tr>
+    <tr><td>Withdrawn &nbsp;(owner's draw)</td><td class="neg">−600</td></tr>
+    <tr class="sub"><td>Total change in Member's Capital</td><td class="pos">+2,040</td></tr></table>
+  <p>The single capital line was an <b>aggregate</b> — three "reasons" folded into one. The finer statement
+  dissolves your discrepancy: capital grew by income <em>minus a draw</em>. Nothing was wrong; something was
+  <em>hidden by the aggregation level</em>.</p>` };
+
+const M_CFS={ title:'Release 4 — the cash flow statement', tab:'Cash flows', html:`
+  <table class="mtab">
+    <tr><td>Collected from repair customers</td><td class="pos">5,500</td></tr>
+    <tr><td>Parts purchased</td><td>(1,200)</td></tr>
+    <tr><td>Rent paid</td><td>(1,950)</td></tr>
+    <tr class="sub"><td>Operating</td><td class="pos">2,350</td></tr>
+    <tr><td>Purchased repair tool</td><td>(400)</td></tr>
+    <tr class="sub"><td>Investing</td><td>(400)</td></tr>
+    <tr><td>Paid off credit card</td><td>(2,030)</td></tr>
+    <tr><td>Owner's draw</td><td>(600)</td></tr>
+    <tr class="sub"><td>Financing</td><td>(2,630)</td></tr>
+    <tr class="sub"><td>Net change in cash</td><td class="neg">(680)</td></tr></table>
+  <p>The most granular release yet — <b>gross flows</b>, not just net changes. Watch how many open questions
+  it settles at once.</p>` };
+
+const M_REVEAL={ title:'What the statements were — and were not', tab:'The point', html:`
+  <p><b>Your graph is correct.</b> Every edge lawful, every node tied to a statement, all three laws holding.
+  It is also <b>not what happened</b>. The shop's ledger holds 19 customer collections behind your one
+  revenue edge, 19 parts drawdowns, three restocks, three rent checks — about fifty entries where you drew
+  twelve edges.</p>
+  <p><b>This is what a financial statement is:</b> a <em>merge</em> of the true graph. Aggregation is
+  one-way — it conserves the totals and destroys the detail. Each release you received refined your
+  partition (totals → line items → reasons → gross flows), but the refinement bottoms out far above the
+  ledger. An outsider's best graph is the insider's <em>closed, aggregated</em> graph — and that is not a
+  flaw in your work. It is the design of financial reporting: lawful summaries, sized for the reader.</p>
+  <p>One question the statements cannot settle at any aggregation level: <b>what was the $600 draw,
+  really?</b> That is the next page.</p>` };
+
+// ---- guided steps ----
+const S=[
+  { stage:'Overview', title:'Due diligence, from the outside',
+    modal:M_INTRO, cta:'Ask for the books →', show:{n:[],e:[]},
+    body:`You will never see the shop's ledger — only what owners share: <b>statements</b>. Each release
+      refines what you can draw. Build the best lawful graph at every step, and keep track of what each
+      release <em>adds</em> — and what stays out of reach.` },
+
+  { stage:'1 · Totals', title:'Three lines, and almost nothing to hold',
+    modal:M_TOT, show:{n:[],e:[]},
+    quiz:{ q:'From the summary totals alone — how much did the business EARN this season?',
+      options:[
+        {t:'$2,040 — capital grew from 2,460 to 4,500.', ok:false,
+         why:'Capital growth is not earnings. It mixes income with anything the owner put in or took out — the totals cannot separate them.'},
+        {t:'$2,250 — the liabilities that were paid off.', ok:false,
+         why:'Paying off debt is not earning. A loan repayment moves cash and a liability; income may or may not be behind it.'},
+        {t:'It cannot be determined from these totals.', ok:true,
+         why:'Exactly. At this aggregation level, earnings, contributions and draws are indistinguishable. You need a finer partition — ask for more.'} ] } },
+
+  { stage:'2 · Balance sheet', title:'Ten facts — and no relations',
+    modal:M_BS2, flash:'Ten Δ-nodes placed — all facts',
+    show:{n:['cash','ar','rou','parts','tools','fix','laptop','cc','dep','cap'], e:[]},
+    body:`Every node is now a <b>fact</b> — and the identity already holds:
+      <span class="idn">Σ node Δ = 0</span>
+      But a balance sheet reports <em>positions</em>, not <em>events</em>. Test how far the facts reach:`,
+    quiz:{ q:'The credit card fell $2,030. Did the shop USE the card this summer?',
+      options:[
+        {t:'No — it only paid the old balance off.', ok:false,
+         why:'Maybe — but you cannot know that from a net change. Charging $500 and paying $2,530 leaves the same Δ.'},
+        {t:'Yes — it charged and repaid within the season.', ok:false,
+         why:'Also possible, also unknowable. Any gross pattern with net −2,030 fits the balance sheet.'},
+        {t:'Cannot be determined — the balance sheet nets gross flows.', ok:true,
+         why:'Right. Net change is a merge of gross flows. Remember this one: a later release settles it.'} ] } },
+
+  { stage:'3 · Income statement', title:'Flows arrive — and a number that doesn\'t fit',
+    modal:M_IS2,
+    body:`The income statement reports the season's <b>flows in aggregate</b>: revenue 6,020, expenses 3,380,
+      net income <b>2,640</b>. Your instinct: capital should have grown by income. But the balance sheet's
+      capital line says <b>+2,040</b>.`,
+    quiz:{ q:'Income 2,640; capital up only 2,040. What explains the $600 gap?',
+      options:[
+        {t:'A bookkeeping error — the statements contradict each other.', ok:false,
+         why:'The identity holds at both dates; nothing is out of balance. Balanced statements can still hide something from you.'},
+        {t:'The owner moved something in or out of capital that is not income.', ok:true,
+         why:'That is the only lawful reading: capital\'s law of motion has more terms than income. What exactly moved, this release cannot say — ask the owner.'},
+        {t:'Depreciation absorbed the difference.', ok:false,
+         why:'Depreciation is already inside the 2,640. The gap sits between income and the capital line, not within income.'} ] } },
+
+  { stage:'4 · Ask the owner', title:'The capital line unmerges',
+    modal:M_CAP, hideN:['cap'], flash:'One capital line → three reasons',
+    show:{n:['contrib','gen'],e:[]},
+    body:`The owner's reply is a finer statement: capital by its <b>reasons</b>. Contributed +0; Generated
+      +2,640 (exactly net income — your law of motion restored); and a third node, <b>Withdrawn</b>, shown
+      with a <b>?</b>. Compute it from the capital identity:
+      <span class="idn">ΔCapital (2,040) = Contributed (0) + Generated (2,640) − Withdrawn</span>`,
+    infer:{ label:'Withdrawn ($)', answer:600, tol:0.5,
+      hint:'Withdrawn = 0 + 2,640 − 2,040.',
+      targetN:['wd'], targetE:[],
+      proof:'The draw. Invisible at every earlier aggregation level — it took the reasons-level statement to surface it.' } },
+
+  { stage:'4 · Ask the owner', title:'The first edge',
+    body:`One event is now known: the owner took <b>$600</b>. Draw it — and note what you are assuming.`,
+    show:{n:[],e:['e_draw']},
+    quiz:{ q:'The draw edge — which direction, and what is still assumed?',
+      options:[
+        {t:'ΔCash → ΔWithdrawn — cash out to the owner; the cash-ness is an assumption.', ok:true,
+         why:'Credit → debit: cash is the source. But no statement has said the draw was CASH — the owner could have taken tools. Tag: inference.'},
+        {t:'ΔWithdrawn → ΔCash — the draw brought cash in.', ok:false,
+         why:'Backwards: a draw is a payout. And mind the second half of the question — how do you know it was cash at all?'},
+        {t:'ΔGenerated → ΔWithdrawn — the draw came out of income.', ok:false,
+         why:'Tempting, but draws are not income deductions — they draw against capital, settled with an asset. Which asset? Assumed, for now.'} ] } },
+
+  { stage:'5 · Cash flows', title:'Gross flows at last',
+    modal:M_CFS, flash:'The CFS settles old questions',
+    show:{n:[],e:['e_revcash','e_cc']}, setE:{ e_draw:{bucket:'fact', cav:'confirmed cash by the CFS financing line'} },
+    body:`The CFS reports <b>gross</b> flows. At once: collections <b>5,500</b> land as a fact edge from
+      Generated into Cash; the card payoff <b>2,030</b> — answering stage 2's open question (no new charges:
+      the line says <em>paid off</em>); and the draw's cash assumption is <b>confirmed</b> — watch its edge
+      turn solid. Facts move the boundary.`,
+    cta:'But revenue was 6,020… →' },
+
+  { stage:'5 · Cash flows', title:'The 520 wedge',
+    body:`Revenue was <b>6,020</b>; only <b>5,500</b> arrived as cash. Where is the remaining <b>520</b>?
+      Two balance-sheet facts are waiting to absorb it. First: how much sits in <b>receivables</b>?`,
+    infer:{ label:'Revenue into Receivables ($)', answer:300, tol:0.5,
+      hint:'ΔReceivables is +300, and it began the season at $0.',
+      targetN:[], targetE:['e_revar'],
+      proof:'Under the assumption nothing older was collected, the +300 receivable IS uncollected revenue. An inference — the CFS wording supports but does not prove it.' } },
+
+  { stage:'5 · Cash flows', title:'Revenue without new cash',
+    body:`$220 of revenue remains unexplained — exactly the customer deposit's fall.`,
+    show:{n:[],e:['e_revdep']},
+    quiz:{ q:'The deposit fell $220. Earned, or refunded?',
+      options:[
+        {t:'Earned — the frame was delivered; the cash arrived LAST season.', ok:true,
+         why:'The 220 completes the revenue equation: 5,500 + 300 + 220 = 6,020. A refund would have shown in the CFS — it did not. Inference, well-supported.'},
+        {t:'Refunded — the shop returned Smith\'s money.', ok:false,
+         why:'A refund is a cash outflow — the CFS shows none. And then revenue would not tie: 5,500 + 300 ≠ 6,020.'},
+        {t:'Impossible to say anything.', ok:false,
+         why:'Stronger can be said: only one reading makes revenue, the deposit AND the cash statement all tie. That is what inference-under-assumption means.'} ] } },
+
+  { stage:'5 · Cash flows', title:'The through-flows',
+    flash:'Parts flow through; rent and the tool are pinned',
+    show:{n:[],e:['e_pused','e_pbuy','e_rent','e_tool']},
+    body:`Four more edges, all essentially factual: parts <b>used 1,200</b> (IS) and <b>bought 1,200</b>
+      (CFS) — a perfect flow-through leaving ΔParts at 0; rent <b>1,950</b> on both statements; the tool
+      purchase <b>400</b> from investing. The graph is nearly closed. One aggregate remains: the single
+      <b>230</b> depreciation line, spread over three kinds of gear.`,
+    cta:'Split the depreciation →' },
+
+  { stage:'5 · Cash flows', title:'Reversing an aggregation',
+    body:`The IS lumps depreciation: <b>230</b>, one line. But you hold three balance-sheet facts and one
+      investing fact. Use Tools' own law of motion to recover its share:
+      <span class="idn">ΔTools (+240) = purchase (400) − depreciation</span>`,
+    infer:{ label:'Tools depreciation ($)', answer:160, tol:0.5,
+      hint:'400 − 240.',
+      targetN:[], targetE:['e_deprT'],
+      proof:'Fixtures (−40, no purchases) and the laptop (−30) follow the same logic — and 160 + 40 + 30 = 230 ✓. You just reversed an aggregation using the laws. It will not always be possible.' } },
+
+  { stage:'5 · Cash flows', title:'The last two edges',
+    flash:'160 + 40 + 30 = the IS\'s single 230 line',
+    show:{n:[],e:['e_deprF','e_deprL']},
+    body:`Fixtures → Generated <b>40</b> and Laptop → Generated <b>30</b> complete the depreciation split.
+      Twelve edges; every law holds; every edge tagged. This is the <b>best graph an outsider can build</b> —
+      no further release would refine it much. Now see what it was a summary <em>of</em>.`,
+    cta:'Compare with what actually happened →' },
+
+  { stage:'The point', title:'Your graph, and the shop\'s ledger',
+    finale:true, modal:M_REVEAL, show:{n:[],e:[]},
+    body:`<b>Both graphs are lawful. Both produce exactly these statements. Only one is what happened.</b>
+      Toggle the ledger view: your single 5,500 collections edge fans into <b>19 repairs</b> — each bundle in its own color: teal collections, crimson parts draws, amber restocks, purple rent (Dana's $120
+      through Westville's $500).
+      About fifty entries stand behind your twelve edges — and no statement, at any release level, could
+      have given them to you.
+      <div class="btnrow" style="margin-top:10px"><button class="btn go" id="fanBtn">Show the shop's actual ledger</button></div>` },
+];
+
+const shownN=new Set(), shownE=new Set(), pendN=new Set(), pendE=new Set();
+let fresh={n:null,e:null};
+
+// =====================  render + fan overlay  =====================
+const svgEl=document.getElementById('canvas');
+const render=BLAGraphRender.create({svg:svgEl,NODES,EDGES,TYPECOL,state:{shownN,shownE,pendN,pendE,fresh}});
+const fmtSigned=render.fmtSigned;
+let revealMode=false;
+const gFan=document.createElementNS(NS,'g');
+svgEl.insertBefore(gFan, svgEl.lastChild);   // under the node layer
+function drawFan(){
+  gFan.innerHTML='';
+  if(!revealMode) { svgEl.classList.remove('revealing'); return; }
+  svgEl.classList.add('revealing');
+  Object.keys(FAN).forEach(eid=>{
+    if(!shownE.has(eid)) return;
+    const e=EDGES[eid], a=NODES[e.from], b=NODES[e.to], f=FAN[eid];
+    const dx=b.x-a.x, dy=b.y-a.y, L=Math.hypot(dx,dy)||1;
+    const px=dy/L, py=-dx/L;                       // perpendicular
+    const n=f.amts.length, spacing=Math.min(9, 120/n+3);
+    f.amts.forEach((w,i)=>{
+      const o=(i-(n-1)/2)*spacing;
+      const mx=(a.x+b.x)/2+px*o*1.6, my=(a.y+b.y)/2+py*o*1.6;
+      const p=document.createElementNS(NS,'path');
+      p.setAttribute('class','fanline'); p.setAttribute('stroke',f.color);
+      p.setAttribute('d',`M${a.x+px*o*0.3},${a.y+py*o*0.3} Q${mx},${my} ${b.x+px*o*0.3},${b.y+py*o*0.3}`);
+      gFan.appendChild(p);
+    });
+    const bx=(a.x+b.x)/2+px*((n/2)*spacing*1.6+16), by=(a.y+b.y)/2+py*((n/2)*spacing*1.6+16);
+    const t=document.createElementNS(NS,'text');
+    t.setAttribute('class','fanbadge'); t.setAttribute('fill',f.color); t.setAttribute('x',bx); t.setAttribute('y',by); t.setAttribute('text-anchor','middle');
+    t.textContent=`×${n} — ${f.label} · $${f.amts.reduce((s,x)=>s+x,0).toLocaleString()}`;
+    gFan.appendChild(t);
+  });
+}
+const draw=()=>{render.draw();drawFan();};
+svgEl.addEventListener('pointerup',()=>{ if(revealMode) drawFan(); });
+
+function activeFlow(){return BLAAccounting.activeEdges([...shownE].filter(id=>!pendE.has(id)).map(id=>({id,cr:EDGES[id].from,dr:EDGES[id].to,w:EDGES[id].w})),NODES,false);}
+
+function refreshPanels(s){
+  const lb=document.getElementById('lawsBody');
+  const flow=activeFlow();
+  const shownNodes=[...shownN];
+  const hasPending = pendN.size>0 || pendE.size>0;
+  const settled=shownNodes.filter(id=>!pendN.has(id));
+  const fai=settled.reduce((sum,id)=>sum+NODES[id].weight,0);
+  let faiFlag, faiEqn;
+  if(pendN.size){ faiFlag='<span class="flag open">open</span>'; faiEqn='Σ node Δ = <b>?</b> — resolve the unknown node'; }
+  else if(!shownNodes.length){ faiFlag='<span class="flag wait">—</span>'; faiEqn='no nodes yet'; }
+  else { faiFlag=Math.abs(fai)<1e-6?'<span class="flag good">holds ✓</span>':'<span class="flag bad">off by '+Math.abs(fai).toLocaleString()+'</span>'; faiEqn='Σ node Δ = <b>'+fmtSigned(fai)+'</b>'; }
+  const touch=new Set();[...pendE].forEach(id=>{touch.add(EDGES[id].from);touch.add(EDGES[id].to);});
+  const openNodes=shownNodes.filter(id=>!pendN.has(id)&&touch.has(id));
+  const flowNodes=shownNodes.filter(id=>flow.some(e=>e.from===id||e.to===id)&&!pendN.has(id)&&!touch.has(id));
+  let lomOK=flowNodes.length>0, anyMismatch=false, rows='';
+  openNodes.forEach(id=>{
+    rows+=`<div class="eqn open">${NODES[id].label.replace('\n',' ')}: built <b>$?</b> · target <b>${fmtSigned(NODES[id].weight)}</b><span class="otag">open</span></div>`;});
+  flowNodes.forEach(id=>{const built=BLAAccounting.signedWeight(id,flow),tgt=NODES[id].weight,match=Math.abs(built-tgt)<1e-6;
+    if(!match){lomOK=false;anyMismatch=true;}
+    rows+=`<div class="eqn">${NODES[id].label.replace('\n',' ')}: built <b>${fmtSigned(built)}</b> ${match?'=':'≠'} target <b>${fmtSigned(tgt)}</b></div>`;});
+  const anyFlow=[...shownE].length>0;
+  const lomFlag = !anyFlow?'<span class="flag wait">no edges yet</span>'
+    : hasPending?'<span class="flag open">open</span>'
+    : lomOK?'<span class="flag good">consistent ✓</span>'
+    : '<span class="flag wait">building…</span>';
+  const capSplit=['contrib','gen','wd'].every(id=>shownN.has(id));
+  const aggEqn=capSplit
+    ? 'ΔCapital <b>+2,040</b> = Contributed 0 + Generated 2,640 − Withdrawn 600'
+    : (shownN.has('cap') ? 'Member\'s Capital reported as <b>one line</b> — its reasons aggregated away' : '—');
+  lb.innerHTML=
+    `<div class="law"><div class="lh"><span>1 · Fundamental identity</span>${faiFlag}</div><div class="eqn">${faiEqn}</div></div>
+     <div class="law"><div class="lh"><span>2 · Law of motion</span>${lomFlag}</div>${rows||'<div class="eqn">place a flow edge to begin</div>'}</div>
+     <div class="law"><div class="lh"><span>3 · Aggregation</span>${capSplit?'<span class="flag good">capital decomposed ✓</span>':'<span class="flag wait">—</span>'}</div>
+       <div class="eqn">${aggEqn}</div></div>`;
+  const es=[...shownE];
+  const col=b=>b==='fact'?'var(--fact)':b==='open'?'var(--open)':'var(--infer)';
+  const word=b=>b==='fact'?'fact':b==='open'?'open':'inferred';
+  document.getElementById('cFact').textContent=es.filter(id=>EDGES[id].bucket==='fact').length;
+  document.getElementById('cInfer').textContent=es.filter(id=>EDGES[id].bucket==='infer').length;
+  document.getElementById('cOpen').textContent=es.filter(id=>EDGES[id].bucket==='open').length;
+  document.getElementById('edgeCount').textContent=es.length+' edge'+(es.length===1?'':'s');
+  document.getElementById('edgeList').innerHTML=es.map(id=>{const e=EDGES[id];
+    return `<li><span class="sw" style="background:${col(e.bucket)}"></span><span class="en">${NODES[e.from].label.replace('\n',' ')} → ${NODES[e.to].label.replace('\n',' ')} · <span class="ev">${pendE.has(id)?'$?':'$'+e.w.toLocaleString()}</span><span class="cav">${word(e.bucket)} — ${e.cav}</span></span></li>`;}).join('')
+    ||'<li style="border:none;color:var(--ink-soft);font-style:italic">edges appear as you place them</li>';
+  // finale: wire the ledger-reveal toggle (body is re-rendered by the stepper)
+  const fb2=document.getElementById('fanBtn');
+  if(fb2) fb2.onclick=()=>{ revealMode=!revealMode; fb2.textContent=revealMode?'Back to your graph':'Show the shop\'s actual ledger'; fb2.classList.toggle('go',!revealMode); draw(); };
+  if(!s.finale && revealMode){ revealMode=false; draw(); }
+}
+
+const stepper=BLAStepper.create({S,state:{shownN,shownE,pendN,pendE,fresh},NODES,EDGES,EDGES0,draw,refreshPanels});
+</script>
+</body>
+</html>
