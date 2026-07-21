@@ -296,9 +296,13 @@ pages).
    piles, give/receive, the walk); the graph vocabulary (node, edge, the walk)
    needs no linter change. If a later beat needs M5/M6 vocabulary, it returns
    for an express authorization then. `lint-language.sh` is untouched.
-9. **Scrub list** — retained earnings / dividends / stock / "Business Language
-   Analytics" branding: scrub everywhere, or antecedent-tag where the contrast
-   teaches?
+9. ~~**Scrub list**~~ — **RULED 2026-07-21: full scrub.** Every stray outside
+   term converts silently to course language — the piles, not retained
+   earnings; the draw, not dividends; Reasons, not equity (including the
+   node-type legend); a generic prospective investor, not a limited partner;
+   course headers, not "Business Language Analytics" branding. No contrast
+   asides — translation to the profession's terms belongs to the future
+   accounting-terms module. Consistent with ruling 8 (no 7x carve-out).
 
 ## Build implications (if approved)
 
