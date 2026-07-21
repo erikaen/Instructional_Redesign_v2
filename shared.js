@@ -1496,61 +1496,65 @@ var COURSE_DONE = {
  * own top-level globals; reaches at===total exactly when its COURSE_DONE finish-
  * condition fires, so the bar and checkmark agree. (Single-step activities and pages
  * that ship their own step bar are NOT listed.) */
+/* Convention (2026-07-21): at = COMPLETED steps (0 on open), total = number of steps, so every
+ * activity bar opens EMPTY and reaches full only when the page is done (at === total exactly when
+ * COURSE_DONE fires). Read-only pages are NOT listed — courseBarState renders them full-on-visit. */
 var COURSE_STEPS = {
-  // 12-2: categorize (1) → value (2) → done (3)  — the sort is ONE stage, not per-item
-  '12-2-Marias-Form.html': function(){ var done = (typeof formDone !== 'undefined' && formDone); var val = (typeof formPhase !== 'undefined' && formPhase === 'valuate'); return { at: done ? 3 : (val ? 2 : 1), total: 3 }; },
-  // 13-2: sorting (1) → all rows classified (2)  — the sort is ONE stage
-  '13-2-The-Bank-Statement.html': function(){ var all = Array.isArray(window.txns) && typeof classifications !== 'undefined' && txns.every(function(t){ return classifications[t.id] !== undefined; }); return { at: all ? 2 : 1, total: 2 }; },
-  // 13-4: deposits answered / total
+  // 12-2: categorize → value → done  (2 actions; the sort is ONE stage)
+  '12-2-Marias-Form.html': function(){ var done = (typeof formDone !== 'undefined' && formDone); var val = (typeof formPhase !== 'undefined' && formPhase === 'valuate'); return { at: done ? 2 : (val ? 1 : 0), total: 2 }; },
+  // 13-2: all rows classified  (1 action; the sort is ONE stage)
+  '13-2-The-Bank-Statement.html': function(){ var all = Array.isArray(window.txns) && typeof classifications !== 'undefined' && txns.every(function(t){ return classifications[t.id] !== undefined; }); return { at: all ? 1 : 0, total: 1 }; },
+  // 13-4: deposits answered / total  (already completed-count)
   '13-4-The-Customer-Payments.html': function(){ var n = (typeof depositAnswers !== 'undefined') ? Object.keys(depositAnswers).length : 0; return { at: n, total: (Array.isArray(window.deposits) ? deposits.length : 1) }; },
-  // 13-5: sort (1) → MCQ answered (2)  — the sort is ONE stage
-  '13-5-The-Credit-Card-Statement.html': function(){ return { at: (typeof cardMCQSubmitted !== 'undefined' && cardMCQSubmitted) ? 2 : 1, total: 2 }; },
-  // 15-3: candidates answered / total
+  // 13-5: MCQ answered  (1 action; the sort is ONE stage)
+  '13-5-The-Credit-Card-Statement.html': function(){ return { at: (typeof cardMCQSubmitted !== 'undefined' && cardMCQSubmitted) ? 1 : 0, total: 1 }; },
+  // 15-3: candidates answered / total  (already completed-count)
   '15-3-The-Entity.html': function(){ var n = (typeof submitted !== 'undefined') ? Object.keys(submitted).length : 0; return { at: n, total: (Array.isArray(window.CANDIDATES) ? CANDIDATES.length : 1) }; },
-  // 22-4: sort the cards (1) → figure (2) → done (3)  — the sort is ONE stage
-  '22-4-whatChanged.html': function(){ var mi = Array.isArray(window.movedItems) ? window.movedItems : []; var allPlaced = mi.length > 0 && typeof placed !== 'undefined' && mi.every(function(m){ return placed[m.id] !== undefined; }); var fs = (typeof figStage !== 'undefined') ? figStage : 0; return { at: allPlaced ? (fs >= 2 ? 3 : 2) : 1, total: 3 }; },
-  // 24-5: fill the schedule (1) → signing (2) → both signed / done (3)  — the fill is ONE stage
-  '24-5-schedule-a.html': function(){ var allEnt = (typeof allEntered === 'function') ? allEntered() : false; var both = (typeof signedCompany !== 'undefined' && signedCompany) && (typeof signedMember !== 'undefined' && signedMember); return { at: allEnt ? (both ? 3 : 2) : 1, total: 3 }; },
+  // 22-4: sort the cards → figure → done  (2 actions; the sort is ONE stage)
+  '22-4-whatChanged.html': function(){ var mi = Array.isArray(window.movedItems) ? window.movedItems : []; var allPlaced = mi.length > 0 && typeof placed !== 'undefined' && mi.every(function(m){ return placed[m.id] !== undefined; }); var fs = (typeof figStage !== 'undefined') ? figStage : 0; return { at: allPlaced ? (fs >= 2 ? 2 : 1) : 0, total: 2 }; },
+  // 24-5: fill the schedule → signing → both signed / done  (2 actions; the fill is ONE stage)
+  '24-5-schedule-a.html': function(){ var allEnt = (typeof allEntered === 'function') ? allEntered() : false; var both = (typeof signedCompany !== 'undefined' && signedCompany) && (typeof signedMember !== 'undefined' && signedMember); return { at: allEnt ? (both ? 2 : 1) : 0, total: 2 }; },
   // 23-3 (Rick's statement-pipeline rebuild): step 0..6, contributed at step 6
-  '23-3-contribution.html': function(){ return { at: Math.min(((typeof step !== 'undefined') ? step : 0) + 1, 7), total: 7 }; },
-  // ---- Rick's new M3/M4/M5 arc (2026-07-19). His pages cap step at TOTAL_STEPS-1,
-  //      so at = step+1 hits total exactly when COURSE_DONE fires. ----
-  '31-1-welcome.html': function(){ return { at: (typeof bsDone !== 'undefined' && bsDone) ? 2 : 1, total: 2 }; },
-  '31-2-work-the-season.html': function(){ return { at: Math.min(((typeof stage !== 'undefined') ? stage : 0) + 1, 8), total: 8 }; },
-  '32-1-check-the-records.html': function(){ return { at: (typeof step !== 'undefined' && step >= 1) ? 2 : 1, total: 2 }; },
-  '32-2-record-the-receivable.html': function(){ return { at: (typeof step !== 'undefined' && step >= 1) ? 2 : 1, total: 2 }; },
-  '32-3-the-third-kind.html': function(){ var w = (typeof walkStep !== 'undefined') ? walkStep : 0; var rec = (typeof recorded !== 'undefined' && recorded); return { at: rec ? 4 : Math.min(w + 1, 3), total: 4 }; },
-  '33-1-copy-the-rows.html': function(){ var sel = (typeof selected !== 'undefined' && selected), pas = (typeof pasted !== 'undefined' && pasted); return { at: pas ? 3 : (sel ? 2 : 1), total: 3 }; },
-  '33-2-sort-the-rows.html': function(){ return { at: Math.min(((typeof activeOrder !== 'undefined') ? activeOrder : 0) + 1, 5), total: 5 }; },
-  '33-3-format-the-statement.html': function(){ return { at: (typeof completed !== 'undefined' && completed) ? 2 : 1, total: 2 }; },
+  '23-3-contribution.html': function(){ return { at: Math.min(((typeof step !== 'undefined') ? step : 0), 6), total: 6 }; },
+  // ---- Rick's M3/M4/M5 arc: at = completed steps (0 on open); each page caps step at
+  //      TOTAL_STEPS, so at hits total exactly when COURSE_DONE fires. ----
+  '31-1-welcome.html': function(){ return { at: (typeof bsDone !== 'undefined' && bsDone) ? 1 : 0, total: 1 }; },
+  '31-2-work-the-season.html': function(){ return { at: Math.min(((typeof stage !== 'undefined') ? stage : 0), 7), total: 7 }; },
+  '32-1-check-the-records.html': function(){ return { at: (typeof step !== 'undefined' && step >= 1) ? 1 : 0, total: 1 }; },
+  '32-2-record-the-receivable.html': function(){ return { at: (typeof step !== 'undefined' && step >= 1) ? 1 : 0, total: 1 }; },
+  '32-3-the-third-kind.html': function(){ var w = (typeof walkStep !== 'undefined') ? walkStep : 0; var rec = (typeof recorded !== 'undefined' && recorded); return { at: rec ? 3 : Math.min(w, 2), total: 3 }; },
+  '33-1-copy-the-rows.html': function(){ var sel = (typeof selected !== 'undefined' && selected), pas = (typeof pasted !== 'undefined' && pasted); return { at: pas ? 2 : (sel ? 1 : 0), total: 2 }; },
+  '33-2-sort-the-rows.html': function(){ return { at: Math.min(((typeof activeOrder !== 'undefined') ? activeOrder : 0), 4), total: 4 }; },
+  '33-3-format-the-statement.html': function(){ return { at: (typeof completed !== 'undefined' && completed) ? 1 : 0, total: 1 }; },
   '34-1-what-cash-missed.html': function(){
     var n = Array.isArray(window.STEPS) ? STEPS.length : 6;
     var av = (typeof assetsVisited !== 'undefined' && assetsVisited);
     var intro = (typeof introDone !== 'undefined' && introDone);
     var w = (typeof walkStep !== 'undefined') ? walkStep : 0;
-    /* prompt(1) → observed(2) → steps(3..n+2) → close(n+3) */
-    return { at: !av ? 1 : (!intro ? 2 : Math.min(w + 3, n + 3)), total: n + 3 }; },
-  '41-1-The-Investor-Asks.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 3 }; },
-  '42-1-The-Missing-Wage.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 3 }; },
+    /* not-observed(0) → observed(1) → walk steps + close(2..n+2) */
+    return { at: !av ? 0 : (!intro ? 1 : Math.min(w + 2, n + 2)), total: n + 2 }; },
+  '41-1-The-Investor-Asks.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 2 }; },
+  '42-1-The-Missing-Wage.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 2 }; },
   '43-1-The-Capital-Bridge.html': function(){
     var srcOn = (typeof sourceConfirmed !== 'undefined' && sourceConfirmed);
     var comp = (typeof completed !== 'undefined' && completed);
     var ord = (typeof currentOrder !== 'undefined') ? currentOrder : 0;
-    /* source beat(1) → order0 beginnings(2) → order1 sort(3) → order2 mcq/gate(4)
-       → order3 format(5) → christened(6) */
-    return { at: !srcOn ? 1 : (comp ? 6 : ord + 2), total: 6 }; },
-  '44-1-The-Cash-Puzzle.html': function(){ return { at: (typeof mcqSubmitted !== 'undefined' && mcqSubmitted) ? 2 : 1, total: 2 }; },
+    /* source beat(0) → order0 beginnings(1) → order1 sort(2) → order2 mcq/gate(3)
+       → order3 format(4) → christened(5) */
+    return { at: !srcOn ? 0 : (comp ? 5 : ord + 1), total: 5 }; },
+  '44-1-The-Cash-Puzzle.html': function(){ return { at: (typeof mcqSubmitted !== 'undefined' && mcqSubmitted) ? 1 : 0, total: 1 }; },
   '44-2-Three-Buckets.html': function(){
     var cp = (typeof copied !== 'undefined' && copied);
     var sc = (typeof sortComplete !== 'undefined' && sortComplete);
     var ord = 0;
     if (cp) { var st = document.querySelector('#statementBuild .brw-step.is-active'); ord = st ? Number(st.getAttribute('data-step-order')) : 0; }
-    /* intro(1) → copied-in(2) → pick(3) → sorted(4) */
-    return { at: !cp ? 1 : (ord >= 2 ? 4 : (ord >= 1 ? 3 : 2)), total: 4 }; },
-  '44-3-The-Cash-Flow-Statement.html': function(){ return { at: (typeof completed !== 'undefined' && completed) ? 2 : 1, total: 2 }; },
-  '46-1-The-Statements-Tie-Out.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; },
-  '47-1-Freddies-Napkin.html': function(){ var s=(typeof step!=='undefined')?step:0, nl=(typeof napkinLines!=='undefined')?napkinLines:0; var pos=(s<2)?s:(s===2?1+nl:6+(s-2)); return { at: pos + 1, total: 9 }; },
-  '48-1-The-Deal.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 4 }; }
+    /* intro(0) → copied-in(1) → pick(2) → sorted(3) */
+    return { at: !cp ? 0 : (ord >= 2 ? 3 : (ord >= 1 ? 2 : 1)), total: 3 }; },
+  '44-3-The-Cash-Flow-Statement.html': function(){ return { at: (typeof completed !== 'undefined' && completed) ? 1 : 0, total: 1 }; },
+  '46-1-The-Statements-Tie-Out.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 4 }; },
+  '46-2-The-Statement-Map.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 4 }; },
+  '47-1-Freddies-Napkin.html': function(){ var s=(typeof step!=='undefined')?step:0, nl=(typeof napkinLines!=='undefined')?napkinLines:0; var pos=(s<2)?s:(s===2?1+nl:6+(s-2)); return { at: pos, total: 8 }; },
+  '48-1-The-Deal.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 3 }; }
 };
 
 (function(){

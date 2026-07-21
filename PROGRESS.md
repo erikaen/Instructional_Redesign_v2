@@ -33,15 +33,20 @@ that system, or the new page will behave wrong (see "If you skip this").
    - Use the **correctness-free** signal — "all items placed" / "all questions answered" /
      "submitted" — **not** "answered correctly".
 
-3. **If the activity has multiple steps AND no progress bar of its own**, add a
-   `COURSE_STEPS` entry — the current step out of the total:
+3. **If the activity has multiple steps**, add a `COURSE_STEPS` entry. **`at` = the number of
+   steps the student has COMPLETED (0 on open); `total` = the number of steps** — so the bar
+   **opens EMPTY and fills one segment per completed step**, reaching full only when done
+   (convention set 2026-07-21):
    ```js
-   'YOUR-FILE.html': function(){ return { at: <currentStep>, total: <totalSteps> }; },
+   'YOUR-FILE.html': function(){ return { at: <stepsCompleted>, total: <totalSteps> }; },
    ```
+   - Do NOT use a 1-indexed "position" value (e.g. `step + 1`) — that makes the bar look
+     pre-filled on open (a 2-step page would open at 50%).
    - A whole **sort counts as ONE step** (not one per item dragged). Each distinct **phase,
-     reveal, or question** is a step.
-   - It MUST reach `at === total` **exactly when** the `COURSE_DONE` function turns true, so
-     the bar and the checkmark agree.
+     reveal, or question** is a step. A single-action page is `total: 1` (0 → 1).
+   - It MUST reach `at === total` **exactly when** the `COURSE_DONE` function turns true, so the
+     bar and the checkmark agree. Verify BOTH the open state (`0/total`) and the done
+     state (`total/total`).
 
 4. **If the activity has a Reset button**, show it only once the student has taken an action
    (there's nothing to reset before that). Match the existing pages.
@@ -56,6 +61,17 @@ that system, or the new page will behave wrong (see "If you skip this").
    COURSE_DONE/COURSE_STEPS entries, and glossary section.
    **Currently PARKED (2026-07-19): Module 5 is not wired into the course.** To enable it,
    add `<script src="course-m5.js"></script>` right after the `shared.js` tag on every page.
+
+## The page template (or the bar won't appear)
+
+New pages MUST use the standard header — a **`.phase-title-row`** wrapping the `.phase-title`
+(copy `46-1`), NOT an old standalone `.tut-header` with its own `<h1>` / "Page X of Y" subtitle
+/ in-page Reset button. The chrome injects the progress bar directly **after `.phase-title-row`**;
+a page without it gets **no bar at all** (and, in the web-app reader, a duplicate header + reset).
+Page CSS lives in `shared.css` as **`.pg-NN-N`-scoped rules** with a matching
+`class="page pg-NN-N"` on the container — no inline `<style>`. Expose a top-level `restart()` for
+the injected Reset. (Real bug: `46-2` shipped on the old template — no bar, duplicate header;
+fixed 2026-07-21.)
 
 ## If you skip step 2
 
