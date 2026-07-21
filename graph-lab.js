@@ -219,7 +219,7 @@
     injectStyle();opts=opts||{};var vals=opts.side==='beg'?Object.keys(data.bs).reduce(function(o,id){o[id]=data.bs[id].beg;return o;},{}):board.levels();
     var previous={};el.querySelectorAll('[data-acct]').forEach(function(line){previous[line.getAttribute('data-acct')]=Number(line.getAttribute('data-value'));});
     function line(id,label,value,display){var moved=previous[id]!=null&&previous[id]!==value;return '<div class="gl-col-line'+(moved?' gl-moved':'')+'" data-acct="'+id+'" data-value="'+value+'"><span>'+label+'</span><span class="gl-col-value">'+(display||money(value))+'</span></div>';}
-    var title=opts.christened?opts.title:'Where we stand',assets=sum(ASSET_IDS,vals),liabs=sum(LIAB_IDS,vals),mc=(vals.contrib||0)+(vals.gen||0)-(vals.wd||0),ok=assets-liabs-mc===0;
+    var title=(opts.side==='end'&&!opts.christened)?'Where we stand':opts.title,assets=sum(ASSET_IDS,vals),liabs=sum(LIAB_IDS,vals),mc=(vals.contrib||0)+(vals.gen||0)-(vals.wd||0),ok=assets-liabs-mc===0;
     var labels={cash:'Cash',ar:'Receivables',rou:'Right of Use',parts:'Parts',tools:'Tools & Equip',fix:'Fixtures',laptop:'Laptop',cc:'Credit Card',dep:'Customer Deposit'};
     var html='<h3 class="gl-col-title">'+title+'</h3><div class="gl-col-sub">'+(opts.sub||'')+'</div><div class="gl-col-section">Assets</div>';
     ASSET_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class="gl-col-total" data-total="assets"><span>Total Assets</span><span>'+money(assets)+'</span></div><div class="gl-col-section">Liabilities</div>';

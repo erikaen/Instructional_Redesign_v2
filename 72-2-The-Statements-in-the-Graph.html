@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Statements in the Graph</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m7-season-stage {
+      display:grid;
+      grid-template-columns:minmax(230px,270px) minmax(0,1fr) minmax(230px,270px);
+      gap:14px;
+      align-items:start;
+      margin-top:16px;
+    }
+    .m7-season-stage > * { min-width:0; }
+    .m7-board-wrap {
+      overflow-x:auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#f0f4f8;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+    }
+    .m7-board-wrap #board { display:block; width:100%; min-width:650px; height:auto; }
+    .m7-season-stage .gl-col { width:100%; box-shadow:0 7px 20px rgba(32,55,72,.08); }
+    .m7-season-stage .gl-col h3 { line-height:1.25; }
+    #tail { margin-top:16px; }
+    #controls { margin-top:18px; }
+    .m7-progress {
+      margin:8px 0 0;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .m7-statement-card {
+      max-width:760px;
+      margin:0 auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#fff;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+      overflow:hidden;
+    }
+    .m7-statement-title {
+      margin:0;
+      padding:15px 18px;
+      background:#eaf1f8;
+      color:#16324a;
+      font:800 1rem/1.35 Inter,sans-serif;
+      letter-spacing:.01em;
+    }
+    .m7-statement-body { padding:8px 18px 14px; }
+    .m7-statement-line {
+      display:grid;
+      grid-template-columns:minmax(150px,1fr) minmax(120px,170px) 86px;
+      gap:10px;
+      align-items:center;
+      padding:11px 0;
+      border-bottom:1px solid #e2e8f0;
+    }
+    .m7-statement-line:last-child { border-bottom:0; }
+    .m7-statement-line.is-correct { color:#166534; }
+    .m7-statement-label { font:700 .94rem/1.35 Inter,sans-serif; }
+    .m7-money-input {
+      box-sizing:border-box;
+      width:100%;
+      min-height:40px;
+      border:1px solid #94a3b8;
+      border-radius:6px;
+      padding:8px 10px;
+      background:#fff;
+      color:#172033;
+      font:700 .95rem/1.2 "JetBrains Mono",monospace;
+      text-align:right;
+    }
+    .m7-money-input:focus { outline:3px solid rgba(40,109,192,.22); border-color:#286dc0; }
+    .m7-money-input:disabled { border-color:#86b89a; background:#ecfdf3; color:#166534; opacity:1; }
+    .m7-check {
+      min-height:40px;
+      border:0;
+      border-radius:6px;
+      padding:8px 12px;
+      background:#286dc0;
+      color:#fff;
+      cursor:pointer;
+      font:800 .86rem/1 Inter,sans-serif;
+    }
+    .m7-check:disabled { background:#28864f; cursor:default; }
+    .m7-feedback {
+      grid-column:2 / 4;
+      min-height:0;
+      margin:0;
+      color:#a63b20;
+      font:600 .84rem/1.4 "Open Sans",sans-serif;
+    }
+    .m7-statement-line.is-correct .m7-feedback { color:#166534; }
+    .m7-given { grid-column:2 / 4; padding-right:98px; text-align:right; font:700 .95rem/1.2 "JetBrains Mono",monospace; }
+    .m7-glossary-dismiss {
+      border:0;
+      padding:2px 7px;
+      background:transparent;
+      color:inherit;
+      cursor:pointer;
+      font-size:1.7rem;
+      line-height:1;
+    }
+    @media (max-width:980px) {
+      .m7-season-stage { grid-template-columns:1fr; }
+      .m7-season-stage > :nth-child(1) { order:1; }
+      .m7-season-stage > :nth-child(2) { order:2; }
+      .m7-season-stage > :nth-child(3) { order:3; }
+      .m7-season-stage .gl-col { max-width:none; }
+    }
+    @media (max-width:680px) {
+      .m7-board-wrap #board { min-width:610px; }
+      .m7-statement-line { grid-template-columns:1fr 88px; }
+      .m7-statement-label { grid-column:1 / 3; }
+      .m7-feedback { grid-column:1 / 3; }
+      .m7-given { grid-column:1 / 3; padding-right:98px; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m7-board-wrap {
+        border-color:#4b5567;
+        background:#211f28;
+        box-shadow:0 7px 20px rgba(0,0,0,.28);
+      }
+      .m7-season-stage .gl-col { border-color:#4b5567; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m7-progress { color:#aebbd0; }
+      .m7-season-stage {
+        --gl-panel:#26242e;
+        --gl-ink:#e7eef9;
+        --gl-region-line:#8996aa;
+        --gl-accent:#e6ae4f;
+        --gl-pulse:#a96915;
+      }
+      .m7-statement-card { border-color:#4b5567; background:#26242e; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m7-statement-title { background:#302e39; color:#e7eef9; }
+      .m7-statement-line { border-color:#4b5567; }
+      .m7-money-input { border-color:#77849a; background:#211f28; color:#e7eef9; }
+      .m7-money-input:disabled { border-color:#4e966a; background:#183425; color:#b6f0c8; }
+      .m7-statement-line.is-correct, .m7-statement-line.is-correct .m7-feedback { color:#b6f0c8; }
+      .m7-feedback { color:#ffb19d; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Statements in the Graph</h1>
+        <p class="tut-header-sub">Module 7 &middot; ~5 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Statements in the Graph</div>
+
+    <div id="beats"></div>
+    <div class="m7-season-stage" id="mainGrid">
+      <div id="beginningColumn" aria-label="Beginning balance sheet"></div>
+      <div class="m7-board-wrap">
+        <svg id="board" viewBox="0 0 1000 660" role="img" aria-label="The finished bike-repair season shown as an accounting graph"></svg>
+      </div>
+      <div id="endingColumn" aria-label="Balance Sheet — August 31, 2026"></div>
+    </div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="m7-glossary-dismiss" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playNope(){ tone(220,0.12,'sine',0.035); }
+function nav(url){ window.location.href=url; }
+
+var step=0;
+var TOTAL_STEPS=4;
+var POSTED=['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL'];
+var answerState={
+  revenue:{answer:6020,tries:0,correct:false,value:'',hint1:'Only one node gives inside Generated. Its badge holds the total.',hint2:'120 + 5,380 + 300 + 220 = 6,020.'},
+  expenses:{answer:3380,tries:0,correct:false,value:'',hint1:'Three receivers inside Generated: the shelf\'s parts, the space\'s rent, the gear\'s seasons.',hint2:'1,200 + 1,950 + 230 = 3,380.'},
+  netIncome:{answer:2640,tries:0,correct:false,value:'',hint1:'Revenue minus expenses.',hint2:'6,020 &minus; 3,380.'},
+  capitalIncome:{answer:2640,tries:0,correct:false,value:'',hint1:'You just computed it on the income statement.',hint2:'2,640.'},
+  withdrawn:{answer:600,tries:0,correct:false,value:'',hint1:'The owner\'s take &mdash; its own pile, never an expense.',hint2:'600.'},
+  ending:{answer:4500,tries:0,correct:false,value:'',hint1:'Beginning plus what came in minus what went out.',hint2:'2,460 + 2,640 &minus; 600 = 4,500.'}
+};
+var data=window.M7_GRAPH;
+var boardSvg=document.getElementById('board');
+var board=GraphLab.createBoard(boardSvg,data,{interactive:true});
+var leftEl=document.getElementById('beginningColumn');
+var rightEl=document.getElementById('endingColumn');
+
+var crossHighlight={
+  cash:{nodes:['cash'],pairs:['cash>parts','cash>tools','cash>cc','rev>cash','cash>rent','cash>wd']},
+  ar:{nodes:['ar'],pairs:['rev>ar']},
+  rou:{nodes:['rou'],pairs:[]},
+  parts:{nodes:['parts'],pairs:['cash>parts','parts>pexp']},
+  tools:{nodes:['tools'],pairs:['cash>tools','tools>depx']},
+  fix:{nodes:['fix'],pairs:['fix>depx']},
+  laptop:{nodes:['laptop'],pairs:['laptop>depx']},
+  cc:{nodes:['cc'],pairs:['cash>cc']},
+  dep:{nodes:['dep'],pairs:['rev>dep']},
+  contrib:{nodes:['contrib'],pairs:[]},
+  gen:{nodes:['gen','rev','pexp','rent','depx'],pairs:['rev>cash','parts>pexp','rev>ar','rev>dep','cash>rent','tools>depx','fix>depx','laptop>depx']},
+  wd:{nodes:['wd'],pairs:['cash>wd']}
+};
+var enclosureHighlight={nodes:['gen','rev','pexp','rent','depx'],pairs:[]};
+var capitalHighlight={nodes:['gen','rev','pexp','rent','depx','wd'],pairs:['cash>wd']};
+
+function render(){
+  renderBeats(step);
+  board.setPosted(POSTED);
+  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
+  var leftTitle=leftEl.querySelector('.gl-col-title');
+  if(leftTitle) leftTitle.textContent='Balance Sheet';
+  GraphLab.renderColumn(rightEl,data,board,{side:'end',title:'Balance Sheet — August 31, 2026',sub:'the season complete',christened:true,highlightAccts:step===2?['contrib','gen','wd']:[]});
+  renderTail(step);
+  renderControls(step);
+  wireInputs();
+  applyStepHighlight();
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='The season is posted and the picture is full. Now read it. Everything the income statement will say lives inside one dotted line: the Generated enclosure &mdash; Repair Revenue on the giving side; Parts Used, Rent, and Depreciation on the receiving side. The sorting you did in Module 3 is a geography here: nothing moved, nothing reset &mdash; the detail simply sits inside Generated, waiting to be summarized.';
+  } else if(currentStep===1){
+    text='Fill in the income statement, straight off the picture. Revenue: what did the work give, in total? Expenses: what did the season receive as used up &mdash; parts, rent, and the gear&rsquo;s given seasons? Net income is the difference. Type the three numbers; the picture has them all.';
+  } else if(currentStep===2){
+    text='Now the Member&rsquo;s Capital walk, pile by pile. Beginning, $2,460. What came in through Generated: net income. What went out through Withdrawn: the owner&rsquo;s take. Type the walk&rsquo;s three missing numbers and watch the walk tie to the column on the right.';
+  } else {
+    text='Two statements read straight off one picture &mdash; and the balance sheet never needed reading at all: it built itself at the christening. One thread is left hanging. The shop earned $2,640 this season &mdash; and Cash fell from $1,300 to $620. A profitable summer, poorer in cash. The next page pulls that thread.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div><p class="m7-progress">Reading '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+function lineHtml(key,label){
+  var item=answerState[key];
+  var feedback=item.correct?'Correct.':(item.tries?item.tries===1?item.hint1:item.hint2:'');
+  return '<div class="m7-statement-line'+(item.correct?' is-correct':'')+'" data-key="'+key+'">'+
+    '<label class="m7-statement-label" for="answer-'+key+'">'+label+'</label>'+
+    '<input class="m7-money-input" id="answer-'+key+'" data-answer-key="'+key+'" inputmode="decimal" autocomplete="off" aria-describedby="feedback-'+key+'" value="'+escapeAttr(item.value)+'"'+(item.correct?' disabled':'')+'>'+
+    '<button class="m7-check" data-check-key="'+key+'"'+(item.correct?' disabled':'')+'>'+(item.correct?'Locked':'Check')+'</button>'+
+    '<p class="m7-feedback" id="feedback-'+key+'" aria-live="polite">'+feedback+'</p></div>';
+}
+
+function escapeAttr(value){ return String(value).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+function renderTail(currentStep){
+  var html='';
+  if(currentStep===1){
+    html='<section class="m7-statement-card" aria-labelledby="income-title"><h2 class="m7-statement-title" id="income-title">Income Statement &middot; June 1 &ndash; August 31, 2026</h2><div class="m7-statement-body">'+
+      lineHtml('revenue','Revenue')+lineHtml('expenses','Expenses')+lineHtml('netIncome','Net income')+'</div></section>';
+  } else if(currentStep===2){
+    html='<section class="m7-statement-card" aria-labelledby="capital-title"><h2 class="m7-statement-title" id="capital-title">Statement of Member&rsquo;s Capital &middot; the season&rsquo;s walk</h2><div class="m7-statement-body">'+
+      '<div class="m7-statement-line"><span class="m7-statement-label">Beginning</span><span class="m7-given">2,460</span></div>'+lineHtml('capitalIncome','plus Net income')+lineHtml('withdrawn','minus Withdrawn')+lineHtml('ending','Ending')+'</div></section>';
+  } else if(currentStep===3){
+    html='<div class="insight-box">Every statement is a reading of the picture &mdash; a chosen summary of the same arrows. Different statements, different summaries, one season.</div>';
+  }
+  document.getElementById('tail').innerHTML=html;
+}
+
+function renderControls(currentStep){
+  var html='<div class="nav-buttons">';
+  if(currentStep>0) html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1){
+    var locked=(currentStep===1&&!incomeComplete())||(currentStep===2&&!capitalComplete());
+    html+='<button class="btn-next" onclick="advance()"'+(locked?' disabled aria-disabled="true"':'')+'>Next &rarr;</button>';
+  } else {
+    html+='<button class="btn-continue" onclick="playSuccess();nav(\'73-1-Where-the-Cash-Went.html\')">Where the Cash Went &rarr;</button>';
+  }
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+
+function wireInputs(){
+  document.querySelectorAll('[data-answer-key]').forEach(function(input){
+    input.addEventListener('input',function(){ answerState[this.getAttribute('data-answer-key')].value=this.value; });
+    input.addEventListener('focus',function(){ highlightForInput(this.getAttribute('data-answer-key')); });
+    input.addEventListener('blur',function(){ setTimeout(applyStepHighlight,0); });
+    input.addEventListener('keydown',function(event){ if(event.key==='Enter'){ event.preventDefault(); checkAnswer(this.getAttribute('data-answer-key')); } });
+  });
+  document.querySelectorAll('[data-check-key]').forEach(function(button){
+    button.addEventListener('click',function(){ checkAnswer(this.getAttribute('data-check-key')); });
+  });
+}
+
+function parsedAnswer(value){
+  var clean=String(value).replace(/[$,\s]/g,'');
+  if(!clean||!/^[-+]?\d+(?:\.\d+)?$/.test(clean)) return null;
+  return Number(clean);
+}
+
+function checkAnswer(key){
+  var item=answerState[key];
+  if(!item||item.correct)return;
+  var input=document.getElementById('answer-'+key);
+  if(input) item.value=input.value;
+  if(parsedAnswer(item.value)===item.answer){
+    item.correct=true;
+    playSuccess();
+  } else {
+    item.tries+=1;
+    playNope();
+  }
+  renderTail(step);
+  renderControls(step);
+  wireInputs();
+  if(!item.correct){
+    var fresh=document.getElementById('answer-'+key);
+    if(fresh){ fresh.focus(); fresh.select(); }
+  } else {
+    applyStepHighlight();
+  }
+}
+
+function incomeComplete(){ return answerState.revenue.correct&&answerState.expenses.correct&&answerState.netIncome.correct; }
+function capitalComplete(){ return answerState.capitalIncome.correct&&answerState.withdrawn.correct&&answerState.ending.correct; }
+
+function highlightForInput(key){
+  if(key==='revenue') board.highlight({nodes:['rev'],pairs:[]});
+  else if(key==='expenses') board.highlight({nodes:['pexp','rent','depx'],pairs:[]});
+  else applyStepHighlight();
+}
+
+function applyStepHighlight(){
+  if(step===2) board.highlight(capitalHighlight);
+  else board.highlight(enclosureHighlight);
+}
+
+function advance(){
+  if((step===1&&!incomeComplete())||(step===2&&!capitalComplete()))return;
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Reading',def:'A statement understood as a chosen summary of the picture.'},
+  {term:'Income statement',def:'A summary of revenue, expenses, and net income for the season.'},
+  {term:'The walk',def:'Beginning, plus what came in, minus what went out, ending. The amounts must tie.'},
+  {term:'Net income',def:'Revenue minus expenses for the season.'},
+  {term:'Withdrawn',def:'The owner&rsquo;s take, kept in its own pile and never treated as an expense.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){
+  playClick();
+  step=0;
+  Object.keys(answerState).forEach(function(key){ answerState[key].tries=0; answerState[key].correct=false; answerState[key].value=''; });
+  render();
+  window.scrollTo(0,0);
+}
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') dismissGlossary(); });
+
+GraphLab.wireCrossHighlight(board,[leftEl,rightEl],crossHighlight);
+[leftEl,rightEl,boardSvg].forEach(function(el){ el.addEventListener('mouseleave',function(){ setTimeout(applyStepHighlight,0); }); });
+window.devFill=function(){
+  Object.keys(answerState).forEach(function(key){ answerState[key].correct=true; answerState[key].value=String(answerState[key].answer); });
+  step=TOTAL_STEPS-1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
