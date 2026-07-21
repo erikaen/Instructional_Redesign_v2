@@ -239,8 +239,9 @@ corresponding open items in the ruling list below.
     beat lights only the accounts and arrows involved in the recognitions of
     that beat; every uninvolved node and arrow grays out (soft gray, not
     near-invisible). Events the walk teaches get their own beats — the tool
-    purchase and the card payoff are separate recognitions, not a batch; at
-    Dana's beat only Cash and Repair Revenue stand vivid.
+    purchase and the card payoff are separate recognitions, not a batch; the
+    season's collections and the parts they consumed are likewise separate
+    beats; at Dana's beat only Cash and Repair Revenue stand vivid.
 
 ## Proposed module shape (working proposal — every choice Rick's to lock)
 
