@@ -1644,6 +1644,10 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .next-card p { font-family: 'Open Sans', sans-serif; font-size: var(--font-m); color: #374151; line-height: 1.65; margin: 0; }
 
 /* ----- Button row ----- */
+/* The `hidden` attribute must always win: components like .btn-row set display via a class,
+   which otherwise overrides [hidden]'s display:none and shows a control that is supposed to be
+   hidden (e.g. 22-4's figure Back button appearing before its step is reached). 2026-07-21. */
+[hidden] { display: none !important; }
 .btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
 /* ----- Vertical stack of cards ----- */
