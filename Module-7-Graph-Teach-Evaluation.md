@@ -193,14 +193,18 @@ corresponding open items in the ruling list below.
    120 → 5,500; Parts→Parts Used 10 → 1,200); hover shows the constituents by
    name from the job records.
 8. **Edge-direction language — give and receive.** Arrows read from the
-   account that GAVE to the account that RECEIVED: debits represent things
-   received; credits represent things given. The Parts reading is the model —
-   the Parts asset account gives up parts for use as Parts Used. The language
-   always works but may take creativity: buying on credit, the liability
-   account "gives" a promise to an outsider. (Staging proposal, not yet ruled:
-   the walk speaks give/receive throughout and christens the profession's
-   names — debit for the receiving end, credit for the giving end — late in
-   the module, names-after-experience.)
+   account that GAVE to the account that RECEIVED. The Parts reading is the
+   model — the Parts asset account gives up parts for use as Parts Used. The
+   language always works but may take creativity: buying on credit, the
+   liability account "gives" a promise to an outsider. (Instructor-side
+   grounding: the receiving end is what the profession calls a debit, the
+   giving end a credit.)
+   **Ruled 2026-07-21: the words "debit" and "credit" do NOT appear in this
+   module.** The walk speaks give/receive only. A separate future module will
+   cover the profession's terms — debit, credit, roll forward, reconciliation,
+   T accounts, journal entries, and the like — so this module strips every
+   Dr/Cr trace from the ported prose, including the journal-entry explainers
+   (whose content is likewise reserved for the terms module).
 9. **Cross-highlighting extends to the flanks.** Hovering an ending-BS line
    highlights its node and edges (and the beginning-BS line); the existing
    statement↔graph highlight maps extend to both balance-sheet columns.
@@ -226,8 +230,8 @@ corresponding open items in the ruling list below.
     - "the three laws don't care" → drop the branding; where needed: "the
       identity holds and every walk ties — regardless of the entity's
       clothes."
-    ("Roll-forward," the profession's term, at most earns a late aside the way
-    articulation was named after the fact.)
+    ("Roll-forward," the profession's term, is reserved for the future
+    accounting-terms module — see ruling 8.)
 
 ## Proposed module shape (working proposal — every choice Rick's to lock)
 
@@ -253,10 +257,10 @@ pages).
 ## Decisions for Rick (the ruling list)
 
 1. ~~**Debits/credits**~~ — **RESOLVED 2026-07-21** (presentation ruling 8):
-   give/receive is the edge-direction language; debits = received, credits =
-   given. Residual staging question: whether the words debit/credit appear
-   student-facing at first use or are christened names-after-experience late
-   in the module (proposal in ruling 8).
+   give/receive is the edge-direction language, and the words debit/credit do
+   not appear in this module at all — the profession's terms (debit, credit,
+   roll forward, reconciliation, T accounts, journal entries, …) are reserved
+   for a separate future terms module.
 2. ~~**Closing**~~ — **RESOLVED 2026-07-21** (presentation ruling 3): avoided
    entirely; the live Generated balance carries it implicitly. The course's
    no-closing ruling stands; no carve-out needed.
