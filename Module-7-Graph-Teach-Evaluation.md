@@ -290,8 +290,12 @@ pages).
    and Rick locks the count there. Working assumption: intro · forward walk ·
    cash · outsider (possibly split at the releases/inference seam) · draw —
    five to seven pages. Presentation ruling 2 confirms the two-attempt arc.
-8. **Lint carve-out** — extend the equity carve-out to 7x pages (and any new
-   vocabulary the rulings admit — give/receive needs none; debit/credit would).
+8. ~~**Lint carve-out**~~ — **RULED 2026-07-21: none.** 7x pages obey the
+   strict M1–4 language rules — no equity/equities, no net assets, no
+   residual. The module speaks pure course language (Member's Capital, the
+   piles, give/receive, the walk); the graph vocabulary (node, edge, the walk)
+   needs no linter change. If a later beat needs M5/M6 vocabulary, it returns
+   for an express authorization then. `lint-language.sh` is untouched.
 9. **Scrub list** — retained earnings / dividends / stock / "Business Language
    Analytics" branding: scrub everywhere, or antecedent-tag where the contrast
    teaches?
