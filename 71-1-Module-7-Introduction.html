@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 7 Introduction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m7-intro { max-width: 900px; margin: 0 auto; }
+    .m7-section { scroll-margin-top: 1rem; }
+    .m7-section + .m7-section { margin-top: 24px; }
+    .m7-kicker { margin: 0 0 7px; color: #64748b; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.11em; text-transform: uppercase; }
+    .m7-section h2 { margin: 0 0 12px; color: #183153; font-family: Inter, sans-serif; font-size: clamp(1.35rem, 3vw, 1.75rem); line-height: 1.2; }
+    .m7-section p { line-height: 1.68; }
+    .m7-point-list { display: grid; gap: 14px; margin-top: 14px; }
+    .m7-point { border-left: 4px solid #c41230; }
+    .m7-point-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+    .m7-point-number { display: inline-grid; flex: 0 0 30px; width: 30px; height: 30px; border-radius: 50%; place-items: center; background: #c41230; color: #fff; font-family: Inter, sans-serif; font-size: 0.84rem; font-weight: 800; }
+    .m7-point-title { padding-top: 3px; color: #183153; font-family: Inter, sans-serif; font-weight: 800; line-height: 1.35; }
+    .m7-new-list { display: grid; gap: 14px; margin-top: 14px; }
+    .m7-new { border-top: 4px solid #183153; }
+    .m7-accordion { display: grid; gap: 8px; margin-top: 16px; }
+    .m7-expand { overflow: hidden; border: 1px solid #d9e0e8; border-radius: 10px; background: #fff; }
+    .m7-expand-button { display: flex; width: 100%; align-items: center; gap: 10px; border: 0; padding: 13px 15px; background: #f5f7fa; color: #183153; cursor: pointer; text-align: left; font: 700 0.95rem/1.35 Inter, sans-serif; }
+    .m7-expand-button:hover { background: #edf1f6; }
+    .m7-expand-button:focus-visible { outline: 3px solid #2d6cdf; outline-offset: -3px; }
+    .m7-expand-index { color: #c41230; font-weight: 800; }
+    .m7-expand-label { flex: 1; }
+    .m7-chevron { display: inline-flex; transition: transform 160ms ease; }
+    .m7-expand-button[aria-expanded="true"] .m7-chevron { transform: rotate(180deg); }
+    .m7-expand-panel { padding: 0 15px 15px 49px; color: #334155; line-height: 1.62; }
+    .m7-expand-panel p { margin: 6px 0 0; }
+    .m7-note { margin-top: 14px; border-color: #d8b45b; }
+    .m7-note .m7-expand-button { background: #fff7df; }
+    .m7-note .m7-expand-button:hover { background: #ffefbd; }
+    .m7-note .m7-expand-panel { padding: 3px 18px 18px; }
+    .m7-note .m7-expand-panel p { margin: 12px 0 0; }
+    .m7-arc-list { margin-top: 12px; }
+    .m7-arc-list li + li { margin-top: 12px; }
+    .m7-lo-list { display: grid; gap: 11px; margin: 14px 0 0; padding: 0; list-style: none; }
+    .m7-lo { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 12px; align-items: start; border-bottom: 1px solid #e2e8f0; padding: 0 0 11px; line-height: 1.55; }
+    .m7-lo:last-child { border-bottom: 0; padding-bottom: 0; }
+    .m7-lo-code { border-radius: 5px; padding: 4px 6px; background: #183153; color: #fff; font: 700 0.76rem/1.3 "JetBrains Mono", monospace; text-align: center; }
+    .m7-nav { margin-top: 20px; }
+    .glossary-dismiss-btn { border: 0; padding: 2px 7px; background: transparent; color: inherit; cursor: pointer; font-size: 1.7rem; line-height: 1; }
+    @media (max-width: 650px) {
+      .m7-lo { grid-template-columns: 1fr; gap: 7px; }
+      .m7-lo-code { width: max-content; }
+      .m7-expand-panel { padding-left: 15px; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .m7-intro, .m7-section, .m7-point-list, .m7-new-list, .m7-arc-list, .m7-lo-list, .m7-nav { color: #d7deea; }
+      .m7-kicker { color: #aebbd0; }
+      .m7-section h2, .m7-point-title, .m7-expand-button { color: #e7eef9; }
+      .m7-point { border-left-color: #e43b58; }
+      .m7-new { border-top-color: #8bb4ff; }
+      .m7-point-number { background: #c41230; color: #fff; }
+      .m7-expand { border-color: #4b5567; background: #252a35; }
+      .m7-expand-button { background: #303744; }
+      .m7-expand-button:hover { background: #3a4352; }
+      .m7-expand-button:focus-visible { outline-color: #8bb4ff; }
+      .m7-expand-index { color: #ff6b82; }
+      .m7-expand-label, .m7-chevron { color: #e7eef9; }
+      .m7-expand-panel { color: #d7deea; }
+      .m7-note { border-color: #8e7436; }
+      .m7-note .m7-expand-button { background: #443a23; }
+      .m7-note .m7-expand-button:hover { background: #514528; }
+      .m7-note .m7-expand-panel { color: #e7e1d2; }
+      .m7-lo { border-bottom-color: #455064; }
+      .m7-lo-code { background: #c41230; color: #fff; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Module 7 Introduction</h1>
+        <p class="tut-header-sub">Module 7 &middot; ~7 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Module 7 Introduction</div>
+
+    <div class="phase active m7-intro" id="phase-introduction">
+      <section class="m7-section" aria-labelledby="m7-turn-title">
+        <p class="m7-kicker">The turn</p>
+        <div class="section-card">
+          <h2 id="m7-turn-title">Two crafts become one picture</h2>
+          <p>This course has taught you two crafts. In Modules 1 through 4 you <strong>built</strong> records from inside &mdash; a shoebox of receipts became a boundary, a workbook, and finally a complete set of financial statements for Bike Repair LLC. In Modules 5 and 6 you <strong>read</strong> statements from outside &mdash; a $250-billion company, then a $59-billion university that nobody owns &mdash; and learned that the same map survives contact with anything; only the names change with the entity. You met the names each entity&rsquo;s situation demanded.</p>
+          <p>Module 7 shows you what both crafts were handling all along: <strong>one picture.</strong> The season you built, drawn as a single connected diagram &mdash; every account a node, every recorded event an arrow between two of them &mdash; with the statements you learned to build and read revealed as readings taken off that one picture.</p>
+          <p>You will build the picture forward from the summer you know by heart. Then the course will take the picture away, hand you nothing but the statements, and ask you to work backward &mdash; the way every outside reader of financial statements works every day.</p>
+          <p>The learning pattern stays what it has been since Module 5: objectives first, then the material, then assessment.</p>
+        </div>
+      </section>
+
+      <section class="m7-section" aria-labelledby="m7-hold-title">
+        <p class="m7-kicker">What you already hold</p>
+        <h2 id="m7-hold-title">Six things you already own</h2>
+        <p>Nothing in this module starts from zero. Six things you already own get assembled into one machine:</p>
+        <div class="m7-point-list">
+          <article class="section-card m7-point">
+            <div class="m7-point-head"><span class="m7-point-number">1</span><div class="m7-point-title">The accounting identity</div></div>
+            <p>Assets minus Liabilities equals Member&rsquo;s Capital, at every date, by construction. The bike shop&rsquo;s June 1 figures tie: <strong>$4,710 &minus; $2,250 = $2,460</strong>. Its August 31 figures tie too: <strong>$4,500 &minus; $0 = $4,500</strong>.</p>
+          </article>
+          <article class="section-card m7-point">
+            <div class="m7-point-head"><span class="m7-point-number">2</span><div class="m7-point-title">Double-entry and match-or-reason</div></div>
+            <p>The match-or-reason rule from Module 1 says every change in the records pairs with a match or takes a reason. You have never seen a one-sided event, and you never will.</p>
+          </article>
+          <article class="section-card m7-point">
+            <div class="m7-point-head"><span class="m7-point-number">3</span><div class="m7-point-title">The piles</div></div>
+            <p>The Reasons side of the shop&rsquo;s records classifies every change in the difference by its source: Contributed, Generated, Withdrawn &mdash; kept from the first jot, never mixed.</p>
+          </article>
+          <article class="section-card m7-point">
+            <div class="m7-point-head"><span class="m7-point-number">4</span><div class="m7-point-title">The walk</div></div>
+            <p>Every statement you built walks a balance from beginning to ending: the Member&rsquo;s Capital walk, <strong>$2,460 &rarr; $4,500</strong>, and the Cash walk, <strong>$1,300 &rarr; $620</strong>. Beginning, plus what came in, minus what went out, ending. The capital walk spells out the path: <strong>$2,460 + $2,640 &minus; $600 = $4,500</strong>.</p>
+          </article>
+          <article class="section-card m7-point">
+            <div class="m7-point-head"><span class="m7-point-number">5</span><div class="m7-point-title">Articulation</div></div>
+            <p>The statements tie to each other: every change on a balance sheet travels through a statement that explains it. That was Module 4&rsquo;s discovery, confirmed at scale in Modules 5 and 6.</p>
+          </article>
+          <article class="section-card m7-point">
+            <div class="m7-point-head"><span class="m7-point-number">6</span><div class="m7-point-title">Read the labels</div></div>
+            <p>A reported figure is defined by its own scope, and an aggregate can hide what composed it &mdash; the lesson that carried the CVS and Yale walks.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="m7-section" aria-labelledby="m7-new-title">
+        <p class="m7-kicker">What is new</p>
+        <h2 id="m7-new-title">The picture and its parts</h2>
+        <p>Four introductions give you the working language for the pages ahead:</p>
+        <div class="m7-new-list">
+          <article class="section-card m7-new">
+            <p><strong>A NODE is an account&rsquo;s change.</strong> It is not the account&rsquo;s whole history, but the season&rsquo;s change in it. Cash&rsquo;s node carries &minus;$680; the Receivables node carries +$300. Nodes appear only when the records first touch them during the season.</p>
+          </article>
+          <article class="section-card m7-new">
+            <p><strong>An ARROW runs from the account that GAVE to the account that RECEIVED.</strong> Every recorded event is one arrow with two ends &mdash; double-entry, drawn. The Parts shelf gives up $10 of parts for Dana&rsquo;s repair; Parts Used receives them. Cash gives $600; the owner&rsquo;s Withdrawn pile receives it. When more of the same thing happens, the arrow&rsquo;s total grows &mdash; one arrow, a bigger number. The repairs arrow grows from $120 to <strong>$5,500</strong>, your first taste of what an aggregate is.</p>
+          </article>
+          <article class="section-card m7-new">
+            <p><strong>A DOTTED ENCLOSURE marks subparts.</strong> Revenue and Expenses sit inside a dotted line around Generated: they are not new kinds of thing; they are Generated, in detail. The whole picture groups into the three regions you have used since Module 1: Assets, Liabilities, Reasons.</p>
+          </article>
+          <article class="section-card m7-new">
+            <p><strong>EVERY ACCOUNT WALKS &mdash; and the walk ties.</strong> The identity ties the sheet; the walk ties each account: beginning, plus what came in, minus what went out, ending. On this module&rsquo;s pages you can watch it tie: the beginning balance sheet stands to the left of the picture, the ending balance sheet to the right, and the ending column&rsquo;s numbers move with every arrow. When the last event posts, that column becomes the August 31 balance sheet you built in Module 3.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="m7-section" aria-labelledby="m7-bridge-title">
+        <p class="m7-kicker">The bridge</p>
+        <div class="section-card">
+          <h2 id="m7-bridge-title">Where each idea appears in the picture</h2>
+          <p>Open each row in this working key to connect an idea you own with the way it appears in the picture.</p>
+          <div class="m7-accordion">
+            <div class="m7-expand">
+              <button class="m7-expand-button" type="button" aria-expanded="false" aria-controls="m7-bridge-1" onclick="toggleExpand(this)"><span class="m7-expand-index">1</span><span class="m7-expand-label">The accounting identity</span><span class="m7-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m7-expand-panel" id="m7-bridge-1" hidden><p>The flanking balance-sheet columns tie at every step &mdash; after every arrow, not just at the ends.</p></div>
+            </div>
+            <div class="m7-expand">
+              <button class="m7-expand-button" type="button" aria-expanded="false" aria-controls="m7-bridge-2" onclick="toggleExpand(this)"><span class="m7-expand-index">2</span><span class="m7-expand-label">Double-entry / match-or-reason</span><span class="m7-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m7-expand-panel" id="m7-bridge-2" hidden><p>Every arrow has two ends. An arrow that stays inside Assets and Liabilities <strong>is</strong> a match; an arrow that ends in the Reasons region <strong>is</strong> a change that took a reason.</p></div>
+            </div>
+            <div class="m7-expand">
+              <button class="m7-expand-button" type="button" aria-expanded="false" aria-controls="m7-bridge-3" onclick="toggleExpand(this)"><span class="m7-expand-index">3</span><span class="m7-expand-label">The piles</span><span class="m7-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m7-expand-panel" id="m7-bridge-3" hidden><p>The Reasons region holds Contributed, Generated &mdash; with Revenue and Expenses inside its dotted enclosure &mdash; and Withdrawn. The ending column shows all three pieces of Member&rsquo;s Capital.</p></div>
+            </div>
+            <div class="m7-expand">
+              <button class="m7-expand-button" type="button" aria-expanded="false" aria-controls="m7-bridge-4" onclick="toggleExpand(this)"><span class="m7-expand-index">4</span><span class="m7-expand-label">The walk</span><span class="m7-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m7-expand-panel" id="m7-bridge-4" hidden><p>Each account&rsquo;s node &mdash; its change &mdash; plus its beginning-column number equals its ending-column number, visible per account at every step.</p></div>
+            </div>
+            <div class="m7-expand">
+              <button class="m7-expand-button" type="button" aria-expanded="false" aria-controls="m7-bridge-5" onclick="toggleExpand(this)"><span class="m7-expand-index">5</span><span class="m7-expand-label">Articulation</span><span class="m7-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m7-expand-panel" id="m7-bridge-5" hidden><p>The balance-sheet pair, the income statement, the Member&rsquo;s Capital walk, and the cash-flow statement are all readings off the one picture.</p></div>
+            </div>
+            <div class="m7-expand">
+              <button class="m7-expand-button" type="button" aria-expanded="false" aria-controls="m7-bridge-6" onclick="toggleExpand(this)"><span class="m7-expand-index">6</span><span class="m7-expand-label">Read the labels / aggregation</span><span class="m7-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m7-expand-panel" id="m7-bridge-6" hidden><p>An arrow&rsquo;s total is a sum &mdash; watch it grow. One depreciation line of $230 hides a three-way split of $160 / $40 / $30. A change shown as one amount merges gross flows an outsider cannot always un-merge.</p></div>
+            </div>
+            <div class="m7-expand">
+              <button class="m7-expand-button" type="button" aria-expanded="false" aria-controls="m7-bridge-7" onclick="toggleExpand(this)"><span class="m7-expand-index">7</span><span class="m7-expand-label">Restrictive recognition</span><span class="m7-chevron"><i data-lucide="chevron-down"></i></span></button>
+              <div class="m7-expand-panel" id="m7-bridge-7" hidden><p>The picture holds only what the records recognize. The owner&rsquo;s skill and loyal customers have no nodes here, just as they had no lines there.</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="m7-section" aria-labelledby="m7-going-title">
+        <p class="m7-kicker">Where we are going</p>
+        <div class="section-card">
+          <h2 id="m7-going-title">From a known summer to an outsider&rsquo;s puzzle</h2>
+          <p>The module follows one connected arc:</p>
+          <ul class="bullet-list m7-arc-list">
+            <li><strong>Build it forward.</strong> Draw the summer you know event by event: first the three events that stay entirely inside Assets and Liabilities &mdash; both ends on the sheets, matched, no Reason needed &mdash; then the events that open the Reasons region: Dana&rsquo;s $120, the season&rsquo;s other eighteen repairs growing the same arrow to $5,500, Ridgeline&rsquo;s $300 billed, Smith&rsquo;s $220 frame delivered, rent, the draw, and the gear giving up a season of its working lives. Revenue then runs <strong>$520</strong> ahead of collections. When the last arrow posts, the right-hand column is the August 31 balance sheet.</li>
+            <li><strong>Read the statements off it.</strong> Fill in the income statement, <strong>$6,020 &minus; $3,380 = $2,640</strong>, and the Member&rsquo;s Capital walk, <strong>$2,460 + $2,640 &minus; $600 = $4,500</strong>, straight from the picture. Then take the cash question one level deeper: Cash&rsquo;s node opens into its three channels, you classify all seven cash arrows, and the profitable-but-poorer season &mdash; $2,640 earned, cash down $680 &mdash; reconciles item by item.</li>
+            <li><strong>Then lose the picture.</strong> A prospective investor is considering buying into the shop, and outsiders never see the ledger, only statements, released a few at a time. From totals alone, then balance sheets, then the income statement, then the owner&rsquo;s replies, you will build the best lawful picture an outsider can build. You will tag every arrow as <em>fact</em>, <em>inference under an assumption you can name</em>, or <em>open</em>, and recover numbers no single release states &mdash; the <strong>$600</strong> the owner took and the <strong>$160</strong> of the tools&rsquo; share &mdash; using nothing but walks that must tie. At the end the shop&rsquo;s actual ledger fans open: your <strong>twelve</strong> lawful arrows stand for about <strong>fifty</strong> actual entries, and no statement at any release level could have given them to you.</li>
+            <li><strong>And ask one last question.</strong> The owner never took a wage &mdash; only the $600 draw, which never touched the income statement. Move that one arrow and call the same $600 a wage: net income falls to <strong>$2,040</strong>, while ending capital and cash do not move at all. Price the owner&rsquo;s bench time at a market wage and the records show a loss for the profitable summer. Same activity, different pictures, all of them lawful. <strong>Representation is a choice, and a reader must see through it.</strong></li>
+          </ul>
+          <div class="insight-box">
+            <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> The promise of the module</div>
+            <p>These are examples, not the whole list. <strong>The statements you can build and read are summaries of one picture &mdash; and knowing the picture tells you exactly what a summary can and cannot say.</strong></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="m7-section" aria-labelledby="m7-arrow-note-title">
+        <p class="m7-kicker">A note on the arrows</p>
+        <div class="section-card">
+          <h2 id="m7-arrow-note-title">Give and receive</h2>
+          <div class="m7-expand m7-note">
+            <button class="m7-expand-button" type="button" aria-expanded="false" aria-controls="m7-arrow-note" onclick="toggleExpand(this)"><span class="m7-expand-label">A note on the arrows &mdash; click to expand</span><span class="m7-chevron"><i data-lucide="chevron-down"></i></span></button>
+            <div class="m7-expand-panel" id="m7-arrow-note" hidden>
+              <p>Every arrow in this module reads the same way: it runs <strong>from the account that gave to the account that received</strong>. The Parts shelf gives up parts; Parts Used receives them. Cash gives $600; the owner&rsquo;s Withdrawn pile receives it. The tools give a season of their working lives; Depreciation receives the season&rsquo;s share.</p>
+              <p>Sometimes the reading takes a little imagination. When something is bought now and paid for later, the liability account gives: it hands the shop&rsquo;s promise to an outsider. The reading always works.</p>
+              <p>The profession has its own pair of names for the two ends of an arrow. They are five hundred years old, they are one of the first things every bookkeeping course teaches, and this course is deliberately not teaching them yet. Names are easiest to keep when you have already handled the thing they name &mdash; that has been this course&rsquo;s way since a summer&rsquo;s list of receipts went looking for a boundary.</p>
+              <p>A later module teaches the profession&rsquo;s recording vocabulary all at once; when it does, the two ends of these arrows will already be old friends. For now, <strong>give and receive say everything the names would.</strong></p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="m7-section" aria-labelledby="m7-lo-title">
+        <p class="m7-kicker">The learning objectives</p>
+        <div class="section-card">
+          <h2 id="m7-lo-title">By the end of Module 7, you will be able to:</h2>
+          <ol class="m7-lo-list">
+            <li class="m7-lo"><span class="m7-lo-code">M7-LO1</span><span>Read a season drawn as a picture: nodes as account changes, arrows as give-and-receive pairs, dotted enclosures as subparts, and state in course language what any arrow records.</span></li>
+            <li class="m7-lo"><span class="m7-lo-code">M7-LO2</span><span>Explain how the balance-sheet pair, the income statement, the Member&rsquo;s Capital walk, and the cash-flow statement are each readings of the same picture &mdash; articulation, seen whole.</span></li>
+            <li class="m7-lo"><span class="m7-lo-code">M7-LO3</span><span>Walk any account &mdash; beginning, plus what came in, minus what went out, ending &mdash; and use a walk that must tie to recover an amount no statement reports directly.</span></li>
+            <li class="m7-lo"><span class="m7-lo-code">M7-LO4</span><span>Explain what aggregation hides: an arrow&rsquo;s total is a sum; a net change merges gross flows; a single reported line can stand for a split the records remember; statements are summaries an outside reader cannot always un-merge.</span></li>
+            <li class="m7-lo"><span class="m7-lo-code">M7-LO5</span><span>Build the best lawful picture from statements alone, tagging each arrow as fact, inference under a named assumption, or open &mdash; and say precisely what each new release added.</span></li>
+            <li class="m7-lo"><span class="m7-lo-code">M7-LO6</span><span>Show how one representational choice &mdash; the owner&rsquo;s draw against an owner&rsquo;s wage &mdash; changes net income and operating cash while leaving ending capital and total cash untouched, and explain why a reader of statements must look for such choices.</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <div class="btn-row m7-nav">
+        <button class="btn-back" onclick="nav('63-6-The-Full-Architecture.html')">&larr; Back</button>
+        <button class="btn-continue" onclick="nav('72-1-The-Season-as-a-Graph.html')">The Season as a Graph &rarr;</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-dismiss-btn" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if (window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+
+var glossaryTerms=[
+  { term:'Node', def:'An account&rsquo;s change during the span shown, not the account&rsquo;s whole history.' },
+  { term:'Arrow (give &rarr; receive)', def:'A recorded event drawn from the account that gave to the account that received.' },
+  { term:'Enclosure', def:'A dotted boundary showing subparts of a larger whole, such as Revenue and Expenses inside Generated.' },
+  { term:'The walk', def:'Beginning, plus what came in, minus what went out, ending. The amounts must tie.' },
+  { term:'Region', def:'One of the picture&rsquo;s three broad groups: Assets, Liabilities, or Reasons.' },
+  { term:'Fact / inference / open', def:'A fact is directly supported; an inference follows under a named assumption; open means the available statements do not settle it.' }
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'<\/div><div class="glossary-entry-def">'+g.def+'<\/div><\/div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function toggleExpand(button){
+  var panel=document.getElementById(button.getAttribute('aria-controls'));
+  var isOpen=button.getAttribute('aria-expanded')==='true';
+  playClick();
+  button.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+  panel.hidden=isOpen;
+}
+function nav(url){ playClick(); window.location.href=url; }
+function restart(){ playClick(); window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ dismissGlossary(); } });
+window.devFill=function(){};
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
