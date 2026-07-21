@@ -57,6 +57,7 @@ var step = 0;
 var TOTAL_STEPS = 4;
 var mcqAnswered = false;
 var mcqSel = null, mcqSubmitted = false;
+var mcqAttempts = 0, mcqRevealed = false;   // three-strike reveal: unblock Next after 3 wrong (never permanently stuck)
 
 var MCQ_OPTS = [
   { id:'recorded', label:'The recorded $4,500 on the balance sheet', fb:'Not quite. That number reports recognized Assets minus recognized Liabilities at August 31. Freddie&rsquo;s $20,000 offer looks to future cash flows.' },
@@ -78,7 +79,11 @@ function mcqHTML(){
   });
   h += '<\/div>';
   if(mcqSubmitted && chosen){
-    h += '<div class="feedback '+(chosen.correct?'ok':'err')+' show">'+chosen.fb+'<\/div>';
+    if(mcqRevealed){
+      h += '<div class="feedback err show">Not quite. The answer is <strong>Future cash flows, supported by repair skill and customer relationships<\/strong> &mdash; Freddie would pay $20,000 for 30% of the future cash flows the shop can produce. The repair skill and customer relationships that help produce them do not sit on the balance sheet under the records&rsquo; own rules.<\/div>';
+    } else {
+      h += '<div class="feedback '+(chosen.correct?'ok':'err')+' show">'+chosen.fb+'<\/div>';
+    }
   }
   h += '<div class="btn-row">'+(mcqSubmitted
     ? '<button class="btn-reset" onclick="mcqReset()" style="margin-left:auto;">Reset<\/button>'
@@ -93,7 +98,12 @@ function mcqSubmit(){
   if(mcqSel===null||mcqSubmitted) return;
   mcqSubmitted = true;
   var o = MCQ_OPTS.filter(function(x){ return x.id===mcqSel; })[0];
-  if(o && o.correct){ mcqAnswered = true; playSuccess(); } else { playNope(); }
+  if(o && o.correct){ mcqAnswered = true; playSuccess(); }
+  else {
+    playNope();
+    mcqAttempts++;
+    if(mcqAttempts>=3){ mcqAnswered = true; mcqRevealed = true; }   // three-strike escape: unblock Next
+  }
   render();
 }
 
