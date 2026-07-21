@@ -208,6 +208,26 @@ corresponding open items in the ruling list below.
     use — Receivables at Ridgeline's billing, Withdrawn at the draw, the
     Revenue/Expense nodes at the first recognition that needs them — matching
     the course's piles-born-when-first-used canon.
+11. **"Law of motion" is retired; the course word is the WALK.** (Ruled
+    2026-07-21.) Every account walks — beginning, plus what came in, minus
+    what went out, ending — and the requirement that accounts add up is said
+    the course's way: **the identity ties the sheet; the walk ties each
+    account.** No new coinage, no umbrella "laws" branding: the BLA "three
+    laws" bundle maps to three names the course already owns — the accounting
+    identity, double-entry/match-or-reason, and the walk. Scrub guide for the
+    ported prose:
+    - "Use Tools' own law of motion to recover its share" → "Walk the Tools
+      account: began 1,200, bought 400, ended 1,440 — the walk only ties if
+      depreciation took 160."
+    - "capital's law of motion has more terms than income" → "Member's
+      Capital's walk has more ways in and out than income alone."
+    - "Generated +2,640 — your law of motion restored" → "Generated +2,640 —
+      the walk ties again."
+    - "the three laws don't care" → drop the branding; where needed: "the
+      identity holds and every walk ties — regardless of the entity's
+      clothes."
+    ("Roll-forward," the profession's term, at most earns a late aside the way
+    articulation was named after the fact.)
 
 ## Proposed module shape (working proposal — every choice Rick's to lock)
 
@@ -245,10 +265,10 @@ pages).
    "limited partner" framing still needs rewording to course language, and the
    market-wage coda stands on its own (no napkin reconciliation required for
    now).
-4. **"Laws of motion"** — largely dissolved by presentation ruling 2 (the live
-   ending column shows beginning + change = ending by juxtaposition, unnamed);
-   remaining: sweep the ported prose for the "three laws / law of motion"
-   branding.
+4. ~~**"Laws of motion"**~~ — **RESOLVED 2026-07-21** (presentation ruling 11):
+   the course word is the **walk** ("every account walks, and the walk ties");
+   "law of motion" / "three laws" branding is retired, with the scrub guide in
+   ruling 11.
 5. **Placement** — Module 7 after M6 (recommended) or between M4 and M5?
 6. **Look** — keep the graph-lab aesthetic with course chrome (recommended),
    or full reskin? (The flanking-BS layout of ruling 1 is a new build either
