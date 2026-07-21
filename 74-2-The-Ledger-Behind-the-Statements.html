@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Ledger Behind the Statements</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m7-season-stage {
+      display:grid;
+      grid-template-columns:minmax(230px,270px) minmax(0,1fr) minmax(230px,270px);
+      gap:14px;
+      align-items:start;
+      margin-top:16px;
+    }
+    .m7-season-stage > * { min-width:0; }
+    .m7-board-wrap {
+      overflow-x:auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#f0f4f8;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+    }
+    .m7-board-wrap #board { display:block; width:100%; min-width:650px; height:auto; }
+    .m7-season-stage .gl-col { width:100%; min-height:170px; box-shadow:0 7px 20px rgba(32,55,72,.08); }
+    .m7-season-stage .gl-col h3 { line-height:1.25; }
+    #tail { margin-top:16px; }
+    #controls { margin-top:18px; }
+    .m7-progress {
+      margin:8px 0 0;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .m7-card {
+      max-width:900px;
+      margin:16px auto 0;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#fff;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+      overflow:hidden;
+    }
+    .m7-card-title {
+      margin:0;
+      padding:15px 18px;
+      background:#eaf1f8;
+      color:#16324a;
+      font:800 1rem/1.35 Inter,sans-serif;
+      letter-spacing:.01em;
+    }
+    .m7-card-body { padding:12px 18px 16px; }
+    .m7-quiz-q { margin:0 0 12px; color:#16324a; font:800 1rem/1.45 Inter,sans-serif; }
+    .m7-option {
+      display:block;
+      width:100%;
+      margin:8px 0;
+      border:1px solid #7a91ab;
+      border-radius:7px;
+      padding:11px 13px;
+      background:#fff;
+      color:#16324a;
+      cursor:pointer;
+      font:700 .88rem/1.4 "Open Sans",sans-serif;
+      text-align:left;
+    }
+    .m7-option:hover:not(:disabled), .m7-option:focus-visible { border-color:#286dc0; outline:2px solid rgba(40,109,192,.2); }
+    .m7-option:disabled { cursor:default; opacity:.58; }
+    .m7-option.is-answer { border-color:#28864f; background:#ecfdf3; color:#166534; opacity:1; }
+    .m7-option.is-wrong { border-color:#c24127; background:#fff1ed; color:#9f2f19; opacity:1; }
+    .m7-feedback { min-height:1.4em; margin:11px 0 0; color:#a63b20; font:600 .86rem/1.45 "Open Sans",sans-serif; }
+    .m7-feedback.is-correct { color:#166534; }
+    .m7-infer-row { display:flex; gap:10px; align-items:end; flex-wrap:wrap; }
+    .m7-infer-label { display:flex; flex-direction:column; gap:6px; color:#16324a; font:800 .92rem/1.3 Inter,sans-serif; }
+    .m7-infer-input { width:190px; border:1px solid #7a91ab; border-radius:6px; padding:10px 11px; background:#fff; color:#16324a; font:700 1rem/1.2 "JetBrains Mono",monospace; }
+    .m7-infer-submit { min-height:42px; border:0; border-radius:6px; padding:9px 17px; background:#286dc0; color:#fff; cursor:pointer; font:800 .86rem/1 Inter,sans-serif; }
+    .m7-proof { margin:12px 0 0; padding:11px 13px; border-left:4px solid #28864f; background:#ecfdf3; color:#166534; font:700 .87rem/1.45 "Open Sans",sans-serif; }
+    .m7-ledger-toggle {
+      display:block;
+      margin:16px auto 0;
+      border:1px solid #286dc0;
+      border-radius:7px;
+      padding:11px 18px;
+      background:#fff;
+      color:#215d9f;
+      cursor:pointer;
+      font:800 .88rem/1.2 Inter,sans-serif;
+    }
+    .m7-ledger-toggle:hover, .m7-ledger-toggle:focus-visible { background:#eaf1f8; outline:2px solid rgba(40,109,192,.2); }
+    .m7-glossary-dismiss { border:0; padding:2px 7px; background:transparent; color:inherit; cursor:pointer; font-size:1.7rem; line-height:1; }
+    @media (max-width:980px) {
+      .m7-season-stage { grid-template-columns:1fr; }
+      .m7-season-stage > :nth-child(1) { order:1; }
+      .m7-season-stage > :nth-child(2) { order:2; }
+      .m7-season-stage > :nth-child(3) { order:3; }
+      .m7-season-stage .gl-col { max-width:none; }
+    }
+    @media (max-width:720px) { .m7-board-wrap #board { min-width:610px; } }
+    @media (prefers-color-scheme:dark) {
+      .m7-board-wrap { border-color:#4b5567; background:#211f28; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m7-season-stage .gl-col { border-color:#4b5567; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m7-season-stage { --gl-panel:#26242e; --gl-ink:#e7eef9; --gl-region-line:#8996aa; --gl-accent:#e6ae4f; --gl-pulse:#a96915; }
+      .m7-progress { color:#aebbd0; }
+      .m7-card { border-color:#4b5567; background:#26242e; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m7-card-title { background:#302e39; color:#e7eef9; }
+      .m7-quiz-q, .m7-infer-label { color:#e7eef9; }
+      .m7-option, .m7-infer-input, .m7-ledger-toggle { border-color:#77849a; background:#211f28; color:#e7eef9; }
+      .m7-option.is-answer { border-color:#4e966a; background:#183425; color:#b6f0c8; }
+      .m7-option.is-wrong { border-color:#d36a54; background:#45251f; color:#ffc0b1; }
+      .m7-feedback { color:#ffb19d; }
+      .m7-feedback.is-correct { color:#b6f0c8; }
+      .m7-proof { background:#183425; color:#b6f0c8; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Ledger Behind the Statements</h1>
+        <p class="tut-header-sub">Module 7 &middot; ~8 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Ledger Behind the Statements</div>
+
+    <div id="beats"></div>
+    <div class="m7-season-stage" id="mainGrid">
+      <div id="beginningColumn" aria-label="Statement column for June 1, 2026"></div>
+      <div class="m7-board-wrap">
+        <svg id="board" viewBox="0 0 1000 660" role="img" aria-label="The outsider's graph of the shop's released statements"></svg>
+      </div>
+      <div id="endingColumn" aria-label="Statement column for August 31, 2026"></div>
+    </div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="m7-glossary-dismiss" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playNope(){ tone(220,0.12,'sine',0.035); }
+function nav(url){ window.location.href=url; }
+
+var step=0;
+var TOTAL_STEPS=7;
+var data=window.M7_GRAPH;
+var quizPick=null;
+var quizSolved=false;
+var inferenceSolved={1:false,4:false};
+var inferenceAttempts={1:0,4:0};
+var inferenceFeedback={1:'',4:''};
+var fanOpen=false;
+var boardSvg=document.getElementById('board');
+var board=GraphLab.createBoard(boardSvg,data,{interactive:true});
+var leftEl=document.getElementById('beginningColumn');
+var rightEl=document.getElementById('endingColumn');
+board.setCollapse(true);
+
+var assetIds=['cash','ar','rou','parts','tools','fix','laptop'];
+var liabilityIds=['cc','dep'];
+var labels={cash:'Cash',ar:'Receivables',rou:'Right of Use',parts:'Parts',tools:'Tools &amp; Equip',fix:'Fixtures',laptop:'Laptop',cc:'Credit Card',dep:'Customer Deposit'};
+var forcedNodes={cash:true,ar:true,rou:true,parts:true,tools:true,fix:true,laptop:true,cc:true,dep:true,gen:true,wd:600};
+
+function money(value){ return Math.abs(value).toLocaleString('en-US'); }
+function sum(ids,values){ return ids.reduce(function(total,id){ return total+(values[id]||0); },0); }
+function sideValues(side){ var values={}; Object.keys(data.bs).forEach(function(id){ values[id]=data.bs[id][side]; }); return values; }
+function memberCapital(values){ return (values.contrib||0)+(values.gen||0)-(values.wd||0); }
+function entryValue(id){ var found=data.entries.filter(function(entry){ return entry.id===id; })[0]; return found?found.w:0; }
+function colLine(id,label,value,display){ return '<div class="gl-col-line" data-acct="'+id+'" data-value="'+value+'"><span>'+label+'</span><span class="gl-col-value">'+(display||money(value))+'</span></div>'; }
+function colTotal(label,value,key){ return '<div class="gl-col-total" data-total="'+key+'"><span>'+label+'</span><span>'+money(value)+'</span></div>'; }
+
+function renderLocalColumn(el,side,title){
+  var values=sideValues(side);
+  var assets=sum(assetIds,values);
+  var liabilities=sum(liabilityIds,values);
+  var capital=memberCapital(values);
+  var identity='<div class="gl-col-ident">A &minus; L = MC &#10003; &middot; '+money(assets)+' &minus; '+money(liabilities)+' = '+money(capital)+'</div>';
+  var html='<h3 class="gl-col-title">'+title+'</h3><div class="gl-col-sub">Balance Sheet</div><div class="gl-col-section">Assets</div>';
+  assetIds.forEach(function(id){ html+=colLine(id,labels[id],values[id]); });
+  html+=colTotal('Total Assets',assets,'assets')+'<div class="gl-col-section">Liabilities</div>';
+  liabilityIds.forEach(function(id){ html+=colLine(id,labels[id],values[id]); });
+  html+=colTotal('Total Liabilities',liabilities,'liabilities')+'<div class="gl-col-section">Member&rsquo;s Capital</div>';
+  html+=colLine('contrib','Contributed',values.contrib)+colLine('gen','Generated',values.gen);
+  html+=colLine('wd','Withdrawn',values.wd,values.wd?'('+money(values.wd)+')':money(values.wd));
+  html+=colTotal('Member&rsquo;s Capital',capital,'mc')+identity;
+  el.setAttribute('class','gl-col');
+  el.innerHTML=html;
+}
+
+function boardState(){
+  var posted=['draw','dana','rest','ccpay'];
+  var tags={'gen>cash':'fact','cash>cc':'fact','cash>wd':'fact'};
+  if(step>1||(step===1&&inferenceSolved[1])){ posted.push('ridge'); tags['gen>ar']='infer'; }
+  if(step>2||(step===2&&quizSolved)){ posted.push('smith'); tags['gen>dep']='infer'; }
+  if(step>=3){
+    posted=posted.concat(['danaP','restP','pbuy','rentx','tool']);
+    tags['parts>gen']='fact'; tags['cash>parts']='fact'; tags['cash>gen']='fact'; tags['cash>tools']='fact';
+  }
+  if(step>4||(step===4&&inferenceSolved[4])){ posted.push('deprT'); tags['tools>gen']='infer'; }
+  if(step>=5){ posted=posted.concat(['deprF','deprL']); tags['fix>gen']='infer'; tags['laptop>gen']='infer'; }
+  board.setCollapse(true);
+  board.setPosted(posted);
+  board.setTags(tags);
+  board.setForceNodes(forcedNodes);
+  board.setFan(step===6&&fanOpen?'gen>cash':null);
+}
+
+function render(){
+  renderBeats(step);
+  boardState();
+  renderLocalColumn(leftEl,'beg','June 1, 2026');
+  renderLocalColumn(rightEl,'end','August 31, 2026');
+  renderTail(step);
+  renderControls(step);
+  wireTail();
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderBeats(currentStep){
+  var heading='';
+  var text='';
+  if(currentStep===0){
+    heading='Gross flows at last.';
+    text='Release 4 &mdash; the cash statement, and it reports <b>gross</b> flows, not nets. Three facts land at once. Collections from repair customers: <b>$'+money(entryValue('dana')+entryValue('rest'))+'</b> &mdash; a solid arrow from Generated into Cash. The card line reads <em>paid off</em>: <b>$'+money(entryValue('ccpay'))+'</b> &mdash; and that settles the question release 2 had to leave open: no new charges hid inside the reported change. And the take&rsquo;s cash assumption is <b>confirmed</b> &mdash; watch its arrow turn solid. Facts move the boundary.';
+  } else if(currentStep===1){
+    heading='The 520 wedge.';
+    text='Revenue was <b>6,020</b>; only <b>5,500</b> arrived as cash. Where is the remaining <b>520</b>? Two balance-sheet facts are waiting to absorb it. First: how much of it sits in Receivables?';
+  } else if(currentStep===2){
+    heading='Revenue without new cash.';
+    text='<b>$220</b> of revenue remains unexplained &mdash; exactly the Customer Deposit&rsquo;s fall.';
+  } else if(currentStep===3){
+    heading='The through-flows.';
+    text='Four more arrows, all essentially factual: parts <b>used 1,200</b> (the income statement) and <b>bought 1,200</b> (the cash statement) &mdash; a perfect flow-through leaving the shelf&rsquo;s walk flat; rent <b>1,950</b> on both statements; the tool purchase <b>400</b> from the investing section. The picture is nearly whole. One aggregate remains: the single <b>230</b> line for the gear&rsquo;s seasons, spread over three kinds of gear.';
+  } else if(currentStep===4){
+    heading='Reversing an aggregation.';
+    text='The income statement lumps the gear&rsquo;s seasons: <b>230</b>, one line. But you hold three balance-sheet facts and one investing fact. Walk the Tools account to recover its share: began 1,200, bought 400, ended 1,440 &mdash; the walk only ties if the Tools gave how much of their working lives?';
+  } else if(currentStep===5){
+    heading='The last two arrows.';
+    text='Fixtures &rarr; Generated <b>40</b> and Laptop &rarr; Generated <b>30</b> complete the split: 160 + 40 + 30 = the income statement&rsquo;s single 230 line. Twelve arrows; every walk ties; every arrow tagged &mdash; fact, or inference under an assumption you can name. This is the best picture an outsider can build. Now see what it was a summary <em>of</em>.';
+  } else {
+    heading='The ledger, fanned open.';
+    text='Toggle the shop&rsquo;s actual ledger. Your single $5,500 collections arrow fans into <b>nineteen named repairs</b> &mdash; Dana R.&rsquo;s $120 through Westville Bike Share&rsquo;s $500. About fifty entries stand behind your twelve arrows &mdash; and no statement, at any release level, could have given them to you. <b>Both pictures are lawful. Both produce exactly these statements. Only one is what happened.</b>';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><h2>'+heading+'</h2><p>'+text+'</p></div><p class="m7-progress">Step '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+function inferHtml(which){
+  var isReceivables=which===1;
+  var label=isReceivables?'Revenue into Receivables ($)':'Tools\' share ($)';
+  var proof=isReceivables?'An inference &mdash; the wording supports it, the statements cannot prove it. Tagged and dashed.':'Fixtures (&minus;40, no purchases) and the Laptop (&minus;30) follow the same logic &mdash; and 160 + 40 + 30 = 230. An aggregation reversed, using nothing but walks that must tie. It will not always be possible.';
+  return '<section class="m7-card" aria-labelledby="infer-title"><h2 class="m7-card-title" id="infer-title">Make the inference</h2><div class="m7-card-body"><form id="inferForm"><div class="m7-infer-row"><label class="m7-infer-label" for="inferInput">'+label+'<input class="m7-infer-input" id="inferInput" name="inference" type="number" step="1" min="0" inputmode="numeric"'+(inferenceSolved[which]?' value="'+inferenceAnswer(which)+'" disabled':'')+'></label><button class="m7-infer-submit" type="submit"'+(inferenceSolved[which]?' disabled':'')+'>Check</button></div></form><p class="m7-feedback'+(inferenceSolved[which]?' is-correct':'')+'" aria-live="polite">'+inferenceFeedback[which]+'</p>'+(inferenceSolved[which]?'<p class="m7-proof">'+proof+'</p>':'')+'</div></section>';
+}
+
+function quizHtml(){
+  var options=[
+    {text:'Earned &mdash; the frame was delivered; the cash arrived LAST season.',correct:true,feedback:'The 220 completes the revenue equation: 5,500 + 300 + 220 = 6,020. A refund would have shown in the cash statement &mdash; it did not. Inference, well supported.'},
+    {text:'Refunded &mdash; the shop returned the money.',feedback:'A refund is a cash outflow &mdash; the cash statement shows none. And revenue would not tie: 5,500 + 300 &ne; 6,020.'},
+    {text:'Impossible to say anything.',feedback:'Stronger can be said: only one reading makes revenue, the deposit, AND the cash statement all tie. That is inference under assumption.'}
+  ];
+  var buttons=options.map(function(option,index){
+    var pickedHere=quizPick===index;
+    var cls=quizSolved&&option.correct?' is-answer':(pickedHere&&!option.correct?' is-wrong':'');
+    return '<button class="m7-option'+cls+'" data-option="'+index+'"'+(quizSolved?' disabled':'')+'>'+String.fromCharCode(97+index)+') '+option.text+'</button>';
+  }).join('');
+  var feedback=quizPick!=null?options[quizPick].feedback:'';
+  return '<section class="m7-card" aria-labelledby="quiz-title"><h2 class="m7-card-title" id="quiz-title">Test the inference</h2><div class="m7-card-body"><p class="m7-quiz-q">The deposit fell $220 &mdash; earned, or refunded?</p>'+buttons+'<p class="m7-feedback'+(quizSolved?' is-correct':'')+'" aria-live="polite">'+feedback+'</p></div></section>';
+}
+
+function renderTail(currentStep){
+  var html='';
+  if(currentStep===1||currentStep===4) html=inferHtml(currentStep);
+  else if(currentStep===2) html=quizHtml();
+  else if(currentStep===6){
+    html='<button class="m7-ledger-toggle" id="ledgerToggle" type="button" aria-pressed="'+fanOpen+'">'+(fanOpen?'Hide the ledger':'Show the shop&rsquo;s actual ledger')+'</button>';
+    html+='<div class="insight-box">The outsider&rsquo;s craft is not guessing what happened &mdash; it is knowing exactly how far the statements let you see, and naming every assumption past that line.</div>';
+  }
+  document.getElementById('tail').innerHTML=html;
+}
+
+function canAdvance(currentStep){
+  if(currentStep===1||currentStep===4)return inferenceSolved[currentStep];
+  if(currentStep===2)return quizSolved;
+  return true;
+}
+
+function renderControls(currentStep){
+  var html='<div class="nav-buttons">';
+  if(currentStep>0) html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep===0){
+    html+='<button class="btn-next" onclick="advance()">But revenue was 6,020&hellip; &rarr;</button>';
+  } else if(currentStep<TOTAL_STEPS-1){
+    html+='<button class="btn-next" onclick="advance()"'+(canAdvance(currentStep)?'':' disabled aria-disabled="true"')+'>Next &rarr;</button>';
+  } else {
+    html+='<button class="btn-continue" onclick="playSuccess();nav(\'75-1-The-Draw-Question.html\')">The Draw Question &rarr;</button>';
+  }
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+
+function wireTail(){
+  document.querySelectorAll('[data-option]').forEach(function(button){
+    button.addEventListener('click',function(){ chooseQuiz(Number(this.getAttribute('data-option'))); });
+  });
+  var form=document.getElementById('inferForm');
+  if(form) form.addEventListener('submit',checkInference);
+  var toggle=document.getElementById('ledgerToggle');
+  if(toggle) toggle.addEventListener('click',toggleLedger);
+}
+
+function chooseQuiz(index){
+  if(quizSolved)return;
+  quizPick=index;
+  if(index===0){ quizSolved=true; playSuccess(); }
+  else playNope();
+  render();
+}
+
+function inferenceAnswer(which){
+  if(which===1)return data.bs.ar.end-data.bs.ar.beg;
+  return data.bs.tools.beg+entryValue('tool')-data.bs.tools.end;
+}
+
+function checkInference(event){
+  event.preventDefault();
+  var which=step;
+  if(inferenceSolved[which])return;
+  var input=document.getElementById('inferInput');
+  var answer=Number(input.value);
+  if(input.value!==''&&answer===inferenceAnswer(which)){
+    inferenceSolved[which]=true;
+    inferenceFeedback[which]=which===1?'Correct. The $300 change is the uncollected revenue under the stated assumption.':'Correct. The Tools walk gives the $160 share.';
+    playSuccess();
+  } else {
+    inferenceAttempts[which]+=1;
+    if(which===1){
+      inferenceFeedback[which]=inferenceAttempts[which]===1?'Receivables&rsquo; walk: began 0, ended 300.':'The +300 change IS uncollected revenue &mdash; if nothing older was collected.';
+    } else {
+      inferenceFeedback[which]=inferenceAttempts[which]===1?'1,200 + 400 &minus; ? = 1,440.':'400 &minus; 240 = 160.';
+    }
+    playNope();
+  }
+  render();
+  if(!inferenceSolved[which]){ var fresh=document.getElementById('inferInput'); if(fresh)fresh.focus(); }
+}
+
+function toggleLedger(){ fanOpen=!fanOpen; playClick(); render(); }
+function advance(){
+  if(!canAdvance(step))return;
+  playClick();
+  fanOpen=false;
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  fanOpen=false;
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Gross vs net flows',def:'Gross flows show each way resources moved; a net change combines those movements into one difference.'},
+  {term:'Flow-through',def:'An amount received and then given onward during the same period, leaving the related balance unchanged.'},
+  {term:'Reversing an aggregation',def:'Using account walks and other released facts to recover the pieces combined in one statement line.'},
+  {term:'The ledger fan',def:'The many named entries behind one lawful summary arrow.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){
+  playClick();
+  step=0;
+  quizPick=null;
+  quizSolved=false;
+  inferenceSolved={1:false,4:false};
+  inferenceAttempts={1:0,4:0};
+  inferenceFeedback={1:'',4:''};
+  fanOpen=false;
+  render();
+  window.scrollTo(0,0);
+}
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') dismissGlossary(); });
+
+var crossHighlight={
+  cash:{nodes:['cash'],pairs:['gen>cash','cash>cc','cash>wd','cash>parts','cash>gen','cash>tools']},
+  ar:{nodes:['ar'],pairs:['gen>ar']},rou:{nodes:['rou'],pairs:[]},parts:{nodes:['parts'],pairs:['parts>gen','cash>parts']},
+  tools:{nodes:['tools'],pairs:['cash>tools','tools>gen']},fix:{nodes:['fix'],pairs:['fix>gen']},laptop:{nodes:['laptop'],pairs:['laptop>gen']},
+  cc:{nodes:['cc'],pairs:['cash>cc']},dep:{nodes:['dep'],pairs:['gen>dep']},contrib:{nodes:['contrib'],pairs:[]},
+  gen:{nodes:['gen'],pairs:['gen>cash','gen>ar','gen>dep','parts>gen','cash>gen','tools>gen','fix>gen','laptop>gen']},wd:{nodes:['wd'],pairs:['cash>wd']}
+};
+GraphLab.wireCrossHighlight(board,[leftEl,rightEl],crossHighlight);
+window.devFill=function(){
+  quizPick=0;
+  quizSolved=true;
+  inferenceSolved={1:true,4:true};
+  inferenceAttempts={1:0,4:0};
+  inferenceFeedback={1:'Correct. The $300 change is the uncollected revenue under the stated assumption.',4:'Correct. The Tools walk gives the $160 share.'};
+  fanOpen=false;
+  step=TOTAL_STEPS-1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
