@@ -276,8 +276,12 @@ pages).
 5. ~~**Placement**~~ — **RULED 2026-07-21: Module 7, for now.** The module
    follows M6; numbering is 7x-x. ("For now" noted: the slot may move if the
    course grows — e.g., the future accounting-terms module.)
-6. **Look** — keep the graph-lab aesthetic with course chrome (recommended),
-   or full reskin? (The flanking-BS layout of ruling 1 is a new build either
+6. ~~**Look**~~ — **RULED 2026-07-21: course chrome + lab board.** The page
+   frame rebuilds in course idiom (tut-header with glossary/restart, course
+   fonts/colors, course nav, step machine); the SVG graph board and its rail
+   stay as the module's distinctive lab bench, lightly recolored to the course
+   palette. Precedent: the workbook facsimile engine as its own idiom inside
+   course pages. (The flanking-BS layout of ruling 1 is a new build either
    way; the hub-centered layout and its router clearances are superseded.)
 7. **Numbering and page count** — the table above is a working assumption;
    presentation ruling 2 confirms the two-attempt arc (forward walk now, a
