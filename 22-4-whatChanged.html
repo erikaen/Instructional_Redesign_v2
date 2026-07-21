@@ -83,6 +83,9 @@ function restart(){
   if(ring) ring.style.opacity='0';
   window.scrollTo(0,0);
 }
+/* Drag-scoped reset: clears ONLY the "Drag into a zone" answers (placed cards return to the
+   bank) and re-renders the sort. Not the whole-page restart(). Button sits bottom-left of the sort. */
+function resetSort(){ playClick(); placed = {}; figStage = 0; renderWhatChanged(); }
 
 /* ===== member name (read from localStorage, set in the name phase) ===== */
 var memberName = '';
@@ -151,11 +154,13 @@ function figBack(){
     var cont=document.getElementById('figCont'); if(cont) cont.hidden = true;
   }
   var bk=document.getElementById('figBackRow'); if(bk) bk.hidden = (figStage===0);
+  var sr=document.getElementById('sortResetRow'); if(sr) sr.hidden = (figStage!==0);   // show the drag Reset again at the sort
 }
 function figAdvance(){
   figStage++;
   playClick();
   var bk=document.getElementById('figBackRow'); if(bk) bk.hidden = false;
+  var sr=document.getElementById('sortResetRow'); if(sr) sr.hidden = true;   // hide the drag Reset once past the sort
   if(figStage===1){
     FIG.forEach(function(c){ var el=document.getElementById(c.id); if(el){ el.style.left=c.p[1][0]+'%'; el.style.top=c.p[1][1]+'%'; } });
     document.getElementById('figRole').style.opacity='1';
@@ -205,6 +210,9 @@ function renderWhatChanged(){
       '<div class="dnd-zone-items">'+itemsHtml+'</div></div>';
   });
   html += '</div>';
+  if(figStage===0 && Object.keys(placed).length > 0){
+    html += '<div class="btn-row" id="sortResetRow" style="margin-top:14px; justify-content:flex-end"><button class="btn-reset" onclick="resetSort()">Reset</button></div>';
+  }
   if(movedItems.every(function(m){ return placed[m.id]; })){
     html += '<div class="insight-box" style="margin-top:16px"><div class="insight-label"><i data-lucide="scale" class="licon"></i> Legal Change, Not an Economic Change</div>'+
       '<p>One thing changed today: <strong>the LLC now exists as a legal entity</strong>. That matters. But the filing, by itself, did <strong>not</strong> change the balance sheet. The recorded assets, recorded liabilities, and the difference between them are still the same. The operation is the same operation you were already tracking. What is new is its <strong>legal standing</strong>.</p></div>';

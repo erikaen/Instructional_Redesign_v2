@@ -124,6 +124,9 @@ function renderObservers(){
       '<div class="dnd-zone-items">'+itemsHtml+'</div></div>';
   });
   html += '</div>';
+  if(Object.keys(placed).length > 0){
+    html += '<div class="btn-row" style="margin-top:14px; justify-content:flex-end"><button class="btn-reset" onclick="resetSort()">Reset</button></div>';
+  }
   if(observers.every(function(o){ return placed[o.id]; })){
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="alert-triangle" class="licon"></i> Only the Books See the Boundary</div>'+
       '<p>Only your books treat your bike-repair role as separate from the rest of your life. The bank, the credit-card company, Smith, and the law still see <strong>one undivided you</strong>. You <em>recognized</em> the role &mdash; that is what Module 1&rsquo;s boundary did &mdash; but the recognition is informal: you maintain it yourself, and it has no legal force. That is why Smith&rsquo;s claim does not stop at it.</p></div>';
@@ -141,6 +144,9 @@ function place(id, zone){
 }
 function onDragStart(e, id){ if(placed[id]) return; e.dataTransfer.setData('text/plain', id); e.currentTarget.classList.add('dragging'); }
 function onDrop(e, zone){ e.preventDefault(); e.currentTarget.classList.remove('over'); var id = e.dataTransfer.getData('text/plain'); if(id) place(id, zone); }
+/* Drag-scoped reset: clears ONLY the "Drag into a zone" answers (placed observers return to the
+   bank) and re-renders the sort. Button sits bottom-right of the sort, shown once something is placed. */
+function resetSort(){ playClick(); placed = {}; renderObservers(); }
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeGlossary(); });
 

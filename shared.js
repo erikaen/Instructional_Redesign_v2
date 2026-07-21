@@ -1559,7 +1559,7 @@ var COURSE_STEPS = {
   /* Chrome-injected Reset ONLY where the page has a real activity but no
      in-activity Reset of its own. Walk/confirm/reveal pages get NO Reset at
      all — Back covers them (ruling 2026-07-19). */
-  var RESET_SCOPE = /^(22-4-|24-5-)/;
+  var RESET_SCOPE = /^(24-5-)/;   // 22-4 uses its own drag-scoped Reset (resetSort), not the whole-page one
   function resetRow(f){
     if (!RESET_SCOPE.test(f)) return null;
     if (typeof window.restart !== 'function') return null;
