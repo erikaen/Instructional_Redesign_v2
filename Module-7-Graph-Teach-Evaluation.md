@@ -273,7 +273,9 @@ pages).
    the course word is the **walk** ("every account walks, and the walk ties");
    "law of motion" / "three laws" branding is retired, with the scrub guide in
    ruling 11.
-5. **Placement** — Module 7 after M6 (recommended) or between M4 and M5?
+5. ~~**Placement**~~ — **RULED 2026-07-21: Module 7, for now.** The module
+   follows M6; numbering is 7x-x. ("For now" noted: the slot may move if the
+   course grows — e.g., the future accounting-terms module.)
 6. **Look** — keep the graph-lab aesthetic with course chrome (recommended),
    or full reskin? (The flanking-BS layout of ruling 1 is a new build either
    way; the hub-centered layout and its router clearances are superseded.)
