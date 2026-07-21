@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Season as a Graph</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m7-season-stage {
+      display:grid;
+      grid-template-columns:minmax(230px,270px) minmax(0,1fr) minmax(230px,270px);
+      gap:14px;
+      align-items:start;
+      margin-top:16px;
+    }
+    .m7-season-stage > * { min-width:0; }
+    .m7-board-wrap {
+      overflow-x:auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#f0f4f8;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+    }
+    .m7-board-wrap #board {
+      display:block;
+      width:100%;
+      min-width:650px;
+      height:auto;
+    }
+    .m7-season-stage .gl-col {
+      width:100%;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+    }
+    .m7-season-stage .gl-col h3 { line-height:1.25; }
+    .m7-season-stage .gl-fans {
+      opacity:0;
+      pointer-events:none;
+      transition:opacity 160ms ease;
+    }
+    .m7-season-stage #board.m7-show-fan .gl-fans { opacity:1; }
+    #tail { margin-top:16px; }
+    #controls { margin-top:18px; }
+    .m7-progress {
+      margin:8px 0 0;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .m7-glossary-dismiss {
+      border:0;
+      padding:2px 7px;
+      background:transparent;
+      color:inherit;
+      cursor:pointer;
+      font-size:1.7rem;
+      line-height:1;
+    }
+    @media (max-width:980px) {
+      .m7-season-stage { grid-template-columns:1fr; }
+      .m7-season-stage > :nth-child(1) { order:1; }
+      .m7-season-stage > :nth-child(2) { order:2; }
+      .m7-season-stage > :nth-child(3) { order:3; }
+      .m7-season-stage .gl-col { max-width:none; }
+    }
+    @media (max-width:680px) {
+      .m7-board-wrap #board { min-width:610px; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m7-board-wrap {
+        border-color:#4b5567;
+        background:#211f28;
+        box-shadow:0 7px 20px rgba(0,0,0,.28);
+      }
+      .m7-season-stage .gl-col {
+        border-color:#4b5567;
+        box-shadow:0 7px 20px rgba(0,0,0,.28);
+      }
+      .m7-progress { color:#aebbd0; }
+      .m7-season-stage {
+        --gl-panel:#26242e;
+        --gl-ink:#e7eef9;
+        --gl-region-line:#8996aa;
+        --gl-accent:#e6ae4f;
+        --gl-pulse:#a96915;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Season as a Graph</h1>
+        <p class="tut-header-sub">Module 7 &middot; ~8 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Season as a Graph</div>
+
+    <div id="beats"></div>
+    <div class="m7-season-stage" id="mainGrid">
+      <div id="beginningColumn" aria-label="Beginning balance sheet"></div>
+      <div class="m7-board-wrap">
+        <svg id="board" viewBox="0 0 1000 660" role="img" aria-label="The bike-repair season shown as an accounting graph"></svg>
+      </div>
+      <div id="endingColumn" aria-label="Live ending balance sheet"></div>
+    </div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="m7-glossary-dismiss" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nav(url){ window.location.href=url; }
+
+var step=0;
+var TOTAL_STEPS=9;
+var POSTED=[
+  [],
+  ['pbuy'],
+  ['pbuy','tool','ccpay'],
+  ['pbuy','tool','ccpay','dana'],
+  ['pbuy','tool','ccpay','dana','rest','danaP','restP'],
+  ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith'],
+  ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw'],
+  ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL'],
+  ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL']
+];
+var data=window.M7_GRAPH;
+var boardSvg=document.getElementById('board');
+var board=GraphLab.createBoard(boardSvg,data,{interactive:true});
+var leftEl=document.getElementById('beginningColumn');
+var rightEl=document.getElementById('endingColumn');
+
+var crossHighlight={
+  cash:{nodes:['cash'],pairs:['cash>parts','cash>tools','cash>cc','rev>cash','cash>rent','cash>wd']},
+  ar:{nodes:['ar'],pairs:['rev>ar']},
+  rou:{nodes:['rou'],pairs:[]},
+  parts:{nodes:['parts'],pairs:['cash>parts','parts>pexp']},
+  tools:{nodes:['tools'],pairs:['cash>tools','tools>depx']},
+  fix:{nodes:['fix'],pairs:['fix>depx']},
+  laptop:{nodes:['laptop'],pairs:['laptop>depx']},
+  cc:{nodes:['cc'],pairs:['cash>cc']},
+  dep:{nodes:['dep'],pairs:['rev>dep']},
+  contrib:{nodes:['contrib'],pairs:[]},
+  gen:{nodes:['gen','rev','pexp','rent','depx'],pairs:['rev>cash','parts>pexp','rev>ar','rev>dep','cash>rent','tools>depx','fix>depx','laptop>depx']},
+  wd:{nodes:['wd'],pairs:['cash>wd']}
+};
+
+function render(){
+  renderBeats(step);
+  boardSvg.classList.remove('m7-show-fan');
+  board.setFan(step===4?'rev>cash':null);
+  board.setPosted(POSTED[step]);
+  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
+  var leftTitle=leftEl.querySelector('.gl-col-title');
+  if(leftTitle) leftTitle.textContent='Balance Sheet';
+  GraphLab.renderColumn(rightEl,data,board,{side:'end',title:step===8?'Balance Sheet — August 31, 2026':'Where we stand',sub:step===8?'the season complete':'live — moves with every event',christened:step===8});
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='Here is the season about to happen. On the left, the June 1 balance sheet you built in Module 2 &mdash; $4,710 &minus; $2,250 = $2,460, with Member&rsquo;s Capital kept in its three piles. On the right, the same numbers again, titled &ldquo;Where we stand&rdquo;: that column is live, and it will move with every event until it has become the August 31 balance sheet. Between them, three dotted regions &mdash; Assets, Liabilities, Reasons &mdash; with a smaller enclosure inside Reasons for Generated. The regions are empty. The season will fill them.';
+  } else if(currentStep===1){
+    text='The first event: restocking the parts shelf, $500 + $400 + $300 across the summer. Cash gives $1,200; the Parts shelf receives it. Two nodes appear &mdash; each badge showing that account&rsquo;s change so far &mdash; and one arrow between them. Look at the columns: Cash&rsquo;s line moved, Parts&rsquo; line moved, and the identity still ties. Both ends of this event sit on the sheets. It is a match &mdash; no Reason needed.';
+  } else if(currentStep===2){
+    text='Two more like it: Cash gives $400 for one new tool, and Cash gives $2,030 to settle the card &mdash; the startup balance paid off, the claim receiving its full settlement. Three arrows now, and notice where they live: entirely inside Assets and Liabilities. The Reasons region has not been touched. Some of a season explains itself.';
+  } else if(currentStep===3){
+    text='Now an event that cannot explain itself. Dana R. pays $120 for a drivetrain job. Cash receives &mdash; but what gave? Not another asset, not a liability: the work gave. That takes a Reason. The Generated enclosure opens and Repair Revenue appears; the arrow runs from it into Cash. And watch the right-hand column: Generated&rsquo;s line just moved, 170 to 290.';
+  } else if(currentStep===4){
+    text='The season at scale. Eighteen more repairs collect in cash &mdash; and no new arrow appears: the same arrow&rsquo;s total grows, $120 to $5,500. Hover it to see the names, Marcus T. through Westville Bike Share. And every repair is also a pair: the shelf gives up parts for the job &mdash; $10 for Dana&rsquo;s, $1,200 across the season &mdash; received by Parts Used, inside Generated.';
+  } else if(currentStep===5){
+    text='Two repairs touched no new cash. Ridgeline Trail Crew&rsquo;s job finished August 28, billed net 15: the work gives, and the right to collect &mdash; Receivables &mdash; receives $300. And Smith&rsquo;s custom frame goes out the door: the work gives the delivered frame, and the Customer Deposit&rsquo;s claim receives its settlement &mdash; $220 no longer owed, now earned. Revenue now runs $520 ahead of collections. Remember that number.';
+  } else if(currentStep===6){
+    text='Keeping the doors open, and the owner&rsquo;s take. Cash gives $650 &times; 3 = $1,950 for the season&rsquo;s rent. And Cash gives $600 to the owner &mdash; received by Withdrawn, its own pile among the Reasons. A draw is not an expense: it never enters Generated, and the income statement will never see it.';
+  } else if(currentStep===7){
+    text='No cash moves in the season&rsquo;s last events. The tools give a season of their working lives &mdash; $160 &mdash; received by Depreciation. The fixtures give $40; the laptop gives $30. One number for later: the income statement will show a single $230 line; the picture remembers the split.';
+  } else if(currentStep===8){
+    text='All fourteen events are posted. Look right: $4,500 &minus; $0 = $4,500 &mdash; Contributed $2,290, Generated $2,810, Withdrawn ($600) &mdash; and the column has earned its date. It is no longer &ldquo;where we stand&rdquo;: it is the Balance Sheet &mdash; August 31, 2026, the one you built in Module 3. Every account&rsquo;s walk ties: beginning, plus what came in, minus what went out, ending.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div><p class="m7-progress">Event view '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+function renderTail(currentStep){
+  document.getElementById('tail').innerHTML=currentStep===8
+    ? '<div class="insight-box">One summer, fourteen events, one picture &mdash; and the ending balance sheet built itself. The statements are next: they are already in there.</div>'
+    : '';
+}
+
+function renderControls(currentStep){
+  var html='<div class="nav-buttons">';
+  if(currentStep>0) html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) html+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else html+='<button class="btn-continue" onclick="playSuccess();nav(\'72-2-The-Statements-in-the-Graph.html\')">The Statements in the Graph &rarr;</button>';
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+
+function advance(){
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Node',def:'An account&rsquo;s change during the season shown, not the account&rsquo;s whole history.'},
+  {term:'Arrow (give &rarr; receive)',def:'A recorded event drawn from the account that gave to the account that received.'},
+  {term:'Enclosure',def:'A dotted boundary showing subparts of a larger whole, such as the detail inside Generated.'},
+  {term:'Match',def:'An event whose two ends both sit among Assets and Liabilities, so no Reason is needed.'},
+  {term:'Reason',def:'The source of a change that cannot be matched entirely within Assets and Liabilities.'},
+  {term:'The walk',def:'Beginning, plus what came in, minus what went out, ending. The amounts must tie.'},
+  {term:'Christening',def:'The moment the live ending column has earned its date and becomes the August 31 balance sheet.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ playClick(); step=0; render(); window.scrollTo(0,0); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') dismissGlossary(); });
+
+GraphLab.wireCrossHighlight(board,[leftEl,rightEl],crossHighlight);
+boardSvg.addEventListener('mouseover',function(event){
+  var arrow=event.target.closest&&event.target.closest('.gl-arrow[data-pair="rev>cash"]');
+  if(step===4&&arrow) boardSvg.classList.add('m7-show-fan');
+});
+boardSvg.addEventListener('mouseout',function(event){
+  var arrow=event.target.closest&&event.target.closest('.gl-arrow[data-pair="rev>cash"]');
+  if(!arrow)return;
+  var next=event.relatedTarget;
+  if(!next||!arrow.contains(next)) boardSvg.classList.remove('m7-show-fan');
+});
+window.devFill=function(){ step=TOTAL_STEPS-1; render(); };
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
