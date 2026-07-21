@@ -203,7 +203,7 @@ function nav(url){ window.location.href=url; }
 
 var step=0;
 var TOTAL_STEPS=4;
-var POSTED=['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL'];
+var RECOGNIZED=['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL'];
 var answerState={
   revenue:{answer:6020,tries:0,correct:false,value:'',hint1:'Only one node gives inside Generated. Its badge holds the total.',hint2:'120 + 5,380 + 300 + 220 = 6,020.'},
   expenses:{answer:3380,tries:0,correct:false,value:'',hint1:'Three receivers inside Generated: the shelf\'s parts, the space\'s rent, the gear\'s seasons.',hint2:'1,200 + 1,950 + 230 = 3,380.'},
@@ -232,12 +232,12 @@ var crossHighlight={
   gen:{nodes:['gen','rev','pexp','rent','depx'],pairs:['rev>cash','parts>pexp','rev>ar','rev>dep','cash>rent','tools>depx','fix>depx','laptop>depx']},
   wd:{nodes:['wd'],pairs:['cash>wd']}
 };
-var enclosureHighlight={nodes:['gen','rev','pexp','rent','depx'],pairs:[]};
-var capitalHighlight={nodes:['gen','rev','pexp','rent','depx','wd'],pairs:['cash>wd']};
+var enclosureFocus={nodes:['rev','pexp','rent','depx'],pairs:[]};
+var capitalFocus={nodes:['wd'],pairs:['cash>wd']};
 
 function render(){
   renderBeats(step);
-  board.setPosted(POSTED);
+  board.setRecognized(RECOGNIZED);
   GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
   var leftTitle=leftEl.querySelector('.gl-col-title');
   if(leftTitle) leftTitle.textContent='Balance Sheet';
@@ -252,7 +252,7 @@ function render(){
 function renderBeats(currentStep){
   var text='';
   if(currentStep===0){
-    text='The season is posted and the picture is full. Now read it. Everything the income statement will say lives inside one dotted line: the Generated enclosure &mdash; Repair Revenue on the giving side; Parts Used, Rent, and Depreciation on the receiving side. The sorting you did in Module 3 is a geography here: nothing moved, nothing reset &mdash; the detail simply sits inside Generated, waiting to be summarized.';
+    text='The season is recognized in full and the picture is whole. Now read it. Everything the income statement will say lives inside one dotted line: the Generated enclosure &mdash; Repair Revenue on the giving side; Parts Used, Rent, and Depreciation on the receiving side. The sorting you did in Module 3 is a geography here: nothing moved, nothing reset &mdash; the detail simply sits inside Generated, waiting to be summarized.';
   } else if(currentStep===1){
     text='Fill in the income statement, straight off the picture. Revenue: what did the work give, in total? Expenses: what did the season receive as used up &mdash; parts, rent, and the gear&rsquo;s given seasons? Net income is the difference. Type the three numbers; the picture has them all.';
   } else if(currentStep===2){
@@ -347,14 +347,15 @@ function incomeComplete(){ return answerState.revenue.correct&&answerState.expen
 function capitalComplete(){ return answerState.capitalIncome.correct&&answerState.withdrawn.correct&&answerState.ending.correct; }
 
 function highlightForInput(key){
-  if(key==='revenue') board.highlight({nodes:['rev'],pairs:[]});
-  else if(key==='expenses') board.highlight({nodes:['pexp','rent','depx'],pairs:[]});
+  if(key==='revenue') board.setFocus({nodes:['rev'],pairs:[]});
+  else if(key==='expenses') board.setFocus({nodes:['pexp','rent','depx'],pairs:[]});
   else applyStepHighlight();
 }
 
 function applyStepHighlight(){
-  if(step===2) board.highlight(capitalHighlight);
-  else board.highlight(enclosureHighlight);
+  if(step===2) board.setFocus(capitalFocus);
+  else if(step===3) board.setFocus(null);
+  else board.setFocus(enclosureFocus);
 }
 
 function advance(){

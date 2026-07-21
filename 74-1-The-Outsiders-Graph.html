@@ -279,7 +279,8 @@ function boardState(){
     if(step>=5||inferenceSolved) forced.wd=data.bs.wd.end;
   }
   board.setCollapse(true);
-  board.setPosted(step===5&&quizSolved[5]?['draw']:[]);
+  board.setRecognized(step===5&&quizSolved[5]?['draw']:[]);
+  board.setFocus(step===5&&quizSolved[5]?{nodes:['cash','wd'],pairs:['cash>wd']}:null);
   board.setForceNodes(forced);
   board.setTags(step===5&&quizSolved[5]?{'cash>wd':'infer'}:{});
 }

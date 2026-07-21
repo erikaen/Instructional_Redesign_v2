@@ -218,21 +218,28 @@ function renderLocalColumn(el,side,title){
 }
 
 function boardState(){
-  var posted=['draw','dana','rest','ccpay'];
+  var recognized=['draw','dana','rest','ccpay'];
   var tags={'gen>cash':'fact','cash>cc':'fact','cash>wd':'fact'};
-  if(step>1||(step===1&&inferenceSolved[1])){ posted.push('ridge'); tags['gen>ar']='infer'; }
-  if(step>2||(step===2&&quizSolved)){ posted.push('smith'); tags['gen>dep']='infer'; }
+  if(step>1||(step===1&&inferenceSolved[1])){ recognized.push('ridge'); tags['gen>ar']='infer'; }
+  if(step>2||(step===2&&quizSolved)){ recognized.push('smith'); tags['gen>dep']='infer'; }
   if(step>=3){
-    posted=posted.concat(['danaP','restP','pbuy','rentx','tool']);
+    recognized=recognized.concat(['danaP','restP','pbuy','rentx','tool']);
     tags['parts>gen']='fact'; tags['cash>parts']='fact'; tags['cash>gen']='fact'; tags['cash>tools']='fact';
   }
-  if(step>4||(step===4&&inferenceSolved[4])){ posted.push('deprT'); tags['tools>gen']='infer'; }
-  if(step>=5){ posted=posted.concat(['deprF','deprL']); tags['fix>gen']='infer'; tags['laptop>gen']='infer'; }
+  if(step>4||(step===4&&inferenceSolved[4])){ recognized.push('deprT'); tags['tools>gen']='infer'; }
+  if(step>=5){ recognized=recognized.concat(['deprF','deprL']); tags['fix>gen']='infer'; tags['laptop>gen']='infer'; }
   board.setCollapse(true);
-  board.setPosted(posted);
+  board.setRecognized(recognized);
   board.setTags(tags);
   board.setForceNodes(forcedNodes);
   board.setFan(step===6&&fanOpen?'gen>cash':null);
+  if(step===0) board.setFocus({nodes:['gen','cash','cc','wd'],pairs:['gen>cash','cash>cc','cash>wd']});
+  else if(step===1&&inferenceSolved[1]) board.setFocus({nodes:['gen','ar'],pairs:['gen>ar']});
+  else if(step===2&&quizSolved) board.setFocus({nodes:['gen','dep'],pairs:['gen>dep']});
+  else if(step===3) board.setFocus({nodes:['parts','cash','tools','gen'],pairs:['parts>gen','cash>parts','cash>gen','cash>tools']});
+  else if(step===4&&inferenceSolved[4]) board.setFocus({nodes:['tools','gen'],pairs:['tools>gen']});
+  else if(step===5) board.setFocus({nodes:['fix','laptop','gen'],pairs:['fix>gen','laptop>gen']});
+  else board.setFocus(null);
 }
 
 function render(){

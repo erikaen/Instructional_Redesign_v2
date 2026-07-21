@@ -85,17 +85,18 @@ function signedMoney(n){return n<0?'−'+money(n):'+'+money(n);}
 function dashMoney(n){return n==null?'&mdash;':parenMoney(n);}
 function allPredicted(){return predictions.every(function(x){return x!==null;});}
 
-function setBoardWorld(next){world=next==='W'?'W':'D';board.setWorld(world).setPosted('season');}
+function setBoardWorld(next){world=next==='W'?'W':'D';board.setWorld(world).setRecognized('season');}
+function worldFocus(){return world==='D'?{nodes:['cash','wd'],pairs:['cash>wd']}:{nodes:['cash','wage'],pairs:['cash>wage']};}
 function renderColumns(){
   GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
   var leftTitle=leftEl.querySelector('.gl-col-title');if(leftTitle)leftTitle.textContent='Balance Sheet';
   GraphLab.renderColumn(rightEl,data,board,{side:'end',christened:true,title:'Balance Sheet — August 31, 2026 · world '+world,sub:world==='D'?'the take, as reported':'the owner-wage recast'});
 }
 function configureBoard(){
-  if(step===0){setBoardWorld('D');board.highlight({nodes:['cash','wd'],pairs:['cash>wd']});}
-  else if(step===1){setBoardWorld('D');board.clearHighlight();}
-  else if(step===3||step===4){setBoardWorld('W');board.clearHighlight();}
-  else{board.setWorld(world).setPosted('season').clearHighlight();}
+  if(step===0){setBoardWorld('D');board.setFocus({nodes:['cash','wd'],pairs:['cash>wd']});}
+  else if(step===1){setBoardWorld('D');board.setFocus(null).clearHighlight();}
+  else if(step===3||step===4){setBoardWorld('W');board.setFocus(null).clearHighlight();}
+  else{board.setWorld(world).setRecognized('season').setFocus(worldFocus()).clearHighlight();}
 }
 function render(){configureBoard();renderBeats();renderWorldControls();renderColumns();renderTask();renderTail();renderControls();if(window.lucide)lucide.createIcons();}
 
@@ -114,7 +115,7 @@ function memberCapitalEnd(){return data.bs.contrib.end+data.bs.gen.end-data.bs.w
 function renderWorldControls(){
   document.getElementById('worldControls').innerHTML=step===2?'<div class="m7-world-toggle" role="group" aria-label="Choose a lawful picture"><button class="'+(world==='D'?'active':'')+'" aria-pressed="'+(world==='D')+'" onclick="chooseWorld(\'D\')">World D &middot; the take</button><button class="'+(world==='W'?'active':'')+'" aria-pressed="'+(world==='W')+'" onclick="chooseWorld(\'W\')">World W &middot; the wage</button></div>':'';
 }
-function chooseWorld(next){playClick();setBoardWorld(next);renderWorldControls();renderColumns();renderStatements();}
+function chooseWorld(next){playClick();setBoardWorld(next);board.setFocus(worldFocus());renderWorldControls();renderColumns();renderStatements();}
 
 function predictionRows(){
   var wage=entryAmount('wagex'),ni=data.recon.ni,mc=memberCapitalEnd(),net=data.cfs.net,cfo=data.cfs.cfo;

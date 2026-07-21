@@ -198,13 +198,14 @@ function nav(url){ window.location.href=url; }
 
 var step=0;
 var TOTAL_STEPS=5;
-var POSTED=['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL'];
+var RECOGNIZED=['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL'];
 var CASH_PAIRS=['rev>cash','cash>parts','cash>rent','cash>tools','cash>cc','cash>wd'];
 var data=window.M7_GRAPH;
 var byEntry={};
 data.entries.forEach(function(entry){ byEntry[entry.id]=entry; });
 var assignments={};
 var wrongPick={};
+var lastAssigned=null;
 var selectedRecon='ni';
 var boardSvg=document.getElementById('board');
 var board=GraphLab.createBoard(boardSvg,data,{interactive:true});
@@ -244,7 +245,7 @@ function sortComplete(){ return sortRows.every(function(row){ return assignments
 
 function render(){
   renderBeats(step);
-  board.setPosted(POSTED);
+  board.setRecognized(RECOGNIZED);
   board.setChannels(step===0?null:(step===1?currentChannels():data.channels));
   GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
   GraphLab.renderColumn(rightEl,data,board,{side:'end',title:'Balance Sheet — August 31, 2026',sub:'the season complete',christened:true});
@@ -336,6 +337,7 @@ function chooseChannel(id,channel){
   if(data.channels[id]===channel){
     assignments[id]=channel;
     delete wrongPick[id];
+    lastAssigned=id;
     playSuccess();
   } else {
     wrongPick[id]=channel;
@@ -347,8 +349,10 @@ function chooseChannel(id,channel){
 }
 
 function applyStepHighlight(){
-  if(step===0) board.highlight({nodes:['cash'],pairs:CASH_PAIRS});
-  else if(step===3) board.highlight(reconHighlights[selectedRecon]||reconHighlights.ni);
+  if(step===0) board.setFocus({nodes:['cash'],pairs:CASH_PAIRS});
+  else if(step===1&&lastAssigned) board.setFocus({nodes:[data.channels[lastAssigned]],pairs:[byEntry[lastAssigned].from+'>'+byEntry[lastAssigned].to]});
+  else board.setFocus(null);
+  if(step===3) board.highlight(reconHighlights[selectedRecon]||reconHighlights.ni);
   else board.clearHighlight();
 }
 
@@ -386,6 +390,7 @@ function restart(){
   step=0;
   assignments={};
   wrongPick={};
+  lastAssigned=null;
   selectedRecon='ni';
   render();
   window.scrollTo(0,0);
@@ -398,6 +403,7 @@ window.devFill=function(){
   assignments={};
   Object.keys(data.channels).forEach(function(id){ assignments[id]=data.channels[id]; });
   wrongPick={};
+  lastAssigned=null;
   selectedRecon='cfo';
   step=TOTAL_STEPS-1;
   render();

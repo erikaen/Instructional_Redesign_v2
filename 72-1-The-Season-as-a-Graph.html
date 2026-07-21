@@ -146,10 +146,11 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 function nav(url){ window.location.href=url; }
 
 var step=0;
-var TOTAL_STEPS=9;
-var POSTED=[
+var TOTAL_STEPS=10;
+var RECOGNIZED=[
   [],
   ['pbuy'],
+  ['pbuy','tool'],
   ['pbuy','tool','ccpay'],
   ['pbuy','tool','ccpay','dana'],
   ['pbuy','tool','ccpay','dana','rest','danaP','restP'],
@@ -157,6 +158,18 @@ var POSTED=[
   ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw'],
   ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL'],
   ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL']
+];
+var FOCUS=[
+  null,
+  {nodes:['cash','parts'],pairs:['cash>parts']},
+  {nodes:['cash','tools'],pairs:['cash>tools']},
+  {nodes:['cash','cc'],pairs:['cash>cc']},
+  {nodes:['rev','cash'],pairs:['rev>cash']},
+  {nodes:['rev','cash','parts','pexp'],pairs:['rev>cash','parts>pexp']},
+  {nodes:['rev','ar','dep'],pairs:['rev>ar','rev>dep']},
+  {nodes:['cash','rent','wd'],pairs:['cash>rent','cash>wd']},
+  {nodes:['tools','fix','laptop','depx'],pairs:['tools>depx','fix>depx','laptop>depx']},
+  null
 ];
 var data=window.M7_GRAPH;
 var boardSvg=document.getElementById('board');
@@ -182,12 +195,13 @@ var crossHighlight={
 function render(){
   renderBeats(step);
   boardSvg.classList.remove('m7-show-fan');
-  board.setFan(step===4?'rev>cash':null);
-  board.setPosted(POSTED[step]);
+  board.setFan(step===5?'rev>cash':null);
+  board.setRecognized(RECOGNIZED[step]);
+  board.setFocus(FOCUS[step]);
   GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
   var leftTitle=leftEl.querySelector('.gl-col-title');
   if(leftTitle) leftTitle.textContent='Balance Sheet';
-  GraphLab.renderColumn(rightEl,data,board,{side:'end',title:step===8?'Balance Sheet — August 31, 2026':'Where we stand',sub:step===8?'the season complete':'live — moves with every event',christened:step===8});
+  GraphLab.renderColumn(rightEl,data,board,{side:'end',title:step===9?'Balance Sheet — August 31, 2026':'Where we stand',sub:step===9?'the season complete':'live — moves with every event',christened:step===9});
   renderTail(step);
   renderControls(step);
   if(window.lucide) lucide.createIcons();
@@ -200,25 +214,27 @@ function renderBeats(currentStep){
   } else if(currentStep===1){
     text='The first event: restocking the parts shelf, $500 + $400 + $300 across the summer. Cash gives $1,200; the Parts shelf receives it. Two nodes appear &mdash; each badge showing that account&rsquo;s change so far &mdash; and one arrow between them. Look at the columns: Cash&rsquo;s line moved, Parts&rsquo; line moved, and the identity still ties. Both ends of this event sit on the sheets. It is a match &mdash; no Reason needed.';
   } else if(currentStep===2){
-    text='Two more like it: Cash gives $400 for one new tool, and Cash gives $2,030 to settle the card &mdash; the startup balance paid off, the claim receiving its full settlement. Three arrows now, and notice where they live: entirely inside Assets and Liabilities. The Reasons region has not been touched. Some of a season explains itself.';
+    text='Another event that explains itself: Cash gives $400; the tool stand receives one new tool. Both lines move &mdash; Tools &amp; Equip up, Cash down &mdash; and the identity ties again. A second match. And notice the first arrow graying back: the picture keeps everything, but each beat lights only the event being recognized.';
   } else if(currentStep===3){
-    text='Now an event that cannot explain itself. Dana R. pays $120 for a drivetrain job. Cash receives &mdash; but what gave? Not another asset, not a liability: the work gave. That takes a Reason. The Generated enclosure opens and Repair Revenue appears; the arrow runs from it into Cash. And watch the right-hand column: Generated&rsquo;s line just moved, 170 to 290.';
+    text='And a third: Cash gives $2,030 to settle the card &mdash; the startup balance paid off, its claim receiving full settlement. Three arrows now, and all of them live entirely inside Assets and Liabilities. The Reasons region has not been touched. Some of a season explains itself.';
   } else if(currentStep===4){
-    text='The season at scale. Eighteen more repairs collect in cash &mdash; and no new arrow appears: the same arrow&rsquo;s total grows, $120 to $5,500. Hover it to see the names, Marcus T. through Westville Bike Share. And every repair is also a pair: the shelf gives up parts for the job &mdash; $10 for Dana&rsquo;s, $1,200 across the season &mdash; received by Parts Used, inside Generated.';
+    text='Now an event that cannot explain itself. Dana R. pays $120 for a drivetrain job. Cash receives &mdash; but what gave? Not another asset, not a liability: the work gave. That takes a Reason. The Generated enclosure opens and Repair Revenue appears; the arrow runs from it into Cash. And watch the right-hand column: Generated&rsquo;s line just moved, 170 to 290.';
   } else if(currentStep===5){
-    text='Two repairs touched no new cash. Ridgeline Trail Crew&rsquo;s job finished August 28, billed net 15: the work gives, and the right to collect &mdash; Receivables &mdash; receives $300. And Smith&rsquo;s custom frame goes out the door: the work gives the delivered frame, and the Customer Deposit&rsquo;s claim receives its settlement &mdash; $220 no longer owed, now earned. Revenue now runs $520 ahead of collections. Remember that number.';
+    text='The season at scale. Eighteen more repairs collect in cash &mdash; and no new arrow appears: the same arrow&rsquo;s total grows, $120 to $5,500. Hover it to see the names, Marcus T. through Westville Bike Share. And every repair is also a pair: the shelf gives up parts for the job &mdash; $10 for Dana&rsquo;s, $1,200 across the season &mdash; received by Parts Used, inside Generated.';
   } else if(currentStep===6){
-    text='Keeping the doors open, and the owner&rsquo;s take. Cash gives $650 &times; 3 = $1,950 for the season&rsquo;s rent. And Cash gives $600 to the owner &mdash; received by Withdrawn, its own pile among the Reasons. A draw is not an expense: it never enters Generated, and the income statement will never see it.';
+    text='Two repairs touched no new cash. Ridgeline Trail Crew&rsquo;s job finished August 28, billed net 15: the work gives, and the right to collect &mdash; Receivables &mdash; receives $300. And Smith&rsquo;s custom frame goes out the door: the work gives the delivered frame, and the Customer Deposit&rsquo;s claim receives its settlement &mdash; $220 no longer owed, now earned. Revenue now runs $520 ahead of collections. Remember that number.';
   } else if(currentStep===7){
-    text='No cash moves in the season&rsquo;s last events. The tools give a season of their working lives &mdash; $160 &mdash; received by Depreciation. The fixtures give $40; the laptop gives $30. One number for later: the income statement will show a single $230 line; the picture remembers the split.';
+    text='Keeping the doors open, and the owner&rsquo;s take. Cash gives $650 &times; 3 = $1,950 for the season&rsquo;s rent. And Cash gives $600 to the owner &mdash; received by Withdrawn, its own pile among the Reasons. A draw is not an expense: it never enters Generated, and the income statement will never see it.';
   } else if(currentStep===8){
-    text='All fourteen events are posted. Look right: $4,500 &minus; $0 = $4,500 &mdash; Contributed $2,290, Generated $2,810, Withdrawn ($600) &mdash; and the column has earned its date. It is no longer &ldquo;where we stand&rdquo;: it is the Balance Sheet &mdash; August 31, 2026, the one you built in Module 3. Every account&rsquo;s walk ties: beginning, plus what came in, minus what went out, ending.';
+    text='No cash moves in the season&rsquo;s last events. The tools give a season of their working lives &mdash; $160 &mdash; received by Depreciation. The fixtures give $40; the laptop gives $30. One number for later: the income statement will show a single $230 line; the picture remembers the split.';
+  } else if(currentStep===9){
+    text='All fourteen events are recognized. Look right: $4,500 &minus; $0 = $4,500 &mdash; Contributed $2,290, Generated $2,810, Withdrawn ($600) &mdash; and the column has earned its date. It is no longer &ldquo;where we stand&rdquo;: it is the Balance Sheet &mdash; August 31, 2026, the one you built in Module 3. Every account&rsquo;s walk ties: beginning, plus what came in, minus what went out, ending.';
   }
   document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div><p class="m7-progress">Event view '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
 }
 
 function renderTail(currentStep){
-  document.getElementById('tail').innerHTML=currentStep===8
+  document.getElementById('tail').innerHTML=currentStep===9
     ? '<div class="insight-box">One summer, fourteen events, one picture &mdash; and the ending balance sheet built itself. The statements are next: they are already in there.</div>'
     : '';
 }
@@ -268,7 +284,7 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') dismissGlo
 GraphLab.wireCrossHighlight(board,[leftEl,rightEl],crossHighlight);
 boardSvg.addEventListener('mouseover',function(event){
   var arrow=event.target.closest&&event.target.closest('.gl-arrow[data-pair="rev>cash"]');
-  if(step===4&&arrow) boardSvg.classList.add('m7-show-fan');
+  if(step===5&&arrow) boardSvg.classList.add('m7-show-fan');
 });
 boardSvg.addEventListener('mouseout',function(event){
   var arrow=event.target.closest&&event.target.closest('.gl-arrow[data-pair="rev>cash"]');
