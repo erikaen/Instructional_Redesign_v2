@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Where the Cash Went</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m7-season-stage {
+      display:grid;
+      grid-template-columns:minmax(230px,270px) minmax(0,1fr) minmax(230px,270px);
+      gap:14px;
+      align-items:start;
+      margin-top:16px;
+    }
+    .m7-season-stage > * { min-width:0; }
+    .m7-board-wrap {
+      overflow-x:auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#f0f4f8;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+    }
+    .m7-board-wrap #board { display:block; width:100%; min-width:650px; height:auto; }
+    .m7-season-stage .gl-col { width:100%; box-shadow:0 7px 20px rgba(32,55,72,.08); }
+    .m7-season-stage .gl-col h3 { line-height:1.25; }
+    #tail { margin-top:16px; }
+    #controls { margin-top:18px; }
+    .m7-progress {
+      margin:8px 0 0;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .m7-card {
+      max-width:900px;
+      margin:0 auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#fff;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+      overflow:hidden;
+    }
+    .m7-card-title {
+      margin:0;
+      padding:15px 18px;
+      background:#eaf1f8;
+      color:#16324a;
+      font:800 1rem/1.35 Inter,sans-serif;
+      letter-spacing:.01em;
+    }
+    .m7-card-body { padding:8px 18px 14px; }
+    .m7-sort-row {
+      display:grid;
+      grid-template-columns:minmax(210px,1fr) repeat(3,minmax(100px,132px));
+      gap:8px;
+      align-items:center;
+      padding:11px 0;
+      border-bottom:1px solid #e2e8f0;
+    }
+    .m7-sort-row:last-child { border-bottom:0; }
+    .m7-sort-row.is-correct { color:#166534; }
+    .m7-sort-label { font:700 .91rem/1.35 Inter,sans-serif; }
+    .m7-choice {
+      min-height:39px;
+      border:1px solid #7a91ab;
+      border-radius:6px;
+      padding:7px 9px;
+      background:#fff;
+      color:#16324a;
+      cursor:pointer;
+      font:700 .78rem/1.15 Inter,sans-serif;
+    }
+    .m7-choice:hover:not(:disabled), .m7-choice:focus-visible { border-color:#286dc0; outline:2px solid rgba(40,109,192,.2); }
+    .m7-choice:disabled { cursor:default; opacity:.55; }
+    .m7-choice.is-answer { border-color:#28864f; background:#ecfdf3; color:#166534; opacity:1; }
+    .m7-choice.is-wrong { border-color:#c24127; background:#fff1ed; color:#9f2f19; }
+    .m7-feedback {
+      grid-column:2 / 5;
+      min-height:0;
+      margin:0;
+      color:#a63b20;
+      font:600 .83rem/1.4 "Open Sans",sans-serif;
+    }
+    .m7-sort-row.is-correct .m7-feedback { color:#166534; }
+    .m7-statement-line, .m7-recon-row {
+      display:grid;
+      grid-template-columns:minmax(170px,1fr) 110px;
+      gap:14px;
+      align-items:center;
+      padding:10px 4px;
+      border-bottom:1px solid #e2e8f0;
+    }
+    .m7-statement-line.is-total, .m7-recon-row.is-total { border-top:2px solid #334155; border-bottom:0; font-weight:800; }
+    .m7-statement-label { font:700 .93rem/1.35 Inter,sans-serif; }
+    .m7-statement-value { text-align:right; font:700 .93rem/1.25 "JetBrains Mono",monospace; }
+    .m7-cash-tie { margin:10px 4px 0; color:#475569; font:700 .88rem/1.4 Inter,sans-serif; text-align:right; }
+    .m7-recon-row {
+      width:100%;
+      border-top:0;
+      border-right:0;
+      border-left:0;
+      background:transparent;
+      color:inherit;
+      cursor:pointer;
+      text-align:left;
+    }
+    .m7-recon-row:hover, .m7-recon-row:focus-visible, .m7-recon-row.is-selected { background:#eef6ff; outline:none; }
+    .m7-recon-note { display:block; margin-top:3px; color:#64748b; font:600 .78rem/1.35 "Open Sans",sans-serif; }
+    .m7-glossary-dismiss { border:0; padding:2px 7px; background:transparent; color:inherit; cursor:pointer; font-size:1.7rem; line-height:1; }
+    @media (max-width:980px) {
+      .m7-season-stage { grid-template-columns:1fr; }
+      .m7-season-stage > :nth-child(1) { order:1; }
+      .m7-season-stage > :nth-child(2) { order:2; }
+      .m7-season-stage > :nth-child(3) { order:3; }
+      .m7-season-stage .gl-col { max-width:none; }
+    }
+    @media (max-width:720px) {
+      .m7-board-wrap #board { min-width:610px; }
+      .m7-sort-row { grid-template-columns:1fr; }
+      .m7-sort-label, .m7-feedback { grid-column:1; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m7-board-wrap { border-color:#4b5567; background:#211f28; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m7-season-stage .gl-col { border-color:#4b5567; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m7-progress { color:#aebbd0; }
+      .m7-season-stage { --gl-panel:#26242e; --gl-ink:#e7eef9; --gl-region-line:#8996aa; --gl-accent:#e6ae4f; --gl-pulse:#a96915; }
+      .m7-card { border-color:#4b5567; background:#26242e; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m7-card-title { background:#302e39; color:#e7eef9; }
+      .m7-sort-row, .m7-statement-line, .m7-recon-row { border-color:#4b5567; }
+      .m7-choice { border-color:#77849a; background:#211f28; color:#e7eef9; }
+      .m7-choice.is-answer { border-color:#4e966a; background:#183425; color:#b6f0c8; }
+      .m7-choice.is-wrong { border-color:#d36a54; background:#45251f; color:#ffc0b1; }
+      .m7-sort-row.is-correct, .m7-sort-row.is-correct .m7-feedback { color:#b6f0c8; }
+      .m7-feedback { color:#ffb19d; }
+      .m7-cash-tie, .m7-recon-note { color:#aebbd0; }
+      .m7-recon-row:hover, .m7-recon-row:focus-visible, .m7-recon-row.is-selected { background:#302e39; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Where the Cash Went</h1>
+        <p class="tut-header-sub">Module 7 &middot; ~7 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Where the Cash Went</div>
+
+    <div id="beats"></div>
+    <div class="m7-season-stage" id="mainGrid">
+      <div id="beginningColumn" aria-label="Beginning balance sheet"></div>
+      <div class="m7-board-wrap">
+        <svg id="board" viewBox="0 0 1000 660" role="img" aria-label="The finished bike-repair season shown as an accounting graph"></svg>
+      </div>
+      <div id="endingColumn" aria-label="Balance Sheet — August 31, 2026"></div>
+    </div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="m7-glossary-dismiss" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playNope(){ tone(220,0.12,'sine',0.035); }
+function nav(url){ window.location.href=url; }
+
+var step=0;
+var TOTAL_STEPS=5;
+var POSTED=['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL'];
+var CASH_PAIRS=['rev>cash','cash>parts','cash>rent','cash>tools','cash>cc','cash>wd'];
+var data=window.M7_GRAPH;
+var byEntry={};
+data.entries.forEach(function(entry){ byEntry[entry.id]=entry; });
+var assignments={};
+var wrongPick={};
+var selectedRecon='ni';
+var boardSvg=document.getElementById('board');
+var board=GraphLab.createBoard(boardSvg,data,{interactive:true});
+var leftEl=document.getElementById('beginningColumn');
+var rightEl=document.getElementById('endingColumn');
+
+var sortRows=[
+  {id:'dana',label:'Dana&rsquo;s collection',feedback:'A customer paying for the shop&rsquo;s work &mdash; that is the day-job.'},
+  {id:'rest',label:'the other eighteen repairs',feedback:'A customer paying for the shop&rsquo;s work &mdash; that is the day-job.'},
+  {id:'pbuy',label:'the parts restock',feedback:'Stocking the shelf the repairs consume is the day-job&rsquo;s spending.'},
+  {id:'rentx',label:'the season&rsquo;s rent',feedback:'Keeping the doors open is the day-job.'},
+  {id:'tool',label:'the new tool',feedback:'One long-lived tool &mdash; capacity, not consumption.'},
+  {id:'ccpay',label:'the card payoff',feedback:'This settles the startup borrowing &mdash; classification follows the claim being settled.'},
+  {id:'draw',label:'the owner&rsquo;s take',feedback:'The owner&rsquo;s take &mdash; never an expense, and not the day-job either.'}
+];
+var channelLabels={cfo:'Operating',cfi:'Investing',cff:'Financing'};
+var reconHighlights={
+  ni:{nodes:['cfo'],pairs:[]},
+  dep230:{nodes:['depx'],pairs:['tools>depx','fix>depx','laptop>depx']},
+  ar300:{nodes:['rev','ar'],pairs:['rev>ar']},
+  dep220:{nodes:['rev','dep'],pairs:['rev>dep']},
+  cfo:{nodes:['cfo'],pairs:[]}
+};
+var crossHighlight={
+  cash:{nodes:['cash','cfo','cfi','cff'],pairs:CASH_PAIRS}, ar:{nodes:['ar'],pairs:['rev>ar']}, rou:{nodes:['rou'],pairs:[]},
+  parts:{nodes:['parts'],pairs:['cash>parts','parts>pexp']}, tools:{nodes:['tools'],pairs:['cash>tools','tools>depx']},
+  fix:{nodes:['fix'],pairs:['fix>depx']}, laptop:{nodes:['laptop'],pairs:['laptop>depx']}, cc:{nodes:['cc'],pairs:['cash>cc']},
+  dep:{nodes:['dep'],pairs:['rev>dep']}, contrib:{nodes:['contrib'],pairs:[]},
+  gen:{nodes:['gen','rev','pexp','rent','depx'],pairs:['rev>cash','parts>pexp','rev>ar','rev>dep','cash>rent','tools>depx','fix>depx','laptop>depx']},
+  wd:{nodes:['wd'],pairs:['cash>wd']}
+};
+
+function money(value){ return Math.abs(value).toLocaleString('en-US'); }
+function signed(value){ return (value<0?'&minus;':'+')+'$'+money(value); }
+function currentChannels(){ return Object.keys(assignments).length?assignments:null; }
+function sortComplete(){ return sortRows.every(function(row){ return assignments[row.id]===data.channels[row.id]; }); }
+
+function render(){
+  renderBeats(step);
+  board.setPosted(POSTED);
+  board.setChannels(step===0?null:(step===1?currentChannels():data.channels));
+  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
+  GraphLab.renderColumn(rightEl,data,board,{side:'end',title:'Balance Sheet — August 31, 2026',sub:'the season complete',christened:true});
+  renderTail(step);
+  renderControls(step);
+  wireTail();
+  applyStepHighlight();
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='Profitable &mdash; and poorer in cash. The season ended with net income $2,640 &mdash; and Cash walked from $1,300 down to $620. Both are true, and the picture holds the answer: seven of its arrows touch Cash. Some are the day-job; one bought long-lived capacity; two settled claims on the shop. The cash statement&rsquo;s whole job is to sort those seven arrows into three channels.';
+  } else if(currentStep===1){
+    text='Sort the seven. Operating &mdash; the day-job: collecting for repairs, restocking the shelf, paying the rent. Investing &mdash; buying long-lived capacity. Financing &mdash; settling the money that set the shop up, and the owner&rsquo;s take. Assign each arrow; the Cash node opens into its three channels as you go.';
+  } else if(currentStep===2){
+    text='The cash statement, read off the channels: Operating +$2,350, Investing &minus;$400, Financing &minus;$2,630 &mdash; summing to &minus;$680 and tying $1,300 to $620. The twist worth saying out loud: the card payoff and the owner&rsquo;s take sit in Financing because classification follows the claim being settled, not how the cash felt on its way out.';
+  } else if(currentStep===3){
+    text='Why is operating cash not net income? Walk the gap. Start at $2,640. Add $230 &mdash; the gear&rsquo;s three gives received by Depreciation, no cash moving. Subtract $300 &mdash; Ridgeline&rsquo;s job, earned with the cash still to come. Subtract $220 &mdash; Smith&rsquo;s frame, earned this season with the cash received last period. Land on $2,350 &mdash; exactly the Operating channel. Click each row to see its arrows.';
+  } else {
+    text='The season, fully told: one picture &mdash; and the balance-sheet pair, the income statement, the capital walk, and the cash statement are all readings off it. Next, the course takes the picture away. You keep only the statements &mdash; the outsider&rsquo;s seat &mdash; and build the best picture they allow.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div><p class="m7-progress">Reading '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+function sortRowHtml(row){
+  var locked=assignments[row.id];
+  var feedback=locked?'Correct &mdash; '+channelLabels[locked]+'.':(wrongPick[row.id]?row.feedback:'');
+  var buttons=['cfo','cfi','cff'].map(function(channel){
+    var answer=locked===channel;
+    var wrong=!locked&&wrongPick[row.id]===channel;
+    return '<button class="m7-choice'+(answer?' is-answer':'')+(wrong?' is-wrong':'')+'" data-sort-id="'+row.id+'" data-channel="'+channel+'"'+(locked?' disabled':'')+'>'+channelLabels[channel]+'</button>';
+  }).join('');
+  return '<div class="m7-sort-row'+(locked?' is-correct':'')+'"><div class="m7-sort-label">'+row.label+' &middot; $'+money(byEntry[row.id].w)+'</div>'+buttons+'<p class="m7-feedback" id="feedback-'+row.id+'" aria-live="polite">'+feedback+'</p></div>';
+}
+
+function statementLine(label,value,total){
+  return '<div class="m7-statement-line'+(total?' is-total':'')+'"><span class="m7-statement-label">'+label+'</span><span class="m7-statement-value">'+signed(value)+'</span></div>';
+}
+
+function reconRow(id,label,value,note,total){
+  return '<button class="m7-recon-row'+(selectedRecon===id?' is-selected':'')+(total?' is-total':'')+'" data-recon-id="'+id+'"><span class="m7-statement-label">'+label+(note?'<span class="m7-recon-note">'+note+'</span>':'')+'</span><span class="m7-statement-value">'+(id==='ni'||id==='cfo'?'$'+money(value):signed(value))+'</span></button>';
+}
+
+function renderTail(currentStep){
+  var html='';
+  if(currentStep===1){
+    html='<section class="m7-card" aria-labelledby="sort-title"><h2 class="m7-card-title" id="sort-title">Sort the seven cash arrows</h2><div class="m7-card-body">'+sortRows.map(sortRowHtml).join('')+'</div></section>';
+  } else if(currentStep===2){
+    html='<section class="m7-card" aria-labelledby="cash-title"><h2 class="m7-card-title" id="cash-title">Statement of Cash Flows &middot; June 1 &ndash; August 31, 2026</h2><div class="m7-card-body">'+
+      statementLine('Operating',data.cfs.cfo,false)+statementLine('Investing',data.cfs.cfi,false)+statementLine('Financing',data.cfs.cff,false)+statementLine('Net change in Cash',data.cfs.net,true)+
+      '<p class="m7-cash-tie">Cash, June 1 $'+money(data.bs.cash.beg)+' &rarr; August 31 $'+money(data.bs.cash.end)+'</p></div></section>';
+  } else if(currentStep===3){
+    html='<section class="m7-card" aria-labelledby="recon-title"><h2 class="m7-card-title" id="recon-title">From net income to operating cash</h2><div class="m7-card-body">'+
+      reconRow('ni','Net income',data.recon.ni,'Starting point',false)+
+      data.recon.items.map(function(item){ return reconRow(item.id,item.amt>0?'Add':'Subtract',item.amt,item.label,false); }).join('')+
+      reconRow('cfo','Operating cash',data.recon.cfo,'The Operating channel',true)+'</div></section>';
+  } else if(currentStep===4){
+    html='<div class="insight-box">Four statements, one picture. The reader&rsquo;s question is always the same: what did the summary keep, and what did it fold away?</div>';
+  }
+  document.getElementById('tail').innerHTML=html;
+}
+
+function renderControls(currentStep){
+  var html='<div class="nav-buttons">';
+  if(currentStep>0) html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1){
+    var locked=currentStep===1&&!sortComplete();
+    html+='<button class="btn-next" onclick="advance()"'+(locked?' disabled aria-disabled="true"':'')+'>Next &rarr;</button>';
+  } else {
+    html+='<button class="btn-continue" onclick="playSuccess();nav(\'74-1-The-Outsiders-Graph.html\')">The Outsider&rsquo;s Graph &rarr;</button>';
+  }
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+
+function wireTail(){
+  document.querySelectorAll('[data-sort-id]').forEach(function(button){
+    button.addEventListener('click',function(){ chooseChannel(this.getAttribute('data-sort-id'),this.getAttribute('data-channel')); });
+  });
+  document.querySelectorAll('[data-recon-id]').forEach(function(button){
+    button.addEventListener('click',function(){ selectedRecon=this.getAttribute('data-recon-id'); playClick(); renderTail(step); wireTail(); applyStepHighlight(); });
+  });
+}
+
+function chooseChannel(id,channel){
+  if(assignments[id])return;
+  if(data.channels[id]===channel){
+    assignments[id]=channel;
+    delete wrongPick[id];
+    playSuccess();
+  } else {
+    wrongPick[id]=channel;
+    playNope();
+  }
+  render();
+  var rowFeedback=document.getElementById('feedback-'+id);
+  if(rowFeedback) rowFeedback.scrollIntoView({block:'nearest'});
+}
+
+function applyStepHighlight(){
+  if(step===0) board.highlight({nodes:['cash'],pairs:CASH_PAIRS});
+  else if(step===3) board.highlight(reconHighlights[selectedRecon]||reconHighlights.ni);
+  else board.clearHighlight();
+}
+
+function advance(){
+  if(step===1&&!sortComplete())return;
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Operating',def:'The cash channel for the shop&rsquo;s day-job: collecting from customers and paying for the work&rsquo;s ordinary needs.'},
+  {term:'Investing',def:'The cash channel for buying or selling long-lived capacity.'},
+  {term:'Financing',def:'The cash channel for the money that set the shop up and the owner&rsquo;s take.'},
+  {term:'Classification follows the claim settled',def:'A cash payment is sorted by what it settles, not by how the cash felt on its way out.'},
+  {term:'Operating cash vs net income',def:'Operating cash tracks cash in the day-job; net income also includes earned work and received use when cash moves in another period or not at all.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){
+  playClick();
+  step=0;
+  assignments={};
+  wrongPick={};
+  selectedRecon='ni';
+  render();
+  window.scrollTo(0,0);
+}
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') dismissGlossary(); });
+
+GraphLab.wireCrossHighlight(board,[leftEl,rightEl],crossHighlight);
+[leftEl,rightEl,boardSvg].forEach(function(el){ el.addEventListener('mouseleave',function(){ setTimeout(applyStepHighlight,0); }); });
+window.devFill=function(){
+  assignments={};
+  Object.keys(data.channels).forEach(function(id){ assignments[id]=data.channels[id]; });
+  wrongPick={};
+  selectedRecon='cfo';
+  step=TOTAL_STEPS-1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
