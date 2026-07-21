@@ -169,7 +169,7 @@
       var genTouched=GENERATED_MEMBERS.some(function(id){return visible[id];})||visible.gen;
       var gg=S('g',{class:'gl-generated'+(hi&&hi.nodes.indexOf('gen')>=0?' gl-hi':''),'data-id':'gen'});
       gg.appendChild(S('rect',{class:'gl-region',x:615,y:380,width:340,height:250,rx:18}));gg.appendChild(S('text',{class:'gl-region-label',x:630,y:400},'GENERATED'));
-      var genForce=forceNodes?forceNodes.gen:null,genBadge=genForce==='?'?'?':(typeof genForce==='number'?genForce:deltas().gen);
+      var genForce=forceNodes?forceNodes.gen:null,genBadge=genForce==='?'?'?':(typeof genForce==='number'?genForce:(genForce===true&&data.bs.gen?data.bs.gen.end-data.bs.gen.beg:deltas().gen));
       if(genTouched)addBadge(gg,900,401,genBadge,'gl-gen-badge');root.appendChild(gg);
     }
     function tagFor(edge){if(tags[edge.id])return tags[edge.id];for(var i=0;i<edge.items.length;i++)if(tags[edge.items[i].id])return tags[edge.items[i].id];return 'fact';}

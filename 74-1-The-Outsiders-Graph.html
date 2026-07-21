@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Outsider's Graph</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m7-season-stage {
+      display:grid;
+      grid-template-columns:minmax(230px,270px) minmax(0,1fr) minmax(230px,270px);
+      gap:14px;
+      align-items:start;
+      margin-top:16px;
+    }
+    .m7-season-stage > * { min-width:0; }
+    .m7-board-wrap {
+      overflow-x:auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#f0f4f8;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+    }
+    .m7-board-wrap #board { display:block; width:100%; min-width:650px; height:auto; }
+    .m7-season-stage .gl-col { width:100%; min-height:170px; box-shadow:0 7px 20px rgba(32,55,72,.08); }
+    .m7-season-stage .gl-col h3 { line-height:1.25; }
+    .m7-empty-col { display:flex; flex-direction:column; justify-content:center; opacity:.48; }
+    .m7-empty-message { margin:auto; padding:28px 10px; color:#64748b; font:700 .82rem/1.45 Inter,sans-serif; text-align:center; }
+    #tail { margin-top:16px; }
+    #controls { margin-top:18px; }
+    .m7-progress {
+      margin:8px 0 0;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .m7-card {
+      max-width:900px;
+      margin:16px auto 0;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#fff;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+      overflow:hidden;
+    }
+    .m7-card-title {
+      margin:0;
+      padding:15px 18px;
+      background:#eaf1f8;
+      color:#16324a;
+      font:800 1rem/1.35 Inter,sans-serif;
+      letter-spacing:.01em;
+    }
+    .m7-card-body { padding:12px 18px 16px; }
+    .m7-quiz-q { margin:0 0 12px; color:#16324a; font:800 1rem/1.45 Inter,sans-serif; }
+    .m7-option {
+      display:block;
+      width:100%;
+      margin:8px 0;
+      border:1px solid #7a91ab;
+      border-radius:7px;
+      padding:11px 13px;
+      background:#fff;
+      color:#16324a;
+      cursor:pointer;
+      font:700 .88rem/1.4 "Open Sans",sans-serif;
+      text-align:left;
+    }
+    .m7-option:hover:not(:disabled), .m7-option:focus-visible { border-color:#286dc0; outline:2px solid rgba(40,109,192,.2); }
+    .m7-option:disabled { cursor:default; opacity:.58; }
+    .m7-option.is-answer { border-color:#28864f; background:#ecfdf3; color:#166534; opacity:1; }
+    .m7-option.is-wrong { border-color:#c24127; background:#fff1ed; color:#9f2f19; opacity:1; }
+    .m7-feedback { min-height:1.4em; margin:11px 0 0; color:#a63b20; font:600 .86rem/1.45 "Open Sans",sans-serif; }
+    .m7-feedback.is-correct { color:#166534; }
+    .m7-statement-line {
+      display:grid;
+      grid-template-columns:minmax(170px,1fr) 110px;
+      gap:14px;
+      align-items:center;
+      padding:9px 4px;
+      border-bottom:1px solid #e2e8f0;
+    }
+    .m7-statement-line.is-total { border-top:2px solid #334155; border-bottom:0; font-weight:800; }
+    .m7-statement-label { font:700 .93rem/1.35 Inter,sans-serif; }
+    .m7-statement-value { text-align:right; font:700 .93rem/1.25 "JetBrains Mono",monospace; }
+    .m7-infer-row { display:flex; gap:10px; align-items:end; flex-wrap:wrap; }
+    .m7-infer-label { display:flex; flex-direction:column; gap:6px; color:#16324a; font:800 .92rem/1.3 Inter,sans-serif; }
+    .m7-infer-input { width:170px; border:1px solid #7a91ab; border-radius:6px; padding:10px 11px; background:#fff; color:#16324a; font:700 1rem/1.2 "JetBrains Mono",monospace; }
+    .m7-infer-submit { min-height:42px; border:0; border-radius:6px; padding:9px 17px; background:#286dc0; color:#fff; cursor:pointer; font:800 .86rem/1 Inter,sans-serif; }
+    .m7-proof { margin:12px 0 0; padding:11px 13px; border-left:4px solid #28864f; background:#ecfdf3; color:#166534; font:700 .87rem/1.45 "Open Sans",sans-serif; }
+    .m7-glossary-dismiss { border:0; padding:2px 7px; background:transparent; color:inherit; cursor:pointer; font-size:1.7rem; line-height:1; }
+    @media (max-width:980px) {
+      .m7-season-stage { grid-template-columns:1fr; }
+      .m7-season-stage > :nth-child(1) { order:1; }
+      .m7-season-stage > :nth-child(2) { order:2; }
+      .m7-season-stage > :nth-child(3) { order:3; }
+      .m7-season-stage .gl-col { max-width:none; }
+    }
+    @media (max-width:720px) { .m7-board-wrap #board { min-width:610px; } }
+    @media (prefers-color-scheme:dark) {
+      .m7-board-wrap { border-color:#4b5567; background:#211f28; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m7-season-stage .gl-col { border-color:#4b5567; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m7-season-stage { --gl-panel:#26242e; --gl-ink:#e7eef9; --gl-region-line:#8996aa; --gl-accent:#e6ae4f; --gl-pulse:#a96915; }
+      .m7-progress, .m7-empty-message { color:#aebbd0; }
+      .m7-card { border-color:#4b5567; background:#26242e; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m7-card-title { background:#302e39; color:#e7eef9; }
+      .m7-quiz-q, .m7-infer-label { color:#e7eef9; }
+      .m7-option, .m7-infer-input { border-color:#77849a; background:#211f28; color:#e7eef9; }
+      .m7-option.is-answer { border-color:#4e966a; background:#183425; color:#b6f0c8; }
+      .m7-option.is-wrong { border-color:#d36a54; background:#45251f; color:#ffc0b1; }
+      .m7-feedback { color:#ffb19d; }
+      .m7-feedback.is-correct { color:#b6f0c8; }
+      .m7-statement-line { border-color:#4b5567; }
+      .m7-proof { background:#183425; color:#b6f0c8; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Outsider&rsquo;s Graph</h1>
+        <p class="tut-header-sub">Module 7 &middot; ~7 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Outsider&rsquo;s Graph</div>
+
+    <div id="beats"></div>
+    <div class="m7-season-stage" id="mainGrid">
+      <div id="beginningColumn" aria-label="Statement column for June 1, 2026"></div>
+      <div class="m7-board-wrap">
+        <svg id="board" viewBox="0 0 1000 660" role="img" aria-label="The best accounting graph the released statements currently allow"></svg>
+      </div>
+      <div id="endingColumn" aria-label="Statement column for August 31, 2026"></div>
+    </div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="m7-glossary-dismiss" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="bike-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playNope(){ tone(220,0.12,'sine',0.035); }
+function nav(url){ window.location.href=url; }
+
+var step=0;
+var TOTAL_STEPS=6;
+var data=window.M7_GRAPH;
+var quizPicks={};
+var quizSolved={};
+var inferenceSolved=false;
+var inferenceAttempts=0;
+var inferenceFeedback='';
+var boardSvg=document.getElementById('board');
+var board=GraphLab.createBoard(boardSvg,data,{interactive:true});
+var leftEl=document.getElementById('beginningColumn');
+var rightEl=document.getElementById('endingColumn');
+board.setCollapse(true);
+
+var assetIds=['cash','ar','rou','parts','tools','fix','laptop'];
+var liabilityIds=['cc','dep'];
+var labels={cash:'Cash',ar:'Receivables',rou:'Right of Use',parts:'Parts',tools:'Tools &amp; Equip',fix:'Fixtures',laptop:'Laptop',cc:'Credit Card',dep:'Customer Deposit'};
+var factNodes={cash:true,ar:true,rou:true,parts:true,tools:true,fix:true,laptop:true,cc:true,dep:true};
+
+var quizzes={
+  1:{
+    q:'From the summary totals alone &mdash; how much did the business EARN this season?',
+    options:[
+      {text:'$2,040 &mdash; capital grew from 2,460 to 4,500.',feedback:'Capital growth is not earnings. It mixes what the work produced with anything the owner put in or took out &mdash; the totals cannot separate them.'},
+      {text:'$2,250 &mdash; the liabilities that were paid off.',feedback:'Paying claims is not earning. A payoff moves cash and a claim; earnings may or may not be behind it.'},
+      {text:'It cannot be determined from these totals.',correct:true,feedback:'Exactly. At this aggregation level, earnings, contributions, and takes are indistinguishable. Ask for more.'}
+    ]
+  },
+  2:{
+    q:'The Credit Card claim fell $2,030. Did the shop USE the card this summer?',
+    options:[
+      {text:'No &mdash; it only paid the old balance off.',feedback:'Maybe &mdash; but a net change cannot say. Charging $500 and paying $2,530 leaves the same change.'},
+      {text:'Yes &mdash; it charged and repaid within the season.',feedback:'Also possible, also unknowable. Any gross pattern netting to &minus;2,030 fits the sheets.'},
+      {text:'It cannot be determined &mdash; a net change merges the gross flows.',correct:true,feedback:'Right. Hold this one open: a later release settles it.'}
+    ]
+  },
+  3:{
+    q:'Income 2,640; capital up only 2,040. What explains the $600 gap?',
+    options:[
+      {text:'A bookkeeping error &mdash; the statements contradict each other.',feedback:'The identity ties at both dates; nothing is out of balance. Balanced statements can still keep secrets.'},
+      {text:'The owner moved something in or out of capital that is not income.',correct:true,feedback:'The only lawful reading: Member&rsquo;s Capital&rsquo;s walk has more ways in and out than income alone. What exactly moved, this release cannot say &mdash; ask the owner.'},
+      {text:'Depreciation absorbed the difference.',feedback:'The 230 is already inside the 2,640. The gap sits between income and the capital line, not within income.'}
+    ]
+  },
+  5:{
+    q:'The take: which direction, and what is still assumed?',
+    options:[
+      {text:'Cash &rarr; Withdrawn &mdash; cash gave, the owner&rsquo;s pile received; that it was CASH is an assumption.',correct:true,feedback:'Drawn &mdash; and tagged. No statement has said the take was cash; the owner could have taken tools. An inference, under an assumption you can name.'},
+      {text:'Withdrawn &rarr; Cash &mdash; the take brought cash in.',feedback:'Backward: a take pays out. And mind the second half &mdash; how do you know it was cash at all?'},
+      {text:'Generated &rarr; Withdrawn &mdash; the take came out of income.',feedback:'Takes are not income&rsquo;s business &mdash; they draw against capital, settled with some asset. Which asset? Assumed, for now.'}
+    ]
+  }
+};
+
+function money(value){ return Math.abs(value).toLocaleString('en-US'); }
+function sum(ids,values){ return ids.reduce(function(total,id){ return total+(values[id]||0); },0); }
+function sideValues(side){ var values={}; Object.keys(data.bs).forEach(function(id){ values[id]=data.bs[id][side]; }); return values; }
+function memberCapital(values){ return (values.contrib||0)+(values.gen||0)-(values.wd||0); }
+function levelForStep(currentStep){ if(currentStep===0)return 'none'; if(currentStep===1)return 'totals'; if(currentStep<4)return 'full-one'; return 'full-pieces'; }
+function colLine(id,label,value,display){ return '<div class="gl-col-line" data-acct="'+id+'" data-value="'+value+'"><span>'+label+'</span><span class="gl-col-value">'+(display||money(value))+'</span></div>'; }
+function colTotal(label,value,key){ return '<div class="gl-col-total" data-total="'+key+'"><span>'+label+'</span><span>'+money(value)+'</span></div>'; }
+
+function renderLocalColumn(el,side,title,level){
+  var values=sideValues(side);
+  var assets=sum(assetIds,values);
+  var liabilities=sum(liabilityIds,values);
+  var capital=memberCapital(values);
+  var identity='<div class="gl-col-ident">A &minus; L = MC &#10003; &middot; '+money(assets)+' &minus; '+money(liabilities)+' = '+money(capital)+'</div>';
+  var html='<h3 class="gl-col-title">'+title+'</h3>';
+  if(level==='none'){
+    html+='<div class="m7-empty-message">no statements yet</div>';
+    el.setAttribute('class','gl-col m7-empty-col');
+    el.innerHTML=html;
+    return;
+  }
+  html+='<div class="gl-col-sub">Balance Sheet</div>';
+  if(level==='totals'){
+    html+=colTotal('Total Assets',assets,'assets')+colTotal('Total Liabilities',liabilities,'liabilities')+colTotal('Member&rsquo;s Capital',capital,'mc')+identity;
+  } else {
+    html+='<div class="gl-col-section">Assets</div>';
+    assetIds.forEach(function(id){ html+=colLine(id,labels[id],values[id]); });
+    html+=colTotal('Total Assets',assets,'assets')+'<div class="gl-col-section">Liabilities</div>';
+    liabilityIds.forEach(function(id){ html+=colLine(id,labels[id],values[id]); });
+    html+=colTotal('Total Liabilities',liabilities,'liabilities')+'<div class="gl-col-section">Member&rsquo;s Capital</div>';
+    if(level==='full-one'){
+      html+=colLine('mc','Member&rsquo;s Capital',capital);
+    } else {
+      html+=colLine('contrib','Contributed',values.contrib)+colLine('gen','Generated',values.gen);
+      var hideWithdrawn=side==='end'&&!inferenceSolved;
+      html+=colLine('wd','Withdrawn',values.wd,hideWithdrawn?'?':(values.wd?'('+money(values.wd)+')':money(values.wd)));
+      html+=colTotal('Member&rsquo;s Capital',capital,'mc');
+    }
+    html+=identity;
+  }
+  el.setAttribute('class','gl-col');
+  el.innerHTML=html;
+}
+
+function boardState(){
+  var forced=null;
+  if(step>=2){
+    forced={}; Object.keys(factNodes).forEach(function(id){ forced[id]=factNodes[id]; });
+    if(step>=4) forced.gen=true;
+    if(step>=5||inferenceSolved) forced.wd=data.bs.wd.end;
+  }
+  board.setCollapse(true);
+  board.setPosted(step===5&&quizSolved[5]?['draw']:[]);
+  board.setForceNodes(forced);
+  board.setTags(step===5&&quizSolved[5]?{'cash>wd':'infer'}:{});
+}
+
+function render(){
+  renderBeats(step);
+  boardState();
+  var level=levelForStep(step);
+  renderLocalColumn(leftEl,'beg','June 1, 2026',level);
+  renderLocalColumn(rightEl,'end','August 31, 2026',level);
+  renderTail(step);
+  renderControls(step);
+  wireTail();
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='A prospective investor is considering buying into the shop: the owner keeps fixing bikes &mdash; the clients come for him &mdash; and you would put in capital and share the results. Before you price anything, you need to know what this shop actually earns. And you will never see the ledger. Owners share <em>statements</em> &mdash; summaries, at some chosen level of aggregation, arriving a few at a time. At each release you will draw the best lawful picture it allows, tagging every arrow: <b>fact</b>, <b>inference under an assumption you can name</b>, or <b>open</b>.';
+  } else if(currentStep===1){
+    text='Release 1 &mdash; the summary totals. Three lines per date. The identity holds at both &mdash; and almost nothing else can be known. Test it:';
+  } else if(currentStep===2){
+    text='Release 2 &mdash; the balance sheets. Ten facts land at once: every account&rsquo;s change, each one a node. The identity already ties &mdash; the changes sum to zero &mdash; and the capital side arrives as <b>one line</b>, a common small-business presentation. Nodes are what changed. Arrows &mdash; who gave and who received &mdash; are still entirely unknown: the Reasons region stays empty.';
+  } else if(currentStep===3){
+    text='Release 3 &mdash; the income statement. The season&rsquo;s flows, in aggregate: revenue 6,020, parts used (1,200), rent (1,950), the gear&rsquo;s seasons (230) &mdash; net income <b>2,640</b>. Your instinct says capital should have grown by exactly that. The sheets say it grew <b>2,040</b>.';
+  } else if(currentStep===4){
+    text='The owner&rsquo;s reply is a finer statement &mdash; Member&rsquo;s Capital by its pieces. Contributed: began 2,290, no changes. Generated: up exactly 2,640 &mdash; net income; the walk ties again. And a third piece the coarser releases hid completely: <b>Withdrawn</b>, shown only as a question mark. Its walk must tie too. Recover it:';
+  } else {
+    text='One event is now known: the owner took $600. Draw the first arrow &mdash; and notice what you are assuming.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div><p class="m7-progress">Release '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+function quizHtml(which){
+  var quiz=quizzes[which];
+  var picked=quizPicks[which];
+  var solved=quizSolved[which];
+  var options=quiz.options.map(function(option,index){
+    var pickedHere=picked===index;
+    var cls=solved&&option.correct?' is-answer':(pickedHere&&!option.correct?' is-wrong':'');
+    return '<button class="m7-option'+cls+'" data-quiz="'+which+'" data-option="'+index+'"'+(solved?' disabled':'')+'>'+String.fromCharCode(97+index)+') '+option.text+'</button>';
+  }).join('');
+  var feedback=picked!=null?quiz.options[picked].feedback:'';
+  return '<section class="m7-card" aria-labelledby="quiz-title-'+which+'"><h2 class="m7-card-title" id="quiz-title-'+which+'">Test the release</h2><div class="m7-card-body"><p class="m7-quiz-q">'+quiz.q+'</p>'+options+'<p class="m7-feedback'+(solved?' is-correct':'')+'" aria-live="polite">'+feedback+'</p></div></section>';
+}
+
+function statementLine(label,value,total){
+  return '<div class="m7-statement-line'+(total?' is-total':'')+'"><span class="m7-statement-label">'+label+'</span><span class="m7-statement-value">'+(value<0?'(':'')+money(value)+(value<0?')':'')+'</span></div>';
+}
+
+function incomeStatementHtml(){
+  var revenue=data.entries.filter(function(entry){ return entry.from==='rev'; }).reduce(function(total,entry){ return total+entry.w; },0);
+  var partsUsed=data.entries.filter(function(entry){ return entry.to==='pexp'; }).reduce(function(total,entry){ return total+entry.w; },0);
+  var rent=data.entries.filter(function(entry){ return entry.to==='rent'; }).reduce(function(total,entry){ return total+entry.w; },0);
+  var depreciation=data.entries.filter(function(entry){ return entry.to==='depx'; }).reduce(function(total,entry){ return total+entry.w; },0);
+  var income=revenue-partsUsed-rent-depreciation;
+  return '<section class="m7-card" aria-labelledby="income-title"><h2 class="m7-card-title" id="income-title">Income Statement &middot; June 1 &ndash; August 31, 2026</h2><div class="m7-card-body">'+
+    statementLine('Repair Revenue',revenue,false)+statementLine('Parts Used',-partsUsed,false)+statementLine('Rent',-rent,false)+statementLine('Depreciation',-depreciation,false)+statementLine('Net income',income,true)+'</div></section>';
+}
+
+function inferHtml(){
+  var feedback=inferenceFeedback;
+  var proof=inferenceSolved?'<p class="m7-proof">The owner&rsquo;s take &mdash; invisible at every earlier aggregation level; it took the pieces-level statement to surface it.</p>':'';
+  return '<section class="m7-card" aria-labelledby="infer-title"><h2 class="m7-card-title" id="infer-title">Recover the hidden piece</h2><div class="m7-card-body"><form id="inferForm"><div class="m7-infer-row"><label class="m7-infer-label" for="inferInput">Withdrawn ($)<input class="m7-infer-input" id="inferInput" name="withdrawn" type="number" step="1" min="0" inputmode="numeric"'+(inferenceSolved?' value="'+data.bs.wd.end+'" disabled':'')+'></label><button class="m7-infer-submit" type="submit"'+(inferenceSolved?' disabled':'')+'>Check</button></div></form><p class="m7-feedback'+(inferenceSolved?' is-correct':'')+'" aria-live="polite">'+feedback+'</p>'+proof+'</div></section>';
+}
+
+function renderTail(currentStep){
+  var html='';
+  if(currentStep===1||currentStep===2||currentStep===5) html=quizHtml(currentStep);
+  else if(currentStep===3) html=incomeStatementHtml()+quizHtml(3);
+  else if(currentStep===4) html=inferHtml();
+  if(currentStep===5&&quizSolved[5]) html+='<div class="insight-box">Five releases in, one arrow on the board &mdash; and a tag on it. Facts move the boundary; assumptions get named. The cash statement is next, and it settles more than one open question.</div>';
+  document.getElementById('tail').innerHTML=html;
+}
+
+function canAdvance(currentStep){
+  if(currentStep===1||currentStep===2||currentStep===3)return !!quizSolved[currentStep];
+  if(currentStep===4)return inferenceSolved;
+  return true;
+}
+
+function renderControls(currentStep){
+  var html='<div class="nav-buttons">';
+  if(currentStep>0) html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep===0){
+    html+='<button class="btn-next" onclick="advance()">Ask for the books &rarr;</button>';
+  } else if(currentStep<TOTAL_STEPS-1){
+    html+='<button class="btn-next" onclick="advance()"'+(canAdvance(currentStep)?'':' disabled aria-disabled="true"')+'>Next &rarr;</button>';
+  } else {
+    html+='<button class="btn-continue" onclick="playSuccess();nav(\'74-2-The-Ledger-Behind-the-Statements.html\')"'+(quizSolved[5]?'':' disabled aria-disabled="true"')+'>The Ledger Behind the Statements &rarr;</button>';
+  }
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+
+function wireTail(){
+  document.querySelectorAll('[data-quiz]').forEach(function(button){
+    button.addEventListener('click',function(){ chooseQuiz(Number(this.getAttribute('data-quiz')),Number(this.getAttribute('data-option'))); });
+  });
+  var form=document.getElementById('inferForm');
+  if(form) form.addEventListener('submit',checkInference);
+}
+
+function chooseQuiz(which,index){
+  if(quizSolved[which])return;
+  quizPicks[which]=index;
+  if(quizzes[which].options[index].correct){ quizSolved[which]=true; playSuccess(); }
+  else playNope();
+  render();
+}
+
+function checkInference(event){
+  event.preventDefault();
+  if(inferenceSolved)return;
+  var input=document.getElementById('inferInput');
+  var answer=Number(input.value);
+  if(input.value!==''&&answer===data.bs.wd.end){
+    inferenceSolved=true;
+    inferenceFeedback='Correct. The capital walk ties with a $'+money(data.bs.wd.end)+' take.';
+    playSuccess();
+  } else {
+    inferenceAttempts+=1;
+    inferenceFeedback=inferenceAttempts===1?'The capital walk: 2,460 + 0 + 2,640 &minus; ? = 4,500.':'0 + 2,640 &minus; 2,040 = 600.';
+    playNope();
+  }
+  render();
+  if(!inferenceSolved){ var fresh=document.getElementById('inferInput'); if(fresh)fresh.focus(); }
+}
+
+function advance(){
+  if(!canAdvance(step))return;
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Release',def:'A statement or statement detail made available at one point in the sequence.'},
+  {term:'Fact',def:'A node or arrow directly supported by a released statement.'},
+  {term:'Inference under assumption',def:'A lawful reading that depends on an assumption you can state and later test.'},
+  {term:'Open',def:'A relationship the released statements do not yet determine.'},
+  {term:'Aggregation',def:'The level at which separate details are combined into a summary line.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){
+  playClick();
+  step=0;
+  quizPicks={};
+  quizSolved={};
+  inferenceSolved=false;
+  inferenceAttempts=0;
+  inferenceFeedback='';
+  render();
+  window.scrollTo(0,0);
+}
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') dismissGlossary(); });
+
+var crossHighlight={
+  cash:{nodes:['cash'],pairs:['cash>wd']},ar:{nodes:['ar'],pairs:[]},rou:{nodes:['rou'],pairs:[]},parts:{nodes:['parts'],pairs:[]},tools:{nodes:['tools'],pairs:[]},fix:{nodes:['fix'],pairs:[]},laptop:{nodes:['laptop'],pairs:[]},cc:{nodes:['cc'],pairs:[]},dep:{nodes:['dep'],pairs:[]},contrib:{nodes:['contrib'],pairs:[]},gen:{nodes:['gen'],pairs:[]},wd:{nodes:['wd'],pairs:['cash>wd']}
+};
+GraphLab.wireCrossHighlight(board,[leftEl,rightEl],crossHighlight);
+window.devFill=function(){
+  quizPicks={1:2,2:2,3:1,5:0};
+  quizSolved={1:true,2:true,3:true,5:true};
+  inferenceSolved=true;
+  inferenceAttempts=0;
+  inferenceFeedback='Correct. The capital walk ties with a $'+money(data.bs.wd.end)+' take.';
+  step=TOTAL_STEPS-1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
