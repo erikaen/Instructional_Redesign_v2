@@ -102,7 +102,7 @@ function renderBeats(){
   var h = '';
 
   if(step === 0){
-    h += freddieBox('Here is my offer: I put <strong>$20,000</strong> into the LLC for a <strong>30%</strong> share. You keep <strong>70%</strong>, run the shop, and take the napkin&rsquo;s <strong>$2,000 salary each season</strong> &mdash; work paid as work.');
+    h += freddieBox('Here is my offer: I put <strong>$20,000</strong> into the LLC for a <strong>30%</strong> share. You keep <strong>70%</strong>, run the shop, and take the napkin&rsquo;s <strong>$2,000 salary each month</strong> &mdash; work paid as work.');
     h += annaBox('After that salary and the napkin&rsquo;s other costs, the expected free cash flow is $5,000. You would take 70%, or $3,500, and Freddie would take 30%, or $1,500. The salary comes first; the cash-flow split follows ownership.');
   }
 
@@ -112,7 +112,7 @@ function renderBeats(){
   }
 
   if(step === 2){
-    h += freddieBox('I would put in $20,000 for 30% of the future cash flows we think the shop can produce. The napkin estimates $5,000 a season after salary and the other costs.');
+    h += freddieBox('I would put in $20,000 for 30% of the future cash flows we think the shop can produce. The napkin estimates $5,000 a month after salary and the other costs.');
     h += annaBox('The repair skill and customer relationships help produce those flows, but neither one sits on the balance sheet under the records&rsquo; own rules.');
     h += '<div class="insight-box"><div class="insight-label"><i data-lucide="lightbulb" class="licon"></i> Two questions</div><p>The records carry only what the recognition conventions let in. The August 31 balance sheet answers its question exactly: recognized Assets of $4,500 minus recognized Liabilities of $0 equals Total Member&rsquo;s Capital of $4,500. Freddie&rsquo;s $20,000 offer asks what a buyer will pay for a 30% share of future cash flows supported by repair skill and customer relationships. Those productive sources sit on no balance sheet under the records&rsquo; own rules.</p><\/div>';
   }
@@ -120,7 +120,7 @@ function renderBeats(){
   if(step === 3){
     /* no in-page Restart / "Module 4 complete" buttons — page nav lives only in
        the course footer's titled Next pill (skill §5, §6). */
-    h += freddieBox('The terms are still being considered: $20,000 for 30%; your $2,000 seasonal salary plus 70% of free cash flow; and 30% of free cash flow for me.');
+    h += freddieBox('The terms are still being considered: $20,000 for 30%; your $2,000 monthly salary plus 70% of free cash flow; and 30% of free cash flow for me.');
   }
 
   document.getElementById('beats').innerHTML = h;
@@ -165,7 +165,7 @@ function back(){
 
 var glossaryTerms=[
   { term:'Member&rsquo;s Capital', def:'On this balance sheet, the difference between recognized Assets and recognized Liabilities. At August 31, the total is $4,500.' },
-  { term:'Future cash flows', def:'Cash the operation is expected to produce in future periods. Freddie&rsquo;s napkin estimates about $5,000 a season.' },
+  { term:'Future cash flows', def:'Cash the operation is expected to produce in future periods. Freddie&rsquo;s napkin estimates about $5,000 a month.' },
   { term:'Recognition conventions', def:'The rules that determine what the records carry and when. Skill and returning customers can help produce cash without appearing as balance-sheet lines.' },
   { term:'Ownership share', def:'A stated portion of the LLC. Freddie proposes $20,000 for 30%, leaving 70% with the current owner.' }
 ];
