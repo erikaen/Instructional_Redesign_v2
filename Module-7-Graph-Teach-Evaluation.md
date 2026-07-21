@@ -233,6 +233,15 @@ corresponding open items in the ruling list below.
     ("Roll-forward," the profession's term, is reserved for the future
     accounting-terms module — see ruling 8.)
 
+12. **Recognition, not posting; focus graying; one event per beat.** (Ruled
+    2026-07-21, at first click-through.) Student-facing prose never says
+    "post/posted" — **recognition** is what puts an edge in the picture. Each
+    beat lights only the accounts and arrows involved in the recognitions of
+    that beat; every uninvolved node and arrow grays out (soft gray, not
+    near-invisible). Events the walk teaches get their own beats — the tool
+    purchase and the card payoff are separate recognitions, not a batch; at
+    Dana's beat only Cash and Repair Revenue stand vivid.
+
 ## Proposed module shape (working proposal — every choice Rick's to lock)
 
 Working assumption: **Module 7**, after Module 6 — the course comes home to
