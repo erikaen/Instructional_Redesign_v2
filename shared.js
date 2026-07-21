@@ -1535,13 +1535,7 @@ var COURSE_STEPS = {
     return { at: !av ? 0 : (!intro ? 1 : Math.min(w + 2, n + 2)), total: n + 2 }; },
   '41-1-The-Investor-Asks.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 2 }; },
   '42-1-The-Missing-Wage.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 2 }; },
-  '43-1-The-Capital-Bridge.html': function(){
-    var srcOn = (typeof sourceConfirmed !== 'undefined' && sourceConfirmed);
-    var comp = (typeof completed !== 'undefined' && completed);
-    var ord = (typeof currentOrder !== 'undefined') ? currentOrder : 0;
-    /* source beat(0) → order0 beginnings(1) → order1 sort(2) → order2 mcq/gate(3)
-       → order3 format(4) → christened(5) */
-    return { at: !srcOn ? 0 : (comp ? 5 : ord + 1), total: 5 }; },
+  '43-1-The-Capital-Bridge.html': function(){ var comp = (typeof completed !== 'undefined' && completed), gate = (typeof gateDone !== 'undefined' && gateDone), mcq = (typeof mcqAnswered !== 'undefined' && mcqAnswered), srt = (typeof sortConfirmed !== 'undefined' && sortConfirmed) || (typeof beginningConfirmed !== 'undefined' && beginningConfirmed) || (typeof sourceConfirmed !== 'undefined' && sourceConfirmed); return { at: comp ? 4 : (gate ? 3 : (mcq ? 2 : (srt ? 1 : 0))), total: 4 }; },
   '44-1-The-Cash-Puzzle.html': function(){ return { at: (typeof mcqSubmitted !== 'undefined' && mcqSubmitted) ? 1 : 0, total: 1 }; },
   '44-2-Three-Buckets.html': function(){
     var cp = (typeof copied !== 'undefined' && copied);
@@ -1553,7 +1547,7 @@ var COURSE_STEPS = {
   '44-3-The-Cash-Flow-Statement.html': function(){ return { at: (typeof completed !== 'undefined' && completed) ? 1 : 0, total: 1 }; },
   '46-1-The-Statements-Tie-Out.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 4 }; },
   '46-2-The-Statement-Map.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 4 }; },
-  '47-1-Freddies-Napkin.html': function(){ var s=(typeof step!=='undefined')?step:0, nl=(typeof napkinLines!=='undefined')?napkinLines:0; var pos=(s<2)?s:(s===2?1+nl:6+(s-2)); return { at: pos, total: 8 }; },
+  '47-1-Freddies-Napkin.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 4 }; },
   '48-1-The-Deal.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 3 }; }
 };
 
