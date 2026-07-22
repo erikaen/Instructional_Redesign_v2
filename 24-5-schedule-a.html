@@ -29,7 +29,7 @@
     <!-- ===== schedule ===== -->
     <div class="phase active" id="phase-schedule">
       <div class="narrative-block">
-        <p>The contributing is done: the cash is in the Company&rsquo;s account, the card is in the Company&rsquo;s name. In 2.3, you copied the books to the Working Tab, organized what the Company receives against what it takes on, found the two Reasons piles, and only then named the statement the Balance Sheet. Now, with the June 1 deposit and the card move recorded, <strong>click each line on the Balance Sheet tab</strong> to complete the draft you left blank &mdash; line by line.</p>
+        <p>In 2.3, you organized the June 1 formation rows by what the Company receives and what it takes on. The Company began its books at zero and recorded one $2,460 Contributed pile; Generated began at $0. Now click each Schedule A line on the Balance Sheet tab to complete the draft.</p>
       </div>
       <div id="wb"></div>
       <div id="schedArea"></div>
@@ -66,9 +66,9 @@ function playPen(){ tone(520,0.18,'triangle',0.12); }
 
 /* ===== glossary (shared across all phases of 2.4) ===== */
 var glossaryTerms = [
-  { term:"Schedule A", def:"The Operating Agreement&rsquo;s list of what the member contributes &mdash; assets, liabilities assumed, and the difference. You complete it from the Company&rsquo;s books, after the contributing is done." },
-  { term:"Capital contribution", def:"What an owner puts into the company. Here: the whole repair business at book amounts, plus the $1,300 cash that opened the account." },
-  { term:"Member&rsquo;s Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. Split into Contributed ($2,290) and Generated ($170): $2,460 on June 1." },
+  { term:"Schedule A", def:"The Operating Agreement&rsquo;s list of the June 1 formation facts: things given at book amounts, claims assumed, and one $2,460 Contributed difference." },
+  { term:"Capital contribution", def:"What a member gives the Company, together with any claims the Company takes on at formation. Here the Company records $2,460 on June 1, all Contributed." },
+  { term:"Member&rsquo;s Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. On June 1 it is $2,460, all Contributed; Generated begins at $0." },
   { term:"Execute (a document)", def:"To sign it and make it operative. You execute the Operating Agreement here &mdash; after Schedule A is complete, because the schedule attests to facts." }
 ];
 function openGlossary(){
@@ -99,8 +99,7 @@ var LINES = [
   { id:'fixt',  sec:'a', label:'Fixtures',                          sched:'Fixtures',                                    amt:750 },
   { id:'card',  sec:'l', label:'Credit card (in the Company&rsquo;s name)', sched:'Credit-card balance (assumed)',       amt:2030 },
   { id:'smith', sec:'l', label:'Customer deposit &mdash; Smith',    sched:'Customer deposit &mdash; Smith (assumed)',    amt:220 },
-  { id:'contrib',sec:'c', label:'Contributed',                      sched:'Contributed',                                 amt:2290 },
-  { id:'gen',   sec:'c', label:'Generated',                         sched:'Generated',                                   amt:170 }
+  { id:'contrib', sec:'c', label:'Contributed', sched:'Contributed', amt:2460 }
 ];
 var entered = {};
 var signedCompany = false, signedMember = false;
@@ -124,27 +123,25 @@ function balanceSheet(cid, snap){
   LINES.filter(function(l){ return l.sec==='l'; }).forEach(function(l){ h += bsRowClickable(l); });
   h += xr('xl-total', '', 'Total liabilities', BRW.dol(2250));
   h += xr('xl-cat', '', '<strong>Member&rsquo;s Capital</strong> (Assets &minus; Liabilities)', BRW.dol(2460));
-  LINES.filter(function(l){ return l.sec==='c'; }).forEach(function(l){ h += bsRowClickable(l); });
+  h += bsRowClickable(LINES.filter(function(l){ return l.id==='contrib'; })[0]);
+  h += xr('xl-item', '', 'Generated', BRW.dol(0));
   return h;
 }
-/* Assets/Liabilities tabs keep the exact end-of-Module-1 look (15-2): expandable
-   category lines, item drill-downs, the dated cash ledger — continuity rule. */
 function m2CashEvents(){
   return [
-    { name:'<span class="cash-line-date">May 1</span>Rent paid in advance', amt:-1300 },
-    { name:'<span class="cash-line-date">May 3</span>Park Tool stand', amt:-200 },
-    { name:'<span class="cash-line-date">May 7</span>Repair finished &mdash; customer paid', amt:340 },
-    { name:'<span class="cash-line-date">May 10</span>Repair finished &mdash; customer paid', amt:180 },
-    { name:'<span class="cash-line-date">May 12</span>Repair finished &mdash; customer paid', amt:80 },
-    { name:'<span class="cash-line-date">May 14</span>Repair finished &mdash; customer paid', amt:140 },
-    { name:'<span class="cash-line-date">May 19</span>Repair finished &mdash; customer paid', amt:130 },
-    { name:'<span class="cash-line-date">May 22</span>Smith deposit', amt:220 },
-    { name:'<span class="cash-line-date">May 23</span>Repair finished &mdash; customer paid', amt:100 },
-    { name:'<span class="cash-line-date">May 27</span>Repair finished &mdash; customer paid', amt:150 },
-    { name:'<span class="cash-line-date">&mdash;</span>From your personal self &mdash; covering what the work drew down', amt:160 },
-    { name:'<span class="cash-line-date">Jun 1</span>Deposited to open the Company&rsquo;s account &mdash; your contribution', amt:1300 }
+    { name:'<span class="cash-line-date">June 1</span>Given at formation', amt:1300 }
   ];
 }
+var formationRows = [
+  {kind:'net',cat:'contributed',account:'Cash',reason:'given at formation (June 1)',delta:1300},
+  {kind:'net',cat:'contributed',account:'Right of Use',reason:'given at book amount (June 1)',delta:650},
+  {kind:'net',cat:'contributed',account:'Supplies',reason:'given at book amount (June 1)',delta:200},
+  {kind:'net',cat:'contributed',account:'Equipment',reason:'given at book amount (June 1)',delta:1200},
+  {kind:'net',cat:'contributed',account:'Computer equipment',reason:'given at book amount (June 1)',delta:610},
+  {kind:'net',cat:'contributed',account:'Fixtures',reason:'given at book amount (June 1)',delta:750},
+  {kind:'net',cat:'contributed',account:'Credit-card balance',reason:'claim assumed at formation (June 1)',delta:-2030},
+  {kind:'net',cat:'contributed',account:'Customer deposit — Smith',reason:'claim assumed at formation (June 1)',delta:-220}
+];
 var wbSnap = {
   file:'Bike-Repair.xlsx',
   tabs:[ {id:'assets',label:'Assets'}, {id:'liabilities',label:'Liabilities'}, {id:'reasons',label:'Reasons'}, {id:'balance',label:'Balance Sheet'} ],
@@ -171,11 +168,11 @@ var wbSnap = {
       {name:'Wheel-truing stand', amt:170},{name:'Fixtures (desk, shelving, racks)', amt:750},{name:'Parts (QBP order)', amt:500} ] }
   ],
   reasons: {
-    pilesTitle:'The Reasons piles &mdash; May 1 to today',
-    pilesSub:'one continuous list &mdash; including this morning&rsquo;s $1,300 deposit',
+    pilesTitle:'The Reasons pile &mdash; Formation &middot; June 1',
+    pilesSub:'the Company&rsquo;s opening reasons &mdash; all Contributed',
     mode:'sorted',
-    groups:[ {key:'contributed',label:'CONTRIBUTED',blurb:'what you put in'}, {key:'generated',label:'GENERATED',blurb:'what the work produced'} ],
-    rows: BR_WB.setupRows()
+    groups:[{key:'contributed',label:'CONTRIBUTED',blurb:'things given less claims assumed'}],
+    rows:formationRows
   }
 };
 
@@ -197,8 +194,9 @@ function scheduleHtml(){
   h += schedRow('Total assets', secDone('a') ? '4,710' : '', {b:true,top:'1px solid #d8d8d8'});
   LINES.filter(function(l){ return l.sec==='l'; }).forEach(function(l){ h += entered[l.id] ? schedRow(l.sched, '('+l.amt.toLocaleString('en-US')+')') : blankRow(); });
   h += schedRow('Total liabilities assumed', secDone('l') ? '(2,250)' : '', {b:true});
-  LINES.filter(function(l){ return l.sec==='c'; }).forEach(function(l){ h += entered[l.id] ? schedRow(l.sched, l.amt.toLocaleString('en-US')) : blankRow(); });
-  h += schedRow('Member&rsquo;s Capital (A &minus; L)', secDone('c') ? '2,460' : '', {b:true,top:'2px solid #374151'});
+  h += entered.contrib
+    ? schedRow('Contributed', '2,460', {b:true,top:'2px solid #374151'})
+    : blankRow();
   h += '</div>';
   if(allEntered()){
     h += '<div style="padding-left:10px;border-left:3px solid var(--accent);margin-top:10px;margin-bottom:8px"><span style="font-weight:700">9. Capital Contributions.</span> &hellip;as set forth on Schedule A. Net book value contributed: <strong>$2,460</strong>.</div>';
@@ -238,13 +236,13 @@ function renderAll(){
   document.getElementById('schedArea').innerHTML = scheduleHtml();
   var ctrl = '';
   if(allEntered() && !(signedCompany && signedMember)){
-    ctrl = '<div class="next-phase-msg">Schedule A is complete, and every line came off the Company&rsquo;s books. Nothing is left for you to fill in later &mdash; so now, and only now, you execute the agreement. Sign both lines.</div>';
+    ctrl = '<div class="next-phase-msg">You have completed Schedule A with nine June 1 formation lines: six things given, two claims assumed, and one Contributed difference of $2,460. Generated is not a Schedule A line; it begins at $0 in the Company&rsquo;s books.</div>';
   }
   if(signedCompany && signedMember){
     ctrl = '<div class="insight-box"><div class="insight-label"><i data-lucide="pen-line" class="licon"></i> Two signatures, one hand</div>'+
       '<p>Your own name, signed twice &mdash; once <strong>for the Company</strong> (as its manager), once <strong>as yourself</strong> (the Sole Member). The two roles you recognized in 2.1 are now <strong>legal and literal</strong>: the law recognizes both, on one page.</p></div>'+
       '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> The schedule equals the sheet</div>'+
-      '<p>You didn&rsquo;t copy a finished schedule &mdash; you built it, line for line, from the Company&rsquo;s books. The statement you assembled in 2.3 was built precisely to answer what is being contributed, so Schedule A and the opening balance sheet agree exactly: you completed the paper from the facts, after the facts were in. Drafted in 2.3, completed and executed today.</p></div>'+
+      '<p>You built Schedule A from the Company&rsquo;s June 1 formation facts. On the opening Balance Sheet, Assets are $4,710, Liabilities are $2,250, and Member&rsquo;s Capital is $2,460, all Contributed. The May work remains in your personal records.</p></div>'+
       '<button class="btn-continue btn-block" onclick="nav(\'24-6-complete.html\')">Finish Module 2 &rarr;</button>';
   }
   document.getElementById('controls').innerHTML = ctrl;

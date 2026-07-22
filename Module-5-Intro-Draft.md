@@ -53,14 +53,17 @@ The map applies. The complications are real. Both facts matter.
       reaches them.
    2. They can be read as classifying every change in net recorded assets by
       its source: **contributed** by owners, or **generated** through the
-      operations of the entity. The bike shop's two piles — Contributed and
-      Generated — are exactly this classification, kept from the first jot.
+      operations of the entity. The bike shop uses the same classification
+      inside the Company's own story: Contributed begins with the June 1
+      formation rows, and Generated begins at zero and is born with Dana's
+      $120 repair.
 
 4. **The statement of changes in shareholders' equity** — the corporate
    analogue of the bike shop's Statement of Member's Capital — provides the
    detail on how each equities account changed over the period. The shop's
-   walk from $2,460 to $4,500 (Contributed $2,290 unchanged; Generated $170
-   plus net income $2,640; Withdrawn $600) is the same statement CVS
+   walk from $2,460 to $4,500 (Contributed $2,460 unchanged; Generated
+   beginning at $0 and increasing by net income of $2,640; Withdrawn
+   increasing from $0 to $600) is the same statement CVS
    publishes, with more accounts and more kinds of change.
 
 5. **The income statement** provides the detail on how the *generated* part
@@ -107,7 +110,7 @@ concretely. Working key:
 |---|-------|-------------------------------------------|
 | 1 | Entity | The statements are Bike-Repair.xlsx's — the boundary drawn in 1.1, given legal form in Module 2; the records never mixed in the day job or the personal card's groceries |
 | 2 | Architecture | The tabs themselves: Assets, Liabilities, Reasons → Balance Sheet; intangibles sit beside tools (A/R $300, Right of Use $650) |
-| 3 | Equities = record-only, two sources | Member's Capital $4,500 = exactly recorded A − L; its piles are Contributed $2,290 / Generated $2,810 / Withdrawn $(600) |
+| 3 | Equities = record-only, two sources | Member's Capital $4,500 = exactly recorded A − L; its piles are Contributed $2,460 / Generated $2,640 / Withdrawn $(600) |
 | 4 | Statement of changes | Statement of Member's Capital: $2,460 → $4,500, pile by pile |
 | 5 | Income statement | Revenue $6,020 − Expenses $3,380 = $2,640, feeding Generated; no gains/losses — all gross (noticing the absence is the point); NI $2,640 vs cash $(680) |
 | 6 | Cash flow statement | Operating $2,350 / Investing $(400) / Financing $(2,630); $1,300 → $620 |

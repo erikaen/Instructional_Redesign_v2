@@ -147,7 +147,7 @@
 **Light Bulb ideas**
 
 - **"A draft, on purpose"** — The agreement is complete except Schedule A; you can't honestly fill it in until the contributing is done.
-- **"Not one number changed"** — The same balance sheet is now the Company's, legally contributed in; "the difference" became Member's Capital (Contributed $990 + Generated $170 = $1,160).
+- **"Not one number changed"** — The member's pre-formation balance sheet remains personal history. The Company's books open at zero on June 1, and the formation rows produce Member's Capital of $2,460, all Contributed.
 - **"The wall"** — Limited liability is a legal fact — it changes who can be pursued, not what the records show; the balance sheet didn't move, the exposure did.
 - **"The keystone"** — Accounting-entity ≠ legal-entity; the accounting entity came first and can exist without any legal body; the LLC is a legal wrapper placed around it.
 - **"The deeper point"** — The same machine runs all the way up; a giant company draws one accounting boundary around dozens of separate legal companies.
@@ -168,7 +168,7 @@
 - **"Co-mingling ended"** — The LLC has its own account and card; the by-hand sorting you've done since 1.1 is now institutional.
 - **"It all ties out"** — Each co-mingled account split into a business half and a personal half; the only new thing to the LLC is the $1,300 capital contribution.
 - **"Two signatures, one hand"** — Signed twice: once for the Company (as manager), once as yourself (Sole Member); the two roles are now legal and literal.
-- **"The schedule equals the sheet"** — You built Schedule A line for line from the Company's books; that's why it agrees exactly with the opening balance sheet.
+- **"The schedule equals the sheet"** — You built Schedule A from the June 1 formation rows: recorded things and cash in, claims assumed, and one difference line, Contributed $2,460. You did not include a Generated section.
 - **"The one idea to keep"** — The accounting boundary and the legal boundary are different lines, drawn for different reasons; the same machine runs all the way up.
 
 **What you discovered**
@@ -177,7 +177,7 @@
 - You formalized the role — a CT Certificate of Organization brought a legal body into existence (2.2).
 - You drafted the Operating Agreement, contributed at book amounts, and named the keystone: accounting-entity ≠ legal-entity (2.3).
 - You gave the entity its own EIN, account, and card — ending co-mingling; the entity is a counterparty in its own right (2.4).
-- You completed Schedule A from the Company's books and signed; the only move that touched the books all module was your $1,300 contribution (Cash 0→1,300; members' capital 990→2,290).
+- The $1,300 cash seed is one June 1 formation row: Cash 0→1,300, included in total Contributed of $2,460.
 
 ## 3.1 — Reading the Season's Books
 
@@ -185,12 +185,13 @@
 
 - **"Assets − Liabilities = Member's Capital"** — $4,710 − $2,250 = $2,460; the difference from Module 1 now carries the LLC's name; the identity holds by definition every time.
 - **"What the line was hiding"** — Parts bought $1,200 and used $1,200, lands back at $200; the flat number hides a season of movement (same for Right of use, Cash, Credit card, Customer deposit).
-- **"The season, in your own piles"** — Reasons tab: CONTRIBUTED $2,290, WITHDRAWN −$600, GENERATED +$2,740; Cash down $680 — a long true list, still no answer to how the season went.
+- **"The season, in your own piles"** — Reasons tab: formation rows net to CONTRIBUTED $2,460; the Company's season-to-date GENERATED pile is $2,570 before the receivable and wear adjustments; WITHDRAWN is $600. No May work row appears in the Company's list.
 - **"A workbook, not yet a statement"** — The three tabs show where things stand and why each balance moved, but never line up in one place what the work delivered against what it used up.
 
 **What you discovered**
 
 *(none in source)*
+
 
 ## 3.2 — Building the Income Statement
 
@@ -307,4 +308,3 @@
 **What you discovered**
 
 *(none in source)*
-

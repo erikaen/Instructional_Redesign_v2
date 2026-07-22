@@ -154,10 +154,10 @@ the repo root.
   because Schedule A (contributions) can't be finalized until the contributing is done.
 - `23-2-agreement.html` — Drafting the Agreement: type the member's name and generate
   the draft, stamped "DRAFT — UNSIGNED"; Schedule A intentionally blank; read §7, §9, §17.
-- `23-3-contribution.html` — What You Put In: walk the workbook tabs; contribute the
-  business into the LLC at book amounts — not one number changes; only one word on the
-  right moves: "the difference" becomes **Member's Capital** (the name the Operating
-  Agreement uses). This is the page that earns that name.
+- `23-3-contribution.html` — What You Put In: the displayed May workbook remains the
+  member's personal record. The Company's books open at zero on June 1; the recorded
+  things and claims assumed form a $1,160 difference, all Contributed. This page stages
+  the noncash formation rows before the $1,300 cash seed is recorded in 2.4.
 - `23-4-wall.html` — The Wall: dramatize §17; re-send Smith's claim — it reaches the
   Company and stops at the wall; limited liability changes exposure, not the records.
 - `23-5-keystone.html` — When Did It Become Real?: keystone MCQ — the entity became
@@ -170,17 +170,20 @@ the repo root.
 - `24-2-ein.html` — Form SS-4: file IRS Form SS-4; EIN 88-3729104 issued (Jun 1, 2026);
   the "disregarded entity" aside (income tax looks through the LLC to the owner).
 - `24-3-account.html` — Opening the Account: three moves — open the LLC account, move
-  $1,300 cash in, move the business card to the LLC; only the $1,300 contribution
-  changes the books (Cash 0→1,300; Member's Capital 990→2,290); co-mingling ends.
+  $1,300 cash in, move the business card to the LLC; the $1,300 cash seed is a formation
+  row that increases Cash from $0 to $1,300 and is included in Contributed $2,460;
+  co-mingling ends.
 - `24-4-statements.html` — The Statements: four month-end statements document the
   split (LLC checking $1,300; LLC card $2,030; personal checking $2,774; personal card
   $230); it all ties out.
-- `24-5-schedule-a.html` — Complete Schedule A: the capstone task — click each of the
-  ten Balance Sheet lines onto Schedule A (Members' Capital $2,460); §9 net book value
-  becomes $2,460; sign both lines (for the Company and as an individual) to execute.
-- `24-6-complete.html` — Module 2 Complete: recap; the only book change all module was
-  the $1,300 contribution; the accounting entity predates its single legal one;
-  previews Module 3 — the story between the snapshots.
+- `24-5-schedule-a.html` — Complete Schedule A: the capstone task — place the asset
+  lines and claims-assumed lines on Schedule A, then enter one difference line,
+  **Contributed $2,460**; do not include a Generated section. §9 net book value becomes
+  $2,460; sign both lines (for the Company and as an individual) to execute.
+- `24-6-complete.html` — Module 2 Complete: recap; the Company's books opened at zero,
+  the June 1 formation rows recorded the things and cash put in and claims assumed, and
+  the difference was Member's Capital $2,460, all Contributed; previews Module 3 — the
+  story between the snapshots.
 
 ### Module 3 — The Story Between the Snapshots (Tutorials 3.1–3.3)
 
@@ -190,10 +193,11 @@ the repo root.
   the season went.
 - `31-2-work-the-season.html` — Read the Books: Anna walks the Aug-31 workbook line
   by line — flat numbers hide a season (Parts $200 bought-and-used $1,200; Cash
-  $620 down $680 over a busy summer); the GENERATED pile is one continuous list since
-  May that can't answer "how did the season go?"
+  $620 down $680 over a busy summer); the Company's GENERATED pile begins with Dana's
+  $120 repair and contains only Company-season rows; the May work remains in the
+  member's Module 1 personal records.
 - `32-1-the-income-statement.html` — The Pile: open the Reasons tab on the GENERATED
-  pile; it has two troubles — it never resets and it is jumbled; next, name the two kinds.
+  pile; its Company-season rows are jumbled; next, name the two kinds.
 - `32-2-two-kinds.html` — Two Kinds of Reason: Anna names **Revenue** and **Expenses**
   *before* the sort; copy the season's rows to a working sheet and sort by those two
   names; the originals stay on the Reasons tab — a sort, not a move.
@@ -360,10 +364,10 @@ The student builds one Excel-facsimile workbook, **Bike-Repair.xlsx**, that grow
 the whole course. Every workbook mount shows sheet tabs so "where am I" is unmistakable.
 
 - **Ledger tabs (dated, permanent):** **Assets**, **Liabilities**, and **Reasons**. The
-  Assets and Liabilities tabs are dated ledgers (a column per period); the Reasons tab is
-  one *continuous* list from the very first May jot — it never resets and never closes.
-  Every line carries its full history; drilling a line shows every entry since
-  recordkeeping began.
+  Assets and Liabilities tabs are dated ledgers (a column per period). The Company's
+  Reasons tab begins with the June 1 formation rows, all Contributed. Generated is born
+  with Dana's $120 repair. Module 1's May Reasons list remains a separate personal-records
+  story.
 - **Tabs earned by sorting, not by copying:** Module 3 graduates the season's Reasons
   rows into **Revenue** and **Expenses** tabs by *sorting* a copy of them on a working
   sheet — the originals never leave the Reasons tab. There are no separate Revenue or
@@ -379,10 +383,10 @@ the whole course. Every workbook mount shows sheet tabs so "where am I" is unmis
   (M3) → +Income/+Cash Flows/+Changes in Capital (M3/M4). Tab color coding (opt-in per
   page) marks permanent (blue), temporary (amber), and statement (purple) tabs.
 - **Key figures the workbook carries:** opening June-1 sheet — Assets $4,710 −
-  Liabilities $2,250 = Member's Capital $2,460 (Contributed $2,290 + Generated $170;
+  Liabilities $2,250 = Member's Capital $2,460 (Contributed $2,460 + Generated $0;
   Cash $1,300). Season — Revenue $6,020 − Expenses $3,380 = Net income $2,640; cash
   $1,300 → $620. August-31 sheet — Assets $4,500 − Liabilities $0 = Member's Capital
-  $4,500 (Contributed $2,290 / Generated $2,810 / Withdrawn $600).
+  $4,500 (Contributed $2,460 / Generated $2,640 / Withdrawn $600).
 
 ## How the pages work
 

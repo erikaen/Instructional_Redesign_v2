@@ -109,7 +109,10 @@ Workbook keys are kebab-cased filenames. Sheets stay in workbook tab order.
    save the file in Excel, then re-run`). It never emits a blank for a live formula.
 2. **`--verify`** (approved set) — after extraction, assert and print PASS/FAIL for each:
    - Income Statement net income **2640** = `St_Members_Capital` GENERATED change = `Reasons`
-     GENERATED (Aug 31 − Jun 1 = 2810 − 170).
+     GENERATED (Aug 31 − Jun 1 = 2640 − 0).
+   - Contributed **2460 − 2460 = 0**.
+   - Withdrawn **600 − 0 = 600**.
+   - Member's Capital **2460 + 2640 − 600 = 4500**.
    - Cash-Flow ending cash **620** = `Assets` Cash Aug-31 balance = `Balance Sheet` Cash Aug-31.
    - Depreciation **230** total = per-class in `Assets` (160 + 40 + 30) = the itemized dep reasons.
    - `Balance Sheet` Aug-31 balances: Total Assets **4500** = Total Liabilities 0 + Total
@@ -352,7 +355,7 @@ migrates the pages that use them.
   laptop 30 in all 7 itemized places; formatted income statement stays one line 230). Executed by
   a verified Ringer run (statement-facsimile, codex workers), labels mirroring the Assets ledger
   class names; Rick inspected and approved. All totals held (Total expenses 3,380 · Net income
-  2,640 · GENERATED 2,810).
+  2,640 · GENERATED 2,640).
 - **Anna's depreciation-discovery beat** lands on the Reasons/GENERATED page (prose), upstream of
   the income build; wording names tools & equipment, fixtures, and the laptop. **Ruled 2026-07-14
   session 3: no useful-life or depreciation-calculation questions anywhere** — the amounts are

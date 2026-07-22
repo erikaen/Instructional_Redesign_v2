@@ -10,7 +10,7 @@ non-negotiable language rules to the repo **CLAUDE.md**.
 Bike Repairs, LLC** — and hands M3 a single opening balance sheet (June 1, 2026):
 
 > Assets **$4,710** − Liabilities **$2,250** = Member's Capital **$2,460**
-> (cash $1,300; **Contributed $2,290 + Generated $170**).
+> (cash $1,300; **Contributed $2,460 + Generated $0**). The Company's books open at zero on June 1; the formation rows put in the recorded things and cash and record the claims assumed, all as Contributed.
 
 **File naming (v2).** `2X-Y-Title.html` = Module 2, Activity X, Page Y. Five activities:
 2.1 The Two You's · 2.2 Filing for a Legal Body · 2.3 The Rules and the Two Signatures ·
@@ -32,14 +32,14 @@ retired course-wide** (the lock changed from Retained → Generated at the M3 cl
 - **At the moment the numbers move onto the OA → pick up the legal *total* name
   "Member's Capital,"** explained on-page as adopting the legal term. **Member's Capital =
   Contributed + Generated.** Only the *total* takes the legal label; the subparts keep their
-  worksheet names.
+  worksheet names. M1's Contributed/Generated piles remain personal-records history; the Company's
+  separate piles begin on June 1 with Contributed $2,460 and Generated $0.
 - **GAAP synonyms are a literacy aside, M4 only.** Students meet "Retained Earnings" (for
   Generated) and "Contributed Capital" (for Contributed) once, as "the wider world calls this
   pile ___" — never as *the* working label. Follows the existing "Customer Deposit (trade name:
   Unearned Revenue)" idiom.
 
-**The $170 is Generated** (May's pre-LLC work), not a contribution — it keeps its Generated
-identity inside the LLC. Opening total: Member's Capital 2,460 = Contributed 2,290 + Generated 170.
+The $170 belongs only to the member's May personal-records history. It does not enter the Company's Generated pile. The Company's books open at zero on June 1, and its opening Member's Capital is $2,460: Contributed $2,460 + Generated $0.
 
 ---
 
@@ -58,21 +58,22 @@ identity inside the LLC. Opening total: Member's Capital 2,460 = Contributed 2,2
 > litigation). Documents/time-periods/activities-as-actors banned — three lint rules added.
 
 **The problem it fixes.** Today the OA's contribution (Schedule A) is "signed" at **23-3**, where
-**Cash = 0** and the balance sheet nets to only **$1,160** — a full activity *before* the $1,300
-bank deposit (24-3) that makes the contribution equal the opening balance sheet. The signature
+**Cash = 0** and the member's pre-formation personal records net to only **$1,160** — a full activity
+*before* the Company comes into existence. The Company's books instead start at zero on June 1 and
+add formation rows for recorded things put in, the $1,300 cash seed, and claims assumed. The signature
 lands before the numbers it attests to exist.
 
 **The fix — three beats across 2.3 → 2.5:**
 
 1. **2.3 — draft, unsigned.** Present the OA as a **draft**; talk it through; establish that the
    member must **assemble what he's contributing before it can be signed.** Signatures deferred.
-   Schedule A shown as a **draft** with Cash still 0, flagged "can't finalize until the cash is
-   in and the card is moved."
+   Schedule A shown as a **draft** with the pre-formation $1,160 view explicitly labeled as the
+   member's personal records, flagged "can't finalize until the cash is in and the card is moved."
 2. **2.4 — settle the accounts, then fill in the numbers.** After the **$1,300 is deposited**
    (24-3, already modeled as a capital contribution) and the **card is moved into the LLC's
-   name**, a **new beat** has the student **fill Schedule A with the balance-sheet numbers** —
-   so the contribution schedule now **equals the opening balance sheet exactly** (asset &
-   liability lines line-for-line; the $170 shows as Generated on the right).
+   name**, a **new beat** has the student enter the asset and assumed-claim lines and one difference
+   line, **Contributed $2,460**, on Schedule A. Do not include a Generated section or $170 Company row.
+   The contribution schedule now **equals the opening balance sheet exactly**.
 3. **2.5 — execute.** The **two-sided signature** (himself *and* as Sole Member of the Company)
    is performed at the very end; the capstone balance sheet (25-2) is identical to the signed
    Schedule A **by construction.**
@@ -90,8 +91,8 @@ not the amount — the card is already $2,030 at 23-3.
 | 23-3 What You Put In | contribution + balance sheet, Cash 0 | **draft** Schedule A; Cash 0, flagged as not-yet-final |
 | 23-4 The Wall | limited-liability wall | unchanged (see open item on 23-5) |
 | 23-5 When Did It Become Real? | keystone (which act made it real) | **re-point to the Certificate filing (2.2)** as legal existence; OA is internal governance executed later — *needs Rick's final nod* |
-| 24-3 Opening the Account | $1,300 deposit; card | + **NEW: finalize Schedule A** = balance-sheet numbers |
-| 25-2 Capstone balance sheet | full lay-out; introduces "Member's Capital" | **final two-sided signing** beat; balance sheet = signed Schedule A |
+| 24-3 Opening the Account | $1,300 deposit; card | + **NEW: finalize Schedule A from the formation rows: recorded things and cash in, claims assumed, and one difference line, Contributed $2,460** |
+| 25-2 Capstone balance sheet | full lay-out; introduces "Member's Capital" | **final two-sided signing** beat; opening balance sheet agrees with signed Schedule A: Member's Capital $2,460, all Contributed |
 
 ---
 
@@ -111,12 +112,11 @@ approval-required**; a numbered additions plan goes to Rick **before** any share
 
 1. ~~23-5 keystone re-point~~ — **confirmed & built 2026-07-07** (Certificate = legal existence;
    1.1 remains the entity answer).
-2. **Numeric inconsistency between design docs (flagged 2026-07-07, do NOT silently fix):**
-   `Bike-Repair-Workbook-Design.md` (lines 124/133) has **GENERATED $2,740 / close $4,430**,
-   while the **locked** M3 close is **Generated 2,210 / $4,500**. *Likely resolution (found
-   2026-07-07): those are the correct **pre-adjustment** figures at 31-2 — before the Ridgeline
-   $300 receivable and $230 depreciation land (2,740 = 170 + 2,570; 4,430 = 4,500 + 230 − 300).
-   The doc pass should relabel them as the intermediate snapshot, not change numbers.*
+2. **Numeric relationship between the pre-adjustment and adjusted figures:** The correct
+   pre-adjustment Company figure is Generated **$2,570**: the Company begins Generated at $0 and
+   the season's recorded rows add $2,570. Pre-adjustment Member's Capital is **$4,430**:
+   $2,460 + $2,570 − $600. After the $300 receivable and $230 of wear, Generated is **$2,640**
+   and Member's Capital is **$4,500**: $2,460 + $2,640 − $600.
 3. ~~Contributed Capital parallel~~ — **confirmed & swept 2026-07-07**: subparts read
    Contributed / Generated on every student-facing sheet; GAAP synonyms are the M4 aside.
 4. ~~Statement-as-tab prototype~~ — **built 2026-07-07** (23-3 balance-sheet tab; M3 pages

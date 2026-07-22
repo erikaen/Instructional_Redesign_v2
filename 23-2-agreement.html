@@ -69,10 +69,10 @@ function playPen(){ tone(520,0.18,'triangle',0.12); }
 var glossaryTerms = [
   { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
   { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
-  { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
-  { term:"Member&rsquo;s Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the generated slice ($170) are kept separate." },
+  { term:"Capital contribution", def:"What a member gives a company, together with any claims the company takes on as part of the formation. Here the Company records a $2,460 difference on June 1, all Contributed." },
+  { term:"Member&rsquo;s Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. On June 1 it is $2,460, all Contributed; Generated begins at $0." },
   { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
-  { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
+  { term:"Accounting entity", def:"The boundary around the information being kept. Module 1 used a boundary inside your personal records; the Company&rsquo;s own books begin on June 1, when the LLC exists." }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
@@ -181,8 +181,8 @@ function buildAgreement(f, interactive, draft){
   html += '<div style="margin-top:12px;margin-bottom:4px;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:0.04em;color:#6b6b6b">Schedule A &mdash; Contributed Property</div>';
   if(draft){
     html += '<div style="max-width:380px">';
-    for(var bi=0; bi<4; bi++){ html += '<div style="border-bottom:1px solid #d8d8d8;height:22px"></div>'; }
-    html += '<div style="display:flex;justify-content:space-between;font-weight:700;border-top:2px solid #374151;margin-top:6px"><span>Net contribution (member&rsquo;s capital)</span><span class="mono">$ ____</span></div>';
+    for(var bi=0; bi<8; bi++){ html += '<div style="border-bottom:1px solid #d8d8d8;height:22px"></div>'; }
+    html += '<div style="display:flex;justify-content:space-between;font-weight:700;border-top:2px solid #374151;margin-top:6px"><span>Contributed</span><span class="mono">$ ____</span></div>';
     html += '</div>';
     html += '<div style="font-size:11px;font-family:Inter,sans-serif;color:#a08050;border:1px dashed #a08050;border-radius:6px;padding:6px 10px;margin-top:8px;max-width:380px">DRAFT &mdash; you can&rsquo;t complete this schedule yet. The cash isn&rsquo;t deposited and the card is still in your name; both happen in 2.4. You complete the schedule from the Company&rsquo;s books after that &mdash; and you sign only after the schedule is complete.</div>';
   } else {
@@ -191,7 +191,7 @@ function buildAgreement(f, interactive, draft){
     html += '<div style="display:flex;justify-content:space-between;font-weight:600;border-top:1px solid #d8d8d8"><span>Total assets</span><span class="mono">'+f.sched.assetsTotal+'</span></div>';
     f.sched.liabs.forEach(function(l){ html += '<div style="display:flex;justify-content:space-between"><span>'+esc(l[0])+'</span><span class="mono">('+l[1]+')</span></div>'; });
     html += '<div style="display:flex;justify-content:space-between;font-weight:600"><span>Total liabilities assumed</span><span class="mono">('+f.sched.liabsTotal+')</span></div>';
-    html += '<div style="display:flex;justify-content:space-between;font-weight:700;border-top:2px solid #374151"><span>Net contribution (members&rsquo; capital)</span><span class="mono">'+f.sched.net+'</span></div>';
+    html += '<div style="display:flex;justify-content:space-between;font-weight:700;border-top:2px solid #374151"><span>Contributed</span><span class="mono">'+f.sched.net+'</span></div>';
     html += '</div>';
   }
   html += '<div style="text-align:center;margin-top:12px;margin-bottom:8px;color:#6b6b6b;font-size:12px">&mdash; signature page &mdash;</div>';

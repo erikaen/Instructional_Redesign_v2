@@ -67,13 +67,13 @@
   });
   /* TEMPORARY SHIM: Bike-Repair-End.xlsx 'Balance Sheet' D19/D21 carry stale cached
      values (their formulas =Reasons!D66/=SUM(..D20) point one row short after the
-     depreciation split). Mirror the intended values (Generated Aug-31 2,810; Total
+     depreciation split). Mirror the intended values (Generated Aug-31 2,640; Total
      4,500) until Rick fixes the source and re-extracts; the guards make this a
      no-op once the source is fixed. */
   books['bike-repair-end'].sheets.forEach(function(sheet){
     if(sheet.name!=='Balance Sheet') return;
     sheet.cells.forEach(function(cell){
-      if(cell.r===19&&cell.c===4&&cell.value===-30) cell.value=2810;
+      if(cell.r===19&&cell.c===4&&cell.value===-30) cell.value=2640;
       if(cell.r===21&&cell.c===4&&cell.value===1660) cell.value=4500;
     });
   });
@@ -198,7 +198,7 @@ function renderBeats(){
     h += '<div class="narrative-block"><p>Cash fell from <strong>$1,300</strong> to <strong>$620</strong> &mdash; down <strong>$680</strong>. On the <strong>Statement of Cash Flows</strong>, that change appears as Operating <strong>+$2,350</strong>, Investing <strong>&minus;$400</strong>, and Financing <strong>&minus;$2,630</strong>. Financing includes both the card payoff (repaying a borrowing) and the owner&rsquo;s draw.</p></div>';
   } else if(step === 2){
     h += freddieBox('Now Member&rsquo;s Capital. I saw it rose $2,040 &mdash; show me the path.');
-    h += '<div class="narrative-block"><p>Member&rsquo;s Capital rose from <strong>$2,460</strong> to <strong>$4,500</strong> &mdash; up <strong>$2,040</strong>. The <strong>Statement of Changes in Member&rsquo;s Capital</strong> tells it pile by pile. <strong>Contributed</strong>: Beginning $2,290, no changes, Ending $2,290. <strong>Generated</strong>: Beginning $170, plus Net income $2,640 from the Income Statement, Ending $2,810. <strong>Withdrawn</strong>: Beginning &mdash;, Owner&rsquo;s draw ($600), Ending ($600). The withdrawn entry records the distribution separately. The totals tie: $2,460 to $4,500.</p></div>';
+    h += '<div class="narrative-block"><p>Member&rsquo;s Capital rose from <strong>$2,460</strong> to <strong>$4,500</strong> &mdash; up <strong>$2,040</strong>. The pile-by-pile detail appears on the <strong>Statement of Member&rsquo;s Capital</strong>. <strong>Contributed</strong>: Beginning $2,460, no changes, Ending $2,460. <strong>Generated</strong>: Beginning $0, plus Net income $2,640 from the Income Statement, Ending $2,640. <strong>Withdrawn</strong>: Beginning $0, Owner&rsquo;s draw ($600), Ending ($600). The withdrawn entry records the distribution separately. The totals tie: $2,460 to $4,500.</p></div>';
   } else if(step === 3){
     h += freddieBox('Net income&rsquo;s the biggest line in that statement. I remember that one &mdash; show me what&rsquo;s behind it.');
     h += '<div class="narrative-block"><p>Click the <strong>Net income</strong> line below to open the <strong>Income Statement</strong> behind it.</p></div>';
@@ -296,7 +296,7 @@ function back(){
 var glossaryTerms=[
   { term:'Articulation', def:'The figures on the statements tie to each other: each balance-sheet change has an explanation in one of the flow statements.' },
   { term:'Statement of Cash Flows', def:'The statement says how Cash changed across Operating, Investing, and Financing. Here: +$2,350, &minus;$400, &minus;$2,630 = &minus;$680, tying $1,300 to $620.' },
-  { term:'Statement of Changes in Member&rsquo;s Capital', def:'The statement tells how Member&rsquo;s Capital changed pile by pile: Contributed (Beginning $2,290, no changes, Ending $2,290), Generated (Beginning $170 + Net income $2,640 = Ending $2,810), Withdrawn (Beginning &mdash;, Owner&rsquo;s draw ($600), Ending ($600)). Totals: $2,460 to $4,500.' },
+  { term:'Statement of Member&rsquo;s Capital', def:'The pile-by-pile change in Member&rsquo;s Capital: Contributed (Beginning $2,460, no changes, Ending $2,460), Generated (Beginning $0 + Net income $2,640 = Ending $2,640), Withdrawn (Beginning $0, Owner&rsquo;s draw ($600), Ending ($600)). Totals: $2,460 to $4,500.' },
   { term:'Income Statement', def:'Revenue minus Expenses for the season. Here: $6,020 &minus; $3,380 = $2,640 net income &mdash; the same figure that enters the Statement of Changes in Member&rsquo;s Capital.' }
 ];
 function openGlossary(){

@@ -5,8 +5,8 @@
 > - **Tutorial 4.3 is one page.** `43-2-The-First-Close.html` is **DELETED** — there is no
 >   close in these materials (the word may not appear student-facing). `43-1` rebuilds as the
 >   **fold-the-piles** development of the per-pile Statement of Changes in Member's Capital:
->   each pile folds Beginning → Change → Ending (Contributed 2,290 → 2,290 · Generated 170
->   +2,640 → 2,810 · Withdrawn — → (600)); totals 2,460 → 4,500. The engine 'bridge' sheet
+>   Contributed 2,460 + 0 = 2,460 · Generated 0 + 2,640 = 2,640 · Withdrawn 0 + 600 = 600;
+>   Member's Capital 2,460 + 2,640 − 600 = 4,500. The engine 'bridge' sheet
 >   carries this per-pile form everywhere, including the 46-2 map.
 > - **Credit-card payoff is FINANCING** (classification follows the *liability settled*, not
 >   the purchase). Cash-flow contract: **Operating +2,350** (collected 5,500 − parts 1,200 −
@@ -17,8 +17,8 @@
 >   standing questions (no Freddie dialog on 43-1–45-1). 44-2 sorts cash rows with the shared
 >   **`BRW.tagger`** (per-row Operating/Investing/Financing pills; the mis-tagged card payoff
 >   is the discovery beat, via the tagger's `onMiss` hook).
-> - **41-1's handed-over balance sheet** shows Member's Capital as Contributed 2,290 /
->   Generated 2,810 / Withdrawn (600) at Aug 31 (June 1: 2,290 / 170 / —).
+> - **41-1's handed-over balance sheet** shows Member's Capital as Contributed 2,460 /
+>   Generated 2,640 / Withdrawn (600) at Aug 31 (June 1: 2,460 / 0 / 0).
 
 **Status:** Draft v2 (2026-07-11) — **restructured (Rick's ruling):** Module 3's post-income-statement
 content (old 34-x/35-x) moves into this module; the statement of changes in Member's Capital, the
@@ -94,8 +94,9 @@ tutorial**; the Statement Map becomes the **capstone**; the napkin moves **next 
   that exists**: the June 1 and August 31 balance sheets and the income statement — no promise of
   other statements (they don't exist yet; his requests bring them into being). This is the student's
   **first sighting of the Aug 31 balance sheet as a statement** — every line traceable to the workbook
-  they built. Deliberate consequence: **Generated 2,210 / Member's Capital 4,500 appear as lines
-  before any statement has walked their path** — that unexplained change IS the module's engine.
+  they built. The handed-over August 31 balance sheet must show three lines: **Contributed $2,460**,
+  **Generated $2,640**, and **Withdrawn ($600)**, followed by **Member's Capital $4,500**. These appear
+  before any statement has walked their path — that unexplained change IS the module's engine.
   Ends with Freddie turning to the income statement → 4.2.
 - **4.2 (`42-1`, ending reworked).** Beats 1–2 stand as built (the five-option hunt including "There
   is no such line" — ruled 2026-07-10; the $1,200-draw MCQ → net income unchanged $2,640). Two
@@ -238,8 +239,8 @@ banned student-facing; see repo `CLAUDE.md`.)
 - **Cash:** $1,300 → $620, **down $680** — explained by the **Statement of Cash Flows**:
   Operating **+$320** · Investing **−$400** · Financing **−$600**.
 - **Member's Capital:** $2,460 → $4,500, **up $2,040** — explained by the **Statement of Changes
-  in Member's Capital**: 2,460 + 2,640 − 600 = 4,500. Contributed ($2,290) never moves — the
-  whole path runs through Generated (170 → 2,210).
+  in Member's Capital**: Contributed ($2,460) never moves. Generated walks from $0 to $2,640,
+  Withdrawn walks from $0 to $600, and Member's Capital walks as $2,460 + $2,640 − $600 = $4,500.
 - **Net income:** **$2,640** — the bridge statement's biggest line, explained by the **Income
   Statement**: 6,020 − 3,380, opened *from* the Net income row so the nesting is seen, with the
   same "two distinct statements in actual reporting" clarification 06 carries.
@@ -280,8 +281,9 @@ map; one continuous interaction, unfragmented.
 | Credit Card | 2,030 | 0 |
 | Customer Deposit | 220 | 0 |
 | **Total Liabilities** | **2,250** | **0** |
-| Contributed | 2,290 | 2,290 |
-| Generated | 170 | 2,210 |
+| Contributed | 2,460 | 2,460 |
+| Generated | 0 | 2,640 |
+| Withdrawn | 0 | (600) |
 | **Member's Capital** | **2,460** | **4,500** |
 
 Closing equipment lines are carrying amounts after the season's depreciation (1,600+400−160 /
@@ -394,7 +396,7 @@ never "we can't measure it" — and the gap is **path dependence**, not "the boo
 
 - **Freddie contributes $20,000 to the shop** (a contribution into the LLC, not a purchase of
   the owner's stake). Post-contribution books: Cash $620 + $20,000 = $20,620; total assets
-  $24,500; Contributed $2,290 + $20,000 = $22,290; Generated $2,210 unchanged.
+  $24,500; Contributed $2,460 + $20,000 = $22,460; World-W Generated $2,040 unchanged.
 - **The Operating Agreement is redone off-stage** — a line of narration, no on-page OA scene.
 - **Profit split (revised 2026-07-09, supersedes the initial 50-50):** the repair person draws
   a **salary of $2,000/month** as an employee; after salary, profits split **70/30
@@ -493,7 +495,7 @@ redone off-stage; **salary $2,000/month**, then **profits 70/30 owner/Freddie**;
 the past season** (prospective only; the deal rests on future expectations); **Freddie's napkin
 locked** (10,000 − 2,000 parts − 650 rent − 2,000 salary − 350 replacement tools & equipment =
 5,000/month; split 3,500/1,500; ~13-month payback); **module ends at the signing** (post-deal:
-Cash $20,620 · Assets $24,500 · Contributed $22,290 · Generated $2,210 — and no human-capital
+Cash $20,620 · Assets $24,500 · Contributed $22,460 · World-W Generated $2,040 — and no human-capital
 line); **implied price of what's not on the books ≈ $42,000** (locked: $20,000 for 30% prices
 the whole ≈ $66,700; the owner's 70% ≈ $46,700 against $4,500 of book — the unrecorded assets
 dwarf the recorded ones ~9:1); **GAAP vocabulary dropped from the course entirely**.

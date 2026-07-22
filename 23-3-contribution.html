@@ -40,7 +40,7 @@
     <!-- ===== contribution ===== -->
     <div class="phase active" id="phase-contribution">
       <div class="narrative-block">
-        <p>Under <strong>Section 9, Capital Contributions</strong>, you move the bicycle-repair business into the Company at its existing book amounts. <strong>Schedule A</strong> &mdash; the list of what the member contributes &mdash; is still empty. Start with the records and build that list.</p>
+        <p>Under <strong>Section 9, Capital Contributions</strong>, build the Company&rsquo;s June 1 opening statement from the formation rows. The May work remains in your personal records. <strong>Schedule A</strong> is still empty; start with the five things given and two claims assumed at this pre-cash stage.</p>
       </div>
       <div class="callout" style="font-family:Georgia,'Times New Roman',serif"><strong>&sect;9.</strong> &ldquo;The Sole Member contributes the assets and liabilities of the bicycle-repair business, at their existing book amounts, as set forth on Schedule A.&rdquo;</div>
       <div id="contributionArea"></div>
@@ -79,15 +79,15 @@ function annaBox(inner){ return '<div class="dialog-box anna"><div class="dialog
 var baseGlossaryTerms = [
   { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
   { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
-  { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the bicycle-repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
+  { term:"Capital contribution", def:"What a member gives a company, together with any claims the company takes on as part of the formation. Here the Company records a $2,460 difference on June 1, all Contributed." },
   { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
-  { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
+  { term:"Accounting entity", def:"The boundary around the information being kept. Module 1 used a boundary inside your personal records; the Company&rsquo;s own books begin on June 1, when the LLC exists." }
 ];
 var earnedGlossaryTerms = [
-  { term:"Balance Sheet", def:"A statement of resources, obligations, and the difference between them at a particular date. Here the difference also carries its contributed and generated history." }
+  { term:"Balance Sheet", def:"A statement of resources, obligations, and the difference between them at a particular date. On the Company&rsquo;s opening statement, the difference is all Contributed and Generated is $0." }
 ];
 var contributedGlossaryTerms = [
-  { term:"Member&rsquo;s Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the generated slice ($170) stay separate." }
+  { term:"Member&rsquo;s Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. On June 1 it is $2,460, all Contributed; Generated begins at $0." }
 ];
 function openGlossary(){
   var glossaryTerms = baseGlossaryTerms.slice();
@@ -117,13 +117,13 @@ var step = 0; /* 0 ask, 1 copied, 2 sort, 3 organized, 4 reasons, 5 named, 6 con
 
 /* ===== completed statement rendering ===== */
 function balanceSheetHTML(){
-  var title = contributed ? esc(llcName()) : 'The repair work &mdash; the books';
+  var title = esc(llcName());
   var assets = '';
   assetRows.forEach(function(a){ assets += '<div class="acct-line"><span>'+esc(a[0])+'</span><span class="acct-val mono">'+a[1]+'</span></div>'; });
-  var liabLabel = contributed ? 'Liabilities &amp; Member&rsquo;s Capital' : 'Liabilities &amp; the difference';
+  var liabLabel = 'Liabilities &amp; Member&rsquo;s Capital';
   var rcLabel = 'Contributed';
   var reLabel = 'Generated';
-  var netLabel = contributed ? 'Member&rsquo;s Capital' : 'The difference';
+  var netLabel = 'Member&rsquo;s Capital';
   var resStyle = contributed ? ' style="background:var(--success-bg);border-radius:4px;padding:2px 6px;margin-top:4px"' : ' style="margin-top:4px"';
   var html = '<div style="text-align:center;font-weight:700;margin-bottom:2px;'+(contributed?'color:var(--primary)':'')+'">'+title+'</div>';
   html += '<div class="section-sub" style="text-align:center;margin-bottom:14px">Balance Sheet &middot; June 1, 2026</div>';
@@ -134,36 +134,16 @@ function balanceSheetHTML(){
     '<div class="acct-line"><span>Customer deposit &mdash; Smith</span><span class="acct-val mono">220</span></div>'+
     '<div class="acct-total" style="border-top:1px solid var(--border)"><span>Liabilities</span><span class="mono">2,250</span></div>'+
     '<div'+resStyle+'>'+
-      '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">990</span></div>'+
-      '<div class="acct-line"><span>'+reLabel+'</span><span class="acct-val mono">170</span></div>'+
+      '<div class="acct-line"><span>'+rcLabel+'</span><span class="acct-val mono">1,160</span></div>'+
+      '<div class="acct-line"><span>'+reLabel+'</span><span class="acct-val mono">0</span></div>'+
       '<div class="acct-total"><span>'+netLabel+'</span><span class="mono">1,160</span></div>'+
     '</div>'+
   '</div>';
   html += '</div>';
   return html;
 }
-/* ===== the whole workbook, statement-as-tab: the balance sheet lives IN Bike-Repair.xlsx =====
-   Assets/Liabilities keep the exact look and categories of the workbook as last shown
-   at the end of Module 1 (15-2): expandable category lines, item drill-downs, the
-   dated May cash ledger. Continuity rule: every Bike-Repair depiction matches the
-   last one shown in the module sequence. */
-function m2CashEvents(postDeposit){
-  var ev = [
-    { name:'<span class="cash-line-date">May 1</span>Rent paid in advance', amt:-1300 },
-    { name:'<span class="cash-line-date">May 3</span>Park Tool stand', amt:-200 },
-    { name:'<span class="cash-line-date">May 7</span>Repair finished &mdash; customer paid', amt:340 },
-    { name:'<span class="cash-line-date">May 10</span>Repair finished &mdash; customer paid', amt:180 },
-    { name:'<span class="cash-line-date">May 12</span>Repair finished &mdash; customer paid', amt:80 },
-    { name:'<span class="cash-line-date">May 14</span>Repair finished &mdash; customer paid', amt:140 },
-    { name:'<span class="cash-line-date">May 19</span>Repair finished &mdash; customer paid', amt:130 },
-    { name:'<span class="cash-line-date">May 22</span>Smith deposit', amt:220 },
-    { name:'<span class="cash-line-date">May 23</span>Repair finished &mdash; customer paid', amt:100 },
-    { name:'<span class="cash-line-date">May 27</span>Repair finished &mdash; customer paid', amt:150 },
-    { name:'<span class="cash-line-date">&mdash;</span>From your personal self &mdash; covering what the work drew down', amt:160 }
-  ];
-  if(postDeposit) ev.push({ name:'<span class="cash-line-date">Jun 1</span>Deposited to open the Company&rsquo;s account &mdash; your contribution', amt:1300 });
-  return ev;
-}
+/* ===== the Company workbook opens with the June 1 formation rows ===== */
+function m2CashEvents(){ return []; }
 function m2AssetLines(postDeposit){
   return [
     { label:'Equipment', note:'the repair tools', amount:1200, items:[
@@ -177,7 +157,7 @@ function m2AssetLines(postDeposit){
       {name:'Cassettes (on shelf)', amt:40},{name:'Bottom brackets (on shelf)', amt:20},{name:'Spokes (on shelf)', amt:20},{name:'Tubes (on shelf)', amt:10} ] },
     { label:'Fixtures', note:'desk, shelving, rack', amount:750, items:[
       {name:'Desk', amt:250},{name:'Shelving units', amt:200},{name:'Display rack', amt:180},{name:'Pegboard + hooks', amt:120} ] },
-    { label:'Cash', note: postDeposit ? 'the Company&rsquo;s account, seeded today' : 'repair cash on hand', events: m2CashEvents(postDeposit) },
+    { label:'Cash', note:'the Company&rsquo;s account is not yet seeded', events: m2CashEvents() },
     { label:'Right of Use', note:'the last month, prepaid', amount:650, items:[ {name:'Right to occupy the space &mdash; last month, prepaid', amt:650} ] }
   ];
 }
@@ -190,17 +170,26 @@ function m2LiabLines(postCardMove){
       {name:'Wheel-truing stand', amt:170},{name:'Fixtures (desk, shelving, racks)', amt:750},{name:'Parts (QBP order)', amt:500} ] }
   ];
 }
+var formationRows = [
+  {kind:'net',cat:'contributed',account:'Right of Use',reason:'given at book amount (June 1)',delta:650},
+  {kind:'net',cat:'contributed',account:'Supplies',reason:'given at book amount (June 1)',delta:200},
+  {kind:'net',cat:'contributed',account:'Equipment',reason:'given at book amount (June 1)',delta:1200},
+  {kind:'net',cat:'contributed',account:'Computer equipment',reason:'given at book amount (June 1)',delta:610},
+  {kind:'net',cat:'contributed',account:'Fixtures',reason:'given at book amount (June 1)',delta:750},
+  {kind:'net',cat:'contributed',account:'Credit-card balance',reason:'claim assumed at formation (June 1)',delta:-2030},
+  {kind:'net',cat:'contributed',account:'Customer deposit — Smith',reason:'claim assumed at formation (June 1)',delta:-220}
+];
 var bsSnap = {
   file:'Bike-Repair.xlsx',
   tabs:[],
   assets: m2AssetLines(false),
   liabilities: m2LiabLines(false),
   reasons: {
-    pilesTitle:'The Reasons piles &mdash; May 1 to today',
-    pilesSub:'one continuous list &mdash; every reason since the first May jot',
+    pilesTitle:'The Reasons pile &mdash; Formation &middot; June 1',
+    pilesSub:'the Company&rsquo;s opening reasons &mdash; all Contributed',
     mode:'sorted',
-    groups:[ {key:'contributed',label:'CONTRIBUTED',blurb:'what you put in'}, {key:'generated',label:'GENERATED',blurb:'what the work produced'} ],
-    rows: BR_WB.setupRows().filter(function(r){ return r.reason.indexOf('LLC bank account') < 0; })
+    groups:[{key:'contributed',label:'CONTRIBUTED',blurb:'things given less claims assumed'}],
+    rows:formationRows
   }
 };
 var copiedRows = [
@@ -244,9 +233,7 @@ function organizedHTML(withReasons){
       '<div class="acct-total"><span>Takes on</span><span class="mono">2,250</span></div>'+
       '<div style="margin-top:12px"><div class="acct-total"><span>The difference</span><span class="mono">1,160</span></div>';
   if(withReasons){
-    html+='<div class="acct-line"><span>CONTRIBUTED</span><span class="acct-val mono">990</span></div>'+
-      '<div class="acct-line"><span>GENERATED</span><span class="acct-val mono">170</span></div>'+
-      '<div class="acct-total"><span>990 + 170</span><span class="mono">1,160</span></div>';
+    html+='<div class="acct-line"><span>CONTRIBUTED</span><span class="acct-val mono">1,160</span></div>';
   }
   return html+'</div></div></div></div>';
 }
@@ -305,7 +292,7 @@ function renderContribution(){
   bsSnap.tabs=workbookTabs();
   var html='<div class="bs-pipeline" id="bsWb"></div>';
   if(step===0){
-    html+=annaBox('Under Section 9, you move the business into the Company, and Schedule A &mdash; the list of what the member contributes &mdash; is still empty. The facts live in the <strong>Assets</strong>, <strong>Liabilities</strong>, and <strong>Reasons</strong> tabs you&rsquo;ve kept since Module 1. To figure out what is being contributed, copy the records to a working sheet.');
+    html+=annaBox('Under Section 9, build the Company&rsquo;s June 1 opening statement from the formation rows. These are new Company records: the May work remains in your personal records.');
     html+='<button class="btn-continue btn-block" style="margin-top:14px" onclick="copyRecords()">Copy the records to a Working Tab &rarr;</button>';
   } else if(step===1){
     html+=annaBox('The fourth tab is born as an amber <strong>Working Tab</strong>. Every row is a copy; the ledgers stay where they are. This sheet is where the organizing will happen.');
@@ -313,17 +300,17 @@ function renderContribution(){
   } else if(step===2){
     html+='<div id="contributionSorterPanel"></div><div id="sortFeedback"></div>';
   } else if(step===3){
-    html+=annaBox('Now the two sides are organized: the Company <strong>receives $3,410</strong> and <strong>takes on $2,250</strong>. The calculation on the working sheet produces one difference, <strong>$1,160</strong> &mdash; but it does not explain why that difference exists. Turn to the Reasons tab: its two piles record the why.');
-    html+='<button class="btn-continue btn-block" style="margin-top:14px" onclick="bringReasons()">Bring the two piles in &rarr;</button>';
+    html+=annaBox('Now the two sides are organized: the Company <strong>receives $3,410</strong> and <strong>takes on $2,250</strong>. The difference is <strong>$1,160</strong>. Bring in the formation reasons to see why that difference exists.');
+    html+='<button class="btn-continue btn-block" style="margin-top:14px" onclick="bringReasons()">Bring the formation reasons in &rarr;</button>';
   } else if(step===4){
-    html+=annaBox('There it is: <strong>CONTRIBUTED $990</strong> and <strong>GENERATED $170</strong>. Together, <strong>$990 + $170 = $1,160</strong>. You can now read the whole story on the completed sheet: what the Company receives, what it takes on, and where the difference came from. A sheet laid out like this &mdash; resources, obligations, and the difference with its history &mdash; has a name.');
+    html+=annaBox('Every formation row belongs in one pile: <strong>CONTRIBUTED $1,160</strong>. The Company generated nothing before it existed, so <strong>Generated begins at $0</strong>. The $1,300 cash seed arrives with the Company&rsquo;s own account in 2.4, completing Contributed at $2,460.');
     html+='<button class="btn-continue btn-block" style="margin-top:14px" onclick="christenSheet()">Rename the completed tab &rarr;</button>';
   } else if(step===5){
-    html+=annaBox('You&rsquo;ve built and named the <strong>Balance Sheet</strong>. Read it slowly: Assets, <strong>$3,410</strong>; Liabilities, <strong>$2,250</strong>; and the difference, <strong>$1,160</strong>, in its two piles &mdash; <strong>Contributed $990</strong> and <strong>Generated $170</strong>. This is the business you move into the Company under Section 9 at these amounts, with no revaluation.');
-    html+='<button class="btn-continue btn-block" style="margin-top:14px" onclick="doContribute()">Contribute the business to the LLC &rarr;</button>';
+    html+=annaBox('You&rsquo;ve built the Company&rsquo;s opening <strong>Balance Sheet</strong>: Assets <strong>$3,410</strong>; Liabilities <strong>$2,250</strong>; Member&rsquo;s Capital <strong>$1,160</strong>, all Contributed. Generated is <strong>$0</strong>.');
+    html+='<button class="btn-continue btn-block" style="margin-top:14px" onclick="doContribute()">Complete the Company view &rarr;</button>';
   } else {
-    html+='<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="check" class="licon"></i> Not one number changed</div>'+
-      '<p>The same Balance Sheet is now the <strong>Company&rsquo;s</strong> &mdash; legally contributed in. The difference became <strong>Member&rsquo;s Capital</strong>, the one name the Operating Agreement uses. <strong>Contributed ($990)</strong> and <strong>Generated ($170)</strong> carried over untouched &mdash; the same $1,160, with the history intact.</p>'+
+    html+='<div class="insight-box" style="margin-top:14px"><div class="insight-label"><i data-lucide="check" class="licon"></i> The Company&rsquo;s books begin here</div>'+
+      '<p>The Company&rsquo;s books opened at zero. On June 1, the Company received $3,410 of resources and rights and took on $2,250 of claims. Their $1,160 difference is Member&rsquo;s Capital, all Contributed. Generated begins at $0; the May $170 remains only in your personal records. The $1,300 cash seed arrives with the Company&rsquo;s own account in 2.4, completing Contributed at $2,460.</p>'+
       '<p><strong>Schedule A</strong> is still <strong>empty</strong>. These are the lines you&rsquo;ll enter in 2.4, after the cash is deposited and the card is moved.</p></div>'+
       '<button class="btn-continue btn-block" onclick="nav(\'23-4-wall.html\')">Now drill into &sect;17 &mdash; the wall &rarr;</button>';
   }

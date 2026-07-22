@@ -29,8 +29,8 @@
     <!-- ===== keystone ===== -->
     <div class="phase active" id="phase-keystone">
       <div class="narrative-block">
-        <p>A legal body. Rules. Your business inside it. A wall. It really feels like the repair work <em>became real</em> today. So, a question worth sitting with:</p>
-        <p style="margin-top:8px;font-weight:600;color:var(--primary)">When did this entity actually become real?</p>
+        <p>A legal body. Rules. The Company&rsquo;s own books. A wall. Two histories now meet without becoming one.</p>
+        <p style="margin-top:8px;font-weight:600;color:var(--primary)">Which statement keeps the two histories straight?</p>
       </div>
       <div id="keystoneArea"></div>
     </div>
@@ -65,10 +65,10 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 var glossaryTerms = [
   { term:"Operating Agreement", def:"An LLC&rsquo;s internal rulebook &mdash; who the members are, how it&rsquo;s managed, what was contributed, who bears its liabilities. Every LLC has one; you write your own." },
   { term:"Sole Member", def:"The single owner of a one-member LLC. Here, that&rsquo;s you &mdash; in your owner capacity." },
-  { term:"Capital contribution", def:"What an owner puts into the company. Here it&rsquo;s the whole repair business, transferred at its existing book amounts &mdash; no revaluation, no new number." },
-  { term:"Member&rsquo;s Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. A definitional difference, not &ldquo;what&rsquo;s left for the owner.&rdquo; The contributed slice ($990) and the generated slice ($170) are kept separate." },
+  { term:"Capital contribution", def:"What a member gives a company, together with any claims the company takes on as part of the formation. Here the Company records a $2,460 difference on June 1, all Contributed." },
+  { term:"Member&rsquo;s Capital", def:"The LLC&rsquo;s name for the difference Assets &minus; Liabilities. On June 1 it is $2,460, all Contributed; Generated begins at $0." },
   { term:"Limited liability", def:"A legal fact: the member is not personally on the hook for the Company&rsquo;s debts. It changes who can be pursued &mdash; not what the records show." },
-  { term:"Accounting entity", def:"The boundary you draw for information &mdash; the thing your books are about. It can exist with or without any legal body, and it came first here (1.1)." }
+  { term:"Accounting entity", def:"The boundary around the information being kept. Module 1 used a boundary inside your personal records; the Company&rsquo;s own books begin on June 1, when the LLC exists." }
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML = glossaryTerms.map(function(g){
@@ -88,19 +88,17 @@ var keystonePick = null;
 /* ===== keystone: the question ===== */
 function renderKeystone(){
   var area = document.getElementById('keystoneArea');
-  var right = keystonePick==='1.1';
+  var right = keystonePick==='personal';
   var opts = [
-    ['cert','When you filed the Certificate (2.2)',
-      'Not quite &mdash; that&rsquo;s the day it became a <em>legal</em> entity. But was that when it became real? Try again.'],
-    ['oa','When the Operating Agreement gets signed',
-      'No &mdash; the agreement is the Company&rsquo;s internal rulebook. It <em>governs</em> the entity; it doesn&rsquo;t create it. Legal existence came with the Certificate (2.2) &mdash; and the signing hasn&rsquo;t even happened yet. Try again.'],
-    ['1.1','Back in 1.1 &mdash; when you first drew the line in your books','']
+    ['personal','Module 1 recorded the repair work in your personal records; the Company&rsquo;s own books begin on June 1.',''],
+    ['generated','The May work becomes the Company&rsquo;s Generated history when the LLC is filed.','Not quite. The May work remains in your personal records.'],
+    ['changed','Filing changes the May personal records into Company records.','Not quite. Filing brings the LLC into existence; it does not rewrite the May records.']
   ];
   var html = '<div style="display:flex;flex-direction:column;gap:10px">';
   opts.forEach(function(o){
     var id=o[0], label=o[1], fb=o[2];
     var picked = keystonePick===id;
-    var isRight = id==='1.1';
+    var isRight = id==='personal';
     var show = keystonePick!==null;
     var st = 'background:var(--primary-faint);border:2px solid var(--border-strong)';
     if(show && picked){ st = isRight ? 'background:var(--success-bg);border:2px solid var(--success-border)' : 'background:var(--error-bg);border:2px solid var(--error-border)'; }
@@ -110,19 +108,19 @@ function renderKeystone(){
   });
   html += '</div>';
   if(right){
-    html += '<div class="callout" style="margin-top:14px">Right. The <strong>Certificate</strong> gave the operation a legal body, and the agreement you drafted today will govern it &mdash; but <strong>neither created the entity</strong>. You&rsquo;ve kept these books, this boundary, since <strong>1.1</strong>. The <strong>accounting</strong> line came first &mdash; by months, and in a real firm, by years.</div>';
+    html += '<div class="callout" style="margin-top:14px">Right. The May records remain personal. The Certificate brought the LLC into existence, and the Company&rsquo;s books began at zero. The June 1 formation rows create $2,460 of Contributed; Generated begins at $0.</div>';
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="key-round" class="licon"></i> The keystone</div>'+
       '<p style="font-size:var(--font-lg);font-weight:700;color:var(--primary);margin-bottom:6px">Accounting&#8209;entity &ne; legal&#8209;entity.</p>'+
-      '<p>The accounting entity is a boundary you drew <em>for information</em> &mdash; it can exist with or without any legal body, and here it came first. The LLC is a legal wrapper placed around it. Getting an LLC didn&rsquo;t make the entity &ldquo;finally real&rdquo;; it was a real <em>accounting</em> entity all along.</p></div>';
+      '<p>An information boundary and a legal boundary answer different questions. Module 1 used an information boundary inside your personal records. The Company is new on June 1, and only its own formation and later activity belong in its books.</p></div>';
     html += '<button class="btn-continue btn-block" onclick="nav(\'23-6-complete.html\')">Finish up &rarr;</button>';
   }
   area.innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
 function pickKeystone(id){
-  if(keystonePick==='1.1') return;
+  if(keystonePick==='personal') return;
   keystonePick = id;
-  if(id==='1.1') playSuccess(); else playNope();
+  if(id==='personal') playSuccess(); else playNope();
   renderKeystone();
 }
 

@@ -1,7 +1,7 @@
 /* ============================================================================
  * bike-repair-workbook.js — the shared Aug-31 snapshot of Bike-Repair.xlsx.
- * Rebuilds the exact novice-kept state shipped in 31-2 (three tabs; every line's
- * full history) so every Module 3 page mounts the SAME workbook via BRW, instead
+ * Rebuilds the exact Company state shipped in 31-2 (three tabs; every line from formation through August 31)
+ * so every Module 3 page mounts the SAME workbook via BRW, instead
  * of re-pasting the snapshot. Depends on BR_JOBS (job-records) and BR_PURCHASES
  * (parts-purchases); load those first.
  *
@@ -10,7 +10,7 @@
  *                               books stay balanced (assets 4,430 -> 4,730)
  *       opts.flowGroups      -> show the SEASON's reasons regrouped into
  *                               DELIVERED / USED UP tallies (the 32-2 sort result) with
- *                               WITHDRAWN below; May's rows stay in their original piles
+ *                               WITHDRAWN below; the June 1 formation rows remain CONTRIBUTED
  *       opts.tabbed          -> RETIRED (2026-07-13): accepted and ignored. GENERATED is
  *                               continuous — the season's rows never leave the Reasons tab;
  *                               the income statement is a sort-view of them.
@@ -20,8 +20,7 @@
  *                               (Tools 1,600 -> 1,440; Fixtures 750 -> 710; Laptop 610 -> 580).
  *       opts.closed          -> RETIRED (2026-07-13): accepted and ignored. There is no
  *                               close in these materials.
- *   BR_WB.setupRows()        -> the pre-season (May + formation) reasons — the Reasons
- *                               list is one CONTINUOUS list, never settled or reset
+ *   BR_WB.setupRows()        -> the June 1 formation reasons from Schedule A — all CONTRIBUTED
  *   BR_WB.generatedRows()    -> the GENERATED reasons, each tagged flow:'in'|'up'
  *   BR_WB.monthName          -> { Jun:'June', ... }
  * ========================================================================== */
@@ -30,21 +29,10 @@ var BR_WB = (function () {
 
   var monthName = { Jun: 'June', Jul: 'July', Aug: 'August' };
 
-  // Cash — the complete ledger, first entry to today (pre-LLC → founding → the season).
+  // Cash — the Company ledger, from the June 1 formation entry through the season.
   function cashEvents() {
-    var pre = [
-      { name: 'Rent paid in advance (the lease)', amt: -1300 },
-      { name: 'Park Tool repair stand', amt: -200 },
-      { name: 'Repair, customer paid', amt: 340 },
-      { name: 'Repair, customer paid', amt: 180 },
-      { name: 'Repair, customer paid', amt: 80 },
-      { name: 'Repair, customer paid', amt: 140 },
-      { name: 'Repair, customer paid', amt: 130 },
-      { name: 'Smith&rsquo;s deposit received', amt: 220 },
-      { name: 'Repair, customer paid', amt: 100 },
-      { name: 'Repair, customer paid', amt: 150 },
-      { name: 'Covered from your personal funds', amt: 160 },
-      { name: 'Deposited to open the LLC bank account', amt: 1300 }
+    var formation = [
+      { name: 'Cash received at formation &mdash; Schedule A', amt: 1300 }
     ];
     var repairs = BR_JOBS.filter(function (j) { return j.collected && j.pay.indexOf('Deposit') < 0; })
       .map(function (j) { return { name: 'Repair collected &mdash; ' + j.customer, amt: j.charge }; });
@@ -57,16 +45,15 @@ var BR_WB = (function () {
       { name: 'Credit card paid off', amt: -2030 },
       { name: 'Money taken out for personal use', amt: -600 }
     ]);
-    return pre.concat(repairs, costs);
+    return formation.concat(repairs, costs);
   }
 
   // Parts asset ledger — opening shelf, then the three restocks item by item (matching
   // the same PO that hit Cash as one payment &mdash; the match lives at the transaction,
   // same as Fixtures back in Module 1), then each job's parts used.
   function partsEvents() {
-    var shelf = [
-      { name: 'Chains', amt: 50 }, { name: 'Brake pads', amt: 40 }, { name: 'Derailleur cables', amt: 20 },
-      { name: 'Cassettes', amt: 40 }, { name: 'Bottom brackets', amt: 20 }, { name: 'Spokes', amt: 20 }, { name: 'Tubes', amt: 10 }
+    var formation = [
+      { name: 'Supplies received at formation &mdash; Schedule A', amt: 200 }
     ];
     var buys = [];
     BR_PURCHASES.forEach(function (p) {
@@ -75,28 +62,20 @@ var BR_WB = (function () {
     });
     var used = BR_JOBS.filter(function (j) { return j.partsCost > 0; })
       .map(function (j) { return { name: 'Parts used &mdash; ' + j.customer, amt: -j.partsCost }; });
-    return shelf.concat(buys, used);
+    return formation.concat(buys, used);
   }
 
-  // The pre-season reasons — May's work and the two formation contributions, exactly as
-  // first jotted. The list is CONTINUOUS: nothing is settled or reset at June 1. The piles'
-  // running subtotals ARE the residual story (CONTRIBUTED 2,290 / GENERATED 170 at June 1);
-  // the first-ever close is Tutorial 3.5's discovery, not a fait accompli.
+  // The Company’s Reasons list begins with the June 1 formation rows from Schedule A. Every formation row is CONTRIBUTED; GENERATED begins at zero and starts with Dana’s first repair.
   function setupRows() {
     return [
-      { kind: 'net', cat: 'contributed', pre: true, account: 'Cash', reason: 'covered from your personal funds (May)', delta: 160 },
-      { kind: 'net', cat: 'contributed', pre: true, account: 'Laptop', reason: 'brought from home (May)', delta: 610 },
-      { kind: 'net', cat: 'contributed', pre: true, account: 'Equipment', reason: 'gear from home &mdash; grinder, headset press, shop vacuum (May)', delta: 220 },
-      { kind: 'net', cat: 'contributed', pre: true, account: 'Cash', reason: 'deposited to open the LLC bank account (June 1)', delta: 1300 },
-      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 340 },
-      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 180 },
-      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 80 },
-      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 140 },
-      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 130 },
-      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 100 },
-      { kind: 'net', cat: 'generated', pre: true, flow: 'in', account: 'Repair collected', reason: 'customer paid (May)', delta: 150 },
-      { kind: 'net', cat: 'generated', pre: true, flow: 'up', account: 'Parts used', reason: 'customer jobs (May)', delta: -300 },
-      { kind: 'net', cat: 'generated', pre: true, flow: 'up', account: 'Rent used', reason: 'May', delta: -650 }
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Cash', reason: 'Cash &mdash; Schedule A, June 1', delta: 1300 },
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Right of Use', reason: 'Right of Use &mdash; Schedule A, June 1', delta: 650 },
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Parts', reason: 'Supplies &mdash; Schedule A, June 1', delta: 200 },
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Tools &amp; Repair Equipment', reason: 'Equipment &mdash; Schedule A, June 1', delta: 1200 },
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Fixtures', reason: 'Fixtures &mdash; Schedule A, June 1', delta: 750 },
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Laptop', reason: 'Computer equipment &mdash; Schedule A, June 1', delta: 610 },
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Credit Card', reason: 'Credit-card balance (assumed) &mdash; Schedule A, June 1', delta: -2030 },
+      { kind: 'net', cat: 'contributed', pre: true, account: 'Customer Deposit', reason: 'Customer deposit &mdash; Smith (assumed) &mdash; Schedule A, June 1', delta: -220 }
     ];
   }
 
@@ -104,10 +83,19 @@ var BR_WB = (function () {
   // (a repair collected, the frame handed over), flow:'up' = something got used up
   // delivering. kind:'net' is what BRW's sorted mode reads.
   function generatedRows() {
-    var rows = [], rentPaid = {};
+    // Rent placement mirrors the workbooks: GENERATED is born at Dana's repair, so
+    // June's rent lands at the end of June's rows; July and August keep rent at the
+    // head of their month's rows.
+    var rows = [], currentMonth = null;
+    function rent(m) { rows.push({ kind: 'net', cat: 'generated', flow: 'up', account: 'Rent used', reason: monthName[m], delta: -650 }); }
     BR_JOBS.forEach(function (j) {
       var m = j.date.slice(0, 3);
-      if (!rentPaid[m]) { rows.push({ kind: 'net', cat: 'generated', flow: 'up', account: 'Rent used', reason: monthName[m], delta: -650 }); rentPaid[m] = true; }
+      if (currentMonth === null) { currentMonth = m; }
+      else if (m !== currentMonth) {
+        if (currentMonth === 'Jun') rent('Jun');
+        rent(m);
+        currentMonth = m;
+      }
       if (j.pay.indexOf('Deposit') >= 0) rows.push({ kind: 'net', cat: 'generated', flow: 'in', account: 'Frame delivered', reason: j.customer, delta: j.charge });
       else if (j.collected) rows.push({ kind: 'net', cat: 'generated', flow: 'in', account: 'Repair collected', reason: j.customer, delta: j.charge });
       if (j.partsCost > 0) rows.push({ kind: 'net', cat: 'generated', flow: 'up', account: 'Parts used', reason: j.customer, delta: -j.partsCost });
@@ -124,21 +112,18 @@ var BR_WB = (function () {
     var assets = [
       { label: 'Cash', amount: 620, events: cashEvents() },
       { label: 'Right of Use', amount: 650, events: [
-        { name: 'Last month&rsquo;s rent, paid in advance (on deposit)', amt: 650 }
+        { name: 'Right of Use received at formation &mdash; Schedule A', amt: 650 }
       ] },
       { label: 'Parts', amount: 200, events: partsEvents() },
       { label: 'Tools &amp; Repair Equipment', amount: 1600, events: [
-        { name: 'Repair stand', amt: 200 }, { name: 'Air compressor', amt: 180 }, { name: 'Parts washer', amt: 130 },
-        { name: 'Wheel-truing stand', amt: 170 }, { name: 'Cone wrench set', amt: 65 }, { name: 'Torque wrench', amt: 95 },
-        { name: 'Hex/Allen set', amt: 45 }, { name: 'Cable cutters', amt: 40 }, { name: 'Chain breaker', amt: 35 },
-        { name: 'Tire levers', amt: 20 }, { name: 'Bench grinder', amt: 90 }, { name: 'Headset press', amt: 70 },
-        { name: 'Shop vacuum', amt: 60 }, { name: 'New repair tool bought this season', amt: 400 }
+        { name: 'Equipment received at formation &mdash; Schedule A', amt: 1200 },
+        { name: 'New repair tool bought this season', amt: 400 }
       ].concat(opts.withDepreciation ? [ { name: 'Depreciation &mdash; Summer 2026 (the season&rsquo;s share of the cost)', amt: -160 } ] : []) },
       { label: 'Fixtures', amount: 750, events: [
-        { name: 'Desk', amt: 250 }, { name: 'Shelving units', amt: 200 }, { name: 'Display rack', amt: 180 }, { name: 'Pegboard + hooks', amt: 120 }
+        { name: 'Fixtures received at formation &mdash; Schedule A', amt: 750 }
       ].concat(opts.withDepreciation ? [ { name: 'Depreciation &mdash; Summer 2026 (the season&rsquo;s share of the cost)', amt: -40 } ] : []) },
       { label: 'Laptop', amount: 610, events: [
-        { name: 'Laptop (from home)', amt: 610 }
+        { name: 'Computer equipment received at formation &mdash; Schedule A', amt: 610 }
       ].concat(opts.withDepreciation ? [ { name: 'Depreciation &mdash; Summer 2026 (the season&rsquo;s share of the cost)', amt: -30 } ] : []) }
     ];
     if (opts.withReceivable) {
@@ -165,13 +150,12 @@ var BR_WB = (function () {
     rows.push(drawReason);
 
     var groups = opts.flowGroups
-      ? [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in' },
-          { key: 'generated', label: 'GENERATED &mdash; through May 31', blurb: 'the work before the season, left where it was' },
-          { key: 'in', label: 'DELIVERED', blurb: 'reasons the work delivered to a customer' },
-          { key: 'up', label: 'USED UP', blurb: 'reasons things got used up' },
+      ? [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in at formation' },
+          { key: 'in', label: 'DELIVERED', blurb: 'reasons for work you delivered to a customer' },
+          { key: 'up', label: 'USED UP', blurb: 'reasons for things you used up' },
           { key: 'drawn', label: 'WITHDRAWN', blurb: 'what you took for yourself' } ]
-      : [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in' },
-          { key: 'generated',   label: 'GENERATED',   blurb: 'what the work produced' },
+      : [ { key: 'contributed', label: 'CONTRIBUTED', blurb: 'what you put in at formation' },
+          { key: 'generated',   label: 'GENERATED',   blurb: 'what the Company&rsquo;s work produced' },
           { key: 'drawn',       label: 'WITHDRAWN',   blurb: 'what you took for yourself' } ];
 
     var snap = {
@@ -180,21 +164,19 @@ var BR_WB = (function () {
       assets: assets,
       liabilities: [
         { label: 'Credit Card', amount: 0, events: [
-          { name: 'Charged &mdash; hand tools', amt: 300 }, { name: 'Charged &mdash; air compressor', amt: 180 },
-          { name: 'Charged &mdash; parts washer', amt: 130 }, { name: 'Charged &mdash; wheel-truing stand', amt: 170 },
-          { name: 'Charged &mdash; fixtures', amt: 750 }, { name: 'Charged &mdash; parts (QBP order)', amt: 500 },
+          { name: 'Credit-card balance assumed at formation &mdash; Schedule A', amt: 2030 },
           { name: 'Paid off in full this season', amt: -2030 }
         ] },
         { label: 'Customer Deposit', amount: 0, events: [
-          { name: 'Smith&rsquo;s advance for a custom frame', amt: 220 },
+          { name: 'Customer deposit &mdash; Smith assumed at formation &mdash; Schedule A', amt: 220 },
           { name: 'Built and delivered Smith&rsquo;s frame &mdash; no longer owed', amt: -220 }
         ] }
       ],
       reasons: {
-        pilesTitle: 'The Reasons piles &mdash; May 1 to today',
+        pilesTitle: 'The Reasons piles &mdash; June 1 to today',
         pilesSub: opts.flowGroups
-          ? 'the season&rsquo;s rows sorted into tallies; May&rsquo;s rows left where they were'
-          : 'one continuous list &mdash; every reason since the first May jot; nothing settled, nothing reset',
+          ? 'the Company&rsquo;s season rows sorted into tallies; formation rows remain CONTRIBUTED'
+          : 'the Company&rsquo;s Reasons list &mdash; formation rows first, then every reason since the first June repair',
         mode: 'sorted',
         groups: groups,
         rows: rows
@@ -293,15 +275,15 @@ var BR_WB = (function () {
     BRW.registerSheet('bridge', function (cid, snap) {
       var h = xr('xl-head', 'Statement of Member&rsquo;s Capital &middot; June&ndash;August 2026', 'Amount');
       h += xr('xl-cat', '<strong>Contributed</strong>', '');
-      h += xr('xl-item', 'Beginning &mdash; June 1', BRW.dol(2290));
+      h += xr('xl-item', 'Beginning &mdash; June 1', BRW.dol(2460));
       h += xr('xl-item', 'No changes this season', '');
-      h += xr('xl-total', 'Ending &mdash; August 31', BRW.dol(2290));
+      h += xr('xl-total', 'Ending &mdash; August 31', BRW.dol(2460));
       h += xr('xl-cat', '<strong>Generated</strong>', '');
-      h += xr('xl-item', 'Beginning &mdash; June 1', BRW.dol(170));
+      h += xr('xl-item', 'Beginning &mdash; June 1', BRW.dol(0));
       h += xr('xl-item', '+ Net income &mdash; from the Income Statement', BRW.signed(2640));
-      h += xr('xl-total', 'Ending &mdash; August 31', BRW.dol(2810));
+      h += xr('xl-total', 'Ending &mdash; August 31', BRW.dol(2640));
       h += xr('xl-cat', '<strong>Withdrawn</strong>', '');
-      h += xr('xl-item', 'Beginning &mdash; June 1', '&mdash;');
+      h += xr('xl-item', 'Beginning &mdash; June 1', BRW.dol(0));
       h += xr('xl-item', 'Owner&rsquo;s draw', paren(600));
       h += xr('xl-total', 'Ending &mdash; August 31', paren(600));
       h += xr('xl-item', '<strong>Total Member&rsquo;s Capital &mdash; June 1</strong>', BRW.dol(2460));
@@ -313,8 +295,8 @@ var BR_WB = (function () {
       h += xr('xl-item', 'Assets', BRW.dol(4500));
       h += xr('xl-item', 'Liabilities', BRW.dol(0));
       h += xr('xl-cat', '<strong>Member&rsquo;s Capital</strong>', BRW.dol(4500));
-      h += xr('xl-item', 'Contributed', BRW.dol(2290));
-      h += xr('xl-item', 'Generated (170 + 2,640)', BRW.dol(2810));
+      h += xr('xl-item', 'Contributed', BRW.dol(2460));
+      h += xr('xl-item', 'Generated', BRW.dol(2640));
       h += xr('xl-item', 'Withdrawn', paren(600));
       h += xr('xl-total', '<strong>Total Member&rsquo;s Capital</strong>', BRW.dol(4500));
       return h;
@@ -376,8 +358,8 @@ var BR_WB = (function () {
     ['item',  'Customer Deposit', 220, 0],
     ['total', '<strong>Total Liabilities</strong>', 2250, 0],
     ['cat',   '<strong>Member&rsquo;s Capital</strong>', null, null],
-    ['item',  'Contributed', 2290, 2290],
-    ['item',  'Generated', 170, 2810],
+    ['item',  'Contributed', 2460, 2460],
+    ['item',  'Generated', 0, 2640],
     ['item',  'Withdrawn', null, -600],
     ['total', '<strong>Total Member&rsquo;s Capital</strong>', 2460, 4500]
   ];

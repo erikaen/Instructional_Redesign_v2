@@ -148,7 +148,7 @@ function showWorkbookTab33(name){
 
 function renderTie(){
   document.getElementById('tie').innerHTML=completed
-    ?'<div class="narrative-block"><p><strong>The ruled lines agree.</strong> On the Reasons tab, GENERATED reads <strong>$170</strong> on June 1 and <strong>$2,810</strong> on August 31. The <strong>$2,640</strong> movement is exactly the number on the formatted sheet.</p></div>'
+    ?'<div class="narrative-block"><p><strong>The ruled amounts agree.</strong> The dated amounts in GENERATED are <strong>$0</strong> on June 1 and <strong>$2,640</strong> on August 31. That <strong>$2,640</strong> increase equals net income on the formatted sheet.</p></div>'
     :'';
 }
 
@@ -161,7 +161,7 @@ function renderTalk(){
   } else {
     anna=annaBox('I promised the income statement would show the three depreciation entries together as one <strong>$230</strong> line. There it is. Now call the formatted sheet the <strong>Income Statement</strong>. Revenue is <strong>'+BRW.dol(REVENUE)+'</strong>, Total expenses are <strong>'+BRW.dol(EXPENSES)+'</strong>, and Net income is <strong>'+BRW.dol(NET_INCOME)+'</strong>.');
     controls=insightBox('The tab earns its name',
-      '<p><strong>Working Tab</strong> becomes <strong>Income Statement</strong>, and its tab changes from amber to purple. The sheet says <strong>'+BRW.dol(NET_INCOME)+'</strong>. The dated GENERATED lines say <strong>'+BRW.dol(2810)+' &minus; '+BRW.dol(170)+' = '+BRW.dol(NET_INCOME)+'</strong>. The formatted sheet summarizes the rows between those dates; it does not move them.</p>')
+      '<p>Rename <strong>Working Tab</strong> as <strong>Income Statement</strong>, and change its tab color from amber to purple. Enter net income of <strong>'+BRW.dol(NET_INCOME)+'</strong>. In GENERATED, the dated amounts are <strong>'+BRW.dol(0)+' + '+BRW.dol(NET_INCOME)+' = '+BRW.dol(2640)+'</strong>. Use the Income Statement to summarize the rows between those dates, and leave the source rows in place.</p>')
       +'<div class="next-phase-msg">Net income is <strong>'+BRW.dol(NET_INCOME)+'</strong>, while Cash reads <strong>$620</strong>, down from <strong>$1,300</strong> on June 1. Both numbers are true because they answer different questions.</div>'
       +'<button class="btn-continue btn-block" onclick="nav(\'34-1-what-cash-missed.html\')">One question remains &rarr;</button>';
   }

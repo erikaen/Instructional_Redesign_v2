@@ -158,34 +158,30 @@ drills into §9 and walks the workbook tabs to see exactly what gets contributed
 ### What this page is
 
 Phase 3 of 6 in 2.3. This page drills into §9 (Capital Contributions) by walking the
-student's existing workbook (Bike-Repair.xlsx tabs: Assets, Liabilities, Reasons, plus a
-new Balance Sheet tab) and then "contributing" the business into the LLC. The key
-discovery: not one number changes — only one word on the right side moves, as "the
-difference" becomes the name the Operating Agreement uses. This is the page where that
-name is earned/revealed. It sits between drafting (23-2) and the §17 wall (23-4).
+student's May workbook, explicitly identified as the member's personal record, and then
+opening the Company's books at zero on June 1. The noncash formation rows record the
+things put in and claims assumed, producing a $1,160 difference, all Contributed. The
+$1,300 cash seed is recorded later in 2.4 and completes total Contributed of $2,460. It
+sits between drafting (23-2) and the §17 wall (23-4).
 
 ### The page, step by step
 
-1. A narrative block points to §9: it says you put everything into the Company at its
-   existing book amounts; Schedule A is still blank, but the books already hold every
-   line it will carry. A callout quotes §9.
-2. The workbook mounts with tabs Assets, Liabilities, Reasons, Balance Sheet. Anna's
-   dialog: start where the facts live — the books since Module 1; flip the tabs;
-   everything §9 talks about is already recorded here; the new Balance Sheet tab lays
-   those records out as a single statement.
+1. A narrative block points to §9. It identifies the displayed May workbook as the
+   member's personal record and explains that contributing does not relabel that history
+   as the Company's. Schedule A is still blank. A callout quotes §9.
+2. The Company comes into existence with books opening at zero on June 1. Its formation
+   rows record the things put in and claims assumed. The member's ten May work rows stay
+   only in the personal workbook and are not copied into the Company's Reasons list.
 3. Step 0 → Continue "Open the Balance Sheet tab →" switches to the Balance Sheet tab
    and advances to step 1.
-4. Step 1: Anna reads the balance sheet slowly — Assets $3,410 (Cash still $0),
-   Liabilities $2,250 (the card and Smith's frame), and the difference $1,160 in its two
-   piles: Contributed $990 and Generated $170 — the same piles the Reasons tab has kept
-   all along. This is the business §9 moves in, at these amounts, no revaluation. Continue
-   "Contribute the business to the LLC →" runs doContribute (step 2).
-5. Step 2: an insight "Not one number changed" — the same balance sheet is now the
-   Company's, legally contributed in. Only one word on the right moved; Contributed
-   ($990) and Generated ($170) carried over untouched, same $1,160, history intact.
-   Schedule A is still empty — you'll enter these lines yourself once the cash is
-   deposited and the card is moved (2.4). Continue "Now drill into §17 — the wall →"
-   navigates to 23-4.
+4. Step 1: Anna reads the noncash formation rows — Assets $3,410 (Cash still $0) and
+   claims assumed of $2,250. Their $1,160 difference is all Contributed. Generated is $0.
+   Continue "Contribute the business to the LLC →" runs doContribute (step 2).
+5. Step 2 reinforces the boundary: the member's $1,160 May difference remains
+   personal-records history. The Company's books began at zero, and the noncash formation
+   rows produce Contributed $1,160 at this stage. Schedule A remains empty until the
+   $1,300 cash seed completes the June 1 formation total of $2,460 in 2.4. Continue "Now
+   drill into §17 — the wall →" navigates to 23-4.
 
 ### If the student is lost
 
@@ -193,33 +189,27 @@ name is earned/revealed. It sits between drafting (23-2) and the §17 wall (23-4
   Sheet tab on the end. Nudge: flip the tabs Anna named — Assets, Liabilities, Reasons.
   Stronger hint: the Balance Sheet tab lays those same records out as one statement; open
   it with the Continue button.
-- "The right side says 'the difference' — is that a name?" — Orient: before the
-  contribution it is literally labeled "the difference". Nudge: watch what happens to that
-  label after you contribute. Stronger hint: after contributing, only one word on the
-  right moves — "the difference" becomes the name the Operating Agreement uses (the page
-  shows it); Contributed and Generated stay exactly as they were. Do not hand the student
-  the name before they click "Contribute the business to the LLC →".
+- "What happens to the May piles?" — Orient: the displayed May workbook is the member's
+  personal record. Nudge: formation starts a separate Company record at zero. Stronger
+  hint: no May work row enters the Company's Reasons list; the $1,160 noncash formation
+  difference is all Contributed.
 - "Why is Cash $0?" — Orient: this is the pre-contribution snapshot. Nudge: the cash
   hasn't been deposited into the Company's account yet. Stronger hint: that deposit is the
-  one move in 2.4 that actually changes the books; here nothing changes — the business is
-  moved in at book carryover.
+  next formation row in 2.4; it increases Cash and Contributed by $1,300, completing
+  Contributed of $2,460.
 - "Schedule A is still empty?" — Orient: yes, on purpose. Nudge: you complete the schedule
   from the Company's books after the cash is in and the card is moved. Stronger hint: that
   happens in 2.4 (24-5).
 
 ### TUTOR-ONLY answer key
 
-TUTOR-ONLY — the page is a walk-through, not a typed answer. Step 0: open the Balance
-Sheet tab. Step 1: read the figures — Assets $3,410; Liabilities $2,250; the difference
-$1,160 = Contributed $990 + Generated $170. Step 2: click "Contribute the business to the
-LLC →"; the balance sheet's title becomes the LLC's name, the right-side label changes
-from "Liabilities & the difference" to "Liabilities & Members' Capital", and "the
-difference" becomes "Members' Capital" — the name the Operating Agreement uses (this is
-the page's reveal of that name). No dollar figure changes; Cash stays $0 here. The two
-piles (Contributed $990, Generated $170) carry over untouched. Schedule A remains blank
-until 24-5. The page has an insight reveal (not a three-strike typed reveal): "Not one
-number changed… 'the difference' became Members' Capital." The tutor confirms this only
-after the student has clicked the contribute button and attempted to say what moved.
+TUTOR-ONLY — the page is a walk-through, not a typed answer. The displayed May workbook
+is the member's personal record; contributing does not relabel it as the Company's.
+The Company's books open at zero on June 1. At this stage, formation rows record Assets
+$3,410 and claims assumed of $2,250, producing a $1,160 difference, all Contributed;
+Generated is $0. The $1,300 cash seed is deferred to 2.4, where it completes Contributed
+of $2,460. Schedule A remains blank until 24-5. Mention the May $170 only as part of the
+member's personal-records history.
 
 ### Anchor
 
@@ -393,9 +383,10 @@ graded task.
 1. A trophy badge and title "Accounting-entity ≠ legal-entity".
 2. A "What You Worked Out" card with five checked bullets recapping 2.3 (you wrote your
    own Operating Agreement — City Cycle's was only an example; it stays a draft until
-   Schedule A is complete; the business was contributed at book carryover — not one
-   number changed, "the difference" became Members' Capital, Contributed $990 + Generated
-   $170 = $1,160; limited liability put a wall between Company debts and personal life;
+   Schedule A is complete; the member's $1,160 May difference remains personal-records
+   history, while the Company's books begin at zero and its completed June 1 formation
+   rows produce Member's Capital of $2,460, all Contributed; limited liability put a wall
+   between Company debts and personal life;
    the keystone that accounting entity ≠ legal entity).
 3. An insight "The deeper point": the same machine runs all the way up — a giant company
    draws one accounting boundary around dozens of separate legal companies; the accounting
@@ -417,9 +408,10 @@ graded task.
 
 ### TUTOR-ONLY answer key
 
-TUTOR-ONLY — no graded answer; this is a recap screen. Key figures to confirm if a
-student asks: Members' Capital on the contributed balance sheet = $1,160 (Contributed $990
-+ Generated $170). The keystone statement is "Accounting-entity ≠ legal-entity." Next
+TUTOR-ONLY — no graded answer; this is a recap screen. The member's $1,160 May difference
+remains personal-records history. The Company's books begin at zero; its completed June 1
+formation rows produce Member's Capital of $2,460, all Contributed. The keystone statement
+is "Accounting-entity ≠ legal-entity." Next
 activity is 2.4 (the entity's own EIN, account, and card; complete Schedule A; sign). No
 three-strike reveal here.
 
@@ -572,8 +564,9 @@ Phase 3 of 6 in 2.4. With the EIN, the student gives the business its own accoun
 pulls it out of personal ones, in three moves: open the LLC's bank account; move $1,300
 cash in; move the business card to the LLC. The page's lesson: two of those moves change
 nothing on the books (the EIN and the card sliding to the LLC's name — $2,030 stays
-$2,030); the one real change is the $1,300 cash contribution (Cash 0 → 1,300; members'
-capital 990 → 2,290). It sits between filing the SS-4 (24-2) and the statements (24-4).
+$2,030); the $1,300 cash seed increases Cash from $0 to $1,300 and increases Contributed
+by $1,300 within the June 1 formation total of $2,460. It sits between filing the SS-4
+(24-2) and the statements (24-4).
 
 ### The page, step by step
 
@@ -592,8 +585,9 @@ capital 990 → 2,290). It sits between filing the SS-4 (24-2) and the statement
    card; personal checking is personal again; the by-hand sorting since 1.1 is now
    institutional (banks, the IRS, customers all deal with the LLC). A callout: two moves
    changed nothing on the books (the EIN and the card to the LLC's name — $2,030 stays
-   $2,030); the one real change was the $1,300 — a capital contribution: Cash 0 → 1,300;
-   members' capital 990 → 2,290. Next: check the paper trail, then complete Schedule A
+   $2,030); the $1,300 cash seed increases Cash from $0 to $1,300 and increases
+   Contributed by $1,300 within the June 1 formation total of $2,460. Next: check the
+   paper trail, then complete Schedule A
    from these books and sign.
 7. An outlined "Source documents" button (same viewer as 24-2). Continue "See the
    statements →" navigates to 24-4.
@@ -609,21 +603,22 @@ capital 990 → 2,290). It sits between filing the SS-4 (24-2) and the statement
   Nudge: the card slid to the LLC's name; the number didn't move. Stronger hint: moving
   the card changes whose name it's in, not the balance — $2,030 stays $2,030; only the
   $1,300 cash changed the books.
-- "Why did members' capital go 990 → 2,290?" — Orient: the $1,300 you moved in is a capital
-  contribution. Nudge: it raised the LLC's cash and its members' capital by $1,300.
-  Stronger hint: Cash 0 → 1,300 and members' capital +1,300 (990 → 2,290) — that's the one
-  move here that touched the books.
+- "What did the $1,300 cash seed do?" — Orient: it is one June 1 formation row. Nudge:
+  it raised the Company's Cash and Contributed by $1,300. Stronger hint: the $1,300 cash
+  seed increases Cash from $0 to $1,300 and increases Contributed by $1,300 within the
+  June 1 formation total of $2,460.
 
 ### TUTOR-ONLY answer key
 
 TUTOR-ONLY — three sequential Continue presses (no typed input). Move 1: open LLC bank
 account (LLC bank $0; personal checking still $4,074). Move 2: move $1,300 cash in (LLC
-bank $1,300; personal checking $2,774; this is the capital contribution — Cash 0 → 1,300,
-members' capital 990 → 2,290). Move 3: move business card to LLC (LLC card $2,030; the
+bank $1,300; personal checking $2,774); the $1,300 cash seed increases Cash from $0 to
+$1,300 and increases Contributed by $1,300 within the June 1 formation total of $2,460.
+Move 3: move business card to LLC (LLC card $2,030; the
 $2,030 balance is unchanged — it was assumed at formation). Final insight: co-mingling
 ended; two moves (EIN, card) changed nothing on the books; the $1,300 is the one real
 change. Personal checking ends at $2,774; personal card ends at $230 (revealed on the
-statements page). The tutor confirms the members'-capital figure (2,290) only after the
+statements page). The tutor confirms the formation total of Contributed $2,460 only after the
 student has made the three moves. No three-strike typed reveal.
 
 ### Anchor
@@ -697,8 +692,9 @@ TUTOR-ONLY — reading page, no typed answer. Statement figures: LLC checking en
 personal card •••• 3902); personal checking ends $2,774.00 ($1,300 moved out); personal
 card ends $230.00 ($2,030 moved out; $230 personal portion stayed). Tie-out: checking
 $1,300 + $2,774 = $4,074; card $2,030 + $230 = $2,260. The only new item on the LLC's
-books is the $1,300 capital contribution (Cash 0 → 1,300; members' capital +1,300, i.e.
-990 → 2,290). Co-mingling is ended. The tutor confirms the tie-out only after the student
+books is the $1,300 cash seed: it increases Cash from $0 to $1,300 and increases
+Contributed by $1,300 within the June 1 formation total of $2,460. Co-mingling is ended.
+The tutor confirms the tie-out only after the student
 has attempted to add the halves. No three-strike typed reveal.
 
 ### Anchor
@@ -719,50 +715,54 @@ A from the Company's books, line by line, and signs.
 Phase 5 of 6 in 2.4 — the capstone task of Module 2. The contributing is done (cash in
 the Company's account, card in the Company's name), so the student completes the draft
 Schedule A left blank in 2.3, line by line, by clicking each line on the Balance Sheet
-tab to enter it on the schedule. When all ten lines are entered, the schedule shows
-Members' Capital $2,460 (Contributed $2,290 + Generated $170), §9's net book value
-becomes $2,460, and the student signs both signature lines (for the Company and as an
-individual) to execute the agreement. It sits between the statements (24-4) and the
+tab to enter it on the schedule. The learner places the asset lines and claims-assumed
+lines, then enters exactly one difference line: Contributed $2,460. Do not include a
+Generated section on Schedule A. The opening balance sheet shows Member's Capital $2,460
+— Contributed $2,460; Generated $0. §9's net book value becomes $2,460, and the student
+signs both signature lines (for the Company and as an individual) to execute the
+agreement. It sits between the statements (24-4) and the
 Module 2 completion screen (24-6).
 
 ### The page, step by step
 
-1. A narrative block: the contributing is done; time to complete the draft from the books,
-   line by line — click each line on the Balance Sheet tab to enter it on Schedule A.
+1. A narrative block: the formation rows are complete; place the asset lines and
+   claims-assumed lines on Schedule A, then enter exactly one difference line:
+   Contributed $2,460.
 2. The workbook mounts (Bike-Repair.xlsx) with tabs Assets, Liabilities, Reasons, Balance
    Sheet; the Balance Sheet tab is shown. It is dated June 1, 2026, and each line is
    clickable. Lines: Assets — Cash 1,300; Right of Use 650; Supplies 200; Equipment 1,200;
    Computer equipment 610; Fixtures 750 (Total assets 4,710); Liabilities — Credit card (in
    the Company's name) 2,030; Customer deposit — Smith 220 (Total liabilities 2,250);
-   Members' Capital (Assets − Liabilities) 2,460 — Contributed 2,290; Generated 170.
+   Member's Capital (Assets − Liabilities) 2,460 — Contributed 2,460; Generated 0.
 3. Clicking a balance-sheet line marks it "entered" and adds it to the Schedule A card
-   below, in the correct section (assets, liabilities assumed, or members' capital). The
-   schedule shows an "IN PROGRESS — N of 10 lines entered" badge until complete.
-4. When all ten lines are entered: the schedule flips to "COMPLETE — June 1, 2026"; totals
-   fill in (Total assets 4,710; Total liabilities assumed (2,250); Members' Capital
+   below, in the correct section (assets or claims assumed). The learner then enters one
+   difference line, Contributed $2,460. The schedule shows an "IN PROGRESS" badge until
+   complete.
+4. When the asset lines, claims-assumed lines, and difference line are entered: the
+   schedule flips to "COMPLETE — June 1, 2026"; totals fill in (Total assets 4,710;
+   Total liabilities assumed (2,250); Member's Capital
    (A − L) 2,460); §9's text updates to "Net book value contributed: $2,460"; a signature
    page appears with two "Sign here" buttons — "For the Company" and "As an individual".
-5. A message prompts: Schedule A is complete and every line came off the Company's books,
-   so now — and only now — execute the agreement; sign both lines.
+5. A message prompts: Schedule A is complete from the June 1 formation rows, so now —
+   and only now — execute the agreement; sign both lines.
 6. Clicking each "Sign here" button signs that line (pen sound); signing both plays a
    success sound. An insight "Two signatures, one hand": the student's name signed twice
    — once for the Company (as its manager), once as themselves (the Sole Member); the two
    roles from 2.1 are now legal and literal. A second insight "The schedule equals the
-   sheet": the student built the schedule line for line from the Company's books, so
-   Schedule A and the opening balance sheet agree exactly — drafted in 2.3, completed and
+   sheet": the asset lines, claims assumed, and one Contributed difference line agree
+   with the opening balance sheet — drafted in 2.3, completed and
    executed today.
 7. Continue "Finish Module 2 →" navigates to 24-6 (appears only after both signatures).
 
 ### If the student is lost
 
-- "What do I click?" — Orient: the Balance Sheet tab has clickable lines. Nudge: click
-  each line to send it to Schedule A below. Stronger hint: click all ten lines — Cash,
-  Right of Use, Supplies, Equipment, Computer equipment, Fixtures, Credit card, Customer
-  deposit — Smith, Contributed, Generated — until the badge says COMPLETE.
-- "Where do I find Contributed and Generated?" — Orient: they're under Members' Capital on
-  the Balance Sheet tab. Nudge: the bottom group of clickable lines. Stronger hint:
-  Contributed ($2,290) and Generated ($170) are the last two lines on the Balance Sheet
-  tab — click them too.
+- "What do I click?" — Orient: the Balance Sheet tab has clickable asset and claim lines.
+  Nudge: place those lines on Schedule A below, then enter the difference. Stronger hint:
+  enter exactly one difference line: Contributed $2,460.
+- "Where do I find Contributed and Generated?" — Orient: Schedule A uses one difference
+  line. Nudge: do not add a Generated section. Stronger hint: Do not include a Generated
+  section on Schedule A. Enter the difference on one line, Contributed $2,460. Mention
+  the May $170 only as part of the member's personal-records history.
 - "Nothing is happening after I entered all the lines." — Orient: check the schedule
   badge. Nudge: when it says COMPLETE, a signature page appears. Stronger hint: scroll
   down — two "Sign here" buttons appear; sign both to execute the agreement.
@@ -773,13 +773,15 @@ Module 2 completion screen (24-6).
 
 ### TUTOR-ONLY answer key
 
-TUTOR-ONLY — click each of the ten Balance Sheet lines to enter them on Schedule A, then
-sign both lines. Expected schedule entries (in order they appear on the balance sheet):
+TUTOR-ONLY — place the asset lines and claims-assumed lines on Schedule A, enter one
+difference line, and then sign both lines. Expected schedule entries:
 Assets — Cash 1,300; Right of Use 650; Supplies 200; Equipment 1,200; Computer equipment
 610; Fixtures 750 (Total assets 4,710). Liabilities assumed — Credit-card balance
 (assumed) (2,030); Customer deposit — Smith (assumed) (220) (Total liabilities assumed
-(2,250)). Members' Capital — Contributed 2,290; Generated 170 (Members' Capital (A − L)
-2,460). Once complete, §9 reads "Net book value contributed: $2,460." Both signature
+(2,250)). Enter the difference on one line, Contributed $2,460. Do not include a Generated
+section on Schedule A. Mention the May $170 only as part of the member's personal-records
+history. The opening balance sheet shows Member's Capital $2,460 — Contributed $2,460;
+Generated $0. Once complete, §9 reads "Net book value contributed: $2,460." Both signature
 lines: "For the Company" ([name], Managing Member) and "As an individual" ([name], as an
 individual), both dated June 1, 2026 — sign both. The page has no wrong-answer strikes
 (clicking is always accepted); the "reveal" is the schedule flipping to COMPLETE and the
@@ -815,13 +817,16 @@ task.
 2. A "What You Built Across Module 2" card with five checked bullets: felt the gap (books
    recognized the role but the bank/card company/Smith/the law saw one undivided you,
    2.1); formalized the role with a CT Certificate of Organization (2.2); drafted the
-   Operating Agreement, contributed the business at book amounts, named the keystone
-   (accounting-entity ≠ legal-entity) and left Schedule A blank until the contributing was
-   done (2.3); gave the entity its own EIN, account, and card — ending co-mingling; the
+   Operating Agreement, kept the May workbook as the member's personal record, opened
+   the Company's books at zero, named the keystone (accounting-entity ≠ legal-entity),
+   and left Schedule A blank until the formation rows were complete (2.3); gave the entity
+   its own EIN, account, and card — ending co-mingling; the
    entity is a counterparty in its own right (2.4); completed Schedule A from the books and
-   signed — once for the Company, once as yourself — and the only move that touched the
-   books all module was the $1,300 contribution (Cash 0 → 1,300; members' capital 990 →
-   2,290).
+   signed — once for the Company, once as yourself. The Company's books opened at zero
+   on June 1. At formation, the member put in recorded things and the $1,300 cash seed,
+   and the Company assumed the recorded claims. The difference was Member's Capital
+   $2,460, all Contributed. On Schedule A, you entered one difference line, Contributed
+   $2,460.
 3. An insight "The one idea to keep": the accounting boundary and the legal boundary are
    different lines drawn for different reasons; you recognized the role first (Module 1, in
    the books) then formalized it (this module, at the state); the same machine runs all the
@@ -839,20 +844,21 @@ task.
 - "Is there anything to do here?" — Orient: this is a recap; read the bullets and the one
   idea. Nudge: no task — just review. Stronger hint: when ready, move on to Module 3 via
   the course navigation.
-- "What was the only book change in Module 2?" — Orient: the recap bullet states it.
-  Nudge: it was a cash deposit. Stronger hint: the $1,300 capital contribution — Cash
-  0 → 1,300; members' capital 990 → 2,290; everything else (EIN, card move, signing) didn't
-  touch the books.
+- "What did the $1,300 cash seed do?" — Orient: the recap bullet states it. Nudge: it was
+  one formation row. Stronger hint: the $1,300 cash seed increases Cash from $0 to $1,300
+  and increases Contributed by $1,300 within the June 1 formation total of $2,460.
 - "What's next?" — Orient: the Coming Next card describes Module 3. Nudge: a real season
   and two balance sheets. Stronger hint: Module 3 asks how the shop did between two
   snapshots — and that turns out to need statements of its own.
 
 ### TUTOR-ONLY answer key
 
-TUTOR-ONLY — no graded answer; recap screen. Key figures to confirm if asked: the only
-book change in all of Module 2 was the $1,300 cash contribution (Cash 0 → 1,300; members'
-capital 990 → 2,290); final Members' Capital on the completed Schedule A = $2,460
-(Contributed $2,290 + Generated $170); the keystone is "Accounting-entity ≠
+TUTOR-ONLY — no graded answer; recap screen. The Company's books opened at zero on June
+1. At formation, the member put in recorded things and the $1,300 cash seed, and the
+Company assumed the recorded claims. The difference was Member's Capital $2,460, all
+Contributed. On Schedule A, you entered one difference line, Contributed $2,460. Do not
+include a Generated section on Schedule A. Mention the May $170 only as part of the
+member's personal-records history. The keystone is "Accounting-entity ≠
 legal-entity." EIN is 88-3729104. Next is Module 3 (the story between the snapshots — do
 not preview its content beyond the Coming Next card). No three-strike reveal here.
 

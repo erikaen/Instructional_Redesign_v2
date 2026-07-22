@@ -1,6 +1,6 @@
 # Bike-Repair.xlsx — Workbook Design (locked)
 
-**Status:** Locked 2026-06-29. **§5 redesigned 2026-07-02** (one continuous Reasons list, no carried-in section; piles CONTRIBUTED / GENERATED / WITHDRAWN, born when first used). **Re-based 2026-07-02** to the revised pre-LLC setup: no May card paydowns, personal cover **$160**, LLC deposit **$1,300**, card carried **$2,030** (opening $4,710 / $2,250 / $2,460). **§5 and §6.7 patched 2026-07-01** to the built novice state
+**Status:** Locked 2026-06-29. **§5 redesigned 2026-07-02** (begin the Company's Reasons list on June 1 with formation rows; keep the member's May rows only in Module 1's personal workbook story). **Re-based 2026-07-02** to the revised pre-LLC setup: no May card paydowns, personal cover **$160**, LLC deposit **$1,300**, card carried **$2,030** (opening $4,710 / $2,250 / $2,460). **§5 and §6.7 patched 2026-07-01** to the built novice state
 (GENERATED +$2,570 itemized job-by-job, residual $4,430, recognition gaps visible). The reference
 design for the in-tutorial **Bike-Repair.xlsx** facsimile, as built and approved in
 `31-2-work-the-season.html`. Every Module 3 page that shows the workbook (`31-3` onward) inherits
@@ -99,38 +99,34 @@ So **A − L = $4,710 − $2,250 = $2,460** opening member's capital.
 
 ---
 
-## 5. Reasons tab — one continuous list (never settled, never reset)
+## 5. Reasons tab — the Company's list begins at formation
 
-**(Redesigned 2026-07-02, Rick's call.)** The Reasons tab is **one continuous list** from the
-student's first May jot to today (Module 2 had no workbook on screen). There is **no "carried in"
-section**: nothing was settled or reset at formation. The piles' running subtotals ARE the equity
-story — CONTRIBUTED $2,290 / GENERATED $170 at June 1 tie line-for-line to the opening balance
-sheet — and the **first-ever close is Tutorial 3.5's discovery**, not a fait accompli performed
-off-screen by the designer.
+**(Redesigned 2026-07-02, Rick's call.)** Start the Company workbook at zero on June 1. Populate
+its Reasons list with formation rows for recorded things and cash put in and claims assumed, all
+under Contributed, net $2,460. Do not copy the ten May work rows. Show opening piles
+**Contributed $2,460 / Generated $0 / Withdrawn $0**.
 
-**The standing pile vocabulary (every Reasons tab, M1 → M3), each pile *born when first used*:**
+**The standing pile vocabulary distinguishes two records:** In Module 1's personal records,
+Generated is born with the May work. In the Company's records, Generated is born with Dana's
+$120 repair after formation.
 
 | Pile | Blurb | Matures into | Born |
 |---|---|---|---|
-| **CONTRIBUTED** | what you put in | Contributed Capital (named 1.5) | 1.4 |
-| **GENERATED** | what the work produced | keeps its name; part of **Member's Capital** (the legal *total*, picked up at the M2 OA). GAAP synonym *Retained Earnings* = M4 literacy aside only | 1.4 |
+| **CONTRIBUTED** | what you put in | Contributed (part of **Member's Capital**) | Company formation |
+| **GENERATED** | what the work produced | keeps its name; part of **Member's Capital** | Dana's $120 repair |
 | **WITHDRAWN** | what you took for yourself | Draws / distributions | M3, at the season's draw |
 
 ### The piles at Aug 31 (each expandable to its rows)
 
 | Pile | Subtotal | Rows |
 |---|--:|---|
-| **CONTRIBUTED** | **+$2,290** | cash covered 160 (May) · laptop 610 (May) · gear 220 (May) · LLC deposit 1,300 (June 1) — nothing new in the season |
-| **GENERATED** | **+$2,740** | May's rows first (+$170: seven repairs +1,120 · parts used −300 · rent used −650), then the season's mess jumbled **job by job**: `Repair collected — {customer}` (+charge) · `Frame delivered — J. Smith` (+220) · `Parts used — {customer}` (−partsCost) · `Rent used — {month}` (−650 ×3). Season nets: Sales **$5,720** − parts **$1,200** − rent **$1,950** = **+$2,570**. **Not** sorted into revenue-then-expense. |
+| **CONTRIBUTED** | **+$2,460** | June 1 formation rows only: recorded things and cash put in and claims assumed |
+| **GENERATED** | **+$2,570** | Company pre-adjustment season rows only, beginning with Dana's $120 repair: `Repair collected — {customer}` (+charge) · `Frame delivered — J. Smith` (+220) · `Parts used — {customer}` (−partsCost) · `Rent used — {month}` (−650 ×3). Season nets: Sales **$5,720** − parts **$1,200** − rent **$1,950** = **+$2,570**. **Not** sorted into revenue-then-expense. |
 | **WITHDRAWN** | **−$600** | owner's draw −600 |
 
-The GENERATED pile spanning May→August is **the point**: ask it "how did the *season* go?" and it
-cannot answer — the student must draw the period line by hand (32-2), feel the tedium, and come to
-*want* tallies that total a period and then reset. The lifetime pile is the permanent account
-(the permanent Generated pile); the period tally is the temporary account — the student holds both
-in hand before either is named.
+The Company's Generated pile spans only its own season. Its pre-adjustment balance is $2,570.
 
-**Residual close:** CONTRIBUTED $2,290 + GENERATED $2,740 − WITHDRAWN $600 = **$4,430** =
+**Pre-adjustment Member's Capital:** $2,460 + $2,570 − $600 = **$4,430** =
 Assets $4,430 − Liabilities $0. (The card is paid off to $0; Smith's Customer Deposit earns out to $0.)
 
 **Recognition gaps left visible in the raw data (deliberate — they seed 3.2/3.3):**
@@ -177,9 +173,9 @@ cash, collect a billed repair, pay the rent, buy a new tool, pay off the card.
    *(Smith's $220 advance **does** earn out in `31-2`: his custom frame is finished and delivered in
    the season, so Customer Deposit closes to $0 and "Frame delivered — J. Smith +$220" sits in the
    GENERATED pile. It is recorded in both the novice and the true books, so it is **not** part of the
-   $70 gap. The season's visible net-movers move capital by **+$1,970** — the season's GENERATED rows
-   +$2,570 less the −$600 WITHDRAWN draw — carrying the June-1 pile state (2,290 + 170) to the novice
-   close $4,430.)*
+   $70 gap. The season's visible net movers add Generated $2,570 and Withdrawn $600 to the June 1
+   Company state (Contributed $2,460; Generated $0), producing pre-adjustment Member's Capital of
+   $4,430.)*
 
 ---
 
@@ -273,8 +269,8 @@ feature is earned it stays (the Reasons tab is **continuous** after its beat).
 | **1.3 Anna and the Bank Statement** | The bank statement brings **cash** into view as its own list — **not yet folded into Assets.** |
 | **1.4 Keeping the Reasons** *(CMU team title: "Why Keep the Reasons")* | ★★ **Two beats, both here.** **(a) Cash-fold** — Cash is folded into the Assets list, decided off the insurable-property framing ("is cash a right to future benefits?" — it's not insurable, but it's still the work's). **(b) Reasons tab is *born*** — log net-movers, cross the pairs, sort into *Contributed* / *Generated* (plain). |
 | **1.5 Naming What You Built** | The piles' worksheet names settle — *Contributed*, *Generated*. The **total (A − L) stays unnamed in M1** (named **Member's Capital** only at the M2 OA). No GAAP names land here; *Contributed Capital* / *Retained Earnings* are wider-world synonyms held for an M4 literacy aside. *(Beat's purpose likely needs revisiting — its old job of landing GAAP names is gone.)* |
-| **Module 2 (no workbook on screen)** | Off-screen events still move it: **+$1,300 contributed** (Contributed Capital 990 → **2,290**), LLC formed, bank account opened. M3 must open consistent with this. |
-| **Module 3 — 3.1 (`31-x`)** | **This locked snapshot.** Opening Assets $4,710 / Liabilities $2,250; the Reasons list runs unbroken from May — piles read **CONTRIBUTED $2,290 / GENERATED $170** at June 1; the season's rows accumulate below (un-closed). |
+| **Module 2 (no workbook on screen)** | The Company's books open at zero on June 1; formation rows put in recorded things and the $1,300 cash seed and record claims assumed, net Contributed $2,460. |
+| **Module 3 — 3.1 (`31-x`)** | **This locked snapshot.** Opens at Contributed $2,460 / Generated $0 / Withdrawn $0; Generated is born with Dana's $120 repair. |
 | **Module 3 — 3.2–3.5** | Discoveries build *on top of* this snapshot: income statement, depreciation, cash-flow, the articulated set. |
 
 > **★ Rebuild gap — Tutorial 1.4.** Both structural beats live here, but the **CMU team's 1.4
@@ -304,5 +300,5 @@ feature is earned it stays (the Reasons tab is **continuous** after its beat).
 - **Check workbook (Rick's):** `…/Bike-Repair-2-YALEiE-v12.2.xlsx` — must share account names (Right of Use, etc.).
 - **Reference implementation:** `31-2-work-the-season.html` (this repo).
 - **Module plot/pedagogy:** `Module-3-Design.md`.
-- **Carried-in M1 detail** (where the $2,290 / $170 come from): Module 1 Tutorial 4/5 reasons
-  (`14-*` / `15-2`).
+- **M1 detail remains a separate personal-records reference** and is not carried into the Company's
+  Reasons list. The Company's opening $2,460 comes from the June 1 formation rows and is all Contributed.

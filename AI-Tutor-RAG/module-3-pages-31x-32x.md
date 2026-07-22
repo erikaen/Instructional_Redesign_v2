@@ -32,7 +32,7 @@ This is the opening of Module 3 (Tutorial 1: Run the Season, Phase 1 of 5). It b
   - Nudge: "Solve the one check first; then the Continue button unlocks."
 
 ### TUTOR-ONLY answer key
-**TUTOR-ONLY.** The expected answer is **$2,460** (also accepted: 2460). Computation: Total assets $4,710 − Total liabilities $2,250 = $2,460. The third-strike reveal (and the correct-answer reveal) states: "Assets − Liabilities = Members' Capital. $4,710 − $2,250 = $2,460 — exactly the Total members' capital line. The difference you found in Module 1 now carries the LLC's name, and the balance sheet is built around the same identity — it holds by definition, every time." Note for the tutor: the page itself names the difference "Members' capital" here — guide the student toward "the difference" first; only confirm the name after the student has attempted the subtraction. Do not blurt the name before the reveal. The opening balance sheet lines: Assets — Cash $1,300, Right of Use $650, Parts $200, Tools & Repair Equipment $1,200, Fixtures $750, Laptop $610 (Total $4,710); Liabilities — Credit Card $2,030, Customer Deposit $220 (Total $2,250); Members' capital — Contributed $2,290, Generated $170 (Total $2,460).
+**TUTOR-ONLY.** The expected answer is **$2,460** (also accepted: 2460). Computation: Total assets $4,710 − Total liabilities $2,250 = $2,460. The third-strike reveal (and the correct-answer reveal) states: "Assets − Liabilities = Member's Capital. $4,710 − $2,250 = $2,460 — exactly the Total Member's Capital line." The opening balance sheet lines: Assets — Cash $1,300, Right of Use $650, Parts $200, Tools & Repair Equipment $1,200, Fixtures $750, Laptop $610 (Total $4,710); Liabilities — Credit Card $2,030, Customer Deposit $220 (Total $2,250); Member's Capital — Contributed $2,460, Generated $0, Withdrawn $0; Member's Capital $2,460.
 
 ### Anchor
 anchor: the frame from Module 1 should hold
@@ -52,7 +52,7 @@ Phase 2 of Tutorial 1. The student opens the same three-tab workbook (Assets, Li
    - Step 3 (Assets tab, Cash): $620, down $680 from the $1,300 opened in June. Open it. Insight: $5,500 came in from repairs, but rent, parts, a new tool, paying the card off in full, and the owner's draw took out more than repairs brought in — so cash is down despite the busiest summer.
    - Step 4 (Liabilities tab, Credit Card): reads $0, was $2,030. Open it. Insight: paid off in full during the season — that cash outflow is one of the outflows seen in the Cash line.
    - Step 5 (Liabilities tab, Customer Deposit): $0, Smith's $220 gone. Open it. Insight: you built and delivered Smith's frame this summer; you no longer owe the work, so it's no longer something you owe — doing the work turned it into earnings.
-   - Step 6 (switch to the Reasons tab): Anna says none of those tabs really say how the season went; switch to Reasons. Insight: one continuous list going back to the first May jot — CONTRIBUTED $2,290, WITHDRAWN −$600, GENERATED +$2,740 — but that pile has been growing since May, so it can't answer "how did the season go?" and Cash went down $680; a long list, all true, and still no answer.
+   - Step 6 (switch to the Reasons tab): Anna says none of those tabs really say how the season went; switch to Reasons. Begin the Company's Reasons list with June 1 formation rows totaling Contributed $2,460. Generated begins with Dana's $120 repair and totals $2,570 before the receivable and wear adjustments; Withdrawn is $600. Do not enter any May work row in the Company's list.
 3. After the sixth step, Anna summarizes: members' capital went from $2,460 in June to $4,430 now (Assets $4,430 − Liabilities $0); the story is scattered across tabs. She notes "how did the shop do?" splits into two questions ("did the work deliver more than it used up?" vs "is there more money in the bank?") that point in different directions.
 4. An insight box "A workbook, not yet a statement" explains the three tabs show where things stand and why each balance moved, but never line up what the work delivered against what it used up — that comparison is next.
 5. An evidence card offers four source buttons (job log, parts orders/supplier invoices, bank statements, credit card statements) so any number can be checked against its source.
@@ -77,7 +77,7 @@ Phase 2 of Tutorial 1. The student opens the same three-tab workbook (Assets, Li
   - Nudge: "The three tabs show where things stand and why each balance moved — but never in one place what the work delivered vs. used up. That comparison is what's next."
 
 ### TUTOR-ONLY answer key
-**TUTOR-ONLY.** The six required actions and what each reveals: (1) open Parts (Assets) → bought $1,200, used $1,200, back to $200; (2) open Right of Use (Assets) → only last month's $650 deposit remains; $1,950 rent used up, paid in cash; (3) open Cash (Assets) → $5,500 in from repairs, but outflows exceeded it, cash down $680; (4) open Credit Card (Liabilities) → paid off in full; (5) open Customer Deposit (Liabilities) → Smith's frame built and delivered, no longer owed; (6) switch to Reasons tab → continuous list, CONTRIBUTED $2,290, WITHDRAWN −$600, GENERATED +$2,740, can't answer "how did the season go?" directly. End state: Assets $4,430 − Liabilities $0 = Members' capital $4,430 (up from $2,460). The tutor confirms only after the student opens the named line/tab; the page auto-advances on the correct action. There is no third-strike reveal here — advancement is action-driven, not answer-driven.
+**TUTOR-ONLY.** The six required actions and what each reveals: (1) open Parts (Assets) → bought $1,200, used $1,200, back to $200; (2) open Right of Use (Assets) → only last month's $650 deposit remains; $1,950 rent used up, paid in cash; (3) open Cash (Assets) → $5,500 in from repairs, but outflows exceeded it, cash down $680; (4) open Credit Card (Liabilities) → paid off in full; (5) open Customer Deposit (Liabilities) → Smith's frame built and delivered, no longer owed; (6) switch to Reasons tab → begin the Company's Reasons list with June 1 formation rows totaling Contributed $2,460. Generated begins with Dana's $120 repair and totals $2,570 before the receivable and wear adjustments; Withdrawn is $600. Do not enter any May work row in the Company's list. End state: Assets $4,430 − Liabilities $0 = Member's Capital $4,430 (up from $2,460).
 
 ### Anchor
 anchor: to see what happened behind the number
@@ -87,32 +87,32 @@ Before: the student confirmed the accounting identity on the June-1 opening bala
 
 ## 32-1-the-income-statement.html — The Pile
 ### What this page is
-Phase 1 of Tutorial 2 (The Income Statement). The workbook opens directly on the Reasons tab, focused on the GENERATED pile — one continuous list growing since the first May jot. Anna points out that the pile can't answer "how did the season go?" because it never resets (May's rows and August's share one pile) and it's jumbled (deliveries and things-used-up are scattered job by job). The page sets up the next step: every season reason is really one of two kinds, which Anna will name before the student sorts.
+Phase 1 of Tutorial 2 (The Income Statement). The workbook opens directly on the Reasons tab, focused on the GENERATED pile. The Company's Generated pile begins with Dana's first repair and contains only this season's rows. It still needs sorting because deliveries and things used up are interleaved; the period problem is the jumbled Company-season list, not personal May history.
 
 ### The page, step by step
-1. Narrative: Bike-Repair.xlsx again, same three tabs; the one place the story actually lives is the Reasons tab, in the GENERATED pile — one continuous list, growing since the first jot back in May. Open it up; every repair, every bit of parts used, each month's rent is jotted job by job in the order things happened; May's spring work sits at the top, the whole summer piles in after it.
+1. Narrative: Bike-Repair.xlsx again, same three tabs. The Company's Generated pile begins with Dana's first repair and contains only this season's rows. Open it up; every repair, every bit of parts used, and each month's rent is jotted job by job in the order things happened.
 2. The workbook mounts and is opened on the Reasons tab. A "Open the job log — every repair this summer" button is available to cross-check.
-3. Anna's dialog: "Start with the pile's own line: GENERATED +$2,740. Is that how the shop did this summer? It can't be — the pile has been growing since May; last spring's repairs sit in it right next to August's. You'd have to fish the season out row by row... Ask it 'what did the work deliver this summer, and what got used up delivering?' — you couldn't point to a line. There isn't one."
-4. An insight box "A true list, but not yet an answer" explains the two troubles at once: the pile never resets (May's and August's reasons share one pile, so no line belongs to "this season") and it's jumbled (what the work delivered and what got used up are scattered job by job instead of totaled in one place).
-5. A message notes that every season reason is really one of just two kinds; next the student will set May's rows aside (the question is about the summer) and Anna will give the two kinds their real names — Revenue and Expenses — before the student sorts the season's rows by them on a working copy.
+3. Anna's dialog: "GENERATED is $2,570 before the receivable and wear adjustments, entirely from Company-season rows. It begins with Dana's $120 repair; no personal May amount is included."
+4. An insight box "A true list, but not yet an answer" explains that the Company-season list is jumbled: what the work delivered and what got used up are scattered job by job instead of totaled in one place.
+5. A message notes that every season reason is really one of just two kinds; Anna will give the two kinds their real names — Revenue and Expenses — before the student sorts the season's rows on a working copy.
 6. Continue button "Name the kinds →" advances to 32-2.
 
 ### If the student is lost
 - "What am I looking at?"
   - Orient: "Which tab is the workbook opened on? Read the narrative — it tells you the one place the story lives."
-  - Nudge: "It's the Reasons tab, in the GENERATED pile. That's the continuous list of why each balance moved."
-- "Why can't GENERATED +$2,740 be the answer?"
-  - Orient: "When did that pile start growing? Is everything in it from this summer?"
-  - Nudge: "It's been growing since May — last spring's repairs sit in it right next to August's, so no line in it belongs to 'this season.'"
-- "What are the 'two troubles'?"
-  - Orient: "Read the insight box. It names two problems with using the pile as-is."
-  - Nudge: "One: it never resets — May and August share one pile. Two: it's jumbled — deliveries and things-used-up are mixed together instead of totaled."
+  - Nudge: "It's the Reasons tab, in the GENERATED pile. It contains only Company-season rows."
+- "Why does GENERATED still need sorting?"
+  - Orient: "How are deliveries and things used up arranged in the pile?"
+  - Nudge: "They are interleaved job by job, so the Company-season list needs sorting."
+- "What is the trouble?"
+  - Orient: "Read the insight box. It names the problem with using the pile as-is."
+  - Nudge: "The Company-season rows are jumbled — deliveries and things used up are mixed together instead of totaled."
 - "What do I do next?"
   - Orient: "Is there a Continue button? It tells you what's coming."
-  - Nudge: "Next you'll set May's rows aside and Anna will name the two kinds before you sort the season's rows."
+  - Nudge: "Next Anna will name the two kinds before you sort the Company-season rows."
 
 ### TUTOR-ONLY answer key
-**TUTOR-ONLY.** There is no student answer to grade on this page — it is a reveal/setting page. Key facts the tutor should know (and only confirm after the student has engaged): the GENERATED pile totals +$2,740 ($170 produced through May + the season's rows); the two troubles are (1) it never resets and (2) it's jumbled; the two kinds of season reason are Revenue (the value of work delivered in the period) and Expenses (what got used up delivering it) — Anna names these on the next page, so the tutor should not state the names before 32-2 does. The income statement will be a sort-view of the season's slice of the GENERATED pile, not a move. Continue unlocks immediately (no task to complete beyond reading).
+**TUTOR-ONLY.** There is no student answer to grade on this page — it is a reveal/setting page. GENERATED is $2,570 before the receivable and wear adjustments, entirely from Company-season rows. It begins with Dana's $120 repair; no personal May amount is included. The Company-season list is jumbled. The two kinds of season reason are Revenue (the value of work delivered in the period) and Expenses (what got used up delivering it) — Anna names these on the next page, so the tutor should not state the names before 32-2 does. The income statement will be a sort-view of the Company's season rows, not a move.
 
 ### Anchor
 anchor: jotted job by job, in the order things happened
@@ -125,13 +125,13 @@ Before: the student walked the Aug-31 workbook and saw the three tabs can't line
 Phase 2 of Tutorial 2. Anna names the two kinds up front — Revenue (the value of the work delivered in the period, whichever way the cash runs) and Expenses (what got used up delivering it) — then the student copies the season's rows to a working sheet and sorts them into those two categories. After a few correct placements a "Sort the rest" control finishes the job, and the page reveals the sorted bands with subtotals, then flags one loose end (an Expense row with no matching Revenue) that the next page resolves.
 
 ### The page, step by step
-1. Narrative: first the period line — the question is how the shop did this summer, so May's rows stay set aside, untouched. Read any season reason and it records one of just two things; Anna names them here, before the student touches a thing; then the student copies the season's rows to a working sheet and sorts them by those two names.
+1. Narrative: the question is how the Company did this season. Read any Company-season reason and it records one of just two things; Anna names them here, before the student touches a thing; then the student copies the season's rows to a working sheet and sorts them by those two names.
 2. Anna's intro dialog names them: "Revenue — the value of the work delivered in the period, whichever way the cash runs. Expenses — what got used up delivering it. That's all. Copy the season's rows to a working sheet and sort them by those two names."
 3. The workbook mounts, opened on the Reasons tab. A "Copy the season's rows to a working sheet →" Continue button is shown.
 4. Clicking it hides the button and reveals the working sheet (tagger): items on the left, two category zones on the right labeled "Revenue" and "Expense." The student drags rows into the correct zone.
 5. After a few correct placements, the "onSorted" callback fires and a gate card appears: "That's the whole trick — every season reason is one or the other. Sort the rest the same way." with a "Sort the rest →" button.
 6. Clicking "Sort the rest" reveals the full sorted view: a Revenue band (every delivery the books caught) with subtotal, and an Expense band (everything used up) with subtotal. Anna's payoff: "There — the same rows, no longer jumbled. One band holds every delivery the books caught — Revenue, $5,720 — the other everything that got used up — the Expenses ($3,150). Line the Revenue total up against the Expenses and the difference is how the season went." She also notes Smith's frame sitting in Revenue: no cash moved this season — his money came in May as a deposit; this summer's row records the frame going out the door and the promise coming off the books. "Revenue is not about money moving — it's about what the work did."
-7. An insight box "A sort, not a move" explains: flip to the Reasons tab — every row is still in the same continuous GENERATED list; the working sheet is a sort of those rows, not a move; the originals stay where they were.
+7. An insight box "A sort, not a move" explains: flip to the Reasons tab — every Company-season row is still in GENERATED; the working sheet is a sort of those rows, not a move; the originals stay where they were.
 8. A message flags the loose end: in the Expenses band sits "Parts used — Ridgeline Trail Crew" with no Revenue across from it. Parts don't leave the shelf on their own; they leave on a finished job.
 9. Continue button "Find Ridgeline →" advances to 32-3.
 
@@ -157,7 +157,7 @@ Phase 2 of Tutorial 2. Anna names the two kinds up front — Revenue (the value 
 anchor: before you touch a thing
 
 ### Before and after
-Before: the student saw the GENERATED pile can't answer "how did the season go?" because it never resets and is jumbled (32-1). After: the student sorts the season into Revenue and Expenses and discovers one delivery (Ridgeline) was never recorded (next page, 32-3).
+Before: the student saw the GENERATED pile can't answer "how did the season go?" because the Company-season rows are jumbled (32-1). After: the student sorts the season into Revenue and Expenses and discovers one delivery (Ridgeline) was never recorded (next page, 32-3).
 
 ## 32-3-revenue-follows-the-work.html — The Work, Not the Cash
 ### What this page is
@@ -233,12 +233,12 @@ Before: the student completed the working sheet by adding Ridgeline's delivery (
 
 ## 32-5-what-the-season-kept.html — What the Season Kept
 ### What this page is
-Phase 5 of Tutorial 2 (the final phase of this tutorial). The page answers where Net income lands: it is not a new thing carried anywhere — it is the season's net addition to GENERATED, already sitting there row by row, right under the $170 produced through May. The income statement reads that slice in one number. CONTRIBUTED holds what the owner put in and is never touched by a season of operations; the $600 draw sits in WITHDRAWN as a distribution. The books already grew this tutorial (Ridgeline's $300 promise is now in Assets). One thing stays open: the last expense (wear on tools and laptop), which the next tutorial finishes.
+Phase 5 of Tutorial 2 (the final phase of this tutorial). Net income is the Company's season net addition to Generated. Generated began at $0 and was born with Dana's $120 repair. The June 1 formation rows net to $2,460 in Contributed, and the season's operations do not change that pile. The $600 draw sits in Withdrawn as a distribution.
 
 ### The page, step by step
-1. Narrative: the income statement answers one question — how the season went — but that answer has to land somewhere in the books. Back on the Reasons tab, the continuous GENERATED pile holds it all: the $170 the work had produced through May, then the season's rows right after it — Revenue and Expenses never left the pile; the income statement is a sort-view that reads the season's slice of it. CONTRIBUTED holds what the owner put in. "When Net income is finished, which pile does it feed?"
+1. Narrative: Back on the Company's Reasons tab, begin Generated with Dana's $120 repair and enter the season's Revenue and Expense rows. On the income statement, present those Company-season rows in one number. "When Net income is finished, which pile does it feed?"
 2. The workbook mounts (with the Accounts Receivable line), opened on the Reasons tab.
-3. Anna's dialog: "Net income isn't a new thing that has to be carried anywhere — it is the season's net addition to GENERATED, already sitting there row by row. The income statement just reads it in one number, right under the $170 the work had produced through May — same pile, one more season of it. What you put in ($2,290) sits in CONTRIBUTED, and a season of operations never touches it — the Module 2 split doing its work. And the books already grew this tutorial — Ridgeline's $300 promise is now a line in Assets."
+3. Anna's dialog: "Net income is the season's net addition to GENERATED, already sitting there row by row. The pile began at $0 and was born with Dana's $120 repair. The June 1 formation rows net to $2,460 in CONTRIBUTED, and the season's operations do not change that pile."
 4. An insight box "The income statement explains a balance-sheet move": between June 1 and August 31 the difference between Assets and Liabilities moved; the income statement says how — its bottom line is the season's net addition to GENERATED. (The $600 draw sits in its own pile, WITHDRAWN — taking money out is a distribution, not a cost of the work; it gets its own statement later.)
 5. A message: you built the whole shape — Revenue, Expenses, Net income — and where it lands. Only one thing is still open: the last expense — the tools and laptop wore out all season and that wear isn't counted yet. Finish it, and Net income finally gets its number.
 6. Continue button "Next: the wear you can't see →" advances to 33-1 (the next tutorial).
@@ -246,7 +246,7 @@ Phase 5 of Tutorial 2 (the final phase of this tutorial). The page answers where
 ### If the student is lost
 - "Where does Net income go?"
   - Orient: "Look at the piles on the Reasons tab — CONTRIBUTED, WITHDRAWN, GENERATED. Which one does the work's result belong to?"
-  - Nudge: "Net income is the season's net addition to GENERATED — it's already there, row by row, under the $170 from May."
+  - Nudge: "Generated began at $0 and the Company's season rows—including Dana's first $120 repair—build it to net income."
   - Stronger hint: "It doesn't get carried to CONTRIBUTED. The work's results accumulate in GENERATED; CONTRIBUTED holds only what the owner put in."
 - "Why doesn't the draw reduce Net income?"
   - Orient: "Is taking money out a cost of doing the work, or an owner move?"
@@ -259,7 +259,7 @@ Phase 5 of Tutorial 2 (the final phase of this tutorial). The page answers where
   - Nudge: "Accounts Receivable, $300 — Ridgeline's unpaid promise — is now a line in Assets."
 
 ### TUTOR-ONLY answer key
-**TUTOR-ONLY.** Net income is the season's net addition to **GENERATED** — it is not carried anywhere; it already sits there row by row, read in one number by the income statement, right under the $170 produced through May. CONTRIBUTED ($2,290) holds only what the owner put in and is never changed by a season of operations (the Module 2 split). The $600 draw is a distribution in WITHDRAWN, not an Expense, and gets its own statement later. Between June 1 and August 31 the difference between Assets and Liabilities moved (members' capital $2,460 → $4,430 before Ridgeline, then $4,730 after the $300 receivable was added); the income statement explains how. The bottom line stays open because the last expense — wear on the tools and laptop — isn't counted yet; it is added in the next tutorial (33-1), and its amount is given, never calculated (no useful-life math). The tutor must not state a final Net income number on this page — the page leaves it open. Do not use the word "depreciation" (the course says "wear" / "used-up"); do not mention "closing the books."
+**TUTOR-ONLY.** Net income is the season's net addition to GENERATED; Generated began at $0 and was born with Dana's $120 repair. CONTRIBUTED ($2,460) contains the June 1 formation rows and is unchanged by operations. The $600 draw is a distribution in WITHDRAWN, not an Expense, and gets its own statement later. Between June 1 and August 31 Member's Capital moved from $2,460 to $4,430 before Ridgeline, then to $4,730 after the $300 receivable was added. The bottom line stays open because the last expense — wear on the tools and laptop — isn't counted yet; it is added in the next tutorial (33-1), and its amount is given, never calculated. The tutor must not state a final Net income number on this page.
 
 ### Anchor
 anchor: When Net income is finished, which pile does it feed?

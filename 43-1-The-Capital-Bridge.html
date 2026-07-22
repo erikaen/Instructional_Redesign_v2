@@ -217,11 +217,12 @@ function mcqClick(id){
 }
 
 function gateHTML(){
+  // Canonical contributed-plus-generated walk: 2,460 + 2,640.
   if(gateDone){
     return '<div class="gate-card gate-armed-maria"><div class="gate-card-title">Ending total confirmed: <strong>$4,500</strong>. Continue to format and name the statement.</div></div>';
   }
   return '<div class="mc-card">'
-    +'<div class="mc-q">Now walk the three piles: $2,290 + $2,810 &minus; $600. Type the ending total that ties to the balance sheet&rsquo;s August 31 column.</div>'
+    +'<div class="mc-q">Now walk the three piles: $2,460 + $2,640 &minus; $600. Type the ending total that ties to the balance sheet&rsquo;s August 31 column.</div>'
     +'<div class="btn-row">'
     +'<input id="gateInput" class="calc-input" type="text" inputmode="numeric" placeholder="$ amount" aria-label="Ending total Member&rsquo;s Capital" onkeydown="if(event.key===\'Enter\'){checkGate();}">'
     +'<button class="btn btn-primary" type="button" onclick="checkGate()">Check</button>'
@@ -251,20 +252,20 @@ function checkGate(){
     return;
   }
   feedback.className='feedback err show';
-  feedback.innerHTML='Not quite &mdash; add 2,290 and 2,810, then subtract 600.';
+  feedback.innerHTML='Not quite &mdash; add 2,460 and 2,640, then subtract 600.';
   playNope();
 }
 
 function renderBuildNote(){
   var html='';
   if(currentOrder===0){
-    html=annaBox('Start with the <strong>BEGINNING</strong> balance in each copied pile: CONTRIBUTED <strong>$2,290</strong>, GENERATED <strong>$170</strong>, and WITHDRAWN <strong>$0</strong>. WITHDRAWN was born mid-season, so there is no June 1 line; treat its beginning as $0.');
+    html=annaBox('Start with the <strong>BEGINNING</strong> balance in each copied pile: CONTRIBUTED <strong>$2,460</strong>, GENERATED <strong>$0</strong>, and WITHDRAWN <strong>$0</strong>. GENERATED is born with the season&rsquo;s first repair, and WITHDRAWN is born with the season&rsquo;s draw; each begins at $0.');
   }else if(currentOrder===1){
     html=annaBox('Now sort the items for the period in each pile. Only GENERATED has a stack of period activity to sort. CONTRIBUTED is unchanged, and WITHDRAWN has just the single $600 draw.');
   }else if(currentOrder===2){
     html=annaBox('Identify GENERATED&rsquo;s change. It is <strong>just the income recognized for the period</strong>, carried over as one number from the Income Statement. Then walk all three ending piles to the total.');
   }else{
-    html=annaBox('The working sheet is finished. Now call it the <strong>Statement of Member&rsquo;s Capital</strong>: CONTRIBUTED $2,290 to $2,290; GENERATED $170 plus net income of $2,640 to $2,810; and WITHDRAWN ($600).');
+    html=annaBox('The working sheet is finished. Now call it the <strong>Statement of Member&rsquo;s Capital</strong>: CONTRIBUTED $2,460 to $2,460; GENERATED $0 plus net income of $2,640 to $2,640; and WITHDRAWN ($600).');
   }
   document.getElementById('buildNote').innerHTML=html;
 }
@@ -273,7 +274,7 @@ function renderInteraction(){
   if(currentOrder===0&&!beginningConfirmed){
     html='<button class="btn-continue btn-block" type="button" onclick="confirmBeginnings()">Mark the three beginning balances &rarr;</button>';
   }else if(currentOrder===0){
-    html=insightBox('Beginnings marked','<p>CONTRIBUTED <strong>$2,290</strong> &middot; GENERATED <strong>$170</strong> &middot; WITHDRAWN <strong>$0</strong></p>');
+    html=insightBox('Beginnings marked','<p>CONTRIBUTED <strong>$2,460</strong> &middot; GENERATED <strong>$0</strong> &middot; WITHDRAWN <strong>$0</strong></p>');
   }
   if(currentOrder===1&&!sortConfirmed){
     html='<button class="btn-continue btn-block" type="button" onclick="confirmSort()">Sort the period items in each pile &rarr;</button>';
@@ -303,7 +304,7 @@ function renderPayoff(){
       +'<button class="btn-continue btn-block" type="button" onclick="christen()">Christen it the Statement of Member&rsquo;s Capital &rarr;</button>';
   }else if(currentOrder===3){
     html=annaBox('That is the walk Freddie asked for: <strong>$2,460 to $4,500</strong>. The $600 sits on its own WITHDRAWN line, in parentheses. It is <strong>not an expense; it is a distribution</strong>. On the Statement of Member&rsquo;s Capital, the changes in all three piles walk to the same ending total as the balance sheet&rsquo;s August 31 column.')
-      +insightBox('One statement, three piles','<p>CONTRIBUTED remains <strong>$2,290</strong>. GENERATED moves from <strong>$170</strong> to <strong>$2,810</strong> with net income of <strong>$2,640</strong>. WITHDRAWN records <strong>($600)</strong>. Together, the total moves from <strong>$2,460</strong> to <strong>$4,500</strong>.</p>');
+      +insightBox('One statement, three piles','<p>CONTRIBUTED remains <strong>$2,460</strong>. GENERATED moves from <strong>$0</strong> to <strong>$2,640</strong> with net income of <strong>$2,640</strong>. WITHDRAWN records <strong>($600)</strong>. Together, the total moves from <strong>$2,460</strong> to <strong>$4,500</strong>.</p>');
   }
   document.getElementById('payoff').innerHTML=html;
 }
@@ -370,7 +371,7 @@ BR_WB.mountStatementBuild('stmtBuild','members-capital-steps',buildOptions);
 var glossaryTerms=[
   {term:'Statement of Member&rsquo;s Capital',def:'A report with each pile&rsquo;s Beginning, Change, and Ending. Here CONTRIBUTED, GENERATED, and WITHDRAWN walk the total from $2,460 on June 1 to $4,500 on August 31.'},
   {term:'Distribution (draw)',def:'Cash withdrawn by an owner for personal use and recorded in WITHDRAWN. It reduces Member&rsquo;s Capital but is not an expense. Here it is ($600), shown in parentheses.'},
-  {term:'Generated',def:'The part of Member&rsquo;s Capital built from running the work, not from contributions. GENERATED moves with net income. Here: Beginning $170 + net income $2,640 = Ending $2,810.'}
+  {term:'Generated',def:'The part of Member&rsquo;s Capital built from running the work, not from contributions. GENERATED moves with net income. Here: Beginning $0 + net income $2,640 = Ending $2,640.'}
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){

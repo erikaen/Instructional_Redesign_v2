@@ -72,7 +72,7 @@ function playMove(){ tone(440,0.12,'sine',0.12); setTimeout(function(){tone(680,
 var glossaryTerms = [
   { term:"EIN", def:"Employer Identification Number &mdash; the entity&rsquo;s own tax ID with the IRS, like a Social Security number for a business. The bank needs it to open an account in the LLC&rsquo;s name." },
   { term:"Co-mingling", def:"Running business and personal money through the same account, so they have to be sorted apart by hand. Opening the LLC&rsquo;s own account ends it." },
-  { term:"Capital contribution", def:"Money (or property) an owner puts into the company. Your $1,300 in cash is one: it raises the LLC&rsquo;s cash and its members&rsquo; capital by $1,300." },
+  { term:"Capital contribution", def:"What a member gives the Company, together with any claims the Company takes on at formation. The $1,300 cash seed is one formation row. After the Company records every formation row, Member&rsquo;s Capital is $2,460, all Contributed." },
   { term:"Disregarded entity", def:"For federal income tax, a single-member LLC is &ldquo;looked through&rdquo; to its owner &mdash; even though it holds its own EIN for every other purpose. Different lines drawn for different purposes." },
   { term:"Counterparty", def:"The other party to a transaction or contract. With its own EIN and accounts, the LLC is a counterparty in its own right &mdash; it deals with banks, customers, and the IRS in its own name, and can owe and be owed (even sue and be sued) as itself, not as you." }
 ];
@@ -161,7 +161,7 @@ function stmtConfigs(en){
       rows:[ { cells:["06/01","Account opened","&mdash;","&mdash;","0.00"] },
         { cells:["06/01","Opening deposit &mdash; member capital contribution",{v:"1,300.00",tone:"pos"},"&mdash;","1,300.00"] },
         { cells:["","Ending balance","1,300.00","&mdash;","1,300.00"], total:true } ],
-      note:"The entity&rsquo;s first bank account &mdash; its <em>own</em> name and EIN. The <strong>$1,300 opening deposit is your capital contribution</strong> (Cash 0&rarr;1,300; members&rsquo; capital +1,300). The business&rsquo;s money runs through this account now." },
+      note:"The entity&rsquo;s first bank account carries its <em>own</em> name and EIN. The <strong>$1,300 opening deposit is the cash row in the June 1 formation contribution</strong>. After the Company records the other things given and claims assumed, Member&rsquo;s Capital is $2,460, all Contributed. The Company&rsquo;s money runs through this account now." },
     llccard:{ heading:"Card Statement #1 &mdash; the entity&rsquo;s own card", bank:"Harborline Visa",
       who:[ en+" &middot; Business card &middot; &bull;&bull;&bull;&bull; 4180" ],
       box:["Period: June 1&ndash;30, 2026","Previous: $0.00","New balance: $2,030.00"],
@@ -249,14 +249,14 @@ function renderAccount(){
   }
   var llcCol = '<div class="section-card"><div style="font-size:var(--font-xs);font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--primary);margin-bottom:8px">The LLC&rsquo;s accounts</div>'+llcInner+'</div>';
   var html = '<div class="main-grid two-col" style="margin-bottom:12px">'+personalCol+llcCol+'</div>';
-  if(step===2){ html += '<div style="text-align:center;font-size:var(--font-xs);color:var(--primary);margin-bottom:10px">&uarr; your <strong>$1,300 cash contribution</strong> &mdash; Cash 0 &rarr; 1,300, members&rsquo; capital +1,300</div>'; }
+  if(step===2){ html += '<div style="text-align:center;font-size:var(--font-xs);color:var(--primary);margin-bottom:10px">&uarr; the <strong>$1,300 cash row</strong> in the June 1 formation contribution &mdash; Company Cash 0 &rarr; 1,300</div>'; }
   if(nextLabel){
     html += '<button class="btn-continue btn-block" onclick="advanceAccount()">'+nextLabel+'</button>';
     html += docsButton();
   } else {
     html += '<div class="insight-box"><div class="insight-label"><i data-lucide="check" class="licon"></i> Co-mingling ended</div>'+
-      '<p>The LLC has its own account and card; your personal checking is personal again. The by-hand sorting you&rsquo;ve done since 1.1 is now <strong>institutional</strong> &mdash; banks, the IRS, and customers all deal with the LLC.</p></div>';
-    html += '<p class="callout">Two of those moves changed <em>nothing</em> on the books &mdash; the EIN, and the card sliding to the LLC&rsquo;s name (<span class="mono">$2,030</span> stays <span class="mono">$2,030</span>). The <strong>one real change</strong> was your <strong>$1,300</strong>: a capital contribution. Cash <span class="mono">0 &rarr; 1,300</span>; members&rsquo; capital <span class="mono">990 &rarr; 2,290</span>. Next: check the paper trail &mdash; then you&rsquo;ll complete Schedule A from these books, and sign.</p>';
+      '<p>The LLC has its own account and card; your personal checking is personal again. The May sorting remains in your personal records. From June 1 forward, banks, the IRS, and customers deal with the Company in its own name.</p></div>';
+    html += '<p class="callout">The EIN and account setup prepare the Company to operate in its own name. On June 1, the Company begins its books at zero, then records $4,710 of resources and rights and $2,250 of claims assumed. Their $2,460 difference is Member&rsquo;s Capital, all Contributed; Generated is $0. Next, check the records, complete Schedule A, and sign.</p>';
     html += docsButton();
     html += '<button class="btn-continue btn-block" onclick="nav(\'24-4-statements.html\')">See the statements &rarr;</button>';
   }

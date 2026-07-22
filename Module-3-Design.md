@@ -2,21 +2,14 @@
 
 > **SUPERSESSION — 2026-07-14 (Rick's 2026-07-13 rulings, EXECUTED).** The statement-construction
 > fold-in is built. Where anything below conflicts with this block, THIS block governs:
-> - **GENERATED is continuous; there are no Revenue/Expenses tabs and no close — ever.** The
->   income statement is a **sort-view**: the season's rows are *copied* to a working sheet
->   (32-2), tagged **Revenue** (the value of the work delivered, whichever way the cash runs)
->   or **Expense** (used up delivering it), sorted into banded subtotals, and laid out as the
->   statement (32-4) — while the original rows never leave the Reasons tab. "Temporary
->   accounts," the 32-4 graduation-to-tabs, DELIVERED/USED UP, and the first close are all
->   retired. Names-first (Rick): Anna defines Revenue/Expenses *before* the sort.
+> - Begin the Company's Reasons list with the June 1 formation rows, all Contributed. Generated
+>   is born at Dana's first $120 repair.
 > - **Engine:** `snapshot()` ignores the retired `tabbed`/`closed` opts; `withDepreciation`
 >   lands the two Depreciation reasons (−200, −30) in GENERATED; the shared **`BRW.tagger`**
 >   component (shared.js/shared.css, approved 2026-07-13) does the Pick→Sort idiom.
-> - **Numbers contract (M3):** Revenue 6,020 − Expenses 3,380 (Parts 1,200 · Rent 1,950 ·
->   Depreciation 200 + 30) = **Net income 2,640**; pre-receivable Revenue 5,720; pre-dep
->   Expenses 3,150; GENERATED continuous subtotal **170 (June 1) → 2,810 (Aug 31)**;
->   Member's Capital = Contributed 2,290 + Generated 2,810 + **Withdrawn (600)** = 4,500.
->   The balance-sheet renderers carry Withdrawn as its own line (never folded into Generated).
+> - **Numbers contract (M3):** Generated **$0 (June 1) + Net income $2,640 = $2,640
+>   (August 31)**; Contributed remains **$2,460**; Withdrawn **$0 + $600 = $600**;
+>   Member's Capital = **$2,460 + $2,640 − $600 = $4,500**.
 
 **Status:** Draft v2 (2026-07-11) — **restructured (Rick's ruling):** everything after the production
 of the income statement moved to Module 4. Tutorials 3.4 (`34-`) and 3.5 (`35-`) — the cash-flow
@@ -34,7 +27,7 @@ statements arrive at his request; then pricing → limited recognition → outsi
 **Opens on M2's close** — no M1/M2 numbers are re-derived; the season layers on top:
 
 > Assets **$4,710** − Liabilities **$2,250** = member's capital **$2,460**
-> (cash $1,300; contributed $2,290 + generated $170). The owner's repair **skill is off the books.**
+> (cash $1,300; contributed $2,460 + generated $0). The owner's repair **skill is off the books.**
 
 **File naming (v2).** Module 3 tutorials are `3X-Y-Title.html` = Module 3, Tutorial X, Page Y
 (parallel to M2's `21-`…`25-`). E.g. `31-1-welcome.html`.
@@ -67,21 +60,10 @@ Follows `accounting-pedagogy`; the points that bite hardest here:
   "what's left for the owner."
 - **Experience-first.** Feel the problem, then name it — exactly the M1 1.4→1.5 discipline.
 - **Records *show* vs entity *has*.** No "measurement" — depreciation is **allocation**.
-- **★ Reasons → temporary accounts (the heart of M3).** Keep the M1 **Reasons** practice (1.4): jot *why*
-  each net-moving change happened. Over a whole season the reasons **pile up** — and it would be **easier**
-  to bucket the operating ones into running tallies (revenues, expenses) that total the period, then **close
-  into Generated and reset** for the next season. *Those* are **temporary accounts**; the income
-  statement is just their organized display. Name them **only after** the bucketing is felt (names-last).
-  **The Reasons list is one continuous list from May** (redesigned 2026-07-02): no carried-in balances,
-  nothing pre-settled — the pile spanning periods is what makes the period-cut, and later the reset,
-  *felt*; the **first-ever close is the discovery** (originally 3.5's; since the 2026-07-11
-  restructure it is Module 4's — tutorial 4.3). Standing pile vocabulary everywhere:
-  **CONTRIBUTED / GENERATED / WITHDRAWN**, each pile born when first used (WITHDRAWN at the season's draw).
-  **Deferred (Rick, 2026-07-11 — do not start unprompted):** the close as built is fine (Rick is
-  comfortable with how little the docs make of "closing temporary accounts"); Revenue/Expenses keep
-  their own tabs. A possible later change: the Reasons tab could carry a closed period as **one net-income
-  line under GENERATED (period specified)** rather than filed period rows. Reasons-tab design to be
-  discussed later as its own conversation.
+- **★ Reasons list (the heart of M3).** Begin the Company's Reasons list on June 1 with the
+  formation rows: recorded things and cash put in and claims assumed, net $2,460, all Contributed.
+  Generated is born at Dana's $120 repair; Withdrawn is born at the season's draw. Keep the member's
+  May Reasons rows only in Module 1's personal-records story.
 - **★ Assets become expenses — and *how* you allocate is a spectrum.** The income statement is the story of
   **assets consumed to earn revenue**, and the opening balance sheet conveniently carries three kinds:
   **parts/supplies** — consumption can be **metered** (count what went into repairs); **prepaid rent** — consumed
@@ -93,8 +75,8 @@ Follows `accounting-pedagogy`; the points that bite hardest here:
   convention**, not a measurement of real decline (never "measurement"). The **laptop** is the star: its eBay
   (market) value already sits **below its cost**, so it's also the first quiet sighting of the **book-vs-market
   gap** M4 blows open.
-- **Operations feed the *generated* slice.** Net income closes into **Generated**; **contributed**
-  capital ($2,290) is untouched by operations — M2's split finally does work. An owner's **draw** reduces
+- **Operations feed the *generated* slice.** Net income enters **Generated**; **Contributed ($2,460)
+  is untouched by operations.** An owner's **draw** reduces
   member's capital but is **not an expense** (a distribution), so it sorts itself *out* of the operating
   tallies and onto the equity statement.
 
@@ -216,9 +198,9 @@ working figures for the summer:
 | Expenses — parts/COGS $1,200 · rent $1,950 · depreciation $230 (tools $200 + laptop $30) | **$3,380** |
 | **Net income** | **$2,640** |
 | Cash flow — operating **+$320** · investing **−$400** (new tool) · financing **−$600** (draw) → net **−$680** | ending cash **$620** (opened at $1,300) |
-| Closing balance sheet — Assets **$4,500** − Liabilities **$0** = member's capital | **$4,500** (contributed 2,290 + generated 2,210) |
+| August 31 balance sheet — Assets **$4,500** − Liabilities **$0** = Member's Capital **$4,500** | Contributed **$2,460** + Generated **$2,640** − Withdrawn **$600** |
 
-> **Terminology (locked 2026-07-07; tightened 2026-07-09):** "Retained"/"Retained Earnings" is retired course-wide. The **Generated** pile keeps its name through the close; the **total** picks up the legal term **Member's Capital** at the M2 Operating Agreement (subparts stay *Contributed* / *Generated*). **GAAP vocabulary is dropped from the course entirely** (2026-07-09 — supersedes the earlier "M4 aside" plan): "Retained Earnings" and "Contributed Capital" appear nowhere, ever. Full rationale + the OA draft→finalize→sign resequencing in **Module-2-Design.md**.
+> **Terminology (locked 2026-07-07; tightened 2026-07-09):** "Retained"/"Retained Earnings" is retired course-wide. The **Generated** pile begins at zero on June 1 and keeps its name through the season; the **total** is Member's Capital. **GAAP vocabulary is dropped from the course entirely** (2026-07-09 — supersedes the earlier "M4 aside" plan): "Retained Earnings" and "Contributed Capital" appear nowhere, ever. Full rationale + the OA draft→finalize→sign resequencing in **Module-2-Design.md**.
 
 **Rent treatment:** the season's rent (**$1,950 = 3 × $650**) is **paid and used this period** — routed through
 Prepaid Rent as a booking convenience, then expired in full to Rent Expense, so in substance it's a **straight

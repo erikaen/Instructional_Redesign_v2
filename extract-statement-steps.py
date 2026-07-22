@@ -382,11 +382,11 @@ def verify(data: dict[str, Any]) -> bool:
     reasons_change = reasons_generated_end - reasons_generated_start
     passed = (
         net_income == 2640
-        and members_generated_start == 170
-        and members_generated_end == 2810
+        and members_generated_start == 0
+        and members_generated_end == 2640
         and members_change == 2640
-        and reasons_generated_start == 170
-        and reasons_generated_end == 2810
+        and reasons_generated_start == 0
+        and reasons_generated_end == 2640
         and reasons_change == 2640
     )
     results.append(passed)
@@ -446,8 +446,8 @@ def verify(data: dict[str, Any]) -> bool:
     passed = (
         total_assets == 4500
         and total_liabilities == 0
-        and contributed_capital == 2290
-        and generated_capital == 2810
+        and contributed_capital == 2460
+        and generated_capital == 2640
         and withdrawn_capital == -600
         and total_capital == 4500
         and total_assets == total_liabilities + total_capital
@@ -582,8 +582,8 @@ def verify(data: dict[str, Any]) -> bool:
             snapshot_account_actual[account] = account_section_values(ledger, account)
 
     snapshot_reason_expected = {
-        "CONTRIBUTED": 2290,
-        "GENERATED": 2740,
+        "CONTRIBUTED": 2460,
+        "GENERATED": 2570,
         "WITHDRAWN": -600,
     }
     snapshot_reason_actual: dict[str, tuple[int | float, int | float]] = {}
@@ -634,8 +634,7 @@ def verify(data: dict[str, Any]) -> bool:
         "Credit Card": 2030,
         "Customer Deposit": 220,
         "Total Liabilities": 2250,
-        "Contributed": 2290,
-        "Generated": 170,
+        "Contributed": 2460,
         "Total Member's Capital": 2460,
     }
     snapshot_bs_actual = {
@@ -732,7 +731,6 @@ def verify(data: dict[str, Any]) -> bool:
         "Credit Card",
         "Customer Deposit",
         "Contributed",
-        "Generated",
     )
     june_1_continuity = {
         label: (
@@ -769,8 +767,8 @@ def verify(data: dict[str, Any]) -> bool:
         "Laptop": (610, 610),
         "Credit Card": (2030, 0),
         "Customer Deposit": (220, 0),
-        "CONTRIBUTED": (2290, 2290),
-        "GENERATED": (170, 2740),
+        "CONTRIBUTED": (2460, 2460),
+        "GENERATED": (0, 2570),
         "WITHDRAWN": (0, -600),
     }
 
@@ -910,7 +908,7 @@ def verify(data: dict[str, Any]) -> bool:
         and not receivable_name_hygiene_offenders
     )
     receivable_dated_expected = dict(dated_expected)
-    receivable_dated_expected["GENERATED"] = (170, 3040)
+    receivable_dated_expected["GENERATED"] = (0, 2870)
     receivable_dated_actual = (
         {}
         if (
@@ -1183,7 +1181,7 @@ def verify(data: dict[str, Any]) -> bool:
             "Tools & Repair Equipment": (1200, 1440),
             "Fixtures": (750, 710),
             "Laptop": (610, 580),
-            "GENERATED": (170, 2810),
+            "GENERATED": (0, 2640),
         }
     )
     statement_label_offenders = dated_label_offenders_by_workbook[statement_key]
@@ -1571,9 +1569,9 @@ def verify(data: dict[str, Any]) -> bool:
     passed = (
         first_members_row_mismatch is None
         and member_item_sums
-        == {"CONTRIBUTED": 2290, "GENERATED": 2810, "WITHDRAWN": -600}
-        and working_generated_start == 170
-        and working_generated_end == 2810
+        == {"CONTRIBUTED": 2460, "GENERATED": 2640, "WITHDRAWN": -600}
+        and working_generated_start == 0
+        and working_generated_end == 2640
         and working_generated_end - working_generated_start == 2640
         and not withdrawn_june_rows
     )

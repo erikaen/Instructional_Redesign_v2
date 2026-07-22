@@ -44,7 +44,7 @@ A workbook is mounted below with the Aug-31 snapshot plus statement tabs (income
 
 A section card "Which statement explains it?" holds three multiple-choice cards. For each, the student clicks an option to select it (the Submit button is disabled until one is chosen), then clicks Submit. A correct answer plays a success sound, locks the choice, and shows a green feedback explanation; a wrong answer plays a nope tone, shows a red feedback explanation, and offers a "Reset" button so the student can try again.
 
-The three prompts and options: (1) "Cash fell $680 (from $1,300 to $620)" — options The Income Statement / The Statement of Cash Flows / The Statement of Changes in Members' Capital; (2) "Members' Capital rose $2,040 (from $2,460 to $4,500)" — options The Statement of Changes in Members' Capital / The Statement of Cash Flows / The Income Statement alone; (3) "Generated (inside Members' Capital) rose from $170 to $2,810" — options The Statement of Changes in Members' Capital / The Statement of Cash Flows alone / Contributed — new money put in.
+The three prompts and options: (1) "Cash fell $680 (from $1,300 to $620)" — options The Income Statement / The Statement of Cash Flows / The Statement of Changes in Member's Capital; (2) "Member's Capital rose $2,040 (from $2,460 to $4,500)" — options The Statement of Changes in Member's Capital / The Statement of Cash Flows / The Income Statement alone; (3) "Generated (inside Member's Capital) rose from $0 to $2,640." — options The Statement of Changes in Member's Capital / The Statement of Cash Flows alone / Contributed — new money put in.
 
 Once all three are correct, Anna's completion dialog appears and names "articulation" — the statements tie to each other; the balance sheet shows where things stand, the flow statements show how it got there. An insight box "Articulation" reinforces this, and a Continue button "Next: the whole map →" navigates to 46-2. Before completion, Anna's prompt simply tells the student to pick, for each move, the statement that carries the story, not just the new number.
 
@@ -57,8 +57,8 @@ Once all three are correct, Anna's completion dialog appears and names "articula
 ### TUTOR-ONLY answer key
 TUTOR-ONLY — confirm only after the student has submitted a genuine attempt; allow the Reset path for wrong answers.
 - Card 1 (Cash −$680): correct answer B — The Statement of Cash Flows. Correct feedback: "Operating +$2,350, Investing −$400, Financing −$2,630, net −$680."
-- Card 2 (Members' Capital +$2,040): correct answer A — The Statement of Changes in Members' Capital. Correct feedback: "Contributed $2,290 (unchanged), Generated $170 + net income $2,640 = $2,810, Withdrawn ($600) — the three piles sum to $4,500."
-- Card 3 (Generated $170 → $2,810): correct answer A — The Statement of Changes in Members' Capital. Correct feedback: "beginning $170 + net income $2,640 = ending $2,810; Withdrawn ($600) is its own pile, never folded into Generated."
+- Card 2 (Member's Capital +$2,040): correct answer A — The Statement of Changes in Member's Capital. Correct feedback: "Contributed $2,460 (unchanged), Generated $0 + net income $2,640 = $2,640, Withdrawn $0 + owner's draw $600 = $600; $2,460 + $2,640 − $600 = $4,500."
+- Card 3 (Generated $0 → $2,640): correct answer A — The Statement of Changes in Member's Capital. Correct feedback: "beginning $0 + net income $2,640 = ending $2,640; Withdrawn records the $600 draw separately."
 - There is no typed third-strike reveal; the mechanism is MCQ with per-card Reset until correct, then the completion dialog reveals "articulation."
 
 ### Anchor
@@ -78,7 +78,7 @@ Step 0: both balance sheets render fully (June 1 and August 31). A center card "
 
 Step 1 (Cash path): Freddie asks to start with Cash; the Cash line and Total Assets stay unfaded while the rest of each sheet fades. The center shows the Statement of Cash Flows: Operating +$2,350, Investing −$400, Financing −$2,630, net −$680, tying $1,300 to $620. A narrative notes Financing holds both the card payoff and the owner's draw.
 
-Step 2 (Members' Capital path): Freddie asks to see the Members' Capital path; Contributed, Generated, Withdrawn, and Total Members' Capital stay unfaded. The center shows the Statement of Changes in Members' Capital. The narrative walks the three piles: Contributed $2,290 unchanged; Generated $170 + net income $2,640 = $2,810; Withdrawn ($600); totals tie $2,460 to $4,500.
+Step 2 (Member's Capital path): Freddie asks to see the Member's Capital path; Contributed, Generated, Withdrawn, and total Member's Capital stay unfaded. The center shows the Statement of Changes in Member's Capital. The narrative walks the three piles: Contributed $2,460 unchanged; Generated $0 + net income $2,640 = $2,640; Withdrawn $0 + owner's draw $600 = $600; total Member's Capital $2,460 → $4,500.
 
 Step 3 (Net income path): Freddie calls net income the biggest line in that bridge and asks what is behind it. The narrative tells the student to click the Net income line below to open the Income Statement behind it. In the center bridge statement, the Net income row is clickable (a pulsing chevron marks it); clicking toggles a nested Income Statement showing Revenue $6,020 minus Expenses $3,380 = $2,640. Next is disabled until the student opens this nested statement at least once (the "incomeSeen" gate). When open, a note explains that in actual reporting these are two distinct statements.
 
@@ -96,7 +96,7 @@ A dual identity bar at the bottom shows the accounting identity at both dates: J
 ### TUTOR-ONLY answer key
 TUTOR-ONLY — confirm only after the student has moved through each step themselves.
 - Step 1 Cash path: $1,300 → $620, down $680, via Operating +$2,350, Investing −$400, Financing −$2,630.
-- Step 2 Members' Capital path: Contributed $2,290 unchanged; Generated $170 + net income $2,640 = $2,810; Withdrawn ($600); total $2,460 → $4,500.
+- Step 2 Member's Capital path: Contributed $2,460 unchanged; Generated $0 + net income $2,640 = $2,640; Withdrawn $0 + owner's draw $600 = $600; total Member's Capital $2,460 → $4,500.
 - Step 3 Net income path: the student must click the pulsing Net income row to open the nested Income Statement (Revenue $6,020 − Expenses $3,380 = $2,640); Next stays disabled until that happens.
 - Step 4 whole map: both statements shown; Income Statement nested open; the "rest of the map" insight names Credit Card (Operating), Customer Deposit and Accounts Receivable (inside Revenue).
 - Identity bar: June 1 $4,710 − $2,250 = $2,460; August 31 $4,500 − $0 = $4,500.

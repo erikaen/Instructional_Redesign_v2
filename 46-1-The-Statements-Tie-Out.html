@@ -146,14 +146,14 @@ var MOVES=[
     {id:'bridge',text:'The Statement of Member&rsquo;s Capital',ok:true},
     {id:'cashflow',text:'The Cash Flow Statement',ok:false},
     {id:'income',text:'The Income Statement alone',ok:false}
-  ],fbOk:'Right &mdash; the full reconciliation appears on the Statement of Member&rsquo;s Capital: Contributed $2,290 (unchanged), Generated $170 + net income $2,640 = $2,810, Withdrawn ($600) &mdash; the three piles sum to $4,500.',
+  ],fbOk:'Right &mdash; the full reconciliation appears on the Statement of Member&rsquo;s Capital: Contributed $2,460 (unchanged), Generated $0 + net income $2,640 = $2,640, Withdrawn ($600) &mdash; the three piles sum to $4,500.',
     fbWrong:'This is incomplete on its own &mdash; net income is only one piece of this move. The draw also passed through, and all three piles appear together only on the Statement of Member&rsquo;s Capital.'},
-  {id:'retained',prompt:'Generated (inside Member&rsquo;s Capital) rose from $170 to $2,810.',opts:[
+  {id:'retained',prompt:'Generated (inside Member&rsquo;s Capital) rose from $0 to $2,640.',opts:[
     {id:'income',text:'The Income Statement',ok:true},
     {id:'bridge',text:'The Statement of Member&rsquo;s Capital alone',ok:false},
     {id:'contrib',text:'Contributed &mdash; new money put in',ok:false}
-  ],fbOk:'Right &mdash; the Income Statement reports net income of $2,640, exactly the increase from Generated $170 to $2,810. That net income then appears as the reason for the change on the Statement of Member&rsquo;s Capital.',
-    fbWrong:'The Statement of Member&rsquo;s Capital displays the change, but the Income Statement explains it: net income of $2,640 is exactly the increase from $170 to $2,810. Contributed did not move this season.'}
+  ],fbOk:'Right &mdash; net income on the Income Statement is $2,640, exactly the increase from Generated $0 to $2,640. The same $2,640 appears as the reason for the change on the Statement of Member&rsquo;s Capital.',
+    fbWrong:'The change appears on the Statement of Member&rsquo;s Capital, and its explanation is net income of $2,640 on the Income Statement: exactly the increase from $0 to $2,640. Contributed did not change during the season.'}
 ];
 var step=0;
 var TOTAL_STEPS=5;
@@ -247,7 +247,7 @@ function renderBeats(){
   }else if(step===1&&moveCorrect(0)){
     h='<div class="narrative-block"><p>Cash fell from <strong>$1,300</strong> to <strong>$620</strong> &mdash; down <strong>$680</strong>. The <strong>Cash Flow Statement</strong> walks that path: Operating <strong>+$2,350</strong>, Investing <strong>&minus;$400</strong>, and Financing <strong>&minus;$2,630</strong>. Financing includes both the card payoff (repaying a borrowing) and the owner&rsquo;s draw.</p></div>';
   }else if(step===2&&moveCorrect(1)){
-    h='<div class="narrative-block"><p>Member&rsquo;s Capital rose from <strong>$2,460</strong> to <strong>$4,500</strong> &mdash; up <strong>$2,040</strong>. The <strong>Statement of Member&rsquo;s Capital</strong> tells it pile by pile. <strong>Contributed</strong>: Beginning $2,290, no changes, Ending $2,290. <strong>Generated</strong>: Beginning $170, plus Net income $2,640 from the Income Statement, Ending $2,810. <strong>Withdrawn</strong>: Beginning &mdash;, Owner&rsquo;s draw ($600), Ending ($600). The draw is recorded separately, and the totals tie.</p></div>';
+    h='<div class="narrative-block"><p>Member&rsquo;s Capital rose from <strong>$2,460</strong> to <strong>$4,500</strong> &mdash; up <strong>$2,040</strong>. The pile-by-pile detail appears on the <strong>Statement of Member&rsquo;s Capital</strong>. <strong>Contributed</strong>: Beginning $2,460, no changes, Ending $2,460. <strong>Generated</strong>: Beginning $0, plus Net income $2,640 from the Income Statement, Ending $2,640. <strong>Withdrawn</strong>: Beginning $0, Owner&rsquo;s draw ($600), Ending ($600). The draw is recorded separately, and the totals tie.</p></div>';
   }else if(step===3&&moveCorrect(2)){
     h='<div class="narrative-block"><p>Net income is the largest change within the statement. Click the <strong>Net income</strong> line below to open the <strong>Income Statement</strong> behind it.</p></div>';
   }else if(step===4){
@@ -330,7 +330,7 @@ function back(){ playClick(); step=Math.max(step-1,0); render(); window.scrollTo
 var glossaryTerms=[
   {term:'Articulation',def:'The statements tie to each other where their figures meet. Cash has the Cash Flow Statement, and Member&rsquo;s Capital has the Statement of Member&rsquo;s Capital. Changes in other lines are explained by the ledgers&rsquo; dated entries.'},
   {term:'Cash Flow Statement',def:'The statement says how Cash changed across Operating, Investing, and Financing. Here: +$2,350, &minus;$400, &minus;$2,630 = &minus;$680, tying $1,300 to $620.'},
-  {term:'Statement of Member&rsquo;s Capital',def:'The statement tells how Member&rsquo;s Capital changed pile by pile: Contributed (Beginning $2,290, no changes, Ending $2,290), Generated (Beginning $170 + Net income $2,640 = Ending $2,810), Withdrawn (Beginning &mdash;, Owner&rsquo;s draw ($600), Ending ($600)). Totals: $2,460 to $4,500.'},
+  {term:'Statement of Member&rsquo;s Capital',def:'The pile-by-pile change in Member&rsquo;s Capital: Contributed (Beginning $2,460, no changes, Ending $2,460), Generated (Beginning $0 + Net income $2,640 = Ending $2,640), Withdrawn (Beginning $0, Owner&rsquo;s draw ($600), Ending ($600)). Totals: $2,460 to $4,500.'},
   {term:'Income Statement',def:'Revenue minus Expenses for the season. Here: $6,020 &minus; $3,380 = $2,640 net income &mdash; the same figure that enters the Statement of Member&rsquo;s Capital.'}
 ];
 function openGlossary(){

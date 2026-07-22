@@ -180,9 +180,9 @@ function renderWhatChanged(){
   html += '</div>';
   if(movedItems.every(function(m){ return placed[m.id]; })){
     html += '<div class="insight-box" style="margin-top:16px"><div class="insight-label"><i data-lucide="scale" class="licon"></i> Legal Change, Not an Economic Change</div>'+
-      '<p>One thing changed today: <strong>the LLC now exists as a legal entity</strong>. That matters. But the filing, by itself, did <strong>not</strong> change the balance sheet. The recorded assets, recorded liabilities, and the difference between them are still the same. The operation is the same operation you were already tracking. What is new is its <strong>legal standing</strong>.</p></div>';
+      '<p>One thing changed today: <strong>the LLC now exists as a legal entity</strong>. The May records remain your personal records; filing does not turn them into the Company&rsquo;s records. The Company opens its books at zero and records the things given and claims assumed in the June 1 formation contribution.</p></div>';
     html += figureHtml();
-    html += '<p class="callout">Two different lines, drawn at different times, for different reasons: first you <strong>recognized</strong> the bike-repair role (Module 1, in the books), then you <strong>formalized</strong> it (today, at the state). The repair work was already operating before today. The legal body is new.</p>';
+    html += '<p class="callout">Two different lines, drawn for different reasons: in Module 1, your personal records tracked the bike-repair role; today, the state brought a new legal body into existence. Your personal records hold the history of the repair work, but the Company&rsquo;s own story starts today.</p>';
     html += '<button class="btn-continue btn-block" id="figCont" hidden onclick="nav(\'22-5-complete.html\')">Continue &rarr;</button>';
   }
   document.getElementById('whatChangedArea').innerHTML = html;

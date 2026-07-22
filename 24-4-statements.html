@@ -70,7 +70,7 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 var glossaryTerms = [
   { term:"EIN", def:"Employer Identification Number &mdash; the entity&rsquo;s own tax ID with the IRS, like a Social Security number for a business. The bank needs it to open an account in the LLC&rsquo;s name." },
   { term:"Co-mingling", def:"Running business and personal money through the same account, so they have to be sorted apart by hand. Opening the LLC&rsquo;s own account ends it." },
-  { term:"Capital contribution", def:"Money (or property) an owner puts into the company. Your $1,300 in cash is one: it raises the LLC&rsquo;s cash and its members&rsquo; capital by $1,300." },
+  { term:"Capital contribution", def:"What a member gives the Company, together with any claims the Company takes on at formation. The $1,300 cash seed is one formation row. After the Company records every formation row, Member&rsquo;s Capital is $2,460, all Contributed." },
   { term:"Disregarded entity", def:"For federal income tax, a single-member LLC is &ldquo;looked through&rdquo; to its owner &mdash; even though it holds its own EIN for every other purpose. Different lines drawn for different purposes." },
   { term:"Counterparty", def:"The other party to a transaction or contract. With its own EIN and accounts, the LLC is a counterparty in its own right &mdash; it deals with banks, customers, and the IRS in its own name, and can owe and be owed (even sue and be sued) as itself, not as you." }
 ];
@@ -161,7 +161,7 @@ function stmtConfigs(en){
       rows:[ { cells:["06/01","Account opened","&mdash;","&mdash;","0.00"] },
         { cells:["06/01","Opening deposit &mdash; member capital contribution",{v:"1,300.00",tone:"pos"},"&mdash;","1,300.00"] },
         { cells:["","Ending balance","1,300.00","&mdash;","1,300.00"], total:true } ],
-      note:"The entity&rsquo;s first bank account &mdash; its <em>own</em> name and EIN. The <strong>$1,300 opening deposit is your capital contribution</strong> (Cash 0&rarr;1,300; members&rsquo; capital +1,300). The business&rsquo;s money runs through this account now." },
+      note:"The entity&rsquo;s first bank account carries its <em>own</em> name and EIN. The <strong>$1,300 opening deposit is the cash row in the June 1 formation contribution</strong>. After the Company records the other things given and claims assumed, Member&rsquo;s Capital is $2,460, all Contributed. The Company&rsquo;s money runs through this account now." },
     llccard:{ heading:"Card Statement #1 &mdash; the entity&rsquo;s own card", bank:"Harborline Visa",
       who:[ en+" &middot; Business card &middot; &bull;&bull;&bull;&bull; 4180" ],
       box:["Period: June 1&ndash;30, 2026","Previous: $0.00","New balance: $2,030.00"],
@@ -237,7 +237,7 @@ function renderStatements(){
     '<p>Nothing was created or lost &mdash; each co-mingled account just split into a business half and a personal half:</p>'+
     '<p style="margin-top:6px">Checking: LLC <span class="mono">$1,300</span> + personal <span class="mono">$2,774</span> = <span class="mono">$4,074</span> (your old balance)</p>'+
     '<p>Card: LLC <span class="mono">$2,030</span> + personal <span class="mono">$230</span> = <span class="mono">$2,260</span> (your old balance)</p>'+
-    '<p style="margin-top:6px">The only thing new to the <em>LLC</em> is the <strong>$1,300</strong> you moved into its account &mdash; your capital contribution. On the LLC&rsquo;s books: Cash <span class="mono">0 &rarr; 1,300</span>, members&rsquo; capital <span class="mono">+1,300</span>.</p></div>';
+    '<p style="margin-top:6px">On June 1, the Company begins its books at zero and records the complete formation contribution: $4,710 of resources and rights, including the $1,300 cash seed, less $2,250 of claims assumed. The $2,460 difference is Member&rsquo;s Capital, all Contributed; Generated begins at $0.</p></div>';
   html += docsButton();
   html += '<button class="btn-continue btn-block" onclick="nav(\'24-5-schedule-a.html\')">Now complete Schedule A &rarr;</button>';
   document.getElementById('statementsArea').innerHTML = html;
