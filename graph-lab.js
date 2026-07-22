@@ -47,7 +47,7 @@
       .gl-focus-mode .gl-arrow,.gl-focus-mode .gl-node{opacity:.32;filter:grayscale(.8)}
       .gl-focus-mode .gl-focus{opacity:1;filter:none}
       .gl-focus.gl-arrow .gl-arrow-path{stroke-width:3}
-      .gl-pulse{animation:glPulse .72s ease-out}.gl-moved{animation:glMove .72s ease-out}
+      .gl-pulse{animation:glPulse .72s ease-out}.gl-moved{animation:glMove .55s ease-out 3}
       @keyframes glPulse{0%{fill:var(--gl-pulse);font-size:18px}100%{fill:var(--gl-ink);font-size:12px}}
       @keyframes glMove{0%{background:var(--gl-pulse)}100%{background:transparent}}
       .gl-col{box-sizing:border-box;background:var(--gl-panel);border:1px solid #d1d5db;border-radius:7px;padding:12px;color:var(--gl-ink);font:12px Inter,Arial,sans-serif;min-width:210px}

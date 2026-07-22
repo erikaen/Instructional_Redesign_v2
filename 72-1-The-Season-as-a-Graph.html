@@ -51,6 +51,40 @@
       text-align:center;
       text-transform:uppercase;
     }
+    .m7-recognition-walk {
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:8px;
+      margin-top:10px;
+    }
+    .m7-recognition-walk button {
+      border:1px solid #94a3b8;
+      border-radius:999px;
+      padding:7px 12px;
+      background:#fff;
+      color:#0f172a;
+      cursor:pointer;
+      font:700 .78rem/1.2 Inter,sans-serif;
+    }
+    .m7-recognition-walk button:disabled {
+      cursor:not-allowed;
+      opacity:.48;
+    }
+    .m7-recognition-walk button.m7-done {
+      border-color:#2f7b72;
+      background:#e8f5f2;
+      color:#195d55;
+      cursor:default;
+      opacity:1;
+    }
+    .m7-recognition-chip {
+      border-radius:999px;
+      padding:6px 10px;
+      background:#e8f5f2;
+      color:#195d55;
+      font:600 .76rem/1.35 Inter,sans-serif;
+    }
     .m7-glossary-dismiss {
       border:0;
       padding:2px 7px;
@@ -81,6 +115,9 @@
         box-shadow:0 7px 20px rgba(0,0,0,.28);
       }
       .m7-progress { color:#aebbd0; }
+      .m7-recognition-walk button { border-color:#718096; background:#26242e; color:#e7eef9; }
+      .m7-recognition-walk button.m7-done,
+      .m7-recognition-chip { border-color:#63aa9f; background:#193b38; color:#c9f1ea; }
       .m7-season-stage {
         --gl-panel:#26242e;
         --gl-ink:#e7eef9;
@@ -147,6 +184,7 @@ function nav(url){ window.location.href=url; }
 
 var step=0;
 var TOTAL_STEPS=11;
+var beatPhases=[0,0,0,0,0,0,0,0,0,0,0];
 var RECOGNIZED=[
   [],
   ['pbuy'],
@@ -173,6 +211,32 @@ var FOCUS=[
   {nodes:['tools','fix','laptop','depx'],pairs:['tools>depx','fix>depx','laptop>depx']},
   null
 ];
+var NEW_NODES=[
+  [],
+  ['cash','parts'],
+  ['tools'],
+  ['cc'],
+  ['rev'],
+  [],
+  ['pexp'],
+  ['ar','dep'],
+  ['rent','wd'],
+  ['depx','fix','laptop'],
+  []
+];
+var COLUMN_ACCTS=[
+  [],
+  ['cash','parts'],
+  ['cash','tools'],
+  ['cash','cc'],
+  ['cash','gen'],
+  ['cash','gen'],
+  ['parts','gen'],
+  ['ar','dep','gen'],
+  ['cash','gen','wd'],
+  ['tools','fix','laptop','gen'],
+  []
+];
 var data=window.M7_GRAPH;
 var boardSvg=document.getElementById('board');
 var board=GraphLab.createBoard(boardSvg,data,{interactive:true});
@@ -197,13 +261,24 @@ var crossHighlight={
 function render(){
   renderBeats(step);
   boardSvg.classList.remove('m7-show-fan');
-  board.setFan(step===5?'rev>cash':null);
-  board.setRecognized(RECOGNIZED[step]);
-  board.setFocus(FOCUS[step]);
-  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
+  var isEvent=step>=1&&step<=9;
+  var phase=isEvent?beatPhases[step]:3;
+  var prevIds=isEvent?RECOGNIZED[step-1]:RECOGNIZED[step];
+  var involved=isEvent?FOCUS[step].nodes:[];
+  var columnAccts=isEvent&&phase>=2?COLUMN_ACCTS[step]:[];
+  var force=null;
+  if(isEvent&&phase===2){
+    force={};
+    NEW_NODES[step].forEach(function(id){ force[id]='?'; });
+  }
+  board.setFan(step===5&&phase===3?'rev>cash':null);
+  board.setForceNodes(force);
+  board.setFocus(isEvent?(phase>=2?{nodes:involved,pairs:phase===3?FOCUS[step].pairs:[]}:{nodes:[],pairs:[]}):null);
+  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026',highlightAccts:phase===2?columnAccts:[]});
   var leftTitle=leftEl.querySelector('.gl-col-title');
   if(leftTitle) leftTitle.textContent='Balance Sheet';
-  GraphLab.renderColumn(rightEl,data,board,{side:'end',title:step===10?'Balance Sheet — August 31, 2026':'Where we stand',sub:step===10?'the season complete':'live — moves with every event',christened:step===10});
+  GraphLab.renderColumn(rightEl,data,board,{side:'end',title:step===10?'Balance Sheet — August 31, 2026':'Where we stand',sub:step===10?'the season complete':'live — moves with every event',christened:step===10,highlightAccts:columnAccts});
+  board.setRecognized(isEvent&&phase<3?prevIds:RECOGNIZED[step]);
   renderTail(step);
   renderControls(step);
   if(window.lucide) lucide.createIcons();
@@ -234,7 +309,20 @@ function renderBeats(currentStep){
   } else if(currentStep===10){
     text='All fourteen events are recognized. Look right: $4,500 &minus; $0 = $4,500 &mdash; Contributed $2,290, Generated $2,810, Withdrawn ($600) &mdash; and the column has earned its date. It is no longer &ldquo;where we stand&rdquo;: it is the Balance Sheet &mdash; August 31, 2026, the one you built in Module 3. Every account&rsquo;s walk ties: beginning, plus what came in, minus what went out, ending.';
   }
-  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div><p class="m7-progress">Event view '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+  var ritual='';
+  if(currentStep>=1&&currentStep<=9){
+    var phase=beatPhases[currentStep];
+    function ritualButton(label,done,enabled,handler){
+      return '<button type="button"'+(done?' class="m7-done"':'')+(!enabled||done?' disabled':'')+' onclick="'+handler+'()">'+(done?'&#10003; ':'')+label+'</button>';
+    }
+    ritual='<div class="m7-recognition-walk" aria-label="Recognition walk">'
+      +ritualButton('Recognize?',phase>=1,phase===0,'recognizeBeat')
+      +ritualButton('Accounts Involved',phase>=2,phase===1,'showAccounts')
+      +ritualButton('Amounts',phase>=3,phase===2,'showAmounts')
+      +(phase>=1?'<span class="m7-recognition-chip">Yes &mdash; recognized. The event is real and its financial effect is known: it enters the records.</span>':'')
+      +'</div>';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div>'+ritual+'<p class="m7-progress">Event view '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
 }
 
 function renderTail(currentStep){
@@ -246,17 +334,37 @@ function renderTail(currentStep){
 function renderControls(currentStep){
   var html='<div class="nav-buttons">';
   if(currentStep>0) html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
-  if(currentStep<TOTAL_STEPS-1) html+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  if(currentStep<TOTAL_STEPS-1) html+='<button class="btn-next" onclick="advance()"'+(currentStep>=1&&currentStep<=9&&beatPhases[currentStep]<3?' disabled aria-disabled="true"':'')+'>Next &rarr;</button>';
   else html+='<button class="btn-continue" onclick="playSuccess();nav(\'72-2-The-Statements-in-the-Graph.html\')">The Statements in the Graph &rarr;</button>';
   html+='</div>';
   document.getElementById('controls').innerHTML=html;
 }
 
 function advance(){
+  if(step>=1&&step<=9&&beatPhases[step]<3)return;
   playClick();
   step=Math.min(step+1,TOTAL_STEPS-1);
   render();
   window.scrollTo(0,0);
+}
+
+function recognizeBeat(){
+  if(step<1||step>9||beatPhases[step]!==0)return;
+  playClick();
+  beatPhases[step]=1;
+  render();
+}
+function showAccounts(){
+  if(step<1||step>9||beatPhases[step]!==1)return;
+  playClick();
+  beatPhases[step]=2;
+  render();
+}
+function showAmounts(){
+  if(step<1||step>9||beatPhases[step]!==2)return;
+  playClick();
+  beatPhases[step]=3;
+  render();
 }
 function back(){
   playClick();
@@ -266,6 +374,7 @@ function back(){
 }
 
 var glossaryTerms=[
+  {term:'Recognition',def:'The decision that an event enters the records; recognition is what puts an arrow in the picture.'},
   {term:'Node',def:'An account&rsquo;s change during the season shown, not the account&rsquo;s whole history.'},
   {term:'Arrow (give &rarr; receive)',def:'A recorded event drawn from the account that gave to the account that received.'},
   {term:'Enclosure',def:'A dotted boundary showing subparts of a larger whole, such as the detail inside Generated.'},
@@ -282,7 +391,7 @@ function openGlossary(){
   if(window.lucide) lucide.createIcons();
 }
 function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
-function restart(){ playClick(); step=0; render(); window.scrollTo(0,0); }
+function restart(){ playClick(); step=0; beatPhases=[0,0,0,0,0,0,0,0,0,0,0]; render(); window.scrollTo(0,0); }
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') dismissGlossary(); });
 
 GraphLab.wireCrossHighlight(board,[leftEl,rightEl],crossHighlight);
@@ -296,7 +405,7 @@ boardSvg.addEventListener('mouseout',function(event){
   var next=event.relatedTarget;
   if(!next||!arrow.contains(next)) boardSvg.classList.remove('m7-show-fan');
 });
-window.devFill=function(){ step=TOTAL_STEPS-1; render(); };
+window.devFill=function(){ beatPhases=[0,3,3,3,3,3,3,3,3,3,0]; step=TOTAL_STEPS-1; render(); };
 render();
 </script>
 <script src="dev.js"></script>

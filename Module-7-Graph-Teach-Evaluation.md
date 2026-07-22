@@ -243,6 +243,19 @@ corresponding open items in the ruling list below.
     season's collections and the parts they consumed are likewise separate
     beats; at Dana's beat only Cash and Repair Revenue stand vivid.
 
+13. **The recognition ritual — three buttons per beat.** (Ruled 2026-07-21.)
+    After each event is presented, the student walks its recognition through
+    three buttons in sequence, and Next stays locked until all three are done:
+    **Recognize?** — confirms the decision ("Yes — recognized. The event is
+    real and its financial effect is known: it enters the records." — the
+    same line every beat; it is the ritual). **Accounts Involved** — the
+    involved accounts step onto the graph *before any amount is known*, new
+    nodes wearing a `?` badge, and both balance-sheet columns outline the
+    lines that will change; no arrow yet, no numbers move. **Amounts** — the
+    arrow(s) land and the ending column's changed lines flash a few times as
+    they move. Applied on 72-1; extension to the other graph pages awaits
+    Rick's click-through of this model.
+
 ## Proposed module shape (working proposal — every choice Rick's to lock)
 
 Working assumption: **Module 7**, after Module 6 — the course comes home to
