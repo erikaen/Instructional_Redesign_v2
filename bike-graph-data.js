@@ -15,7 +15,7 @@ window.M7_GRAPH = {
     "contrib": {"label": "Contributed", "region": "reasons", "x": 880, "y": 300},
     "wd": {"label": "Withdrawn", "region": "reasons", "x": 690, "y": 300},
     "rev": {"label": "Repair Revenue", "region": "reasons", "sub": "generated", "x": 700, "y": 470},
-    "pexp": {"label": "Parts Used", "region": "reasons", "sub": "generated", "x": 860, "y": 420},
+    "pexp": {"label": "Parts Used", "region": "reasons", "sub": "generated", "x": 860, "y": 455},
     "rent": {"label": "Rent", "region": "reasons", "sub": "generated", "x": 860, "y": 560},
     "depx": {"label": "Depreciation", "region": "reasons", "sub": "generated", "x": 700, "y": 580},
     "wage": {"label": "Owner's Wage", "region": "reasons", "sub": "generated", "x": 785, "y": 520}
