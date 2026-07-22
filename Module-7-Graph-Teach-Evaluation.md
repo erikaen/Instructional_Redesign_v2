@@ -241,7 +241,9 @@ corresponding open items in the ruling list below.
     near-invisible). Events the walk teaches get their own beats — the tool
     purchase and the card payoff are separate recognitions, not a batch; the
     season's collections and the parts they consumed are likewise separate
-    beats; at Dana's beat only Cash and Repair Revenue stand vivid.
+    beats; Ridgeline's receivable and the earning of Smith's deposit are
+    likewise separate beats; at Dana's beat only Cash and Repair Revenue
+    stand vivid.
 
 13. **The recognition ritual — three buttons per beat.** (Ruled 2026-07-21.)
     After each event is presented, the student walks its recognition through
