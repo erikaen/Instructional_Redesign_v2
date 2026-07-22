@@ -62,8 +62,8 @@ var profitOK = false;
 var feedback = '';
 
 var NAPKIN_ROWS = [
-  { label:'Revenue', val:'$10,000', note:'repair work at the ramped-up pace' },
-  { label:'Parts used', val:'&minus;$2,000', note:'scales with the jobs' },
+  { label:'Collections from customers', val:'$10,000', note:'repair work at the ramped-up pace' },
+  { label:'Cash spent for parts', val:'&minus;$2,000', note:'scales with the jobs' },
   { label:'Rent', val:'&minus;$650', note:'the lease runs on' },
   { label:'Salary', val:'&minus;$2,000', note:'your work paid as work, now that labor and ownership separate' },
   { label:'Replacement tools &amp; equipment', val:'&minus;$350', note:'keeping the kit whole' }
@@ -123,7 +123,7 @@ function renderBeats(){
   }
 
   if(step === 2){
-    h += freddieBox('Suppose the ramped-up repair work produces $10,000 of revenue in a month. Let me sketch it.');
+    h += freddieBox('Suppose the ramped-up repair work collects $10,000 in cash from customers in a month. Let me sketch it.');
     h += renderNapkin();
   }
 
@@ -173,7 +173,7 @@ function advance(){
   if(step === 1){
     playClick();
     step = 2;
-    napkinLines = 1; // the napkin never renders empty — Revenue appears with it
+    napkinLines = 1; // the napkin never renders empty — Collections from customers appears with it
     render();
     window.scrollTo(0, 0);
     return;
