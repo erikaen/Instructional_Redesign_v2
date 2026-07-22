@@ -242,7 +242,9 @@ corresponding open items in the ruling list below.
     purchase and the card payoff are separate recognitions, not a batch; the
     season's collections and the parts they consumed are likewise separate
     beats; Ridgeline's receivable and the earning of Smith's deposit are
-    likewise separate beats; at Dana's beat only Cash and Repair Revenue
+    likewise separate beats; the rent and the owner's
+    draw are likewise separate beats (the three depreciation entries may
+    stay one beat — ruled OK); at Dana's beat only Cash and Repair Revenue
     stand vivid.
 
 13. **The recognition ritual — three buttons per beat.** (Ruled 2026-07-21.)
@@ -257,6 +259,25 @@ corresponding open items in the ruling list below.
     arrow(s) land and the ending column's changed lines flash a few times as
     they move. Applied on 72-1; extension to the other graph pages awaits
     Rick's click-through of this model.
+
+14. **The cash flow statement runs both directions.** (Ruled 2026-07-22.)
+    It shows where cash came from AND where it went — never frame it as
+    only the outbound side. 73-1's presented title is now "Where the Cash
+    Came From and Where It Went" (filename unchanged).
+
+15. **Never show the shop's actual ledger to the outsider.** (Ruled
+    2026-07-22.) 74-2's fan reveal (the nineteen named repairs) is CUT;
+    the outsider's reconstruction is built UNCOLLAPSED — the income
+    statement names the Generated members (Repair Revenue, Parts Used,
+    Rent, Depreciation), so those accounts appear in the Generated area
+    and every arrow runs between real accounts (parts→Parts Used, not
+    parts→gen). The page closes on "the summary the statements can
+    support"; the unseen-ledger lesson is prose only.
+
+16. **No market-wage what-if.** (Ruled 2026-07-22.) 75-1 does not get
+    into what a mechanic would actually cost — the what-if wage panel and
+    the market-rate discussion are cut; the page teaches only the
+    draw-vs-wage relabeling (same $600, two lawful pictures).
 
 ## Proposed module shape (working proposal — every choice Rick's to lock)
 

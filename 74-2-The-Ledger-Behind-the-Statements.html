@@ -80,18 +80,6 @@
     .m7-infer-input { width:190px; border:1px solid #7a91ab; border-radius:6px; padding:10px 11px; background:#fff; color:#16324a; font:700 1rem/1.2 "JetBrains Mono",monospace; }
     .m7-infer-submit { min-height:42px; border:0; border-radius:6px; padding:9px 17px; background:#286dc0; color:#fff; cursor:pointer; font:800 .86rem/1 Inter,sans-serif; }
     .m7-proof { margin:12px 0 0; padding:11px 13px; border-left:4px solid #28864f; background:#ecfdf3; color:#166534; font:700 .87rem/1.45 "Open Sans",sans-serif; }
-    .m7-ledger-toggle {
-      display:block;
-      margin:16px auto 0;
-      border:1px solid #286dc0;
-      border-radius:7px;
-      padding:11px 18px;
-      background:#fff;
-      color:#215d9f;
-      cursor:pointer;
-      font:800 .88rem/1.2 Inter,sans-serif;
-    }
-    .m7-ledger-toggle:hover, .m7-ledger-toggle:focus-visible { background:#eaf1f8; outline:2px solid rgba(40,109,192,.2); }
     .m7-glossary-dismiss { border:0; padding:2px 7px; background:transparent; color:inherit; cursor:pointer; font-size:1.7rem; line-height:1; }
     @media (max-width:980px) {
       .m7-season-stage { grid-template-columns:1fr; }
@@ -109,7 +97,7 @@
       .m7-card { border-color:#4b5567; background:#26242e; box-shadow:0 7px 20px rgba(0,0,0,.28); }
       .m7-card-title { background:#302e39; color:#e7eef9; }
       .m7-quiz-q, .m7-infer-label { color:#e7eef9; }
-      .m7-option, .m7-infer-input, .m7-ledger-toggle { border-color:#77849a; background:#211f28; color:#e7eef9; }
+      .m7-option, .m7-infer-input { border-color:#77849a; background:#211f28; color:#e7eef9; }
       .m7-option.is-answer { border-color:#4e966a; background:#183425; color:#b6f0c8; }
       .m7-option.is-wrong { border-color:#d36a54; background:#45251f; color:#ffc0b1; }
       .m7-feedback { color:#ffb19d; }
@@ -172,24 +160,22 @@ function playNope(){ tone(220,0.12,'sine',0.035); }
 function nav(url){ window.location.href=url; }
 
 var step=0;
-var TOTAL_STEPS=7;
+var TOTAL_STEPS=6;
 var data=window.M7_GRAPH;
 var quizPick=null;
 var quizSolved=false;
 var inferenceSolved={1:false,4:false};
 var inferenceAttempts={1:0,4:0};
 var inferenceFeedback={1:'',4:''};
-var fanOpen=false;
 var boardSvg=document.getElementById('board');
 var board=GraphLab.createBoard(boardSvg,data,{interactive:true});
 var leftEl=document.getElementById('beginningColumn');
 var rightEl=document.getElementById('endingColumn');
-board.setCollapse(true);
 
 var assetIds=['cash','ar','rou','parts','tools','fix','laptop'];
 var liabilityIds=['cc','dep'];
 var labels={cash:'Cash',ar:'Receivables',rou:'Right of Use',parts:'Parts',tools:'Tools &amp; Equip',fix:'Fixtures',laptop:'Laptop',cc:'Credit Card',dep:'Customer Deposit'};
-var forcedNodes={cash:true,ar:true,rou:true,parts:true,tools:true,fix:true,laptop:true,cc:true,dep:true,gen:true,wd:600};
+var forcedNodes={cash:true,ar:true,rou:true,parts:true,tools:true,fix:true,laptop:true,cc:true,dep:true,rev:6020,pexp:-1200,rent:-1950,depx:-230,wd:600};
 
 function money(value){ return Math.abs(value).toLocaleString('en-US'); }
 function sum(ids,values){ return ids.reduce(function(total,id){ return total+(values[id]||0); },0); }
@@ -219,26 +205,24 @@ function renderLocalColumn(el,side,title){
 
 function boardState(){
   var recognized=['draw','dana','rest','ccpay'];
-  var tags={'gen>cash':'fact','cash>cc':'fact','cash>wd':'fact'};
-  if(step>1||(step===1&&inferenceSolved[1])){ recognized.push('ridge'); tags['gen>ar']='infer'; }
-  if(step>2||(step===2&&quizSolved)){ recognized.push('smith'); tags['gen>dep']='infer'; }
+  var tags={'rev>cash':'fact','cash>cc':'fact','cash>wd':'fact'};
+  if(step>1||(step===1&&inferenceSolved[1])){ recognized.push('ridge'); tags['rev>ar']='infer'; }
+  if(step>2||(step===2&&quizSolved)){ recognized.push('smith'); tags['rev>dep']='infer'; }
   if(step>=3){
     recognized=recognized.concat(['danaP','restP','pbuy','rentx','tool']);
-    tags['parts>gen']='fact'; tags['cash>parts']='fact'; tags['cash>gen']='fact'; tags['cash>tools']='fact';
+    tags['parts>pexp']='fact'; tags['cash>parts']='fact'; tags['cash>rent']='fact'; tags['cash>tools']='fact';
   }
-  if(step>4||(step===4&&inferenceSolved[4])){ recognized.push('deprT'); tags['tools>gen']='infer'; }
-  if(step>=5){ recognized=recognized.concat(['deprF','deprL']); tags['fix>gen']='infer'; tags['laptop>gen']='infer'; }
-  board.setCollapse(true);
+  if(step>4||(step===4&&inferenceSolved[4])){ recognized.push('deprT'); tags['tools>depx']='infer'; }
+  if(step>=5){ recognized=recognized.concat(['deprF','deprL']); tags['fix>depx']='infer'; tags['laptop>depx']='infer'; }
   board.setRecognized(recognized);
   board.setTags(tags);
   board.setForceNodes(forcedNodes);
-  board.setFan(step===6&&fanOpen?'gen>cash':null);
-  if(step===0) board.setFocus({nodes:['gen','cash','cc','wd'],pairs:['gen>cash','cash>cc','cash>wd']});
-  else if(step===1&&inferenceSolved[1]) board.setFocus({nodes:['gen','ar'],pairs:['gen>ar']});
-  else if(step===2&&quizSolved) board.setFocus({nodes:['gen','dep'],pairs:['gen>dep']});
-  else if(step===3) board.setFocus({nodes:['parts','cash','tools','gen'],pairs:['parts>gen','cash>parts','cash>gen','cash>tools']});
-  else if(step===4&&inferenceSolved[4]) board.setFocus({nodes:['tools','gen'],pairs:['tools>gen']});
-  else if(step===5) board.setFocus({nodes:['fix','laptop','gen'],pairs:['fix>gen','laptop>gen']});
+  if(step===0) board.setFocus({nodes:['rev','cash','cc','wd'],pairs:['rev>cash','cash>cc','cash>wd']});
+  else if(step===1&&inferenceSolved[1]) board.setFocus({nodes:['rev','ar'],pairs:['rev>ar']});
+  else if(step===2&&quizSolved) board.setFocus({nodes:['rev','dep'],pairs:['rev>dep']});
+  else if(step===3) board.setFocus({nodes:['parts','pexp','cash','rent','tools'],pairs:['parts>pexp','cash>parts','cash>rent','cash>tools']});
+  else if(step===4&&inferenceSolved[4]) board.setFocus({nodes:['tools','depx'],pairs:['tools>depx']});
+  else if(step===5) board.setFocus({nodes:['fix','laptop','depx'],pairs:['fix>depx','laptop>depx']});
   else board.setFocus(null);
 }
 
@@ -258,7 +242,7 @@ function renderBeats(currentStep){
   var text='';
   if(currentStep===0){
     heading='Gross flows at last.';
-    text='Release 4 &mdash; the cash statement, and it reports <b>gross</b> flows, not nets. Three facts land at once. Collections from repair customers: <b>$'+money(entryValue('dana')+entryValue('rest'))+'</b> &mdash; a solid arrow from Generated into Cash. The card line reads <em>paid off</em>: <b>$'+money(entryValue('ccpay'))+'</b> &mdash; and that settles the question release 2 had to leave open: no new charges hid inside the reported change. And the take&rsquo;s cash assumption is <b>confirmed</b> &mdash; watch its arrow turn solid. Facts move the boundary.';
+    text='Release 4 &mdash; the cash statement, and it reports <b>gross</b> flows, not nets. Three facts land at once. Collections from repair customers: <b>$'+money(entryValue('dana')+entryValue('rest'))+'</b> &mdash; a solid arrow from Repair Revenue into Cash. The card line reads <em>paid off</em>: <b>$'+money(entryValue('ccpay'))+'</b> &mdash; and that settles the question release 2 had to leave open: no new charges hid inside the reported change. And the take&rsquo;s cash assumption is <b>confirmed</b> &mdash; watch its arrow turn solid. Facts move the boundary.';
   } else if(currentStep===1){
     heading='The 520 wedge.';
     text='Revenue was <b>6,020</b>; only <b>5,500</b> arrived as cash. Where is the remaining <b>520</b>? Two balance-sheet facts are waiting to absorb it. First: how much of it sits in Receivables?';
@@ -273,10 +257,7 @@ function renderBeats(currentStep){
     text='The income statement lumps the gear&rsquo;s seasons: <b>230</b>, one line. But you hold three balance-sheet facts and one investing fact. Walk the Tools account to recover its share: began 1,200, bought 400, ended 1,440 &mdash; the walk only ties if the Tools gave how much of their working lives?';
   } else if(currentStep===5){
     heading='The last two arrows.';
-    text='Fixtures &rarr; Generated <b>40</b> and Laptop &rarr; Generated <b>30</b> complete the split: 160 + 40 + 30 = the income statement&rsquo;s single 230 line. Twelve arrows; every walk ties; every arrow tagged &mdash; fact, or inference under an assumption you can name. This is the best picture an outsider can build. Now see what it was a summary <em>of</em>.';
-  } else {
-    heading='The ledger, fanned open.';
-    text='Toggle the shop&rsquo;s actual ledger. Your single $5,500 collections arrow fans into <b>nineteen named repairs</b> &mdash; Dana R.&rsquo;s $120 through Westville Bike Share&rsquo;s $500. About fifty entries stand behind your twelve arrows &mdash; and no statement, at any release level, could have given them to you. <b>Both pictures are lawful. Both produce exactly these statements. Only one is what happened.</b>';
+    text='Fixtures &rarr; Depreciation Expense <b>40</b> and Laptop &rarr; Depreciation Expense <b>30</b> complete the split: 160 + 40 + 30 = the income statement&rsquo;s single 230 line. Twelve arrows; every walk ties; every arrow tagged &mdash; fact, or inference under an assumption you can name. This is the best picture an outsider can build. Behind it sits the shop&rsquo;s own ledger &mdash; dozens of entries you will never see. Many different ledgers could produce exactly these statements; the graph you built is the summary the statements can support.';
   }
   document.getElementById('beats').innerHTML='<div class="narrative-block"><h2>'+heading+'</h2><p>'+text+'</p></div><p class="m7-progress">Step '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
 }
@@ -307,10 +288,6 @@ function renderTail(currentStep){
   var html='';
   if(currentStep===1||currentStep===4) html=inferHtml(currentStep);
   else if(currentStep===2) html=quizHtml();
-  else if(currentStep===6){
-    html='<button class="m7-ledger-toggle" id="ledgerToggle" type="button" aria-pressed="'+fanOpen+'">'+(fanOpen?'Hide the ledger':'Show the shop&rsquo;s actual ledger')+'</button>';
-    html+='<div class="insight-box">The outsider&rsquo;s craft is not guessing what happened &mdash; it is knowing exactly how far the statements let you see, and naming every assumption past that line.</div>';
-  }
   document.getElementById('tail').innerHTML=html;
 }
 
@@ -340,8 +317,6 @@ function wireTail(){
   });
   var form=document.getElementById('inferForm');
   if(form) form.addEventListener('submit',checkInference);
-  var toggle=document.getElementById('ledgerToggle');
-  if(toggle) toggle.addEventListener('click',toggleLedger);
 }
 
 function chooseQuiz(index){
@@ -380,18 +355,15 @@ function checkInference(event){
   if(!inferenceSolved[which]){ var fresh=document.getElementById('inferInput'); if(fresh)fresh.focus(); }
 }
 
-function toggleLedger(){ fanOpen=!fanOpen; playClick(); render(); }
 function advance(){
   if(!canAdvance(step))return;
   playClick();
-  fanOpen=false;
   step=Math.min(step+1,TOTAL_STEPS-1);
   render();
   window.scrollTo(0,0);
 }
 function back(){
   playClick();
-  fanOpen=false;
   step=Math.max(step-1,0);
   render();
   window.scrollTo(0,0);
@@ -419,18 +391,17 @@ function restart(){
   inferenceSolved={1:false,4:false};
   inferenceAttempts={1:0,4:0};
   inferenceFeedback={1:'',4:''};
-  fanOpen=false;
   render();
   window.scrollTo(0,0);
 }
 document.addEventListener('keydown',function(event){ if(event.key==='Escape') dismissGlossary(); });
 
 var crossHighlight={
-  cash:{nodes:['cash'],pairs:['gen>cash','cash>cc','cash>wd','cash>parts','cash>gen','cash>tools']},
-  ar:{nodes:['ar'],pairs:['gen>ar']},rou:{nodes:['rou'],pairs:[]},parts:{nodes:['parts'],pairs:['parts>gen','cash>parts']},
-  tools:{nodes:['tools'],pairs:['cash>tools','tools>gen']},fix:{nodes:['fix'],pairs:['fix>gen']},laptop:{nodes:['laptop'],pairs:['laptop>gen']},
-  cc:{nodes:['cc'],pairs:['cash>cc']},dep:{nodes:['dep'],pairs:['gen>dep']},contrib:{nodes:['contrib'],pairs:[]},
-  gen:{nodes:['gen'],pairs:['gen>cash','gen>ar','gen>dep','parts>gen','cash>gen','tools>gen','fix>gen','laptop>gen']},wd:{nodes:['wd'],pairs:['cash>wd']}
+  cash:{nodes:['cash'],pairs:['rev>cash','cash>cc','cash>wd','cash>parts','cash>rent','cash>tools']},
+  ar:{nodes:['ar'],pairs:['rev>ar']},rou:{nodes:['rou'],pairs:[]},parts:{nodes:['parts'],pairs:['parts>pexp','cash>parts']},
+  tools:{nodes:['tools'],pairs:['cash>tools','tools>depx']},fix:{nodes:['fix'],pairs:['fix>depx']},laptop:{nodes:['laptop'],pairs:['laptop>depx']},
+  cc:{nodes:['cc'],pairs:['cash>cc']},dep:{nodes:['dep'],pairs:['rev>dep']},contrib:{nodes:['contrib'],pairs:[]},
+  gen:{nodes:['gen','rev','pexp','rent','depx'],pairs:['rev>cash','rev>ar','rev>dep','parts>pexp','cash>rent','tools>depx','fix>depx','laptop>depx']},wd:{nodes:['wd'],pairs:['cash>wd']}
 };
 GraphLab.wireCrossHighlight(board,[leftEl,rightEl],crossHighlight);
 window.devFill=function(){
@@ -439,7 +410,6 @@ window.devFill=function(){
   inferenceSolved={1:true,4:true};
   inferenceAttempts={1:0,4:0};
   inferenceFeedback={1:'Correct. The $300 change is the uncollected revenue under the stated assumption.',4:'Correct. The Tools walk gives the $160 share.'};
-  fanOpen=false;
   step=TOTAL_STEPS-1;
   render();
 };

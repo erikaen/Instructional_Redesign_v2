@@ -296,7 +296,7 @@ function renderControls(currentStep){
     var locked=(currentStep===1&&!incomeComplete())||(currentStep===2&&!capitalComplete());
     html+='<button class="btn-next" onclick="advance()"'+(locked?' disabled aria-disabled="true"':'')+'>Next &rarr;</button>';
   } else {
-    html+='<button class="btn-continue" onclick="playSuccess();nav(\'73-1-Where-the-Cash-Went.html\')">Where the Cash Went &rarr;</button>';
+    html+='<button class="btn-continue" onclick="playSuccess();nav(\'73-1-Where-the-Cash-Went.html\')">Where the Cash Came From and Where It Went &rarr;</button>';
   }
   html+='</div>';
   document.getElementById('controls').innerHTML=html;

@@ -183,8 +183,8 @@ function playClick(){ tone(600,0.08,'sine',0.04); }
 function nav(url){ window.location.href=url; }
 
 var step=0;
-var TOTAL_STEPS=12;
-var beatPhases=[0,0,0,0,0,0,0,0,0,0,0,0];
+var TOTAL_STEPS=13;
+var beatPhases=[0,0,0,0,0,0,0,0,0,0,0,0,0];
 var RECOGNIZED=[
   [],
   ['pbuy'],
@@ -195,6 +195,7 @@ var RECOGNIZED=[
   ['pbuy','tool','ccpay','dana','rest','danaP','restP'],
   ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge'],
   ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith'],
+  ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx'],
   ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw'],
   ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL'],
   ['pbuy','tool','ccpay','dana','rest','danaP','restP','ridge','smith','rentx','draw','deprT','deprF','deprL']
@@ -209,7 +210,8 @@ var FOCUS=[
   {nodes:['parts','pexp'],pairs:['parts>pexp']},
   {nodes:['rev','ar'],pairs:['rev>ar']},
   {nodes:['rev','dep'],pairs:['rev>dep']},
-  {nodes:['cash','rent','wd'],pairs:['cash>rent','cash>wd']},
+  {nodes:['cash','rent'],pairs:['cash>rent']},
+  {nodes:['cash','wd'],pairs:['cash>wd']},
   {nodes:['tools','fix','laptop','depx'],pairs:['tools>depx','fix>depx','laptop>depx']},
   null
 ];
@@ -223,7 +225,8 @@ var NEW_NODES=[
   ['pexp'],
   ['ar'],
   ['dep'],
-  ['rent','wd'],
+  ['rent'],
+  ['wd'],
   ['depx','fix','laptop'],
   []
 ];
@@ -237,7 +240,8 @@ var COLUMN_ACCTS=[
   ['parts','gen'],
   ['ar','gen'],
   ['dep','gen'],
-  ['cash','gen','wd'],
+  ['cash','gen'],
+  ['cash','wd'],
   ['tools','fix','laptop','gen'],
   []
 ];
@@ -265,7 +269,7 @@ var crossHighlight={
 function render(){
   renderBeats(step);
   boardSvg.classList.remove('m7-show-fan');
-  var isEvent=step>=1&&step<=10;
+  var isEvent=step>=1&&step<=11;
   var phase=isEvent?beatPhases[step]:3;
   var prevIds=isEvent?RECOGNIZED[step-1]:RECOGNIZED[step];
   var involved=isEvent?FOCUS[step].nodes:[];
@@ -281,7 +285,7 @@ function render(){
   GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026',highlightAccts:phase===2?columnAccts:[]});
   var leftTitle=leftEl.querySelector('.gl-col-title');
   if(leftTitle) leftTitle.textContent='Balance Sheet';
-  GraphLab.renderColumn(rightEl,data,board,{side:'end',title:step===11?'Balance Sheet — August 31, 2026':'Where we stand',sub:step===11?'the season complete':'live — moves with every event',christened:step===11,highlightAccts:columnAccts});
+  GraphLab.renderColumn(rightEl,data,board,{side:'end',title:step===12?'Balance Sheet — August 31, 2026':'Where we stand',sub:step===12?'the season complete':'live — moves with every event',christened:step===12,highlightAccts:columnAccts});
   board.setRecognized(isEvent&&phase<3?prevIds:RECOGNIZED[step]);
   renderTail(step);
   renderControls(step);
@@ -309,14 +313,16 @@ function renderBeats(currentStep){
   } else if(currentStep===8){
     text='And Smith&rsquo;s custom frame goes out the door: the work gives the delivered frame, and the Customer Deposit&rsquo;s claim receives its settlement &mdash; $220 no longer owed, now earned. A liability shrinking as revenue is recognized &mdash; no cash in sight. Revenue now runs $520 ahead of collections. Remember that number.';
   } else if(currentStep===9){
-    text='Keeping the doors open, and the owner&rsquo;s take. Cash gives $650 &times; 3 = $1,950 for the season&rsquo;s rent. And Cash gives $600 to the owner &mdash; received by Withdrawn, its own pile among the Reasons. A draw is not an expense: it never enters Generated, and the income statement will never see it.';
+    text='Keeping the doors open. Cash gives $650 &times; 3 = $1,950 for the season&rsquo;s rent &mdash; received by Rent, its own pile inside Generated. An expense of the shop, like the parts: the income statement will count it.';
   } else if(currentStep===10){
-    text='No cash moves in the season&rsquo;s last events. The tools give a season of their working lives &mdash; $160 &mdash; received by Depreciation. The fixtures give $40; the laptop gives $30. One number for later: the income statement will show a single $230 line; the picture remembers the split.';
+    text='And the owner&rsquo;s take. Cash gives $600 to the owner &mdash; received by Withdrawn, its own pile among the Reasons. A draw is not an expense: it never enters Generated, and the income statement will never see it.';
   } else if(currentStep===11){
+    text='No cash moves in the season&rsquo;s last events. The tools give a season of their working lives &mdash; $160 &mdash; received by Depreciation. The fixtures give $40; the laptop gives $30. One number for later: the income statement will show a single $230 line; the picture remembers the split.';
+  } else if(currentStep===12){
     text='All fourteen events are recognized. Look right: $4,500 &minus; $0 = $4,500 &mdash; Contributed $2,290, Generated $2,810, Withdrawn ($600) &mdash; and the column has earned its date. It is no longer &ldquo;where we stand&rdquo;: it is the Balance Sheet &mdash; August 31, 2026, the one you built in Module 3. Every account&rsquo;s walk ties: beginning, plus what came in, minus what went out, ending.';
   }
   var ritual='';
-  if(currentStep>=1&&currentStep<=10){
+  if(currentStep>=1&&currentStep<=11){
     var phase=beatPhases[currentStep];
     function ritualButton(label,done,enabled,handler){
       return '<button type="button"'+(done?' class="m7-done"':'')+(!enabled||done?' disabled':'')+' onclick="'+handler+'()">'+(done?'&#10003; ':'')+label+'</button>';
@@ -332,7 +338,7 @@ function renderBeats(currentStep){
 }
 
 function renderTail(currentStep){
-  document.getElementById('tail').innerHTML=currentStep===11
+  document.getElementById('tail').innerHTML=currentStep===12
     ? '<div class="insight-box">One summer, fourteen events, one picture &mdash; and the ending balance sheet built itself. The statements are next: they are already in there.</div>'
     : '';
 }
@@ -340,14 +346,14 @@ function renderTail(currentStep){
 function renderControls(currentStep){
   var html='<div class="nav-buttons">';
   if(currentStep>0) html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
-  if(currentStep<TOTAL_STEPS-1) html+='<button class="btn-next" onclick="advance()"'+(currentStep>=1&&currentStep<=10&&beatPhases[currentStep]<3?' disabled aria-disabled="true"':'')+'>Next &rarr;</button>';
+  if(currentStep<TOTAL_STEPS-1) html+='<button class="btn-next" onclick="advance()"'+(currentStep>=1&&currentStep<=11&&beatPhases[currentStep]<3?' disabled aria-disabled="true"':'')+'>Next &rarr;</button>';
   else html+='<button class="btn-continue" onclick="playSuccess();nav(\'72-2-The-Statements-in-the-Graph.html\')">The Statements in the Graph &rarr;</button>';
   html+='</div>';
   document.getElementById('controls').innerHTML=html;
 }
 
 function advance(){
-  if(step>=1&&step<=10&&beatPhases[step]<3)return;
+  if(step>=1&&step<=11&&beatPhases[step]<3)return;
   playClick();
   step=Math.min(step+1,TOTAL_STEPS-1);
   render();
@@ -355,19 +361,19 @@ function advance(){
 }
 
 function recognizeBeat(){
-  if(step<1||step>10||beatPhases[step]!==0)return;
+  if(step<1||step>11||beatPhases[step]!==0)return;
   playClick();
   beatPhases[step]=1;
   render();
 }
 function showAccounts(){
-  if(step<1||step>10||beatPhases[step]!==1)return;
+  if(step<1||step>11||beatPhases[step]!==1)return;
   playClick();
   beatPhases[step]=2;
   render();
 }
 function showAmounts(){
-  if(step<1||step>10||beatPhases[step]!==2)return;
+  if(step<1||step>11||beatPhases[step]!==2)return;
   playClick();
   beatPhases[step]=3;
   render();
@@ -397,7 +403,7 @@ function openGlossary(){
   if(window.lucide) lucide.createIcons();
 }
 function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
-function restart(){ playClick(); step=0; beatPhases=[0,0,0,0,0,0,0,0,0,0,0,0]; render(); window.scrollTo(0,0); }
+function restart(){ playClick(); step=0; beatPhases=[0,0,0,0,0,0,0,0,0,0,0,0,0]; render(); window.scrollTo(0,0); }
 document.addEventListener('keydown',function(e){ if(e.key==='Escape') dismissGlossary(); });
 
 GraphLab.wireCrossHighlight(board,[leftEl,rightEl],crossHighlight);
@@ -411,7 +417,7 @@ boardSvg.addEventListener('mouseout',function(event){
   var next=event.relatedTarget;
   if(!next||!arrow.contains(next)) boardSvg.classList.remove('m7-show-fan');
 });
-window.devFill=function(){ beatPhases=[0,3,3,3,3,3,3,3,3,3,3,0]; step=11; render(); };
+window.devFill=function(){ beatPhases=[0,3,3,3,3,3,3,3,3,3,3,3,0]; step=12; render(); };
 render();
 </script>
 <script src="dev.js"></script>

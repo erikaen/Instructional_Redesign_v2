@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Where the Cash Went</title>
+  <title>Where the Cash Came From and Where It Went</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -148,7 +148,7 @@
   <div class="prework-wrap">
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Where the Cash Went</h1>
+        <h1>Where the Cash Came From and Where It Went</h1>
         <p class="tut-header-sub">Module 7 &middot; ~7 min</p>
       </div>
       <div class="tut-header-actions">
@@ -156,7 +156,7 @@
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">Where the Cash Went</div>
+    <div class="phase-title" id="phaseTitle">Where the Cash Came From and Where It Went</div>
 
     <div id="beats"></div>
     <div class="m7-season-stage" id="mainGrid">
@@ -259,15 +259,15 @@ function render(){
 function renderBeats(currentStep){
   var text='';
   if(currentStep===0){
-    text='Profitable &mdash; and poorer in cash. The season ended with net income $2,640 &mdash; and Cash walked from $1,300 down to $620. Both are true, and the picture holds the answer: seven of its arrows touch Cash. Some are the day-job; one bought long-lived capacity; two settled claims on the shop. The cash statement&rsquo;s whole job is to sort those seven arrows into three channels.';
+    text='Profitable &mdash; and poorer in cash. The season ended with net income $2,640 &mdash; and Cash walked from $1,300 down to $620. Both are true, and the picture holds the answer: seven of its arrows touch Cash. The collections brought $5,500 into Cash from customers; the other arrows show where cash went. Some are the day-job; one bought long-lived capacity; two settled claims on the shop. The cash statement&rsquo;s whole job is to show where cash came from and where it went by sorting those seven arrows into three channels.';
   } else if(currentStep===1){
-    text='Sort the seven. Operating &mdash; the day-job: collecting for repairs, restocking the shelf, paying the rent. Investing &mdash; buying long-lived capacity. Financing &mdash; settling the money that set the shop up, and the owner&rsquo;s take. Assign each arrow; the Cash node opens into its three channels as you go.';
+    text='Sort the seven to show where cash came from and where it went. Operating &mdash; the day-job: collecting $5,500 from customers, restocking the shelf, paying the rent. Investing &mdash; buying long-lived capacity. Financing &mdash; settling the money that set the shop up, and the owner&rsquo;s take. Assign each arrow; the Cash node opens into its three channels as you go.';
   } else if(currentStep===2){
     text='The cash statement, read off the channels: Operating +$2,350, Investing &minus;$400, Financing &minus;$2,630 &mdash; summing to &minus;$680 and tying $1,300 to $620. The twist worth saying out loud: the card payoff and the owner&rsquo;s take sit in Financing because classification follows the claim being settled, not how the cash felt on its way out.';
   } else if(currentStep===3){
     text='Why is operating cash not net income? Walk the gap. Start at $2,640. Add $230 &mdash; the gear&rsquo;s three gives received by Depreciation, no cash moving. Subtract $300 &mdash; Ridgeline&rsquo;s job, earned with the cash still to come. Subtract $220 &mdash; Smith&rsquo;s frame, earned this season with the cash received last period. Land on $2,350 &mdash; exactly the Operating channel. Click each row to see its arrows.';
   } else {
-    text='The season, fully told: one picture &mdash; and the balance-sheet pair, the income statement, the capital walk, and the cash statement are all readings off it. Next, the course takes the picture away. You keep only the statements &mdash; the outsider&rsquo;s seat &mdash; and build the best picture they allow.';
+    text='The season, fully told: one picture &mdash; and the balance-sheet pair, the income statement, the capital walk, and the cash statement are all readings off it. The cash statement shows where cash came from, including $5,500 collected from customers, and where it went. Next, the course takes the picture away. You keep only the statements &mdash; the outsider&rsquo;s seat &mdash; and build the best picture they allow.';
   }
   document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div><p class="m7-progress">Reading '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
 }
