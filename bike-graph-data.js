@@ -47,8 +47,8 @@ window.M7_GRAPH = {
     "laptop": {"beg": 610, "end": 580},
     "cc": {"beg": 2030, "end": 0},
     "dep": {"beg": 220, "end": 0},
-    "contrib": {"beg": 2290, "end": 2290},
-    "gen": {"beg": 170, "end": 2810},
+    "contrib": {"beg": 2460, "end": 2460},
+    "gen": {"beg": 0, "end": 2640},
     "wd": {"beg": 0, "end": 600}
   },
   "channels": {
@@ -91,5 +91,5 @@ window.M7_GRAPH = {
     {"who": "Sam Q.", "amt": 390},
     {"who": "Westville Bike Share", "amt": 500}
   ],
-  "worldW": {"ni": 2040, "gen": 2210, "cfo": 1750, "netCash": -680}
+  "worldW": {"ni": 2040, "gen": 2040, "cfo": 1750, "netCash": -680}
 };

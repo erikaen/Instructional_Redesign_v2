@@ -279,6 +279,18 @@ corresponding open items in the ruling list below.
     the market-rate discussion are cut; the page teaches only the
     draw-vs-wage relabeling (same $600, two lawful pictures).
 
+17. **June 1 is all-Contributed.** (Ruled 2026-07-22, during the
+    formation-mockup exploration.) The records before the LLC's formation
+    were the member's *personal* records; nothing generated before the
+    Company existed can be the Company's generation. So the June 1 balance
+    sheet carries **Contributed $2,460, Generated $0** — the old
+    2,290/170 split is retired in Module 7. Aug 31 becomes Contributed
+    2,460 / Generated 2,640 / Withdrawn (600); Member's Capital totals and
+    net income are unchanged. Generated's pile is born at Dana's repair —
+    the Company's own first work. World-W Generated ends 2,040.
+    NOTE: Modules 2–6 still print the old split; that course-wide sweep is
+    a separate project, not yet scheduled.
+
 ## Proposed module shape (working proposal — every choice Rick's to lock)
 
 Working assumption: **Module 7**, after Module 6 — the course comes home to

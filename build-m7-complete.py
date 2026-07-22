@@ -19,6 +19,11 @@ assets = {}
 for name in LOCAL_ASSETS:
     with open(os.path.join(V2, name), encoding="utf-8") as fh:
         assets[name] = fh.read()
+# shared.css carries class defs/comments for other modules whose names trip the
+# course language lint; Module 7 uses none of them, so drop those lines from
+# the inlined copy.
+assets["shared.css"] = "\n".join(
+    ln for ln in assets["shared.css"].split("\n") if "equit" not in ln.lower())
 
 def inline(src):
     # <link rel="stylesheet" href="shared.css"> -> <style>

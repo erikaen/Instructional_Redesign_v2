@@ -19,7 +19,7 @@ All figures are Bike-Repair canon, already verified against the workbook.
    **christened** "Balance Sheet — August 31, 2026" only when the last entry
    posts (titled "Where we stand" until then).
 2. **No closing, ever.** The ending column's Generated line accumulates
-   implicitly (170 → 2,810). No merge, no reset, no closing vocabulary, no
+   implicitly (0 → 2,640; revised 2026-07-22 — see ruling 17, June 1 is all-Contributed). No merge, no reset, no closing vocabulary, no
    journal-entry explainers (reserved for the future accounting-terms module).
 3. **Member's Capital in three pieces** on the ending column: Contributed /
    Generated / Withdrawn.
@@ -100,12 +100,12 @@ M7-LOs. Nav: Back → 63-6; forward → 72-1.
 | 0 | st 0 | The two sheets: beginning column = June 1 (4,710 / 2,250 / 2,460, piles shown); ending column identical, titled "Where we stand"; canvas empty except three faint region enclosures. Narration: the season happens between these columns; every account walks. |
 | 1 | st 3 (part) | The first match — restock: Cash and Parts nodes born; arrow Cash→Parts 1,200; both columns' lines move; identity re-ties. Both ends visible on the sheets — matched, no Reason needed. |
 | 2 | st 3 (part) | The other two matches — the tool (Tools node, 400) and the card payoff (Credit Card node, 2,030 — the claim settled). Three arrows, and the REASONS region still empty: some of the season explains itself. |
-| 3 | st 1 (part) | The first Reason — Dana's $120: the Generated enclosure opens inside REASONS, Repair Revenue born; arrow Revenue→Cash 120. Cash received — what gave? The work. That takes a Reason. Ending Generated line moves 170 → 290. |
+| 3 | st 1 (part) | The first Reason — Dana's $120: the Generated enclosure opens inside REASONS, Repair Revenue born; arrow Revenue→Cash 120. Cash received — what gave? The work. That takes a Reason. Ending Generated line moves 0 → 120: the pile is born from the Company’s own first repair. |
 | 4 | st 1 (rest) | The season at scale: the same arrow's total grows 120 → 5,500 (hover: the eighteen names); the repair pair completes — Parts Used born, Parts→Parts Used grows 10 → 1,200. Every repair is that pair: the work gives, the shelf gives. |
 | 5 | st 2 | Revenue that touched no new cash: Ridgeline (Receivables born; Revenue→Receivables 300) and Smith (Revenue→Customer Deposit 220 — the deposit settled by delivery). Revenue now runs $520 ahead of collections — remember that number. |
 | 6 | st 3 (rest) | Running the shop, and the owner's take: rent (Cash→Rent 1,950) and the draw (Withdrawn born; Cash→Withdrawn 600 — its own pile, never an expense). |
 | 7 | st 4 | The season's share of the gear: three gives of a season's use — Tools→Depreciation 160, Fixtures→Depreciation 40, Laptop→Depreciation 30. No cash moves. The income statement will one day show one 230 line; the graph remembers the split. |
-| 8 | new | The christening: all 14 entries posted; the ending column ties (4,500 − 0 = 4,500; Contributed 2,290 / Generated 2,810 / Withdrawn (600)) and is christened **Balance Sheet — August 31, 2026**. Every account's walk ties. Chain → 72-2. |
+| 8 | new | The christening: all 14 entries posted; the ending column ties (4,500 − 0 = 4,500; Contributed 2,460 / Generated 2,640 / Withdrawn (600)) and is christened **Balance Sheet — August 31, 2026**. Every account's walk ties. Chain → 72-2. |
 
 ### 72-2 The Statements in the Graph (~5 min) — bike-forward stages 5–7 minus closing, 4 steps
 
