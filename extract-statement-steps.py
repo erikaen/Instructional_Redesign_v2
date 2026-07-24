@@ -650,7 +650,7 @@ def verify(data: dict[str, Any]) -> bool:
     cash_header = label_rows(snapshot_assets, "Cash")[0]
     cash_boundary = label_rows(
         snapshot_assets,
-        "Deposited to open the LLC bank account",
+        "Company received at formation (June 1)",
         start=cash_header + 1,
         contains=True,
     )[0]
