@@ -42,7 +42,7 @@ var PLAN = [
    ['links to 32-1', d=>d.documentElement.outerHTML.includes('32-1-check-the-records.html')]]},
  {file:'32-1-check-the-records.html', asserts:[
    ['job-log control present', d=>!!d.querySelector('button[onclick="openJobLog()"]')],
-   ['opening GENERATED amount 2,740', d=>d.body.textContent.includes('2,740')],
+   ['opening GENERATED amount 2,570', d=>d.body.textContent.includes('2,570')],
    ['Ridgeline named', d=>d.body.textContent.includes('Ridgeline Trail Crew')],
    ['Ridgeline parts row present and visible', d=>{var rows=d.querySelectorAll('#wbGrid [data-brw-row]'); for(var i=0;i<rows.length;i++) if(rows[i].textContent.includes('Parts used — Ridgeline Trail Crew')) return !rows[i].classList.contains('is-collapsed'); return false;}],
    ['links to 32-2', d=>d.documentElement.outerHTML.includes('32-2-record-the-receivable.html')]]},
@@ -50,33 +50,21 @@ var PLAN = [
    ['two workbook panels', d=>d.querySelectorAll('.xlwb').length===2],
    ['both tab bars complete and no Working Tab', d=>d.querySelectorAll('[data-sheet-tab]').length>=8 && !Array.prototype.some.call(d.querySelectorAll('[data-sheet-tab]'),function(t){return t.textContent.trim()==='Working Tab';})],
    ['Ridgeline delivery row present and visible after fill', d=>{var rows=d.querySelectorAll('#rightGrid [data-brw-row]'); for(var i=0;i<rows.length;i++) if(rows[i].textContent.includes('Repair delivered — Ridgeline Trail Crew')) return !rows[i].classList.contains('is-collapsed'); return false;}],
-   ['GENERATED reaches 3,040', d=>d.body.textContent.includes('3,040')],
+   ['GENERATED reaches 2,870', d=>d.body.textContent.includes('2,870')],
    ['source includes Put it on the books', d=>d.documentElement.outerHTML.includes('Put it on the books')],
    ['links to 32-3', d=>d.documentElement.outerHTML.includes('32-3-the-third-kind.html')]]},
  {file:'32-3-the-third-kind.html', asserts:[
    ["Anna's wording (we write it ourselves)", d=>d.documentElement.outerHTML.includes('we write it ourselves')],
    ['three depreciation rows visible in left panel', d=>{var rows=d.querySelectorAll('#leftGrid [data-brw-row]'),found=[]; for(var i=0;i<rows.length;i++) if(rows[i].textContent.includes('Depreciation — ')) found.push(rows[i]); return found.length===3 && found.every(function(row){return !row.classList.contains('is-collapsed');});}],
-   ['GENERATED settles at 2,810 after fill', d=>d.body.textContent.includes('2,810')],
+   ['GENERATED settles at 2,640 after fill', d=>d.body.textContent.includes('2,640')],
    ['two workbook panels', d=>d.querySelectorAll('.xlwb').length===2],
-   ['links to 33-1', d=>d.documentElement.outerHTML.includes('33-1-copy-the-rows.html')]]},
- {file:'33-1-copy-the-rows.html', asserts:[
-   ['Working Tab displayed amber and active after fill', d=>{var t=d.querySelector('[data-sheet-tab="working"]'); return !!t && t.textContent.trim()==='Working Tab' && !t.hidden && d.defaultView.getComputedStyle(t).display!=='none' && t.classList.contains('tk-temp') && t.classList.contains('active');}],
-   ['raw copied laptop depreciation row present', d=>d.body.textContent.includes('Depreciation — laptop, Summer 2026')],
-   ['dated line 2,810 present', d=>d.body.textContent.includes('2,810')],
-   ['links to 33-2', d=>d.documentElement.outerHTML.includes('33-2-sort-the-rows.html')]]},
- {file:'33-2-sort-the-rows.html', asserts:[
+   ['links to 33-1', d=>d.documentElement.outerHTML.includes('33-1-build-the-income-statement.html')]]},
+ {file:'33-1-build-the-income-statement.html', asserts:[
+   ['amber Working Tab exists mid-flow and final tab is purple Income Statement', d=>{var t=d.querySelector('[data-sheet-tab="working"]'); return !!t && t.getAttribute('data-was-amber-working')==='true' && t.textContent.trim()==='Income Statement' && t.classList.contains('tk-stmt') && t.classList.contains('active');}],
    ['grouped totals 6,020, 1,200, 1,950, and 230', d=>['6,020','1,200','1,950','230'].every(function(x){return d.body.textContent.includes(x);})],
-   ['Revenue appears before Expenses in statement grid', d=>{var g=d.querySelector('#statementBuild .brw-grid'),t=g?g.textContent:''; var r=t.search(/revenue/i); return r>=0 && t.indexOf('Expenses')>r;}],
-   ['no sorter drop zone named Category or Kind', d=>!Array.prototype.some.call(d.querySelectorAll('.brw-sort-zone'),function(z){return /^(Category|Kind)$/i.test(z.textContent.trim());})],
-   ['Working Tab remains amber', d=>{var t=d.querySelector('[data-sheet-tab="working"]'); return !!t && t.textContent.trim()==='Working Tab' && t.classList.contains('tk-temp');}],
-   ['links to 33-3', d=>d.documentElement.outerHTML.includes('33-3-format-the-statement.html')]]},
- {file:'33-3-format-the-statement.html', asserts:[
-   ['title is not The Bottom Line', d=>d.title!=='The Bottom Line'],
-   ['fifth tab is purple Income Statement', d=>{var tabs=d.querySelectorAll('.xlwb-tab'),t=tabs[4]; return tabs.length===5 && t.textContent.trim()==='Income Statement' && t.classList.contains('tk-stmt');}],
    ['exactly one Depreciation line in statement grid', d=>{var g=d.querySelector('#statementBuild .brw-grid'); return !!g && (g.textContent.match(/Depreciation/g)||[]).length===1;}],
    ['total expenses 3,380 and net income 2,640', d=>d.body.textContent.includes('3,380') && d.body.textContent.includes('2,640')],
-   ['the tie reads 170', d=>d.body.textContent.includes('170')],
-   ['never says lands', d=>!/\blands\b/i.test(d.body.textContent)],
+   ['the tie opens at $0', d=>d.body.textContent.includes('$0 on June 1')],
    ['links to 34-1', d=>d.documentElement.outerHTML.includes('34-1-what-cash-missed.html')]]},
  {file:'34-1-what-cash-missed.html', asserts:[
    ['opens on purple Income Statement tab', d=>{var t=d.querySelector('[data-workbook-tab="Statement"]'); return !!t && t.textContent.trim()==='Income Statement' && t.classList.contains('tk-stmt') && t.classList.contains('active');}],

@@ -26,7 +26,7 @@
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
     '32-1-check-the-records', '32-2-record-the-receivable', '32-3-the-third-kind',
-    '33-1-copy-the-rows', '33-2-sort-the-rows', '33-3-format-the-statement',
+    '33-1-build-the-income-statement',
     '34-1-what-cash-missed', '34-2-module-complete',
     '41-1', '42-1',
     '43-1',
