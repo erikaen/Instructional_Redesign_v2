@@ -186,8 +186,8 @@
   </div>
 </div>
 
-<script src="bike-graph-data.js?v=5"></script>
-<script src="graph-lab.js?v=5"></script>
+<script src="bike-graph-data.js?v=6"></script>
+<script src="graph-lab.js?v=6"></script>
 <script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -238,7 +238,7 @@ var capitalFocus={nodes:['wd'],pairs:['cash>wd']};
 function render(){
   renderBeats(step);
   board.setRecognized(RECOGNIZED);
-  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
+  GraphLab.renderColumn(leftEl,data,board,{side:'beg',omit:['ar'],title:'Balance Sheet',sub:'June 1, 2026'});
   var leftTitle=leftEl.querySelector('.gl-col-title');
   if(leftTitle) leftTitle.textContent='Balance Sheet';
   GraphLab.renderColumn(rightEl,data,board,{side:'end',title:'Balance Sheet — August 31, 2026',sub:'the season complete',christened:true,highlightAccts:step===2?['contrib','gen','wd']:[]});

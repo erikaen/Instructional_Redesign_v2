@@ -52,8 +52,8 @@
   <div class="glossary-panel"><div class="glossary-panel-head"><div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div><button class="m7-glossary-dismiss" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button></div><div class="glossary-list" id="glossaryList"></div></div>
 </div>
 
-<script src="bike-graph-data.js?v=5"></script>
-<script src="graph-lab.js?v=5"></script>
+<script src="bike-graph-data.js?v=6"></script>
+<script src="graph-lab.js?v=6"></script>
 <script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -84,7 +84,7 @@ function allPredicted(){return predictions.every(function(x){return x!==null;});
 function setBoardWorld(next){world=next==='W'?'W':'D';board.setWorld(world).setRecognized('season');}
 function worldFocus(){return world==='D'?{nodes:['cash','wd'],pairs:['cash>wd']}:{nodes:['cash','wage'],pairs:['cash>wage']};}
 function renderColumns(){
-  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
+  GraphLab.renderColumn(leftEl,data,board,{side:'beg',omit:['ar'],title:'Balance Sheet',sub:'June 1, 2026'});
   var leftTitle=leftEl.querySelector('.gl-col-title');if(leftTitle)leftTitle.textContent='Balance Sheet';
   GraphLab.renderColumn(rightEl,data,board,{side:'end',christened:true,title:'Balance Sheet — August 31, 2026 · world '+world,sub:world==='D'?'the take, as reported':'the owner-wage recast'});
 }

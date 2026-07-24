@@ -144,8 +144,8 @@
   </div>
 </div>
 
-<script src="bike-graph-data.js?v=5"></script>
-<script src="graph-lab.js?v=5"></script>
+<script src="bike-graph-data.js?v=6"></script>
+<script src="graph-lab.js?v=6"></script>
 <script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -192,7 +192,7 @@ function renderLocalColumn(el,side,title){
   var capital=memberCapital(values);
   var identity='<div class="gl-col-ident">A &minus; L = MC &#10003; &middot; '+money(assets)+' &minus; '+money(liabilities)+' = '+money(capital)+'</div>';
   var html='<h3 class="gl-col-title">'+title+'</h3><div class="gl-col-sub">Balance Sheet</div><div class="gl-col-section">Assets</div>';
-  assetIds.forEach(function(id){ html+=colLine(id,labels[id],values[id]); });
+  assetIds.forEach(function(id){ if(side==='beg'&&id==='ar')return; html+=colLine(id,labels[id],values[id]); });
   html+=colTotal('Total Assets',assets,'assets')+'<div class="gl-col-section">Liabilities</div>';
   liabilityIds.forEach(function(id){ html+=colLine(id,labels[id],values[id]); });
   html+=colTotal('Total Liabilities',liabilities,'liabilities')+'<div class="gl-col-section">Member&rsquo;s Capital</div>';

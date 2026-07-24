@@ -181,8 +181,8 @@
   </div>
 </div>
 
-<script src="bike-graph-data.js?v=5"></script>
-<script src="graph-lab.js?v=5"></script>
+<script src="bike-graph-data.js?v=6"></script>
+<script src="graph-lab.js?v=6"></script>
 <script src="shared.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
@@ -247,7 +247,7 @@ function render(){
   renderBeats(step);
   board.setRecognized(RECOGNIZED);
   board.setChannels(step===0?null:(step===1?currentChannels():data.channels));
-  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
+  GraphLab.renderColumn(leftEl,data,board,{side:'beg',omit:['ar'],title:'Balance Sheet',sub:'June 1, 2026'});
   GraphLab.renderColumn(rightEl,data,board,{side:'end',title:'Balance Sheet — August 31, 2026',sub:'the season complete',christened:true});
   renderTail(step);
   renderControls(step);

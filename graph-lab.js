@@ -20,6 +20,7 @@
       .gl-board{background:var(--gl-panel);font-family:Inter,Arial,sans-serif;color:var(--gl-ink)}
       .gl-region{fill:none;stroke:var(--gl-region-line);stroke-width:1.5;stroke-dasharray:4 5;opacity:.58}
       .gl-region-label{font:700 11px Inter,Arial,sans-serif;letter-spacing:.14em;fill:var(--gl-ink);opacity:.63}
+      .gl-ident-glyph{fill:var(--gl-ink);opacity:.78;font-family:Inter,Arial,sans-serif;font-weight:800;text-anchor:middle;dominant-baseline:central}
       .gl-generated.gl-hi .gl-region{stroke:var(--gl-accent);stroke-width:4;opacity:1}
       .gl-arrow-path{fill:none;stroke:var(--gl-ink);stroke-width:2.25;opacity:.84}
       .gl-arrow-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke}
@@ -167,8 +168,12 @@
     function addBadge(parent,x,y,value,extra){var txt=typeof value==='string'?value:signed(value),width=Math.max(38,txt.length*8+12),g=S('g',{class:'gl-badge '+(extra||'')});
       g.appendChild(S('rect',{x:x-width/2,y:y-15,width:width,height:22,rx:4}));g.appendChild(S('text',{x:x,y:y},txt));parent.appendChild(g);return g;}
     function addRegions(root, visible) {
-      var specs=[['assets',40,60,520,580,'ASSETS'],['liabilities',600,60,360,140,'LIABILITIES'],['reasons',600,240,360,400,'REASONS']];
+      var specs=[['assets',40,60,520,580,'\u0394 ASSETS'],['liabilities',600,60,360,140,'\u0394 LIABILITIES'],['reasons',600,240,360,400,'\u0394 REASONS']];
       specs.forEach(function(r){var g=S('g',{class:'gl-region-group gl-region-'+r[0]});g.appendChild(S('rect',{class:'gl-region',x:r[1],y:r[2],width:r[3],height:r[4],rx:18}));g.appendChild(S('text',{class:'gl-region-label',x:r[1]+14,y:r[2]+20},r[5]));root.appendChild(g);});
+      /* The accounting identity written into the geography: Assets − Liabilities,
+         with the = rotated 90° where the equation turns down into Reasons. */
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:580,y:130,'font-size':'54'},'\u2212'));
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:780,y:220,'font-size':'46',transform:'rotate(90 780 220)'},'='));
       var genTouched=GENERATED_MEMBERS.some(function(id){return visible[id];})||visible.gen;
       var gg=S('g',{class:'gl-generated'+(hi&&hi.nodes.indexOf('gen')>=0?' gl-hi':''),'data-id':'gen'});
       gg.appendChild(S('rect',{class:'gl-region',x:615,y:380,width:340,height:250,rx:18}));gg.appendChild(S('text',{class:'gl-region-label',x:630,y:400},'GENERATED'));
@@ -233,7 +238,7 @@
     var title=(opts.side==='end'&&!opts.christened)?'Where we stand':opts.title,assets=sum(ASSET_IDS,vals),liabs=sum(LIAB_IDS,vals),mc=(vals.contrib||0)+(vals.gen||0)-(vals.wd||0),ok=assets-liabs-mc===0;
     var labels={cash:'Cash',ar:'Receivables',rou:'Right of Use',parts:'Parts',tools:'Tools & Equip',fix:'Fixtures',laptop:'Laptop',cc:'Credit Card',dep:'Customer Deposit'};
     var html='<h3 class="gl-col-title">'+title+'</h3><div class="gl-col-sub">'+(opts.sub||'')+'</div><div class="gl-col-section">Assets</div>';
-    ASSET_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class="gl-col-total" data-total="assets"><span>Total Assets</span><span>'+money(assets)+'</span></div><div class="gl-col-section">Liabilities</div>';
+    var omit=opts.omit||[];ASSET_IDS.forEach(function(id){if(omit.indexOf(id)>=0)return;html+=line(id,labels[id],vals[id]||0);});html+='<div class="gl-col-total" data-total="assets"><span>Total Assets</span><span>'+money(assets)+'</span></div><div class="gl-col-section">Liabilities</div>';
     LIAB_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class="gl-col-total" data-total="liabilities"><span>Total Liabilities</span><span>'+money(liabs)+'</span></div><div class="gl-col-section">Member’s Capital</div>';
     html+=line('contrib','Contributed',vals.contrib||0)+line('gen','Generated',vals.gen||0)+line('wd','Withdrawn',vals.wd||0,(vals.wd||0)?'('+money(vals.wd)+')':'0');
     html+='<div class="gl-col-total" data-total="mc" data-value="'+mc+'"><span>Member’s Capital</span><span class="gl-col-value">'+money(mc)+'</span></div><div class="gl-col-ident">A − L = MC '+(ok?'✓':'✗')+' · '+money(assets)+' − '+money(liabs)+' = '+money(mc)+'</div>';

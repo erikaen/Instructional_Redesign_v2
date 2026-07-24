@@ -5148,7 +5148,7 @@ window.devFill=function(){};
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
     '32-1-check-the-records', '32-2-record-the-receivable', '32-3-the-third-kind',
-    '33-1-copy-the-rows', '33-2-sort-the-rows', '33-3-format-the-statement',
+    '33-1-build-the-income-statement',
     '34-1-what-cash-missed', '34-2-module-complete',
     '41-1', '42-1',
     '43-1',
@@ -8875,6 +8875,7 @@ window.M7_GRAPH = {
       .gl-board{background:var(--gl-panel);font-family:Inter,Arial,sans-serif;color:var(--gl-ink)}
       .gl-region{fill:none;stroke:var(--gl-region-line);stroke-width:1.5;stroke-dasharray:4 5;opacity:.58}
       .gl-region-label{font:700 11px Inter,Arial,sans-serif;letter-spacing:.14em;fill:var(--gl-ink);opacity:.63}
+      .gl-ident-glyph{fill:var(--gl-ink);opacity:.78;font-family:Inter,Arial,sans-serif;font-weight:800;text-anchor:middle;dominant-baseline:central}
       .gl-generated.gl-hi .gl-region{stroke:var(--gl-accent);stroke-width:4;opacity:1}
       .gl-arrow-path{fill:none;stroke:var(--gl-ink);stroke-width:2.25;opacity:.84}
       .gl-arrow-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke}
@@ -9022,8 +9023,12 @@ window.M7_GRAPH = {
     function addBadge(parent,x,y,value,extra){var txt=typeof value==='string'?value:signed(value),width=Math.max(38,txt.length*8+12),g=S('g',{class:'gl-badge '+(extra||'')});
       g.appendChild(S('rect',{x:x-width/2,y:y-15,width:width,height:22,rx:4}));g.appendChild(S('text',{x:x,y:y},txt));parent.appendChild(g);return g;}
     function addRegions(root, visible) {
-      var specs=[['assets',40,60,520,580,'ASSETS'],['liabilities',600,60,360,140,'LIABILITIES'],['reasons',600,240,360,400,'REASONS']];
+      var specs=[['assets',40,60,520,580,'\u0394 ASSETS'],['liabilities',600,60,360,140,'\u0394 LIABILITIES'],['reasons',600,240,360,400,'\u0394 REASONS']];
       specs.forEach(function(r){var g=S('g',{class:'gl-region-group gl-region-'+r[0]});g.appendChild(S('rect',{class:'gl-region',x:r[1],y:r[2],width:r[3],height:r[4],rx:18}));g.appendChild(S('text',{class:'gl-region-label',x:r[1]+14,y:r[2]+20},r[5]));root.appendChild(g);});
+      /* The accounting identity written into the geography: Assets − Liabilities,
+         with the = rotated 90° where the equation turns down into Reasons. */
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:580,y:130,'font-size':'54'},'\u2212'));
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:780,y:220,'font-size':'46',transform:'rotate(90 780 220)'},'='));
       var genTouched=GENERATED_MEMBERS.some(function(id){return visible[id];})||visible.gen;
       var gg=S('g',{class:'gl-generated'+(hi&amp;&amp;hi.nodes.indexOf('gen')>=0?' gl-hi':''),'data-id':'gen'});
       gg.appendChild(S('rect',{class:'gl-region',x:615,y:380,width:340,height:250,rx:18}));gg.appendChild(S('text',{class:'gl-region-label',x:630,y:400},'GENERATED'));
@@ -9088,7 +9093,7 @@ window.M7_GRAPH = {
     var title=(opts.side==='end'&amp;&amp;!opts.christened)?'Where we stand':opts.title,assets=sum(ASSET_IDS,vals),liabs=sum(LIAB_IDS,vals),mc=(vals.contrib||0)+(vals.gen||0)-(vals.wd||0),ok=assets-liabs-mc===0;
     var labels={cash:'Cash',ar:'Receivables',rou:'Right of Use',parts:'Parts',tools:'Tools &amp; Equip',fix:'Fixtures',laptop:'Laptop',cc:'Credit Card',dep:'Customer Deposit'};
     var html='<h3 class=&quot;gl-col-title&quot;>'+title+'</h3><div class=&quot;gl-col-sub&quot;>'+(opts.sub||'')+'</div><div class=&quot;gl-col-section&quot;>Assets</div>';
-    ASSET_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
+    var omit=opts.omit||[];ASSET_IDS.forEach(function(id){if(omit.indexOf(id)>=0)return;html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
     LIAB_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;liabilities&quot;><span>Total Liabilities</span><span>'+money(liabs)+'</span></div><div class=&quot;gl-col-section&quot;>Member’s Capital</div>';
     html+=line('contrib','Contributed',vals.contrib||0)+line('gen','Generated',vals.gen||0)+line('wd','Withdrawn',vals.wd||0,(vals.wd||0)?'('+money(vals.wd)+')':'0');
     html+='<div class=&quot;gl-col-total&quot; data-total=&quot;mc&quot; data-value=&quot;'+mc+'&quot;><span>Member’s Capital</span><span class=&quot;gl-col-value&quot;>'+money(mc)+'</span></div><div class=&quot;gl-col-ident&quot;>A − L = MC '+(ok?'✓':'✗')+' · '+money(assets)+' − '+money(liabs)+' = '+money(mc)+'</div>';
@@ -10657,7 +10662,7 @@ function render(){
   board.setFan(step===5&amp;&amp;phase===3?'rev>cash':null);
   board.setForceNodes(force);
   board.setFocus(isEvent?(phase>=2?{nodes:involved,pairs:phase===3?FOCUS[step].pairs:[]}:{nodes:[],pairs:[]}):null);
-  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026',highlightAccts:phase===2?columnAccts:[]});
+  GraphLab.renderColumn(leftEl,data,board,{side:'beg',omit:['ar'],title:'Balance Sheet',sub:'June 1, 2026',highlightAccts:phase===2?columnAccts:[]});
   var leftTitle=leftEl.querySelector('.gl-col-title');
   if(leftTitle) leftTitle.textContent='Balance Sheet';
   GraphLab.renderColumn(rightEl,data,board,{side:'end',title:step===12?'Balance Sheet — August 31, 2026':'Where we stand',sub:step===12?'the season complete':'live — moves with every event',christened:step===12,highlightAccts:columnAccts});
@@ -10670,7 +10675,7 @@ function render(){
 function renderBeats(currentStep){
   var text='';
   if(currentStep===0){
-    text='Here is the season about to happen. On the left, the June 1 balance sheet you built in Module 2 &amp;mdash; $4,710 &amp;minus; $2,250 = $2,460, with Member&amp;rsquo;s Capital kept in its three piles. On the right, the same numbers again, titled &amp;ldquo;Where we stand&amp;rdquo;: that column is live, and it will move with every event until it has become the August 31 balance sheet. Between them, three dotted regions &amp;mdash; Assets, Liabilities, Reasons &amp;mdash; with a smaller enclosure inside Reasons for Generated. The regions are empty. The season will fill them.';
+    text='Here is the season about to happen. On the left, the June 1 balance sheet you built in Module 2 &amp;mdash; $4,710 &amp;minus; $2,250 = $2,460, with Member&amp;rsquo;s Capital kept in its three piles. On the right, the same numbers again, titled &amp;ldquo;Where we stand&amp;rdquo;: that column is live, and it will move with every event until it has become the August 31 balance sheet. Between them, three dotted regions hold the changes &amp;mdash; &amp;Delta; Assets &amp;minus; &amp;Delta; Liabilities, and the rotated equals turning the identity down into &amp;Delta; Reasons &amp;mdash; with a smaller enclosure inside Reasons for Generated. The regions are empty. The season will fill them.';
   } else if(currentStep===1){
     text='The first event: restocking the parts shelf, $500 + $400 + $300 across the summer. Cash gives $1,200; the Parts shelf receives it. Two nodes appear &amp;mdash; each badge showing that account&amp;rsquo;s change so far &amp;mdash; and one arrow between them. Look at the columns: Cash&amp;rsquo;s line moved, Parts&amp;rsquo; line moved, and the identity still ties. Both ends of this event sit on the sheets. It is a match &amp;mdash; no Reason needed.';
   } else if(currentStep===2){
@@ -10824,7 +10829,7 @@ render();
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
     '32-1-check-the-records', '32-2-record-the-receivable', '32-3-the-third-kind',
-    '33-1-copy-the-rows', '33-2-sort-the-rows', '33-3-format-the-statement',
+    '33-1-build-the-income-statement',
     '34-1-what-cash-missed', '34-2-module-complete',
     '41-1', '42-1',
     '43-1',
@@ -14569,6 +14574,7 @@ window.M7_GRAPH = {
       .gl-board{background:var(--gl-panel);font-family:Inter,Arial,sans-serif;color:var(--gl-ink)}
       .gl-region{fill:none;stroke:var(--gl-region-line);stroke-width:1.5;stroke-dasharray:4 5;opacity:.58}
       .gl-region-label{font:700 11px Inter,Arial,sans-serif;letter-spacing:.14em;fill:var(--gl-ink);opacity:.63}
+      .gl-ident-glyph{fill:var(--gl-ink);opacity:.78;font-family:Inter,Arial,sans-serif;font-weight:800;text-anchor:middle;dominant-baseline:central}
       .gl-generated.gl-hi .gl-region{stroke:var(--gl-accent);stroke-width:4;opacity:1}
       .gl-arrow-path{fill:none;stroke:var(--gl-ink);stroke-width:2.25;opacity:.84}
       .gl-arrow-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke}
@@ -14716,8 +14722,12 @@ window.M7_GRAPH = {
     function addBadge(parent,x,y,value,extra){var txt=typeof value==='string'?value:signed(value),width=Math.max(38,txt.length*8+12),g=S('g',{class:'gl-badge '+(extra||'')});
       g.appendChild(S('rect',{x:x-width/2,y:y-15,width:width,height:22,rx:4}));g.appendChild(S('text',{x:x,y:y},txt));parent.appendChild(g);return g;}
     function addRegions(root, visible) {
-      var specs=[['assets',40,60,520,580,'ASSETS'],['liabilities',600,60,360,140,'LIABILITIES'],['reasons',600,240,360,400,'REASONS']];
+      var specs=[['assets',40,60,520,580,'\u0394 ASSETS'],['liabilities',600,60,360,140,'\u0394 LIABILITIES'],['reasons',600,240,360,400,'\u0394 REASONS']];
       specs.forEach(function(r){var g=S('g',{class:'gl-region-group gl-region-'+r[0]});g.appendChild(S('rect',{class:'gl-region',x:r[1],y:r[2],width:r[3],height:r[4],rx:18}));g.appendChild(S('text',{class:'gl-region-label',x:r[1]+14,y:r[2]+20},r[5]));root.appendChild(g);});
+      /* The accounting identity written into the geography: Assets − Liabilities,
+         with the = rotated 90° where the equation turns down into Reasons. */
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:580,y:130,'font-size':'54'},'\u2212'));
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:780,y:220,'font-size':'46',transform:'rotate(90 780 220)'},'='));
       var genTouched=GENERATED_MEMBERS.some(function(id){return visible[id];})||visible.gen;
       var gg=S('g',{class:'gl-generated'+(hi&amp;&amp;hi.nodes.indexOf('gen')>=0?' gl-hi':''),'data-id':'gen'});
       gg.appendChild(S('rect',{class:'gl-region',x:615,y:380,width:340,height:250,rx:18}));gg.appendChild(S('text',{class:'gl-region-label',x:630,y:400},'GENERATED'));
@@ -14782,7 +14792,7 @@ window.M7_GRAPH = {
     var title=(opts.side==='end'&amp;&amp;!opts.christened)?'Where we stand':opts.title,assets=sum(ASSET_IDS,vals),liabs=sum(LIAB_IDS,vals),mc=(vals.contrib||0)+(vals.gen||0)-(vals.wd||0),ok=assets-liabs-mc===0;
     var labels={cash:'Cash',ar:'Receivables',rou:'Right of Use',parts:'Parts',tools:'Tools &amp; Equip',fix:'Fixtures',laptop:'Laptop',cc:'Credit Card',dep:'Customer Deposit'};
     var html='<h3 class=&quot;gl-col-title&quot;>'+title+'</h3><div class=&quot;gl-col-sub&quot;>'+(opts.sub||'')+'</div><div class=&quot;gl-col-section&quot;>Assets</div>';
-    ASSET_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
+    var omit=opts.omit||[];ASSET_IDS.forEach(function(id){if(omit.indexOf(id)>=0)return;html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
     LIAB_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;liabilities&quot;><span>Total Liabilities</span><span>'+money(liabs)+'</span></div><div class=&quot;gl-col-section&quot;>Member’s Capital</div>';
     html+=line('contrib','Contributed',vals.contrib||0)+line('gen','Generated',vals.gen||0)+line('wd','Withdrawn',vals.wd||0,(vals.wd||0)?'('+money(vals.wd)+')':'0');
     html+='<div class=&quot;gl-col-total&quot; data-total=&quot;mc&quot; data-value=&quot;'+mc+'&quot;><span>Member’s Capital</span><span class=&quot;gl-col-value&quot;>'+money(mc)+'</span></div><div class=&quot;gl-col-ident&quot;>A − L = MC '+(ok?'✓':'✗')+' · '+money(assets)+' − '+money(liabs)+' = '+money(mc)+'</div>';
@@ -16289,7 +16299,7 @@ var capitalFocus={nodes:['wd'],pairs:['cash>wd']};
 function render(){
   renderBeats(step);
   board.setRecognized(RECOGNIZED);
-  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
+  GraphLab.renderColumn(leftEl,data,board,{side:'beg',omit:['ar'],title:'Balance Sheet',sub:'June 1, 2026'});
   var leftTitle=leftEl.querySelector('.gl-col-title');
   if(leftTitle) leftTitle.textContent='Balance Sheet';
   GraphLab.renderColumn(rightEl,data,board,{side:'end',title:'Balance Sheet — August 31, 2026',sub:'the season complete',christened:true,highlightAccts:step===2?['contrib','gen','wd']:[]});
@@ -16485,7 +16495,7 @@ render();
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
     '32-1-check-the-records', '32-2-record-the-receivable', '32-3-the-third-kind',
-    '33-1-copy-the-rows', '33-2-sort-the-rows', '33-3-format-the-statement',
+    '33-1-build-the-income-statement',
     '34-1-what-cash-missed', '34-2-module-complete',
     '41-1', '42-1',
     '43-1',
@@ -20225,6 +20235,7 @@ window.M7_GRAPH = {
       .gl-board{background:var(--gl-panel);font-family:Inter,Arial,sans-serif;color:var(--gl-ink)}
       .gl-region{fill:none;stroke:var(--gl-region-line);stroke-width:1.5;stroke-dasharray:4 5;opacity:.58}
       .gl-region-label{font:700 11px Inter,Arial,sans-serif;letter-spacing:.14em;fill:var(--gl-ink);opacity:.63}
+      .gl-ident-glyph{fill:var(--gl-ink);opacity:.78;font-family:Inter,Arial,sans-serif;font-weight:800;text-anchor:middle;dominant-baseline:central}
       .gl-generated.gl-hi .gl-region{stroke:var(--gl-accent);stroke-width:4;opacity:1}
       .gl-arrow-path{fill:none;stroke:var(--gl-ink);stroke-width:2.25;opacity:.84}
       .gl-arrow-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke}
@@ -20372,8 +20383,12 @@ window.M7_GRAPH = {
     function addBadge(parent,x,y,value,extra){var txt=typeof value==='string'?value:signed(value),width=Math.max(38,txt.length*8+12),g=S('g',{class:'gl-badge '+(extra||'')});
       g.appendChild(S('rect',{x:x-width/2,y:y-15,width:width,height:22,rx:4}));g.appendChild(S('text',{x:x,y:y},txt));parent.appendChild(g);return g;}
     function addRegions(root, visible) {
-      var specs=[['assets',40,60,520,580,'ASSETS'],['liabilities',600,60,360,140,'LIABILITIES'],['reasons',600,240,360,400,'REASONS']];
+      var specs=[['assets',40,60,520,580,'\u0394 ASSETS'],['liabilities',600,60,360,140,'\u0394 LIABILITIES'],['reasons',600,240,360,400,'\u0394 REASONS']];
       specs.forEach(function(r){var g=S('g',{class:'gl-region-group gl-region-'+r[0]});g.appendChild(S('rect',{class:'gl-region',x:r[1],y:r[2],width:r[3],height:r[4],rx:18}));g.appendChild(S('text',{class:'gl-region-label',x:r[1]+14,y:r[2]+20},r[5]));root.appendChild(g);});
+      /* The accounting identity written into the geography: Assets − Liabilities,
+         with the = rotated 90° where the equation turns down into Reasons. */
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:580,y:130,'font-size':'54'},'\u2212'));
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:780,y:220,'font-size':'46',transform:'rotate(90 780 220)'},'='));
       var genTouched=GENERATED_MEMBERS.some(function(id){return visible[id];})||visible.gen;
       var gg=S('g',{class:'gl-generated'+(hi&amp;&amp;hi.nodes.indexOf('gen')>=0?' gl-hi':''),'data-id':'gen'});
       gg.appendChild(S('rect',{class:'gl-region',x:615,y:380,width:340,height:250,rx:18}));gg.appendChild(S('text',{class:'gl-region-label',x:630,y:400},'GENERATED'));
@@ -20438,7 +20453,7 @@ window.M7_GRAPH = {
     var title=(opts.side==='end'&amp;&amp;!opts.christened)?'Where we stand':opts.title,assets=sum(ASSET_IDS,vals),liabs=sum(LIAB_IDS,vals),mc=(vals.contrib||0)+(vals.gen||0)-(vals.wd||0),ok=assets-liabs-mc===0;
     var labels={cash:'Cash',ar:'Receivables',rou:'Right of Use',parts:'Parts',tools:'Tools &amp; Equip',fix:'Fixtures',laptop:'Laptop',cc:'Credit Card',dep:'Customer Deposit'};
     var html='<h3 class=&quot;gl-col-title&quot;>'+title+'</h3><div class=&quot;gl-col-sub&quot;>'+(opts.sub||'')+'</div><div class=&quot;gl-col-section&quot;>Assets</div>';
-    ASSET_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
+    var omit=opts.omit||[];ASSET_IDS.forEach(function(id){if(omit.indexOf(id)>=0)return;html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
     LIAB_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;liabilities&quot;><span>Total Liabilities</span><span>'+money(liabs)+'</span></div><div class=&quot;gl-col-section&quot;>Member’s Capital</div>';
     html+=line('contrib','Contributed',vals.contrib||0)+line('gen','Generated',vals.gen||0)+line('wd','Withdrawn',vals.wd||0,(vals.wd||0)?'('+money(vals.wd)+')':'0');
     html+='<div class=&quot;gl-col-total&quot; data-total=&quot;mc&quot; data-value=&quot;'+mc+'&quot;><span>Member’s Capital</span><span class=&quot;gl-col-value&quot;>'+money(mc)+'</span></div><div class=&quot;gl-col-ident&quot;>A − L = MC '+(ok?'✓':'✗')+' · '+money(assets)+' − '+money(liabs)+' = '+money(mc)+'</div>';
@@ -21959,7 +21974,7 @@ function render(){
   renderBeats(step);
   board.setRecognized(RECOGNIZED);
   board.setChannels(step===0?null:(step===1?currentChannels():data.channels));
-  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
+  GraphLab.renderColumn(leftEl,data,board,{side:'beg',omit:['ar'],title:'Balance Sheet',sub:'June 1, 2026'});
   GraphLab.renderColumn(rightEl,data,board,{side:'end',title:'Balance Sheet — August 31, 2026',sub:'the season complete',christened:true});
   renderTail(step);
   renderControls(step);
@@ -22151,7 +22166,7 @@ render();
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
     '32-1-check-the-records', '32-2-record-the-receivable', '32-3-the-third-kind',
-    '33-1-copy-the-rows', '33-2-sort-the-rows', '33-3-format-the-statement',
+    '33-1-build-the-income-statement',
     '34-1-what-cash-missed', '34-2-module-complete',
     '41-1', '42-1',
     '43-1',
@@ -25868,6 +25883,7 @@ window.M7_GRAPH = {
       .gl-board{background:var(--gl-panel);font-family:Inter,Arial,sans-serif;color:var(--gl-ink)}
       .gl-region{fill:none;stroke:var(--gl-region-line);stroke-width:1.5;stroke-dasharray:4 5;opacity:.58}
       .gl-region-label{font:700 11px Inter,Arial,sans-serif;letter-spacing:.14em;fill:var(--gl-ink);opacity:.63}
+      .gl-ident-glyph{fill:var(--gl-ink);opacity:.78;font-family:Inter,Arial,sans-serif;font-weight:800;text-anchor:middle;dominant-baseline:central}
       .gl-generated.gl-hi .gl-region{stroke:var(--gl-accent);stroke-width:4;opacity:1}
       .gl-arrow-path{fill:none;stroke:var(--gl-ink);stroke-width:2.25;opacity:.84}
       .gl-arrow-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke}
@@ -26015,8 +26031,12 @@ window.M7_GRAPH = {
     function addBadge(parent,x,y,value,extra){var txt=typeof value==='string'?value:signed(value),width=Math.max(38,txt.length*8+12),g=S('g',{class:'gl-badge '+(extra||'')});
       g.appendChild(S('rect',{x:x-width/2,y:y-15,width:width,height:22,rx:4}));g.appendChild(S('text',{x:x,y:y},txt));parent.appendChild(g);return g;}
     function addRegions(root, visible) {
-      var specs=[['assets',40,60,520,580,'ASSETS'],['liabilities',600,60,360,140,'LIABILITIES'],['reasons',600,240,360,400,'REASONS']];
+      var specs=[['assets',40,60,520,580,'\u0394 ASSETS'],['liabilities',600,60,360,140,'\u0394 LIABILITIES'],['reasons',600,240,360,400,'\u0394 REASONS']];
       specs.forEach(function(r){var g=S('g',{class:'gl-region-group gl-region-'+r[0]});g.appendChild(S('rect',{class:'gl-region',x:r[1],y:r[2],width:r[3],height:r[4],rx:18}));g.appendChild(S('text',{class:'gl-region-label',x:r[1]+14,y:r[2]+20},r[5]));root.appendChild(g);});
+      /* The accounting identity written into the geography: Assets − Liabilities,
+         with the = rotated 90° where the equation turns down into Reasons. */
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:580,y:130,'font-size':'54'},'\u2212'));
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:780,y:220,'font-size':'46',transform:'rotate(90 780 220)'},'='));
       var genTouched=GENERATED_MEMBERS.some(function(id){return visible[id];})||visible.gen;
       var gg=S('g',{class:'gl-generated'+(hi&amp;&amp;hi.nodes.indexOf('gen')>=0?' gl-hi':''),'data-id':'gen'});
       gg.appendChild(S('rect',{class:'gl-region',x:615,y:380,width:340,height:250,rx:18}));gg.appendChild(S('text',{class:'gl-region-label',x:630,y:400},'GENERATED'));
@@ -26081,7 +26101,7 @@ window.M7_GRAPH = {
     var title=(opts.side==='end'&amp;&amp;!opts.christened)?'Where we stand':opts.title,assets=sum(ASSET_IDS,vals),liabs=sum(LIAB_IDS,vals),mc=(vals.contrib||0)+(vals.gen||0)-(vals.wd||0),ok=assets-liabs-mc===0;
     var labels={cash:'Cash',ar:'Receivables',rou:'Right of Use',parts:'Parts',tools:'Tools &amp; Equip',fix:'Fixtures',laptop:'Laptop',cc:'Credit Card',dep:'Customer Deposit'};
     var html='<h3 class=&quot;gl-col-title&quot;>'+title+'</h3><div class=&quot;gl-col-sub&quot;>'+(opts.sub||'')+'</div><div class=&quot;gl-col-section&quot;>Assets</div>';
-    ASSET_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
+    var omit=opts.omit||[];ASSET_IDS.forEach(function(id){if(omit.indexOf(id)>=0)return;html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
     LIAB_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;liabilities&quot;><span>Total Liabilities</span><span>'+money(liabs)+'</span></div><div class=&quot;gl-col-section&quot;>Member’s Capital</div>';
     html+=line('contrib','Contributed',vals.contrib||0)+line('gen','Generated',vals.gen||0)+line('wd','Withdrawn',vals.wd||0,(vals.wd||0)?'('+money(vals.wd)+')':'0');
     html+='<div class=&quot;gl-col-total&quot; data-total=&quot;mc&quot; data-value=&quot;'+mc+'&quot;><span>Member’s Capital</span><span class=&quot;gl-col-value&quot;>'+money(mc)+'</span></div><div class=&quot;gl-col-ident&quot;>A − L = MC '+(ok?'✓':'✗')+' · '+money(assets)+' − '+money(liabs)+' = '+money(mc)+'</div>';
@@ -27875,7 +27895,7 @@ render();
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
     '32-1-check-the-records', '32-2-record-the-receivable', '32-3-the-third-kind',
-    '33-1-copy-the-rows', '33-2-sort-the-rows', '33-3-format-the-statement',
+    '33-1-build-the-income-statement',
     '34-1-what-cash-missed', '34-2-module-complete',
     '41-1', '42-1',
     '43-1',
@@ -31578,6 +31598,7 @@ window.M7_GRAPH = {
       .gl-board{background:var(--gl-panel);font-family:Inter,Arial,sans-serif;color:var(--gl-ink)}
       .gl-region{fill:none;stroke:var(--gl-region-line);stroke-width:1.5;stroke-dasharray:4 5;opacity:.58}
       .gl-region-label{font:700 11px Inter,Arial,sans-serif;letter-spacing:.14em;fill:var(--gl-ink);opacity:.63}
+      .gl-ident-glyph{fill:var(--gl-ink);opacity:.78;font-family:Inter,Arial,sans-serif;font-weight:800;text-anchor:middle;dominant-baseline:central}
       .gl-generated.gl-hi .gl-region{stroke:var(--gl-accent);stroke-width:4;opacity:1}
       .gl-arrow-path{fill:none;stroke:var(--gl-ink);stroke-width:2.25;opacity:.84}
       .gl-arrow-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke}
@@ -31725,8 +31746,12 @@ window.M7_GRAPH = {
     function addBadge(parent,x,y,value,extra){var txt=typeof value==='string'?value:signed(value),width=Math.max(38,txt.length*8+12),g=S('g',{class:'gl-badge '+(extra||'')});
       g.appendChild(S('rect',{x:x-width/2,y:y-15,width:width,height:22,rx:4}));g.appendChild(S('text',{x:x,y:y},txt));parent.appendChild(g);return g;}
     function addRegions(root, visible) {
-      var specs=[['assets',40,60,520,580,'ASSETS'],['liabilities',600,60,360,140,'LIABILITIES'],['reasons',600,240,360,400,'REASONS']];
+      var specs=[['assets',40,60,520,580,'\u0394 ASSETS'],['liabilities',600,60,360,140,'\u0394 LIABILITIES'],['reasons',600,240,360,400,'\u0394 REASONS']];
       specs.forEach(function(r){var g=S('g',{class:'gl-region-group gl-region-'+r[0]});g.appendChild(S('rect',{class:'gl-region',x:r[1],y:r[2],width:r[3],height:r[4],rx:18}));g.appendChild(S('text',{class:'gl-region-label',x:r[1]+14,y:r[2]+20},r[5]));root.appendChild(g);});
+      /* The accounting identity written into the geography: Assets − Liabilities,
+         with the = rotated 90° where the equation turns down into Reasons. */
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:580,y:130,'font-size':'54'},'\u2212'));
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:780,y:220,'font-size':'46',transform:'rotate(90 780 220)'},'='));
       var genTouched=GENERATED_MEMBERS.some(function(id){return visible[id];})||visible.gen;
       var gg=S('g',{class:'gl-generated'+(hi&amp;&amp;hi.nodes.indexOf('gen')>=0?' gl-hi':''),'data-id':'gen'});
       gg.appendChild(S('rect',{class:'gl-region',x:615,y:380,width:340,height:250,rx:18}));gg.appendChild(S('text',{class:'gl-region-label',x:630,y:400},'GENERATED'));
@@ -31791,7 +31816,7 @@ window.M7_GRAPH = {
     var title=(opts.side==='end'&amp;&amp;!opts.christened)?'Where we stand':opts.title,assets=sum(ASSET_IDS,vals),liabs=sum(LIAB_IDS,vals),mc=(vals.contrib||0)+(vals.gen||0)-(vals.wd||0),ok=assets-liabs-mc===0;
     var labels={cash:'Cash',ar:'Receivables',rou:'Right of Use',parts:'Parts',tools:'Tools &amp; Equip',fix:'Fixtures',laptop:'Laptop',cc:'Credit Card',dep:'Customer Deposit'};
     var html='<h3 class=&quot;gl-col-title&quot;>'+title+'</h3><div class=&quot;gl-col-sub&quot;>'+(opts.sub||'')+'</div><div class=&quot;gl-col-section&quot;>Assets</div>';
-    ASSET_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
+    var omit=opts.omit||[];ASSET_IDS.forEach(function(id){if(omit.indexOf(id)>=0)return;html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
     LIAB_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;liabilities&quot;><span>Total Liabilities</span><span>'+money(liabs)+'</span></div><div class=&quot;gl-col-section&quot;>Member’s Capital</div>';
     html+=line('contrib','Contributed',vals.contrib||0)+line('gen','Generated',vals.gen||0)+line('wd','Withdrawn',vals.wd||0,(vals.wd||0)?'('+money(vals.wd)+')':'0');
     html+='<div class=&quot;gl-col-total&quot; data-total=&quot;mc&quot; data-value=&quot;'+mc+'&quot;><span>Member’s Capital</span><span class=&quot;gl-col-value&quot;>'+money(mc)+'</span></div><div class=&quot;gl-col-ident&quot;>A − L = MC '+(ok?'✓':'✗')+' · '+money(assets)+' − '+money(liabs)+' = '+money(mc)+'</div>';
@@ -33294,7 +33319,7 @@ function renderLocalColumn(el,side,title){
   var capital=memberCapital(values);
   var identity='<div class=&quot;gl-col-ident&quot;>A &amp;minus; L = MC &amp;#10003; &amp;middot; '+money(assets)+' &amp;minus; '+money(liabilities)+' = '+money(capital)+'</div>';
   var html='<h3 class=&quot;gl-col-title&quot;>'+title+'</h3><div class=&quot;gl-col-sub&quot;>Balance Sheet</div><div class=&quot;gl-col-section&quot;>Assets</div>';
-  assetIds.forEach(function(id){ html+=colLine(id,labels[id],values[id]); });
+  assetIds.forEach(function(id){ if(side==='beg'&amp;&amp;id==='ar')return; html+=colLine(id,labels[id],values[id]); });
   html+=colTotal('Total Assets',assets,'assets')+'<div class=&quot;gl-col-section&quot;>Liabilities</div>';
   liabilityIds.forEach(function(id){ html+=colLine(id,labels[id],values[id]); });
   html+=colTotal('Total Liabilities',liabilities,'liabilities')+'<div class=&quot;gl-col-section&quot;>Member&amp;rsquo;s Capital</div>';
@@ -33546,7 +33571,7 @@ render();
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
     '32-1-check-the-records', '32-2-record-the-receivable', '32-3-the-third-kind',
-    '33-1-copy-the-rows', '33-2-sort-the-rows', '33-3-format-the-statement',
+    '33-1-build-the-income-statement',
     '34-1-what-cash-missed', '34-2-module-complete',
     '41-1', '42-1',
     '43-1',
@@ -37157,6 +37182,7 @@ window.M7_GRAPH = {
       .gl-board{background:var(--gl-panel);font-family:Inter,Arial,sans-serif;color:var(--gl-ink)}
       .gl-region{fill:none;stroke:var(--gl-region-line);stroke-width:1.5;stroke-dasharray:4 5;opacity:.58}
       .gl-region-label{font:700 11px Inter,Arial,sans-serif;letter-spacing:.14em;fill:var(--gl-ink);opacity:.63}
+      .gl-ident-glyph{fill:var(--gl-ink);opacity:.78;font-family:Inter,Arial,sans-serif;font-weight:800;text-anchor:middle;dominant-baseline:central}
       .gl-generated.gl-hi .gl-region{stroke:var(--gl-accent);stroke-width:4;opacity:1}
       .gl-arrow-path{fill:none;stroke:var(--gl-ink);stroke-width:2.25;opacity:.84}
       .gl-arrow-hit{fill:none;stroke:transparent;stroke-width:18;pointer-events:stroke}
@@ -37304,8 +37330,12 @@ window.M7_GRAPH = {
     function addBadge(parent,x,y,value,extra){var txt=typeof value==='string'?value:signed(value),width=Math.max(38,txt.length*8+12),g=S('g',{class:'gl-badge '+(extra||'')});
       g.appendChild(S('rect',{x:x-width/2,y:y-15,width:width,height:22,rx:4}));g.appendChild(S('text',{x:x,y:y},txt));parent.appendChild(g);return g;}
     function addRegions(root, visible) {
-      var specs=[['assets',40,60,520,580,'ASSETS'],['liabilities',600,60,360,140,'LIABILITIES'],['reasons',600,240,360,400,'REASONS']];
+      var specs=[['assets',40,60,520,580,'\u0394 ASSETS'],['liabilities',600,60,360,140,'\u0394 LIABILITIES'],['reasons',600,240,360,400,'\u0394 REASONS']];
       specs.forEach(function(r){var g=S('g',{class:'gl-region-group gl-region-'+r[0]});g.appendChild(S('rect',{class:'gl-region',x:r[1],y:r[2],width:r[3],height:r[4],rx:18}));g.appendChild(S('text',{class:'gl-region-label',x:r[1]+14,y:r[2]+20},r[5]));root.appendChild(g);});
+      /* The accounting identity written into the geography: Assets − Liabilities,
+         with the = rotated 90° where the equation turns down into Reasons. */
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:580,y:130,'font-size':'54'},'\u2212'));
+      root.appendChild(S('text',{class:'gl-ident-glyph',x:780,y:220,'font-size':'46',transform:'rotate(90 780 220)'},'='));
       var genTouched=GENERATED_MEMBERS.some(function(id){return visible[id];})||visible.gen;
       var gg=S('g',{class:'gl-generated'+(hi&amp;&amp;hi.nodes.indexOf('gen')>=0?' gl-hi':''),'data-id':'gen'});
       gg.appendChild(S('rect',{class:'gl-region',x:615,y:380,width:340,height:250,rx:18}));gg.appendChild(S('text',{class:'gl-region-label',x:630,y:400},'GENERATED'));
@@ -37370,7 +37400,7 @@ window.M7_GRAPH = {
     var title=(opts.side==='end'&amp;&amp;!opts.christened)?'Where we stand':opts.title,assets=sum(ASSET_IDS,vals),liabs=sum(LIAB_IDS,vals),mc=(vals.contrib||0)+(vals.gen||0)-(vals.wd||0),ok=assets-liabs-mc===0;
     var labels={cash:'Cash',ar:'Receivables',rou:'Right of Use',parts:'Parts',tools:'Tools &amp; Equip',fix:'Fixtures',laptop:'Laptop',cc:'Credit Card',dep:'Customer Deposit'};
     var html='<h3 class=&quot;gl-col-title&quot;>'+title+'</h3><div class=&quot;gl-col-sub&quot;>'+(opts.sub||'')+'</div><div class=&quot;gl-col-section&quot;>Assets</div>';
-    ASSET_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
+    var omit=opts.omit||[];ASSET_IDS.forEach(function(id){if(omit.indexOf(id)>=0)return;html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;assets&quot;><span>Total Assets</span><span>'+money(assets)+'</span></div><div class=&quot;gl-col-section&quot;>Liabilities</div>';
     LIAB_IDS.forEach(function(id){html+=line(id,labels[id],vals[id]||0);});html+='<div class=&quot;gl-col-total&quot; data-total=&quot;liabilities&quot;><span>Total Liabilities</span><span>'+money(liabs)+'</span></div><div class=&quot;gl-col-section&quot;>Member’s Capital</div>';
     html+=line('contrib','Contributed',vals.contrib||0)+line('gen','Generated',vals.gen||0)+line('wd','Withdrawn',vals.wd||0,(vals.wd||0)?'('+money(vals.wd)+')':'0');
     html+='<div class=&quot;gl-col-total&quot; data-total=&quot;mc&quot; data-value=&quot;'+mc+'&quot;><span>Member’s Capital</span><span class=&quot;gl-col-value&quot;>'+money(mc)+'</span></div><div class=&quot;gl-col-ident&quot;>A − L = MC '+(ok?'✓':'✗')+' · '+money(assets)+' − '+money(liabs)+' = '+money(mc)+'</div>';
@@ -38857,7 +38887,7 @@ function allPredicted(){return predictions.every(function(x){return x!==null;});
 function setBoardWorld(next){world=next==='W'?'W':'D';board.setWorld(world).setRecognized('season');}
 function worldFocus(){return world==='D'?{nodes:['cash','wd'],pairs:['cash>wd']}:{nodes:['cash','wage'],pairs:['cash>wage']};}
 function renderColumns(){
-  GraphLab.renderColumn(leftEl,data,board,{side:'beg',title:'Balance Sheet',sub:'June 1, 2026'});
+  GraphLab.renderColumn(leftEl,data,board,{side:'beg',omit:['ar'],title:'Balance Sheet',sub:'June 1, 2026'});
   var leftTitle=leftEl.querySelector('.gl-col-title');if(leftTitle)leftTitle.textContent='Balance Sheet';
   GraphLab.renderColumn(rightEl,data,board,{side:'end',christened:true,title:'Balance Sheet — August 31, 2026 · world '+world,sub:world==='D'?'the take, as reported':'the owner-wage recast'});
 }
@@ -38959,7 +38989,7 @@ render();
     '25-1-welcome', '25-2-capstone', '25-3-complete',
     '31-1-welcome', '31-2-work-the-season',
     '32-1-check-the-records', '32-2-record-the-receivable', '32-3-the-third-kind',
-    '33-1-copy-the-rows', '33-2-sort-the-rows', '33-3-format-the-statement',
+    '33-1-build-the-income-statement',
     '34-1-what-cash-missed', '34-2-module-complete',
     '41-1', '42-1',
     '43-1',
