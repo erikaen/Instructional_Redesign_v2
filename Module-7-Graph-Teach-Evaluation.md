@@ -279,6 +279,17 @@ corresponding open items in the ruling list below.
     the market-rate discussion are cut; the page teaches only the
     draw-vs-wage relabeling (same $600, two lawful pictures).
 
+17½. **The formation opens the module.** (Ruled 2026-07-24.) The
+    formation exploration is folded in as course page
+    71-2-The-Formation-of-the-LLC.html — the module's first board page,
+    where the graph format is introduced (nodes, give→receive arrows,
+    badges, the Δ regions and identity glyphs, the live column) by
+    watching the June 1 balance sheet be born. Chain: 71-1 → 71-2 →
+    72-1. Recognize? is a Yes/No decision on every beat (Yes correct on
+    the eight formation beats; No correct on the skill beat, which is
+    the LAST beat — the refusal closes the formation). The mockup file
+    is retired.
+
 17. **June 1 is all-Contributed.** (Ruled 2026-07-22, during the
     formation-mockup exploration.) The records before the LLC's formation
     were the member's *personal* records; nothing generated before the

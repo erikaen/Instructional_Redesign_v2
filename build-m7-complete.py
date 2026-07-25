@@ -6,6 +6,7 @@ import re, html, os
 V2 = "/Users/ra1/Courses-Local/Instructional_Redesign_v2"
 PAGES = [
     ("71-1-Module-7-Introduction.html", "Introduction"),
+    ("71-2-The-Formation-of-the-LLC.html", "The Formation of the LLC"),
     ("72-1-The-Season-as-a-Graph.html", "The Season as a Graph"),
     ("72-2-The-Statements-in-the-Graph.html", "The Statements in the Graph"),
     ("73-1-Where-the-Cash-Went.html", "Where the Cash Came From and Where It Went"),

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Formation Mockup — Constructing the June 1 Balance Sheet</title>
+  <title>The Formation of the LLC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
@@ -31,23 +31,28 @@
 <body>
 <div class="tut-page">
   <header class="tut-header">
-    <div><h1>The Formation of the LLC</h1><p class="tut-sub">Module 7 &middot; mockup &mdash; constructing the June 1 balance sheet, step by step</p></div>
+    <div><h1>The Formation of the LLC</h1><p class="tut-sub">Module 7 &middot; ~10 min</p></div>
+    <div class="tut-header-actions">
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+    </div>
   </header>
-
-  <div class="mockup-note">Exploration only &mdash; the 72-1 recognition ritual applied to the formation. Recognize? is now a <b>Yes/No decision</b> on every beat, and the owner&rsquo;s skill &mdash; the recognition that is <b>refused</b> &mdash; is the LAST beat, after the sheet is built. Ruled 2026-07-22: the difference goes entirely into Contributed ($2,460) &mdash; pre-formation records were personal records, so no Generated at June 1. NOTE: this diverges from current course canon (2,290/170) pending the course-wide sweep. Still flagged: the assumed claims drawn INTO Contributed. Receivables omitted from both sheets.</div>
 
   <div id="beats"></div>
 
-  <div class="m7-layout">
+  <div class="m7-layout" id="maingrid">
     <div id="beginningColumn"></div>
     <div class="m7-board-wrap"><svg id="board"></svg></div>
     <div id="endingColumn"></div>
   </div>
 
+  <div id="tail"></div>
   <div class="m7-controls" id="controls"></div>
 </div>
 
-<script src="graph-lab.js?v=5"></script>
+<script src="graph-lab.js?v=6"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
 <script>
 var data={
   nodes:{
@@ -159,7 +164,7 @@ function render(){
 function renderBeats(s){
   var text='';
   if(s===0){
-    text='June 1, before the season. The LLC is formed and its books open empty &mdash; every account at zero, on both sheets. The right column is live: it will move with each recognition until it has become the June 1 balance sheet, the one the season starts from. Between the sheets, three dotted regions hold the changes &mdash; &Delta; Assets, &Delta; Liabilities, &Delta; Reasons. The formation will fill them.';
+    text='June 1, before the season. The LLC is formed and its books open empty &mdash; every account at zero, on both sheets. Between the sheets sits the picture this module reads everything from: three dotted regions holding the changes &mdash; &Delta; Assets &minus; &Delta; Liabilities, the rotated equals turning the identity down into &Delta; Reasons. Every account is a node; every recognized event is an arrow from the account that gives to the account that receives; the badge above a node is its change so far. The right column is live: it will move with each recognition until it has become the June 1 balance sheet, the one the season starts from. The formation will fill the picture.';
   } else if(s===1){
     text='The first entry of the Company&rsquo;s life: the member seeds the Company&rsquo;s account. Cash receives $1,300; Contributed gives &mdash; the member&rsquo;s put-in, a Reason. An exchange, a known amount: it recognizes cleanly.';
   } else if(s===2){
@@ -218,10 +223,16 @@ function renderBeats(s){
 
 function renderControls(){
   var html='';
-  html+='<button onclick="goBack()"'+(step===0?' disabled':'')+'>&larr; Back</button>';
-  html+='<button class="btn-next" onclick="advance()"'+(step>=1&&step<=9&&beatPhases[step]<3?' disabled':'')+(step===TOTAL_STEPS-1?' disabled':'')+'>Next &rarr;</button>';
+  html+='<button class="btn-back" onclick="goBack()"'+(step===0?' disabled':'')+'>&larr; Back</button>';
+  if(step===TOTAL_STEPS-1){
+    html+='<button class="btn-next" onclick="nav(\'72-1-The-Season-as-a-Graph.html\')">Work the season &rarr;</button>';
+  } else {
+    html+='<button class="btn-next" onclick="advance()"'+(step>=1&&step<=9&&beatPhases[step]<3?' disabled':'')+'>Next &rarr;</button>';
+  }
   document.getElementById('controls').innerHTML=html;
 }
+function nav(url){ window.location.href=url; }
+function restart(){ location.reload(); }
 
 function advance(){ if(step>=1&&step<=9&&beatPhases[step]<3)return; step=Math.min(step+1,TOTAL_STEPS-1); render(); }
 function goBack(){ step=Math.max(step-1,0); render(); }
@@ -265,5 +276,30 @@ new MutationObserver(function(){decorate();}).observe(rightEl,{childList:true});
 render();
 decorate();
 </script>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-head"><h2>Glossary</h2>
+      <button class="m7-glossary-dismiss" aria-label="Dismiss" onclick="closeGlossary()">&times;</button></div>
+    <div id="glossaryList"></div>
+  </div>
+</div>
+<script>
+var glossaryTerms=[
+  {term:'Recognition',def:'The decision that an event enters the records; recognition is what puts an arrow in the picture. It needs two things: the event is real, and its financial effect is known.'},
+  {term:'Formation contribution',def:'What the member gives the Company on June 1, together with the claims the Company assumes &mdash; per Schedule A. The $2,460 difference is all Contributed.'},
+  {term:'Node and arrow',def:'Every account is a node; every recognized event is an arrow from the account that gives to the account that receives. A node&rsquo;s badge shows its change so far.'},
+  {term:'Christening',def:'The moment the live column has earned its date and its name: the Balance Sheet &mdash; June 1, 2026, the one the season starts from.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'</div><div class="glossary-entry-def">'+g.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+if(window.lucide) lucide.createIcons();
+</script>
+<script src="dev.js"></script>
 </body>
 </html>
