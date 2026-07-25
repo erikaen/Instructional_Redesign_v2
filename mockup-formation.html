@@ -34,7 +34,7 @@
     <div><h1>The Formation of the LLC</h1><p class="tut-sub">Module 7 &middot; mockup &mdash; constructing the June 1 balance sheet, step by step</p></div>
   </header>
 
-  <div class="mockup-note">Exploration only &mdash; the 72-1 recognition ritual applied to the formation, opening with a recognition that is <b>refused</b> (the owner&rsquo;s skill). Ruled 2026-07-22: the difference goes entirely into Contributed ($2,460) &mdash; pre-formation records were personal records, so no Generated at June 1. NOTE: this diverges from current course canon (2,290/170) pending the course-wide sweep. Still flagged: the assumed claims drawn INTO Contributed. Receivables omitted from both sheets.</div>
+  <div class="mockup-note">Exploration only &mdash; the 72-1 recognition ritual applied to the formation. Recognize? is now a <b>Yes/No decision</b> on every beat, and the owner&rsquo;s skill &mdash; the recognition that is <b>refused</b> &mdash; is the LAST beat, after the sheet is built. Ruled 2026-07-22: the difference goes entirely into Contributed ($2,460) &mdash; pre-formation records were personal records, so no Generated at June 1. NOTE: this diverges from current course canon (2,290/170) pending the course-wide sweep. Still flagged: the assumed claims drawn INTO Contributed. Receivables omitted from both sheets.</div>
 
   <div id="beats"></div>
 
@@ -81,10 +81,9 @@ var data={
 };
 
 var step=0;
-var TOTAL_STEPS=11;                /* 0 opening · 1 the skill (refused) · 2-9 event beats · 10 christening */
+var TOTAL_STEPS=11;                /* 0 opening · 1-8 formation beats · 9 the skill (refused, last) · 10 christening */
 var beatPhases=[0,0,0,0,0,0,0,0,0,0,0];
 var RECOGNIZED=[
-  [],
   [],
   ['seed'],
   ['seed','fparts'],
@@ -94,30 +93,37 @@ var RECOGNIZED=[
   ['seed','fparts','ftools','flap','ffix','frou'],
   ['seed','fparts','ftools','flap','ffix','frou','fcc'],
   ['seed','fparts','ftools','flap','ffix','frou','fcc','fdep'],
+  ['seed','fparts','ftools','flap','ffix','frou','fcc','fdep'],
   ['seed','fparts','ftools','flap','ffix','frou','fcc','fdep']
 ];
 /* Contributed's running change after each completed beat (the engine force-hides
    contrib/rou on season boards, so both are forced on with explicit badges).
    Beat 1 (the skill) recognizes nothing. */
-var CONTRIB_RUN=[null,null,1300,1500,2700,3310,4060,4710,2680,2460,2460];
-var NEW_NODES={1:['skill'],2:['cash','contrib'],3:['parts'],4:['tools'],5:['laptop'],6:['fix'],7:['rou'],8:['cc'],9:['dep']};
+var CONTRIB_RUN=[null,1300,1500,2700,3310,4060,4710,2680,2460,2460,2460];
+var NEW_NODES={1:['cash','contrib'],2:['parts'],3:['tools'],4:['laptop'],5:['fix'],6:['rou'],7:['cc'],8:['dep'],9:['skill']};
 var FOCUS={
-  1:{nodes:['skill'],pairs:[]},
-  2:{nodes:['cash','contrib'],pairs:['contrib>cash']},
-  3:{nodes:['contrib','parts'],pairs:['contrib>parts']},
-  4:{nodes:['contrib','tools'],pairs:['contrib>tools']},
-  5:{nodes:['contrib','laptop'],pairs:['contrib>laptop']},
-  6:{nodes:['contrib','fix'],pairs:['contrib>fix']},
-  7:{nodes:['contrib','rou'],pairs:['contrib>rou']},
-  8:{nodes:['cc','contrib'],pairs:['cc>contrib']},
-  9:{nodes:['dep','contrib'],pairs:['dep>contrib']}
+  1:{nodes:['cash','contrib'],pairs:['contrib>cash']},
+  2:{nodes:['contrib','parts'],pairs:['contrib>parts']},
+  3:{nodes:['contrib','tools'],pairs:['contrib>tools']},
+  4:{nodes:['contrib','laptop'],pairs:['contrib>laptop']},
+  5:{nodes:['contrib','fix'],pairs:['contrib>fix']},
+  6:{nodes:['contrib','rou'],pairs:['contrib>rou']},
+  7:{nodes:['cc','contrib'],pairs:['cc>contrib']},
+  8:{nodes:['dep','contrib'],pairs:['dep>contrib']},
+  9:{nodes:['skill'],pairs:[]}
 };
-var COLUMN_ACCTS={1:[],2:['cash','contrib'],3:['parts','contrib'],4:['tools','contrib'],5:['laptop','contrib'],6:['fix','contrib'],7:['rou','contrib'],8:['cc','contrib'],9:['dep','contrib']};
+var COLUMN_ACCTS={1:['cash','contrib'],2:['parts','contrib'],3:['tools','contrib'],4:['laptop','contrib'],5:['fix','contrib'],6:['rou','contrib'],7:['cc','contrib'],8:['dep','contrib'],9:[]};
 
-/* Beat 1's ritual: the same walk, but the answers refuse recognition. */
+/* Recognize? is a real decision: Yes/No. Yes is correct on the eight formation
+   beats; No is correct on the skill beat (the refusal). */
+var choiceOpen=[false,false,false,false,false,false,false,false,false,false,false];
+var choiceWrong=[false,false,false,false,false,false,false,false,false,false,false];
 var SKILL_BUTTONS=['Recognize?','What would be the purpose?','What amount?'];
+var CHIP_YES='Yes &mdash; recognized. The event is real and its financial effect is known: it enters the records.';
+var CHIP_YES_WRONG='No? Look again &mdash; an exchange happened, and it set the amount. The event is real and its financial effect is known: that is all recognition asks. Answer again.';
+var CHIP_NO_WRONG='Yes? Then name the figure you would record &mdash; $500? $5,000? No exchange ever priced the skill. Answer again.';
 var SKILL_CHIPS=[
-  'Not so fast. Recognition needs two things: the event is real, and its financial effect is known. The skill is real &mdash; the whole shop is built on it. The trouble is everything else.',
+  'No is right &mdash; and here is why. Recognition needs two things: the event is real, and its financial effect is known. The skill is real &mdash; the whole shop is built on it. The trouble is everything else.',
   'What would recognizing it accomplish? The sheets exist to list Assets and Liabilities and to explain the difference. The skill was never exchanged &mdash; there is no cost to record, nothing to tie, nothing a walk could check.',
   'Name a figure &mdash; $500? $5,000? Any number would be a guess: no exchange ever priced it. So it is <b>not recognized</b>: the skill stays off the books, and the sheets stay at zero. But keep the records, and by season&rsquo;s end they will let you ask the better question &mdash; did the skill, and the ability to do everything else running a shop requires, actually produce value? The season will answer with numbers that tie.'
 ];
@@ -128,8 +134,8 @@ var rightEl=document.getElementById('endingColumn');
 
 function baseForce(completedBeats){
   var f={};
-  if(completedBeats>=2)f.contrib=CONTRIB_RUN[completedBeats];
-  if(completedBeats>=7)f.rou=true;
+  if(completedBeats>=1)f.contrib=CONTRIB_RUN[completedBeats];
+  if(completedBeats>=6)f.rou=true;
   return f;
 }
 
@@ -140,7 +146,7 @@ function render(){
   var prevIds=isEvent?RECOGNIZED[step-1]:RECOGNIZED[step];
   var columnAccts=isEvent&&phase>=2?COLUMN_ACCTS[step]:[];
   var force=baseForce(isEvent?(phase>=3?step:step-1):(step===0?0:9));
-  var ghost=isEvent&&(phase===2||(step===1&&phase===3));
+  var ghost=isEvent&&(phase===2||(step===9&&phase===3));
   if(ghost){NEW_NODES[step].forEach(function(id){if(force[id]==null)force[id]='?';});}
   board.setForceNodes(force);
   board.setFocus(isEvent?(phase>=2?{nodes:FOCUS[step].nodes,pairs:phase===3?FOCUS[step].pairs:[]}:{nodes:[],pairs:[]}):null);
@@ -155,48 +161,56 @@ function renderBeats(s){
   if(s===0){
     text='June 1, before the season. The LLC is formed and its books open empty &mdash; every account at zero, on both sheets. The right column is live: it will move with each recognition until it has become the June 1 balance sheet, the one the season starts from. Between the sheets, three dotted regions hold the changes &mdash; &Delta; Assets, &Delta; Liabilities, &Delta; Reasons. The formation will fill them.';
   } else if(s===1){
-    text='Before any money moves, the real starting point: the owner can fix bikes. The shop exists because of that skill &mdash; and the ability to do everything else running a shop requires. Here is the first recognition decision of the Company&rsquo;s life. Walk it.';
+    text='The first entry of the Company&rsquo;s life: the member seeds the Company&rsquo;s account. Cash receives $1,300; Contributed gives &mdash; the member&rsquo;s put-in, a Reason. An exchange, a known amount: it recognizes cleanly.';
   } else if(s===2){
-    text='The first entry that does enter the records: the member seeds the Company&rsquo;s account. Cash receives $1,300; Contributed gives &mdash; the member&rsquo;s put-in, a Reason. An exchange, a known amount: this one recognizes cleanly.';
-  } else if(s===3){
     text='Now the business&rsquo;s things, contributed one at a time, each at the amount an exchange once set. First the parts on the shelf: $200 &mdash; chains, brake pads, cables, cassettes, the stock the season will draw on. Contributed gives; the shelf receives. The put-in grows to $1,500.';
-  } else if(s===4){
+  } else if(s===3){
     text='The repair tools: $1,200 &mdash; the stand, the wrench sets, the compressor, the whole bench. Contributed&rsquo;s total climbs to $2,700.';
-  } else if(s===5){
+  } else if(s===4){
     text='The laptop from home: $610. Bookings, invoices, and the Company&rsquo;s records will live on it &mdash; including, soon, this very balance sheet. $3,310 put in so far.';
-  } else if(s===6){
+  } else if(s===5){
     text='The desk, the shelving, the display rack: $750 of fixtures. The space starts to look like a shop. Contributed reads $4,060.';
-  } else if(s===7){
+  } else if(s===6){
     text='And lastly the right to occupy the space: the last month&rsquo;s rent, prepaid before the Company existed &mdash; $650. Not a thing you can hold, but a real asset: the shop may use the space, and that right was bought. The put-in tops out at $4,710 &mdash; every dollar of it priced by an exchange.';
-  } else if(s===8){
+  } else if(s===7){
     text='The claims come with the business. The card&rsquo;s $2,030, still owed, now in the Company&rsquo;s name. Its arrow runs INTO Contributed: the card stands behind part of what came in, so the member&rsquo;s net put-in shrinks to $2,680. No asset moved &mdash; this recognition lives entirely on the right side of the picture.';
-  } else if(s===9){
+  } else if(s===8){
     text='And Smith&rsquo;s $220, paid up front for a frame not yet built &mdash; owed as work, not money. Assumed the same way: the deposit stands behind $220 more of what came in. Contributed settles at $2,460 &mdash; exactly Assets minus Liabilities. All of it Contributed: whatever the member&rsquo;s things earned before June 1, they earned it in the member&rsquo;s personal records. The Company&rsquo;s own story hasn&rsquo;t started yet.';
+  } else if(s===9){
+    text='The sheet is built &mdash; $4,710 &minus; $2,250 = $2,460, all Contributed. But one candidate remains, the real starting point: the owner can fix bikes. The shop exists because of that skill &mdash; and the ability to do everything else running a shop requires. Here is the last recognition decision of the formation. Walk it.';
   } else {
     text='All eight entries are recognized &mdash; and one, deliberately, is not. Look right: $4,710 &minus; $2,250 = $2,460, every dollar of it Contributed &mdash; and the column has earned its date: <b>Balance Sheet &mdash; June 1, 2026</b>. Generated stands at zero: its enclosure waits, and it will be born the day the Company&rsquo;s own work first produces something. The skill that started it all appears nowhere on the sheet. This is how a balance sheet is born: begin at zero, recognize what can be recognized, and let the records earn the right to answer what the rest is worth.';
   }
   var ritual='';
   if(s>=1&&s<=9){
     var phase=beatPhases[s];
+    var isSkill=(s===9);
     function ritualButton(label,done,enabled,handler){
       return '<button type="button"'+(done?' class="m7-done"':'')+(!enabled||done?' disabled':'')+' onclick="'+handler+'()">'+(done?'&#10003; ':'')+label+'</button>';
     }
-    if(s===1){
+    var strip='';
+    if(phase===0&&choiceOpen[s]){
+      strip+='<button type="button" class="m7-done" disabled>Recognize?</button>'
+        +'<button type="button" onclick="answerRecognize(true)">Yes</button>'
+        +'<button type="button" onclick="answerRecognize(false)">No</button>';
+    } else {
+      strip+=ritualButton('Recognize?',phase>=1,phase===0,'recognizeBeat');
+    }
+    if(isSkill){
+      strip+=ritualButton(SKILL_BUTTONS[1],phase>=2,phase===1,'showAccounts')
+           +ritualButton(SKILL_BUTTONS[2],phase>=3,phase===2,'showAmounts');
       var chips='';
+      if(phase===0&&choiceWrong[s]) chips+='<span class="m7-recognition-chip m7-chip-no">'+CHIP_NO_WRONG+'</span>';
       for(var i=0;i<3;i++){ if(phase>=i+1) chips+='<span class="m7-recognition-chip'+(i===2?' m7-chip-no':'')+'">'+SKILL_CHIPS[i]+'</span>'; }
-      ritual='<div class="m7-recognition-walk" aria-label="Recognition walk">'
-        +ritualButton(SKILL_BUTTONS[0],phase>=1,phase===0,'recognizeBeat')
-        +ritualButton(SKILL_BUTTONS[1],phase>=2,phase===1,'showAccounts')
-        +ritualButton(SKILL_BUTTONS[2],phase>=3,phase===2,'showAmounts')
-        +'</div>'
+      ritual='<div class="m7-recognition-walk" aria-label="Recognition walk">'+strip+'</div>'
         +(chips?'<div class="m7-chip-stack">'+chips+'</div>':'');
     } else {
-      ritual='<div class="m7-recognition-walk" aria-label="Recognition walk">'
-        +ritualButton('Recognize?',phase>=1,phase===0,'recognizeBeat')
-        +ritualButton('Accounts Involved',phase>=2,phase===1,'showAccounts')
-        +ritualButton('Amounts',phase>=3,phase===2,'showAmounts')
-        +(phase>=1?'<span class="m7-recognition-chip">Yes &mdash; recognized. The event is real and its financial effect is known: it enters the records.</span>':'')
-        +'</div>';
+      strip+=ritualButton('Accounts Involved',phase>=2,phase===1,'showAccounts')
+           +ritualButton('Amounts',phase>=3,phase===2,'showAmounts');
+      var chip='';
+      if(phase===0&&choiceWrong[s]) chip='<span class="m7-recognition-chip m7-chip-no">'+CHIP_YES_WRONG+'</span>';
+      if(phase>=1) chip='<span class="m7-recognition-chip">'+CHIP_YES+'</span>';
+      ritual='<div class="m7-recognition-walk" aria-label="Recognition walk">'+strip+chip+'</div>';
     }
   }
   document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div>'+ritual+'<p class="m7-progress">Formation view '+(s+1)+' of '+TOTAL_STEPS+'</p>';
@@ -211,10 +225,17 @@ function renderControls(){
 
 function advance(){ if(step>=1&&step<=9&&beatPhases[step]<3)return; step=Math.min(step+1,TOTAL_STEPS-1); render(); }
 function goBack(){ step=Math.max(step-1,0); render(); }
-function recognizeBeat(){ if(step<1||step>9||beatPhases[step]!==0)return; beatPhases[step]=1; render(); }
+function recognizeBeat(){ if(step<1||step>9||beatPhases[step]!==0)return; choiceOpen[step]=true; render(); }
+function answerRecognize(yes){
+  if(step<1||step>9||beatPhases[step]!==0)return;
+  var correct=(step===9)?!yes:yes;
+  if(correct){ choiceOpen[step]=false; choiceWrong[step]=false; beatPhases[step]=1; }
+  else { choiceWrong[step]=true; }
+  render();
+}
 function showAccounts(){ if(step<1||step>9||beatPhases[step]!==1)return; beatPhases[step]=2; render(); }
 function showAmounts(){ if(step<1||step>9||beatPhases[step]!==2)return; beatPhases[step]=3; render(); }
-window.devFill=function(){ beatPhases=[0,3,3,3,3,3,3,3,3,3,0]; step=TOTAL_STEPS-1; render(); };
+window.devFill=function(){ beatPhases=[0,3,3,3,3,3,3,3,3,3,0]; choiceOpen=choiceOpen.map(function(){return false;}); choiceWrong=choiceWrong.map(function(){return false;}); step=TOTAL_STEPS-1; render(); };
 
 /* Δ region labels, identity glyphs, and the Receivables removal — re-applied
    after every engine re-render. Region geometry: Assets x40-560 y60-640;
