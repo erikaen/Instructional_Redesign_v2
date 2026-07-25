@@ -252,7 +252,7 @@ function initPage(moduleNum) {
  * BRW — the Bike-Repair.xlsx workbook renderer (added 2026-06-29, Rick approved).
  * One renderer, driven by a per-page "snapshot" of data, so every workbook page
  * (11-1 … 31-x) is the same widget at a different point in the story.
- * See Bike-Repair-Workbook-Design.md §7. Append-only; self-contained `BRW`.
+ * See Design-Docs/Bike-Repair-Workbook-Design.md §7. Append-only; self-contained `BRW`.
  *
  * Page usage (page must link shared.js):
  *     BRW.mount('wbBox', snapshot);     // initial render; BRW owns tab + expand UI
