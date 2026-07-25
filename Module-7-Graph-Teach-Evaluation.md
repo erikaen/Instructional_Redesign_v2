@@ -299,8 +299,11 @@ corresponding open items in the ruling list below.
     2,460 / Generated 2,640 / Withdrawn (600); Member's Capital totals and
     net income are unchanged. Generated's pile is born at Dana's repair —
     the Company's own first work. World-W Generated ends 2,040.
-    NOTE: Modules 2–6 still print the old split; that course-wide sweep is
-    a separate project, not yet scheduled.
+    NOTE (updated 2026-07-25): the course-wide sweep LANDED 2026-07-22
+    (`55bbc1c` — M2–M6 pages, all 13 source workbooks, design docs, RAG;
+    extractor invariants 20/20). Still on the old figures: the published
+    M1 `Tutorials-v2/` copy, which needs renumbering + this ruling as one
+    combined job.
 
 ## Proposed module shape (working proposal — every choice Rick's to lock)
 

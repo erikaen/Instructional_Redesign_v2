@@ -1,237 +1,284 @@
-# Module 7 — Graph Walk — Conversion Plan (7x-x)
+# Module 7 — Graph Walk — As-Built Record (7x-x)
 
-**Status: DRAFT — awaiting Rick's approval. This document, once approved, is the
-build contract, and approving it locks the page cut (ruling 7).**
+**Status: AS BUILT — rewritten 2026-07-25 to describe the module as it ships.**
+The 2026-07-21 draft plan was approved, built, and then matured through Rick's
+click-throughs; the deltas are recorded as presentation rulings 12–17½ in
+`Module-7-Graph-Teach-Evaluation.md`, which remains the ruling authority. This
+document records what stands on `graph-teach-wip` today. (The original draft
+survives in git history at this path, pre-`66b469d`.)
 
-Drafted 2026-07-21 on `graph-teach-wip`. Source: the four pages in
-`Bike-Repair-Graph-Teach/` (`bike-forward`, `bike-cashflows`, `bike-outsider`,
-`bike-draw`) plus the rulings in `Module-7-Graph-Teach-Evaluation.md`
-("Presentation rulings 2026-07-21," rulings 1–11, and the resolved ruling
-list). Target: the course page format — course chrome + the graph lab board
-(look ruling), vanilla JS, step-based `render()`, one teaching arc per page.
-All figures are Bike-Repair canon, already verified against the workbook.
+## The module at a glance
 
-## Governing rulings (locked 2026-07-21 — restated for the builder)
+**Eight pages**, chained 71-1 → 71-2 → 72-1 → 72-2 → 73-1 → 74-1 → 74-2 → 75-1
+(75-1 is terminal; module-complete/assessment pages remain out of scope). The
+module is NOT yet wired into `index.html`/`view.html` — reachable only by
+direct URL or by the chain from 63-6. Emailable single-file bundle:
+`Module-7-Complete.html`, rebuilt by `build-m7-complete.py` (8 pages, ~2.3 MB).
 
-1. **Layout:** beginning balance sheet column LEFT of the graph; ending
-   balance sheet column RIGHT. The ending column is **live**: it starts at the
-   June-1 values, its lines and totals move as items are recognized, and it is
-   **christened** "Balance Sheet — August 31, 2026" only when the last entry
-   posts (titled "Where we stand" until then).
-2. **No closing, ever.** The ending column's Generated line accumulates
-   implicitly (0 → 2,640; revised 2026-07-22 — see ruling 17, June 1 is all-Contributed). No merge, no reset, no closing vocabulary, no
-   journal-entry explainers (reserved for the future accounting-terms module).
-3. **Member's Capital in three pieces** on the ending column: Contributed /
-   Generated / Withdrawn.
-4. **Dotted enclosures:** Revenue and Expense nodes sit inside a dotted
-   enclosure marking them subparts of **Generated**; the whole canvas groups
-   into three labeled regions — **ASSETS, LIABILITIES, REASONS**. (73-1
-   extends the same idea to an asset: Cash's three channels in a dotted
-   "Cash, in detail" enclosure.)
-5. **Matches first, then Reasons:** the walk opens with the three
-   assets-and-liabilities-only entries, whose arrows never leave the A/L
-   regions; everything after needs the Reasons region.
-6. **Accumulating arrows:** one arrow per account pair; posting more updates
-   the TOTAL on the arrow (Revenue→Cash 120 → 5,500; Parts→Parts Used
-   10 → 1,200); hover shows constituents by name from the job records.
-7. **Give/receive language only.** Arrows run from the account that GAVE to
-   the account that RECEIVED. The words debit/credit never appear.
-8. **The walk, not "laws of motion":** every account walks — beginning + what
-   came in − what went out = ending; the identity ties the sheet, the walk
-   ties each account.
-9. **Cross-highlighting** spans balance-sheet columns ↔ nodes ↔ arrows.
-10. **Nodes appear when needed** — no node before its first use; the three
-    region enclosures render faintly from the start so the geography precedes
-    the population.
-11. **No Freddie; no 7x lint carve-out; full scrub.** The outsider is a
-    generic prospective investor. 7x pages must pass `lint-language.sh` under
-    the strict M1–4 rules — which means the **internal code vocabulary renames
-    too** (node type `'equity'` → `'reason'`, legend "Equity" → "Reasons",
-    etc.): the linter scans whole lines, not just prose.
+| Page | Title (as presented) | Views/steps |
+|---|---|---|
+| 71-1 | Module 7 Introduction | single telling view |
+| 71-2 | The Formation of the LLC | 11 formation views |
+| 72-1 | The Season as a Graph | 13 event views |
+| 72-2 | The Statements in the Graph | 4 readings |
+| 73-1 | Where the Cash Came From and Where It Went *(filename unchanged: `73-1-Where-the-Cash-Went.html`)* | 5 readings |
+| 74-1 | The Outsider's Graph | 6 releases |
+| 74-2 | The Ledger Behind the Statements | 6 steps |
+| 75-1 | The Draw Question | 4 questions |
 
-## The give/receive captions (the 14 entries — the plan's core scrub)
+## Canon (ruling 17 — June 1 is all-Contributed)
 
-Arrow directions are UNCHANGED from the source pages (the giver end is what
-the source called the credit); only the language changes. Draft captions,
-Rick-editable at click-through:
+June 1: Contributed **2,460**, Generated **0** — pre-formation records were the
+member's personal records; Generated's pile is born at Dana's $120 repair, the
+Company's own first work. Aug 31: Contributed 2,460 / Generated 2,640 /
+Withdrawn (600) → Member's Capital 4,500. World W: Generated ends **2,040**.
+The old 2,290/170 split is retired everywhere; if a page shows it, that is a
+bug. (The course-wide sweep landed 2026-07-22, `55bbc1c`.)
 
-| # | Entry | Arrow (giver → receiver) | $ | Draft caption |
+## Governing rulings — as matured
+
+Rulings 1–11 (2026-07-21) stand as drafted: flanking balance-sheet columns
+with the live, christened ending column; no closing anywhere; Member's Capital
+in three pieces; dotted enclosures (Generated inside REASONS; the three
+regions); matches first, then Reasons; accumulating arrows with hover
+constituents; give/receive language only (no debit/credit anywhere);
+cross-highlighting spanning flanks ↔ nodes ↔ arrows; nodes appear on first
+use; the WALK vocabulary ("the identity ties the sheet; the walk ties each
+account"); no Freddie; strict lint with no 7x carve-out.
+
+The click-through rulings that reshaped the build (full text in the eval doc):
+
+12. **Recognition, not posting; focus graying; one event per beat.** "Posted"
+    never appears student-facing; each beat lights only its involved accounts
+    and arrows, everything else grays softly. One-event-per-beat splits:
+    tool ≠ card payoff, collections ≠ parts consumed, Ridgeline ≠ Smith,
+    rent ≠ draw. The three depreciation entries stay one beat (ruled OK).
+13. **The recognition ritual** — per-beat buttons Recognize? → Accounts
+    Involved → Amounts, Next locked until all three fire. Accounts Involved
+    puts the involved accounts on the board *before any amount is known* (new
+    nodes wear a `?` badge; both columns outline the lines that will change);
+    Amounts lands the arrows and flashes the moved lines.
+14. **The cash statement runs both directions** — 73-1's presented title is
+    "Where the Cash Came From and Where It Went."
+15. **The outsider never sees the ledger** — 74-2's nineteen-repair fan reveal
+    is CUT; the reconstruction is built UNCOLLAPSED (real accounts inside
+    Generated); the unseen-ledger lesson is prose only.
+16. **No market-wage what-if** — 75-1 teaches only the draw-vs-wage
+    relabeling; the editable-wage panel is gone.
+17. **June 1 is all-Contributed** (canon above).
+17½. **The formation opens the module** — the formation exploration graduated
+    from mockup to course page 71-2, the module's first board page, where the
+    graph format itself is introduced. On 71-2, **Recognize? is a Yes/No
+    decision** with corrective chips: Yes is correct on the eight formation
+    beats; No is correct on the skill beat, which comes LAST — the refusal
+    closes the formation. (The Yes/No form has been offered for 72-1's season
+    ritual but is not yet ruled — 72-1 still runs the confirm-style ritual of
+    ruling 13.)
+
+## The board format (module-wide, from the formation mockup — `7ad4e71`)
+
+- The graph canvas is labeled **Δ ASSETS / Δ LIABILITIES / Δ REASONS** with
+  identity glyphs between the regions (the − and the rotated ‖): the canvas
+  reads as the identity's change form.
+- Flanking balance-sheet columns; the **beginning column omits Receivables**
+  (`renderColumn`'s `omit:['ar']`) so every season page's June-1 column is
+  row-for-row the formation page's ending sheet.
+- The ending column is live ("Where we stand") and is christened with the
+  statement's dated name only at the final view.
+- Focus graying, appear-on-first-use nodes with `?` badges during Accounts
+  Involved, accumulating arrow totals with hover constituents, fact/inference/
+  open arrow styling (74-x), channel enclosure (73-1), world toggle (75-1).
+
+## The give/receive captions (as built, in `bike-graph-data.js`)
+
+| # | id | Arrow (giver → receiver) | $ | Caption |
 |---|---|---|---|---|
-| 1 | Parts restock | Cash → Parts | 1,200 | Cash gives; the Parts shelf receives its restock (June–August). |
-| 2 | New tool | Cash → Tools & Equip | 400 | Cash gives; the tool stand receives one new tool. |
-| 3 | Card payoff | Cash → Credit Card | 2,030 | Cash gives; the card's claim receives full settlement — the startup balance paid off. |
-| 4 | Dana's repair | Repair Revenue → Cash | 120 | The work gives — Dana R. pays $120 for a drivetrain job; Cash receives. |
-| 5 | 18 more repairs | (same arrow, total → 5,500) | +5,380 | The season's other eighteen repairs — the arrow's total grows; hover for the names. |
-| 6 | Dana's parts | Parts → Parts Used | 10 | The shelf gives up $10 of parts for use in Dana's repair; Parts Used receives. |
-| 7 | The season's parts | (same arrow, total → 1,200) | +1,190 | Parts consumed by all the other repairs — the arrow's total grows. |
-| 8 | Ridgeline | Repair Revenue → Receivables | 300 | The work gives — job finished Aug 28, billed net 15; the right to collect receives. |
-| 9 | Smith's frame | Repair Revenue → Customer Deposit | 220 | The work gives the delivered frame; the deposit's claim receives its settlement — no longer owed, now earned. |
-| 10 | Rent | Cash → Rent | 1,950 | Cash gives $650 × 3; the season's use of the space is what it bought. |
-| 11 | Depreciation — tools | Tools & Equip → Depreciation | 160 | The tools give a season of their working lives; Depreciation receives the season's share. |
-| 12 | Depreciation — fixtures | Fixtures → Depreciation | 40 | Same reading, the fixtures' share. |
-| 13 | Depreciation — laptop | Laptop → Depreciation | 30 | Same reading, the laptop's share. |
-| 14 | The draw | Cash → Withdrawn | 600 | Cash gives; the owner's take is recorded in its own pile — Withdrawn, never an expense. |
+| 1 | pbuy | Cash → Parts | 1,200 | Cash gives; the Parts shelf receives its restock (June–August). |
+| 2 | tool | Cash → Tools & Equip | 400 | Cash gives; the tool stand receives one new tool. |
+| 3 | ccpay | Cash → Credit Card | 2,030 | Cash gives; the card's claim receives full settlement — the startup balance paid off. |
+| 4 | dana | Repair Revenue → Cash | 120 | The work gives — Dana R. pays $120 for a drivetrain job; Cash receives. |
+| 5 | rest | (same arrow, total → 5,500) | +5,380 | The season's other eighteen repairs — the arrow's total grows; hover for the names. |
+| 6 | danaP | Parts → Parts Used | 10 | The shelf gives up $10 of parts for use in Dana's repair; Parts Used receives. |
+| 7 | restP | (same arrow, total → 1,200) | +1,190 | Parts consumed by all the other repairs — the arrow's total grows. |
+| 8 | ridge | Repair Revenue → Receivables | 300 | The work gives — job finished Aug 28, billed net 15; the right to collect receives. |
+| 9 | smith | Repair Revenue → Customer Deposit | 220 | The work gives the delivered frame; the deposit's claim receives its settlement — no longer owed, now earned. |
+| 10 | rentx | Cash → Rent | 1,950 | Cash gives $650 × 3; the season's use of the space is what it bought. |
+| 11 | deprT | Tools & Equip → Depreciation | 160 | The tools give a season of their working lives; Depreciation receives the season's share. |
+| 12 | deprF | Fixtures → Depreciation | 40 | The fixtures give a season of their working lives; Depreciation receives their share. |
+| 13 | deprL | Laptop → Depreciation | 30 | The laptop gives a season of its working life; Depreciation receives its share. |
+| 14 | draw | Cash → Withdrawn | 600 | Cash gives; the owner's take is recorded in its own pile — Withdrawn, never an expense. |
+| 15 | wagex | Cash → Owner's Wage | 600 | World W recasts the same $600: Cash gives and Owner's Wage receives. *(75-1 only)* |
 
-(Ruling 8's creative case for reference wording elsewhere: when something is
-bought on credit, the liability account gives its promise to an outsider.)
+The formation's eight entries live inline in 71-2 (see its page section);
+their giver on the asset side is Contributed, and the two assumed claims give
+INTO Contributed.
 
-## The page suite (FOR RICK TO LOCK — approving this plan locks it)
+## Page-by-page, as built
 
-Seven pages: 71-1 intro → 72-1/72-2 the forward walk → 73-1 cash → 74-1/74-2
-the outsider → 75-1 the draw. The outsider's 13 source stages split at the
-natural seam (statement releases | edge-building); every page lands in the
-course's 4–9 step range. Titles plain and Rick-renameable.
+### 71-1 Module 7 Introduction — single telling view
 
-### 71-1 Module 7 Introduction (~6 min, single view)
+The turn (the course has built statements and read statements; this module
+shows the single picture both were views of), the vocabulary introductions,
+what the module re-uses, the two-attempt frame, M7-LOs. Nav: Back → 63-6;
+forward → 71-2 ("The Formation of the LLC").
 
-Built from **`Module-7-Intro-Draft.md`** — the companion artifact drafted
-after this plan is approved, in the Module-5/6 intro format: the turn (the
-course has built statements and read statements; this module shows the single
-picture both were views of), the vocabulary introductions (node = an account's
-change; arrow = give → receive; the enclosures; the walk), what the module
-re-uses (identity, match-or-reason, the piles, articulation), the two-attempt
-frame (build the graph forward; then infer it from statements alone), and
-M7-LOs. Nav: Back → 63-6; forward → 72-1.
+### 71-2 The Formation of the LLC — 11 views (`66b469d`)
 
-### 72-1 The Season as a Graph (~8 min) — bike-forward stages 0–4 re-staged, 9 steps
+The module's first board page: the graph format is introduced by watching the
+June 1 balance sheet be born. Both columns start EMPTY (an all-zero company).
+Every beat runs the Yes/No ritual (ruling 17½): Recognize? Yes/No →
+Accounts Involved → Amounts; wrong answers get corrective chips; Next gated.
 
-| Step | Source | Beat |
+| View | Beat | Contributed runs to |
 |---|---|---|
-| 0 | st 0 | The two sheets: beginning column = June 1 (4,710 / 2,250 / 2,460, piles shown); ending column identical, titled "Where we stand"; canvas empty except three faint region enclosures. Narration: the season happens between these columns; every account walks. |
-| 1 | st 3 (part) | The first match — restock: Cash and Parts nodes born; arrow Cash→Parts 1,200; both columns' lines move; identity re-ties. Both ends visible on the sheets — matched, no Reason needed. |
-| 2 | st 3 (part) | The other two matches — the tool (Tools node, 400) and the card payoff (Credit Card node, 2,030 — the claim settled). Three arrows, and the REASONS region still empty: some of the season explains itself. |
-| 3 | st 1 (part) | The first Reason — Dana's $120: the Generated enclosure opens inside REASONS, Repair Revenue born; arrow Revenue→Cash 120. Cash received — what gave? The work. That takes a Reason. Ending Generated line moves 0 → 120: the pile is born from the Company’s own first repair. |
-| 4 | st 1 (rest) | The season at scale: the same arrow's total grows 120 → 5,500 (hover: the eighteen names); the repair pair completes — Parts Used born, Parts→Parts Used grows 10 → 1,200. Every repair is that pair: the work gives, the shelf gives. |
-| 5 | st 2 | Revenue that touched no new cash: Ridgeline (Receivables born; Revenue→Receivables 300) and Smith (Revenue→Customer Deposit 220 — the deposit settled by delivery). Revenue now runs $520 ahead of collections — remember that number. |
-| 6 | st 3 (rest) | Running the shop, and the owner's take: rent (Cash→Rent 1,950) and the draw (Withdrawn born; Cash→Withdrawn 600 — its own pile, never an expense). |
-| 7 | st 4 | The season's share of the gear: three gives of a season's use — Tools→Depreciation 160, Fixtures→Depreciation 40, Laptop→Depreciation 30. No cash moves. The income statement will one day show one 230 line; the graph remembers the split. |
-| 8 | new | The christening: all 14 entries posted; the ending column ties (4,500 − 0 = 4,500; Contributed 2,460 / Generated 2,640 / Withdrawn (600)) and is christened **Balance Sheet — August 31, 2026**. Every account's walk ties. Chain → 72-2. |
+| 0 | Opening — the papers are signed; a Company exists and owns nothing yet | — |
+| 1 | The member seeds the account: Cash $1,300 in (Cash, Contributed born) | 1,300 |
+| 2 | The parts on the shelf, contributed at book: $200 | 1,500 |
+| 3 | The repair tools, contributed at book: $1,200 | 2,700 |
+| 4 | The laptop from home, contributed at book: $610 | 3,310 |
+| 5 | Desk, shelving, rack — Fixtures, contributed at book: $750 | 4,060 |
+| 6 | The Right of Use of the space, contributed at book: $650 | 4,710 |
+| 7 | The card's claim, ASSUMED: $2,030 — arrow runs INTO Contributed; the member's net put-in shrinks | 2,680 |
+| 8 | Smith's deposit, assumed: $220 owed as work | 2,460 |
+| 9 | **The skill (LAST — the refusal closes the formation):** Recognize? **No** — the skill is real, but no exchange ever priced it; its own button strip (Recognize? / What would be the purpose? / What amount?) | 2,460 |
+| 10 | Christening: **Balance Sheet — June 1, 2026** — 4,710 − 2,250 = 2,460, all Contributed, Generated $0 | 2,460 |
 
-### 72-2 The Statements in the Graph (~5 min) — bike-forward stages 5–7 minus closing, 4 steps
+Chain → 72-1 ("Work the season →").
 
-| Step | Source | Beat |
-|---|---|---|
-| 0 | new | Orientation: the finished graph holds the whole season; the Generated enclosure holds exactly what the income statement summarizes — a sorting made visible, nothing moved. |
-| 1 | st 6 | Income statement, filled from the graph: the student types Revenue (6,020 — the enclosure's give-arrows), Expenses (3,380), Net income (2,640). Course three-strike pacing on the inputs. |
-| 2 | st 6 | The Member's Capital walk, filled from the Reasons region: 2,460 + 2,640 − 600 = 4,500, pile by pile — beginning, what came in, what went out, ending. The walk ties. |
-| 3 | st 7 | One summer, one graph: the statements are readings OF the graph. Loose thread, stated plainly: over a profitable season, cash FELL 680. Chain → 73-1. |
+### 72-1 The Season as a Graph — 13 event views
 
-### 73-1 Where the Cash Went (~7 min) — bike-cashflows, 5 steps
+The confirm-style ritual of ruling 13 on every event view (1–11), Next gated
+until the beat's three phases complete. One event per beat (ruling 12 splits
+applied). The beginning column is row-for-row 71-2's ending sheet.
 
-| Step | Source | Beat |
-|---|---|---|
-| 0 | st 0 | Profitable — and poorer in cash: NI 2,640 against Cash 1,300 → 620 on the flanking columns. |
-| 1 | st 1 | Cash, in detail: the Cash node opens into a dotted enclosure of three channels — Operating, Investing, Financing (the subpart idea, applied to an asset). TASK: classify all seven cash arrows into the channels (key: repairs + restock + rent → Operating; the tool → Investing; card payoff + draw → Financing). Wrong assignments bounce with the source page's explanations, scrubbed. |
-| 2 | st 2 | The shop's cash-flow statement, read off the channels: +2,350 / −400 / −2,630 = −680, tying 1,300 → 620 — with the twist stated: the card payoff and the draw sit in Financing because classification follows the claim settled, not the cash's feel. |
-| 3 | st 3 | Reconcile: why operating cash ≠ net income — sub-steps with graph highlights: 2,640 + 230 (the three no-cash gives of use) − 300 (Ridgeline, earned not collected) − 220 (Smith, collected last period) = 2,350. |
-| 4 | st 4 | The season fully told: one graph; the balance-sheet pair, the income statement, the capital walk, and the cash statement all read off it. Chain → 74-1: now lose the graph and keep only the statements. |
+| View | Beat |
+|---|---|
+| 0 | The two sheets: June-1 column (4,710 / 2,250 / 2,460); ending column identical, titled "Where we stand"; canvas empty but for the faint Δ regions |
+| 1 | The first match — restock: Cash→Parts 1,200; no Reason needed |
+| 2 | The second match — the tool: Cash→Tools & Equip 400 |
+| 3 | The third match — the card payoff: Cash→Credit Card 2,030 (the claim settled) |
+| 4 | The first Reason — Dana's $120: Generated enclosure opens, Repair Revenue born; ending Generated 0 → 120 — **the pile is born from the Company's own first repair** |
+| 5 | The season at scale: the same arrow accumulates 120 → 5,500; the fan of the eighteen names shows (insiders may see their own ledger) |
+| 6 | The parts those repairs consumed: Parts→Parts Used 10 → 1,200 |
+| 7 | Ridgeline: Receivables born; Revenue→Receivables 300 |
+| 8 | Smith's frame: Revenue→Customer Deposit 220 — the deposit settled by delivery |
+| 9 | Rent: Cash→Rent 1,950 |
+| 10 | The owner's take: Withdrawn born; Cash→Withdrawn 600 — its own pile, never an expense |
+| 11 | The season's share of the gear (one beat): Tools→Depreciation 160, Fixtures→Depreciation 40, Laptop→Depreciation 30 — no cash moves |
+| 12 | The christening: ending column ties (4,500; 2,460 / 2,640 / (600)) and becomes **Balance Sheet — August 31, 2026** |
 
-### 74-1 The Outsider's Graph (~7 min) — bike-outsider stages 0–4, 6 steps
+Chain → 72-2.
 
-Layout note: the releases ARE the columns arriving — both flanks start EMPTY.
+### 72-2 The Statements in the Graph — 4 readings
 
-| Step | Source | Beat |
-|---|---|---|
-| 0 | Overview | The offer: a prospective investor (no name) may buy into the shop; the owner keeps fixing bikes. You will never see the ledger — only statements, arriving in releases. Build the best lawful graph at each release; tag every arrow **fact / inference-under-assumption / open**. |
-| 1 | 1 · Totals | Release 1 — three lines in each column (totals only). QUIZ: how much did the business earn? (Correct: cannot be determined — at this aggregation, earnings, contributions and draws are indistinguishable.) |
-| 2 | 2 · BS | Release 2 — the full balance sheets fill both columns; ten Δ-nodes appear, all facts, already summing to zero; the capital side arrives as ONE line. QUIZ: the card fell 2,030 — did the shop USE the card this summer? (Cannot be determined — a net change merges gross flows. Held open.) |
-| 3 | 3 · IS | Release 3 — the income statement panel arrives: 6,020 − 3,380 = 2,640. But the capital line moved only +2,040. QUIZ: what explains the 600 gap? (The owner moved something in or out of capital that is not income — Member's Capital's walk has more ways in and out than income alone.) |
-| 4 | 4 · Capital | The owner's reply — the capital statement: the ending column's one capital line unmerges into the three pieces (Contributed +0; Generated +2,640 — the walk ties again; Withdrawn shown as **?**). INFER: Withdrawn = 600 from the capital walk (2,040 = 0 + 2,640 − ?). |
-| 5 | 4 · First edge | Draw the first arrow: Cash→Withdrawn 600. QUIZ: direction, and what is still assumed? (Cash gives to the owner's pile — but no statement has said the take was CASH; tag: inference.) Chain → 74-2. |
+0 orientation (the Generated enclosure holds exactly what the income statement
+summarizes — a sorting made visible); 1 income statement filled off the graph
+(6,020 / 3,380 / 2,640 — typed inputs, three-strike pacing with hints);
+2 the Member's Capital walk filled pile by pile (2,460 + 2,640 − 600 = 4,500);
+3 close — one summer, one graph, and the loose thread stated plainly: over a
+profitable season, Cash FELL from 1,300 to 620. Chain → 73-1.
 
-### 74-2 The Ledger Behind the Statements (~8 min) — bike-outsider stages 5–12, 7 steps
+### 73-1 Where the Cash Came From and Where It Went — 5 readings
 
-| Step | Source | Beat |
-|---|---|---|
-| 0 | 5 · CFS | Release 4 — gross flows at last: collections 5,500 lands as a fact arrow into Cash; the card line reads *paid off* (step 2's open question settled: no new charges); the draw's cash-ness is confirmed — its arrow turns solid fact. Facts move the boundary. |
-| 1 | 520 wedge | Revenue 6,020; cash collected 5,500. INFER: Revenue→Receivables = 300 (Receivables' walk: began 0, ended 300). Tag: inference — supported, not proven. |
-| 2 | Deposit | $220 still unexplained — exactly the deposit's fall. QUIZ: earned or refunded? (Earned — a refund would show in the cash statement and does not; 5,500 + 300 + 220 = 6,020 ties.) |
-| 3 | Through-flows | Four near-factual arrows: parts used 1,200 and bought 1,200 (a flow-through leaving the shelf's walk flat), rent 1,950 on both statements, the tool 400 from investing. One aggregate left: the single 230 depreciation line. |
-| 4 | Reversal | Walk the Tools account to recover its share: began 1,200, bought 400, ended 1,440 — the walk only ties if depreciation took **160** (INFER). Fixtures (40) and the laptop (30) follow; 160 + 40 + 30 = 230 ✓. An aggregation reversed, using nothing but the walks. |
-| 5 | Complete | Twelve arrows; every walk ties; every arrow tagged. This is the best graph an outsider can build — no release would refine it much. |
-| 6 | Finale | The reveal: toggle the shop's actual ledger — the single 5,500 arrow fans into nineteen named repairs; about fifty entries stand behind the twelve arrows. **Both graphs are lawful; both produce exactly these statements; only one is what happened.** Chain → 75-1. |
+0 profitable — and poorer in cash (NI 2,640; Cash 1,300 → 620); 1 TASK —
+classify the seven cash arrows into the three channels (the Cash node opens
+into its channel enclosure as you go; wrong picks bounce with explanations);
+2 the cash statement off the channels: +2,350 / −400 / −2,630 = −680, with the
+twist said out loud — the card payoff and the take sit in Financing because
+classification follows the claim being settled; 3 reconcile NI → operating
+cash: 2,640 + 230 − 300 − 220 = 2,350, row-click highlights; 4 the season
+fully told — all four statements are readings off one picture. Chain → 74-1.
 
-### 75-1 The Draw Question (~6 min) — bike-draw, 5 steps
+### 74-1 The Outsider's Graph — 6 releases
 
-| Step | Source | Beat |
-|---|---|---|
-| 0 | st 0 | Who paid the mechanic? The shop "earned" 2,640; the only money the bike-fixing owner received is the 600 draw — which never touched the income statement. Two honest ways to draw the same summer. |
-| 1 | st 1 | Predict before the arrow moves — four predictions with per-answer feedback: net income (falls to 2,040), ending capital (invariant — different doors, same room), ΔCash (invariant — reclassification moves no money), operating cash (falls to 1,750 — a wage is an operating payment). |
-| 2 | st 2 | One arrow moved, two worlds: toggle D (the draw, as reported) ↔ W (a 600 owner's wage). The ENDING COLUMN re-renders per world — in W, Generated ends 2,210 and Withdrawn never appears; total capital 4,500 either way. Side-by-side statements, hover-linked to the graph. |
-| 3 | st 3 | What would a mechanic actually cost? The wage becomes editable (default 3,900): at a market wage the summer runs at a loss. What the shop "really earned" depends on a choice the statements didn't have to disclose. |
-| 4 | st 4 | Representation is a choice — and the reader must see through it. The module's close; terminal page (module-complete/assessment wiring out of scope). |
+Both flanks start EMPTY; the releases ARE the columns arriving. Every arrow
+tagged fact / inference-under-assumption / open.
 
-## Page mechanics
+| Step | Release / beat |
+|---|---|
+| 0 | The offer: a prospective investor may buy in; the owner keeps fixing bikes. You will never see the ledger — only statements |
+| 1 | Release 1 — summary totals, three lines per date. QUIZ: how much did the business earn? (Cannot be determined) |
+| 2 | Release 2 — the balance sheets: ten Δ-node facts, already summing to zero; capital arrives as ONE line. Arrows still unknown |
+| 3 | Release 3 — the income statement: 6,020 − 3,380 = 2,640. But capital moved only +2,040. QUIZ: the gap |
+| 4 | The owner's reply — the capital statement: Contributed began 2,460, no changes; Generated +2,640 (the walk ties again); Withdrawn shown as **?** — INFER 600 from the walk |
+| 5 | Draw the first arrow: Cash→Withdrawn 600. What is still assumed? (No statement has said the take was CASH — tag: inference) |
 
-- **Course chrome (look ruling):** tut-header (title, "Module 7 · ~N min",
-  glossary + restart), course fonts/palette, `shared.css` linked and untouched,
-  step machine (`var step`, `TOTAL_STEPS`, full re-render, Back/Next, chain
-  button at the last step), `window.devFill`, glossary overlay with per-page
-  terms, `dev.js` last. Page-specific styles in per-page `<style>` prefixed
-  `m7-`, dark-mode-safe.
-- **The lab board:** the SVG canvas + rail port as a shared library —
-  `graph-lab.js`, a NEW file in the repo root (factored once from the four
-  pages' duplicated `BLAAccounting`/`BLARouter` + renderers; `shared.js`
-  untouched). New capabilities the rulings require: the three region
-  enclosures + nested Generated enclosure; the banded layout (regions aligned
-  with the BS sections of the flanks — proposal in ruling 1, exercised here);
-  live BS columns bound to posted entries with per-line move highlights and
-  the christening state; accumulating arrow totals with hover constituents;
-  appear-on-first-use nodes; fact/inference/open arrow styling (74-x);
-  channel-split enclosure (73-1); world toggle (75-1); cross-highlight maps
-  spanning flanks ↔ nodes ↔ arrows.
-- **Internal vocabulary rename (lint):** node types become `asset` / `liab` /
-  `reason` (with `sub:'generated'` for the enclosure members); every literal
-  "equity," "debit," "credit," "closing," "law of motion," "retained
-  earnings," "dividend," "stock," "limited partner," "Business Language
-  Analytics" is gone from shipped files — prose AND code strings. 7x pages
-  must pass `bash lint-language.sh` with NO new carve-out.
-- **Tasks:** the source pages' quiz (options + per-distractor feedback),
-  numeric-infer (input + tolerance + hint + proof), classify (channel
-  assignment), predict (choice + feedback), and fill-in-the-blank statement
-  mechanics all port into the course's three-strike pacing; step chips remain
-  gated by task completion (course precedent: gates exist where a page asks
-  for work).
+Chain (gated on the last quiz) → 74-2.
 
-## Data & verification
+### 74-2 The Ledger Behind the Statements — 6 steps, UNCOLLAPSED (ruling 15)
 
-- One shared data file `bike-graph-data.js` (NEW): the 14 entries, node
-  definitions, June-1/Aug-31 balance-sheet lines, the classification key, the
-  reconciliation chain, the ledger-fan constituents (from
-  `bike-repair-job-records.js` naming), and the two-world edge sets — factored
-  from the four source pages, values unchanged.
-- An executable check (`checks/check-m7-data.py`, Ringer-run like the M6
-  data-port): entries sum to every canon figure (June-1 and Aug-31 sheets tie;
-  Revenue 6,020 = 120+5,380+300+220; expenses 3,380 = 1,200+1,950+230; NI
-  2,640; cash −680 = 2,350−400−2,630 by the classification key; capital walk
-  2,460+2,640−600 = 4,500; per-account walks tie: Tools 1,200+400−160 = 1,440,
-  Fixtures 750−40 = 710, Laptop 610−30 = 580, Parts 200+1,200−1,200 = 200,
-  Receivables 0+300 = 300, Deposit 220−220 = 0, Card 2,030−2,030 = 0), plus
-  the world-W assertions (NI 2,040; Generated 2,210; capital 4,500 invariant;
-  CFO 1,750). The graph-teach repo's test suite is the reference.
+The income statement names the Generated members, so Repair Revenue, Parts
+Used, Rent, and Depreciation appear as real accounts and every arrow runs
+between real accounts. No fan, no ledger reveal.
 
-## Build order & review gates
+| Step | Beat |
+|---|---|
+| 0 | Release 4 — the cash statement, GROSS flows: collections 5,500 (fact arrow into Cash); the card line reads *paid off* (release 2's open question settled — no new charges); the draw's cash-ness confirmed. Facts move the boundary |
+| 1 | The 520 wedge: Revenue 6,020, cash collected 5,500 — INFER Revenue→Receivables 300 (Receivables' walk: began 0, ended 300) |
+| 2 | $220 still unexplained — exactly the deposit's fall. QUIZ: earned or refunded? (Earned; 5,500 + 300 + 220 = 6,020 ties) |
+| 3 | The through-flows: parts used 1,200 and bought 1,200 (flow-through, the shelf's walk flat), rent 1,950 on both statements, the tool 400 from investing. One aggregate left: the single 230 line |
+| 4 | Reversing an aggregation: walk the Tools account — began 1,200, bought 400, ended 1,440 — the walk only ties if depreciation took **160** (INFER) |
+| 5 | Fixtures 40 and the Laptop 30 complete the split (160 + 40 + 30 = 230). Twelve arrows; every walk ties; every arrow tagged. Closing prose: behind this sit dozens of entries you will never see; many ledgers could produce these statements — **the graph you built is the summary the statements can support** |
 
-1. Rick approves this plan (page cut locks; titles/captions Rick-editable at
-   click-through) and the companion `Module-7-Intro-Draft.md` is drafted for
-   his ruling (the 71-1 source).
-2. `bike-graph-data.js` + check harness (Ringer worker, verbatim output kept).
-3. `graph-lab.js` factored and extended (regions, live flanks, accumulation,
-   tags, channels, worlds); one dev harness page for board verification in a
-   real browser (not shipped).
-4. Pages one at a time, 71-1 → 75-1, each: build (worker) → static check →
-   `bash lint-language.sh` (strict — no 7x carve-out) → live browser pass
-   (every step, tasks exercised for real, devFill, dark scheme, chain links
-   CLICKED through) → commit by name on `graph-teach-wip`; push per Rick's
-   standing instruction on this branch. `Rick` branch untouched.
-5. Rick's click-through, batched or per page at his preference.
-6. M3/M4/M5/M6 pages untouched; both existing flow checks stay green.
+Chain → 75-1.
 
-## Out of scope
+### 75-1 The Draw Question — 4 questions (ruling 16: no market-wage what-if)
 
-- The future accounting-terms module (debit, credit, roll forward,
-  reconciliation, T accounts, journal entries) — repeatedly reserved.
-- index.html / view.html wiring; module-complete/assessment pages; RAG docs
-  (post-build, per the new corpus pattern); publishing.
+| Step | Beat |
+|---|---|
+| 0 | Who paid the mechanic? The shop "earned" 2,640; the only money the bike-fixing owner received is the 600 take, which never touched the income statement. Another lawful way: call the same $600 an owner's wage |
+| 1 | Predict before the arrow moves — four predictions with per-answer feedback: net income (falls to 2,040), ending Member's Capital (invariant — different doors, same room), ΔCash (invariant — a relabeling moves no money), operating cash (falls to 1,750 — a wage is an operating payment) |
+| 2 | One arrow moved, two worlds: toggle D (the take) ↔ W (the wage). In W the arrow lands inside Generated as Owner's Wage, Withdrawn never appears, Generated ends **2,040**; Member's Capital 4,500 either way. Side-by-side statement table, columns following the active world |
+| 3 | Representation is a choice — even inside an honest boundary, with every walk tying, the same summer supports many lawful pictures. Module close; terminal page |
+
+## Engine & data (as built)
+
+- **`graph-lab.js`** (repo root, shared library). Board API:
+  `GraphLab.createBoard(svg, data, opts)` with `setRecognized`, `setFocus`
+  (focus graying), `setForceNodes` (forced nodes / `?` badges), `setFan`
+  (constituent fan on an arrow), `setTags` (fact/infer/open), `setWorld`
+  (D/W), `clearHighlight`; `GraphLab.renderColumn(el, data, board, {side,
+  omit, title, sub, christened, highlightAccts})` renders the flanking
+  balance-sheet columns. Regions + nested Generated enclosure, Δ labels and
+  identity glyphs, accumulating totals, cross-highlight maps.
+- **`bike-graph-data.js`** — `window.M7_GRAPH`: 17 nodes (Owner's Wage
+  included for world W), the 15 entries above, June-1/Aug-31 `bs` (June 1:
+  4,710 / 2,250 / Contributed 2,460 · Generated 0), the channel key, `cfs`
+  {2,350 / −400 / −2,630 / −680}, the reconciliation chain, the fan
+  constituents (nineteen named repairs from the job records), and `worldW`
+  {ni 2,040, gen 2,040, cfo 1,750, netCash −680}.
+- 71-2 carries its own inline **formation dataset** (nodes incl. Right of Use
+  and the never-recognized Repair Skill; the eight formation entries; all-zero
+  beginning column).
+
+## Verification stack (`Accounting Pre-work/M7-graph-build/`)
+
+- `checks/check-m7-data.py` — 148 tie-outs on `bike-graph-data.js` (every
+  canon figure, per-account walks, world-W assertions).
+- `checks/check-m7-page.py` — parametric static page check with the M7
+  vocabulary guard (includes `\bclose\b` — overlays use aria-label
+  "Dismiss").
+- `checks/check-graph-lab.py` — engine check.
+- `harness.html` — 50/50 in-browser assertions; serve the harness dir on port
+  8766. The course itself serves via `python3 serve.py` (no-cache, port 8765)
+  from the v2 root.
+- `build-m7-complete.py` (v2 root) rebuilds `Module-7-Complete.html`; it
+  strips the lint-tripping `shared.css` lines. Rebuild after ANY 7x change.
+- `bash lint-language.sh` — strict, no 7x carve-out — before finishing.
+
+## Open items (not yet built or ruled)
+
+- **index/view wiring** — placement after M6 recommended in the eval doc;
+  numbering and roadmap grouping are Rick's call.
+- **Yes/No Recognize on 72-1** — offered, awaiting Rick's ruling (71-2 has it;
+  72-1 still confirm-style).
+- **M7 RAG docs** — none yet; write after the module stabilizes.
+- **Module-complete/assessment pages** — out of scope for the build.
+- **CMU share refresh** — `graph-teach` branch `rick/yale-module-7` is stale
+  (pre-formation-page); refresh copies the current set + runs their npm test.
+
+## Out of scope (unchanged from the draft)
+
+- The future accounting-terms module (the profession's vocabulary — reserved).
 - Any change to the four source pages in `Bike-Repair-Graph-Teach/` (they stay
-  as the reference implementation) or to the sibling `graph-teach` repo.
+  the reference implementation) or to the sibling `graph-teach` repo's main.
