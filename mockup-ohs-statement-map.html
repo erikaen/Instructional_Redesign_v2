@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Nonprofit Statement Map — Oregon Humane Society</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6ohs-scope {
+      --m6ohs-paper:#ffffff;
+      --m6ohs-ink:#263746;
+      --m6ohs-muted:#657583;
+      --m6ohs-primary:#155b86;
+      --m6ohs-rule:#c8d4dc;
+      --m6ohs-rule-strong:#708592;
+      --m6ohs-accent:#d5a528;
+      --m6ohs-soft:#f3f8fb;
+      --m6ohs-shadow:rgba(32,55,72,.09);
+      box-sizing:border-box;
+      max-width:1500px;
+      margin:0 auto;
+      padding:28px 20px 36px;
+      color:var(--m6ohs-ink);
+      font-family:Inter,"Open Sans",sans-serif;
+    }
+    .m6ohs-scope *, .m6ohs-scope *::before, .m6ohs-scope *::after { box-sizing:inherit; }
+    .m6ohs-page-kicker {
+      margin:0 0 7px;
+      color:var(--m6ohs-accent);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+    .m6ohs-page-title { margin:0; color:var(--m6ohs-primary); font-size:clamp(24px,3vw,38px); line-height:1.15; }
+    .m6ohs-page-subtitle { margin:8px 0 24px; color:var(--m6ohs-muted); font-size:14px; }
+    .m6ohs-scroll { overflow-x:auto; padding:2px 2px 14px; }
+    .m6ohs-grid {
+      display:grid;
+      grid-template-columns:minmax(245px,.9fr) minmax(390px,1.45fr) minmax(245px,.9fr);
+      gap:14px;
+      align-items:start;
+      min-width:920px;
+    }
+    .m6ohs-column { min-width:0; }
+    .m6ohs-center { display:grid; gap:10px; }
+    .m6ohs-card, .m6ohs-panel {
+      border:1px solid var(--m6ohs-rule);
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m6ohs-card { padding:17px; border-radius:12px; }
+    .m6ohs-panel { padding:14px; border-radius:10px; }
+    .m6ohs-kicker {
+      margin:0 0 5px;
+      color:var(--m6ohs-muted);
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .m6ohs-title { margin:0; color:var(--m6ohs-primary); font-size:17px; line-height:1.25; }
+    .m6ohs-panel .m6ohs-title { font-size:13px; letter-spacing:.035em; }
+    .m6ohs-subline { margin:4px 0 0; color:var(--m6ohs-muted); font-size:11px; font-style:italic; line-height:1.45; }
+    .m6ohs-date { margin:3px 0 0; color:var(--m6ohs-muted); font-size:11px; }
+    .m6ohs-section { margin-top:15px; }
+    .m6ohs-section-head { display:flex; align-items:center; gap:6px; margin-bottom:3px; }
+    .m6ohs-section-label { color:var(--m6ohs-muted); font-size:10px; font-weight:800; letter-spacing:.09em; text-transform:uppercase; }
+    .m6ohs-help {
+      display:inline-grid;
+      width:18px;
+      height:18px;
+      padding:0;
+      place-items:center;
+      border:1px solid var(--m6ohs-rule);
+      border-radius:50%;
+      background:var(--m6ohs-soft);
+      color:var(--m6ohs-primary);
+      font:700 11px/1 Inter,sans-serif;
+      cursor:pointer;
+    }
+    .m6ohs-help:hover, .m6ohs-help:focus-visible, .m6ohs-expand:hover, .m6ohs-expand:focus-visible {
+      outline:2px solid var(--m6ohs-accent);
+      outline-offset:2px;
+    }
+    .m6ohs-definition { margin:4px 0 6px; padding:6px 8px; border-left:2px solid var(--m6ohs-accent); background:var(--m6ohs-soft); color:var(--m6ohs-muted); font-size:10px; line-height:1.4; }
+    .m6ohs-expand {
+      width:100%;
+      margin:0;
+      padding:5px 0;
+      border:0;
+      border-radius:2px;
+      background:transparent;
+      color:inherit;
+      font:inherit;
+      text-align:left;
+      cursor:pointer;
+    }
+    .m6ohs-row, .m6ohs-expand-inner {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(76px,auto);
+      gap:8px;
+      align-items:baseline;
+    }
+    .m6ohs-row { padding:3px 0; font-size:10.5px; }
+    .m6ohs-chevron { display:inline-block; width:1.05em; color:var(--m6ohs-primary); }
+    .m6ohs-value {
+      text-align:right;
+      white-space:nowrap;
+      font-family:"JetBrains Mono",monospace;
+      font-variant-numeric:tabular-nums;
+    }
+    .m6ohs-total {
+      margin-top:3px;
+      padding-top:6px;
+      border-top:1px solid var(--m6ohs-rule-strong);
+      color:var(--m6ohs-primary);
+      font-size:11px;
+      font-weight:800;
+    }
+    .m6ohs-detail { margin:3px 0 7px 12px; padding:5px 0 4px 9px; border-left:2px solid var(--m6ohs-rule); }
+    .m6ohs-detail .m6ohs-row { color:var(--m6ohs-muted); font-size:9.5px; }
+    .m6ohs-subtotal { margin-top:3px; padding-top:4px !important; border-top:1px solid var(--m6ohs-rule); color:var(--m6ohs-ink) !important; font-weight:700; }
+    .m6ohs-identity, .m6ohs-walk {
+      margin:12px 0 0;
+      padding-top:8px;
+      border-top:1px solid var(--m6ohs-rule);
+      color:var(--m6ohs-muted);
+      font-size:9.5px;
+      font-style:italic;
+      line-height:1.45;
+    }
+    .m6ohs-identity { text-align:center; }
+    .m6ohs-walk { color:var(--m6ohs-primary); font-weight:800; font-style:normal; }
+    .m6ohs-summary { margin-top:9px; }
+    .m6ohs-summary > .m6ohs-expand { border-bottom:1px solid var(--m6ohs-rule); }
+    .m6ohs-summary-label { font-size:10.5px; line-height:1.35; }
+    .m6ohs-detail-note, .m6ohs-note { margin:6px 0 0; color:var(--m6ohs-muted); font-size:9.5px; font-style:italic; line-height:1.45; }
+    .m6ohs-piles { margin:3px 0 5px; padding:5px 6px; border-radius:4px; background:var(--m6ohs-soft); }
+    .m6ohs-pile-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(64px,auto));
+      gap:5px;
+      align-items:baseline;
+      justify-content:end;
+      color:var(--m6ohs-muted);
+      font-size:9px;
+      font-style:italic;
+    }
+    .m6ohs-pile-head { font-weight:700; text-align:right; }
+    .m6ohs-subheading { margin:8px 0 3px; color:var(--m6ohs-muted); font-size:9.5px; font-weight:800; letter-spacing:.04em; }
+    .m6ohs-purpose-grid {
+      display:grid;
+      grid-template-columns:minmax(150px,1fr) minmax(72px,auto);
+      gap:4px 8px;
+      align-items:baseline;
+      font-size:9.5px;
+    }
+    .m6ohs-purpose-grid > :nth-child(even) { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m6ohs-purpose-subtotal { padding-top:4px; border-top:1px solid var(--m6ohs-rule); font-weight:800; }
+    .m6ohs-footer { margin:14px 2px 0; color:var(--m6ohs-muted); font-size:10px; font-style:italic; }
+    [hidden] { display:none !important; }
+    @media (max-width:700px) {
+      .m6ohs-scope { padding:20px 12px 28px; }
+      .m6ohs-grid { min-width:860px; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6ohs-scope {
+        --m6ohs-paper:#26242e;
+        --m6ohs-ink:#e8edf1;
+        --m6ohs-muted:#b4c0c8;
+        --m6ohs-primary:#7dc8f3;
+        --m6ohs-rule:#4b5361;
+        --m6ohs-rule-strong:#8797a2;
+        --m6ohs-accent:#d8ad3e;
+        --m6ohs-soft:#25313a;
+        --m6ohs-shadow:rgba(0,0,0,.28);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="m6ohs-scope">
+    <header>
+      <p class="m6ohs-page-kicker">PROTOTYPE — FOR RULING</p>
+      <h1 class="m6ohs-page-title">A Nonprofit Statement Map — Oregon Humane Society</h1>
+      <p class="m6ohs-page-subtitle">Real audited statements, year ended December 31, 2025.</p>
+    </header>
+    <div class="m6ohs-scroll" aria-label="Oregon Humane Society statement map">
+      <div class="m6ohs-grid">
+        <div class="m6ohs-column" id="m6ohs-left"></div>
+        <div class="m6ohs-column m6ohs-center" id="m6ohs-center"></div>
+        <div class="m6ohs-column" id="m6ohs-right"></div>
+      </div>
+    </div>
+    <template id="m6ohs-total-markers">
+      <button class="m6ohs-total" data-total="assets"></button>
+      <button class="m6ohs-total" data-total="liabilities"></button>
+      <button class="m6ohs-total" data-total="netassets"></button>
+    </template>
+    <p class="m6ohs-footer">Prototype for ruling — numbers from the audited FY2025 statements (Perkins &amp; Co). Not yet a course page.</p>
+  </main>
+
+  <script type="application/json" id="ohs-map-data">
+{
+  "meta": {
+    "org": "Oregon Humane Society",
+    "docTitle": "Financial Statements, Year Ended December 31, 2025 (with summarized comparative information as of December 31, 2024)",
+    "auditor": "Perkins & Company, P.C.",
+    "beginDate": "December 31, 2024",
+    "endDate": "December 31, 2025"
+  },
+  "sfp": {
+    "assets": [
+      {"id": "cash", "label": "Cash and cash equivalents", "y2025": 6014635, "y2024": 3932294},
+      {"id": "ar", "label": "Accounts receivable, net", "y2025": 207367, "y2024": 507983},
+      {"id": "contribRec", "label": "Contributions and grants receivable, net", "y2025": 495880, "y2024": 787646},
+      {"id": "bequestsRec", "label": "Bequests receivable, net", "y2025": 3812163, "y2024": 3293019},
+      {"id": "noteRec", "label": "Note receivable", "y2025": 1371617, "y2024": 1412947},
+      {"id": "prepaid", "label": "Prepaid expenses and other assets", "y2025": 706324, "y2024": 813339},
+      {"id": "investments", "label": "Investments", "y2025": 37453436, "y2024": 36981295},
+      {"id": "trusts", "label": "Beneficial interest in charitable trusts held by others", "y2025": 2405712, "y2024": 2242927},
+      {"id": "ppe", "label": "Property and equipment, net", "y2025": 61294513, "y2024": 62804618}
+    ],
+    "totalAssets": {"y2025": 113761647, "y2024": 112776068},
+    "liabilities": [
+      {"id": "ap", "label": "Accounts payable and accrued expenses", "y2025": 829432, "y2024": 829344},
+      {"id": "payroll", "label": "Accrued payroll and related expenses", "y2025": 1852414, "y2024": 1874962},
+      {"id": "deferredRev", "label": "Deferred revenue", "y2025": 178052, "y2024": 154687},
+      {"id": "splitInterest", "label": "Liabilities under split-interest agreements", "y2025": 1202583, "y2024": 1276197},
+      {"id": "deferredComp", "label": "Deferred compensation", "y2025": 2487051, "y2024": 2252141}
+    ],
+    "totalLiabilities": {"y2025": 6549532, "y2024": 6387331},
+    "netAssetsWithout": [
+      {"id": "availOps", "label": "Available for programs and general operations", "y2025": 10144704, "y2024": 11423272},
+      {"id": "boardEndow", "label": "Board-designated endowment", "y2025": 14395813, "y2024": 13290442},
+      {"id": "netCapital", "label": "Net investment in capital assets", "y2025": 61090468, "y2024": 62576168}
+    ],
+    "totalWithout": {"y2025": 85630985, "y2024": 87289882},
+    "withRestrictions": {"y2025": 21581130, "y2024": 19098855},
+    "totalNetAssets": {"y2025": 107212115, "y2024": 106388737}
+  },
+  "activities": {
+    "columns": ["Without donor restrictions", "With donor restrictions", "Total 2025", "Total 2024"],
+    "operatingRevenues": [
+      {"id": "contrib", "label": "Contributions and grants", "wo": 6003256, "w": 4659036, "t2025": 10662292, "t2024": 12054639},
+      {"id": "legacies", "label": "Legacies and bequests", "wo": 6868034, "w": 3718126, "t2025": 10586160, "t2024": 14878480},
+      {"id": "salesFees", "label": "Sales and program fees, less costs of sales", "wo": 8551991, "w": 0, "t2025": 8551991, "t2024": 7060800},
+      {"id": "invReturn", "label": "Investment return, net", "wo": 3130102, "w": -1372813, "t2025": 1757289, "t2024": -229603},
+      {"id": "specialEvents", "label": "Special events revenue, less direct benefits to donors", "wo": 1627143, "w": 0, "t2025": 1627143, "t2024": 1693498},
+      {"id": "inKind", "label": "In-kind contributions", "wo": 1402144, "w": 0, "t2025": 1402144, "t2024": 1498434},
+      {"id": "rental", "label": "Rental income", "wo": 338385, "w": 0, "t2025": 338385, "t2024": 695311},
+      {"id": "trustChange", "label": "Change in value of beneficial interest in charitable trusts", "wo": 0, "w": 162785, "t2025": 162785, "t2024": 9740},
+      {"id": "splitChange", "label": "Change in actuarial value of split-interest liabilities", "wo": 0, "w": -38125, "t2025": -38125, "t2024": -73853},
+      {"id": "ertc", "label": "Employee Retention Tax Credits income", "wo": 2913362, "w": 0, "t2025": 2913362, "t2024": 0},
+      {"id": "other", "label": "Other income", "wo": 49065, "w": 0, "t2025": 49065, "t2024": 74011}
+    ],
+    "totalOperatingRevenuesGains": {"wo": 30883482, "w": 7129009, "t2025": 38012491, "t2024": 37661457},
+    "appropriation": {"label": "Appropriation of endowment and Board-designated investment return for expenditure", "wo": 1188879, "w": -459227, "t2025": 729652, "t2024": 913136},
+    "releases": {"label": "Net assets released from restrictions for operating purposes", "wo": 6189517, "w": -6189517, "t2025": 0, "t2024": 0},
+    "totalOperatingSupport": {"wo": 38261878, "w": 480265, "t2025": 38742143, "t2024": 38574593},
+    "operatingExpenses": [
+      {"id": "program", "label": "Program services", "wo": 32805920, "w": 0, "t2025": 32805920, "t2024": 29559814},
+      {"id": "supporting", "label": "Supporting services", "wo": 8220228, "w": 0, "t2025": 8220228, "t2024": 7456593}
+    ],
+    "totalOperatingExpenses": {"wo": 41026148, "w": 0, "t2025": 41026148, "t2024": 37016407},
+    "changeBeforeNonoperating": {"wo": -2764270, "w": 480265, "t2025": -2284005, "t2024": 1558186},
+    "nonoperating": [
+      {"id": "capitalContrib", "label": "Contributions restricted for capital purposes", "wo": 0, "w": 0, "t2025": 0, "t2024": 91795},
+      {"id": "endowReturn", "label": "Total endowment and Board-designated investment return, less appropriation for expenditure", "wo": 1105373, "w": 2002010, "t2025": 3107383, "t2024": 2361051}
+    ],
+    "totalNonoperating": {"wo": 1105373, "w": 2002010, "t2025": 3107383, "t2024": 2452846},
+    "changeInNetAssets": {"wo": -1658897, "w": 2482275, "t2025": 823378, "t2024": 4011032},
+    "netAssetsBeginning": {"wo": 87289882, "w": 19098855, "t2025": 106388737, "t2024": 102377705},
+    "netAssetsEnd": {"wo": 85630985, "w": 21581130, "t2025": 107212115, "t2024": 106388737}
+  },
+  "functional": {
+    "programColumns": ["Sheltering and Adoptions", "Community Veterinary Services", "Community and Education Services", "Behavior Consultation and Training", "Humane Law Enforcement and Rescue"],
+    "supportingColumns": ["Management and General", "Fundraising"],
+    "rows": [
+      {"id": "salaries", "label": "Salaries", "cells": [10687801, 4083998, 1416189, 1219665, 626081], "totalProgram": 18033734, "mg": 2221389, "fr": 2310641, "totalSupporting": 4532030, "t2025": 22565764, "t2024": 20122429},
+      {"id": "payrollTax", "label": "Payroll taxes and benefits", "cells": [2473284, 911714, 293737, 346895, 129495], "totalProgram": 4155125, "mg": 761604, "fr": 525857, "totalSupporting": 1287461, "t2025": 5442586, "t2024": 4811440},
+      {"id": "depreciation", "label": "Depreciation", "cells": [1414604, 583067, 109377, 129566, 44065], "totalProgram": 2280679, "mg": 147094, "fr": 160559, "totalSupporting": 307653, "t2025": 2588332, "t2024": 2568940},
+      {"id": "feed", "label": "Feed, shelter, and program supplies", "cells": [1142912, 265980, 13725, 14115, 40210], "totalProgram": 1476942, "mg": 11649, "fr": 970, "totalSupporting": 12619, "t2025": 1489561, "t2024": 1103923},
+      {"id": "surgical", "label": "Surgical, medications, and lab", "cells": [612171, 833073, 0, 0, 30173], "totalProgram": 1475417, "mg": 0, "fr": 0, "totalSupporting": 0, "t2025": 1475417, "t2024": 1301522},
+      {"id": "occupancy", "label": "Occupancy and equipment", "cells": [564859, 268819, 34382, 223919, 41638], "totalProgram": 1133617, "mg": 48028, "fr": 18758, "totalSupporting": 66786, "t2025": 1200403, "t2024": 1100785},
+      {"id": "repairs", "label": "Repairs and maintenance", "cells": [493483, 247420, 29223, 191484, 42459], "totalProgram": 1004069, "mg": 13680, "fr": 15652, "totalSupporting": 29332, "t2025": 1033401, "t2024": 1059808},
+      {"id": "professional", "label": "Professional services", "cells": [137620, 111713, 11600, 29882, 35498], "totalProgram": 326313, "mg": 477232, "fr": 17404, "totalSupporting": 494636, "t2025": 820949, "t2024": 705146},
+      {"id": "it", "label": "Information technology", "cells": [408585, 167420, 31888, 31910, 12218], "totalProgram": 652021, "mg": 43891, "fr": 47828, "totalSupporting": 91719, "t2025": 743740, "t2024": 781744},
+      {"id": "bankFees", "label": "Bank fees", "cells": [37894, 208464, 193409, 4921, 0], "totalProgram": 444688, "mg": 19891, "fr": 196854, "totalSupporting": 216745, "t2025": 661433, "t2024": 475413},
+      {"id": "devPromo", "label": "Development and promotion", "cells": [10368, 1935, 120105, 0, 173], "totalProgram": 132581, "mg": 8656, "fr": 413298, "totalSupporting": 421954, "t2025": 554535, "t2024": 608029},
+      {"id": "publicAware", "label": "Public awareness", "cells": [0, 0, 405688, 0, 0], "totalProgram": 405688, "mg": 0, "fr": 31, "totalSupporting": 31, "t2025": 405719, "t2024": 420514},
+      {"id": "travel", "label": "Travel and training", "cells": [192344, 66998, 14606, 17664, 37870], "totalProgram": 329482, "mg": 26602, "fr": 21597, "totalSupporting": 48199, "t2025": 377681, "t2024": 427521},
+      {"id": "insurance", "label": "Insurance", "cells": [164852, 72168, 12401, 21334, 40325], "totalProgram": 311080, "mg": 41939, "fr": 17049, "totalSupporting": 58988, "t2025": 370068, "t2024": 350652},
+      {"id": "office", "label": "Office", "cells": [177414, 74008, 25364, 14476, 6368], "totalProgram": 297630, "mg": 21885, "fr": 22345, "totalSupporting": 44230, "t2025": 341860, "t2024": 323609},
+      {"id": "directMail", "label": "Direct mail", "cells": [0, 0, 0, 0, 0], "totalProgram": 0, "mg": 0, "fr": 298817, "totalSupporting": 298817, "t2025": 298817, "t2024": 239355},
+      {"id": "eventPromo", "label": "Event promotion", "cells": [0, 0, 0, 0, 0], "totalProgram": 0, "mg": 0, "fr": 208454, "totalSupporting": 208454, "t2025": 208454, "t2024": 254538},
+      {"id": "other", "label": "Other", "cells": [180626, 74105, 14399, 15652, 62072], "totalProgram": 346854, "mg": 77526, "fr": 23048, "totalSupporting": 100574, "t2025": 447428, "t2024": 361039}
+    ],
+    "totalsRow": {"cells": [18698817, 7970882, 2726093, 2261483, 1148645], "totalProgram": 32805920, "mg": 3921066, "fr": 4299162, "totalSupporting": 8220228, "t2025": 41026148, "t2024": 37016407}
+  },
+  "cfs": {
+    "operating": {
+      "changeInNetAssets": 823378,
+      "adjustments": [
+        {"id": "allowance", "label": "Allowance for cr&#101;dit losses on accounts receivable", "v": 84283},
+        {"id": "npvDiscount", "label": "Change in net present value discount on long-term contributions and bequests receivable", "v": 546046},
+        {"id": "realizedGains", "label": "Realized gains on investments", "v": -670087},
+        {"id": "unrealizedGains", "label": "Unrealized gains on investments", "v": -3893029},
+        {"id": "trustChange", "label": "Change in value of beneficial interest in charitable trusts held by others", "v": -162785},
+        {"id": "depreciation", "label": "Depreciation expense", "v": 2588332},
+        {"id": "splitActuarial", "label": "Change in actuarial value of liabilities under split-interest agreements", "v": 38125},
+        {"id": "restrictedLT", "label": "Contributions received restricted for long-term investment", "v": -1287599},
+        {"id": "restrictedCapex", "label": "Contributions received restricted for capital expenditures", "v": -3700}
+      ],
+      "workingCapital": [
+        {"id": "ar", "label": "Accounts receivable", "v": 216333},
+        {"id": "contribRec", "label": "Contributions and grants receivables", "v": 292355},
+        {"id": "bequestsRec", "label": "Bequests receivable", "v": -1065779},
+        {"id": "noteRec", "label": "Note receivable", "v": 41330},
+        {"id": "prepaid", "label": "Prepaid expenses and other assets", "v": 107015},
+        {"id": "ap", "label": "Accounts payable and accrued expenses", "v": -203957},
+        {"id": "payroll", "label": "Accrued payroll and related expenses", "v": -22548},
+        {"id": "deferredRev", "label": "Deferred revenue", "v": 23365},
+        {"id": "deferredComp", "label": "Deferred compensation", "v": 234910}
+      ],
+      "cfo": -2314012
+    },
+    "investing": {
+      "lines": [
+        {"id": "salesInv", "label": "Proceeds from sales of investments", "v": 8811390},
+        {"id": "purchasesInv", "label": "Purchases of investments", "v": -4720415},
+        {"id": "ppe", "label": "Purchases of property and equipment", "v": -874182}
+      ],
+      "cfi": 3216793
+    },
+    "financing": {
+      "lines": [
+        {"id": "restrictedLT", "label": "Contributions received restricted for long-term investment", "v": 1287599},
+        {"id": "restrictedCapex", "label": "Contributions received restricted for capital expenditures", "v": 3700},
+        {"id": "annuityProceeds", "label": "Proceeds from contributions subject to charitable gift annuity agreements", "v": 80737},
+        {"id": "annuityDistributions", "label": "Distributions made under charitable gift annuity agreements", "v": -192476}
+      ],
+      "cff": 1179560
+    },
+    "netChange": 2082341,
+    "cashBeginning": 3932294,
+    "cashEnd": 6014635
+  }
+}
+  </script>
+  <script>
+    (function () {
+      "use strict";
+
+      var encodedData = document.getElementById("ohs-map-data").textContent;
+      var dataDecoder = document.createElement("textarea");
+      dataDecoder.innerHTML = encodedData;
+      var data = JSON.parse(dataDecoder.value);
+      var serial = 0;
+
+      function el(tag, className, text) {
+        var node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+
+      function fmt(value) {
+        var absolute = Math.abs(value).toLocaleString("en-US", { maximumFractionDigits: 0 });
+        return value < 0 ? "(" + absolute + ")" : absolute;
+      }
+
+      function amountRow(label, value, extraClass) {
+        var row = el("div", "m6ohs-row" + (extraClass ? " " + extraClass : ""));
+        row.append(el("div", "", label), el("div", "m6ohs-value", fmt(value)));
+        return row;
+      }
+
+      function expandable(label, value, detail, extraClass, totalKind) {
+        serial += 1;
+        var id = "m6ohs-detail-" + serial;
+        var button = el("button", "m6ohs-expand" + (extraClass ? " " + extraClass : ""));
+        button.type = "button";
+        button.setAttribute("aria-expanded", "false");
+        button.setAttribute("aria-controls", id);
+        if (totalKind) button.setAttribute("data-total", totalKind);
+        var inner = el("span", "m6ohs-expand-inner");
+        var labelNode = el("span", "m6ohs-summary-label");
+        labelNode.append(el("span", "m6ohs-chevron", "▸"), document.createTextNode(label));
+        inner.append(labelNode, el("span", "m6ohs-value", fmt(value)));
+        button.append(inner);
+        detail.id = id;
+        detail.hidden = true;
+        button.addEventListener("click", function () {
+          var open = button.getAttribute("aria-expanded") === "true";
+          button.setAttribute("aria-expanded", String(!open));
+          button.querySelector(".m6ohs-chevron").textContent = open ? "▸" : "▾";
+          detail.hidden = open;
+        });
+        var wrap = el("div", "m6ohs-expandable");
+        wrap.append(button, detail);
+        return wrap;
+      }
+
+      function helpButton(definition) {
+        serial += 1;
+        var id = "m6ohs-definition-" + serial;
+        var wrap = document.createDocumentFragment();
+        var button = el("button", "m6ohs-help", "?");
+        button.type = "button";
+        button.setAttribute("aria-label", "Show definition");
+        button.setAttribute("aria-expanded", "false");
+        button.setAttribute("aria-controls", id);
+        var note = el("p", "m6ohs-definition", definition);
+        note.id = id;
+        note.hidden = true;
+        button.addEventListener("click", function () {
+          var open = button.getAttribute("aria-expanded") === "true";
+          button.setAttribute("aria-expanded", String(!open));
+          note.hidden = open;
+        });
+        wrap.append(button, note);
+        return wrap;
+      }
+
+      function splitBlock(item) {
+        var box = el("div", "m6ohs-piles");
+        var grid = el("div", "m6ohs-pile-grid");
+        grid.append(
+          el("div", "m6ohs-pile-head", "Without"),
+          el("div", "m6ohs-pile-head", "With"),
+          el("div", "m6ohs-value", fmt(item.wo)),
+          el("div", "m6ohs-value", fmt(item.w))
+        );
+        box.append(grid);
+        return box;
+      }
+
+      function detailForActivityLines(lines) {
+        var detail = el("div", "m6ohs-detail");
+        lines.forEach(function (item) {
+          detail.append(amountRow(item.label, item.t2025));
+          if (item.w !== 0) detail.append(splitBlock(item));
+        });
+        return detail;
+      }
+
+      function snapshot(year, date, kicker) {
+        var card = el("article", "m6ohs-card");
+        card.append(
+          el("p", "m6ohs-kicker", kicker),
+          el("h2", "m6ohs-title", "Statement of Financial Position"),
+          el("p", "m6ohs-subline", "Their name for the balance sheet"),
+          el("p", "m6ohs-date", date)
+        );
+
+        function section(label, definition, totalLabel, totalValue, detail, totalKind) {
+          var part = el("section", "m6ohs-section");
+          var head = el("div", "m6ohs-section-head");
+          head.append(el("span", "m6ohs-section-label", label), helpButton(definition));
+          part.append(head, expandable(totalLabel, totalValue, detail, "m6ohs-total", totalKind));
+          card.append(part);
+        }
+
+        var assetDetail = el("div", "m6ohs-detail");
+        data.sfp.assets.forEach(function (item) { assetDetail.append(amountRow(item.label, item[year])); });
+        section("Assets", "Economic benefits owned or controlled by OHS.", "Total Assets", data.sfp.totalAssets[year], assetDetail, "assets");
+
+        var liabilityDetail = el("div", "m6ohs-detail");
+        data.sfp.liabilities.forEach(function (item) { liabilityDetail.append(amountRow(item.label, item[year])); });
+        section("Liabilities", "Obligations to sacrifice economic benefits in the future.", "Total Liabilities", data.sfp.totalLiabilities[year], liabilityDetail, "liabilities");
+
+        var netDetail = el("div", "m6ohs-detail");
+        data.sfp.netAssetsWithout.forEach(function (item) { netDetail.append(amountRow(item.label, item[year])); });
+        netDetail.append(
+          amountRow("Total without donor restrictions", data.sfp.totalWithout[year], "m6ohs-subtotal"),
+          amountRow("With donor restrictions", data.sfp.withRestrictions[year])
+        );
+        section("Net Assets", "The difference: total assets minus total liabilities (A − L = Net Assets).", "Total Net Assets", data.sfp.totalNetAssets[year], netDetail, "netassets");
+
+        var identity = el("p", "m6ohs-identity");
+        identity.textContent = "A − L = Net Assets ✓ · " + fmt(data.sfp.totalAssets[year]) + " − " + fmt(data.sfp.totalLiabilities[year]) + " = " + fmt(data.sfp.totalNetAssets[year]);
+        card.append(identity);
+        return card;
+      }
+
+      function panel(title, subline) {
+        var card = el("article", "m6ohs-panel");
+        card.append(el("h2", "m6ohs-title", title), el("p", "m6ohs-subline", subline));
+        return card;
+      }
+
+      function activitiesPanel() {
+        var a = data.activities;
+        var card = panel("Statement of Activities", "Plays the income statement's role: why net assets changed this year · year ended December 31, 2025");
+        var summary = el("div", "m6ohs-summary");
+
+        var revenueDetail = detailForActivityLines(a.operatingRevenues);
+        revenueDetail.append(amountRow("Total operating revenues, gains, and other support before appropriation and releases", a.totalOperatingRevenuesGains.t2025, "m6ohs-subtotal"));
+        [a.appropriation, a.releases].forEach(function (item) {
+          revenueDetail.append(amountRow(item.label, item.t2025), splitBlock(item));
+        });
+        revenueDetail.append(
+          amountRow("Operating revenues, gains, and other support", a.totalOperatingSupport.t2025, "m6ohs-subtotal"),
+          el("p", "m6ohs-detail-note", "A release moves money BETWEEN the two piles, no new money.")
+        );
+        summary.append(expandable("Operating revenues, gains, and other support", a.totalOperatingSupport.t2025, revenueDetail));
+
+        var expenseDetail = detailForActivityLines(a.operatingExpenses);
+        expenseDetail.append(amountRow("Operating expenses", a.totalOperatingExpenses.t2025, "m6ohs-subtotal"));
+        summary.append(expandable("Operating expenses", a.totalOperatingExpenses.t2025, expenseDetail));
+
+        var beforeDetail = el("div", "m6ohs-detail");
+        beforeDetail.append(splitBlock(Object.assign({ label:"Change in net assets before non-operating" }, a.changeBeforeNonoperating)));
+        summary.append(expandable("Change in net assets before non-operating", a.changeBeforeNonoperating.t2025, beforeDetail));
+
+        var nonoperatingDetail = detailForActivityLines(a.nonoperating);
+        nonoperatingDetail.append(amountRow("Non-operating activities", a.totalNonoperating.t2025, "m6ohs-subtotal"));
+        summary.append(expandable("Non-operating activities", a.totalNonoperating.t2025, nonoperatingDetail));
+
+        var changeDetail = el("div", "m6ohs-detail");
+        changeDetail.append(
+          splitBlock(Object.assign({ label:"Change in net assets" }, a.changeInNetAssets)),
+          splitBlock(Object.assign({ label:"Net assets, beginning" }, a.netAssetsBeginning)),
+          splitBlock(Object.assign({ label:"Net assets, end" }, a.netAssetsEnd))
+        );
+        summary.append(expandable("Change in net assets", a.changeInNetAssets.t2025, changeDetail));
+        card.append(summary);
+        var walk = el("p", "m6ohs-walk");
+        walk.textContent = fmt(a.netAssetsBeginning.t2025) + " + " + fmt(a.changeInNetAssets.t2025) + " = " + fmt(a.netAssetsEnd.t2025) + " — the net assets walk ties the two balance sheets";
+        card.append(walk);
+        return card;
+      }
+
+      function functionalPanel() {
+        var f = data.functional;
+        var card = panel("Statement of Functional Expenses", "The nonprofit's own statement: expenses broken down by kind and by function.");
+        var summary = el("div", "m6ohs-summary");
+        var kindDetail = el("div", "m6ohs-detail");
+        f.rows.forEach(function (item) { kindDetail.append(amountRow(item.label, item.t2025)); });
+        kindDetail.append(amountRow("Total expenses", f.totalsRow.t2025, "m6ohs-subtotal"));
+        summary.append(expandable("By kind — " + f.rows.length + " rows", f.totalsRow.t2025, kindDetail));
+
+        var purposeDetail = el("div", "m6ohs-detail");
+        var purposeGrid = el("div", "m6ohs-purpose-grid");
+        f.programColumns.forEach(function (label, index) {
+          purposeGrid.append(el("div", "", label), el("div", "", fmt(f.totalsRow.cells[index])));
+        });
+        purposeGrid.append(
+          el("div", "m6ohs-purpose-subtotal", "Total program services"),
+          el("div", "m6ohs-purpose-subtotal", fmt(f.totalsRow.totalProgram)),
+          el("div", "", f.supportingColumns[0]),
+          el("div", "", fmt(f.totalsRow.mg)),
+          el("div", "", f.supportingColumns[1]),
+          el("div", "", fmt(f.totalsRow.fr)),
+          el("div", "m6ohs-purpose-subtotal", "Total supporting services"),
+          el("div", "m6ohs-purpose-subtotal", fmt(f.totalsRow.totalSupporting)),
+          el("div", "m6ohs-purpose-subtotal", "Total expenses"),
+          el("div", "m6ohs-purpose-subtotal", fmt(f.totalsRow.t2025))
+        );
+        purposeDetail.append(purposeGrid);
+        summary.append(expandable("By function — " + (f.programColumns.length + f.supportingColumns.length) + " columns", f.totalsRow.t2025, purposeDetail));
+        card.append(summary, el("p", "m6ohs-note", "The same " + fmt(f.totalsRow.t2025) + ", broken down two ways at once — by kind and by function."));
+        return card;
+      }
+
+      function cashDetail(lines) {
+        var detail = el("div", "m6ohs-detail");
+        lines.forEach(function (item) { detail.append(amountRow(item.label, item.v)); });
+        return detail;
+      }
+
+      function cashFlowsPanel() {
+        var c = data.cfs;
+        var card = panel("Statement of Cash Flows", "Same name, same job: why cash changed this year · year ended December 31, 2025 · The operating section uses the indirect method — it reconciles the change in net assets to the operating cash flow.");
+        var summary = el("div", "m6ohs-summary");
+        var operatingDetail = el("div", "m6ohs-detail");
+        operatingDetail.append(
+          amountRow("Change in net assets", c.operating.changeInNetAssets),
+          el("div", "m6ohs-subheading", "Adjustments — undoing the no-cash items")
+        );
+        c.operating.adjustments.forEach(function (item) { operatingDetail.append(amountRow(item.label, item.v)); });
+        operatingDetail.append(el("div", "m6ohs-subheading", "Changes in operating assets and liabilities"));
+        c.operating.workingCapital.forEach(function (item) { operatingDetail.append(amountRow(item.label, item.v)); });
+        operatingDetail.append(amountRow("Operating activities", c.operating.cfo, "m6ohs-subtotal"));
+        summary.append(
+          expandable("Operating activities", c.operating.cfo, operatingDetail),
+          expandable("Investing activities", c.investing.cfi, cashDetail(c.investing.lines)),
+          expandable("Financing activities", c.financing.cff, cashDetail(c.financing.lines))
+        );
+        card.append(summary);
+        var walk = el("p", "m6ohs-walk");
+        walk.textContent = fmt(c.cashBeginning) + " + " + fmt(c.netChange) + " = " + fmt(c.cashEnd) + " — the cash walk ties the Cash line of the two balance sheets";
+        card.append(walk);
+        return card;
+      }
+
+      document.getElementById("m6ohs-left").append(snapshot("y2024", data.meta.beginDate, "Beginning snapshot"));
+      document.getElementById("m6ohs-center").append(activitiesPanel(), functionalPanel(), cashFlowsPanel());
+      document.getElementById("m6ohs-right").append(snapshot("y2025", data.meta.endDate, "Ending snapshot"));
+    }());
+  </script>
+</body>
+</html>

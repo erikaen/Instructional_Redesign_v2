@@ -68,7 +68,10 @@ check 'accounting equation'      'Say "accounting identity", never "accounting e
 # (61-* is NOT added to the residual carve-out above: the M6 welcome page does
 # not carry the attributed standard-setters' quotation; its prose says "the
 # definitional difference" instead.)
-netassets_files=$(echo "$FILES" | grep -vE '^[56][0-9]-')
+# 2026-07-26 (OHS M6 rebuild): the OHS statement-map prototype (graduating into
+# 62-1 per the OHS walk plan's prototype rulings) carries the same NFP statement
+# vocabulary — carved out by filename like the 5x/6x pages.
+netassets_files=$(echo "$FILES" | grep -vE '^[56][0-9]-|^mockup-ohs-')
 netassets_hits=$(grep -rniE 'net assets' $netassets_files 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)')
 if [ -n "$netassets_hits" ]; then
   echo 'BANNED — "Net Assets" was removed in the equity purge; do not reintroduce it in M1–M4 student-facing pages (Module 5 pages are carved out).'
