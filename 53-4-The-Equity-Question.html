@@ -2,176 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Equity Question</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
-  <style>
-    .cvs-scope {
-      --cvs-paper:#ffffff;
-      --cvs-panel:#f8fafc;
-      --cvs-ink:#263746;
-      --cvs-muted:#657583;
-      --cvs-primary:#155b86;
-      --cvs-rule:#c8d4dc;
-      --cvs-rule-strong:#708592;
-      --cvs-warm:#fff8df;
-      --cvs-accent:#d5a528;
-      --cvs-shadow:rgba(32,55,72,0.09);
-      --cvs-success:#247a4d;
-    }
-    .cvs-doc-wrap { overflow-x:auto; padding:2px 2px 8px; }
-    .cvs-doc-card, .cvs-snapshot, .cvs-question, .cvs-note {
-      background:var(--cvs-paper);
-      color:var(--cvs-ink);
-      border:1px solid var(--cvs-rule);
-      border-radius:12px;
-      box-shadow:0 8px 24px var(--cvs-shadow);
-    }
-    .cvs-doc-card { max-width:1040px; min-width:610px; margin:0 auto; padding:24px; box-sizing:border-box; }
-    .cvs-kicker {
-      margin:0 0 5px;
-      color:var(--cvs-muted);
-      font-size:11px;
-      font-weight:700;
-      letter-spacing:.1em;
-      text-transform:uppercase;
-    }
-    .cvs-doc-title, .cvs-snapshot-title { margin:0; color:var(--cvs-primary); }
-    .cvs-doc-title { font-size:20px; }
-    .cvs-snapshot-title { font-size:17px; }
-    .cvs-subline { margin:3px 0 0; color:var(--cvs-muted); font-size:12px; font-style:italic; }
-    .cvs-table { margin-top:18px; font-size:13px; }
-    .cvs-row {
-      display:grid;
-      grid-template-columns:minmax(300px,1fr) 7rem 7rem;
-      column-gap:10px;
-      align-items:baseline;
-      padding:3px 0;
-    }
-    .cvs-row-head { border-bottom:1px solid var(--cvs-rule); color:var(--cvs-primary); font-weight:700; }
-    .cvs-value { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
-    .cvs-section { grid-column:1 / -1; margin-top:10px; color:var(--cvs-primary); font-weight:800; }
-    .cvs-subtotal { font-weight:600; }
-    .cvs-total { margin-top:4px; padding-top:6px; border-top:1px solid var(--cvs-rule-strong); color:var(--cvs-primary); font-weight:800; }
-    .cvs-split.main-grid { align-items:stretch; grid-template-columns:minmax(245px,.9fr) minmax(290px,1.2fr) minmax(245px,.9fr); }
-    .cvs-split.main-grid > * { min-width:0; }
-    .cvs-snapshot-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
-    .cvs-snapshot { min-width:245px; height:100%; padding:18px; box-sizing:border-box; }
-    .cvs-snapshot-table { margin-top:15px; font-size:12px; }
-    .cvs-snapshot-row {
-      display:grid;
-      grid-template-columns:minmax(155px,1fr) 5.4rem;
-      column-gap:8px;
-      align-items:baseline;
-      padding:4px 7px;
-      border-left:3px solid transparent;
-    }
-    .cvs-snapshot-row.cvs-total { margin-top:3px; }
-    .cvs-snapshot-row.cvs-lit {
-      border-left-color:var(--cvs-accent);
-      border-radius:4px;
-      background:var(--cvs-warm);
-      color:var(--cvs-primary);
-      font-weight:700;
-    }
-    .cvs-compact-gap { height:9px; }
-    .cvs-restricted-note { margin:1px 7px 4px 15px; color:var(--cvs-success); font-size:10px; font-style:italic; }
-    .cvs-question {
-      height:100%;
-      min-height:300px;
-      padding:24px 20px;
-      box-sizing:border-box;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      border:2px dashed var(--cvs-accent);
-      background:var(--cvs-warm);
-      text-align:center;
-    }
-    .cvs-question h2 { margin:2px 0 10px; color:var(--cvs-primary); font-size:21px; }
-    .cvs-question-delta { margin:4px 0; color:var(--cvs-primary); font:500 29px/1.2 "JetBrains Mono",monospace; }
-    .cvs-question-range { margin:2px 0 13px; color:var(--cvs-muted); font:500 12px/1.4 "JetBrains Mono",monospace; }
-    .cvs-question-setup { margin:0; color:var(--cvs-ink); font-size:13px; font-style:italic; line-height:1.55; }
-    .cvs-question-footer { margin:15px 0 0; padding-top:12px; border-top:1px solid var(--cvs-rule); color:var(--cvs-primary); font-size:12px; font-weight:700; line-height:1.45; }
-    .cvs-note { height:100%; min-height:250px; padding:22px; box-sizing:border-box; display:flex; align-items:center; justify-content:center; background:var(--cvs-panel); text-align:center; }
-    .cvs-note p { margin:0; color:var(--cvs-muted); font-size:13px; line-height:1.6; }
-    .cvs-note strong { color:var(--cvs-primary); }
-    .cvs-soce-grid { min-width:1135px; }
-    .cvs-soce-grid.cvs-bucket-grid { min-width:720px; }
-    .cvs-soce-row {
-      display:grid;
-      grid-template-columns:minmax(250px,1fr) repeat(9,5.2rem);
-      column-gap:8px;
-      align-items:baseline;
-      padding:3px 0;
-      color:var(--cvs-ink);
-    }
-    .cvs-soce-row.cvs-bucket-grid { grid-template-columns:minmax(250px,1fr) repeat(4,6.8rem); }
-    .cvs-soce-head { padding-bottom:7px; border-bottom:1px solid var(--cvs-rule); color:var(--cvs-primary); font-size:10px; font-weight:700; line-height:1.2; }
-    .cvs-soce-label { font-size:11px; line-height:1.35; }
-    .cvs-soce-balance { margin-top:7px; padding-top:7px; border-top:1px solid var(--cvs-rule-strong); color:var(--cvs-primary); font-weight:800; }
-    .cvs-soce-movement { color:var(--cvs-ink); }
-    .cvs-soce-section { margin:12px 0 2px; color:var(--cvs-primary); font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.06em; }
-    .cvs-running { margin-top:9px; padding-top:8px; border-top:2px dashed var(--cvs-accent); color:var(--cvs-primary); font-weight:800; }
-    .cvs-running .cvs-soce-label { color:var(--cvs-accent); font-style:italic; }
-    .cvs-bucket-head {
-      width:100%;
-      padding:3px 2px;
-      border:0;
-      background:transparent;
-      color:var(--cvs-primary);
-      font:inherit;
-      font-weight:700;
-      text-align:right;
-    }
-    .cvs-bucket-head[role="button"] { cursor:pointer; border-radius:4px; }
-    .cvs-bucket-head[role="button"]:focus-visible { outline:2px solid var(--cvs-accent); outline-offset:2px; }
-    .cvs-expand-area { margin-top:16px; padding-top:12px; border-top:1px solid var(--cvs-rule); }
-    .cvs-expand-title { margin:0 0 8px; color:var(--cvs-primary); font-size:11px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
-    .cvs-expand-row { border-bottom:1px solid var(--cvs-rule); }
-    .cvs-expand-toggle {
-      width:100%;
-      display:grid;
-      grid-template-columns:1.2rem 1fr;
-      gap:5px;
-      align-items:center;
-      padding:8px 5px;
-      border:0;
-      background:transparent;
-      color:var(--cvs-ink);
-      font:600 12px/1.3 Inter,sans-serif;
-      text-align:left;
-      cursor:pointer;
-    }
-    .cvs-expand-toggle:focus-visible { outline:2px solid var(--cvs-accent); outline-offset:-2px; }
-    .cvs-expand-panel { padding:4px 8px 9px 25px; background:var(--cvs-panel); }
-    .cvs-detail-row { display:grid; grid-template-columns:minmax(170px,1fr) repeat(3,5.5rem); gap:7px; padding:3px 0; font-size:11px; }
-    .cvs-detail-head { color:var(--cvs-muted); font-weight:700; }
-    .cvs-center-card { min-width:610px; padding:18px; }
-    .cvs-center-card .cvs-soce-row.cvs-bucket-grid { grid-template-columns:minmax(175px,1fr) repeat(4,4.5rem); }
-    .cvs-center-card .cvs-soce-grid.cvs-bucket-grid { min-width:555px; }
-    .cvs-center-card .cvs-soce-label { font-size:10px; }
-    @keyframes cvs-hint-pulse { 0%,100%{box-shadow:0 0 0 0 var(--cvs-shadow)} 50%{box-shadow:0 0 0 4px var(--cvs-warm)} }
-    .cvs-hint-pulse { animation:cvs-hint-pulse 1.2s ease-in-out 2; }
-    @media (max-width:900px) {
-      .cvs-split.main-grid { grid-template-columns:1fr; }
-      .cvs-question, .cvs-note { min-height:180px; }
-      .cvs-center-card { min-width:610px; }
-    }
-    @media (prefers-reduced-motion:reduce) { .cvs-hint-pulse { animation:none; } }
-      </style>
 </head>
 <body>
-<div class="page">
+<div class="page pg-53-4">
   <div class="prework-wrap">
 
-    <div class="phase-title-row">
-      <div class="phase-title"></div>
-      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Equity Question</h1>
+        <p class="tut-header-sub">Module 5 &middot; ~8 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
     </div>
+    <div class="phase-title" id="phaseTitle">The Equity Question</div>
 
     <div id="beats"></div>
     <div id="mainGrid"></div>
@@ -194,6 +46,8 @@
 
 <script src="cvs-10k-data.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
+<script src="course-m6.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if(window.lucide) lucide.createIcons();

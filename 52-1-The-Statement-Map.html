@@ -2,31 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Statement Map</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Open+Sans:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
-  <style>
-    .main-grid > *, .map-center { min-width:0; }
-    .map-center .statement-panel { margin:4px 0 10px; overflow-x:auto; background:white; }
-    .map-center .wb-grid-wrap { padding:6px; overflow-x:auto; background:white; }
-    .map-center .brw-row { grid-template-columns:minmax(0,1fr) 2rem 6rem; min-width:0; }
-    .map-center .brw-row > .brw-cell:nth-child(n+4) { display:none; }
-    .map-center .brw-cell { min-width:0; }
-    .map-center .brw-cell { padding:4px 6px; font-size:11px; }
-    .map-center .sce-is-nested { margin-top:8px; }
-      </style>
 </head>
 <body>
-<div class="page">
+<div class="page pg-52-1">
   <div class="prework-wrap">
 
-    <div class="phase-title-row">
-      <div class="phase-title"></div>
-      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Statement Map</h1>
+        <p class="tut-header-sub">Module 5 &middot; ~8 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
     </div>
+    <div class="phase-title" id="phaseTitle">The Statement Map</div>
 
     <div id="beats"></div>
     <div id="mainGrid"></div>
@@ -51,6 +48,8 @@
 <script src="bike-repair-parts-purchases.js"></script>
 <script src="bike-repair-workbook.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
+<script src="course-m6.js"></script>
 <script src="bike-repair-statement-steps.generated.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>

@@ -2,193 +2,28 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light">
+  <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Where Net Income Comes From</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shared.css">
-  <style>
-    .cvs-scope {
-      --cvs-paper:#ffffff;
-      --cvs-panel:#f8fafc;
-      --cvs-ink:#263746;
-      --cvs-muted:#657583;
-      --cvs-primary:#155b86;
-      --cvs-rule:#c8d4dc;
-      --cvs-rule-strong:#708592;
-      --cvs-warm:#fff8df;
-      --cvs-accent:#d5a528;
-      --cvs-shadow:rgba(32,55,72,0.09);
-    }
-    .cvs-doc-wrap { overflow-x:auto; padding:2px 2px 8px; }
-    .cvs-doc-card, .cvs-snapshot {
-      background:var(--cvs-paper);
-      color:var(--cvs-ink);
-      border:1px solid var(--cvs-rule);
-      border-radius:12px;
-      box-shadow:0 8px 24px var(--cvs-shadow);
-    }
-    .cvs-doc-card { max-width:820px; min-width:610px; margin:0 auto; padding:24px; }
-    .cvs-kicker {
-      margin:0 0 5px;
-      color:var(--cvs-muted);
-      font-size:11px;
-      font-weight:700;
-      letter-spacing:.1em;
-      text-transform:uppercase;
-    }
-    .cvs-doc-title, .cvs-snapshot-title { margin:0; color:var(--cvs-primary); }
-    .cvs-doc-title { font-size:20px; }
-    .cvs-snapshot-title { font-size:17px; }
-    .cvs-subline { margin:3px 0 0; color:var(--cvs-muted); font-size:12px; font-style:italic; }
-    .cvs-table { margin-top:18px; font-size:13px; }
-    .cvs-row {
-      display:grid;
-      grid-template-columns:minmax(300px,1fr) 7rem 7rem;
-      column-gap:10px;
-      align-items:baseline;
-      padding:3px 0;
-    }
-    .cvs-row-head { border-bottom:1px solid var(--cvs-rule); color:var(--cvs-primary); font-weight:700; }
-    .cvs-value { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
-    .cvs-section { grid-column:1 / -1; margin-top:10px; color:var(--cvs-primary); font-weight:800; }
-    .cvs-subtotal { font-weight:600; }
-    .cvs-total { margin-top:4px; padding-top:6px; border-top:1px solid var(--cvs-rule-strong); color:var(--cvs-primary); font-weight:800; }
-    .cvs-identity {
-      margin-top:18px;
-      padding:13px 15px;
-      border:1px solid var(--cvs-accent);
-      border-radius:9px;
-      background:var(--cvs-warm);
-      color:var(--cvs-ink);
-    }
-    .cvs-identity-title { margin:0 0 6px; font-weight:800; }
-    .cvs-identity-line { margin:3px 0; font-family:"JetBrains Mono",monospace; font-size:12px; }
-    .cvs-split.main-grid { align-items:stretch; }
-    .cvs-split.main-grid > * { min-width:0; }
-    .cvs-snapshot-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
-    .cvs-snapshot { min-width:285px; height:100%; padding:18px; box-sizing:border-box; }
-    .cvs-snapshot-table { margin-top:15px; font-size:12px; }
-    .cvs-snapshot-row {
-      display:grid;
-      grid-template-columns:minmax(185px,1fr) 6rem;
-      column-gap:8px;
-      align-items:baseline;
-      padding:3px 0;
-    }
-    .cvs-snapshot-row.cvs-section { display:block; }
-    .cvs-gap {
-      min-height:230px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      box-sizing:border-box;
-      padding:24px 18px;
-      border:2px dashed var(--cvs-accent);
-      border-radius:12px;
-      background:var(--cvs-warm);
-      color:var(--cvs-muted);
-      text-align:center;
-      font-size:13px;
-      font-style:italic;
-      line-height:1.55;
-    }
-
-    .cvs-compact-row {
-      display:grid;
-      grid-template-columns:minmax(175px,1fr) 5.6rem;
-      column-gap:8px;
-      align-items:baseline;
-      padding:4px 6px;
-      border-left:3px solid transparent;
-    }
-    .cvs-compact-row.cvs-compact-total {
-      margin-top:4px;
-      padding-top:6px;
-      border-top:1px solid var(--cvs-rule-strong);
-      color:var(--cvs-primary);
-      font-weight:800;
-    }
-    .cvs-compact-row.cvs-equity-first { margin-top:10px; border-top:1px solid var(--cvs-rule); }
-    .cvs-compact-row.cvs-lit {
-      border-left-color:var(--cvs-accent);
-      background:var(--cvs-warm);
-      color:var(--cvs-primary);
-      font-weight:700;
-    }
-    .cvs-compact-spacer { height:7px; }
-    .cvs-restricted-note { margin:0 6px 3px 18px; color:var(--cvs-primary); font-size:10px; font-style:italic; }
-    .cvs-check { margin:10px 4px 0; color:var(--cvs-muted); font-family:"JetBrains Mono",monospace; font-size:10px; text-align:right; }
-
-    .cvs-question {
-      min-height:100%;
-      box-sizing:border-box;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      padding:22px;
-      border:2px dashed var(--cvs-accent);
-      border-radius:12px;
-      background:var(--cvs-warm);
-      color:var(--cvs-ink);
-      box-shadow:0 8px 24px var(--cvs-shadow);
-    }
-    .cvs-question h2 { margin:2px 0 14px; color:var(--cvs-primary); font-size:20px; line-height:1.25; }
-    .cvs-question-figure { color:var(--cvs-primary); font-family:"JetBrains Mono",monospace; font-size:27px; font-weight:800; }
-    .cvs-question-label { margin:3px 0 14px; color:var(--cvs-muted); font-size:11px; font-weight:700; text-transform:uppercase; }
-    .cvs-question-setup { margin:0; color:var(--cvs-ink); font-size:12px; font-style:italic; line-height:1.55; }
-    .cvs-question-footer { margin:15px 0 0; padding-top:11px; border-top:1px solid var(--cvs-rule); color:var(--cvs-primary); font-size:11px; font-weight:700; line-height:1.45; }
-
-    .cvs-is-card { max-width:900px; min-width:700px; }
-    .cvs-statement-4 .cvs-row { grid-template-columns:minmax(330px,1fr) repeat(3,6.3rem); }
-    .cvs-statement-2 .cvs-row { grid-template-columns:minmax(330px,1fr) 7rem; }
-    .cvs-statement-row-label { min-width:0; line-height:1.35; }
-    .cvs-nci-split { max-width:680px; min-width:500px; }
-    .cvs-nci-note { margin:14px 0 0; padding:10px 12px; border-left:3px solid var(--cvs-accent); background:var(--cvs-warm); color:var(--cvs-ink); font-size:12px; font-style:italic; }
-    .cvs-ci-card { max-width:800px; min-width:610px; }
-    .cvs-ci-section { margin-top:12px; color:var(--cvs-primary); font-weight:800; }
-
-    .cvs-bucket-strip {
-      max-width:880px;
-      margin:0 auto;
-      padding:20px;
-      border:2px solid var(--cvs-accent);
-      border-radius:12px;
-      background:var(--cvs-panel);
-      color:var(--cvs-ink);
-      box-shadow:0 8px 24px var(--cvs-shadow);
-    }
-    .cvs-bucket-grid { display:grid; grid-template-columns:2fr 1fr; gap:16px; margin-top:13px; }
-    .cvs-bucket { padding:15px; border:1px solid var(--cvs-rule); border-radius:9px; background:var(--cvs-paper); }
-    .cvs-bucket h3 { margin:0 0 9px; color:var(--cvs-primary); font-size:15px; }
-    .cvs-running-row { display:grid; grid-template-columns:minmax(180px,1fr) 5.5rem; gap:10px; padding:3px 0; align-items:baseline; font-size:12px; }
-    .cvs-running-row.cvs-running-total { margin-top:5px; padding-top:7px; border-top:1px solid var(--cvs-rule-strong); color:var(--cvs-primary); font-weight:800; }
-    .cvs-destination { margin:0 0 5px; color:var(--cvs-muted); font-size:10px; font-style:italic; }
-    .cvs-strip-foot { margin:12px 0 0; color:var(--cvs-muted); font-size:11px; font-style:italic; }
-
-    .cvs-center-card { min-width:285px; padding:18px; }
-    .cvs-center-table { margin-top:13px; font-size:11px; }
-    .cvs-center-row { display:grid; grid-template-columns:minmax(165px,1fr) 5.2rem; gap:8px; align-items:baseline; padding:4px 0; }
-    .cvs-center-row.cvs-center-total { margin-top:3px; padding-top:6px; border-top:1px solid var(--cvs-rule-strong); color:var(--cvs-primary); font-weight:800; }
-    .cvs-center-oci { margin-top:12px; padding-top:10px; border-top:1px dashed var(--cvs-accent); }
-    .cvs-flow-arrow { color:var(--cvs-accent); font-weight:800; }
-
-    @media (max-width:760px) {
-      .cvs-split.main-grid { grid-template-columns:1fr; }
-      .cvs-gap { min-height:170px; }
-      .cvs-bucket-grid { grid-template-columns:1fr; }
-    }
-      </style>
 </head>
 <body>
-<div class="page">
+<div class="page pg-53-5">
   <div class="prework-wrap">
 
-    <div class="phase-title-row">
-      <div class="phase-title"></div>
-      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Where Net Income Comes From</h1>
+        <p class="tut-header-sub">Module 5 &middot; ~8 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
     </div>
+    <div class="phase-title" id="phaseTitle">Where Net Income Comes From</div>
 
     <div id="beats"></div>
     <div id="mainGrid"></div>
@@ -211,6 +46,8 @@
 
 <script src="cvs-10k-data.js"></script>
 <script src="shared.js"></script>
+<script src="course-m5.js"></script>
+<script src="course-m6.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
 if(window.lucide) lucide.createIcons();
