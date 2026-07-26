@@ -71,6 +71,7 @@ var huntAnswered=false;
 var huntSel=null, huntSubmitted=false;
 var mcqAnswered=false;
 var mcqSel=null, mcqSubmitted=false;
+var huntAttempts=0, mcqAttempts=0;   // three-strike reveal: unblock after 3 wrong (never permanently stuck)
 
 var HUNT_OPTS=[
   { id:'parts', label:'Parts used &mdash; $1,200', fb:'That line records parts used for the repair work. It does not pay for the labor the shop uses.' },
@@ -110,7 +111,12 @@ function huntSubmit(){
   if(huntSel===null||huntSubmitted) return;
   huntSubmitted=true;
   var o=HUNT_OPTS.filter(function(x){return x.id===huntSel;})[0];
-  if(o.correct){ huntAnswered=true; playSuccess(); } else { playNope(); }
+  if(o.correct){ huntAnswered=true; playSuccess(); }
+  else {
+    huntAttempts++;
+    if(huntAttempts>=3){ huntAnswered=true; if(huntAttempts===3){ o.fb += ' <strong>Correct answer:</strong> There is no wage line &mdash; no wage expense appears on the Income Statement for the owner&rsquo;s work.'; } }
+    playNope();
+  }
   render();
 }
 function huntReset(){ playClick(); huntSel=null; huntSubmitted=false; render(); }
@@ -124,7 +130,12 @@ function mcqSubmit(){
   if(mcqSel===null||mcqSubmitted) return;
   mcqSubmitted=true;
   var o=MCQ_OPTS.filter(function(x){return x.id===mcqSel;})[0];
-  if(o.correct){ mcqAnswered=true; playSuccess(); } else { playNope(); }
+  if(o.correct){ mcqAnswered=true; playSuccess(); }
+  else {
+    mcqAttempts++;
+    if(mcqAttempts>=3){ mcqAnswered=true; if(mcqAttempts===3){ o.fb += ' <strong>Correct answer:</strong> $2,640 &mdash; unchanged. A draw is a WITHDRAWN entry that reduces Member&rsquo;s Capital on the balance sheet, not an expense, so net income is unchanged.'; } }
+    playNope();
+  }
   render();
 }
 

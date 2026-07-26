@@ -504,7 +504,7 @@ function render(){
   document.getElementById('walkControls').innerHTML = backRow + controls();
   var beatDirty = Object.keys(explainedAt).some(function(id){ return explainedAt[id]===beatIndex; }) || (b && b.key==='CASH' && (tallySubmitted || tallySel!==null));
   document.getElementById('beatResetRow').style.display = beatDirty ? '' : 'none';
-  if (window.renderStepProgress) renderStepProgress('stepProg', Math.min(beatIndex + 1, BEATS.length), BEATS.length);
+  if (window.renderStepProgress) renderStepProgress('stepProg', Math.min(beatIndex, BEATS.length - 1), BEATS.length - 1);
   if(window.lucide) lucide.createIcons();
 }
 

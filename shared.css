@@ -1644,6 +1644,10 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
 .next-card p { font-family: 'Open Sans', sans-serif; font-size: var(--font-m); color: #374151; line-height: 1.65; margin: 0; }
 
 /* ----- Button row ----- */
+/* The `hidden` attribute must always win: components like .btn-row set display via a class,
+   which otherwise overrides [hidden]'s display:none and shows a control that is supposed to be
+   hidden (e.g. 22-4's figure Back button appearing before its step is reached). 2026-07-21. */
+[hidden] { display: none !important; }
 .btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
 /* ----- Vertical stack of cards ----- */
@@ -1667,7 +1671,8 @@ a.roadmap-activity:hover .roadmap-activity-text { color: var(--primary); }
   box-shadow: 0 2px 8px rgba(0, 50, 157, 0.10), 0 12px 30px rgba(0, 50, 157, 0.08); }
 /* the tail sits at band height, filled with the band color */
 .dialog-box::before { content: ''; position: absolute; top: 15px; left: -7px; width: 14px; height: 14px;
-  background: var(--dialog-band-hi); border-radius: 3px; transform: rotate(45deg); }
+  background: var(--dialog-band-hi); border-radius: 3px; transform: rotate(45deg);
+  z-index: -1; }  /* tuck the tail behind the opaque bubble so only the outward point shows (not the inner half) */
 .dialog-box.freddie { --dialog-band: #3b82f6; --dialog-band-hi: #2563eb;
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.12), 0 12px 30px rgba(59, 130, 246, 0.10); }
 /* "you" answers back: quiet gray frame, tail on the right */

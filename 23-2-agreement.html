@@ -226,7 +226,7 @@ function closeDoc(){
 
 /* ===== agreement: generate + sign ===== */
 function renderAgreement(){
-  if (window.renderStepProgress) renderStepProgress('stepProg', generated ? 2 : 1, 2);
+  if (window.renderStepProgress) renderStepProgress('stepProg', generated ? 1 : 0, 1);
   var area = document.getElementById('agreementArea');
   if(!generated){
     area.innerHTML =

@@ -187,8 +187,8 @@ function renderNameSteps(){
     html = '<div class="dialog-box anna"><div class="dialog-label">ANNA</div><div class="dialog-text">Now you have the two names. <strong>Assets</strong> is the proper name for the Things list &mdash; everything recorded on the repair-work side of your line: <strong>'+dollars(ASSETS_TOTAL)+'</strong>, including the right to use the workspace later. <strong>Liabilities</strong> is the name for the Promises list &mdash; everything still owed because of the repair work: <strong>'+dollars(LIABILITIES_TOTAL)+'</strong>. And now you know that an asset is a <strong>present right to an economic benefit</strong>, and a liability is a <strong>present obligation to transfer an economic benefit later</strong>.</div></div>';
   }
   document.getElementById('nameSteps').innerHTML = backHtml + html;
-  var at = liabilitiesNamed ? 4 : (rouRevealed ? 3 : (assetsNamed ? 2 : 1));
-  if (window.renderStepProgress) renderStepProgress('stepProg', at, 4);
+  var at = liabilitiesNamed ? 3 : (rouRevealed ? 2 : (assetsNamed ? 1 : 0));
+  if (window.renderStepProgress) renderStepProgress('stepProg', at, 3);
   if(window.lucide) lucide.createIcons();
 }
 function nameAssets(){ playClick(); assetsNamed=true; excelTab='things'; renderWorkbook('nameWb','name'); renderNameSteps(); }

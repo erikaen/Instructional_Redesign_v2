@@ -155,6 +155,7 @@ function showMemberCapitalTab(){
 var currentOrder=0;
 var mcqAnswered=false;
 var mcqSel=null, mcqSubmitted=false;
+var mcqAttempts=0;   // three-strike reveal on the MCQ: unblock after 3 wrong (never permanently stuck)
 var gateDone=false;
 var gateAttempts=0;
 var gateRight=true;
@@ -192,6 +193,8 @@ function mcqSubmit(){
     mcqAnswered=true;
     playSuccess();
   }else{
+    mcqAttempts++;
+    if(mcqAttempts>=3){ mcqAnswered=true; }
     playNope();
   }
   renderInteraction();

@@ -230,7 +230,7 @@ function acctRow(label, sub, amount, llc){
     '<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:var(--font-s);font-weight:600">'+label+'</span>'+amt+'</div>'+subHtml+'</div>';
 }
 function renderAccount(){
-  if (window.renderStepProgress) renderStepProgress('stepProg', step + 1, 4);
+  if (window.renderStepProgress) renderStepProgress('stepProg', step, 3);
   var en = esc(llcName());
   var nextLabel = step===0 ? 'Open the LLC&rsquo;s bank account &rarr;'
     : step===1 ? 'Move $1,300 in cash into the account &rarr;'

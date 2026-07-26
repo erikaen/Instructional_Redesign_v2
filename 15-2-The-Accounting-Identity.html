@@ -252,7 +252,7 @@ function balanceSheet(){
 }
 
 function renderIdentity(){
-  if (window.renderStepProgress) renderStepProgress('stepProg', Math.min(idStage + 1, 5), 5);
+  if (window.renderStepProgress) renderStepProgress('stepProg', Math.min(idStage, 4), 4);
   var c = document.getElementById('identityBody');
   var html = '';
   if(idStage===0){
