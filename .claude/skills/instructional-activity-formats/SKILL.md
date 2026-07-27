@@ -173,6 +173,11 @@ wrong or fill in (a sort, an MCQ, a fill-in, a form)?
 - **No activity (walk / confirm / reveal pages): NO Reset anywhere.** Clicking
   through beats isn't resettable work — the step ← Back covers revisiting.
   Examples: 32-1/32-2/32-3, 33-1, 33-3, 34-1, 44-3.
+- **Never place a page-level Reset beside the Glossary button in the
+  `.phase-title-row`.** The header action area contains Glossary only. Reset
+  belongs to a real activity and must render inside that activity; reading,
+  statement-walk, map, introduction, and architecture pages get no Reset.
+  (M5/M6 header sweep, 2026-07-27.)
 - **Module/Tutorial Complete (Overview) pages NEVER have a Reset** — nothing
   on a recap page is resettable, and "Reset this page" there reads as
   resetting the module. Delete any such button on sight.
@@ -217,8 +222,12 @@ instead.)
   the TOP of the sheet, inside the workbook shell; the Back/Next step controls
   render BELOW the shell — give the page a `<containerId>-controls` div right
   after the shell (and hide/show it together with the build container).
-- No in-page "Next page" / "Continue to <page>" buttons — the footer's titled
-  Back/Next pills are the only page nav.
+- **Cross-tutorial navigation belongs ONLY in the course footer.** No in-page
+  "Next page," "Continue to <page>," "Open the next tutorial," linked bridge
+  button, or terminal CTA may navigate to another HTML page. This applies both
+  to dynamically rendered controls and links embedded inside content cards.
+  In-page Next/Continue controls may advance only the current page's internal
+  step state; the footer's titled Back/Next pills are the only page navigation.
 - **Exactly ONE forward control per step.** A page with a bespoke intro button
   (e.g. 44-2 "Copy the season slice") AND a mounted pipeline must keep the
   pipeline's `<containerId>-controls` div `hidden` until the intro hands off —
@@ -304,7 +313,198 @@ section noted; this is the fast "did I break it again?" list.
 9. **A − L = Member's Capital renders in the `.acct-col` formula**, not a
    colored identity bar; don't also restate the math in prose. (§3a · 41-1,
    46-1)
-10. **Expandable sheet row → chevron in the left `.xl-gutter`** (sorting-style
-    `.stmt-info-btn`); never add horizontal padding to one grid row (it
-    misaligns the row). (§3 · 46-1)
+10. **Expandable sheet row → a WORKING chevron in the left `.xl-gutter`**
+    (sorting-style `.stmt-info-btn`). Clicking it must visibly open or close
+    the promised detail; changing the icon alone is not an expansion. Keep the
+    gutter, row number, label, and amount on the same grid columns as every
+    sibling row, and never add horizontal padding to the clickable row (it
+    misaligns the row). (§3 · 46-1, 52-1)
 11. **ADD steps don't scroll to top; REPLACE steps do.** (§6 · 42-1)
+12. **No in-page control or content-card link crosses tutorial/page boundaries.**
+    Internal Next advances only the current page; the footer alone owns HTML-page
+    Back/Next navigation. Check static `<a href="NN-N-…">` links as well as
+    dynamically rendered buttons. (§6 · M5/M6 sweep)
+13. **The header never has a Reset beside Glossary.** Header = Glossary only;
+    activity Reset stays inside the activity, and reading/walk pages have none.
+    (§5 · M5/M6 sweep)
+14. **Real-statement modules still use the shared course skin.** M5/M6 may keep
+    the genuine statement detail, tabular amount columns, and a local
+    horizontal scroll wrapper, but their visible typography, blue/orange
+    palette, card shells, callouts, headings, and controls must match M1–M4.
+    Do not introduce a module-specific teal/gold palette or dark-mode skin.
+    Compact label columns use `minmax(0,1fr)` and wrap inside the card rather
+    than clipping or widening it. (M5/M6 redesign, 2026-07-27.)
+15. **Balance sheets grow with the page; they do not scroll inside a card.**
+    Compact balance sheets use the shared `.acct-col` shell. Two-date balance
+    sheets wrap their label column and remain auto-height. Never add an inner
+    vertical scrollbar or fixed/max height to a statement card. Reserve local
+    horizontal scrolling for genuinely wide statements with three or more
+    amount columns; the page itself supplies all vertical movement.
+    (M5/M6 balance-sheet sweep, 2026-07-27.)
+16. **Full Architecture keeps Beginning and Ending on the same comparison
+    line.** On 53-6 and 63-6, the desktop architecture is Beginning Balance
+    Sheet | vertically stacked explanatory statements | Ending Balance Sheet.
+    Do not turn those three peers into three full-width blocks: students need
+    to compare the two snapshots across the same row. At narrower widths, keep
+    Beginning and Ending beside each other and move the explanatory stack
+    below them; only phone-sized layouts become one column, ordered Beginning,
+    Ending, then explanatory statements. No nested horizontal scroller.
+    (Full Architecture ruling, 2026-07-27.)
+
+## 11. M5–M6 redesign procedure — complete CSS record
+
+This is the canonical sequence used to bring Modules 5 and 6 into the M1–M4
+design system on 2026-07-27. Follow all of it when rebuilding, extending, or
+repairing a real-statement page. Do not treat one page as an isolated design.
+
+### Step 1 — inventory before styling
+
+1. List every M5/M6 page and identify each visible kind of object:
+   introduction section, accordion, statement card, compact snapshot, full
+   statement, question card, semantic callout, architecture map, workbook
+   facsimile, formula, and navigation control.
+2. Compare each kind against its M1–M4 counterpart. Preserve genuine financial
+   statement structure, but remove module-specific visual skins.
+3. Search `shared.css` before creating any class. Page-local `<style>` blocks
+   are not allowed. Relocate reusable/page-scoped rules to `shared.css`.
+4. Keep page selectors scoped with `.pg-51-1` through `.pg-53-6` and
+   `.pg-61-1` through `.pg-63-6`; do not let a repair for one statement alter
+   unrelated modules.
+
+### Step 2 — normalize the shared visual language
+
+1. Body/prose uses `"Open Sans", sans-serif`; UI chrome, labels, kickers,
+   controls, and cards use `Inter, system-ui, sans-serif`; statement amounts
+   retain `JetBrains Mono`/tabular numerals.
+2. Map the old `--cvs-*` and `--m6-*` variables to shared tokens:
+   `--primary`, `--primary-faint`, `--accent`, `--border`,
+   `--border-strong`, `--success-*`, `--error-*`, and `--warn-*`.
+3. Remove the separate teal/gold/red/navy look. M5/M6 use the same blue/orange,
+   neutral text, and semantic success/error/warning surfaces as M1–M4.
+4. The current M5/M6 decision is light-only. A system dark-mode preference must
+   not reintroduce the old module-specific dark palette. This is an explicit
+   exception to the general shared-style dark-mode rule until dark mode is
+   redesigned course-wide.
+5. Standard statement/card shell: white background, `1px solid #e0e0e0`,
+   `6px` radius, no decorative shadow, and shared text colors. Keep different
+   internal table geometry; do not keep a different outer design system.
+
+### Step 3 — introduction pages (51-1 and 61-1)
+
+1. Force readable dark body text; never inherit faded/muted colors across the
+   whole introduction.
+2. Section headings use shared primary blue and Open Sans.
+3. Number badges and point accents use `var(--primary)`.
+4. Accordions use white/shared-faint surfaces, shared borders, `6px` radius,
+   shared hover/focus states, and Inter labels.
+5. Vocabulary cards use `var(--primary-faint)` plus shared borders.
+6. Notes use the shared warning surface, not a custom module color.
+7. Learning-objective codes may wrap; never let a fixed badge column force text
+   outside its container.
+
+### Step 4 — statement and question cards
+
+1. Apply the shared card shell to `.cvs-doc-card`, `.cvs-snapshot`,
+   `.cvs-mini-panel`, `.m6-doc-card`, `.m6-snapshot`, `.m6-mini-panel`, and
+   their question/reference/callout variants.
+2. Statement titles use the shared balance-sheet heading treatment: primary
+   blue, Open Sans, and a `2px` primary underline.
+3. Kicker text is gray, uppercase, letter-spaced Inter; supporting prose and
+   notes use Open Sans.
+4. Question cards use the shared pale-blue surface with a primary left border.
+5. Success/reconciliation cards use `--success-bg`/`--success-border`; error
+   notices use `--error-bg`/`--error-border`; informational cards use
+   `--primary-faint`.
+6. Do not use raw one-line arithmetic as a visual. Standalone identities use
+   `.acct-col` + `.acct-line` + `.acct-total`. If a full/compact balance sheet
+   already displays Total assets, minus Total liabilities, and the resulting
+   category, remove any duplicate equation sentence underneath.
+
+### Step 5 — width, wrapping, and overflow rules
+
+1. Every flexible label column starts with `minmax(0,1fr)`, and every grid/card
+   child that can shrink gets `min-width:0`. This is the first fix for clipped
+   labels and amounts.
+2. Fixed amount columns stay only as wide as needed (normally `4rem–7rem`) and
+   use tabular numerals. Labels wrap; figures do not get pushed outside cards.
+3. Never add an inner vertical scrollbar or fixed/max height to a statement.
+   The page grows vertically.
+4. Balance sheets, compact snapshots, and two-date statements do not scroll
+   inside their cards. Set their wrappers/cards to `overflow:visible`,
+   `width:100%`, and `min-width:0`.
+5. Local horizontal scrolling is reserved for genuinely wide statements with
+   three or more amount columns, such as a full Cash Flow comparison,
+   Statement of Shareholders’ Equity, or Statement of Activities.
+6. When a table scrolls horizontally, the card background, border, and padding
+   must grow with the full table width. The 53-4 original nine-column statement
+   uses `.cvs-wide-doc-card` (`width:max-content`, no max width) so scrolling
+   never exposes a transparent/right-side sheet.
+7. Dynamic statement column counts use classes, not inline grid styles.
+   Example: 53-2 uses `.cvs-cols-1`, `.cvs-cols-2`, and `.cvs-cols-3`.
+
+### Step 6 — responsive comparison layouts
+
+1. General three-part statement views use flexible outer columns and a narrower
+   explanatory center. At `760px` and below, ordinary split/question/cash views
+   become one column.
+2. Do not flatten Full Architecture on desktop. On 53-6 and 63-6 it remains:
+   Beginning snapshot | vertically stacked explanatory statements | Ending
+   snapshot.
+3. At `900px` and below, Beginning and Ending remain beside each other and the
+   explanatory stack spans the next row.
+4. At `620px` and below, use one column ordered Beginning, Ending, explanatory
+   statements. Preserve comparison order and remove nested horizontal scrolling.
+5. Compact bucket grids use `minmax(0,1fr)` for labels plus fixed amount
+   columns, so architecture cards wrap instead of widening the page.
+
+### Step 7 — workbook facsimile geometry inside narrow maps
+
+1. Display-only extracted statements must mount with `layout:'standard'`.
+   Otherwise generated C/E/F widths can be mistaken for Pick/Note columns and
+   create a large blank region.
+2. The compact map geometry is exactly four visible columns:
+   `22px gutter | 34px row number | minmax(0,1fr) label | 6rem amount`.
+3. Place `.brw-col-b` in grid column 3 and `.brw-col-d` in grid column 4.
+   Restore the amount cell if an older `nth-child` rule hid it.
+4. The empty first column is intentional: it is the workbook outline gutter.
+   It remains blank on display-only rows and carries the chevron on expandable
+   rows.
+5. The 4.6 and 5.2 center statements share this geometry; repair both when the
+   shared pattern changes.
+
+### Step 8 — expandable rows and alignment
+
+1. Put the working sorting-style `.stmt-info-btn` in the first `.xl-gutter`;
+   never append the arrow to the label.
+2. Clicking the arrow must visibly add/remove the promised nested statement,
+   update `aria-expanded`, and switch the icon/open state.
+3. `.sce-ni-clickable` must have zero horizontal padding in a sheet grid.
+   Background, outline, or a stripe may show hover/open state without shifting
+   gutter, row number, label, or amount.
+4. Verify the clickable row has the same `x`, width, and computed grid columns
+   as a sibling row.
+
+### Step 9 — controls and surrounding chrome
+
+1. Header markup is `.phase-title-row`; its action area contains Glossary only.
+   Never place Reset beside Glossary.
+2. Activity Reset remains inside its activity. Reading, map, architecture, and
+   recap pages have no Reset.
+3. Cross-tutorial navigation appears only in the shared footer; CSS must not
+   make a second in-page tutorial CTA look like part of the activity.
+4. Progress, Back, Reset, Continue, MCQ, sort, fill-in, glossary, and dialogue
+   components keep their canonical M1–M4 classes and visual treatment.
+
+### Step 10 — required verification
+
+1. Test every M5/M6 page at desktop and narrow widths.
+2. For every statement wrapper, compare `scrollWidth` and `clientWidth`; any
+   overflow must be intentional and horizontally reachable.
+3. Scroll every permitted wide statement all the way right. Confirm the card
+   background and border still surround the table.
+4. Confirm no text, badge, amount, or card exceeds its container.
+5. Confirm balance-sheet cards have no inner horizontal or vertical scrollbar.
+6. Confirm Full Architecture ordering at desktop, tablet, and phone widths.
+7. Exercise every expandable row and check exact sibling alignment.
+8. Run `bash lint-language.sh` and `git diff --check`. The language command must
+   print `lint-language: clean`.

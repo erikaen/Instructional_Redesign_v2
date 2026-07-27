@@ -16,7 +16,6 @@
     <div class="phase-title-row">
       <div class="phase-title"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <div id="beats"></div>
@@ -86,7 +85,7 @@ function compactSnapshot(year,label,highlightEarned,highlightRestricted){
   var d=window.CVS_10K.compactBS[year];
   var yearText=year==='y2025'?'2025':'2024';
   var allOther=d.totalAssets-d.cash-d.otherCurrent-d.otherAssets;
-  var h='<div class="cvs-snapshot-wrap"><div class="cvs-snapshot">';
+  var h='<div class="cvs-snapshot-wrap"><div class="acct-col cvs-snapshot">';
   h+='<p class="cvs-kicker">'+label+'</p><h3 class="cvs-snapshot-title">Balance Sheet</h3>';
   h+='<p class="cvs-subline">December 31, '+yearText+' &middot; in $ millions</p><div class="cvs-snapshot-table">';
   h+=compactRow('Cash and cash equivalents',d.cash,'');
@@ -102,7 +101,6 @@ function compactSnapshot(year,label,highlightEarned,highlightRestricted){
   h+=compactRow('+ Earned and retained',d.earnedRetained,highlightEarned?'cvs-lit':'');
   h+=compactRow('+ Noncontrolling interests',d.nci,'');
   h+=compactRow('= Total shareholders&rsquo; equity',d.totalEq,'cvs-compact-total');
-  h+='<p class="cvs-check">'+fmt(d.totalAssets)+' &minus; '+fmt(d.totalLiab)+' = '+fmt(d.totalEq)+' &#10003;</p>';
   return h+'</div></div></div>';
 }
 

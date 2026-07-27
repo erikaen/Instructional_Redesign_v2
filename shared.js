@@ -3039,3 +3039,48 @@ BRW.mountMCQ = function (containerId, opts) {
   return api;
 };
 
+/* Load the later-module registries on earlier tracked course pages so the
+   shared index and footer always know the full course sequence. The registry
+   files stay separate from framework code and generated workbook data. */
+(function loadLaterCourseRegistries(){
+  if (window.self !== window.top || typeof courseTutorialOf !== 'function') return;
+  var file = location.pathname.split('/').pop() || '';
+  if (courseTutorialOf(file) < 0 || file === '48-2-Module-Complete.html') return;
+
+  var pending = 2;
+  var domReady = document.readyState !== 'loading';
+  var needsRefresh = domReady;
+  var refreshed = false;
+
+  function refreshCourseChrome(){
+    if (refreshed || !domReady || pending > 0 || !needsRefresh) return;
+    refreshed = true;
+    var banner = document.querySelector('.course-banner');
+    var footer = document.querySelector('.course-page-footer');
+    if (banner) banner.remove();
+    if (footer) footer.remove();
+    initCourseChrome();
+  }
+  function registryFinished(){
+    pending--;
+    refreshCourseChrome();
+  }
+  function loadRegistry(src){
+    var script = document.createElement('script');
+    script.src = src;
+    script.async = false;
+    script.onload = registryFinished;
+    script.onerror = registryFinished;
+    document.head.appendChild(script);
+  }
+  if (!domReady) {
+    document.addEventListener('DOMContentLoaded', function(){
+      domReady = true;
+      needsRefresh = pending > 0;
+      refreshCourseChrome();
+    });
+  }
+  loadRegistry('course-m5.js');
+  loadRegistry('course-m6.js');
+})();
+

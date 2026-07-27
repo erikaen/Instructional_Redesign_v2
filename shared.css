@@ -2994,6 +2994,9 @@ body.has-course-footer { padding-bottom: 62px; }
   .pg-53-2 .cvs-subline { margin:3px 0 0; color:var(--cvs-muted); font-size:12px; font-style:italic; }
   .pg-53-2 .cvs-table { margin-top:18px; font-size:13px; }
   .pg-53-2 .cvs-row { display:grid; grid-template-columns:minmax(300px,1fr) 7rem 7rem; column-gap:10px; align-items:baseline; padding:3px 0; }
+  .pg-53-2 .cvs-row.cvs-cols-1 { grid-template-columns:minmax(300px,1fr) 7rem; }
+  .pg-53-2 .cvs-row.cvs-cols-2 { grid-template-columns:minmax(300px,1fr) 7rem 7rem; }
+  .pg-53-2 .cvs-row.cvs-cols-3 { grid-template-columns:minmax(300px,1fr) 7rem 7rem 7rem; }
   .pg-53-2 .cvs-row-head { border-bottom:1px solid var(--cvs-rule); color:var(--cvs-primary); font-weight:700; }
   .pg-53-2 .cvs-value { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
   .pg-53-2 .cvs-section { grid-column:1 / -1; margin-top:10px; color:var(--cvs-primary); font-weight:800; }
@@ -3817,3 +3820,399 @@ body.has-course-footer { padding-bottom: 62px; }
   @media (prefers-color-scheme:dark) {
     .pg-63-6 .m6-scope { --m6-paper:#26242e; --m6-ink:#e8edf1; --m6-muted:#b4c0c8; --m6-primary:#7dc8f3; --m6-rule:#4b5361; --m6-rule-strong:#8797a2; --m6-accent:#d8ad3e; --m6-shadow:rgba(0,0,0,0.28); --m6-soft:#25313a; }
   }
+
+/* ===== M5–M6 ALIGNMENT WITH THE M1–M4 SHARED DESIGN SYSTEM (2026-07-27) =====
+   The real-statement modules keep their detailed table geometry, but their
+   typography, palette, cards, callouts, and accordions use the same visual
+   language as Modules 1–4. These late overrides also keep M5–M6 light-only,
+   as requested, even when the operating system prefers dark mode. */
+
+:is(
+  .pg-51-1, .pg-52-1, .pg-53-1, .pg-53-2, .pg-53-3, .pg-53-4, .pg-53-5, .pg-53-6,
+  .pg-61-1, .pg-62-1, .pg-63-1, .pg-63-2, .pg-63-3, .pg-63-4, .pg-63-5, .pg-63-6
+) {
+  font-family: "Open Sans", sans-serif;
+  color: #373a44;
+}
+
+:is(.pg-53-1, .pg-53-2, .pg-53-3, .pg-53-4, .pg-53-5, .pg-53-6) .cvs-scope {
+  --cvs-paper: #fff;
+  --cvs-panel: var(--primary-faint);
+  --cvs-ink: #374151;
+  --cvs-muted: #666;
+  --cvs-primary: var(--primary);
+  --cvs-rule: var(--border);
+  --cvs-rule-strong: var(--border-strong);
+  --cvs-warm: var(--primary-faint);
+  --cvs-accent: var(--accent);
+  --cvs-shadow: rgba(0,0,0,.07);
+  --cvs-success: var(--success-text);
+  --cvs-success-bg: var(--success-bg);
+  --cvs-danger: var(--error-text);
+  --cvs-info-bg: var(--primary-faint);
+  --cvs-hover: var(--primary-faint);
+  --cvs-lit: var(--success-bg);
+}
+
+:is(.pg-62-1, .pg-63-1, .pg-63-2, .pg-63-3, .pg-63-4, .pg-63-5, .pg-63-6)
+:is(.m6-scope, .m6-map-scope) {
+  --m6-paper: #fff;
+  --m6-panel: var(--primary-faint);
+  --m6-ink: #374151;
+  --m6-muted: #666;
+  --m6-primary: var(--primary);
+  --m6-rule: var(--border);
+  --m6-rule-strong: var(--border-strong);
+  --m6-warm: var(--primary-faint);
+  --m6-highlight: var(--primary-faint);
+  --m6-cash: var(--primary-faint);
+  --m6-soft: var(--primary-faint);
+  --m6-accent: var(--accent);
+  --m6-error: var(--error-text);
+  --m6-error-bg: var(--error-bg);
+  --m6-success: var(--success-text);
+  --m6-success-bg: var(--success-bg);
+  --m6-hover: var(--primary-faint);
+  --m6-shadow: rgba(0,0,0,.07);
+}
+
+/* Introduction-page sections and accordions follow the shared card/rabbit-hole
+   treatment instead of a separate red/navy system. */
+:is(.pg-51-1, .pg-61-1)
+:is(.m5-intro, .m6-intro, .m5-section, .m6-section, .m5-point-list,
+    .m6-point-list, .m5-subpoints, .m6-subpoints, .m5-preview-list,
+    .m6-preview-list, .m5-lo-list, .m6-lo-list, .m5-close, .m6-close) {
+  color: #373a44;
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-kicker, .m6-kicker) {
+  color: #888;
+  font-family: Inter, system-ui, sans-serif;
+  font-size: var(--font-xs);
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-section h2, .m6-section h2) {
+  color: var(--primary);
+  font-family: "Open Sans", sans-serif;
+  font-size: clamp(17px, 2.2vw, 21px);
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-point, .m6-point) {
+  border-left-color: var(--primary);
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-point-number, .m6-point-number) {
+  background: var(--primary);
+  font-family: Inter, system-ui, sans-serif;
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-point-title, .m6-point-title) {
+  color: var(--primary);
+  font-family: Inter, system-ui, sans-serif;
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-expand, .m6-expand) {
+  border-color: var(--border);
+  border-radius: 6px;
+  background: #fff;
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-expand-button, .m6-expand-button) {
+  background: var(--primary-faint);
+  color: var(--primary);
+  font-family: Inter, system-ui, sans-serif;
+  font-size: var(--font-s);
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-expand-button:hover, .m6-expand-button:hover) {
+  background: #e5edf7;
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-expand-button:focus-visible, .m6-expand-button:focus-visible) {
+  outline-color: var(--primary-light);
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-expand-index, .m6-expand-index, .m6-bridge-who) {
+  color: var(--primary);
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-expand-panel, .m6-expand-panel) {
+  color: #444;
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-vocab, .m6-vocab) {
+  border-color: var(--border);
+  border-radius: 6px;
+  background: var(--primary-faint);
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-vocab h3, .m6-vocab h3) {
+  color: var(--primary);
+  font-family: Inter, system-ui, sans-serif;
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-note, .m6-note) {
+  border-color: var(--warn-border);
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-note .m5-expand-button, .m6-note .m6-expand-button) {
+  background: var(--warn-bg);
+  color: var(--warn-text);
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-note .m5-expand-button:hover, .m6-note .m6-expand-button:hover) {
+  background: #fff4cc;
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-lo, .m6-lo) {
+  border-bottom-color: var(--border);
+}
+:is(.pg-51-1, .pg-61-1) :is(.m5-lo-code, .m6-lo-code) {
+  background: var(--primary);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* Detailed corporate/nonprofit statement shells adopt the same restrained
+   border, radius, and shadow as the shared .acct-col statement card. */
+:is(.pg-53-1, .pg-53-2, .pg-53-3, .pg-53-4, .pg-53-5, .pg-53-6)
+:is(.cvs-doc-card, .cvs-snapshot, .cvs-mini-panel, .cvs-strip, .cvs-reference-strip,
+    .cvs-recon-card, .cvs-bucket-strip, .cvs-question-card, .cvs-question, .cvs-note),
+:is(.pg-62-1, .pg-63-1, .pg-63-2, .pg-63-3, .pg-63-4, .pg-63-5, .pg-63-6)
+:is(.m6-doc-card, .m6-snapshot, .m6-mini-panel, .m6-reference-strip,
+    .m6-not-card, .m6-notice-card, .m6-solution-card, .m6-release-callout,
+    .m6-question-card) {
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  background: #fff;
+  color: #374151;
+  box-shadow: none;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+:is(.pg-53-1, .pg-53-2, .pg-53-3, .pg-53-4, .pg-53-5, .pg-53-6)
+:is(.cvs-kicker, .cvs-strip-label, .cvs-mini-title),
+:is(.pg-62-1, .pg-63-1, .pg-63-2, .pg-63-3, .pg-63-4, .pg-63-5, .pg-63-6)
+:is(.m6-kicker, .m6-reference-label, .m6-mini-title) {
+  color: #888;
+  font-family: Inter, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+}
+
+:is(.pg-53-1, .pg-53-2, .pg-53-3, .pg-53-4, .pg-53-5, .pg-53-6)
+:is(.cvs-doc-title, .cvs-snapshot-title),
+:is(.pg-62-1, .pg-63-1, .pg-63-2, .pg-63-3, .pg-63-4, .pg-63-5, .pg-63-6)
+:is(.m6-doc-title, .m6-snapshot-title) {
+  margin: 0 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--primary);
+  color: var(--primary);
+  font-family: "Open Sans", sans-serif;
+  font-size: var(--font-m);
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+:is(.pg-53-2, .pg-53-3, .pg-53-4, .pg-53-5)
+:is(.cvs-question-card, .cvs-question),
+:is(.pg-63-2, .pg-63-4, .pg-63-5) .m6-question-card {
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--primary);
+  border-radius: 6px;
+  background: var(--primary-faint);
+}
+
+:is(.pg-53-2, .pg-53-3, .pg-53-4, .pg-53-5)
+:is(.cvs-question-title, .cvs-question h2),
+:is(.pg-63-2, .pg-63-4, .pg-63-5)
+:is(.m6-question-title, .m6-question-card h2) {
+  color: var(--primary);
+  font-family: "Open Sans", sans-serif;
+}
+
+/* Values stay tabular; prose, labels, notes, and controls use shared families. */
+:is(.pg-53-1, .pg-53-2, .pg-53-3, .pg-53-4, .pg-53-5, .pg-53-6)
+:is(.cvs-subline, .cvs-restricted-note, .cvs-identity-note, .cvs-question-setup,
+    .cvs-question-foot, .cvs-question-range, .cvs-check, .cvs-destination,
+    .cvs-strip-foot, .cvs-direct-note),
+:is(.pg-62-1, .pg-63-1, .pg-63-2, .pg-63-3, .pg-63-4, .pg-63-5, .pg-63-6)
+:is(.m6-subline, .m6-identity-note, .m6-identity-foot, .m6-question-setup,
+    .m6-question-foot, .m6-question-range, .m6-reference-range, .m6-reference-copy,
+    .m6-expand-hint, .m6-doc-note, .m6-release-close, .m6-rounding-note,
+    .m6-center-foot, .m6-target) {
+  font-family: "Open Sans", sans-serif;
+}
+
+/* Semantic callouts use the shared success/error surfaces. */
+.pg-53-3 .cvs-recon-card,
+.pg-63-3 .m6-solution-card {
+  border-color: var(--success-border);
+  background: var(--success-bg);
+}
+.pg-63-3 .m6-notice-card {
+  border-color: var(--error-border);
+  background: var(--error-bg);
+}
+.pg-63-1 .m6-not-card,
+.pg-63-5 .m6-release-callout {
+  border-left: 4px solid var(--primary);
+  background: var(--primary-faint);
+}
+
+/* Compact architecture cards wrap their label column instead of pushing a
+   fixed-width bucket grid beyond the card edge. */
+.pg-53-6 .cvs-bucket-grid {
+  grid-template-columns: minmax(0,1fr) repeat(3,4.5rem);
+  min-width: 0;
+}
+:is(.pg-62-1, .pg-63-6) .m6-bucket-grid {
+  grid-template-columns: minmax(0,1fr) repeat(3,4.5rem);
+  min-width: 0;
+}
+.pg-53-5 .cvs-running-row,
+.pg-53-5 .cvs-center-row {
+  grid-template-columns: minmax(0,1fr) 5.2rem;
+}
+.pg-63-5 .m6-center-row {
+  grid-template-columns: 18px minmax(0,1fr) repeat(3,4rem);
+}
+.pg-63-5 .m6-detail-row {
+  grid-template-columns: minmax(0,1fr) repeat(3,4rem);
+}
+
+/* ===== BALANCE SHEETS GROW WITH THE PAGE (2026-07-27) =====
+   Compact balance-sheet cards use the shared .acct-col shell and never create
+   an inner scroll region. Full two-date balance sheets also wrap within the
+   page; horizontal scrolling remains reserved for genuinely wide statements
+   with three or more amount columns. */
+:is(.pg-53-1, .pg-53-2, .pg-53-3, .pg-53-4, .pg-53-5, .pg-53-6)
+.cvs-snapshot-wrap,
+:is(.pg-62-1, .pg-63-1, .pg-63-2, .pg-63-3, .pg-63-4, .pg-63-5, .pg-63-6)
+.m6-snapshot-wrap {
+  min-width: 0;
+  overflow: visible;
+}
+:is(.pg-53-1, .pg-53-2, .pg-53-3, .pg-53-4, .pg-53-5, .pg-53-6)
+.cvs-snapshot,
+:is(.pg-62-1, .pg-63-1, .pg-63-2, .pg-63-3, .pg-63-4, .pg-63-5, .pg-63-6)
+.m6-snapshot {
+  min-width: 0;
+  width: 100%;
+  overflow: visible;
+}
+.pg-53-1 .cvs-doc-wrap,
+.pg-63-1 .m6-doc-wrap {
+  overflow: visible;
+}
+.pg-53-1 .cvs-doc-card,
+.pg-63-1 .m6-doc-card {
+  min-width: 0;
+  width: 100%;
+}
+.pg-53-1 .cvs-row,
+.pg-63-1 .m6-row {
+  grid-template-columns: minmax(0,1fr) repeat(2,4.5rem);
+  column-gap: 8px;
+}
+:is(.pg-53-1, .pg-53-2, .pg-53-4, .pg-53-5)
+:is(.cvs-split, .cvs-cash-grid).main-grid,
+:is(.pg-63-1, .pg-63-2, .pg-63-4)
+:is(.m6-split, .m6-cash-grid, .m6-question-grid).main-grid {
+  grid-template-columns: minmax(0,1.2fr) minmax(0,.75fr) minmax(0,1.2fr);
+}
+@media (max-width: 760px) {
+  :is(.pg-53-1, .pg-53-2, .pg-53-4, .pg-53-5)
+  :is(.cvs-split, .cvs-cash-grid).main-grid,
+  :is(.pg-63-1, .pg-63-2, .pg-63-4)
+  :is(.m6-split, .m6-cash-grid, .m6-question-grid).main-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Architecture overviews favor page length over a nested horizontal scroller:
+   Beginning, explanatory statements, and Ending render as full-width blocks. */
+.pg-53-3 .cvs-architecture-wrap,
+:is(.pg-63-3, .pg-63-5, .pg-63-6) .m6-architecture-wrap,
+.pg-62-1 .m6-map-scroll {
+  overflow: visible;
+}
+.pg-53-3 .cvs-architecture.main-grid,
+.pg-53-6 .cvs-architecture,
+:is(.pg-62-1, .pg-63-3, .pg-63-5, .pg-63-6)
+:is(.m6-map-grid, .m6-architecture) {
+  grid-template-columns: 1fr;
+  min-width: 0;
+}
+.pg-53-6 .cvs-mini-panel,
+:is(.pg-62-1, .pg-63-6) .m6-mini-panel {
+  overflow: visible;
+}
+
+/* ===== FULL ARCHITECTURE COMPARISON LINE (2026-07-27) =====
+   The beginning and ending balance sheets remain peers on the same row, with
+   the explanatory statements stacked between them. Narrow layouts preserve
+   that comparison before falling back to one column on phone-sized screens. */
+.pg-53-6 .cvs-architecture,
+.pg-63-6 .m6-architecture {
+  grid-template-columns: minmax(0,.9fr) minmax(0,1.45fr) minmax(0,.9fr);
+  min-width: 0;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .pg-53-6 .cvs-architecture,
+  .pg-63-6 .m6-architecture {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+  }
+  .pg-53-6 .cvs-center-stack,
+  .pg-63-6 .m6-center-stack {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+@media (max-width: 620px) {
+  .pg-53-6 .cvs-architecture,
+  .pg-63-6 .m6-architecture {
+    grid-template-columns: 1fr;
+  }
+  .pg-53-6 .cvs-architecture > .cvs-snapshot-wrap:last-child,
+  .pg-63-6 .m6-architecture > .m6-snapshot-wrap:last-child {
+    grid-row: 2;
+  }
+  .pg-53-6 .cvs-center-stack,
+  .pg-63-6 .m6-center-stack {
+    grid-column: auto;
+    grid-row: 3;
+  }
+}
+
+/* ===== 5.2 STATEMENT MAP — COMPACT DISPLAY-ONLY SHEETS (2026-07-27) =====
+   The extracted statements have four visible columns: outline gutter, row
+   number, label, and amount. Keep those columns aligned inside the narrow
+   center panel instead of inheriting the generated sheet's unused C/E/F slots. */
+.pg-52-1 .map-center .brw-layout-standard .brw-row {
+  grid-template-columns: 22px 34px minmax(0,1fr) 6rem;
+  min-width: 0;
+}
+.pg-52-1 .map-center .brw-layout-standard .brw-col-b {
+  grid-column-start: 3;
+}
+.pg-52-1 .map-center .brw-layout-standard .brw-col-d {
+  grid-column-start: 4;
+}
+.pg-52-1 .map-center .brw-layout-standard .brw-row > .brw-cell:nth-child(n+4) {
+  display: flex;
+}
+
+/* 4.6 uses the same compact display-only statement geometry as 5.2. */
+.pg-46-1 .map-center .brw-layout-standard .brw-row {
+  grid-template-columns: 22px 34px minmax(0,1fr) 6rem;
+  min-width: 0;
+}
+.pg-46-1 .map-center .brw-layout-standard .brw-col-b {
+  grid-column-start: 3;
+}
+.pg-46-1 .map-center .brw-layout-standard .brw-col-d {
+  grid-column-start: 4;
+}
+.pg-46-1 .map-center .brw-layout-standard .brw-row > .brw-cell:nth-child(n+4) {
+  display: flex;
+}
+
+/* Keep 5.2's clickable Net-income row on the same grid line as its siblings. */
+.pg-52-1 .sce-ni-clickable {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* The original nine-column shareholders' statement is wider than the page.
+   Its card grows with the table so the background, border, and padding remain
+   intact across the full horizontal scroll range. */
+.pg-53-4 .cvs-wide-doc-card {
+  width: max-content;
+  min-width: calc(1135px + 48px);
+  max-width: none;
+}

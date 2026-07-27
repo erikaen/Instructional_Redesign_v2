@@ -16,7 +16,6 @@
     <div class="phase-title-row">
       <div class="phase-title"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
 
     <div id="beats"></div>
@@ -100,10 +99,16 @@ function identityCheck(){
   var assets=totalByLabel('Total assets');
   var liabilities=totalByLabel('Total liabilities');
   var netAssets=totalByLabel('Total net assets');
-  return '<div class="m6-identity"><p class="m6-identity-title">Identity check at both dates</p>'
-    +'<p class="m6-identity-line">2025: '+money(assets.y2025)+' &minus; '+money(liabilities.y2025)+' = '+money(netAssets.y2025)+' &#10003;</p>'
-    +'<p class="m6-identity-line">2024: '+money(assets.y2024)+' &minus; '+money(liabilities.y2024)+' = '+money(netAssets.y2024)+' &#10003;</p>'
-    +'<p class="m6-identity-foot">A &minus; L = Net Assets &middot; the identity holds at both dates</p></div>';
+  function col(title,year){
+    return '<div class="acct-col"><h4>'+title+'</h4>'
+      +'<div class="acct-line"><span>Assets</span><span class="acct-val mono">'+money(assets[year])+'</span></div>'
+      +'<div class="acct-line"><span>&minus; Liabilities</span><span class="acct-val mono">'+money(liabilities[year])+'</span></div>'
+      +'<div class="acct-total"><span>= Net Assets</span><span class="mono">'+money(netAssets[year])+'</span></div></div>';
+  }
+  return '<div class="main-grid two-col identity-formula">'
+    +col('Beginning &mdash; June 30, 2024','y2024')
+    +col('Ending &mdash; June 30, 2025','y2025')
+    +'</div>';
 }
 function documentForm(showAll){
   return '<div class="m6-scope"><div class="m6-doc-wrap"><div class="m6-doc-card">'
@@ -135,7 +140,7 @@ function snapshotRows(year,showAll){
 }
 function snapshot(year,label,showAll){
   var yearText=year==='y2025'?'2025':'2024';
-  return '<div class="m6-snapshot-wrap"><div class="m6-snapshot"><p class="m6-kicker">'+label+'</p>'
+  return '<div class="m6-snapshot-wrap"><div class="acct-col m6-snapshot"><p class="m6-kicker">'+label+'</p>'
     +'<h3 class="m6-snapshot-title">Statement of Financial Position</h3>'
     +'<p class="m6-subline">June 30, '+yearText+' &middot; in $ millions</p>'
     +'<div class="m6-snapshot-table">'+snapshotRows(year,showAll)+'</div></div></div>';

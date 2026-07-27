@@ -191,7 +191,12 @@ function resetMove(id){
 function statementPanelHTML(containerId,title){
   return '<div class="sce-is-panel statement-panel"><div class="sce-is-title">'+title+'</div><div class="wb-grid-wrap"><div id="'+containerId+'"></div></div></div>';
 }
-function mountStatement(containerId,sheetName,key){ BRW.mountGrid(containerId,sheetOf(sheetName),{gridId:'statements-tie-out-'+key+'-'+(++gridSeq)}); }
+function mountStatement(containerId,sheetName,key){
+  BRW.mountGrid(containerId,sheetOf(sheetName),{
+    gridId:'statements-tie-out-'+key+'-'+(++gridSeq),
+    layout:'standard'
+  });
+}
 function wireCapitalRow(containerId,clickable){
   var container=document.getElementById(containerId);
   if(!container)return;

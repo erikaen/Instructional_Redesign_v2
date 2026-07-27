@@ -15,7 +15,6 @@
     <div class="phase-title-row">
       <div class="phase-title"></div>
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-      <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
     <div id="beats"></div>
     <div id="mainGrid"></div>
@@ -127,7 +126,7 @@ function compactSnapshot(year,label){
     +compactRow('&#8627; of which noncontrolling interests',d.naWithoutNCI,'m6-compact-sub')
     +compactRow('+ NA with donor restrictions',d.naWith,'m6-compact-lit')
     +compactRow('= Total net assets',d.totalNA,'m6-compact-total m6-compact-lit');
-  return '<div class="m6-snapshot-wrap"><div class="m6-snapshot"><p class="m6-kicker">'+label+'</p><h3 class="m6-snapshot-title">Statement of Financial Position</h3><p class="m6-subline">June 30, '+yearText+' &middot; in $ millions</p><div class="m6-snapshot-table">'+rows+'</div><p class="m6-identity-note">'+fmt(d.totalAssets)+' &minus; '+fmt(d.totalLiab)+' = '+fmt(d.totalNA)+' &#10003;</p></div></div>';
+  return '<div class="m6-snapshot-wrap"><div class="acct-col m6-snapshot"><p class="m6-kicker">'+label+'</p><h3 class="m6-snapshot-title">Statement of Financial Position</h3><p class="m6-subline">June 30, '+yearText+' &middot; in $ millions</p><div class="m6-snapshot-table">'+rows+'</div></div></div>';
 }
 function centerCells(wo,wi){ return soaCell(wo)+soaCell(wi)+soaCell((wo||0)+(wi||0)); }
 function sectionData(){
