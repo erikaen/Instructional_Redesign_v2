@@ -25,12 +25,12 @@ if (typeof COURSE_DONE !== 'undefined') Object.assign(COURSE_DONE, {
   '53-5-Where-Net-Income-Comes-From.html': function(){ return typeof step !== 'undefined' && step >= 7; }
 });
 if (typeof COURSE_STEPS !== 'undefined') Object.assign(COURSE_STEPS, {
-  '52-1-The-Statement-Map.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; },
-  '53-1-Two-Balance-Sheets.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 4 }; },
-  '53-2-The-Cash-Question.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; },
-  '53-3-Read-the-Labels.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 4 }; },
-  '53-4-The-Equity-Question.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 8 }; },
-  '53-5-Where-Net-Income-Comes-From.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 8 }; }
+  '52-1-The-Statement-Map.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 4 }; },
+  '53-1-Two-Balance-Sheets.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 3 }; },
+  '53-2-The-Cash-Question.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 4 }; },
+  '53-3-Read-the-Labels.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 3 }; },
+  '53-4-The-Equity-Question.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 7 }; },
+  '53-5-Where-Net-Income-Comes-From.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 7 }; }
 });
 if (typeof COURSE_GLOSSARY !== 'undefined') COURSE_GLOSSARY.push(
   { module:'Module 5 · Real Statements', tutorial:'', terms:[

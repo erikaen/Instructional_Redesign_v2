@@ -25,11 +25,11 @@ if (typeof COURSE_DONE !== 'undefined') Object.assign(COURSE_DONE, {
   '63-5-Releases-and-the-Endowment.html': function(){ return typeof step !== 'undefined' && step >= 4; }
 });
 if (typeof COURSE_STEPS !== 'undefined') Object.assign(COURSE_STEPS, {
-  '63-1-The-Statement-of-Financial-Position.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; },
-  '63-2-The-Cash-Question.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; },
-  '63-3-Read-the-Labels.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 4 }; },
-  '63-4-The-Net-Assets-Question.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 6 }; },
-  '63-5-Releases-and-the-Endowment.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0) + 1, total: 5 }; }
+  '63-1-The-Statement-of-Financial-Position.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 4 }; },
+  '63-2-The-Cash-Question.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 4 }; },
+  '63-3-Read-the-Labels.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 3 }; },
+  '63-4-The-Net-Assets-Question.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 5 }; },
+  '63-5-Releases-and-the-Endowment.html': function(){ return { at: ((typeof step !== 'undefined') ? step : 0), total: 4 }; }
 });
 if (typeof COURSE_GLOSSARY !== 'undefined') COURSE_GLOSSARY.push(
   { module:'Module 6 · Nonprofit Statements', tutorial:'', terms:[

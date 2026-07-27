@@ -2953,14 +2953,11 @@ body.has-course-footer { padding-bottom: 62px; }
   }
 
 /* --- 53-1-Two-Balance-Sheets.html (relocated from page-local <style> 2026-07-25) --- */
-  .pg-53-1 .cvs-scope { --cvs-paper:#ffffff; --cvs-panel:#f8fafc; --cvs-ink:#263746; --cvs-muted:#657583; --cvs-primary:#155b86; --cvs-rule:#c8d4dc; --cvs-rule-strong:#708592; --cvs-warm:#fff8df; --cvs-accent:#d5a528; --cvs-shadow:rgba(32,55,72,0.09); }
+  /* colors inherit the shared course palette (no bespoke teal/gold); card shells
+     + headers use shared .section-card / .section-tag / .section-title / .card-title */
+  .pg-53-1 .cvs-scope { --cvs-paper:#ffffff; --cvs-panel:var(--primary-faint); --cvs-ink:#2a2a2a; --cvs-muted:#888; --cvs-primary:var(--primary); --cvs-rule:var(--border); --cvs-rule-strong:var(--border-strong); --cvs-warm:var(--primary-faint); --cvs-accent:var(--accent); --cvs-shadow:rgba(0,0,0,0.07); }
   .pg-53-1 .cvs-doc-wrap { overflow-x:auto; padding:2px 2px 8px; }
-  .pg-53-1 .cvs-doc-card, .pg-53-1 .cvs-snapshot { background:var(--cvs-paper); color:var(--cvs-ink); border:1px solid var(--cvs-rule); border-radius:12px; box-shadow:0 8px 24px var(--cvs-shadow); }
-  .pg-53-1 .cvs-doc-card { max-width:820px; min-width:610px; margin:0 auto; padding:24px; }
-  .pg-53-1 .cvs-kicker { margin:0 0 5px; color:var(--cvs-muted); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
-  .pg-53-1 .cvs-doc-title, .pg-53-1 .cvs-snapshot-title { margin:0; color:var(--cvs-primary); }
-  .pg-53-1 .cvs-doc-title { font-size:20px; }
-  .pg-53-1 .cvs-snapshot-title { font-size:17px; }
+  .pg-53-1 .cvs-doc-card { max-width:820px; min-width:610px; margin:0 auto; }
   .pg-53-1 .cvs-subline { margin:3px 0 0; color:var(--cvs-muted); font-size:12px; font-style:italic; }
   .pg-53-1 .cvs-table { margin-top:18px; font-size:13px; }
   .pg-53-1 .cvs-row { display:grid; grid-template-columns:minmax(300px,1fr) 7rem 7rem; column-gap:10px; align-items:baseline; padding:3px 0; }
@@ -2983,9 +2980,6 @@ body.has-course-footer { padding-bottom: 62px; }
   @media (max-width:760px) {
     .pg-53-1 .cvs-split.main-grid { grid-template-columns:1fr; }
     .pg-53-1 .cvs-gap { min-height:170px; }
-  }
-  @media (prefers-color-scheme:dark) {
-    .pg-53-1 .cvs-scope { --cvs-paper:#26242e; --cvs-panel:#211f28; --cvs-ink:#e8edf1; --cvs-muted:#b4c0c8; --cvs-primary:#7dc8f3; --cvs-rule:#4b5361; --cvs-rule-strong:#8797a2; --cvs-warm:#332f20; --cvs-accent:#d8ad3e; --cvs-shadow:rgba(0,0,0,0.28); }
   }
 
 /* --- 53-2-The-Cash-Question.html (relocated from page-local <style> 2026-07-25) --- */

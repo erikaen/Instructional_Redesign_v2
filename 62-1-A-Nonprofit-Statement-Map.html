@@ -12,17 +12,11 @@
 <body>
 <div class="page pg-62-1">
   <div class="prework-wrap">
-    <div class="tut-header">
-      <div class="tut-header-main">
-        <h1>A Nonprofit Statement Map</h1>
-        <p class="tut-header-sub">Module 6 &middot; ~4 min</p>
-      </div>
-      <div class="tut-header-actions">
-        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
-        <button class="icon-btn" title="Restart" aria-label="Restart this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
-      </div>
+    <div class="phase-title-row">
+      <div class="phase-title"></div>
+      <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+      <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
     </div>
-    <div class="phase-title" id="phaseTitle">A Nonprofit Statement Map</div>
     <div id="beats"></div>
     <div id="mainGrid"></div>
     <div id="tail"></div>
@@ -147,7 +141,7 @@ function render(){
   document.getElementById('beats').innerHTML='<div class="narrative-block"><p><strong>Yale&rsquo;s map at a glance:</strong> two Statements of Financial Position, one fiscal year apart &mdash; June 30, 2024 and June 30, 2025 &mdash; with the year&rsquo;s story told between them.</p><p>A for-profit needed three explanatory statements; a nonprofit needs <strong>two statements</strong>. The Statement of Cash Flows still tells the cash story. The Statement of Activities does the combined work of an income statement and a statement of changes in equity, because every change in net assets flows through it. The walk ahead (63-x) steps through each piece; this page is the map.</p></div>';
   document.getElementById('mainGrid').innerHTML=architectureView();
   document.getElementById('tail').innerHTML='<div class="m6-map-scope m6-insight-wrap"><div class="insight-box">The architecture from the bike shop, on a $59-billion nonprofit: two balance-sheet snapshots, two explanatory statements between them, every change in net assets accounted for. Two statements, not three: the Statement of Activities carries both the income-statement story and the changes-in-the-difference story.</div></div>';
-  document.getElementById('controls').innerHTML='<div class="nav-buttons"><button class="btn-back" onclick="nav(\'61-1-Module-6-Introduction.html\')">&larr; Back</button><button class="btn-continue" onclick="nav(\'63-1-The-Statement-of-Financial-Position.html\')">The Statement of Financial Position &rarr;</button></div>';
+  document.getElementById('controls').innerHTML='';
   if(window.lucide) lucide.createIcons();
 }
 
