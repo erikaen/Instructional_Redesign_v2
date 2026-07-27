@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Net Assets Question</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6ohs-scope {
+      --m6ohs-paper:#ffffff;
+      --m6ohs-ink:#263746;
+      --m6ohs-muted:#657583;
+      --m6ohs-primary:#155b86;
+      --m6ohs-rule:#c8d4dc;
+      --m6ohs-rule-strong:#708592;
+      --m6ohs-accent:#d5a528;
+      --m6ohs-soft:#f3f8fb;
+      --m6ohs-warm:#fff8df;
+      --m6ohs-success:#167447;
+      --m6ohs-down:#a33d2f;
+      --m6ohs-shadow:rgba(32,55,72,.09);
+      box-sizing:border-box;
+      color:var(--m6ohs-ink);
+      font-family:Inter,"Open Sans",sans-serif;
+    }
+    .m6ohs-scope *, .m6ohs-scope *::before, .m6ohs-scope *::after { box-sizing:inherit; }
+    .m6ohs-wrap { min-width:0; overflow-x:auto; padding:2px 2px 10px; }
+    .m6ohs-card {
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      border:1px solid var(--m6ohs-rule);
+      border-radius:12px;
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+      padding:18px;
+    }
+    .m6ohs-kicker {
+      margin:0 0 5px;
+      color:var(--m6ohs-muted);
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .m6ohs-title { margin:0; color:var(--m6ohs-primary); font-size:17px; line-height:1.25; }
+    .m6ohs-subline { margin:4px 0 0; color:var(--m6ohs-muted); font-size:11px; font-style:italic; line-height:1.45; }
+    .m6ohs-value { text-align:right; white-space:nowrap; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m6ohs-up { color:var(--m6ohs-success); }
+    .m6ohs-down { color:var(--m6ohs-down); }
+
+    /* Step 0 — the three walks */
+    .m6ohs-walk-grid {
+      display:grid;
+      grid-template-columns:repeat(3,minmax(250px,1fr));
+      gap:14px;
+      max-width:1020px;
+      margin:0 auto;
+      min-width:790px;
+    }
+    .m6ohs-walk-row {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(96px,auto);
+      gap:8px;
+      align-items:baseline;
+      padding:4px 0;
+      font-size:11.5px;
+    }
+    .m6ohs-walk-row.m6ohs-walk-end { margin-top:3px; padding-top:7px; border-top:1px solid var(--m6ohs-rule-strong); color:var(--m6ohs-primary); font-weight:800; }
+    .m6ohs-walk-delta { font-weight:700; }
+    .m6ohs-identity-strip {
+      max-width:1020px;
+      margin:12px auto 0;
+      color:var(--m6ohs-muted);
+      font:italic 10.5px/1.5 "JetBrains Mono",monospace;
+      text-align:center;
+    }
+
+    /* Note tables — steps 1 and 2 */
+    .m6ohs-note-card { max-width:760px; margin:0 auto; }
+    .m6ohs-tbl { margin-top:14px; font-size:11.5px; }
+    .m6ohs-tbl-row {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(88px,auto) minmax(88px,auto);
+      gap:10px;
+      align-items:baseline;
+      padding:3px 6px;
+      border-left:3px solid transparent;
+    }
+    .m6ohs-tbl-head { padding-bottom:6px; border-bottom:1px solid var(--m6ohs-rule); color:var(--m6ohs-primary); font-size:10px; font-weight:700; }
+    .m6ohs-tbl-group { margin-top:10px; color:var(--m6ohs-muted); font-size:10px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }
+    .m6ohs-tbl-sub { margin-top:2px; padding-top:5px; border-top:1px solid var(--m6ohs-rule); font-weight:700; }
+    .m6ohs-tbl-total { margin-top:5px; padding-top:7px; border-top:3px double var(--m6ohs-rule-strong); color:var(--m6ohs-primary); font-weight:800; }
+    .m6ohs-tbl-lit { border-left-color:var(--m6ohs-accent); border-radius:3px; background:var(--m6ohs-warm); color:var(--m6ohs-primary); font-weight:700; }
+    .m6ohs-tbl-note { margin:12px 0 0; padding:8px 10px; border-left:2px solid var(--m6ohs-accent); background:var(--m6ohs-soft); color:var(--m6ohs-muted); font-size:11px; font-style:italic; line-height:1.5; }
+    .m6ohs-tbl-note strong { color:var(--m6ohs-primary); }
+
+    /* Step 3 — the fence */
+    .m6ohs-fence-grid {
+      display:grid;
+      grid-template-columns:minmax(300px,1.1fr) minmax(300px,1fr);
+      gap:14px;
+      max-width:860px;
+      margin:0 auto;
+      min-width:640px;
+      align-items:start;
+    }
+    .m6ohs-fence-math { margin-top:14px; font-size:11.5px; }
+    .m6ohs-fence-math .m6ohs-walk-row { font-size:11.5px; }
+
+    /* Step 4 — commit-then-reveal */
+    .m6ohs-q-grid {
+      display:grid;
+      grid-template-columns:minmax(250px,1fr) minmax(290px,1.15fr) minmax(250px,1fr);
+      gap:14px;
+      align-items:stretch;
+      max-width:1080px;
+      margin:0 auto;
+      min-width:830px;
+    }
+    .m6ohs-snapshot { height:100%; }
+    .m6ohs-snap-row {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(88px,auto);
+      gap:8px;
+      align-items:baseline;
+      padding:3px 0;
+      font-size:11px;
+    }
+    .m6ohs-snap-sub { padding-left:12px; color:var(--m6ohs-muted); font-size:10px; font-style:italic; }
+    .m6ohs-snap-total { margin-top:2px; padding-top:5px; border-top:1px solid var(--m6ohs-rule-strong); font-weight:700; }
+    .m6ohs-snap-grand { margin-top:4px; padding-top:6px; border-top:3px double var(--m6ohs-rule-strong); color:var(--m6ohs-primary); font-weight:800; }
+    .m6ohs-snap-identity { margin:10px 0 0; color:var(--m6ohs-muted); font:italic 9.5px/1.4 "JetBrains Mono",monospace; text-align:right; }
+    .m6ohs-q-card {
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      border:2px dashed var(--m6ohs-accent);
+      background:var(--m6ohs-warm);
+      text-align:center;
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+      border-radius:12px;
+      padding:20px;
+    }
+    .m6ohs-q-card h2 { margin:2px 0 10px; color:var(--m6ohs-primary); font-size:19px; }
+    .m6ohs-q-lead { margin:0 0 14px; color:var(--m6ohs-ink); font-size:13px; line-height:1.55; }
+    .m6ohs-choices { display:grid; gap:8px; }
+    .m6ohs-choice {
+      padding:10px 12px;
+      border:1px solid var(--m6ohs-rule-strong);
+      border-radius:8px;
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      font:600 12.5px/1.35 Inter,sans-serif;
+      cursor:pointer;
+    }
+    .m6ohs-choice:hover, .m6ohs-choice:focus-visible { outline:2px solid var(--m6ohs-accent); outline-offset:2px; }
+    .m6ohs-choice[disabled] { cursor:default; opacity:.55; }
+    .m6ohs-choice.m6ohs-chosen { opacity:1; border-color:var(--m6ohs-primary); color:var(--m6ohs-primary); box-shadow:inset 0 0 0 1px var(--m6ohs-primary); }
+    .m6ohs-q-hint { margin:12px 0 0; color:var(--m6ohs-muted); font-size:11px; font-style:italic; }
+    .m6ohs-reveal {
+      max-width:1080px;
+      margin:14px auto 0;
+      padding:14px 16px;
+      border:1px solid var(--m6ohs-rule);
+      border-left:4px solid var(--m6ohs-accent);
+      border-radius:10px;
+      background:var(--m6ohs-paper);
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+      font-size:13px;
+      line-height:1.6;
+    }
+    .m6ohs-reveal-verdict { margin:0 0 6px; color:var(--m6ohs-primary); font-weight:800; }
+    .m6ohs-reveal p { margin:0; }
+
+    /* The "About the name Net Assets" expandable */
+    .m6ohs-name-note { max-width:860px; margin:16px auto 0; }
+    .m6ohs-name-toggle {
+      width:100%;
+      display:flex;
+      align-items:baseline;
+      gap:8px;
+      padding:12px 16px;
+      border:1px solid var(--m6ohs-rule);
+      border-radius:10px;
+      background:var(--m6ohs-soft);
+      color:var(--m6ohs-primary);
+      font:700 13px/1.35 Inter,sans-serif;
+      text-align:left;
+      cursor:pointer;
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m6ohs-name-toggle:hover, .m6ohs-name-toggle:focus-visible { outline:2px solid var(--m6ohs-accent); outline-offset:2px; }
+    .m6ohs-name-toggle .m6ohs-name-chev { display:inline-block; width:1.05em; }
+    .m6ohs-name-toggle .m6ohs-name-hint { margin-left:auto; color:var(--m6ohs-muted); font-weight:400; font-size:11px; font-style:italic; }
+    .m6ohs-name-body {
+      margin-top:-1px;
+      padding:14px 18px 16px;
+      border:1px solid var(--m6ohs-rule);
+      border-top:0;
+      border-radius:0 0 10px 10px;
+      background:var(--m6ohs-paper);
+      font-size:13px;
+      line-height:1.65;
+    }
+    .m6ohs-name-body p { margin:0 0 12px; }
+    .m6ohs-name-body p:last-child { margin-bottom:0; }
+    .m6ohs-name-body strong { color:var(--m6ohs-primary); }
+    [hidden] { display:none !important; }
+
+    @media (max-width:900px) {
+      .m6ohs-walk-grid, .m6ohs-q-grid, .m6ohs-fence-grid { grid-template-columns:1fr; min-width:0; }
+      .m6ohs-q-card { min-height:230px; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6ohs-scope {
+        --m6ohs-paper:#26242e;
+        --m6ohs-ink:#e8edf1;
+        --m6ohs-muted:#b4c0c8;
+        --m6ohs-primary:#7dc8f3;
+        --m6ohs-rule:#4b5361;
+        --m6ohs-rule-strong:#8797a2;
+        --m6ohs-accent:#d8ad3e;
+        --m6ohs-soft:#25313a;
+        --m6ohs-warm:#332f20;
+        --m6ohs-success:#70d6a3;
+        --m6ohs-down:#e08b7a;
+        --m6ohs-shadow:rgba(0,0,0,.28);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Net Assets Question</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~7 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Net Assets Question</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-fy2025-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playSuccess(){ tone(660,0.09,'sine',0.04); window.setTimeout(function(){ tone(880,0.12,'sine',0.04); },80); }
+function nav(url){ window.location.href=url; }
+
+var D=window.OHS_FY2025;
+var step=0;
+var TOTAL_STEPS=5;
+var answered=null;       // null | 'yes' | 'no'
+var nameNoteOpen=false;  // the "About the name Net Assets" expandable
+
+function escapeHTML(value){
+  return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmt(v){
+  if(v===0) return '&mdash;';
+  var a=Math.abs(v).toLocaleString('en-US');
+  return v<0 ? '('+a+')' : a;
+}
+function plain(v){ return Math.abs(v).toLocaleString('en-US'); }
+function signed(v){ return (v<0?'&minus;':'+')+plain(v); }
+
+/* ---------- step 0: the three walks ---------- */
+function walkCard(kicker,begin,delta,end){
+  var dirClass=delta<0?'m6ohs-down':'m6ohs-up';
+  return '<div class="m6ohs-card">'
+    +'<p class="m6ohs-kicker">'+kicker+'</p>'
+    +'<div class="m6ohs-walk-row"><div>'+D.meta.beginDate+'</div><div class="m6ohs-value">'+fmt(begin)+'</div></div>'
+    +'<div class="m6ohs-walk-row"><div>Change in net assets</div><div class="m6ohs-value m6ohs-walk-delta '+dirClass+'">'+signed(delta)+'</div></div>'
+    +'<div class="m6ohs-walk-row m6ohs-walk-end"><div>'+D.meta.endDate+'</div><div class="m6ohs-value">'+fmt(end)+'</div></div>'
+    +'</div>';
+}
+function walksView(){
+  var a=D.activities;
+  var s=D.sfp;
+  return '<div class="m6ohs-scope"><div class="m6ohs-wrap"><div class="m6ohs-walk-grid">'
+    +walkCard('Without donor restrictions',a.netAssetsBeginning.wo,a.changeInNetAssets.wo,a.netAssetsEnd.wo)
+    +walkCard('With donor restrictions',a.netAssetsBeginning.w,a.changeInNetAssets.w,a.netAssetsEnd.w)
+    +walkCard('Total net assets',a.netAssetsBeginning.t2025,a.changeInNetAssets.t2025,a.netAssetsEnd.t2025)
+    +'</div></div>'
+    +'<p class="m6ohs-identity-strip">The identity ties each sheet on its own date &mdash; '
+    +'2024: '+plain(s.totalAssets.y2024)+' &minus; '+plain(s.totalLiabilities.y2024)+' = '+plain(s.totalNetAssets.y2024)+' &#10003; &middot; '
+    +'2025: '+plain(s.totalAssets.y2025)+' &minus; '+plain(s.totalLiabilities.y2025)+' = '+plain(s.totalNetAssets.y2025)+' &#10003;</p></div>';
+}
+
+/* ---------- steps 1-2: note tables ---------- */
+function tblRow(label,y2024,y2025,extraClass){
+  return '<div class="m6ohs-tbl-row'+(extraClass?' '+extraClass:'')+'"><div>'+label+'</div>'
+    +'<div class="m6ohs-value">'+fmt(y2024)+'</div><div class="m6ohs-value">'+fmt(y2025)+'</div></div>';
+}
+function tblHead(){
+  return '<div class="m6ohs-tbl-row m6ohs-tbl-head"><div></div>'
+    +'<div class="m6ohs-value">Dec 31, 2024</div><div class="m6ohs-value">Dec 31, 2025</div></div>';
+}
+function restrictionsView(){
+  var r=D.notes.restrictions;
+  var h='<div class="m6ohs-scope"><div class="m6ohs-wrap"><div class="m6ohs-card m6ohs-note-card">'
+    +'<p class="m6ohs-kicker">Oregon Humane Society &middot; note 16</p>'
+    +'<h2 class="m6ohs-title">Net assets with donor restrictions</h2>'
+    +'<p class="m6ohs-subline">Three kinds of promises, both dates &middot; exact dollars</p>'
+    +'<div class="m6ohs-tbl">'+tblHead();
+  h+='<div class="m6ohs-tbl-row m6ohs-tbl-group"><div>Restricted to a purpose</div><div></div><div></div></div>';
+  r.purpose.forEach(function(row){
+    h+=tblRow(escapeHTML(row.label),row.y2024,row.y2025,row.id==='luluMadison'?'m6ohs-tbl-lit':'');
+  });
+  h+=tblRow('Total purpose restrictions',r.totalPurpose.y2024,r.totalPurpose.y2025,'m6ohs-tbl-sub');
+  h+='<div class="m6ohs-tbl-row m6ohs-tbl-group"><div>Restricted in time</div><div></div><div></div></div>';
+  r.time.forEach(function(row){ h+=tblRow(escapeHTML(row.label),row.y2024,row.y2025,''); });
+  h+=tblRow('Total time restrictions',r.totalTime.y2024,r.totalTime.y2025,'m6ohs-tbl-sub');
+  h+='<div class="m6ohs-tbl-row m6ohs-tbl-group"><div>Held in perpetuity</div><div></div><div></div></div>';
+  r.perpetuity.forEach(function(row){ h+=tblRow(escapeHTML(row.label),row.y2024,row.y2025,''); });
+  h+=tblRow('Total held in perpetuity',r.totalPerpetuity.y2024,r.totalPerpetuity.y2025,'m6ohs-tbl-sub');
+  h+=tblRow('Total net assets with donor restrictions',r.total.y2024,r.total.y2025,'m6ohs-tbl-total');
+  h+='</div><p class="m6ohs-tbl-note"><strong>The Lulu Madison Fund</strong> &mdash; note 16: &ldquo;'+escapeHTML(r.luluMadisonStory)+'&rdquo;</p>'
+    +'</div></div></div>';
+  return h;
+}
+function boardView(){
+  var b=D.notes.boardDesignated;
+  var h='<div class="m6ohs-scope"><div class="m6ohs-wrap"><div class="m6ohs-card m6ohs-note-card">'
+    +'<p class="m6ohs-kicker">Oregon Humane Society &middot; note 18</p>'
+    +'<h2 class="m6ohs-title">Board-designated endowment</h2>'
+    +'<p class="m6ohs-subline">Every dollar of it sits in the pile <em>without</em> donor restrictions</p>'
+    +'<div class="m6ohs-tbl">'+tblHead();
+  b.rows.forEach(function(row){
+    h+=tblRow(escapeHTML(row.label),row.y2024,row.y2025,row.id==='ocfSusanCarey'?'m6ohs-tbl-lit':'');
+  });
+  h+=tblRow('Total board-designated endowment',b.total.y2024,b.total.y2025,'m6ohs-tbl-total');
+  h+='</div><p class="m6ohs-tbl-note">On the Statement of Financial Position this whole table is one row of the '
+    +'<strong>without</strong> pile: Board-designated endowment, '+fmt(b.total.y2025)+'.</p>'
+    +'</div></div></div>';
+  return h;
+}
+
+/* ---------- step 3: the capital fence ---------- */
+function fenceView(){
+  var s=D.sfp;
+  var ppe=null;
+  s.assets.forEach(function(row){ if(row.id==='ppe') ppe=row; });
+  var netCap=null;
+  s.netAssetsWithout.forEach(function(row){ if(row.id==='netCapital') netCap=row; });
+  var owed=ppe.y2025-netCap.y2025;
+  var pilesCard='<div class="m6ohs-card">'
+    +'<p class="m6ohs-kicker">The pile without donor restrictions &middot; Dec 31, 2025</p>'
+    +'<div class="m6ohs-tbl" style="margin-top:10px">';
+  s.netAssetsWithout.forEach(function(row){
+    pilesCard+='<div class="m6ohs-tbl-row'+(row.id==='netCapital'?' m6ohs-tbl-lit':'')+'" style="grid-template-columns:minmax(0,1fr) minmax(96px,auto)">'
+      +'<div>'+escapeHTML(row.label)+'</div><div class="m6ohs-value">'+fmt(row.y2025)+'</div></div>';
+  });
+  pilesCard+='<div class="m6ohs-tbl-row m6ohs-tbl-total" style="grid-template-columns:minmax(0,1fr) minmax(96px,auto)">'
+    +'<div>Total without donor restrictions</div><div class="m6ohs-value">'+fmt(s.totalWithout.y2025)+'</div></div>'
+    +'</div></div>';
+  var mathCard='<div class="m6ohs-card">'
+    +'<p class="m6ohs-kicker">Where the number comes from</p>'
+    +'<div class="m6ohs-fence-math">'
+    +'<div class="m6ohs-walk-row"><div>'+escapeHTML(ppe.label)+'</div><div class="m6ohs-value">'+fmt(ppe.y2025)+'</div></div>'
+    +'<div class="m6ohs-walk-row"><div>&minus; equipment purchases still sitting in accounts payable</div><div class="m6ohs-value">'+fmt(owed)+'</div></div>'
+    +'<div class="m6ohs-walk-row m6ohs-walk-end"><div>= Net investment in capital assets</div><div class="m6ohs-value">'+fmt(netCap.y2025)+'</div></div>'
+    +'</div>'
+    +'<p class="m6ohs-subline" style="margin-top:12px">No donor restricted it. No board vote fenced it. The row is a fence anyway &mdash; drawn for the reader.</p>'
+    +'</div>';
+  return '<div class="m6ohs-scope"><div class="m6ohs-wrap"><div class="m6ohs-fence-grid">'+pilesCard+mathCard+'</div></div></div>';
+}
+
+/* ---------- step 4: commit-then-reveal ---------- */
+function snapshotCard(year,kicker){
+  var s=D.sfp;
+  var yearText=year==='y2025'?D.meta.endDate:D.meta.beginDate;
+  var h='<div class="m6ohs-card m6ohs-snapshot">'
+    +'<p class="m6ohs-kicker">'+kicker+'</p>'
+    +'<h3 class="m6ohs-title" style="font-size:14px">Statement of Financial Position</h3>'
+    +'<p class="m6ohs-subline">Net Assets section &middot; '+yearText+'</p>'
+    +'<div style="margin-top:12px">';
+  s.netAssetsWithout.forEach(function(row){
+    h+='<div class="m6ohs-snap-row m6ohs-snap-sub"><div>'+escapeHTML(row.label)+'</div><div class="m6ohs-value">'+fmt(row[year])+'</div></div>';
+  });
+  h+='<div class="m6ohs-snap-row m6ohs-snap-total"><div>Total without donor restrictions</div><div class="m6ohs-value">'+fmt(s.totalWithout[year])+'</div></div>'
+    +'<div class="m6ohs-snap-row"><div>With donor restrictions</div><div class="m6ohs-value">'+fmt(s.withRestrictions[year])+'</div></div>'
+    +'<div class="m6ohs-snap-row m6ohs-snap-grand"><div>Total net assets</div><div class="m6ohs-value">'+fmt(s.totalNetAssets[year])+'</div></div>'
+    +'</div>'
+    +'<p class="m6ohs-snap-identity">'+plain(s.totalAssets[year])+' &minus; '+plain(s.totalLiabilities[year])+' = '+plain(s.totalNetAssets[year])+' &#10003;</p>'
+    +'</div>';
+  return h;
+}
+function inferQuestionCard(){
+  var yesAttrs=answered?' disabled':'';
+  var noAttrs=answered?' disabled':'';
+  var yesCls='m6ohs-choice'+(answered==='yes'?' m6ohs-chosen':'');
+  var noCls='m6ohs-choice'+(answered==='no'?' m6ohs-chosen':'');
+  return '<div class="m6ohs-q-card">'
+    +'<p class="m6ohs-kicker">Commit before you reveal</p>'
+    +'<h2>Could a reader tell?</h2>'
+    +'<p class="m6ohs-q-lead">Suppose these two snapshots were <em>all</em> a reader ever saw &mdash; no Statement of Activities. Could the reader tell that the day-to-day operating work ran a deficit in 2025?</p>'
+    +'<div class="m6ohs-choices">'
+    +'<button class="'+yesCls+'"'+yesAttrs+' onclick="choose(\'yes\')">Yes &mdash; the without pile fell, so a deficit must have happened</button>'
+    +'<button class="'+noCls+'"'+noAttrs+' onclick="choose(\'no\')">No &mdash; not from the snapshots alone</button>'
+    +'</div>'
+    +(answered?'':'<p class="m6ohs-q-hint">Pick one &mdash; the answer appears below.</p>')
+    +'</div>';
+}
+function inferView(){
+  return '<div class="m6ohs-scope"><div class="m6ohs-wrap"><div class="m6ohs-q-grid">'
+    +snapshotCard('y2024','Beginning snapshot')
+    +inferQuestionCard()
+    +snapshotCard('y2025','Ending snapshot')
+    +'</div></div></div>';
+}
+function revealBox(){
+  var a=D.activities;
+  var verdict=answered==='no'
+    ? 'Right &mdash; no.'
+    : 'Tempting &mdash; the without pile did fall. But no.';
+  return '<div class="m6ohs-scope"><div class="m6ohs-reveal">'
+    +'<p class="m6ohs-reveal-verdict">'+verdict+'</p>'
+    +'<p>The snapshots give positions: the without pile lower by '+plain(a.changeInNetAssets.wo)+', the with pile higher by '
+    +plain(a.changeInNetAssets.w)+', the total UP '+plain(a.changeInNetAssets.t2025)+' &mdash; a reader glancing at the totals would call it a comfortable year. '
+    +'And even the without pile&rsquo;s fall proves nothing by itself: a pile can fall because of an investment loss, or a transfer between piles, with the day-to-day work in surplus. '
+    +'Which pile fell, and <em>why</em>, is exactly what the Statement of Activities supplies: each pile&rsquo;s walk, with an operating deficit of '
+    +fmt(a.changeBeforeNonoperating.t2025)+' carried past zero by the endowment&rsquo;s non-operating return of '+plain(a.totalNonoperating.t2025)+'. '
+    +'Positions come from the snapshots. Reasons come from the statement between them.</p>'
+    +'</div></div>';
+}
+
+/* ---------- the "About the name Net Assets" expandable ---------- */
+function toggleNameNote(){
+  playClick();
+  nameNoteOpen=!nameNoteOpen;
+  var body=document.getElementById('nameNoteBody');
+  var chev=document.getElementById('nameNoteChev');
+  var btn=document.getElementById('nameNoteToggle');
+  if(body) body.hidden=!nameNoteOpen;
+  if(chev) chev.textContent=nameNoteOpen?'▾':'▸';
+  if(btn) btn.setAttribute('aria-expanded',String(nameNoteOpen));
+}
+function nameNoteHTML(){
+  var totalNA=D.sfp.totalNetAssets.y2025;
+  var millions=(totalNA/1000000).toFixed(1);
+  return '<div class="m6ohs-scope"><div class="m6ohs-name-note">'
+    +'<button id="nameNoteToggle" class="m6ohs-name-toggle" aria-expanded="'+String(nameNoteOpen)+'" aria-controls="nameNoteBody" onclick="toggleNameNote()">'
+    +'<span id="nameNoteChev" class="m6ohs-name-chev">'+(nameNoteOpen?'▾':'▸')+'</span>'
+    +'About the name Net Assets'
+    +'<span class="m6ohs-name-hint">a note on the name &mdash; click to expand</span>'
+    +'</button>'
+    +'<div id="nameNoteBody" class="m6ohs-name-body"'+(nameNoteOpen?'':' hidden')+'>'
+    +'<p>Back in Module 1 you built a tab and named it <strong>Reasons</strong> &mdash; the reasons the difference between what the shop had and what it owed had moved. You may also remember how long we went <em>without</em> naming the difference itself. It was just &ldquo;the difference,&rdquo; A &minus; L, for page after page &mdash; and that was deliberate. Here is why.</p>'
+    +'<p>The difference has now worn three names in this course. At the shop it earned the name <strong>Member&rsquo;s Capital</strong> &mdash; one member, one claim. At CVS it was called <strong>shareholders&rsquo; equity</strong> &mdash; many owners, tradeable claims. At OHS it is called <strong>Net Assets</strong> &mdash; because nobody owns the place at all, so no claim-word fits. Three names; the thing itself never changed once: recorded assets minus recorded liabilities, whatever that difference happens to be. The name is chosen to fit who the organization answers to &mdash; which is exactly why we would not let a name get ahead of the idea.</p>'
+    +'<p>And the Reasons stayed reasons everywhere. At the shop the piles tracked where the difference came from &mdash; Contributed, Generated, Withdrawn. At OHS the piles track promises instead &mdash; without donor restrictions, with donor restrictions. Different questions asked of the same difference; a tab named Reasons can hold either answer.</p>'
+    +'<p>One warning, carried over from Module 5: do not let the plain-sounding name fool you. &ldquo;Net Assets&rdquo; can sound like &ldquo;the assets, netted down&rdquo; &mdash; spendable money. It is not. At OHS it is $'+millions+' million, and most of it is buildings and fenced funds, not a bank balance. How much OHS can actually spend is an asset-side question with its own page (63-6).</p>'
+    +'</div></div></div>';
+}
+
+/* ---------- render ---------- */
+function render(){
+  renderBeats(step);
+  renderGrid(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function renderBeats(currentStep){
+  var a=D.activities;
+  var s=D.sfp;
+  var r=D.notes.restrictions;
+  var b=D.notes.boardDesignated;
+  var lulu2024=0;
+  r.purpose.forEach(function(row){ if(row.id==='luluMadison') lulu2024=row.y2024; });
+  var swigert=b.rows[0], building=b.rows[1];
+  var susanCarey=0;
+  b.rows.forEach(function(row){ if(row.id==='ocfSusanCarey') susanCarey=row.y2025; });
+  var ppe2025=0;
+  s.assets.forEach(function(row){ if(row.id==='ppe') ppe2025=row.y2025; });
+  var netCap2025=0;
+  s.netAssetsWithout.forEach(function(row){ if(row.id==='netCapital') netCap2025=row.y2025; });
+  var owed=ppe2025-netCap2025;
+  var texts=[
+    'The last page ended on the bottom rows of the Statement of Activities. Read them now for what they are: <strong>three walks, run side by side</strong>. The pile <em>without</em> donor restrictions fell &mdash; '+plain(a.netAssetsBeginning.wo)+' at the start of the year, '+plain(a.netAssetsEnd.wo)+' at the end, down '+plain(a.changeInNetAssets.wo)+': the year&rsquo;s operating deficit landed in this pile. The pile <em>with</em> donor restrictions rose &mdash; '+plain(a.netAssetsBeginning.w)+' to '+plain(a.netAssetsEnd.w)+', up '+plain(a.changeInNetAssets.w)+': new promises arrived faster than old ones were kept and released. Put the two together and total net assets rose '+plain(a.changeInNetAssets.t2025)+'. The walk ties each pile between the two balance sheets; the identity ties each sheet on its own date.',
+    'Open the pile with donor restrictions. Note 16 sorts its '+plain(r.total.y2025)+' into <strong>three kinds of promises</strong>. Restricted to a <em>purpose</em> &mdash; '+plain(r.totalPurpose.y2025)+': spend it only on the named work. Restricted in <em>time</em> &mdash; '+plain(r.totalTime.y2025)+': mostly promised money that has not arrived yet, like the bequests receivable. Held in <em>perpetuity</em> &mdash; '+plain(r.totalPerpetuity.y2025)+': endowment principal that may never be spent at all, only invested. And one row lets you watch a promise <em>finish</em>: the Lulu Madison Fund stood at '+plain(lulu2024)+' a year ago, with withdrawals capped through 2025. That time restriction expired in 2025, the fund was released in full for use in operations, and its row now reads zero.',
+    'Now back to the <em>without</em> pile, because one of its rows dresses like a restriction. <strong>Board-designated endowment: '+plain(b.total.y2025)+'</strong>. Note 18 names the pieces: the F. Swigert quasi-endowment fund ('+plain(swigert.y2025)+'), the building maintenance fund ('+plain(building.y2025)+'), a run of funds held at the Oregon Community Foundation &mdash; down to '+plain(susanCarey)+' for Susan Carey cat advancement. Yet every dollar of it sits in the without pile, and that placement is the lesson: a board designation is <strong>a choice wearing a restriction&rsquo;s clothes</strong>. The board voted these fences into place, and the board can vote them away. Donors&rsquo; restrictions it cannot touch &mdash; only the donor&rsquo;s terms, or time passing, can end those.',
+    'The biggest piece of the without pile is the one that spends worst. <strong>&ldquo;Net investment in capital assets&rdquo;: '+plain(netCap2025)+'</strong>. No donor restricted it, no board vote designated it &mdash; and still nobody can spend it, because it is the shelters and hospitals themselves: property and equipment of '+plain(ppe2025)+', less '+plain(owed)+' of equipment purchases still sitting in accounts payable. The row exists for the reader&rsquo;s honesty. Without it, '+plain(netCap2025)+' of buildings would hide inside a line called &ldquo;available,&rdquo; and &ldquo;available&rdquo; would mislead every reader who took it at its word.',
+    'One question left, and it is the module&rsquo;s sharpest. Below are the Net Assets sections of the two balance sheets &mdash; everything the snapshots alone can give a reader. You know from the Statement of Activities that the day-to-day operating work ran a deficit of '+plain(Math.abs(a.changeBeforeNonoperating.t2025))+' in 2025. Could a reader holding only the two snapshots know it too? <strong>Commit to an answer before you reveal.</strong>'
+  ];
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+texts[currentStep]+'</p></div>';
+}
+function renderGrid(currentStep){
+  var views=[walksView,restrictionsView,boardView,fenceView,inferView];
+  document.getElementById('mainGrid').innerHTML=views[currentStep]();
+}
+function renderTail(currentStep){
+  var h='';
+  if(currentStep===2) h+=nameNoteHTML();
+  if(currentStep===4 && answered){
+    h+=revealBox();
+    h+='<div class="insight-box">Two snapshots give positions. The statements between them give reasons &mdash; that is why there are four statements, not one.</div>';
+  }
+  document.getElementById('tail').innerHTML=h;
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep===0) h+='<button class="btn-back" onclick="playClick();nav(\'63-3-The-Statement-of-Activities.html\')">&larr; Back</button>';
+  else h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else if(answered) h+='<button class="btn-continue" onclick="playClick();nav(\'63-5-The-Statement-of-Functional-Expenses.html\')">The Statement of Functional Expenses &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function choose(ans){
+  if(answered) return;
+  answered=ans;
+  if(ans==='no') playSuccess(); else playClick();
+  render();
+}
+function advance(){
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Net Assets',def:'The difference between total assets and total liabilities (A &minus; L = Net Assets) &mdash; the name the difference wears at an organization nobody owns. On OHS&rsquo;s statements it is sorted by promises: without donor restrictions and with donor restrictions.'},
+  {term:'Donor restriction',def:'A condition a donor attaches to a gift &mdash; a purpose to serve, a time to wait, or perpetuity. The gift sits in the pile with donor restrictions until the condition is met; only a donor can create a restriction, and only the donor&rsquo;s terms, or time passing, can end one.'},
+  {term:'Board designation',def:'A fence the board votes into place around part of the pile without donor restrictions. It behaves like a restriction until the board votes it away &mdash; a choice wearing a restriction&rsquo;s clothes.'},
+  {term:'Endowment',def:'Funds held to be invested rather than spent, with an approved draw of the investment return moved to operations each year. Donor-restricted endowment principal is a promise held in perpetuity; a board-designated (&ldquo;quasi-&rdquo;) endowment is the board&rsquo;s own choice.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){ step=TOTAL_STEPS-1; answered='no'; render(); };
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

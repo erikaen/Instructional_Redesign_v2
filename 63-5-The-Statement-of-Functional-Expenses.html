@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Statement of Functional Expenses</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6ohs-scope {
+      --m6ohs-paper:#ffffff;
+      --m6ohs-ink:#263746;
+      --m6ohs-muted:#657583;
+      --m6ohs-primary:#155b86;
+      --m6ohs-rule:#c8d4dc;
+      --m6ohs-rule-strong:#708592;
+      --m6ohs-accent:#d5a528;
+      --m6ohs-soft:#f3f8fb;
+      --m6ohs-warm:#fff8df;
+      --m6ohs-success:#167447;
+      --m6ohs-error:#b43b3b;
+      --m6ohs-shadow:rgba(32,55,72,.09);
+    }
+    .m6ohs-scroll { min-width:0; overflow-x:auto; padding:2px 2px 10px; }
+    .m6ohs-card {
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      border:1px solid var(--m6ohs-rule);
+      border-radius:12px;
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m6ohs-fx-card { max-width:1160px; min-width:940px; margin:0 auto; padding:22px 24px; box-sizing:border-box; }
+    .m6ohs-kicker { margin:0 0 5px; color:var(--m6ohs-muted); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+    .m6ohs-doc-title { margin:0; color:var(--m6ohs-primary); font-size:20px; }
+    .m6ohs-subline { margin:3px 0 0; color:var(--m6ohs-muted); font-size:12px; font-style:italic; line-height:1.45; }
+    .m6ohs-value { text-align:right; white-space:nowrap; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m6ohs-fx-table { margin-top:16px; }
+    .m6ohs-fx-row, .m6ohs-fx-group {
+      display:grid;
+      grid-template-columns:minmax(150px,1.35fr) repeat(11,minmax(64px,1fr));
+      column-gap:6px;
+      align-items:baseline;
+      padding:2px 4px;
+    }
+    .m6ohs-fx-row { font-size:9.5px; }
+    .m6ohs-fx-group { padding-bottom:2px; color:var(--m6ohs-primary); font-size:9px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+    .m6ohs-fx-group-cell { padding-bottom:3px; border-bottom:2px solid var(--m6ohs-rule-strong); text-align:center; }
+    .m6ohs-fx-head { align-items:end; padding-bottom:6px; border-bottom:1px solid var(--m6ohs-rule); color:var(--m6ohs-primary); font-size:8px; font-weight:700; line-height:1.25; }
+    .m6ohs-fx-head .m6ohs-fx-cell { white-space:normal; }
+    .m6ohs-fx-label { color:var(--m6ohs-ink); line-height:1.3; }
+    .m6ohs-fx-cell { min-width:0; }
+    .m6ohs-fx-totalcol { font-weight:700; }
+    .m6ohs-fx-totals { margin-top:4px; padding-top:6px; border-top:3px double var(--m6ohs-rule-strong); color:var(--m6ohs-primary); font-weight:800; }
+    .m6ohs-fx-totals .m6ohs-fx-cell, .m6ohs-fx-totals .m6ohs-fx-label { font-weight:800; color:var(--m6ohs-primary); }
+    .m6ohs-fx-hl { border-radius:3px; background:var(--m6ohs-warm); box-shadow:inset 2px 0 0 var(--m6ohs-accent); color:var(--m6ohs-primary); font-weight:700; }
+    .m6ohs-fx-row.m6ohs-fx-hl-row { border-radius:4px; background:var(--m6ohs-warm); box-shadow:inset 3px 0 0 var(--m6ohs-accent); }
+    .m6ohs-fx-row.m6ohs-fx-hl-row .m6ohs-fx-label, .m6ohs-fx-row.m6ohs-fx-hl-row .m6ohs-fx-cell { color:var(--m6ohs-primary); font-weight:700; }
+    .m6ohs-fx-foot { margin:12px 4px 0; color:var(--m6ohs-muted); font-size:10px; font-style:italic; line-height:1.45; }
+    .m6ohs-task-card {
+      max-width:860px;
+      margin:14px auto 0;
+      padding:20px 22px;
+      box-sizing:border-box;
+      border:2px dashed var(--m6ohs-accent);
+      border-radius:12px;
+      background:var(--m6ohs-warm);
+      color:var(--m6ohs-ink);
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m6ohs-task-card .m6ohs-kicker { text-align:center; }
+    .m6ohs-task-q { margin:0 0 10px; color:var(--m6ohs-primary); font-size:14px; font-weight:800; line-height:1.4; }
+    .m6ohs-task-part + .m6ohs-task-part { margin-top:16px; padding-top:15px; border-top:1px solid var(--m6ohs-rule); }
+    .m6ohs-opts { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:8px; }
+    .m6ohs-opt {
+      display:block;
+      width:100%;
+      padding:9px 11px;
+      border:1px solid var(--m6ohs-rule);
+      border-radius:8px;
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      font:600 12.5px/1.3 "JetBrains Mono",monospace;
+      text-align:center;
+      cursor:pointer;
+    }
+    .m6ohs-opt:hover, .m6ohs-opt:focus-visible { outline:2px solid var(--m6ohs-accent); outline-offset:1px; }
+    .m6ohs-opt.m6ohs-opt-wrong { border-color:var(--m6ohs-error); color:var(--m6ohs-error); }
+    .m6ohs-opt.m6ohs-opt-right { border-color:var(--m6ohs-success); color:var(--m6ohs-success); font-weight:800; }
+    .m6ohs-opt.m6ohs-opt-locked { cursor:default; opacity:.55; }
+    .m6ohs-opt.m6ohs-opt-right.m6ohs-opt-locked { opacity:1; }
+    .m6ohs-feedback { margin:10px 0 0; font-size:12px; line-height:1.5; }
+    .m6ohs-feedback.m6ohs-fb-ok { color:var(--m6ohs-success); font-weight:600; }
+    .m6ohs-feedback.m6ohs-fb-err { color:var(--m6ohs-error); }
+    .m6ohs-task-done {
+      margin:16px 0 0;
+      padding-top:14px;
+      border-top:1px solid var(--m6ohs-rule-strong);
+      color:var(--m6ohs-primary);
+      font:700 12px/1.6 "JetBrains Mono",monospace;
+      text-align:center;
+    }
+    .m6ohs-task-wait { margin:16px 0 0; color:var(--m6ohs-muted); font-size:11px; font-style:italic; text-align:center; }
+    @media (max-width:700px) {
+      .m6ohs-fx-card { min-width:900px; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6ohs-scope {
+        --m6ohs-paper:#26242e;
+        --m6ohs-ink:#e8edf1;
+        --m6ohs-muted:#b4c0c8;
+        --m6ohs-primary:#7dc8f3;
+        --m6ohs-rule:#4b5361;
+        --m6ohs-rule-strong:#8797a2;
+        --m6ohs-accent:#d8ad3e;
+        --m6ohs-soft:#25313a;
+        --m6ohs-warm:#332f20;
+        --m6ohs-success:#70d6a3;
+        --m6ohs-error:#ff8f8f;
+        --m6ohs-shadow:rgba(0,0,0,.28);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Statement of Functional Expenses</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~6 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Statement of Functional Expenses</div>
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-fy2025-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c) return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playNope(){ tone(196,0.18,'sine',0.05); }
+function nav(url){ window.location.href = url; }
+
+var step=0;
+var TOTAL_STEPS=5;
+var t1Pick=-1, t2Pick=-1;
+var t1Correct=false, t2Correct=false;
+
+function escapeHTML(value){ return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function fmt(v){ if(v===0) return '&mdash;'; var a=Math.abs(v).toLocaleString('en-US'); return v<0?'('+a+')':a; }
+function fx(){ return window.OHS_FY2025.functional; }
+
+var COLKEYS=['p0','p1','p2','p3','p4','tp','mg','fr','ts','t25','t24'];
+var TOTALCOLS={tp:true,ts:true,t25:true,t24:true};
+function headerLabels(){
+  var f=fx();
+  return f.programColumns.concat(['Total Program Services',f.supportingColumns[0],f.supportingColumns[1],'Total Supporting Services','Total 2025','Total 2024']);
+}
+function rowValues(row){
+  return row.cells.concat([row.totalProgram,row.mg,row.fr,row.totalSupporting,row.t2025,row.t2024]);
+}
+
+// opts: {rows:[ids], cols:[keys] (header + totals cells), totCols:[keys] (totals cells only), grand:bool}
+function matrixView(opts){
+  opts=opts||{};
+  var f=fx();
+  var hlRows={},hlCols={},hlTot={};
+  (opts.rows||[]).forEach(function(id){ hlRows[id]=true; });
+  (opts.cols||[]).forEach(function(k){ hlCols[k]=true; hlTot[k]=true; });
+  (opts.totCols||[]).forEach(function(k){ hlTot[k]=true; });
+  if(opts.grand) hlTot.t25=true;
+
+  var h='<div class="m6ohs-scope"><div class="m6ohs-scroll"><div class="m6ohs-card m6ohs-fx-card">';
+  h+='<p class="m6ohs-kicker">Oregon Humane Society &middot; from the FY2025 report</p>';
+  h+='<h2 class="m6ohs-doc-title">Statement of Functional Expenses</h2>';
+  h+='<p class="m6ohs-subline">The nonprofit&rsquo;s own statement: expenses broken down by kind and by function.</p>';
+  h+='<p class="m6ohs-subline">year ended December 31, 2025 &middot; comparative totals for 2024 &middot; in dollars</p>';
+  h+='<div class="m6ohs-fx-table">';
+  h+='<div class="m6ohs-fx-group"><div></div>'
+    +'<div class="m6ohs-fx-group-cell" style="grid-column:2 / span 6">Program Services</div>'
+    +'<div class="m6ohs-fx-group-cell" style="grid-column:8 / span 3">Supporting Services</div>'
+    +'<div class="m6ohs-fx-group-cell" style="grid-column:11 / span 2">Total Expenses</div></div>';
+  var labels=headerLabels();
+  h+='<div class="m6ohs-fx-row m6ohs-fx-head"><div></div>';
+  for(var c=0;c<labels.length;c++){
+    var key=COLKEYS[c];
+    h+='<div class="m6ohs-fx-cell m6ohs-value'+(hlCols[key]?' m6ohs-fx-hl':'')+'">'+escapeHTML(labels[c])+'</div>';
+  }
+  h+='</div>';
+  for(var r=0;r<f.rows.length;r++){
+    var row=f.rows[r],vals=rowValues(row);
+    h+='<div class="m6ohs-fx-row'+(hlRows[row.id]?' m6ohs-fx-hl-row':'')+'"><div class="m6ohs-fx-label">'+escapeHTML(row.label)+'</div>';
+    for(c=0;c<vals.length;c++) h+='<div class="m6ohs-fx-cell m6ohs-value'+(TOTALCOLS[COLKEYS[c]]?' m6ohs-fx-totalcol':'')+'">'+fmt(vals[c])+'</div>';
+    h+='</div>';
+  }
+  var tvals=rowValues(Object.assign({cells:fx().totalsRow.cells},fx().totalsRow));
+  h+='<div class="m6ohs-fx-row m6ohs-fx-totals"><div class="m6ohs-fx-label">Total expenses</div>';
+  for(c=0;c<tvals.length;c++) h+='<div class="m6ohs-fx-cell m6ohs-value'+(hlTot[COLKEYS[c]]?' m6ohs-fx-hl':'')+'">'+fmt(tvals[c])+'</div>';
+  h+='</div></div>';
+  h+='<p class="m6ohs-fx-foot">Every expense lands in exactly one row and exactly one column. Rows down and columns across foot to the same total: '+fmt(f.totalsRow.t2025)+'.</p>';
+  h+='</div></div></div>';
+  return h;
+}
+
+var TASK1=[
+  {v:31657275,fb:'Four programs, not five &mdash; Humane Law Enforcement and Rescue (1,148,645) is a program column too.'},
+  {v:32805920,ok:true,fb:'Right: 18,698,817 + 7,970,882 + 2,726,093 + 2,261,483 + 1,148,645 = 32,805,920.'},
+  {v:36726986,fb:'That adds Management and General (3,921,066) to the five programs &mdash; but Management and General is a supporting service, not a program.'},
+  {v:41026148,fb:'That is total expenses &mdash; every column, programs and supporting services alike. The program total stops before Management and General and Fundraising.'}
+];
+var TASK2=[
+  {t:'20%',fb:'That is the supporting-services share: 8,220,228 &divide; 41,026,148 = 20.0%. The program ratio is the other piece of the same total.'},
+  {t:'55%',fb:'That is the Salaries row as a share of total expenses &mdash; a by-kind number. The program ratio reads the by-function columns.'},
+  {t:'80%',ok:true,fb:'Right: 32,805,920 &divide; 41,026,148 = 80.0%. Program services are 80% of total expenses &mdash; the figure the donor sites quote.'},
+  {t:'89%',fb:'That divides by programs plus Management and General only (36,726,986). Total expenses include Fundraising (4,299,162) too.'}
+];
+
+function optButton(part,index,text,pick,options,correctDone){
+  var option=options[index];
+  var cls='m6ohs-opt';
+  if(index===pick) cls+=option.ok?' m6ohs-opt-right':' m6ohs-opt-wrong';
+  if(correctDone) cls+=' m6ohs-opt-locked';
+  var attrs=correctDone?' disabled':' onclick="pickOption('+part+','+index+')"';
+  return '<button type="button" class="'+cls+'"'+attrs+'>'+text+'</button>';
+}
+function taskPart(part,question,options,pick,correctDone,texts){
+  var h='<div class="m6ohs-task-part"><p class="m6ohs-task-q">'+question+'</p><div class="m6ohs-opts">';
+  for(var i=0;i<options.length;i++) h+=optButton(part,i,texts[i],pick,options,correctDone);
+  h+='</div>';
+  if(pick>=0) h+='<div class="m6ohs-feedback '+(options[pick].ok?'m6ohs-fb-ok':'m6ohs-fb-err')+'" aria-live="polite">'+options[pick].fb+'</div>';
+  return h+'</div>';
+}
+function taskCard(){
+  var h='<div class="m6ohs-scope"><div class="m6ohs-task-card"><p class="m6ohs-kicker">The task &middot; derive the program ratio</p>';
+  h+=taskPart(1,'1. Total program services &mdash; add the five program column totals. Which is it?',TASK1,t1Pick,t1Correct,TASK1.map(function(o){ return fmt(o.v); }));
+  if(t1Correct){
+    h+=taskPart(2,'2. The program ratio &mdash; program services as a share of total expenses. Which is it?',TASK2,t2Pick,t2Correct,TASK2.map(function(o){ return o.t; }));
+  }
+  if(t1Correct&&t2Correct){
+    h+='<div class="m6ohs-task-done">32,805,920 program + 8,220,228 supporting = 41,026,148<br>32,805,920 &divide; 41,026,148 = 80.0%</div>';
+  } else {
+    h+='<div class="m6ohs-task-wait">Next unlocks when both answers are right. The totals row below has everything you need.</div>';
+  }
+  return h+'</div></div>';
+}
+function pickOption(part,index){
+  if(part===1){
+    if(t1Correct) return;
+    t1Pick=index;
+    if(TASK1[index].ok){ t1Correct=true; playSuccess(); } else { playNope(); }
+  } else {
+    if(t2Correct) return;
+    t2Pick=index;
+    if(TASK2[index].ok){ t2Correct=true; playSuccess(); } else { playNope(); }
+  }
+  render();
+}
+
+function renderBeats(currentStep){
+  var texts=[
+    'A statement neither CVS nor the shop ever produced. The Statement of Activities reported the year&rsquo;s operating expenses as two lines &mdash; program services 32,805,920 and supporting services 8,220,228. This statement takes the same <strong>41,026,148</strong> and breaks it down two ways <em>at once</em>: <strong>by kind</strong>, down the rows &mdash; salaries, depreciation, feed &mdash; and <strong>by function</strong>, across the columns &mdash; five named programs, then Management and General and Fundraising. Every expense lands in exactly one row and exactly one column, and both breakdowns foot to the same 41,026,148. (2024&rsquo;s total, 37,016,407, prints beside it &mdash; both years, as everywhere in this report.) You sorted the shop&rsquo;s expenses once to build an income statement; this is the sorting lesson, squared.',
+    'Read the rows first &mdash; the by-kind sort. <strong>Salaries, 22,565,764</strong> &mdash; more than half of the whole statement, 55% of total expenses: care is people. Payroll taxes and benefits add 5,442,586 more. <strong>Depreciation, 2,588,332</strong> &mdash; given, as always: asserted on the statement, never calculated here &mdash; and no cash was paid for it this year. An expense can be incurred by using an existing asset, or by taking on an obligation &mdash; not only by paying cash; depreciation is the standing proof. Then the rows only an animal shelter would carry: <strong>Feed, shelter, and program supplies, 1,489,561</strong>, and <strong>Surgical, medications, and lab, 1,475,417</strong>.',
+    'Now the columns &mdash; the by-function sort. Five named programs: <strong>Sheltering and Adoptions, 18,698,817</strong> &mdash; by far the largest; <strong>Community Veterinary Services, 7,970,882</strong>; <strong>Community and Education Services, 2,726,093</strong>; <strong>Behavior Consultation and Training, 2,261,483</strong>; <strong>Humane Law Enforcement and Rescue, 1,148,645</strong>. Then two supporting-services columns: <strong>Management and General, 3,921,066</strong> and <strong>Fundraising, 4,299,162</strong> &mdash; the work of running the organization and raising its support, tied to no single program. Program or supporting: that split is the next step&rsquo;s question.',
+    'Your turn. Donor-rating sites quote one figure from this statement above all others: the <strong>program ratio</strong> &mdash; program services as a share of total expenses. Derive it from the matrix: first total the five program columns, then set that total against the whole statement. The highlighted totals row has every number you need.',
+    'One honest caveat closes the page. The row totals and the grand total are firm. The <em>spread</em> across the columns is an <strong>allocation</strong>: note 3o discloses the methods &mdash; depreciation is allocated by square footage; salaries, by estimates of time spent. A different reasonable method would shade the columns &mdash; and the 80% ratio &mdash; differently. The sort is lawful, disclosed, and audited; it is also chosen. Representation, again: where the rules leave room, someone chose, and the notes say how.'
+  ];
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+texts[currentStep]+'</p></div>';
+}
+function renderGrid(currentStep){
+  var h='';
+  if(currentStep===0) h=matrixView({grand:true});
+  else if(currentStep===1) h=matrixView({rows:['salaries','depreciation','feed','surgical']});
+  else if(currentStep===2) h=matrixView({cols:['p0','p1','p2','p3','p4','mg','fr']});
+  else if(currentStep===3) h=taskCard()+matrixView({totCols:['p0','p1','p2','p3','p4','mg','fr','t25']});
+  else h=matrixView({rows:['depreciation','salaries']});
+  document.getElementById('mainGrid').innerHTML=h;
+}
+function renderTail(currentStep){
+  document.getElementById('tail').innerHTML=currentStep===4
+    ? '<div class="insight-box">Two sorts, one total: 32,805,920 program + 8,220,228 supporting = 41,026,148, tied row-wise and column-wise &mdash; and the split across the columns is a disclosed, chosen allocation.</div>'
+    : '';
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep===0) h+='<button class="btn-back" onclick="playClick();nav(\'63-4-The-Net-Assets-Question.html\')">&larr; Back</button>';
+  else h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep===3){
+    if(t1Correct&&t2Correct) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  } else if(currentStep<TOTAL_STEPS-1){
+    h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  } else {
+    h+='<button class="btn-continue" onclick="playClick();nav(\'63-6-The-Full-Architecture.html\')">How Much Can OHS Spend? &rarr;</button>';
+  }
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function render(){ renderBeats(step); renderGrid(step); renderTail(step); renderControls(step); if(window.lucide) lucide.createIcons(); }
+function advance(){ playClick(); step=Math.min(step+1,TOTAL_STEPS-1); render(); window.scrollTo(0,0); }
+function back(){ playClick(); step=Math.max(step-1,0); render(); window.scrollTo(0,0); }
+
+var glossaryTerms=[
+  {term:'Functional expenses',def:'Expenses broken down by kind and by function &mdash; the same total sorted two ways at once on one statement.'},
+  {term:'Program services',def:'Expenses incurred carrying out the mission&rsquo;s programs &mdash; at OHS, five named columns from Sheltering and Adoptions to Humane Law Enforcement and Rescue.'},
+  {term:'Supporting services',def:'Expenses of running the organization and raising its support rather than of any one program: Management and General, and Fundraising.'},
+  {term:'Allocation',def:'The assignment of a shared expense across functions by a chosen, disclosed method &mdash; depreciation by square footage, salaries by estimates of time spent (note 3o).'}
+];
+function openGlossary(){ document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){ return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>'; }).join(''); document.getElementById('glossaryOverlay').classList.add('open'); }
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') closeGlossary(); });
+window.devFill=function(){ step=TOTAL_STEPS-1; t1Correct=true; t2Correct=true; t1Pick=1; t2Pick=2; render(); };
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

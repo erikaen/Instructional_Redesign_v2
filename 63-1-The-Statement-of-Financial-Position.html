@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Statement of Financial Position</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6ohs-scope {
+      --m6ohs-paper:#ffffff;
+      --m6ohs-ink:#263746;
+      --m6ohs-muted:#657583;
+      --m6ohs-primary:#155b86;
+      --m6ohs-rule:#c8d4dc;
+      --m6ohs-rule-strong:#708592;
+      --m6ohs-accent:#d5a528;
+      --m6ohs-soft:#f3f8fb;
+      --m6ohs-warm:#fff8df;
+      --m6ohs-shadow:rgba(32,55,72,.09);
+    }
+    .m6sfp-doc-wrap { overflow-x:auto; padding:2px 2px 8px; }
+    .m6sfp-doc-card {
+      max-width:820px;
+      min-width:610px;
+      margin:0 auto;
+      padding:24px;
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      border:1px solid var(--m6ohs-rule);
+      border-radius:12px;
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m6sfp-kicker {
+      margin:0 0 5px;
+      color:var(--m6ohs-muted);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .m6sfp-doc-title { margin:0; color:var(--m6ohs-primary); font-size:20px; }
+    .m6sfp-subline { margin:3px 0 0; color:var(--m6ohs-muted); font-size:12px; font-style:italic; }
+    .m6sfp-table { margin-top:18px; font-size:13px; }
+    .m6sfp-row {
+      display:grid;
+      grid-template-columns:minmax(300px,1fr) 7.5rem 7.5rem;
+      column-gap:10px;
+      align-items:baseline;
+      padding:3px 4px;
+      border-radius:4px;
+    }
+    .m6sfp-row-head { border-bottom:1px solid var(--m6ohs-rule); color:var(--m6ohs-primary); font-weight:700; border-radius:0; }
+    .m6sfp-value { text-align:right; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .m6sfp-section { margin-top:12px; padding:2px 4px 0; color:var(--m6ohs-primary); font-weight:800; }
+    .m6sfp-sublabel { padding:3px 4px 0; color:var(--m6ohs-muted); font-size:12px; font-style:italic; }
+    .m6sfp-indent { padding-left:.75rem; }
+    .m6sfp-subtotal { font-weight:600; }
+    .m6sfp-subtotal > div:first-child { padding-left:.75rem; }
+    .m6sfp-total { margin-top:4px; padding-top:6px; border-top:1px solid var(--m6ohs-rule-strong); color:var(--m6ohs-primary); font-weight:800; border-radius:0 0 4px 4px; }
+    .m6sfp-hl { background:var(--m6ohs-warm); box-shadow:inset 2px 0 0 var(--m6ohs-accent); }
+    .m6sfp-identity {
+      margin-top:18px;
+      padding:13px 15px;
+      border:1px solid var(--m6ohs-accent);
+      border-radius:9px;
+      background:var(--m6ohs-warm);
+      color:var(--m6ohs-ink);
+    }
+    .m6sfp-identity-title { margin:0 0 6px; font-weight:800; }
+    .m6sfp-identity-line { margin:3px 0; font-family:"JetBrains Mono",monospace; font-size:12px; }
+    .m6sfp-identity-foot { margin:7px 0 0; color:var(--m6ohs-muted); font-family:"JetBrains Mono",monospace; font-size:11px; font-style:italic; }
+    .m6sfp-not-card {
+      max-width:820px;
+      margin:0 auto;
+      padding:24px;
+      border:2px solid var(--m6ohs-accent);
+      border-radius:12px;
+      background:var(--m6ohs-warm);
+      color:var(--m6ohs-ink);
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m6sfp-not-kicker { color:var(--m6ohs-accent); }
+    .m6sfp-not-title { margin:2px 0 17px; color:var(--m6ohs-primary); font-size:20px; }
+    .m6sfp-not-item { margin:0 0 14px; }
+    .m6sfp-not-item-title { margin:0 0 3px; color:var(--m6ohs-primary); font-size:14px; font-weight:800; }
+    .m6sfp-not-item p { margin:0; font-size:14px; line-height:1.58; }
+    .m6sfp-not-close { margin:18px 0 0; color:var(--m6ohs-muted); font-size:14px; font-style:italic; line-height:1.58; }
+    @media (prefers-color-scheme:dark) {
+      .m6ohs-scope {
+        --m6ohs-paper:#26242e;
+        --m6ohs-ink:#e8edf1;
+        --m6ohs-muted:#b4c0c8;
+        --m6ohs-primary:#7dc8f3;
+        --m6ohs-rule:#4b5361;
+        --m6ohs-rule-strong:#8797a2;
+        --m6ohs-accent:#d8ad3e;
+        --m6ohs-soft:#25313a;
+        --m6ohs-warm:#332f20;
+        --m6ohs-shadow:rgba(0,0,0,.28);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Statement of Financial Position</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~7 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart this page" aria-label="Restart this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Statement of Financial Position</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-fy2025-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nav(url){ window.location.href = url; }
+
+var step=0;
+var TOTAL_STEPS=6;
+
+var SFP=window.OHS_FY2025.sfp;
+var VOL=window.OHS_FY2025.notes.inKind.volunteers;
+
+function escapeHTML(value){
+  return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function fmt(v){
+  if(v===0) return '&mdash;';
+  var a=Math.abs(v).toLocaleString('en-US');
+  return v<0 ? '('+a+')' : a;
+}
+function n(v){ return Math.abs(v).toLocaleString('en-US'); }
+function money(v){ return '$'+n(v); }
+function sfpItem(group,id){
+  for(var i=0;i<group.length;i++) if(group[i].id===id) return group[i];
+  return null;
+}
+function assetLine(id){ return sfpItem(SFP.assets,id); }
+function pileLine(id){ return sfpItem(SFP.netAssetsWithout,id); }
+
+function rowHTML(label,y2025,y2024,cls,hl){
+  var c='m6sfp-row'+(cls?' '+cls:'')+(hl?' m6sfp-hl':'');
+  return '<div class="'+c+'"><div>'+label+'</div>'
+    +'<div class="m6sfp-value">'+fmt(y2025)+'</div>'
+    +'<div class="m6sfp-value">'+fmt(y2024)+'</div></div>';
+}
+function lineRow(item,hl,indent){
+  var lbl=(indent?'<span class="m6sfp-indent">':'')+escapeHTML(item.label)+(indent?'</span>':'');
+  return rowHTML(lbl,item.y2025,item.y2024,'',hl&&hl.indexOf(item.id)>=0);
+}
+function docRows(hl){
+  hl=hl||[];
+  var h='';
+  h+='<div class="m6sfp-section'+(hl.indexOf('secAssets')>=0?' m6sfp-hl':'')+'">Assets</div>';
+  SFP.assets.forEach(function(item){ h+=lineRow(item,hl,false); });
+  h+=rowHTML('Total assets',SFP.totalAssets.y2025,SFP.totalAssets.y2024,'m6sfp-total',hl.indexOf('totalAssets')>=0);
+  h+='<div class="m6sfp-section'+(hl.indexOf('secLiabilities')>=0?' m6sfp-hl':'')+'">Liabilities</div>';
+  SFP.liabilities.forEach(function(item){ h+=lineRow(item,hl,false); });
+  h+=rowHTML('Total liabilities',SFP.totalLiabilities.y2025,SFP.totalLiabilities.y2024,'m6sfp-total',hl.indexOf('totalLiabilities')>=0);
+  h+='<div class="m6sfp-section'+(hl.indexOf('secNetAssets')>=0?' m6sfp-hl':'')+'">Net assets</div>';
+  h+='<div class="m6sfp-sublabel">Without donor restrictions:</div>';
+  SFP.netAssetsWithout.forEach(function(item){ h+=lineRow(item,hl,true); });
+  h+=rowHTML('Total without donor restrictions',SFP.totalWithout.y2025,SFP.totalWithout.y2024,'m6sfp-subtotal',hl.indexOf('totalWithout')>=0);
+  h+=rowHTML('With donor restrictions',SFP.withRestrictions.y2025,SFP.withRestrictions.y2024,'',hl.indexOf('withRestrictions')>=0);
+  h+=rowHTML('Total net assets',SFP.totalNetAssets.y2025,SFP.totalNetAssets.y2024,'m6sfp-total',hl.indexOf('totalNetAssets')>=0);
+  return h;
+}
+function identityCheck(){
+  return '<div class="m6sfp-identity"><p class="m6sfp-identity-title">Identity check at both dates</p>'
+    +'<p class="m6sfp-identity-line">2025: '+money(SFP.totalAssets.y2025)+' &minus; '+money(SFP.totalLiabilities.y2025)+' = '+money(SFP.totalNetAssets.y2025)+' &#10003;</p>'
+    +'<p class="m6sfp-identity-line">2024: '+money(SFP.totalAssets.y2024)+' &minus; '+money(SFP.totalLiabilities.y2024)+' = '+money(SFP.totalNetAssets.y2024)+' &#10003;</p>'
+    +'<p class="m6sfp-identity-foot">A &minus; L = Net Assets &middot; the identity ties the sheet at both dates</p></div>';
+}
+function docCard(hl,showIdentity){
+  return '<div class="m6ohs-scope"><div class="m6sfp-doc-wrap"><div class="m6sfp-doc-card">'
+    +'<p class="m6sfp-kicker">Oregon Humane Society &middot; from the audited statements &middot; page 3</p>'
+    +'<h2 class="m6sfp-doc-title">Statement of Financial Position</h2>'
+    +'<p class="m6sfp-subline">December 31, 2025 and 2024</p>'
+    +'<p class="m6sfp-subline">Exact dollars &mdash; no rounding, no &ldquo;in millions&rdquo;</p>'
+    +'<div class="m6sfp-table"><div class="m6sfp-row m6sfp-row-head"><div></div><div class="m6sfp-value">2025</div><div class="m6sfp-value">2024</div></div>'
+    +docRows(hl)+'</div>'+(showIdentity?identityCheck():'')+'</div></div></div>';
+}
+function whatsNotCard(){
+  return '<div class="m6ohs-scope"><div class="m6sfp-not-card">'
+    +'<p class="m6sfp-kicker m6sfp-not-kicker">What&rsquo;s NOT on this statement</p>'
+    +'<h2 class="m6sfp-not-title">Recorded &ne; everything that is real at OHS</h2>'
+    +'<div class="m6sfp-not-item"><h3 class="m6sfp-not-item-title">The volunteers &mdash; '+n(VOL.hours.y2025)+' hours, roughly '+n(VOL.fteEquivalent.y2025)+' full-time equivalents</h3>'
+    +'<p>In 2025, volunteers gave OHS '+n(VOL.hours.y2025)+' hours of work &mdash; the labor of roughly '+n(VOL.fteEquivalent.y2025)+' full-time employees &mdash; and no line on any statement carries a dollar of it. Note 20 gives the reason: &ldquo;no reasonable method of valuation available,&rdquo; and OHS does not control the time, place, and manner of the service closely enough to record it on a consistent basis. The work is real and essential. Recognition still refuses, because recognition demands an effect it can reliably price &mdash; the same refusal the prework practiced.</p></div>'
+    +'<div class="m6sfp-not-item"><h3 class="m6sfp-not-item-title">Money at the Oregon Community Foundation &mdash; real, and outside the boundary</h3>'
+    +'<p>Note 15: donors have established funds at the Oregon Community Foundation naming OHS as beneficiary. The money is real, invested, and intended for OHS&rsquo;s benefit &mdash; but OCF retains <em>variance power</em>, the final say over those funds. Because the final say sits with OCF, the funds sit outside the entity boundary, and outside every column on this page. The boundary decides what the statement can carry.</p></div>'
+    +'<div class="m6sfp-not-item"><h3 class="m6sfp-not-item-title">A street-improvement commitment &mdash; real, unestimable, unrecognized</h3>'
+    +'<p>Note 22: OHS has committed to share the cost of local improvement district work near its property. The commitment is real, but no reliable estimate of the amount exists yet &mdash; so no liability row carries it. The same refusal as the volunteers, from the other side of the sheet.</p></div>'
+    +'<p class="m6sfp-not-close">None of these are oversights. The recognition convention records what has a knowable, priceable effect inside the entity boundary, and the notes disclose the rest. A careful reader takes both: the columns, and the edges the columns admit to.</p>'
+    +'</div></div>';
+}
+
+function render(){
+  renderBeats(step);
+  renderGrid(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='One document, one column of accounts, two dates. This is the Oregon Humane Society&rsquo;s Statement of Financial Position exactly as the auditors present it &mdash; December 31, 2025 beside December 31, 2024, so a reader sees both ends of the year at once. The title is the only unfamiliar thing on the page: <strong>a Statement of Financial Position IS a balance sheet</strong>. The formal definitions, for the record: <strong>Assets</strong> &mdash; economic benefits owned or controlled by OHS. <strong>Liabilities</strong> &mdash; obligations to sacrifice economic benefits in the future. <strong>Net assets</strong> &mdash; the difference: A &minus; L = Net Assets. The identity ties the sheet at both dates &mdash; '
+      +n(SFP.totalAssets.y2025)+' &minus; '+n(SFP.totalLiabilities.y2025)+' = '+n(SFP.totalNetAssets.y2025)
+      +' in 2025, and 2024 ties the same way. &ldquo;Net assets&rdquo; is the difference the prework has computed since its first module, wearing its earned name.';
+  } else if(currentStep===1){
+    var bequests=assetLine('bequestsRec'), noteRec=assetLine('noteRec');
+    text='Read down the asset column, label by label: cash first, then a run of receivables &mdash; amounts other parties owe OHS. Two repay a pause. <strong>Bequests receivable, '+n(bequests.y2025)+'</strong>: gifts to OHS named in donors&rsquo; wills &mdash; promised, not yet delivered. And <strong>Note receivable, '+n(noteRec.y2025)+'</strong>, a promise with a name attached: a note that pays OHS $6,000 a month through 2050. Neither line is money in hand. Both are promises, <strong>priced and discounted</strong> &mdash; recorded at what the stream of future payments is worth today, and recorded at all only because each promise is definite enough to price.';
+  } else if(currentStep===2){
+    var inv=assetLine('investments'), ppe=assetLine('ppe'), cash=assetLine('cash');
+    var pct=Math.round((inv.y2025+ppe.y2025)/SFP.totalAssets.y2025*100);
+    var cashCents=Math.round(cash.y2025/SFP.totalAssets.y2025*100);
+    text='Two lines carry most of the sheet. <strong>Investments, '+n(inv.y2025)+'</strong>, and <strong>Property and equipment, '+n(ppe.y2025)+'</strong> &mdash; together about '+pct+'% of the '+n(SFP.totalAssets.y2025)+' total. <strong>Most of OHS is not money.</strong> It is shelter buildings, surgery suites, land, and an investment portfolio. Cash is '+n(cash.y2025)+' &mdash; about '+cashCents+' cents of every recorded asset dollar. Hold onto that proportion; it returns when the walk asks what OHS can actually spend.';
+  } else if(currentStep===3){
+    var liabCents=Math.round(SFP.totalLiabilities.y2025/SFP.totalAssets.y2025*100);
+    text='Now the short side. <strong>Total liabilities: '+n(SFP.totalLiabilities.y2025)+'</strong> &mdash; against '+n(SFP.totalAssets.y2025)+' of recorded assets, roughly '+liabCents+' cents of recorded obligation per recorded dollar. The labels are ordinary: bills and payroll not yet paid, fees received for services not yet delivered, payments promised under gift annuity agreements, compensation deferred. The list is short because most of what OHS owes the world is <strong>promises of care, not payments</strong> &mdash; commitments of mission, not obligations already incurred from past transactions. Only the second kind qualifies as a liability, and at OHS those claims are small.';
+  } else if(currentStep===4){
+    var availOps=pileLine('availOps'), boardEndow=pileLine('boardEndow'), netCap=pileLine('netCapital');
+    text='The bottom section is the one the prework built you to read: net assets, in rows &mdash; <strong>piles, with names that say why</strong>. <strong>'+escapeHTML(availOps.label)+', '+n(availOps.y2025)+'</strong>: no fence at all. <strong>'+escapeHTML(boardEndow.label)+', '+n(boardEndow.y2025)+'</strong>: the board&rsquo;s own stated intent &mdash; a fence the board built, which the board can also move. <strong>'+escapeHTML(netCap.label)+', '+n(netCap.y2025)+'</strong>: the buildings and equipment, fenced on the page so no reader mistakes them for spendable money. Those three sum to net assets <em>without</em> donor restrictions, '+n(SFP.totalWithout.y2025)+'. Then the line the board cannot touch: <strong>With donor restrictions, '+n(SFP.withRestrictions.y2025)+'</strong> &mdash; gifts whose donor-set conditions are not yet met. Only donors create binding restrictions; a board designation is intent, not restriction. This is the Reasons tab, grown up.';
+  } else if(currentStep===5){
+    text='One more reading skill before leaving the sheet: noticing what is <em>not</em> here. Three things about OHS are real, documented in the notes &mdash; and absent from every column.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div>';
+}
+function renderGrid(currentStep){
+  var html='';
+  if(currentStep===0) html=docCard(null,true);
+  else if(currentStep===1) html=docCard(['bequestsRec','noteRec'],false);
+  else if(currentStep===2) html=docCard(['investments','ppe'],false);
+  else if(currentStep===3) html=docCard(['secLiabilities','ap','payroll','deferredRev','splitInterest','deferredComp','totalLiabilities'],false);
+  else if(currentStep===4) html=docCard(['secNetAssets','availOps','boardEndow','netCapital','totalWithout','withRestrictions','totalNetAssets'],false);
+  else html=whatsNotCard();
+  document.getElementById('mainGrid').innerHTML=html;
+}
+function renderTail(currentStep){
+  document.getElementById('tail').innerHTML=currentStep===TOTAL_STEPS-1
+    ? '<div class="insight-box"><strong>One statement, fully read.</strong> The identity ties the sheet at both dates; the labels give the reasons; the notes carry what the columns refuse. Next: the year between the two dates &mdash; starting with cash.</div>'
+    : '';
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep===0) h+='<button class="btn-back" onclick="playClick();nav(\'62-1-A-Nonprofit-Statement-Map.html\')">&larr; Back</button>';
+  else h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else h+='<button class="btn-continue" onclick="playClick();nav(\'63-2-The-Cash-Question.html\')">The Cash Question &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function advance(){
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Statement of Financial Position',def:'A nonprofit&rsquo;s name for the balance sheet: a snapshot of recorded assets, recorded liabilities, and net assets at a single date.'},
+  {term:'Net Assets',def:'The difference between total recorded assets and total recorded liabilities (A &minus; L = Net Assets). A nonprofit&rsquo;s name for the difference &mdash; chosen because a nonprofit has no owners, so the name points at accountability to mission and donors instead.'},
+  {term:'Donor restriction',def:'A purpose or time condition a donor attaches to a gift. Only donors can create binding restrictions. Net assets with donor restrictions holds gifts whose conditions have not yet been met; when a condition is met, the amount moves to the pile without donor restrictions.'},
+  {term:'Board designation',def:'The board&rsquo;s stated intent for how part of the pile without donor restrictions will be used. Not a restriction &mdash; the board can change its own mind &mdash; so board-designated amounts stay inside net assets without donor restrictions.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){
+  step=TOTAL_STEPS-1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

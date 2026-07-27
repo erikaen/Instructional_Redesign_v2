@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Statement of Activities</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6ohs-scope {
+      --m6ohs-paper:#ffffff;
+      --m6ohs-ink:#263746;
+      --m6ohs-muted:#657583;
+      --m6ohs-primary:#155b86;
+      --m6ohs-rule:#c8d4dc;
+      --m6ohs-rule-strong:#708592;
+      --m6ohs-accent:#d5a528;
+      --m6ohs-soft:#f3f8fb;
+      --m6ohs-warm:#fff8df;
+      --m6ohs-cash:#e7f1fb;
+      --m6ohs-error:#b43b3b;
+      --m6ohs-success:#167447;
+      --m6ohs-shadow:rgba(32,55,72,.09);
+    }
+    .m6ohs-doc-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
+    .m6ohs-doc-card, .m6ohs-question-card {
+      color:var(--m6ohs-ink);
+      border-radius:12px;
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+      box-sizing:border-box;
+    }
+    .m6ohs-doc-card {
+      max-width:880px;
+      min-width:700px;
+      margin:0 auto;
+      padding:22px 24px;
+      border:1px solid var(--m6ohs-rule);
+      background:var(--m6ohs-paper);
+    }
+    .m6ohs-kicker {
+      margin:0 0 5px;
+      color:var(--m6ohs-muted);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .m6ohs-doc-title { margin:0; color:var(--m6ohs-primary); font-size:20px; }
+    .m6ohs-subline { margin:3px 0 0; color:var(--m6ohs-muted); font-size:12px; font-style:italic; }
+    .m6ohs-act-table { margin-top:16px; font-size:11px; }
+    .m6ohs-act-row {
+      display:grid;
+      grid-template-columns:minmax(240px,1fr) repeat(4,6.3rem);
+      column-gap:9px;
+      align-items:baseline;
+      padding:3px 4px;
+      border-left:3px solid transparent;
+      color:var(--m6ohs-ink);
+    }
+    .m6ohs-act-head {
+      align-items:end;
+      padding-bottom:5px;
+      border-bottom:1px solid var(--m6ohs-rule);
+      color:var(--m6ohs-muted);
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    .m6ohs-col { text-align:right; }
+    .m6ohs-col-hot { color:var(--m6ohs-primary); }
+    .m6ohs-item-label { min-width:0; color:var(--m6ohs-ink); font-size:10.5px; line-height:1.35; }
+    .m6ohs-value {
+      text-align:right;
+      white-space:nowrap;
+      font-family:"JetBrains Mono",monospace;
+      font-variant-numeric:tabular-nums;
+    }
+    .m6ohs-section-row { margin-top:9px; padding:2px 4px 1px; color:var(--m6ohs-primary); font-size:11px; font-weight:800; }
+    .m6ohs-act-row.m6ohs-subtotal { margin-top:2px; padding-top:6px; border-top:1px solid var(--m6ohs-rule-strong); font-weight:700; }
+    .m6ohs-act-row.m6ohs-bigline { margin-top:7px; padding-top:7px; border-top:2px solid var(--m6ohs-primary); color:var(--m6ohs-primary); font-weight:800; }
+    .m6ohs-bigline .m6ohs-item-label { color:var(--m6ohs-primary); font-size:11px; font-weight:800; }
+    .m6ohs-subtotal .m6ohs-item-label { font-weight:700; }
+    .m6ohs-act-row.m6ohs-endline { border-top:3px double var(--m6ohs-rule-strong); color:var(--m6ohs-primary); font-weight:800; }
+    .m6ohs-endline .m6ohs-item-label { color:var(--m6ohs-primary); font-weight:800; }
+    .m6ohs-act-row.m6ohs-hot {
+      border-left-color:var(--m6ohs-accent);
+      border-radius:3px;
+      background:var(--m6ohs-cash);
+    }
+    .m6ohs-hot .m6ohs-item-label, .m6ohs-hot .m6ohs-value { color:var(--m6ohs-primary); font-weight:700; }
+    .m6ohs-walknote {
+      margin:13px 2px 0;
+      padding-top:8px;
+      border-top:1px solid var(--m6ohs-rule);
+      color:var(--m6ohs-muted);
+      font:italic 10px/1.45 "JetBrains Mono",monospace;
+      text-align:right;
+    }
+    .m6ohs-question-card {
+      max-width:700px;
+      margin:0 auto;
+      padding:22px;
+      border:2px dashed var(--m6ohs-accent);
+      background:var(--m6ohs-warm);
+    }
+    .m6ohs-question-title { margin:0; color:var(--m6ohs-primary); font-size:19px; }
+    .m6ohs-question-lead { margin:12px 0 0; font-size:13px; line-height:1.55; }
+    .m6ohs-choice {
+      display:block;
+      width:100%;
+      margin:9px 0 0;
+      padding:10px 13px;
+      border:1px solid var(--m6ohs-rule);
+      border-radius:8px;
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      font:inherit;
+      font-size:13px;
+      line-height:1.45;
+      text-align:left;
+      cursor:pointer;
+    }
+    .m6ohs-choice:hover, .m6ohs-choice:focus-visible { outline:2px solid var(--m6ohs-accent); outline-offset:1px; }
+    .m6ohs-question-foot { margin:14px 0 0; padding-top:12px; border-top:1px solid var(--m6ohs-rule); color:var(--m6ohs-muted); font-size:11px; font-style:italic; line-height:1.45; }
+    .m6ohs-verdict-head { margin:14px 0 0; color:var(--m6ohs-primary); font-size:15px; font-weight:800; }
+    .m6ohs-answer {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:3px 12px;
+      margin:9px 0 0;
+      padding:10px 13px;
+      border:1px solid var(--m6ohs-rule);
+      border-radius:8px;
+      background:var(--m6ohs-paper);
+    }
+    .m6ohs-answer.m6ohs-picked { border-color:var(--m6ohs-accent); box-shadow:inset 0 0 0 1px var(--m6ohs-accent); }
+    .m6ohs-answer-name { color:var(--m6ohs-primary); font-size:12.5px; font-weight:700; }
+    .m6ohs-chip {
+      margin-left:8px;
+      color:var(--m6ohs-accent);
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+    .m6ohs-answer-fig { align-self:baseline; font:700 15px/1.2 "JetBrains Mono",monospace; text-align:right; }
+    .m6ohs-answer-fig.m6ohs-pos { color:var(--m6ohs-success); }
+    .m6ohs-answer-fig.m6ohs-neg { color:var(--m6ohs-error); }
+    .m6ohs-answer-src { grid-column:1 / -1; color:var(--m6ohs-muted); font-size:10.5px; font-style:italic; line-height:1.4; }
+    .m6ohs-answer-frame { grid-column:1 / -1; font-size:11.5px; line-height:1.45; }
+    .m6ohs-verdict { margin:14px 0 0; font-size:12.5px; line-height:1.55; }
+    @media (max-width:760px) {
+      .m6ohs-doc-card { min-width:640px; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6ohs-scope {
+        --m6ohs-paper:#26242e;
+        --m6ohs-ink:#e8edf1;
+        --m6ohs-muted:#b4c0c8;
+        --m6ohs-primary:#7dc8f3;
+        --m6ohs-rule:#4b5361;
+        --m6ohs-rule-strong:#8797a2;
+        --m6ohs-accent:#d8ad3e;
+        --m6ohs-soft:#25313a;
+        --m6ohs-warm:#332f20;
+        --m6ohs-cash:#263847;
+        --m6ohs-error:#ff8f8f;
+        --m6ohs-success:#70d6a3;
+        --m6ohs-shadow:rgba(0,0,0,.28);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Statement of Activities</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~7 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Statement of Activities</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-fy2025-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nav(url){ window.location.href = url; }
+
+var D=window.OHS_FY2025;
+var A=D.activities;
+
+var step=0;
+var TOTAL_STEPS=6;
+var committed=-1;
+
+function fmt(v){
+  if(v===0) return '&mdash;';
+  var a=Math.abs(v).toLocaleString('en-US');
+  return v<0 ? '('+a+')' : a;
+}
+function sfmt(v){
+  var a=Math.abs(v).toLocaleString('en-US');
+  return v<0 ? '('+a+')' : '+'+a;
+}
+function usd(v){ return '$'+Math.abs(v).toLocaleString('en-US'); }
+function walkStr(b,c,e){
+  return fmt(b)+' '+(c<0?'&minus;':'+')+' '+Math.abs(c).toLocaleString('en-US')+' &rarr; '+fmt(e);
+}
+function revById(id){
+  for(var i=0;i<A.operatingRevenues.length;i++) if(A.operatingRevenues[i].id===id) return A.operatingRevenues[i];
+  return null;
+}
+function valCell(v){ return '<div class="m6ohs-value">'+fmt(v)+'</div>'; }
+function actRow(label,vals,cls,hot){
+  return '<div class="m6ohs-act-row'+(cls?' '+cls:'')+(hot?' m6ohs-hot':'')+'">'
+    +'<div class="m6ohs-item-label">'+label+'</div>'
+    +valCell(vals.wo)+valCell(vals.w)+valCell(vals.t2025)+valCell(vals.t2024)+'</div>';
+}
+function sectionRow(label){ return '<div class="m6ohs-section-row">'+label+'</div>'; }
+function isHot(hotIds,id){
+  for(var i=0;i<hotIds.length;i++) if(hotIds[i]===id) return true;
+  return false;
+}
+var HOT_BY_STEP={
+  0:['naBegin','changeNA','naEnd'],
+  1:['salesFees','contrib','legacies'],
+  2:['releases'],
+  3:['ertc','inKind'],
+  4:['changeBefore','endowReturn','changeNA'],
+  5:[]
+};
+function statementDoc(currentStep){
+  var hotIds=HOT_BY_STEP[currentStep]||[];
+  var colHot=currentStep===0?' m6ohs-col-hot':'';
+  var h='<div class="m6ohs-act-row m6ohs-act-head"><div></div>'
+    +'<div class="m6ohs-col'+colHot+'">Without donor restrictions</div>'
+    +'<div class="m6ohs-col'+colHot+'">With donor restrictions</div>'
+    +'<div class="m6ohs-col">Total 2025</div>'
+    +'<div class="m6ohs-col">Total 2024</div></div>';
+  h+=sectionRow('Operating revenues, gains, and other support');
+  for(var i=0;i<A.operatingRevenues.length;i++){
+    var r=A.operatingRevenues[i];
+    h+=actRow(r.label,r,'',isHot(hotIds,r.id));
+  }
+  h+=actRow('Total operating revenues, gains, and other support before appropriation and releases',A.totalOperatingRevenuesGains,'m6ohs-subtotal',false);
+  h+=actRow(A.appropriation.label,A.appropriation,'',false);
+  h+=actRow(A.releases.label,A.releases,'',isHot(hotIds,'releases'));
+  h+=actRow('Operating revenues, gains, and other support',A.totalOperatingSupport,'m6ohs-subtotal',false);
+  h+=sectionRow('Operating expenses');
+  for(var j=0;j<A.operatingExpenses.length;j++){
+    var e=A.operatingExpenses[j];
+    h+=actRow(e.label,e,'',false);
+  }
+  h+=actRow('Total operating expenses',A.totalOperatingExpenses,'m6ohs-subtotal',false);
+  h+=actRow('Change in net assets before non-operating activities',A.changeBeforeNonoperating,'m6ohs-bigline',isHot(hotIds,'changeBefore'));
+  h+=sectionRow('Non-operating activities');
+  for(var k=0;k<A.nonoperating.length;k++){
+    var n=A.nonoperating[k];
+    h+=actRow(n.label,n,'',isHot(hotIds,n.id));
+  }
+  h+=actRow('Total non-operating activities',A.totalNonoperating,'m6ohs-subtotal',false);
+  h+=actRow('Change in net assets',A.changeInNetAssets,'m6ohs-bigline',isHot(hotIds,'changeNA'));
+  h+=actRow('Net assets, beginning of year',A.netAssetsBeginning,'',isHot(hotIds,'naBegin'));
+  h+=actRow('Net assets, end of year',A.netAssetsEnd,'m6ohs-endline',isHot(hotIds,'naEnd'));
+  return '<div class="m6ohs-scope"><div class="m6ohs-doc-wrap"><div class="m6ohs-doc-card">'
+    +'<p class="m6ohs-kicker">Oregon Humane Society &middot; from the report</p>'
+    +'<h2 class="m6ohs-doc-title">Statement of Activities</h2>'
+    +'<p class="m6ohs-subline">Their version of the income statement&rsquo;s territory: why net assets changed</p>'
+    +'<p class="m6ohs-subline">Year ended December 31, 2025 (with summarized totals for 2024) &middot; exact dollars</p>'
+    +'<div class="m6ohs-act-table">'+h+'</div>'
+    +'<p class="m6ohs-walknote">'+fmt(A.netAssetsBeginning.t2025)+' + '+fmt(A.changeInNetAssets.t2025)+' = '+fmt(A.netAssetsEnd.t2025)+' &mdash; the walk ties the two balance sheets</p>'
+    +'</div></div></div>';
+}
+function fourAnswerRows(){
+  var FA=D.fourAnswers;
+  return [
+    {name:'The operating result',v:FA.operatingResult.y2025,
+     src:'Statement of Activities &middot; Change in net assets before non-operating activities',
+     frame:'The day-job frame: operating support of '+fmt(A.totalOperatingSupport.t2025)+' fell short of operating expenses of '+fmt(A.totalOperatingExpenses.t2025)+'.'},
+    {name:'Change in net assets',v:FA.changeInNetAssets.y2025,
+     src:'Statement of Activities &middot; the bottom line',
+     frame:'The whole-year frame: with the endowment&rsquo;s return counted, net assets grew.'},
+    {name:'Operating cash',v:FA.operatingCash.y2025,
+     src:'Statement of Cash Flows &middot; net cash used in operating activities',
+     frame:'The cash-engine frame: operations paid out more cash than they brought in.'},
+    {name:'Change in cash',v:FA.changeInCash.y2025,
+     src:'Statement of Cash Flows &middot; net change in cash and cash equivalents',
+     frame:'The cash-pile frame: cash walked '+fmt(D.cfs.cashBeginning)+' &rarr; '+fmt(D.cfs.cashEnd)+'.'}
+  ];
+}
+var CHOICES=[
+  'Badly &mdash; the day job ran a deficit.',
+  'Well &mdash; OHS ended the year with more net assets than it began.',
+  'Badly &mdash; operations used cash.',
+  'Well &mdash; cash rose across the year.'
+];
+function questionCard(){
+  var h='<div class="m6ohs-question-card"><p class="m6ohs-kicker">The module&rsquo;s question</p>'
+    +'<h3 class="m6ohs-question-title">How did OHS do in 2025?</h3>';
+  if(committed<0){
+    h+='<p class="m6ohs-question-lead">One organization, one year &mdash; and four honest figures each claiming the verdict. Which one would you sign?</p>';
+    for(var i=0;i<CHOICES.length;i++){
+      h+='<button class="m6ohs-choice" onclick="choose('+i+')">'+CHOICES[i]+'</button>';
+    }
+    h+='<p class="m6ohs-question-foot">Pick the verdict you would sign. The card opens all four after you choose.</p>';
+  } else {
+    h+='<p class="m6ohs-verdict-head">True &mdash; and so are the other three.</p>';
+    var rows=fourAnswerRows();
+    for(var j=0;j<rows.length;j++){
+      var r=rows[j];
+      var picked=j===committed;
+      h+='<div class="m6ohs-answer'+(picked?' m6ohs-picked':'')+'">'
+        +'<div class="m6ohs-answer-name">'+r.name+(picked?'<span class="m6ohs-chip">Your answer</span>':'')+'</div>'
+        +'<div class="m6ohs-answer-fig '+(r.v<0?'m6ohs-neg':'m6ohs-pos')+'">'+sfmt(r.v)+'</div>'
+        +'<div class="m6ohs-answer-src">'+r.src+'</div>'
+        +'<div class="m6ohs-answer-frame">'+r.frame+'</div>'
+        +'</div>';
+    }
+    h+='<p class="m6ohs-verdict">Each figure is exact, and each answers a different question: did the day job cover its own costs; did total net assets grow; did operations generate cash; did the cash pile rise. &ldquo;How did OHS do?&rdquo; is four questions wearing one sentence &mdash; a reader&rsquo;s first job is to say which one is being asked.</p>';
+  }
+  h+='</div>';
+  return '<div class="m6ohs-scope">'+h+'</div>';
+}
+function render(){
+  renderBeats(step);
+  renderGrid(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='OHS&rsquo;s name for this statement is the <strong>Statement of Activities</strong> &mdash; analogous to the income statement, the statement CVS used to explain its year. The nonprofit version explains why net assets changed. Read the column heads before any row: <strong>Without donor restrictions</strong> and <strong>With donor restrictions</strong>, then the totals. This is not a format to decode &mdash; these are the two piles from the Statement of Financial Position, each walking down its own column. The free pile walked '+walkStr(A.netAssetsBeginning.wo,A.changeInNetAssets.wo,A.netAssetsEnd.wo)+'; the restricted pile walked '+walkStr(A.netAssetsBeginning.w,A.changeInNetAssets.w,A.netAssetsEnd.w)+'. The Total 2025 column adds the two walks; Total 2024 prints last year beside them. Two accounts walking, run side by side.';
+  } else if(currentStep===1){
+    var fees=revById('salesFees'), con=revById('contrib'), leg=revById('legacies');
+    text='Now the operating revenues, read the prework&rsquo;s way: <strong>match or reason</strong>. Sales and program fees, '+usd(fees.t2025)+' &mdash; adoption fees, veterinary charges, training classes &mdash; is exchange revenue: value moved both ways, a fee paid and a service delivered. A match. The two bigger lines above it have no match. Contributions and grants, '+usd(con.t2025)+', and Legacies and bequests, '+usd(leg.t2025)+', are one-sided: money arrived, and nothing went back the other way. Recording them rests on the reason alone. Note 3m draws the very line the course drew &mdash; revenue from exchanges on one side, contributions on the other &mdash; and more than half of the year&rsquo;s operating support sits on the one-sided side.';
+  } else if(currentStep===2){
+    text='One row behaves like no revenue at all. <strong>Net assets released from restrictions</strong>: '+fmt(A.releases.wo)+' in the Without column, '+fmt(A.releases.w)+' in the With column, and a dash in the total. No new money arrived. When a promise is kept &mdash; the donor&rsquo;s purpose served, the donor&rsquo;s date reached &mdash; the amount moves between the piles: the restricted pile gives, the free pile receives, and the two entries cancel. This year '+usd(A.releases.wo)+' of restrictions were satisfied and walked across. Total net assets did not move by a dollar.';
+  } else if(currentStep===3){
+    var ertc=revById('ertc'), ik=revById('inKind');
+    var vol=D.notes.inKind.volunteers;
+    text='Before comparing 2025 with 2024, read the labels &mdash; two of them carry warnings. <strong>Employee Retention Tax Credits income</strong>, '+usd(ertc.t2025)+': one-time federal pandemic-relief money, claimed once, sitting inside operating revenue &mdash; with a dash in the 2024 column. A careful reader catches that label before comparing the years: with it, 2025&rsquo;s operating revenues and gains ('+fmt(A.totalOperatingRevenuesGains.t2025)+') edge past 2024&rsquo;s ('+fmt(A.totalOperatingRevenuesGains.t2024)+'); set it aside and they fall well short. And <strong>In-kind contributions</strong>, '+usd(ik.t2025)+': donated vehicles, materials, and supplies &mdash; recorded because each came with a price that could be looked up. The volunteers, again, are not here: '+vol.hours.y2025.toLocaleString('en-US')+' hours of work, roughly '+vol.fteEquivalent.y2025+' full-time equivalents, and Note 20 states the reason &mdash; no reasonable method of valuation. Real, essential, unrecorded.';
+  } else if(currentStep===4){
+    text='Now the line the statement has been walking toward. <strong>Change in net assets before non-operating activities: '+fmt(A.changeBeforeNonoperating.t2025)+'</strong>. The day job ran a deficit &mdash; operating support of '+fmt(A.totalOperatingSupport.t2025)+' against operating expenses of '+fmt(A.totalOperatingExpenses.t2025)+'. Then the non-operating rows: the endowment&rsquo;s investment return beyond the approved spending draw, '+sfmt(A.totalNonoperating.t2025)+', carries the year to a Change in net assets of '+sfmt(A.changeInNetAssets.t2025)+'. Both lines print; neither erases the other. The day-to-day work ran short, and the endowment&rsquo;s return more than covered the gap.';
+  } else if(currentStep===5){
+    text='So &mdash; how did OHS do in 2025? You have read the operating line and the bottom line here, and the Statement of Cash Flows gave two more answers a page ago. Four figures each claim the verdict. Commit to one before the card opens them all.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div>';
+}
+function renderGrid(currentStep){
+  document.getElementById('mainGrid').innerHTML=currentStep===5?questionCard():statementDoc(currentStep);
+}
+function renderTail(currentStep){
+  document.getElementById('tail').innerHTML=(currentStep===5 && committed>=0)
+    ? '<div class="insight-box">None of the four figures is THE answer. Each is exact inside its frame, and the frames are printed on the statements &mdash; name the frame, then quote the figure.</div>'
+    : '';
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep===0) h+='<button class="btn-back" onclick="nav(\'63-2-The-Cash-Question.html\')">&larr; Back</button>';
+  else h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else if(committed>=0) h+='<button class="btn-continue" onclick="playClick();nav(\'63-4-The-Net-Assets-Question.html\')">The Net Assets Question &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function advance(){
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+function choose(i){
+  committed=i;
+  playSuccess();
+  render();
+}
+
+var glossaryTerms=[
+  {term:'Statement of Activities',def:'The nonprofit statement that explains why net assets changed during the period &mdash; analogous to the income statement. Each net asset pile walks in its own column: without donor restrictions, with donor restrictions, then the total.'},
+  {term:'Releases from restrictions',def:'A transfer between the two net asset piles recorded when a donor&rsquo;s restriction is met: the amount leaves With donor restrictions and joins Without. No new money arrives, and total net assets do not change.'},
+  {term:'Operating vs non-operating',def:'A line management draws inside the Statement of Activities. Operating rows carry the year&rsquo;s mission work and its support; non-operating rows carry the endowment&rsquo;s investment return beyond the approved spending draw. Where the line falls is a choice, defined by OHS&rsquo;s own policy.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){
+  step=TOTAL_STEPS-1;
+  committed=1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

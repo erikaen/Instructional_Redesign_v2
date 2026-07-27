@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Cash Question</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6ohs-scope {
+      --m6ohs-paper:#ffffff;
+      --m6ohs-ink:#263746;
+      --m6ohs-muted:#657583;
+      --m6ohs-primary:#155b86;
+      --m6ohs-rule:#c8d4dc;
+      --m6ohs-rule-strong:#708592;
+      --m6ohs-accent:#d5a528;
+      --m6ohs-soft:#f3f8fb;
+      --m6ohs-shadow:rgba(32,55,72,.09);
+      --m6ohs-warm:#fff8df;
+      --m6ohs-error:#b43b3b;
+      --m6ohs-cash:#e7f1fb;
+    }
+    .m6cq-doc-wrap, .m6cq-snapshot-wrap, .m6cq-answer-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
+    .m6cq-doc-card, .m6cq-snapshot, .m6cq-reference-strip, .m6cq-answer-card {
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      border:1px solid var(--m6ohs-rule);
+      border-radius:12px;
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m6cq-doc-card { max-width:760px; min-width:620px; margin:0 auto; padding:24px; }
+    .m6cq-kicker {
+      margin:0 0 5px;
+      color:var(--m6ohs-muted);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+    }
+    .m6cq-doc-title, .m6cq-snapshot-title { margin:0; color:var(--m6ohs-primary); }
+    .m6cq-doc-title { font-size:20px; }
+    .m6cq-snapshot-title { font-size:16px; }
+    .m6cq-subline { margin:3px 0 0; color:var(--m6ohs-muted); font-size:12px; font-style:italic; }
+    .m6cq-grid.main-grid { grid-template-columns:minmax(0,1fr) minmax(0,1.18fr) minmax(0,1fr); align-items:stretch; }
+    .m6cq-grid.main-grid > * { min-width:0; }
+    .m6cq-snapshot { min-width:280px; height:100%; padding:18px; box-sizing:border-box; }
+    .m6cq-snapshot-table { margin-top:14px; font-size:12px; }
+    .m6cq-compact-row {
+      display:grid;
+      grid-template-columns:minmax(150px,1fr) 6.5rem;
+      column-gap:8px;
+      align-items:baseline;
+      padding:4px 5px;
+      border-left:3px solid transparent;
+      color:var(--m6ohs-ink);
+    }
+    .m6cq-lit {
+      border-left-color:var(--m6ohs-accent);
+      border-radius:3px;
+      background:var(--m6ohs-cash);
+      color:var(--m6ohs-primary);
+      font-weight:700;
+    }
+    .m6cq-compact-total { margin-top:3px; padding-top:6px; border-top:1px solid var(--m6ohs-rule-strong); color:var(--m6ohs-primary); font-weight:800; }
+    .m6cq-compact-gap { height:8px; }
+    .m6cq-value { text-align:right; white-space:nowrap; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m6cq-identity-note { margin:12px 2px 0; color:var(--m6ohs-muted); font:italic 10px/1.4 "JetBrains Mono",monospace; text-align:right; }
+    .m6cq-question-card {
+      min-height:100%;
+      box-sizing:border-box;
+      display:flex;
+      flex-direction:column;
+      padding:22px;
+      border:2px dashed var(--m6ohs-accent);
+      border-radius:12px;
+      background:var(--m6ohs-warm);
+      color:var(--m6ohs-ink);
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m6cq-question-title { margin:0; color:var(--m6ohs-primary); font-size:18px; }
+    .m6cq-question-lead { margin:15px 0 0; font-size:13px; line-height:1.5; }
+    .m6cq-question-figure { margin:12px 0 5px; color:var(--m6ohs-primary); font:700 27px/1.2 "JetBrains Mono",monospace; text-align:center; }
+    .m6cq-question-range { margin:0 0 14px; color:var(--m6ohs-muted); font:12px/1.4 "JetBrains Mono",monospace; text-align:center; }
+    .m6cq-question-setup { margin:0 0 14px; color:var(--m6ohs-ink); font-size:13px; font-style:italic; line-height:1.55; }
+    .m6cq-choices { display:grid; gap:8px; }
+    .m6cq-choice {
+      padding:9px 12px;
+      border:1.5px solid var(--m6ohs-rule-strong);
+      border-radius:8px;
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      font:600 13px/1.3 Inter,"Open Sans",sans-serif;
+      text-align:left;
+      cursor:pointer;
+    }
+    .m6cq-choice:hover, .m6cq-choice:focus-visible { border-color:var(--m6ohs-accent); outline:none; }
+    .m6cq-choice.m6cq-chosen {
+      border-color:var(--m6ohs-primary);
+      background:var(--m6ohs-cash);
+      color:var(--m6ohs-primary);
+      font-weight:800;
+    }
+    .m6cq-question-foot { margin:auto 0 0; padding-top:14px; border-top:1px solid var(--m6ohs-rule); color:var(--m6ohs-muted); font-size:11px; font-style:italic; line-height:1.45; }
+    .m6cq-reference-strip {
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+      align-items:center;
+      max-width:760px;
+      margin:0 auto 16px;
+      padding:12px;
+      box-sizing:border-box;
+    }
+    .m6cq-reference-cell { padding:2px 8px; text-align:center; }
+    .m6cq-reference-cell + .m6cq-reference-cell { border-left:1px solid var(--m6ohs-rule); }
+    .m6cq-reference-label { margin:0; color:var(--m6ohs-muted); font-size:10px; letter-spacing:.08em; text-transform:uppercase; }
+    .m6cq-reference-date { margin:2px 0 0; color:var(--m6ohs-ink); font-size:11px; }
+    .m6cq-reference-value { margin:5px 0 0; color:var(--m6ohs-primary); font:700 13px/1.35 "JetBrains Mono",monospace; }
+    .m6cq-reference-question .m6cq-reference-label, .m6cq-reference-question .m6cq-reference-value { color:var(--m6ohs-error); }
+    .m6cq-reference-question .m6cq-reference-date { color:var(--m6ohs-muted); font-style:italic; }
+    .m6cq-table { margin-top:18px; font-size:13px; }
+    .m6cq-row {
+      display:grid;
+      grid-template-columns:minmax(300px,1fr) 7rem;
+      column-gap:10px;
+      align-items:baseline;
+      padding:3px 0;
+      border-left:3px solid transparent;
+    }
+    .m6cq-row.m6cq-lit { padding-left:5px; padding-right:5px; }
+    .m6cq-section { margin-top:12px; color:var(--m6ohs-primary); font-weight:800; }
+    .m6cq-subheading { margin:7px 0 2px; color:var(--m6ohs-muted); font-size:11px; font-style:italic; line-height:1.4; }
+    .m6cq-item-label { color:var(--m6ohs-ink); font-size:12px; line-height:1.35; }
+    .m6cq-subtotal { margin-top:4px; padding-top:5px; border-top:1px solid var(--m6ohs-rule-strong); font-weight:600; }
+    .m6cq-reconciliation { margin-top:18px; padding-top:7px; border-top:2px solid var(--m6ohs-primary); }
+    .m6cq-net-change { padding-top:5px; border-top:3px double var(--m6ohs-rule-strong); font-weight:700; }
+    .m6cq-ending { color:var(--m6ohs-primary); font-weight:700; }
+    .m6cq-doc-foot { margin:14px 2px 0; color:var(--m6ohs-muted); font-size:10.5px; font-style:italic; line-height:1.5; }
+    .m6cq-answer-card { max-width:640px; margin:0 auto; padding:24px; }
+    .m6cq-answer-table { margin-top:14px; font-size:13px; }
+    .m6cq-answer-row {
+      display:grid;
+      grid-template-columns:minmax(200px,1fr) 6.5rem 6.5rem;
+      column-gap:10px;
+      align-items:baseline;
+      padding:5px 5px;
+      border-left:3px solid transparent;
+    }
+    .m6cq-answer-head { padding-bottom:5px; border-bottom:1px solid var(--m6ohs-rule); color:var(--m6ohs-primary); font-weight:700; }
+    .m6cq-answer-note { margin:12px 2px 0; color:var(--m6ohs-muted); font-size:10.5px; font-style:italic; line-height:1.5; }
+    .m6cq-nav-hint { align-self:center; color:var(--m6ohs-muted); font-size:12px; font-style:italic; }
+    @media (max-width:760px) {
+      .m6cq-grid.main-grid { grid-template-columns:1fr; }
+      .m6cq-question-card { min-height:260px; }
+      .m6cq-reference-strip { grid-template-columns:1fr; }
+      .m6cq-reference-cell + .m6cq-reference-cell { padding-top:10px; border-top:1px solid var(--m6ohs-rule); border-left:0; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6ohs-scope {
+        --m6ohs-paper:#26242e;
+        --m6ohs-ink:#e8edf1;
+        --m6ohs-muted:#b4c0c8;
+        --m6ohs-primary:#7dc8f3;
+        --m6ohs-rule:#4b5361;
+        --m6ohs-rule-strong:#8797a2;
+        --m6ohs-accent:#d8ad3e;
+        --m6ohs-soft:#25313a;
+        --m6ohs-shadow:rgba(0,0,0,.28);
+        --m6ohs-warm:#332f20;
+        --m6ohs-error:#ff8f8f;
+        --m6ohs-cash:#263847;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Cash Question</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~6 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Cash Question</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-fy2025-data.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nav(url){ window.location.href = url; }
+
+var step=0;
+var TOTAL_STEPS=5;
+var choice=null;
+var CHOICE_LABELS={good:'A good year',bad:'A bad year',cant:'Can&rsquo;t tell from this'};
+
+var D=window.OHS_FY2025;
+var CFS=D.cfs;
+function byId(list,id){ for(var i=0;i<list.length;i++) if(list[i].id===id) return list[i]; return null; }
+function num(v){ return Math.abs(v).toLocaleString('en-US'); }
+function fmt(v){
+  if(v===0) return '&mdash;';
+  var a=num(v);
+  return v<0 ? '('+a+')' : a;
+}
+function escapeHTML(value){
+  return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+var CASH_BEGIN=CFS.cashBeginning;
+var CASH_END=CFS.cashEnd;
+var CASH_DELTA=CFS.netChange;
+var CNA=CFS.operating.changeInNetAssets;
+var CFO=CFS.operating.cfo;
+var CFI=CFS.investing.cfi;
+var CFF=CFS.financing.cff;
+var DEP=byId(CFS.operating.adjustments,'depreciation').v;
+var UNREAL=byId(CFS.operating.adjustments,'unrealizedGains').v;
+var BEQ=byId(CFS.operating.workingCapital,'bequestsRec').v;
+var AP_CHANGE=byId(CFS.operating.workingCapital,'ap').v;
+var INV_SOLD=byId(CFS.investing.lines,'salesInv').v;
+var INV_BOUGHT=byId(CFS.investing.lines,'purchasesInv').v;
+var PPE_BOUGHT=byId(CFS.investing.lines,'ppe').v;
+var GIFT_LT=byId(CFS.financing.lines,'restrictedLT').v;
+var GIFT_CAPEX=byId(CFS.financing.lines,'restrictedCapex').v;
+var FA=D.fourAnswers;
+
+function compactRow(label,value,extraClass){
+  return '<div class="m6cq-compact-row'+(extraClass?' '+extraClass:'')+'"><div>'+label+'</div><div class="m6cq-value">'+fmt(value)+'</div></div>';
+}
+function compactSnapshot(year,label){
+  var yearText=year==='y2025'?'2025':'2024';
+  var cash=byId(D.sfp.assets,'cash')[year];
+  var investments=byId(D.sfp.assets,'investments')[year];
+  var totalAssets=D.sfp.totalAssets[year];
+  var totalLiab=D.sfp.totalLiabilities[year];
+  var naWithout=D.sfp.totalWithout[year];
+  var naWith=D.sfp.withRestrictions[year];
+  var totalNA=D.sfp.totalNetAssets[year];
+  var noncash=totalAssets-cash;
+  var rows=compactRow('Cash and cash equivalents',cash,'m6cq-lit')
+    +compactRow('Noncash assets <em>(incl. '+fmt(investments)+' investments)</em>',noncash,'')
+    +compactRow('Total assets',totalAssets,'m6cq-compact-total')
+    +'<div class="m6cq-compact-gap"></div>'
+    +compactRow('&minus; Total liabilities',totalLiab,'')
+    +compactRow('= Net assets without donor restrictions',naWithout,'m6cq-compact-total')
+    +compactRow('+ Net assets with donor restrictions',naWith,'')
+    +compactRow('= Total net assets',totalNA,'m6cq-compact-total');
+  return '<div class="m6cq-snapshot-wrap"><div class="m6cq-snapshot"><p class="m6cq-kicker">'+label+'</p>'
+    +'<h3 class="m6cq-snapshot-title">Statement of Financial Position</h3>'
+    +'<p class="m6cq-subline">December 31, '+yearText+' &middot; in exact dollars</p>'
+    +'<div class="m6cq-snapshot-table">'+rows+'</div>'
+    +'<p class="m6cq-identity-note">'+fmt(totalAssets)+' &minus; '+fmt(totalLiab)+' = '+fmt(totalNA)+' &#10003;</p></div></div>';
+}
+function choiceButton(key){
+  var chosen=choice===key?' m6cq-chosen':'';
+  return '<button class="m6cq-choice'+chosen+'" onclick="commitChoice(\''+key+'\')">'+CHOICE_LABELS[key]+'</button>';
+}
+function questionCard(){
+  var foot=choice
+    ? 'Answer recorded: <strong>'+CHOICE_LABELS[choice]+'</strong>. Hold it &mdash; the statement that explains cash is next. You can still change your answer before moving on.'
+    : 'Pick one to continue. There is no penalty &mdash; the point is to commit before the statement weighs in.';
+  return '<div class="m6cq-question-card"><p class="m6cq-kicker">The question</p>'
+    +'<h3 class="m6cq-question-title">Cash rose.</h3>'
+    +'<p class="m6cq-question-lead">Across the year, Cash and cash equivalents increased by</p>'
+    +'<p class="m6cq-question-figure">+'+num(CASH_DELTA)+'</p>'
+    +'<p class="m6cq-question-range">'+num(CASH_BEGIN)+' &rarr; '+num(CASH_END)+'</p>'
+    +'<p class="m6cq-question-setup">From this one number, was 2025 a good year for OHS?</p>'
+    +'<div class="m6cq-choices">'+choiceButton('good')+choiceButton('bad')+choiceButton('cant')+'</div>'
+    +'<p class="m6cq-question-foot">'+foot+'</p></div>';
+}
+function cashQuestionView(){
+  return '<div class="m6ohs-scope"><div class="main-grid m6cq-grid">'
+    +compactSnapshot('y2024','Beginning')+questionCard()+compactSnapshot('y2025','Ending')+'</div></div>';
+}
+function referenceStrip(){
+  var answerLine=choice?'Your answer: '+CHOICE_LABELS[choice]:'Did OHS have a good year?';
+  return '<div class="m6cq-reference-strip">'
+    +'<div class="m6cq-reference-cell"><p class="m6cq-reference-label">Beginning SFP</p><p class="m6cq-reference-date">December 31, 2024</p><p class="m6cq-reference-value">Cash '+fmt(CASH_BEGIN)+'</p></div>'
+    +'<div class="m6cq-reference-cell m6cq-reference-question"><p class="m6cq-reference-label">The question</p><p class="m6cq-reference-value">+'+num(CASH_DELTA)+'</p><p class="m6cq-reference-date">'+answerLine+'</p></div>'
+    +'<div class="m6cq-reference-cell"><p class="m6cq-reference-label">Ending SFP</p><p class="m6cq-reference-date">December 31, 2025</p><p class="m6cq-reference-value">Cash '+fmt(CASH_END)+'</p></div></div>';
+}
+function docRow(label,value,type,lit){
+  var cls='m6cq-row';
+  if(type==='subtotal') cls+=' m6cq-subtotal';
+  if(type==='net') cls+=' m6cq-net-change';
+  if(type==='ending') cls+=' m6cq-ending';
+  if(lit) cls+=' m6cq-lit';
+  return '<div class="'+cls+'"><div class="'+(type==='line'?'m6cq-item-label':'')+'">'+label+'</div>'
+    +'<div class="m6cq-value">'+fmt(value)+'</div></div>';
+}
+function operatingSection(showDetail,litIds){
+  var rows='<div class="m6cq-section">Cash flows from operating activities:</div>';
+  if(showDetail){
+    rows+=docRow('Change in net assets',CNA,'line');
+    rows+='<div class="m6cq-subheading">Adjustments to reconcile change in net assets to net cash used in operating activities:</div>';
+    CFS.operating.adjustments.forEach(function(item){
+      rows+=docRow(escapeHTML(item.label),item.v,'line',litIds.indexOf('adj:'+item.id)>=0);
+    });
+    rows+='<div class="m6cq-subheading">Changes in operating assets and liabilities:</div>';
+    CFS.operating.workingCapital.forEach(function(item){
+      rows+=docRow(escapeHTML(item.label),item.v,'line',litIds.indexOf('wc:'+item.id)>=0);
+    });
+  }
+  rows+=docRow('Net cash used in operating activities',CFO,'subtotal');
+  return rows;
+}
+function channelSection(key,heading,subtotalLabel,showDetail,litIds){
+  var section=CFS[key];
+  var rows='<div class="m6cq-section">'+heading+'</div>';
+  if(showDetail){
+    section.lines.forEach(function(item){
+      rows+=docRow(escapeHTML(item.label),item.v,'line',litIds.indexOf(key+':'+item.id)>=0);
+    });
+  }
+  rows+=docRow(subtotalLabel,key==='investing'?section.cfi:section.cff,'subtotal');
+  return rows;
+}
+function cfsDocument(currentStep){
+  var litIds=[];
+  if(currentStep===2) litIds=['adj:depreciation','adj:unrealizedGains','wc:bequestsRec'];
+  if(currentStep===3) litIds=['investing:salesInv','investing:purchasesInv','financing:restrictedLT','financing:restrictedCapex'];
+  var rows=operatingSection(currentStep===2,litIds)
+    +channelSection('investing','Cash flows from investing activities:','Net cash provided by investing activities',currentStep===3,litIds)
+    +channelSection('financing','Cash flows from financing activities:','Net cash provided by financing activities',currentStep===3,litIds);
+  rows+='<div class="m6cq-reconciliation">'
+    +docRow('Net increase in cash and cash equivalents',CASH_DELTA,'net')
+    +docRow('Cash and cash equivalents, beginning of year',CASH_BEGIN,'line')
+    +docRow('Cash and cash equivalents, end of year',CASH_END,'ending')
+    +'</div>';
+  var foot=currentStep===3
+    ? '<p class="m6cq-doc-foot">Below the statement, a supplemental disclosure: '+fmt(D.cfs.supplemental.y2025)+' of property and equipment purchases sat in accounts payable at year-end &mdash; bought, not yet paid for, so no cash moved and no line appears above.</p>'
+    : '';
+  return '<div class="m6ohs-scope">'+referenceStrip()+'<div class="m6cq-doc-wrap"><div class="m6cq-doc-card">'
+    +'<p class="m6cq-kicker">Oregon Humane Society &middot; from the report &middot; page 7</p>'
+    +'<h2 class="m6cq-doc-title">Statement of Cash Flows</h2>'
+    +'<p class="m6cq-subline">Year Ended December 31, 2025 &middot; in exact dollars</p>'
+    +'<div class="m6cq-table">'+rows+'</div>'+foot+'</div></div></div>';
+}
+function answerRow(label,v2025,v2024,extraClass){
+  return '<div class="m6cq-answer-row'+(extraClass?' '+extraClass:'')+'"><div>'+label+'</div>'
+    +'<div class="m6cq-value">'+fmt(v2025)+'</div><div class="m6cq-value">'+fmt(v2024)+'</div></div>';
+}
+function answerView(){
+  var rows='<div class="m6cq-answer-row m6cq-answer-head"><div></div><div class="m6cq-value">2025</div><div class="m6cq-value">2024</div></div>'
+    +answerRow('Change in net assets',FA.changeInNetAssets.y2025,FA.changeInNetAssets.y2024)
+    +answerRow('Net cash provided by (used in) operating activities',FA.operatingCash.y2025,FA.operatingCash.y2024)
+    +answerRow('Change in cash for the year',FA.changeInCash.y2025,FA.changeInCash.y2024,'m6cq-lit');
+  return '<div class="m6ohs-scope"><div class="m6cq-answer-wrap"><div class="m6cq-answer-card">'
+    +'<p class="m6cq-kicker">Two years, side by side</p>'
+    +'<h2 class="m6cq-doc-title">The signs do not travel together</h2>'
+    +'<p class="m6cq-subline">2024 figures from the report&rsquo;s comparative columns &middot; in exact dollars</p>'
+    +'<div class="m6cq-answer-table">'+rows+'</div>'
+    +'<p class="m6cq-answer-note">2025: net assets up, operating cash negative, cash up. 2024: net assets up '+num(FA.changeInNetAssets.y2024)+' &mdash; the stronger year by far &mdash; operating cash positive, and cash <strong>down</strong> '+num(-FA.changeInCash.y2024)+'.</p>'
+    +'</div></div></div>';
+}
+function render(){
+  renderBeats(step);
+  renderGrid(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='Between the two Statements of Financial Position &mdash; shown compact here, Cash lit on both dates &mdash; one line moved most visibly: <strong>Cash and cash equivalents</strong> walked from '+num(CASH_BEGIN)+' to '+num(CASH_END)+', up '+num(CASH_DELTA)+'. One number, one direction. Before reading a line of the statement that explains it, commit to an answer on the card.';
+  } else if(currentStep===1){
+    text='Here is the Statement of Cash Flows in skeleton: three channels, then a footer tying the beginning balance to the ending one. Operating activities &mdash; the day job of sheltering, adopting, and treating animals &mdash; came to net cash <strong>used</strong> of '+fmt(CFO)+'. Operations consumed cash. The rise came entirely from the other two channels: investing provided '+num(CFI)+' and financing provided '+num(CFF)+'. Together the three sum to +'+num(CASH_DELTA)+', and '+num(CASH_BEGIN)+' walks to '+num(CASH_END)+'. Whatever pushed cash up, it was not the day job.';
+  } else if(currentStep===2){
+    text='Open the operating section. It names its method &mdash; the <strong>indirect method</strong>: it reconciles the change in net assets, +'+num(CNA)+', to the operating cash flow. Read it the prework&rsquo;s way: start at the change and <strong>undo</strong> every piece of it that was never cash. Depreciation '+num(DEP)+' comes back &mdash; an expense with no cash leaving this year. Unrealized gains on investments '+fmt(UNREAL)+' come out &mdash; the portfolio rose in value, and no cash arrived. Bequests receivable '+fmt(BEQ)+' comes out too &mdash; promised money, recognized before it arrives. Then the timing lines: accounts payable '+fmt(AP_CHANGE)+' means bills were paid down, so a little more cash left than the expense lines say. After every undo, +'+num(CNA)+' of change in net assets becomes '+fmt(CFO)+' of operating cash. Richer on paper, cash flowing out &mdash; the shop&rsquo;s profitable-but-poorer lesson, printed as a statement.';
+  } else if(currentStep===3){
+    text='So where did the cash actually come from? <strong>Investing</strong>: proceeds from selling investments, '+num(INV_SOLD)+', against '+fmt(INV_BOUGHT)+' of purchases and '+fmt(PPE_BOUGHT)+' of property and equipment &mdash; net +'+num(CFI)+'. OHS sold more of its portfolio than it bought. <strong>Financing</strong>: contributions restricted for long-term investment, '+num(GIFT_LT)+', and for capital expenditures, '+num(GIFT_CAPEX)+', plus the gift-annuity lines. Notice: those same restricted gifts were removed from the operating section above, then placed here. <strong>Classification follows the claim</strong> &mdash; a gift the donor restricts to the endowment funds the permanent base, the way long-term funding does, so its cash lands in financing, not in the day job&rsquo;s channel.';
+  } else if(currentStep===4){
+    var verdict=choice==='cant'
+      ? '&mdash; the defensible one.'
+      : (choice ? '&mdash; and the statement&rsquo;s answer is: not from that number alone.' : '');
+    var answered=choice ? 'On the card you answered: <strong>'+CHOICE_LABELS[choice]+'</strong> '+verdict+' ' : '';
+    text='Now answer the card. '+answered+'Cash rose '+num(CASH_DELTA)+' in a year when operations used '+num(-CFO)+' of cash &mdash; the rise was sold investments and restricted gifts, not the day job. And 2024 proves the converse: change in net assets +'+num(FA.changeInNetAssets.y2024)+', the strongest recent year, with operations providing +'+num(FA.operatingCash.y2024)+' of cash &mdash; and cash <strong>fell</strong> '+num(-FA.changeInCash.y2024)+'. The sign of the change in cash, by itself, tells you nothing about the sign of the year.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div>';
+}
+function renderGrid(currentStep){
+  var html;
+  if(currentStep===0) html=cashQuestionView();
+  else if(currentStep===4) html=answerView();
+  else html=cfsDocument(currentStep);
+  document.getElementById('mainGrid').innerHTML=html;
+}
+function renderTail(currentStep){
+  document.getElementById('tail').innerHTML=currentStep===4
+    ? '<div class="insight-box">A rising cash balance is not a verdict on the year &mdash; and a falling one is not either. The Statement of Cash Flows tells you <em>where</em> cash came from and went; how OHS <em>did</em> is the next statement&rsquo;s question.</div>'
+    : '';
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep===0){
+    h+='<button class="btn-back" onclick="playClick();nav(\'63-1-The-Statement-of-Financial-Position.html\')">&larr; Back</button>';
+    h+=choice
+      ? '<button class="btn-next" onclick="advance()">Next &rarr;</button>'
+      : '<button class="btn-next" disabled>Next &rarr;</button><span class="m6ohs-scope m6cq-nav-hint">Commit an answer first</span>';
+  } else {
+    h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+    if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+    else h+='<button class="btn-continue" onclick="playClick();nav(\'63-3-The-Statement-of-Activities.html\')">The Statement of Activities &rarr;</button>';
+  }
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function commitChoice(key){
+  playClick();
+  choice=key;
+  render();
+}
+function advance(){
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Indirect method',def:'A way of presenting operating cash flow that starts from the change in net assets and undoes every piece of it that was not cash &mdash; noncash expenses like depreciation come back, noncash gains come out, and timing differences in receivables and payables are adjusted &mdash; until what remains is the cash that operations provided or used.'},
+  {term:'Operating activities',def:'The cash effects of the day job &mdash; the mission work and the ordinary revenues and expenses around it: adoption fees collected, staff paid, supplies bought.'},
+  {term:'Investing activities',def:'Cash paid for and received from long-lived assets and investments &mdash; buying and selling the things the organization holds rather than spends: the portfolio, property, equipment.'},
+  {term:'Financing activities',def:'Cash from and to the organization&rsquo;s long-term funding. For a nonprofit this includes gifts donors restrict to the endowment or to capital &mdash; money claimed for the permanent base rather than for the year&rsquo;s operations, so its cash is sorted here.'},
+  {term:'Net change in cash',def:'The three channels combined &mdash; the amount by which Cash and cash equivalents walked from its beginning balance to its ending balance.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){
+  choice='cant';
+  step=TOTAL_STEPS-1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
