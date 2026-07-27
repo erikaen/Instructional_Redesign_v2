@@ -249,5 +249,215 @@
     board.onHover(function(hit){columnEls.forEach(function(el){el.querySelectorAll('[data-acct]').forEach(function(x){x.classList.remove('gl-hi');});if(!hit)return;Object.keys(mapping).forEach(function(id){var m=mapping[id]||{},match=hit.kind==='node'?(m.nodes||[]).indexOf(hit.id)>=0:(m.pairs||[]).indexOf(hit.id)>=0;if(match){var row=el.querySelector('[data-acct="'+id+'"]');if(row)row.classList.add('gl-hi');}});});});
   }
 
-  window.GraphLab={pairKey:pairKey,createBoard:createBoard,renderColumn:renderColumn,wireCrossHighlight:wireCrossHighlight};
+  window.GraphLab={pairKey:pairKey,createBoard:createBoard,renderColumn:renderColumn,wireCrossHighlight:wireCrossHighlight,
+    /* internals exported for the statement-board extension below (M6 graph-teach) */
+    _internals:{S:S,money:money,signed:signed,Router:Router,injectStyle:injectStyle}};
+})();
+
+/* ============================================================
+   Statement-board extension (M6 graph-teach, 64-x) — appended
+   2026-07-27 per OHS-Graph-Teach-Walk-Plan.md engine deltas.
+   A generic board for real-statement graphs: partitioned
+   REASONS region (With/Without Donor Restrictions), pile-to-
+   pile transfer arrows, the Value change caption idiom, and
+   drill-down explode/fold groups. The bike-shop createBoard
+   above is untouched.
+   ============================================================ */
+(function () {
+  'use strict';
+  var I = window.GraphLab._internals;
+  var serialSeq = 0;
+
+  function injectStatementStyle() {
+    if (document.getElementById('gl-stmt-style')) return;
+    var style = document.createElement('style');
+    style.id = 'gl-stmt-style';
+    style.textContent = [
+      '.gl-subregion{fill:none;stroke:var(--gl-region-line);stroke-width:1.2;stroke-dasharray:2 4;opacity:.5}',
+      '.gl-subregion-label{font:700 10px Inter,Arial,sans-serif;letter-spacing:.1em;fill:var(--gl-ink);opacity:.55}',
+      '.gl-transfer .gl-arrow-path{stroke:var(--gl-reason);stroke-width:3;stroke-dasharray:1 6;stroke-linecap:round}',
+      '.gl-transfer .gl-arrow-label{fill:var(--gl-reason)}',
+      '.gl-tag-inference .gl-arrow-path{stroke-dasharray:8 5}',
+      '.gl-vc .gl-arrow-path{stroke-dasharray:8 5}',
+      '.gl-node-vc ellipse{fill:var(--gl-reason);stroke:#fff;stroke-width:2;stroke-dasharray:2 3}',
+      '.gl-explodable ellipse{cursor:pointer}',
+      '.gl-explodable .gl-node-label{cursor:pointer}',
+      '.gl-explode-hint{font:800 13px Inter,Arial,sans-serif;fill:#fff;opacity:.85;text-anchor:middle;pointer-events:none}'
+    ].join('\n');
+    document.head.appendChild(style);
+  }
+
+  function createStatementBoard(svgEl, data, opts) {
+    I.injectStyle(); injectStatementStyle(); opts = opts || {};
+    var S = I.S, money = I.money, signed = I.signed, Router = I.Router;
+    var serial = ++serialSeq, markerId = 'gl-stmt-arrowhead-' + serial;
+    var view = opts.viewBox || '0 0 1000 660';
+    svgEl.classList.add('gl-board'); svgEl.setAttribute('viewBox', view);
+
+    var nodesById = {}; (data.nodes || []).forEach(function (n) { nodesById[n.id] = n; });
+    var edgesById = {}; (data.edges || []).forEach(function (e) { edgesById[e.id] = e; });
+    var groupsById = {}; (data.groups || []).forEach(function (g) { groupsById[g.id] = g; });
+    var visibleNodes = [], visibleEdges = [], badges = {}, tags = {}, exploded = {};
+    var hi = null, focus = null, hoverCallbacks = [];
+    var regionSpecs = data.regions || [
+      { id: 'assets', x: 40, y: 60, w: 520, h: 580, label: 'Δ ASSETS' },
+      { id: 'liab', x: 600, y: 60, w: 360, h: 140, label: 'Δ LIABILITIES' },
+      { id: 'reasons', x: 600, y: 240, w: 360, h: 400, label: 'Δ REASONS' }
+    ];
+    var partition = data.partition; /* {regionId, woLabel, wLabel, splitY} */
+
+    function effNodes() {
+      var out = [];
+      visibleNodes.forEach(function (id) {
+        var g = groupsById[id];
+        if (g && exploded[id]) g.members.forEach(function (m) { if (out.indexOf(m) < 0) out.push(m); });
+        else if (out.indexOf(id) < 0) out.push(id);
+      });
+      return out;
+    }
+    function remap(id, shown) {
+      /* an edge endpoint folded inside an unexploded group re-targets to
+         the group parent; endpoints already visible stay themselves */
+      if (shown.indexOf(id) >= 0) return id;
+      var keys = Object.keys(groupsById);
+      for (var i = 0; i < keys.length; i++) {
+        var g = groupsById[keys[i]];
+        if (g.members.indexOf(id) >= 0 && !exploded[keys[i]]) return keys[i];
+      }
+      return id;
+    }
+    function geo(list) {
+      var out = {};
+      list.forEach(function (id) {
+        var n = nodesById[id]; if (!n) return;
+        out[id] = { id: id, label: n.label, region: n.region, pile: n.pile || '', x: n.x, y: n.y,
+          rx: Math.max(40, n.label.length * 4.0 + 12), ry: 24 };
+      });
+      return out;
+    }
+    function addBadge(parent, x, y, value) {
+      var txt = typeof value === 'string' ? value : signed(value);
+      var width = Math.max(38, txt.length * 8 + 12);
+      var g = S('g', { class: 'gl-badge' });
+      g.appendChild(S('rect', { x: x - width / 2, y: y - 15, width: width, height: 22, rx: 4 }));
+      g.appendChild(S('text', { x: x, y: y }, txt));
+      parent.appendChild(g); return g;
+    }
+    function fireHover(payload) { hoverCallbacks.forEach(function (cb) { cb(payload); }); }
+    function render() {
+      svgEl.innerHTML = '';
+      svgEl.classList.toggle('gl-dim', !!hi);
+      svgEl.classList.toggle('gl-focus-mode', !!focus && !hi);
+      var defs = S('defs', {});
+      var marker = S('marker', { id: markerId, viewBox: '0 0 10 10', refX: 8.5, refY: 5, markerWidth: 7, markerHeight: 7, orient: 'auto-start-reverse' });
+      marker.appendChild(S('path', { d: 'M0,0 L10,5 L0,10 z', fill: 'var(--gl-ink)' }));
+      defs.appendChild(marker); svgEl.appendChild(defs);
+
+      var rg = S('g', { class: 'gl-regions' });
+      regionSpecs.forEach(function (r) {
+        var g = S('g', { class: 'gl-region-group gl-region-' + r.id });
+        g.appendChild(S('rect', { class: 'gl-region', x: r.x, y: r.y, width: r.w, height: r.h, rx: 18 }));
+        g.appendChild(S('text', { class: 'gl-region-label', x: r.x + 14, y: r.y + 20 }, r.label));
+        rg.appendChild(g);
+      });
+      if (data.identityGlyphs !== false) {
+        rg.appendChild(S('text', { class: 'gl-ident-glyph', x: 580, y: 130, 'font-size': '54' }, '−'));
+        rg.appendChild(S('text', { class: 'gl-ident-glyph', x: 780, y: 220, 'font-size': '46', transform: 'rotate(90 780 220)' }, '='));
+      }
+      if (partition) {
+        var pr = regionSpecs.filter(function (r) { return r.id === partition.regionId; })[0];
+        if (pr) {
+          var pg = S('g', { class: 'gl-partition' });
+          pg.appendChild(S('rect', { class: 'gl-subregion', x: pr.x + 8, y: pr.y + 28, width: pr.w - 16, height: partition.splitY - pr.y - 34, rx: 12 }));
+          pg.appendChild(S('rect', { class: 'gl-subregion', x: pr.x + 8, y: partition.splitY + 6, width: pr.w - 16, height: pr.y + pr.h - partition.splitY - 14, rx: 12 }));
+          pg.appendChild(S('text', { class: 'gl-subregion-label', x: pr.x + 20, y: pr.y + 44 }, partition.woLabel || 'WITHOUT DONOR RESTRICTIONS'));
+          pg.appendChild(S('text', { class: 'gl-subregion-label', x: pr.x + 20, y: partition.splitY + 22 }, partition.wLabel || 'WITH DONOR RESTRICTIONS'));
+          rg.appendChild(pg);
+        }
+      }
+      svgEl.appendChild(rg);
+
+      var shown = effNodes(), nodeGeo = geo(shown);
+      var edges = visibleEdges.map(function (id) { return edgesById[id]; }).filter(Boolean)
+        .map(function (e) { return { id: e.id, from: remap(e.from, shown), to: remap(e.to, shown), src: e }; })
+        .filter(function (e) { return e.from !== e.to && nodeGeo[e.from] && nodeGeo[e.to]; });
+      var routes = Router.routeAll(edges, nodeGeo, shown);
+
+      var arrows = S('g', { class: 'gl-arrows' });
+      edges.forEach(function (e) {
+        var route = routes[e.id]; if (!route) return;
+        var src = e.src, tag = tags[e.id] || src.tag || 'fact';
+        var cls = 'gl-arrow gl-tag-' + tag
+          + (src.kind === 'transfer' ? ' gl-transfer' : '')
+          + (src.kind === 'valueChange' ? ' gl-vc' : '')
+          + (hi && hi.pairs.indexOf(e.id) >= 0 ? ' gl-hi' : '')
+          + (focus && focus.pairs.indexOf(e.id) >= 0 ? ' gl-focus' : '');
+        var g = S('g', { class: cls, 'data-pair': e.id });
+        var d = 'M' + route.curve.P0.x.toFixed(1) + ',' + route.curve.P0.y.toFixed(1)
+          + ' C' + route.curve.P1.x.toFixed(1) + ',' + route.curve.P1.y.toFixed(1)
+          + ' ' + route.curve.P2.x.toFixed(1) + ',' + route.curve.P2.y.toFixed(1)
+          + ' ' + route.curve.P3.x.toFixed(1) + ',' + route.curve.P3.y.toFixed(1);
+        g.appendChild(S('path', { class: 'gl-arrow-hit', d: d }));
+        g.appendChild(S('path', { class: 'gl-arrow-path', d: d, 'marker-end': 'url(#' + markerId + ')' }));
+        var ly = route.apex.y + (route.side > 0 ? -8 : 16);
+        g.appendChild(S('text', { class: 'gl-arrow-label', x: route.apex.x, y: ly, 'text-anchor': 'middle' }, '$' + money(src.amount)));
+        if (src.caption) {
+          var tip = S('g', { class: 'gl-arrow-tip' });
+          var lines = src.caption.match(/.{1,46}(\s|$)/g) || [src.caption];
+          var w = Math.max.apply(null, lines.map(function (x) { return x.length; })) * 5.6 + 16;
+          tip.appendChild(S('rect', { x: route.apex.x - w / 2, y: ly + 7, width: w, height: lines.length * 14 + 9, rx: 4 }));
+          lines.forEach(function (line, i) { tip.appendChild(S('text', { x: route.apex.x - w / 2 + 8, y: ly + 21 + i * 14 }, line.replace(/\s+$/, ''))); });
+          g.appendChild(tip);
+        }
+        g.addEventListener('mouseenter', function () { fireHover({ kind: 'arrow', id: e.id }); });
+        g.addEventListener('mouseleave', function () { fireHover(null); });
+        arrows.appendChild(g);
+      });
+      svgEl.appendChild(arrows);
+
+      var nodeG = S('g', { class: 'gl-nodes' });
+      shown.forEach(function (id) {
+        var n = nodeGeo[id]; if (!n) return;
+        var src = nodesById[id];
+        var isGroup = !!groupsById[id];
+        var cls = 'gl-node'
+          + (src.kind === 'valueChange' ? ' gl-node-vc' : '')
+          + (isGroup ? ' gl-explodable' : '')
+          + (hi && hi.nodes.indexOf(id) >= 0 ? ' gl-hi' : '')
+          + (focus && focus.nodes.indexOf(id) >= 0 ? ' gl-focus' : '');
+        var g = S('g', { class: cls, 'data-id': id, 'data-region': n.region, 'data-pile': n.pile });
+        g.appendChild(S('ellipse', { cx: n.x, cy: n.y, rx: n.rx, ry: n.ry }));
+        g.appendChild(S('text', { class: 'gl-node-label', x: n.x, y: n.y + 4 }, n.label));
+        var bv = badges.hasOwnProperty(id) ? badges[id] : (src.badge != null ? src.badge : null);
+        if (bv != null) addBadge(g, n.x, n.y - n.ry - 9, bv);
+        if (isGroup) g.appendChild(S('text', { class: 'gl-explode-hint', x: n.x + n.rx - 10, y: n.y + n.ry - 6 }, '⊕'));
+        if (isGroup && opts.clickToExplode !== false) {
+          g.addEventListener('click', function () { board.setExploded(id, !exploded[id]); });
+        }
+        g.addEventListener('mouseenter', function () { fireHover({ kind: 'node', id: id }); });
+        g.addEventListener('mouseleave', function () { fireHover(null); });
+        nodeG.appendChild(g);
+      });
+      svgEl.appendChild(nodeG);
+    }
+
+    var board = {
+      setVisibleNodes: function (ids) { visibleNodes = (ids || []).slice(); render(); return board; },
+      showNodes: function (ids) { (Array.isArray(ids) ? ids : [ids]).forEach(function (id) { if (visibleNodes.indexOf(id) < 0) visibleNodes.push(id); }); render(); return board; },
+      setVisibleEdges: function (ids) { visibleEdges = (ids || []).slice(); render(); return board; },
+      showEdges: function (ids) { (Array.isArray(ids) ? ids : [ids]).forEach(function (id) { if (visibleEdges.indexOf(id) < 0) visibleEdges.push(id); }); render(); return board; },
+      setBadges: function (v) { badges = v || {}; render(); return board; },
+      setTags: function (v) { tags = v || {}; render(); return board; },
+      setExploded: function (id, on) { exploded[id] = !!on; render(); if (opts.onExplode) opts.onExplode(id, !!on); return board; },
+      isExploded: function (id) { return !!exploded[id]; },
+      highlight: function (v) { hi = { nodes: (v && v.nodes) || [], pairs: (v && v.pairs) || [] }; render(); return board; },
+      clearHighlight: function () { hi = null; render(); return board; },
+      setFocus: function (v) { focus = v ? { nodes: v.nodes || [], pairs: v.pairs || [] } : null; render(); return board; },
+      onHover: function (cb) { if (typeof cb === 'function') hoverCallbacks.push(cb); return board; },
+      _state: function () { return { visibleNodes: visibleNodes.slice(), visibleEdges: visibleEdges.slice(), exploded: JSON.parse(JSON.stringify(exploded)) }; }
+    };
+    render(); return board;
+  }
+
+  window.GraphLab.createStatementBoard = createStatementBoard;
 })();

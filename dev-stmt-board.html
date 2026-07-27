@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>dev: statement-board engine check</title>
+  <style>body{font:13px Inter,Arial,sans-serif;margin:16px}svg{width:900px;border:1px solid #ccc}pre{background:#f4f4f4;padding:10px}</style>
+</head>
+<body>
+<h2>Statement-board engine check (instructor-side dev page)</h2>
+<svg id="board"></svg>
+<pre id="out">running…</pre>
+<script src="ohs-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script>
+(function () {
+  var results = [], pass = 0, fail = 0;
+  function ok(cond, msg) { results.push((cond ? 'PASS ' : 'FAIL ') + msg); cond ? pass++ : fail++; }
+  var G = window.OHS_GRAPH;
+
+  /* board data assembled from the canon: three summary nodes that explode
+     into the eighteen, plus a transfer edge, a value-change edge, and an
+     inference edge */
+  var nodes = [
+    { id: 'sumAssets', label: 'Assets', region: 'assets', x: 300, y: 300, badge: G.level0.dAssets },
+    { id: 'sumLiab', label: 'Liabilities', region: 'liab', x: 780, y: 130, badge: G.level0.dLiabilities },
+    { id: 'sumNA', label: 'Net Assets', region: 'reasons', x: 780, y: 430, badge: G.level0.dNetAssets },
+    { id: 'valueChange', label: 'Value change', region: 'reasons', pile: 'wo', kind: 'valueChange', x: 700, y: 300 }
+  ];
+  var grid = { assets: { x: 90, y: 100, cols: 3, dx: 160, dy: 90 }, liab: { x: 640, y: 100, cols: 3, dx: 110, dy: 60 }, reasons: { x: 660, y: 300, cols: 2, dx: 150, dy: 80 } };
+  var counters = { assets: 0, liab: 0, reasons: 0 };
+  G.nodes.forEach(function (n) {
+    var g = grid[n.region], i = counters[n.region]++;
+    nodes.push({ id: n.id, label: n.label, region: n.region, pile: n.pile, x: g.x + (i % g.cols) * g.dx, y: g.y + Math.floor(i / g.cols) * g.dy, badge: n.d });
+  });
+  var edges = [
+    { id: 'releases', from: 'withRestrictions', to: 'availOps', amount: 6189517, kind: 'transfer', tag: 'fact', caption: 'pile-to-pile' },
+    { id: 'vcInv', from: 'valueChange', to: 'investments', amount: G.valueChange.investmentsTotal, kind: 'valueChange', tag: 'inference', caption: 're-priced' },
+    { id: 'ertc', from: 'sumNA', to: 'sumAssets', amount: 2913362, tag: 'inference', caption: 'inference arrow' },
+    { id: 'sales', from: 'investments', to: 'cash', amount: 8811390, tag: 'fact', caption: 'fact arrow' }
+  ];
+  var groups = [
+    { id: 'sumAssets', members: G.nodes.filter(function (n) { return n.region === 'assets'; }).map(function (n) { return n.id; }) },
+    { id: 'sumLiab', members: G.nodes.filter(function (n) { return n.region === 'liab'; }).map(function (n) { return n.id; }) },
+    { id: 'sumNA', members: G.nodes.filter(function (n) { return n.region === 'reasons'; }).map(function (n) { return n.id; }) }
+  ];
+  var svg = document.getElementById('board');
+  var board = GraphLab.createStatementBoard(svg, {
+    nodes: nodes, edges: edges, groups: groups,
+    partition: { regionId: 'reasons', splitY: 460 }
+  });
+
+  ok(typeof GraphLab.createStatementBoard === 'function', 'createStatementBoard exported');
+  ok(svg.querySelectorAll('.gl-region').length === 3, 'three regions render');
+  ok(svg.querySelectorAll('.gl-subregion').length === 2, 'partition renders two sub-regions');
+  var labels = Array.prototype.map.call(svg.querySelectorAll('.gl-subregion-label'), function (t) { return t.textContent; });
+  ok(labels.join('|').indexOf('WITHOUT DONOR RESTRICTIONS') >= 0 && labels.join('|').indexOf('WITH DONOR RESTRICTIONS') >= 0, 'partition labels');
+
+  board.setVisibleNodes(['sumAssets', 'sumLiab', 'sumNA']);
+  ok(svg.querySelectorAll('.gl-node').length === 3, 'level-0: three nodes');
+  var badges = Array.prototype.map.call(svg.querySelectorAll('.gl-badge text'), function (t) { return t.textContent; });
+  ok(badges.indexOf('+985,579') >= 0 && badges.indexOf('+162,201') >= 0 && badges.indexOf('+823,378') >= 0, 'level-0 badges verbatim');
+  ok(svg.querySelectorAll('.gl-explodable').length === 3, 'all three are explodable');
+
+  board.setExploded('sumAssets', true);
+  ok(svg.querySelectorAll('.gl-node').length === 11, 'assets explode: 9 members + 2 summaries');
+  board.setExploded('sumLiab', true); board.setExploded('sumNA', true);
+  ok(svg.querySelectorAll('.gl-node').length === 18, 'full explode: the eighteen');
+
+  board.showNodes('valueChange');
+  ok(svg.querySelectorAll('.gl-node').length === 19, 'the eighteen + Value change');
+  board.setVisibleEdges(['releases', 'vcInv', 'sales', 'ertc']);
+  ok(svg.querySelectorAll('.gl-arrow').length === 3, 'edges render (ertc skipped: its endpoints are exploded-away summaries)');
+  ok(svg.querySelector('.gl-transfer') !== null, 'transfer arrow styled');
+  ok(svg.querySelector('.gl-vc') !== null, 'value-change arrow styled');
+  ok(svg.querySelector('.gl-tag-inference') !== null, 'inference tag styled');
+  var releasesArrow = svg.querySelector('[data-pair="releases"]');
+  ok(releasesArrow !== null, 'releases transfer present');
+  ok(releasesArrow && releasesArrow.querySelector('.gl-arrow-label').textContent === '$6,189,517', 'transfer label verbatim');
+
+  board.setVisibleNodes(['sumAssets', 'sumLiab', 'sumNA', 'valueChange']);
+  board.setExploded('sumAssets', false); board.setExploded('sumLiab', false); board.setExploded('sumNA', false);
+  board.setVisibleEdges(['vcInv']);
+  ok(svg.querySelectorAll('.gl-node').length === 4, 'fold back: three summaries + Value change');
+  var vcArrow = svg.querySelector('[data-pair="vcInv"]');
+  ok(vcArrow !== null, 'value-change edge remaps its folded endpoint to the group parent');
+  ok(svg.querySelector('.gl-node-vc') !== null, 'Value change node styled as a Reason kind');
+
+  board.highlight({ nodes: ['sumAssets'], pairs: [] });
+  ok(svg.classList.contains('gl-dim') && svg.querySelector('.gl-node.gl-hi') !== null, 'highlight works');
+  board.clearHighlight();
+  ok(!svg.classList.contains('gl-dim'), 'clearHighlight works');
+
+  document.getElementById('out').textContent = results.join('\n') + '\n\n' + pass + '/' + (pass + fail) + ' assertions pass' + (fail ? ' — FAILURES ABOVE' : '');
+  window.__CHECK__ = { pass: pass, fail: fail };
+})();
+</script>
+</body>
+</html>
