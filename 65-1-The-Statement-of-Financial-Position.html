@@ -283,7 +283,7 @@ function render(){
 function renderBeats(currentStep){
   var text='';
   if(currentStep===0){
-    text='Here is Yale&rsquo;s Consolidated Statements of Financial Position as it appears on page 21 of the FY2025 financial report. One table, two date columns &mdash; June 30, 2025 on the left, June 30, 2024 on the right &mdash; exactly as Yale presents it. The architecture is the one you know: a snapshot of recorded assets, recorded liabilities, and the difference between them. Yale&rsquo;s name for that difference is <strong>Net Assets</strong>, because a nonprofit has no owners; the identity is still A &minus; L = Net Assets. (Figures rounded to $ millions; the report states thousands.)';
+    text='<strong>An optional side trip:</strong> the same architecture you just walked at the Oregon Humane Society, three decimal places more zeros. Here is Yale&rsquo;s Consolidated Statements of Financial Position as it appears on page 21 of the FY2025 financial report. One table, two date columns &mdash; June 30, 2025 on the left, June 30, 2024 on the right &mdash; exactly as Yale presents it. The architecture is the one you know: a snapshot of recorded assets, recorded liabilities, and the difference between them. Yale&rsquo;s name for that difference is <strong>Net Assets</strong>, because a nonprofit has no owners; the identity is still A &minus; L = Net Assets. (Figures rounded to $ millions; the report states thousands.)';
   } else if(currentStep===1){
     text='Before narrowing to the architecture, pause on what this statement does <em>not</em> show. Yale&rsquo;s collections &mdash; the Beinecke&rsquo;s rare books and manuscripts, the Art Gallery, the Center for British Art, the Peabody&rsquo;s specimens &mdash; are deliberately excluded under FASB ASC 958-360, which lets a nonprofit decline to record collections held for public exhibition, education, or research, provided they are protected, preserved, and covered by a policy that reinvests any sale proceeds in the collections. Yale takes that option; the footnotes disclose it; the statement itself is silent. The same recognition convention keeps the Yale name and the faculty&rsquo;s expertise off the books &mdash; for the same reason CVS&rsquo;s brand is off CVS&rsquo;s books. What is recorded is what the convention captures; what is missing is a deliberate choice with identifiable trade-offs, not a failure of ability.';
   } else if(currentStep===2){
@@ -312,7 +312,7 @@ function renderControls(currentStep){
   var h='<div class="nav-buttons">';
   if(currentStep>0) h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
   if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
-  else h+='<button class="btn-continue" onclick="playClick();nav(\'63-2-The-Cash-Question.html\')">The Cash Question &rarr;</button>';
+  else h+='<button class="btn-continue" onclick="playClick();nav(\'65-2-The-Cash-Question.html\')">The Cash Question &rarr;</button>';
   h+='</div>';
   document.getElementById('controls').innerHTML=h;
 }

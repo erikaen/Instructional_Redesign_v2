@@ -344,7 +344,7 @@ function renderControls(currentStep){
   var h='<div class="nav-buttons">';
   if(currentStep>0) h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
   if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
-  else h+='<button class="btn-continue" onclick="playClick();nav(\'63-6-The-Full-Architecture.html\')">The Full Architecture &rarr;</button>';
+  else h+='<button class="btn-continue" onclick="playClick();nav(\'65-6-The-Full-Architecture.html\')">The Full Architecture &rarr;</button>';
   h+='</div>'; document.getElementById('controls').innerHTML=h;
 }
 function clearRevealTimer(){ if(revealTimer){ clearTimeout(revealTimer); revealTimer=null; } }
