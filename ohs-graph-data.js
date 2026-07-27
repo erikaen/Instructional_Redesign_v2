@@ -979,5 +979,145 @@ window.OHS_GRAPH = {
    "y2025": 2082341,
    "y2024": -500244
   }
+ },
+ "layout": {
+  "regions": [
+   {
+    "id": "assets",
+    "x": 40,
+    "y": 60,
+    "w": 520,
+    "h": 580,
+    "label": "Δ ASSETS"
+   },
+   {
+    "id": "liab",
+    "x": 600,
+    "y": 60,
+    "w": 360,
+    "h": 140,
+    "label": "Δ LIABILITIES"
+   },
+   {
+    "id": "reasons",
+    "x": 600,
+    "y": 240,
+    "w": 360,
+    "h": 400,
+    "label": "Δ REASONS"
+   }
+  ],
+  "partition": {
+   "regionId": "reasons",
+   "splitY": 470,
+   "woLabel": "WITHOUT DONOR RESTRICTIONS",
+   "wLabel": "WITH DONOR RESTRICTIONS"
+  },
+  "positions": {
+   "sumAssets": [
+    300,
+    340
+   ],
+   "sumLiab": [
+    780,
+    130
+   ],
+   "sumNA": [
+    780,
+    440
+   ],
+   "cash": [
+    140,
+    140
+   ],
+   "ar": [
+    300,
+    140
+   ],
+   "contribRec": [
+    460,
+    140
+   ],
+   "bequestsRec": [
+    140,
+    260
+   ],
+   "noteRec": [
+    300,
+    260
+   ],
+   "prepaid": [
+    460,
+    260
+   ],
+   "investments": [
+    140,
+    400
+   ],
+   "trusts": [
+    300,
+    400
+   ],
+   "ppe": [
+    460,
+    480
+   ],
+   "ap": [
+    660,
+    110
+   ],
+   "payroll": [
+    790,
+    100
+   ],
+   "deferredRev": [
+    905,
+    110
+   ],
+   "splitInterest": [
+    700,
+    165
+   ],
+   "deferredComp": [
+    860,
+    165
+   ],
+   "availOps": [
+    700,
+    310
+   ],
+   "boardEndow": [
+    870,
+    310
+   ],
+   "netCapital": [
+    785,
+    370
+   ],
+   "withRestrictions": [
+    780,
+    545
+   ],
+   "valueChange": [
+    670,
+    430
+   ],
+   "reasonDepreciation": [
+    880,
+    430
+   ],
+   "reasonERTC": [
+    700,
+    270
+   ],
+   "reasonContribW": [
+    690,
+    600
+   ],
+   "reasonAnnuity": [
+    880,
+    600
+   ]
+  }
  }
 };
