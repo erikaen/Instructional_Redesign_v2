@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Judgment Calls</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* Page-scoped Module-6 OHS palette + layout, matching the 63-x / 64-x idiom. */
+    .m6ohs-scope {
+      --m6ohs-paper:#ffffff;
+      --m6ohs-panel:#f8fafc;
+      --m6ohs-ink:#263746;
+      --m6ohs-muted:#657583;
+      --m6ohs-primary:#155b86;
+      --m6ohs-rule:#c8d4dc;
+      --m6ohs-rule-strong:#708592;
+      --m6ohs-warm:#fff8df;
+      --m6ohs-accent:#d5a528;
+      --m6ohs-success:#167447;
+      --m6ohs-error:#b43b3b;
+      --m6ohs-soft:#f3f8fb;
+      --m6ohs-cash:#e7f1fb;
+      --m6ohs-shadow:rgba(32,55,72,.09);
+    }
+    .m6ohs-doc-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
+    .m6ohs-doc-card, .m6ohs-question-card {
+      box-sizing:border-box;
+      border:1px solid var(--m6ohs-rule);
+      border-radius:12px;
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m6ohs-doc-card { max-width:880px; margin:0 auto 14px; padding:22px 24px; }
+    .m6ohs-kicker { margin:0 0 5px; color:var(--m6ohs-muted); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+    .m6ohs-doc-title { margin:0; color:var(--m6ohs-primary); font-size:20px; }
+    .m6ohs-subline { margin:3px 0 0; color:var(--m6ohs-muted); font-size:12px; font-style:italic; }
+    .m6ohs-value { text-align:right; white-space:nowrap; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m6ohs-question-card { max-width:760px; margin:0 auto; padding:26px; border:2px dashed var(--m6ohs-accent); background:var(--m6ohs-warm); }
+    .m6ohs-question-card h2 { margin:3px 0 16px; color:var(--m6ohs-primary); font-size:22px; text-align:center; }
+    .m6ohs-question-card > .m6ohs-kicker { text-align:center; }
+    .m6ohs-station { display:grid; grid-template-columns:2rem minmax(0,1fr); gap:10px; align-items:baseline; padding:7px 4px; font-size:13px; line-height:1.5; }
+    .m6ohs-station + .m6ohs-station { border-top:1px solid var(--m6ohs-rule); }
+    .m6ohs-station-n { color:var(--m6ohs-accent); font:800 14px "JetBrains Mono",monospace; text-align:center; }
+    .m6ohs-station b { color:var(--m6ohs-primary); }
+    .m6ohs-q-footer { margin:16px 0 0; padding-top:12px; border-top:1px solid var(--m6ohs-rule-strong); color:var(--m6ohs-primary); font-size:12px; font-weight:800; text-align:center; }
+    .m6ohs-board-svg { display:block; width:100%; height:auto; max-width:940px; margin:10px auto 0; border-radius:8px; }
+    .m6ohs-board-caption { margin:9px 2px 0; color:var(--m6ohs-muted); font-size:11px; font-style:italic; line-height:1.5; }
+    .m6ohs-drill-btn {
+      display:inline-block; margin:12px 0 0; padding:9px 16px;
+      border:1px solid var(--m6ohs-accent); border-radius:8px;
+      background:var(--m6ohs-warm); color:var(--m6ohs-primary);
+      font:700 13px Inter,"Open Sans",sans-serif; cursor:pointer;
+    }
+    .m6ohs-drill-btn:hover, .m6ohs-drill-btn:focus-visible { outline:2px solid var(--m6ohs-accent); outline-offset:1px; }
+    .m6ohs-walkline { margin:13px 0 0; padding-top:9px; border-top:1px solid var(--m6ohs-rule); color:var(--m6ohs-primary); font:700 11px/1.5 "JetBrains Mono",monospace; }
+    .m6ohs-walkline .m6ohs-ok { color:var(--m6ohs-success); }
+    .m6ohs-tie-note { margin:8px 0 0; color:var(--m6ohs-muted); font-size:10.5px; font-style:italic; line-height:1.5; }
+    .m6ohs-chip {
+      display:inline-block; margin:0 0 0 8px; padding:2px 7px;
+      border:1px solid var(--m6ohs-accent); border-radius:4px;
+      color:var(--m6ohs-accent); font-size:9px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap;
+    }
+    .m6ohs-chip-open { border-style:dashed; opacity:.85; }
+    .m6ohs-nt-table { margin-top:14px; font-size:11px; }
+    .m6ohs-nt-row { display:grid; grid-template-columns:minmax(220px,1fr) 6.4rem 6.4rem; column-gap:9px; align-items:baseline; padding:3px 4px; border-left:3px solid transparent; }
+    .m6ohs-nt-head { padding-bottom:5px; border-bottom:1px solid var(--m6ohs-rule); color:var(--m6ohs-muted); font-size:9px; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }
+    .m6ohs-nt-row.m6ohs-subtotal { margin-top:2px; padding-top:6px; border-top:1px solid var(--m6ohs-rule-strong); font-weight:700; }
+    .m6ohs-nt-row.m6ohs-endline { margin-top:3px; padding-top:6px; border-top:3px double var(--m6ohs-rule-strong); color:var(--m6ohs-primary); font-weight:800; }
+    .m6ohs-nt-row.m6ohs-hot { border-left-color:var(--m6ohs-accent); border-radius:3px; background:var(--m6ohs-cash); }
+    .m6ohs-nt-row.m6ohs-hot > div { color:var(--m6ohs-primary); font-weight:700; }
+    .m6ohs-section-row { margin-top:9px; padding:2px 4px 1px; color:var(--m6ohs-primary); font-size:11px; font-weight:800; }
+    .m6ohs-note-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(360px,1fr)); gap:14px; max-width:880px; margin:0 auto 14px; }
+    .m6ohs-note-grid .m6ohs-doc-card { margin:0; max-width:none; }
+    .m6ohs-spans { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin-top:14px; }
+    .m6ohs-span-node { padding:10px 12px; border:1px dashed var(--m6ohs-rule-strong); border-radius:9px; background:var(--m6ohs-soft); }
+    .m6ohs-span-node .m6ohs-span-name { color:var(--m6ohs-primary); font-size:12px; font-weight:800; }
+    .m6ohs-span-node .m6ohs-span-d { margin-top:3px; font:700 13px "JetBrains Mono",monospace; }
+    .m6ohs-span-node .m6ohs-span-sub { margin-top:3px; color:var(--m6ohs-muted); font-size:10px; font-style:italic; }
+    .m6ohs-vol-card { border-style:dashed; border-color:var(--m6ohs-rule-strong); background:var(--m6ohs-panel); }
+    .m6ohs-vol-figures { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin-top:14px; }
+    .m6ohs-vol-fig { padding:10px 12px; border:1px solid var(--m6ohs-rule); border-radius:9px; background:var(--m6ohs-paper); }
+    .m6ohs-vol-big { color:var(--m6ohs-primary); font:800 21px/1.15 "JetBrains Mono",monospace; }
+    .m6ohs-vol-lbl { margin-top:3px; color:var(--m6ohs-muted); font-size:10.5px; }
+    .m6ohs-vol-quote { margin:14px 0 0; padding:10px 13px; border-left:3px solid var(--m6ohs-rule-strong); color:var(--m6ohs-ink); font-size:12px; font-style:italic; line-height:1.55; }
+    .m6ohs-open-card { border:2px dashed var(--m6ohs-rule-strong); background:var(--m6ohs-panel); }
+    .m6ohs-eq { margin-top:12px; font:700 12.5px/1.7 "JetBrains Mono",monospace; color:var(--m6ohs-ink); }
+    .m6ohs-eq .m6ohs-unknown { color:var(--m6ohs-error); }
+    .m6ohs-eq .m6ohs-known { color:var(--m6ohs-success); }
+    .m6ohs-openq { font:800 24px Inter,Arial,sans-serif; fill:#00329d; opacity:.6; text-anchor:middle; }
+    .m6ohs-insight-wrap { margin-top:18px; }
+    @media (max-width:620px) {
+      .m6ohs-nt-row { grid-template-columns:minmax(0,1fr) 5.4rem 5.4rem; }
+      .m6ohs-board-svg { min-width:560px; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6ohs-scope {
+        --m6ohs-paper:#26242e;
+        --m6ohs-panel:#211f28;
+        --m6ohs-ink:#e8edf1;
+        --m6ohs-muted:#b4c0c8;
+        --m6ohs-primary:#7dc8f3;
+        --m6ohs-rule:#4b5361;
+        --m6ohs-rule-strong:#8797a2;
+        --m6ohs-warm:#332f20;
+        --m6ohs-accent:#d8ad3e;
+        --m6ohs-success:#70d6a3;
+        --m6ohs-error:#ff8f8f;
+        --m6ohs-soft:#25313a;
+        --m6ohs-cash:#263847;
+        --m6ohs-shadow:rgba(0,0,0,.28);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Judgment Calls</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~8 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Judgment Calls</div>
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-graph-data.js"></script>
+<script src="ohs-fy2025-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c) return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nav(url){ playClick(); window.location.href=url; }
+
+var G=window.OHS_GRAPH;
+var D=window.OHS_FY2025;
+
+var step=0;
+var TOTAL_STEPS=6;
+var invExploded=false;     /* step 1: has note 8 un-netted the return node? */
+var chased=false;          /* step 4: have the notes been opened? */
+var invBoardRef=null;
+
+function escapeHTML(value){ return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function fmt(v){ if(v===0) return '&mdash;'; var a=Math.abs(v).toLocaleString('en-US'); return v<0?'('+a+')':a; }
+function plain(v){ return Math.abs(v).toLocaleString('en-US'); }
+function usd(v){ return '$'+Math.abs(v).toLocaleString('en-US'); }
+function nodeById(id){ for(var i=0;i<G.nodes.length;i++) if(G.nodes[i].id===id) return G.nodes[i]; return null; }
+function MINUS(){ return '−'; }
+
+/* ---------- Step 0: the five stations ---------- */
+function stationsCard(){
+  var gr=G.netted.investmentReturn.gross;
+  var r9=G.r9;
+  var stations=[
+    'Two lines that arrive <b>already netted</b> &mdash; investment return with '+plain(Math.abs(gr.fees))+' of fees folded inside it, and special events revenue printed after the donors&rsquo; benefits.',
+    '<b>'+plain(G.inKind.total)+'</b> of gifts that moved real value and never touched Cash.',
+    '<b>'+plain(G.inKind.volunteers.hours.y2025)+' hours</b> of volunteer work that never reach the board at all.',
+    'A CFS line of <b>'+plain(r9.apparentFloor.cfsLine)+'</b> that spans two receivable nodes &mdash; and looked unsplittable.',
+    'One figure that stays <b>open</b> &mdash; absent from this document, and from any release of these statements.'
+  ];
+  var h='<div class="m6ohs-question-card"><p class="m6ohs-kicker">After the facts and the walks</p>'
+    +'<h2>The arrows no walk can force</h2>';
+  for(var i=0;i<stations.length;i++){
+    h+='<div class="m6ohs-station"><div class="m6ohs-station-n">'+(i+1)+'</div><div>'+stations[i]+'</div></div>';
+  }
+  h+='<p class="m6ohs-q-footer">Judgment first. The open item last.</p></div>';
+  return '<div class="m6ohs-scope">'+h+'</div>';
+}
+
+/* ---------- Step 1: netted lines (R2) ---------- */
+function invReturnCard(){
+  var gr=G.netted.investmentReturn;
+  var h='<div class="m6ohs-doc-card">'
+    +'<p class="m6ohs-kicker">Netted line 1 &middot; drill-down &middot; Note 8</p>'
+    +'<h2 class="m6ohs-doc-title">Investment return, net</h2>'
+    +'<p class="m6ohs-subline">the face prints it in two pieces &mdash; '+plain(gr.netOperating)+' in operating, '+plain(gr.netNonOperating)+' in non-operating &mdash; each already net of fees</p>'
+    +'<svg id="invBoard" class="m6ohs-board-svg" width="1000" height="340"></svg>'
+    +'<button class="m6ohs-drill-btn" id="invToggle" onclick="toggleInv()">Open note 8 &mdash; un-net it &rarr;</button>'
+    +'<div class="m6ohs-walkline" id="invWalkline" style="display:'+(invExploded?'block':'none')+'">'
+    +plain(gr.gross.gains)+' + '+plain(gr.gross.interestDividends)+' '+MINUS()+' '+plain(Math.abs(gr.gross.fees))+' = '+plain(gr.gross.total)+' <span class="m6ohs-ok">&#10003;</span> &mdash; note 8, un-netted: gains, interest and dividends, fees</div>'
+    +'<p class="m6ohs-board-caption">The netted node is the first pass &mdash; lawful, and the floor the face offers. Note 8 lowers that floor: click the node (or the button) and it explodes into its gross components, the same drill-down that turned three nodes into eighteen.</p>'
+    +'</div>';
+  return h;
+}
+function specialEventsCard(){
+  var se=G.netted.specialEvents;
+  return '<div class="m6ohs-doc-card">'
+    +'<p class="m6ohs-kicker">Netted line 2 &middot; the drill-down that fails</p>'
+    +'<h2 class="m6ohs-doc-title">Special events revenue, less direct benefits to donors <span class="m6ohs-chip">floor &mdash; by omission</span></h2>'
+    +'<div class="m6ohs-nt-table">'
+    +'<div class="m6ohs-nt-row m6ohs-hot"><div>Special events revenue, less direct benefits to donors</div><div class="m6ohs-value">'+fmt(se.net)+'</div><div></div></div>'
+    +'<div class="m6ohs-nt-row"><div>Gross event take</div><div class="m6ohs-value">?</div><div></div></div>'
+    +'<div class="m6ohs-nt-row"><div>Direct benefits to donors</div><div class="m6ohs-value">?</div><div></div></div>'
+    +'</div>'
+    +'<p class="m6ohs-tie-note">Note 3p states that these direct-benefit costs exist &mdash; &ldquo;fundraising expenses that directly benefited donors&rdquo; are subtracted inside this line &mdash; but the published note carries no dollar figures for them. For investment return, a note lowered the floor to the gross components. Here no note does: the netted figure is the floor &mdash; not by aggregation, by omission.</p>'
+    +'</div>';
+}
+function nettedView(){
+  return '<div class="m6ohs-scope"><div class="m6ohs-doc-wrap">'+invReturnCard()+specialEventsCard()+'</div></div>';
+}
+function mountInvBoard(){
+  var svg=document.getElementById('invBoard');
+  if(!svg || !window.GraphLab) return;
+  var gr=G.netted.investmentReturn.gross;
+  invBoardRef=GraphLab.createStatementBoard(svg,{
+    identityGlyphs:false,
+    regions:[{id:'reasons',x:40,y:30,w:920,h:280,label:'Δ REASONS · WITHOUT DONOR RESTRICTIONS'}],
+    nodes:[
+      {id:'invReturn',label:'Investment return, net',region:'reasons',pile:'wo',x:500,y:200,badge:'+'+plain(gr.total)},
+      {id:'grossGains',label:'Gains on investments',region:'reasons',pile:'wo',x:230,y:180,badge:'+'+plain(gr.gains)},
+      {id:'grossIntDiv',label:'Interest & dividends',region:'reasons',pile:'wo',x:510,y:140,badge:'+'+plain(gr.interestDividends)},
+      {id:'grossFees',label:'Investment fees',region:'reasons',pile:'wo',x:780,y:180,badge:MINUS()+plain(Math.abs(gr.fees))}
+    ],
+    edges:[],
+    groups:[{id:'invReturn',members:['grossGains','grossIntDiv','grossFees']}]
+  },{
+    viewBox:'0 0 1000 340',
+    onExplode:function(id,on){ invExploded=on; updateInvUI(); if(on) playSuccess(); else playClick(); }
+  });
+  invBoardRef.setVisibleNodes(['invReturn']);
+  invBoardRef.setVisibleEdges([]);
+  if(invExploded) invBoardRef.setExploded('invReturn',true);
+  updateInvUI();
+}
+function updateInvUI(){
+  var btn=document.getElementById('invToggle');
+  var wl=document.getElementById('invWalkline');
+  if(btn) btn.innerHTML=invExploded?'&larr; Fold back to the netted line':'Open note 8 &mdash; un-net it &rarr;';
+  if(wl) wl.style.display=invExploded?'block':'none';
+}
+function toggleInv(){
+  if(invBoardRef) invBoardRef.setExploded('invReturn',!invExploded);
+}
+
+/* ---------- Step 2: in-kind (R3) ---------- */
+function ikTotals(){
+  var t25=0,t24=0;
+  G.inKind.rows.forEach(function(r){ t25+=r.y2025; t24+=r.y2024; });
+  return {t25:t25,t24:t24};
+}
+function inKindView(){
+  var t=ikTotals();
+  var h='<div class="m6ohs-doc-card">'
+    +'<p class="m6ohs-kicker">In-kind &middot; arrows that skip Cash</p>'
+    +'<h2 class="m6ohs-doc-title">'+plain(G.inKind.total)+' of gifts, no cash traffic</h2>'
+    +'<svg id="ikBoard" class="m6ohs-board-svg" width="1000" height="320"></svg>'
+    +'<p class="m6ohs-board-caption">One arrow, straight across the Reasons region: the contribution Reason gives, and the expense that used the gift receives. Look at the Cash node &mdash; nothing touches it. Recognized because each gift arrived with a price that could be looked up.</p>'
+    +'</div>';
+  var groupsOrder=[];
+  G.inKind.rows.forEach(function(r){ if(groupsOrder.indexOf(r.group)<0) groupsOrder.push(r.group); });
+  var rows='<div class="m6ohs-nt-row m6ohs-nt-head"><div></div><div class="m6ohs-value">2025</div><div class="m6ohs-value">2024</div></div>';
+  groupsOrder.forEach(function(grp){
+    rows+='<div class="m6ohs-section-row">'+escapeHTML(grp)+'</div>';
+    G.inKind.rows.forEach(function(r){
+      if(r.group!==grp) return;
+      rows+='<div class="m6ohs-nt-row"><div>'+escapeHTML(r.label)+'</div><div class="m6ohs-value">'+fmt(r.y2025)+'</div><div class="m6ohs-value">'+fmt(r.y2024)+'</div></div>';
+    });
+  });
+  rows+='<div class="m6ohs-nt-row m6ohs-endline"><div>Total in-kind contributions</div><div class="m6ohs-value">'+fmt(t.t25)+'</div><div class="m6ohs-value">'+fmt(t.t24)+'</div></div>';
+  h+='<div class="m6ohs-doc-card">'
+    +'<p class="m6ohs-kicker">Oregon Humane Society &middot; from the notes</p>'
+    +'<h2 class="m6ohs-doc-title">In-Kind Contributions</h2>'
+    +'<p class="m6ohs-subline">years ended December 31 &middot; exact dollars &middot; where each gift landed</p>'
+    +'<div class="m6ohs-nt-table">'+rows+'</div>'
+    +'<p class="m6ohs-tie-note">The mix swings year to year &mdash; donated merchandise was '+plain(233983)+' in 2024 and '+plain(2406)+' in 2025 &mdash; but every row is priceable, so every row is on the board.</p>'
+    +'</div>';
+  return '<div class="m6ohs-scope"><div class="m6ohs-doc-wrap">'+h+'</div></div>';
+}
+function mountIkBoard(){
+  var svg=document.getElementById('ikBoard');
+  if(!svg || !window.GraphLab) return;
+  var total=G.inKind.total;
+  var b=GraphLab.createStatementBoard(svg,{
+    identityGlyphs:false,
+    regions:[
+      {id:'assets',x:40,y:30,w:250,h:260,label:'Δ ASSETS'},
+      {id:'reasons',x:330,y:30,w:630,h:260,label:'Δ REASONS · WITHOUT DONOR RESTRICTIONS'}
+    ],
+    nodes:[
+      {id:'cash',label:'Cash',region:'assets',x:165,y:180},
+      {id:'ikContrib',label:'In-kind contributions',region:'reasons',pile:'wo',x:470,y:200,badge:'+'+plain(total)},
+      {id:'ikExpense',label:'Expenses, in kind',region:'reasons',pile:'wo',x:815,y:200,badge:MINUS()+plain(total)}
+    ],
+    edges:[
+      {id:'ikFlow',from:'ikContrib',to:'ikExpense',amount:total,tag:'fact',kind:'reason',
+       caption:'The gift arrives and is used; Cash never moves.'}
+    ],
+    groups:[]
+  },{viewBox:'0 0 1000 320'});
+  b.setVisibleNodes(['cash','ikContrib','ikExpense']);
+  b.setVisibleEdges(['ikFlow']);
+}
+
+/* ---------- Step 3: the volunteers (R3) ---------- */
+function volunteersView(){
+  var vol=G.inKind.volunteers;
+  return '<div class="m6ohs-scope"><div class="m6ohs-doc-wrap">'
+    +'<div class="m6ohs-doc-card m6ohs-vol-card">'
+    +'<p class="m6ohs-kicker">Oregon Humane Society &middot; from the notes &middot; Note 20</p>'
+    +'<h2 class="m6ohs-doc-title">The Volunteers <span class="m6ohs-chip m6ohs-chip-open">off the board &mdash; not recognized</span></h2>'
+    +'<p class="m6ohs-subline">no node, no arrow, no dollar &mdash; and the shelter runs on them</p>'
+    +'<div class="m6ohs-vol-figures">'
+    +'<div class="m6ohs-vol-fig"><div class="m6ohs-vol-big">'+plain(vol.hours.y2025)+'</div><div class="m6ohs-vol-lbl">volunteer hours, 2025 ('+plain(vol.hours.y2024)+' in 2024)</div></div>'
+    +'<div class="m6ohs-vol-fig"><div class="m6ohs-vol-big">&asymp; '+vol.fteEquivalent.y2025+'</div><div class="m6ohs-vol-lbl">full-time equivalents (&asymp; '+vol.fteEquivalent.y2024+' in 2024)</div></div>'
+    +'<div class="m6ohs-vol-fig"><div class="m6ohs-vol-big">$0</div><div class="m6ohs-vol-lbl">recognized on any statement</div></div>'
+    +'</div>'
+    +'<div class="m6ohs-vol-quote">&ldquo;'+escapeHTML(vol.whyUnrecorded.replace(' (Note 20)',''))+'&rdquo; &mdash; Note 20</div>'
+    +'</div>'
+    +'</div></div>';
+}
+
+/* ---------- Step 4: the apparent floor, broken by the notes (R9) ---------- */
+function cfsAdjCard(){
+  var rows='<div class="m6ohs-nt-row m6ohs-nt-head"><div></div><div class="m6ohs-value">2025</div><div></div></div>';
+  D.cfs.operating.adjustments.forEach(function(r){
+    rows+='<div class="m6ohs-nt-row'+(r.id==='npvDiscount'?' m6ohs-hot':'')+'"><div>'+escapeHTML(r.label)+'</div><div class="m6ohs-value">'+fmt(r.v)+'</div><div></div></div>';
+  });
+  var cRec=nodeById('contribRec'),bRec=nodeById('bequestsRec');
+  var h='<div class="m6ohs-doc-card">'
+    +'<p class="m6ohs-kicker">Oregon Humane Society &middot; Statement of Cash Flows &middot; the wedge inventory</p>'
+    +'<h2 class="m6ohs-doc-title">One line, two nodes</h2>'
+    +'<p class="m6ohs-subline">adjustments to reconcile the change in net assets to operating cash &middot; 2025</p>'
+    +'<div class="m6ohs-nt-table">'+rows+'</div>'
+    +'<div class="m6ohs-spans">'
+    +'<div class="m6ohs-span-node"><div class="m6ohs-span-name">Contributions rec.</div><div class="m6ohs-span-d">'+MINUS()+plain(Math.abs(cRec.d))+'</div><div class="m6ohs-span-sub">one receivable the line spans</div></div>'
+    +'<div class="m6ohs-span-node"><div class="m6ohs-span-name">Bequests rec.</div><div class="m6ohs-span-d">+'+plain(bRec.d)+'</div><div class="m6ohs-span-sub">the other receivable it spans</div></div>'
+    +'</div>'
+    +'<p class="m6ohs-tie-note">Every other wedge line names one walk. This one names two accounts at once &mdash; on its face, '+plain(G.r9.apparentFloor.cfsLine)+' with no stated split. The floor of what these statements support &mdash; apparently.</p>'
+    +(chased?'':'<button class="m6ohs-drill-btn" onclick="chaseNotes()">Chase the notes &rarr;</button>')
+    +'</div>';
+  return h;
+}
+function noteCard(kicker,title,note,discountLabel){
+  var rows='<div class="m6ohs-nt-row m6ohs-nt-head"><div></div><div class="m6ohs-value">2025</div><div class="m6ohs-value">2024</div></div>';
+  note.rows.forEach(function(r){
+    rows+='<div class="m6ohs-nt-row"><div>'+escapeHTML(r.label)+'</div><div class="m6ohs-value">'+fmt(r.y2025)+'</div><div class="m6ohs-value">'+fmt(r.y2024)+'</div></div>';
+  });
+  rows+='<div class="m6ohs-nt-row m6ohs-subtotal"><div>Gross</div><div class="m6ohs-value">'+fmt(note.gross.y2025)+'</div><div class="m6ohs-value">'+fmt(note.gross.y2024)+'</div></div>';
+  rows+='<div class="m6ohs-nt-row m6ohs-hot"><div>'+discountLabel+'</div><div class="m6ohs-value">'+fmt(note.discount.y2025)+'</div><div class="m6ohs-value">'+fmt(note.discount.y2024)+'</div></div>';
+  rows+='<div class="m6ohs-nt-row m6ohs-endline"><div>Net</div><div class="m6ohs-value">'+fmt(note.net.y2025)+'</div><div class="m6ohs-value">'+fmt(note.net.y2024)+'</div></div>';
+  return '<div class="m6ohs-doc-card">'
+    +'<p class="m6ohs-kicker">'+kicker+'</p>'
+    +'<h2 class="m6ohs-doc-title">'+title+'</h2>'
+    +'<div class="m6ohs-nt-table">'+rows+'</div>'
+    +'</div>';
+}
+function floorView(){
+  var h=cfsAdjCard();
+  if(chased){
+    var n5=D.notes.contributionsReceivable,n6=D.notes.bequestsReceivable,r9=G.r9.apparentFloor;
+    var cdChange=Math.abs(n5.discount.y2024)-Math.abs(n5.discount.y2025); /* 589: the contributions discount fell */
+    h+='<div class="m6ohs-note-grid">'
+      +noteCard('From the notes &middot; Note 6','Bequests Receivable',n6,'Less: net present value discount ('+n6.discountRate2025+')')
+      +noteCard('From the notes &middot; Note 5','Contributions and Grants Receivable',n5,'Less: net present value discount')
+      +'</div>'
+      +'<div class="m6ohs-doc-card">'
+      +'<p class="m6ohs-kicker">The floor, broken</p>'
+      +'<h2 class="m6ohs-doc-title">Split to the dollar</h2>'
+      +'<div class="m6ohs-walkline">'+plain(r9.bequestsDiscount)+' '+MINUS()+' '+plain(cdChange)+' = '+plain(r9.cfsLine)+' <span class="m6ohs-ok">&#10003;</span> &mdash; bequests discount (note 6, new in 2025) minus the fall in the contributions discount (note 5: '+plain(Math.abs(n5.discount.y2024))+' &rarr; '+plain(Math.abs(n5.discount.y2025))+') = the one CFS line</div>'
+      +'<div class="m6ohs-walkline">'+plain(n6.net.y2024)+' + '+plain(G.r9.trueOpen.netRise)+' '+MINUS()+' '+plain(r9.bequestsDiscount)+' = '+plain(n6.net.y2025)+' <span class="m6ohs-ok">&#10003;</span> &mdash; the bequests walk, closed on note 6&rsquo;s own table</div>'
+      +'<p class="m6ohs-tie-note">A careful first pass called this line unallocatable &mdash; provably open. It was merely unread: two notes split it exactly, and the walk it feeds closes to the dollar. Chase the notes before you tag anything open.</p>'
+      +'</div>';
+  }
+  return '<div class="m6ohs-scope"><div class="m6ohs-doc-wrap">'+h+'</div></div>';
+}
+function chaseNotes(){ chased=true; playSuccess(); render(); }
+
+/* ---------- Step 5: the true open (R9) ---------- */
+function openView(){
+  var r9=G.r9.trueOpen;
+  var h='<div class="m6ohs-doc-card">'
+    +'<p class="m6ohs-kicker">The aggregation floor &mdash; the real one</p>'
+    +'<h2 class="m6ohs-doc-title">The gross bequest flows <span class="m6ohs-chip m6ohs-chip-open">open</span></h2>'
+    +'<svg id="openBoard" class="m6ohs-board-svg" width="1000" height="340"></svg>'
+    +'<p class="m6ohs-board-caption">Two arrows the graph is owed: new bequests recognized (the Reason gives into Bequests receivable) and bequests collected (Bequests receivable gives into Cash). Both faded, both unpriced &mdash; tagged open.</p>'
+    +'</div>'
+    +'<div class="m6ohs-doc-card m6ohs-open-card">'
+    +'<p class="m6ohs-kicker">The record</p>'
+    +'<h2 class="m6ohs-doc-title">One equation, two unknowns</h2>'
+    +'<div class="m6ohs-eq">'
+    +'new bequests recognized &nbsp;= <span class="m6ohs-unknown">?</span><br>'
+    +'bequests collected &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <span class="m6ohs-unknown">?</span><br>'
+    +'recognized '+MINUS()+' collected &nbsp;&nbsp;= <span class="m6ohs-known">'+plain(r9.netRise)+'</span> &nbsp;(CFS working-capital line, stated)'
+    +'</div>'
+    +'<p class="m6ohs-tie-note">No statement line states either flow; no note splits them; no walk has another route in. The netted rise is knowable to the dollar &mdash; the gross traffic is not, from this document or from any release of these statements. This is the aggregation floor, and it is real: the drill-down stops here, and you can say exactly why.</p>'
+    +'</div>';
+  return '<div class="m6ohs-scope"><div class="m6ohs-doc-wrap">'+h+'</div></div>';
+}
+function mountOpenBoard(){
+  var svg=document.getElementById('openBoard');
+  if(!svg || !window.GraphLab) return;
+  var bRec=nodeById('bequestsRec');
+  var b=GraphLab.createStatementBoard(svg,{
+    identityGlyphs:false,
+    regions:[
+      {id:'assets',x:40,y:30,w:560,h:280,label:'Δ ASSETS'},
+      {id:'reasons',x:640,y:30,w:320,h:280,label:'Δ REASONS · WITH DONOR RESTRICTIONS'}
+    ],
+    nodes:[
+      {id:'cash',label:'Cash',region:'assets',x:150,y:210},
+      {id:'bequestsRec',label:'Bequests receivable',region:'assets',x:400,y:190,badge:'+'+plain(bRec.d)},
+      {id:'legacies',label:'Legacies & bequests',region:'reasons',pile:'w',x:800,y:200}
+    ],
+    edges:[
+      {id:'openNew',from:'legacies',to:'bequestsRec',amount:0,tag:'open',kind:'reason',
+       caption:'New bequests recognized during the year: amount unknown.'},
+      {id:'openCollected',from:'bequestsRec',to:'cash',amount:0,tag:'open',kind:'exchange',
+       caption:'Bequests collected during the year: amount unknown.'}
+    ],
+    groups:[]
+  },{viewBox:'0 0 1000 340'});
+  b.setVisibleNodes(['cash','bequestsRec','legacies']);
+  b.setVisibleEdges(['openNew','openCollected']);
+  qMark(svg,600,120); /* over the recognized arrow */
+  qMark(svg,275,130); /* over the collected arrow */
+}
+function qMark(svg,x,y){
+  var t=document.createElementNS('http://www.w3.org/2000/svg','text');
+  t.setAttribute('x',x); t.setAttribute('y',y);
+  t.setAttribute('class','m6ohs-openq');
+  t.textContent='?';
+  svg.appendChild(t);
+}
+
+/* ---------- narration ---------- */
+function renderBeats(currentStep){
+  var gr=G.netted.investmentReturn,se=G.netted.specialEvents,vol=G.inKind.volunteers;
+  var r9f=G.r9.apparentFloor,r9o=G.r9.trueOpen;
+  var n5=D.notes.contributionsReceivable,n6=D.notes.bequestsReceivable;
+  var texts=[
+    'The fact arrows landed, and the walks closed nearly everything else. What remains are the arrows no walk can force &mdash; the ones that take judgment. Two statement lines arrive already netted, with real flows folded inside them. '+plain(G.inKind.total)+' of gifts moved value without a dollar of cash. '+plain(vol.hours.y2025)+' hours of work never reach the board at all. And this page ends at something rarer: first a figure that looked unknowable until the notes broke it open &mdash; then the one that truly is. Not every question the board poses has a statement answer. Five stations; judgment first, the open item last.',
+    'Some lines arrive already netted. The activities face prints <strong>Investment return, net</strong> &mdash; '+plain(gr.netOperating)+' inside operating, and the endowment&rsquo;s return beyond the approved draw in non-operating &mdash; and inside those figures, '+plain(Math.abs(gr.gross.fees))+' of investment fees have already been subtracted. The face&rsquo;s netted figure is the first pass, and it is lawful. Then the drill-down: note 8 un-nets it &mdash; gains of '+plain(gr.gross.gains)+', plus interest and dividends of '+plain(gr.gross.interestDividends)+', minus fees of '+plain(Math.abs(gr.gross.fees))+', is '+plain(gr.gross.total)+' of gross return. Open the node and watch it explode into those components. Then the twin: <strong>Special events revenue, less direct benefits to donors</strong>, '+plain(se.net)+' &mdash; netted the same way, the event take with the donors&rsquo; dinner-and-auction benefits already inside it. Note 3p states that those benefit costs exist, but the published note carries no dollar figures for them. Same structure, opposite ending: one note lowers the floor to the gross components; the other leaves the netted figure as the floor &mdash; not by aggregation, by omission.',
+    'Now the gifts that never touch Cash. In 2025, '+plain(G.inKind.total)+' of contributions arrived as things and services, not money &mdash; donated vehicles, shelter materials and supplies, professional services, merchandise. Each came with a price that could be looked up, so each is recognized: the contribution Reason gives, and the expense that used the gift receives &mdash; one arrow, straight across the Reasons region, and Cash never moves. Real value ran through the piles &mdash; support up '+plain(G.inKind.total)+', expenses up the same &mdash; with no cash traffic at all. The note&rsquo;s own table lists where every gift landed.',
+    'And then the gift that dwarfs them all. '+plain(vol.hours.y2025)+' hours of volunteer work in 2025 &mdash; roughly '+vol.fteEquivalent.y2025+' full-time equivalents &mdash; real, essential, and OFF the board. Not one node, not one arrow. Note 20 states the reason in the auditors&rsquo; own words: no reasonable method of valuation, nor sufficient control over the time, place, and manner of the services. You met this refusal once before, at the shop&rsquo;s formation: the founder&rsquo;s skill was real and the whole shop was built on it, but no exchange had ever priced it, so recognition refused &mdash; any figure would have been a guess. Here the same line is drawn at the scale of two hundred people. Not everything gets recognized. The line is drawn in ink &mdash; and the notes say where.',
+    'One wedge line looked like a wall. The CFS adjustment <strong>Change in net present value discount on long-term contributions and bequests receivable &mdash; '+plain(r9f.cfsLine)+'</strong> names two accounts in a single line. One number, two receivable nodes: on its face there is no way to split it, and a careful first pass called it exactly that &mdash; unallocatable, the floor of what these statements support. But the method has one more move: chase every wedge to its note. Chase this one'+(chased
+      ?' &mdash; and it breaks. Note 6 states the bequests discount outright: '+plain(r9f.bequestsDiscount)+', new in 2025, at '+n6.discountRate2025+'. Note 5 prints the contributions discount at both dates: '+plain(Math.abs(n5.discount.y2024))+' then, '+plain(Math.abs(n5.discount.y2025))+' now &mdash; a fall of '+plain(Math.abs(r9f.contributionsDiscountChange))+' running the other way. '+plain(r9f.bequestsDiscount)+' '+MINUS()+' '+plain(Math.abs(r9f.contributionsDiscountChange))+' = '+plain(r9f.cfsLine)+', to the dollar. And note 6&rsquo;s own table closes the bequests walk exactly: '+plain(n6.net.y2024)+' + '+plain(r9o.netRise)+' '+MINUS()+' '+plain(r9f.bequestsDiscount)+' = '+plain(n6.net.y2025)+'. What looked provably open was merely unread. The method &mdash; walk, wedge, note &mdash; is vindicated.'
+      :'.'),
+    'Now the true open item &mdash; and it sits inside the walk that just closed. The CFS&rsquo;s working-capital line says bequests receivable rose '+plain(r9o.netRise)+' before the new discount. That rise is itself a netted figure &mdash; two gross flows the graph would carry as separate arrows: new bequests recognized during the year (the Legacies &amp; bequests Reason gives into Bequests receivable) and bequests collected (Bequests receivable gives into Cash). Recognized minus collected = '+plain(r9o.netRise)+'. One equation, two unknowns. No statement line states either flow; no note splits them; no walk has another route in. You can know the netted rise to the dollar and still never name the gross traffic &mdash; not from this document, and not from any release of these statements. Tag both arrows OPEN and let them fade. The aggregation floor is real; it simply runs one level deeper than it first appeared &mdash; and now you know exactly where.'
+  ];
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+texts[currentStep]+'</p></div>';
+}
+function renderGrid(currentStep){
+  var h=currentStep===0?stationsCard()
+    :currentStep===1?nettedView()
+    :currentStep===2?inKindView()
+    :currentStep===3?volunteersView()
+    :currentStep===4?floorView()
+    :openView();
+  document.getElementById('mainGrid').innerHTML=h;
+}
+function renderTail(currentStep){
+  var h='';
+  if(currentStep===3) h='<div class="m6ohs-scope m6ohs-insight-wrap"><div class="insight-box">Recognition is a drawn line, not an accident. Priceable gifts cross it and move the piles; '+plain(G.inKind.volunteers.hours.y2025)+' hours of unpriceable work stay outside &mdash; stated in the notes, absent from every total.</div></div>';
+  if(currentStep===4 && chased) h='<div class="m6ohs-scope m6ohs-insight-wrap"><div class="insight-box">&ldquo;Unknowable&rdquo; is a claim that has to survive the notes. This one did not: two notes split the one line to the dollar. Chase before you tag anything open.</div></div>';
+  if(currentStep===5) h='<div class="m6ohs-scope m6ohs-insight-wrap"><div class="insight-box">Fact, inference, judgment &mdash; and open. An honest reading ends with all four on the board: the open arrow is not a failure of reading. It is reading, proving where the document stops.</div></div>';
+  document.getElementById('tail').innerHTML=h;
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep===0) h+='<button class="btn-back" onclick="nav(\'64-5-The-Walks-That-Close.html\')">&larr; Back</button>';
+  else h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else h+='<button class="btn-continue" onclick="nav(\'64-7-The-Best-Lawful-Picture.html\')">The Best Lawful Picture &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function mountBoards(currentStep){
+  if(currentStep===1) mountInvBoard();
+  if(currentStep===2) mountIkBoard();
+  if(currentStep===5) mountOpenBoard();
+}
+function render(){
+  renderBeats(step); renderGrid(step); renderTail(step); renderControls(step);
+  if(window.lucide) lucide.createIcons();
+  mountBoards(step);
+}
+function advance(){ playClick(); step=Math.min(step+1,TOTAL_STEPS-1); render(); window.scrollTo(0,0); }
+function back(){ playClick(); step=Math.max(step-1,0); render(); window.scrollTo(0,0); }
+
+var glossaryTerms=[
+  {term:'Open (tag)',def:'The third tag, after fact and inference. An arrow the document supports as existing but cannot price: no statement line states it, no walk solves it, and no note supplies it. It stays on the board, faded &mdash; honestly unknown.'},
+  {term:'Netted line',def:'A statement line printed as a difference of gross flows &mdash; investment return after fees, special events revenue after direct benefits to donors. The face shows the netted figure; a note may un-net it into the gross components, or may not.'},
+  {term:'In-kind contribution',def:'A gift of goods or services, recognized because it arrived with a price that could be looked up. On the board it is a contribution Reason giving straight into an expense &mdash; value moves, and Cash never does.'},
+  {term:'Aggregation floor',def:'The finest grain a set of statements supports. Above the floor, drill-downs and notes keep un-netting; at the floor, a netted figure is knowable while the gross flows inside it are not &mdash; from any reading of the document.'}
+];
+function openGlossary(){ document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){ return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>'; }).join(''); document.getElementById('glossaryOverlay').classList.add('open'); if(window.lucide) lucide.createIcons(); }
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') closeGlossary(); });
+window.devFill=function(){ step=TOTAL_STEPS-1; invExploded=true; chased=true; render(); };
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

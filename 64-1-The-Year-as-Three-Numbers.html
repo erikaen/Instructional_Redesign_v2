@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Year as Three Numbers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* Page-scoped Module-6 OHS palette, matching the 63-x walk-page idiom. */
+    .m6ohs-scope {
+      --m6ohs-paper:#ffffff;
+      --m6ohs-panel:#f8fafc;
+      --m6ohs-ink:#263746;
+      --m6ohs-muted:#657583;
+      --m6ohs-primary:#155b86;
+      --m6ohs-rule:#c8d4dc;
+      --m6ohs-rule-strong:#708592;
+      --m6ohs-warm:#fff8df;
+      --m6ohs-accent:#d5a528;
+      --m6ohs-soft:#f3f8fb;
+      --m6ohs-shadow:rgba(32,55,72,0.09);
+    }
+    .m64-board-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
+    .m64-board-card, .m64-side-card {
+      box-sizing:border-box;
+      border:1px solid var(--m6ohs-rule);
+      border-radius:12px;
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m64-board-card { max-width:980px; min-width:660px; margin:0 auto; padding:18px 18px 10px; }
+    .m64-kicker { margin:0 0 5px; color:var(--m6ohs-muted); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+    .m64-board-title { margin:0; color:var(--m6ohs-primary); font-size:20px; }
+    .m64-subline { margin:3px 0 0; color:var(--m6ohs-muted); font-size:12px; font-style:italic; }
+    .m64-board-card svg { display:block; width:100%; min-width:620px; height:auto; margin-top:12px; border-radius:8px; }
+    .m64-side-card { max-width:760px; margin:14px auto 0; padding:20px 22px; }
+    .m64-identity {
+      margin:0 auto;
+      max-width:760px;
+      padding:13px 15px;
+      border:1px solid var(--m6ohs-accent);
+      border-radius:9px;
+      background:var(--m6ohs-warm);
+      color:var(--m6ohs-ink);
+      margin-top:14px;
+    }
+    .m64-identity-title { margin:0 0 6px; font-weight:800; color:var(--m6ohs-primary); }
+    .m64-identity-line { margin:3px 0; font-family:"JetBrains Mono",monospace; font-size:12.5px; }
+    .m64-identity-foot { margin:7px 0 0; color:var(--m6ohs-muted); font-family:"JetBrains Mono",monospace; font-size:11px; font-style:italic; }
+    .m64-collapse-table { margin-top:14px; font-size:12px; }
+    .m64-collapse-row {
+      display:grid;
+      grid-template-columns:minmax(130px,1fr) 8rem 8rem 7rem;
+      column-gap:10px;
+      align-items:baseline;
+      padding:4px 4px;
+    }
+    .m64-collapse-head { border-bottom:1px solid var(--m6ohs-rule); color:var(--m6ohs-primary); font-weight:700; font-size:11px; }
+    .m64-collapse-row + .m64-collapse-row { border-top:1px solid var(--m6ohs-rule); }
+    .m64-collapse-row.m64-collapse-head + .m64-collapse-row { border-top:0; }
+    .m64-value { text-align:right; white-space:nowrap; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m64-delta { color:var(--m6ohs-primary); font-weight:700; }
+    .m64-collapse-note { margin:12px 0 0; color:var(--m6ohs-muted); font-size:11px; font-style:italic; line-height:1.5; }
+    .m64-insight-wrap { margin-top:18px; }
+    @media (max-width:700px) {
+      .m64-collapse-row { grid-template-columns:minmax(110px,1fr) 6.4rem 6.4rem 5.6rem; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6ohs-scope {
+        --m6ohs-paper:#26242e;
+        --m6ohs-panel:#211f28;
+        --m6ohs-ink:#e8edf1;
+        --m6ohs-muted:#b4c0c8;
+        --m6ohs-primary:#7dc8f3;
+        --m6ohs-rule:#4b5361;
+        --m6ohs-rule-strong:#8797a2;
+        --m6ohs-warm:#332f20;
+        --m6ohs-accent:#d8ad3e;
+        --m6ohs-soft:#25313a;
+        --m6ohs-shadow:rgba(0,0,0,0.28);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Year as Three Numbers</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~5 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart this page" aria-label="Restart this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Year as Three Numbers</div>
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c) return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nav(url){ playClick(); window.location.href=url; }
+
+var step=0;
+var TOTAL_STEPS=4;
+
+function G(){ return window.OHS_GRAPH; }
+function n(v){ return Math.abs(v).toLocaleString('en-US'); }
+function sgn(v){ return (v<0?'&minus;':'+')+n(v); }
+
+/* Every figure on this page renders FROM the canon: the level-0 deltas
+   verbatim, and the two snapshot columns re-summed from the eighteen nodes. */
+function regionTotals(region){
+  var begin=0,end=0;
+  G().nodes.forEach(function(node){
+    if(node.region===region){ begin+=node.begin; end+=node.end; }
+  });
+  return {begin:begin,end:end,d:end-begin};
+}
+
+/* ---------- the board ---------- */
+function boardCard(sub){
+  return '<div class="m6ohs-scope"><div class="m64-board-wrap"><div class="m64-board-card">'
+    +'<p class="m64-kicker">Oregon Humane Society &middot; the year, as a board</p>'
+    +'<h2 class="m64-board-title">FY2025 as a graph</h2>'
+    +'<p class="m64-subline">'+sub+'</p>'
+    +'<svg id="boardSvg" role="img" aria-label="The graph board: three regions for changes in Assets, Liabilities, and Net Assets"></svg>'
+    +'</div></div></div>';
+}
+function mountBoard(currentStep){
+  var svg=document.getElementById('boardSvg');
+  if(!svg || !window.GraphLab || !window.GraphLab.createStatementBoard) return;
+  var data=G(),P=data.layout.positions;
+  var nodes=[
+    { id:'sumAssets', label:'Assets', region:'assets', x:P.sumAssets[0], y:P.sumAssets[1], badge:data.level0.dAssets },
+    { id:'sumLiab', label:'Liabilities', region:'liab', x:P.sumLiab[0], y:P.sumLiab[1], badge:data.level0.dLiabilities },
+    { id:'sumNA', label:'Net Assets', region:'reasons', x:P.sumNA[0], y:P.sumNA[1], badge:data.level0.dNetAssets }
+  ];
+  var board=GraphLab.createStatementBoard(svg,{
+    nodes:nodes, edges:[], groups:[],
+    regions:data.layout.regions
+  },{});
+  if(currentStep>=1) board.setVisibleNodes(['sumAssets','sumLiab','sumNA']);
+  else board.setVisibleNodes([]);
+}
+
+/* ---------- side cards ---------- */
+function identityCard(){
+  var L=G().level0;
+  return '<div class="m6ohs-scope"><div class="m64-identity">'
+    +'<p class="m64-identity-title">The identity of changes</p>'
+    +'<p class="m64-identity-line">&Delta;Assets &minus; &Delta;Liabilities = &Delta;Net Assets</p>'
+    +'<p class="m64-identity-line">'+n(L.dAssets)+' &minus; '+n(L.dLiabilities)+' = '+n(L.dNetAssets)+' &#10003;</p>'
+    +'<p class="m64-identity-foot">A &minus; L = Net Assets holds at both dates, so the changes obey the same identity &mdash; to the dollar</p>'
+    +'</div></div>';
+}
+function collapseCard(){
+  var a=regionTotals('assets'),l=regionTotals('liab'),r=regionTotals('reasons');
+  function row(label,t){
+    return '<div class="m64-collapse-row"><div>'+label+'</div>'
+      +'<div class="m64-value">'+n(t.begin)+'</div>'
+      +'<div class="m64-value">'+n(t.end)+'</div>'
+      +'<div class="m64-value m64-delta">'+sgn(t.d)+'</div></div>';
+  }
+  return '<div class="m6ohs-scope"><div class="m64-side-card">'
+    +'<p class="m64-kicker">The statement map (62-1), collapsed</p>'
+    +'<h2 class="m64-board-title">Two snapshot columns &rarr; one &Delta; each</h2>'
+    +'<div class="m64-collapse-table">'
+    +'<div class="m64-collapse-row m64-collapse-head"><div></div><div class="m64-value">Dec 31, 2024</div><div class="m64-value">Dec 31, 2025</div><div class="m64-value">&Delta;</div></div>'
+    +row('Total assets',a)
+    +row('Total liabilities',l)
+    +row('Total net assets',r)
+    +'</div>'
+    +'<p class="m64-collapse-note">2024 ties: '+n(a.begin)+' &minus; '+n(l.begin)+' = '+n(r.begin)+' &#10003; &middot; 2025 ties: '+n(a.end)+' &minus; '+n(l.end)+' = '+n(r.end)+' &#10003; &mdash; and because both columns tie, the &Delta; column ties too: '+sgn(a.d)+' &minus; ('+sgn(l.d)+') = '+sgn(r.d)+' &#10003;</p>'
+    +'</div></div>';
+}
+
+/* ---------- narration ---------- */
+function renderBeats(currentStep){
+  var L=G().level0;
+  var texts=[
+    'Six pages ago you came to the Oregon Humane Society&rsquo;s statements as a stranger; by 63-6 you had read all four. Now the offer changes. Reading is done &mdash; this sequence <strong>rebuilds the year</strong> those statements describe, as a graph on the board below: every change, and who gave and who received in every move. One condition makes this different from anything the prework has asked before. Behind the bike shop&rsquo;s statements sat a full set of records &mdash; every entry, every date, ready to settle any question. Here, <strong>no one has the ledger</strong>. Not you, not any reader of the audited statements, not the board below &mdash; there is no hidden answer key behind this page. The published statements are the entire record an outsider gets, and the graph you build from them is the best picture anyone on the outside can build. The board starts empty: three regions &mdash; &Delta;&nbsp;Assets, &Delta;&nbsp;Liabilities, &Delta;&nbsp;Reasons &mdash; and the identity glyphs joining them.',
+    'Three nodes land, one per region, and each carries a &Delta; &mdash; <em>delta</em>, the sign for change: ending amount minus beginning amount. <strong>&Delta;Assets '+sgn(L.dAssets)+'</strong>: total recorded assets ended the year '+n(L.dAssets)+' higher than they began. <strong>&Delta;Liabilities '+sgn(L.dLiabilities)+'</strong>: recorded obligations grew '+n(L.dLiabilities)+'. <strong>&Delta;Net Assets '+sgn(L.dNetAssets)+'</strong>: the computed difference grew '+n(L.dNetAssets)+'. And the three are already bound to each other. On 63-1 you tied A &minus; L = Net Assets at both statement dates &mdash; and if the identity holds at both ends of the year, it must hold for the changes between them: '+n(L.dAssets)+' &minus; '+n(L.dLiabilities)+' = '+n(L.dNetAssets)+', to the dollar. Call that the <strong>identity of changes</strong>. It is not a new law; it is the old one, differenced.',
+    'You have seen this picture before, wearing more detail. The statement map of 62-1 set the two snapshots at the edges &mdash; the December 31, 2024 column and the December 31, 2025 column &mdash; with the explaining statements between them. This board is that map, collapsed: each snapshot column squeezed down to one total per region, and the two columns squeezed down to their difference. The table below does the collapse in the open. Both snapshot columns tie, so the &Delta; column ties &mdash; which means that with just three numbers on it, <strong>the board is already lawful</strong>. Everything this sequence adds will be detail inside a picture that already obeys the identity.',
+    'Before the detail arrives, be precise about what a node is &mdash; and is not. A node is <strong>what changed</strong>: one account, one &Delta;, one number the statement faces state outright. It is silent about <em>how</em>. Assets '+sgn(L.dAssets)+' could have come from one enormous bequest or a hundred thousand small moves &mdash; the node cannot tell you. The <em>how</em> lives in <strong>arrows</strong> &mdash; who gave and who received, move by move &mdash; and on this board, every arrow is missing. That is the module&rsquo;s task. Level by level, the three numbers open into eighteen changes, the eighteen into the two piles&rsquo; walks, the walks into arrows &mdash; each arrow drawn where the statements support it, and honestly tagged unknown where they do not. When the drill-down ends, you will hold the best lawful picture of this year that anyone outside the organization can hold.'
+  ];
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+texts[currentStep]+'</p></div>';
+}
+function renderGrid(currentStep){
+  var subs=[
+    'the board, empty: three regions and the identity glyphs',
+    'level 0: the whole year as three &Delta;-nodes',
+    'the same three nodes &mdash; the 62-1 map, collapsed to changes',
+    'three facts stated; every arrow still unknown'
+  ];
+  var h=boardCard(subs[currentStep]);
+  if(currentStep===1) h+=identityCard();
+  else if(currentStep===2) h+=collapseCard();
+  document.getElementById('mainGrid').innerHTML=h;
+  mountBoard(currentStep);
+}
+function renderTail(currentStep){
+  document.getElementById('tail').innerHTML=currentStep===TOTAL_STEPS-1
+    ? '<div class="m6ohs-scope m64-insight-wrap"><div class="insight-box"><strong>The sequence ahead.</strong> Nodes are what changed; arrows are who gave and who received. The statements state the first and withhold the second &mdash; so the graph is rebuilt level by level: three numbers, then eighteen changes, then the piles&rsquo; walks, then the arrows &mdash; fact by fact, inference by inference &mdash; until every arrow is drawn or honestly tagged unknown.</div></div>'
+    : '';
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep===0) h+='<button class="btn-back" onclick="nav(\'63-6-The-Full-Architecture.html\')">&larr; Back</button>';
+  else h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else h+='<button class="btn-continue" onclick="nav(\'64-2-Eighteen-Changes.html\')">Eighteen Changes &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function render(){ renderBeats(step); renderGrid(step); renderTail(step); renderControls(step); if(window.lucide) lucide.createIcons(); }
+function advance(){ playClick(); step=Math.min(step+1,TOTAL_STEPS-1); render(); window.scrollTo(0,0); }
+function back(){ playClick(); step=Math.max(step-1,0); render(); window.scrollTo(0,0); }
+
+var glossaryTerms=[
+  {term:'Δ (delta / change)',def:'The sign for change over the year: the ending amount minus the beginning amount. &Delta;Assets is total assets at December 31, 2025 minus total assets at December 31, 2024.'},
+  {term:'Node',def:'A shape on the board carrying one &Delta; &mdash; the fact that an amount changed, and by how much. A node records <em>what</em> changed; it is silent about who gave and who received.'},
+  {term:'Arrow',def:'A give&rarr;receive link between two nodes: value leaving one and arriving at another. The statement faces carry the &Delta;s; the arrows are the module&rsquo;s work &mdash; drawn where the statements support them, tagged unknown where they do not.'},
+  {term:'The identity of changes',def:'Because A &minus; L = Net Assets holds at both statement dates, the changes across the year obey the same identity: &Delta;Assets &minus; &Delta;Liabilities = &Delta;Net Assets. The old identity, differenced.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') closeGlossary(); });
+window.devFill=function(){ step=TOTAL_STEPS-1; render(); };
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

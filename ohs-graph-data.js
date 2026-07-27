@@ -117,7 +117,7 @@ window.OHS_GRAPH = {
   },
   {
    "id": "payroll",
-   "label": "Accrued payroll",
+   "label": "Payroll",
    "statementLabel": "Accrued payroll and related expenses",
    "region": "liab",
    "pile": null,
@@ -127,7 +127,7 @@ window.OHS_GRAPH = {
   },
   {
    "id": "deferredRev",
-   "label": "Deferred revenue",
+   "label": "Deferred rev.",
    "statementLabel": "Deferred revenue",
    "region": "liab",
    "pile": null,
@@ -157,7 +157,7 @@ window.OHS_GRAPH = {
   },
   {
    "id": "availOps",
-   "label": "Available for operations",
+   "label": "Available for ops",
    "statementLabel": "Available for programs and general operations",
    "region": "reasons",
    "pile": "wo",
@@ -167,7 +167,7 @@ window.OHS_GRAPH = {
   },
   {
    "id": "boardEndow",
-   "label": "Board-designated endowment",
+   "label": "Board endowment",
    "statementLabel": "Board-designated endowment",
    "region": "reasons",
    "pile": "wo",
@@ -177,7 +177,7 @@ window.OHS_GRAPH = {
   },
   {
    "id": "netCapital",
-   "label": "Net investment in capital assets",
+   "label": "Net capital assets",
    "statementLabel": "Net investment in capital assets",
    "region": "reasons",
    "pile": "wo",
@@ -1063,8 +1063,8 @@ window.OHS_GRAPH = {
     480
    ],
    "ap": [
-    660,
-    110
+    645,
+    105
    ],
    "payroll": [
     790,
@@ -1072,27 +1072,27 @@ window.OHS_GRAPH = {
    ],
    "deferredRev": [
     905,
-    110
+    102
    ],
    "splitInterest": [
-    700,
-    165
+    710,
+    170
    ],
    "deferredComp": [
-    860,
-    165
+    855,
+    175
    ],
    "availOps": [
     700,
-    310
+    300
    ],
    "boardEndow": [
-    870,
-    310
+    872,
+    300
    ],
    "netCapital": [
     785,
-    370
+    375
    ],
    "withRestrictions": [
     780,
@@ -1100,15 +1100,15 @@ window.OHS_GRAPH = {
    ],
    "valueChange": [
     670,
-    430
+    432
    ],
    "reasonDepreciation": [
     880,
-    430
+    432
    ],
    "reasonERTC": [
-    700,
-    270
+    640,
+    375
    ],
    "reasonContribW": [
     690,
@@ -1117,6 +1117,10 @@ window.OHS_GRAPH = {
    "reasonAnnuity": [
     880,
     600
+   ],
+   "reasonBequests": [
+    628,
+    555
    ]
   }
  }

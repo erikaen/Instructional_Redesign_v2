@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Piles Walk</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m6ohs-scope {
+      --m6ohs-paper:#ffffff;
+      --m6ohs-ink:#263746;
+      --m6ohs-muted:#657583;
+      --m6ohs-primary:#155b86;
+      --m6ohs-rule:#c8d4dc;
+      --m6ohs-rule-strong:#708592;
+      --m6ohs-accent:#d5a528;
+      --m6ohs-soft:#f3f8fb;
+      --m6ohs-warm:#fff8df;
+      --m6ohs-cash:#e7f1fb;
+      --m6ohs-error:#b43b3b;
+      --m6ohs-success:#167447;
+      --m6ohs-shadow:rgba(32,55,72,.09);
+    }
+    .pw-stage { max-width:980px; margin:0 auto; }
+    .pw-board-wrap { min-width:0; overflow-x:auto; padding:2px 2px 8px; }
+    .pw-board-card {
+      max-width:960px;
+      min-width:720px;
+      margin:0 auto;
+      padding:8px;
+      border:1px solid var(--m6ohs-rule);
+      border-radius:12px;
+      background:#f0f4f8;
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+      box-sizing:border-box;
+    }
+    .pw-board-card svg { display:block; width:100%; height:auto; }
+    .pw-cards { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; align-items:stretch; margin-top:14px; }
+    .pw-card {
+      box-sizing:border-box;
+      min-width:280px;
+      max-width:460px;
+      padding:14px 16px;
+      border:1px solid var(--m6ohs-rule);
+      border-radius:10px;
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .pw-kicker {
+      margin:0 0 4px;
+      color:var(--m6ohs-muted);
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.09em;
+      text-transform:uppercase;
+    }
+    .pw-walk {
+      margin-top:6px;
+      color:var(--m6ohs-primary);
+      font:700 14px/1.4 "JetBrains Mono",monospace;
+      font-variant-numeric:tabular-nums;
+      white-space:nowrap;
+    }
+    .pw-walk-cap { margin-top:2px; color:var(--m6ohs-muted); font-size:10px; font-style:italic; }
+    .pw-note {
+      margin:9px 0 0;
+      padding-top:8px;
+      border-top:1px solid var(--m6ohs-rule);
+      color:var(--m6ohs-muted);
+      font-size:11px;
+      font-style:italic;
+      line-height:1.5;
+    }
+    .pw-stmt { margin-top:9px; font-size:11px; }
+    .pw-stmt-row {
+      display:grid;
+      grid-template-columns:minmax(150px,1fr) repeat(3,6.4rem);
+      column-gap:9px;
+      align-items:baseline;
+      padding:3px 4px;
+      border-left:3px solid transparent;
+    }
+    .pw-stmt-head {
+      padding-bottom:4px;
+      border-bottom:1px solid var(--m6ohs-rule);
+      color:var(--m6ohs-muted);
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+    }
+    .pw-stmt-head > div { text-align:right; }
+    .pw-stmt-head > div:first-child { text-align:left; }
+    .pw-stmt-row.pw-hot {
+      border-left-color:var(--m6ohs-accent);
+      border-radius:3px;
+      background:var(--m6ohs-cash);
+    }
+    .pw-hot .pw-lab, .pw-hot .pw-val { color:var(--m6ohs-primary); font-weight:700; }
+    .pw-lab { min-width:0; font-size:10.5px; line-height:1.35; }
+    .pw-val {
+      text-align:right;
+      white-space:nowrap;
+      font-family:"JetBrains Mono",monospace;
+      font-variant-numeric:tabular-nums;
+    }
+    .pw-rows { margin-top:9px; font-size:11px; }
+    .pw-rows .pw-stmt-row { grid-template-columns:minmax(150px,1.2fr) repeat(3,6.6rem) 5.4rem; }
+    .pw-open { text-align:right; color:var(--m6ohs-muted); font-size:10px; font-style:italic; white-space:nowrap; }
+    @media (max-width:760px) {
+      .pw-board-card { min-width:640px; }
+      .pw-card { min-width:0; width:100%; }
+      .pw-walk { white-space:normal; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6ohs-scope {
+        --m6ohs-paper:#26242e;
+        --m6ohs-ink:#e8edf1;
+        --m6ohs-muted:#b4c0c8;
+        --m6ohs-primary:#7dc8f3;
+        --m6ohs-rule:#4b5361;
+        --m6ohs-rule-strong:#8797a2;
+        --m6ohs-accent:#d8ad3e;
+        --m6ohs-soft:#25313a;
+        --m6ohs-warm:#332f20;
+        --m6ohs-cash:#263847;
+        --m6ohs-error:#ff8f8f;
+        --m6ohs-success:#70d6a3;
+        --m6ohs-shadow:rgba(0,0,0,.28);
+      }
+      .pw-board-card { border-color:#4b5361; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Piles Walk</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~6 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Piles Walk</div>
+
+    <div id="beats"></div>
+    <div class="m6ohs-scope pw-stage">
+      <div class="pw-board-wrap">
+        <div class="pw-board-card"><svg id="pwBoard" role="img" aria-label="The reconstruction board: the Reasons region partitioned into Without and With Donor Restrictions"></svg></div>
+      </div>
+      <div class="pw-cards" id="sidePanel"></div>
+    </div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nav(url){ window.location.href = url; }
+
+var G=window.OHS_GRAPH;
+var L=G.layout;
+
+var step=0;
+var TOTAL_STEPS=5;
+
+function money(v){ return Math.abs(v).toLocaleString('en-US'); }
+function fmt(v){
+  if(v===0) return '&mdash;';
+  return v<0 ? '('+money(v)+')' : money(v);
+}
+function sfmt(v){ return (v<0?'&minus;':'+')+money(v); }
+function gnode(id){
+  for(var i=0;i<G.nodes.length;i++) if(G.nodes[i].id===id) return G.nodes[i];
+  return null;
+}
+var WO_ROW_IDS=['availOps','boardEndow','netCapital'];
+var REL=G.transfers[0];   /* releases: with -> without, 6,189,517 */
+var APP=G.transfers[1];   /* appropriation: restricted share crosses the fence */
+
+function walkStr(walk){
+  return money(walk.begin)+' '+(walk.change<0?'&minus;':'+')+' '+money(walk.change)+' = '+money(walk.end);
+}
+function sumStr(ids){
+  var parts=[];
+  for(var i=0;i<ids.length;i++){
+    var d=gnode(ids[i]).d;
+    if(i===0) parts.push((d<0?'&minus;':'')+money(d));
+    else parts.push((d<0?'&minus; ':'+ ')+money(d));
+  }
+  return parts.join(' ');
+}
+
+/* ---------- the board, rendered from the canon ---------- */
+var reasonsNodes=[];
+for(var i=0;i<G.nodes.length;i++) if(G.nodes[i].region==='reasons') reasonsNodes.push(G.nodes[i]);
+function pileEnd(pile){ return pile==='w' ? 'withRestrictions' : 'availOps'; }
+var boardNodes=reasonsNodes.map(function(n){
+  var p=L.positions[n.id];
+  return { id:n.id, label:n.label, region:n.region, pile:n.pile, x:p[0], y:p[1], badge:n.d };
+});
+var boardEdges=G.transfers.map(function(t){
+  return { id:t.id, from:pileEnd(t.from), to:pileEnd(t.to), amount:t.amount, kind:t.kind, tag:t.tag, caption:t.caption };
+});
+var board=GraphLab.createStatementBoard(document.getElementById('pwBoard'),{
+  nodes:boardNodes, edges:boardEdges, regions:L.regions, partition:L.partition
+});
+board.setVisibleNodes(reasonsNodes.map(function(n){ return n.id; }));
+
+function applyBoard(currentStep){
+  if(currentStep===2) board.setVisibleEdges([REL.id]);
+  else if(currentStep>=3) board.setVisibleEdges([REL.id,APP.id]);
+  else board.setVisibleEdges([]);
+  if(currentStep===2) board.highlight({nodes:['withRestrictions','availOps'],pairs:[REL.id]});
+  else if(currentStep===3) board.highlight({nodes:['withRestrictions','availOps'],pairs:[APP.id]});
+  else if(currentStep===4) board.highlight({nodes:WO_ROW_IDS,pairs:[]});
+  else board.clearHighlight();
+}
+
+/* ---------- side cards ---------- */
+function walkCards(){
+  var wo=G.pileWalks.wo, w=G.pileWalks.w;
+  var h='<div class="pw-card">'
+    +'<p class="pw-kicker">Statement of Activities &middot; Without donor restrictions column</p>'
+    +'<div class="pw-walk">'+walkStr(wo)+'</div>'
+    +'<div class="pw-walk-cap">begin &middot; change in net assets &middot; end</div>'
+    +'<p class="pw-note">Board check: the three free-pile badges sum to '+sumStr(WO_ROW_IDS)+' = '+sfmt(wo.change)+' &mdash; the column&rsquo;s change, to the dollar.</p>'
+    +'</div>';
+  h+='<div class="pw-card">'
+    +'<p class="pw-kicker">Statement of Activities &middot; With donor restrictions column</p>'
+    +'<div class="pw-walk">'+walkStr(w)+'</div>'
+    +'<div class="pw-walk-cap">begin &middot; change in net assets &middot; end</div>'
+    +'<p class="pw-note">One row on the SFP, one column here: the restricted pile&rsquo;s badge, '+sfmt(gnode('withRestrictions').d)+', is this column&rsquo;s change.</p>'
+    +'</div>';
+  return h;
+}
+function stmtHead(){
+  return '<div class="pw-stmt-row pw-stmt-head"><div></div><div>Without donor restrictions</div><div>With donor restrictions</div><div>Total 2025</div></div>';
+}
+function releasesCard(){
+  return '<div class="pw-card">'
+    +'<p class="pw-kicker">The row, as the activities statement prints it</p>'
+    +'<div class="pw-stmt">'+stmtHead()
+    +'<div class="pw-stmt-row pw-hot"><div class="pw-lab">Net assets released from restrictions</div>'
+    +'<div class="pw-val">'+fmt(REL.amount)+'</div><div class="pw-val">'+fmt(-REL.amount)+'</div><div class="pw-val">'+fmt(0)+'</div></div>'
+    +'</div>'
+    +'<p class="pw-note">One column gives, one receives, and the total column shows a dash: zero-sum by construction. No asset or liability sits at either end of this arrow.</p>'
+    +'</div>';
+}
+function appropriationCard(){
+  return '<div class="pw-card">'
+    +'<p class="pw-kicker">The row, as the activities statement prints it</p>'
+    +'<div class="pw-stmt">'+stmtHead()
+    +'<div class="pw-stmt-row pw-hot"><div class="pw-lab">Appropriation of endowment assets for expenditure</div>'
+    +'<div class="pw-val">'+fmt(APP.woLine)+'</div><div class="pw-val">'+fmt(APP.wLine)+'</div><div class="pw-val">'+fmt(APP.crossesIn)+'</div></div>'
+    +'</div>'
+    +'<p class="pw-note">'+money(APP.woLine)+' = '+money(APP.amount)+' + '+money(APP.crossesIn)+'. The '+money(APP.amount)+' crosses the fence &mdash; the transfer arrow. The '+money(APP.crossesIn)+' arrives into operating from the non-operating section further down the same column &mdash; a move between sections, not between piles, so it earns no arrow here.</p>'
+    +'</div>';
+}
+function rowsCard(){
+  var labels={availOps:'Available for operations',boardEndow:'Board-designated endowment',netCapital:'Net investment in capital assets'};
+  var h='<div class="pw-card">'
+    +'<p class="pw-kicker">The free pile&rsquo;s three rows &middot; Statement of Financial Position, both dates</p>'
+    +'<div class="pw-stmt pw-rows">'
+    +'<div class="pw-stmt-row pw-stmt-head"><div></div><div>Dec 31, 2024</div><div>Dec 31, 2025</div><div>&Delta;</div><div>Its walk</div></div>';
+  for(var i=0;i<WO_ROW_IDS.length;i++){
+    var n=gnode(WO_ROW_IDS[i]);
+    h+='<div class="pw-stmt-row pw-hot"><div class="pw-lab">'+labels[n.id]+'</div>'
+      +'<div class="pw-val">'+fmt(n.begin)+'</div><div class="pw-val">'+fmt(n.end)+'</div>'
+      +'<div class="pw-val">'+sfmt(n.d)+'</div><div class="pw-open">not stated</div></div>';
+  }
+  h+='</div>'
+    +'<p class="pw-note">Six figures, three changes &mdash; all facts. But the activities statement walks the two pile columns and stops: no statement explains the path any of these three rows took.</p>'
+    +'</div>';
+  return h;
+}
+
+/* ---------- beats ---------- */
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='The board returns with its Reasons region redrawn. The shop&rsquo;s board kept one open Reasons space; this one is <strong>partitioned</strong> &mdash; Without Donor Restrictions above the line, With Donor Restrictions below it. These are the two piles you met on the Statement of Financial Position, promoted from rows on a page to territory on the board. Four &Delta;-nodes land inside. The free pile arrives already split into the SFP&rsquo;s three rows &mdash; Available for operations, Board-designated endowment, Net investment in capital assets &mdash; and the restricted pile arrives whole. Every badge is a fact: the difference between the two statement dates. The line between the sub-regions is the donors&rsquo; fence.';
+  } else if(currentStep===1){
+    text='Now set the Statement of Activities beside the board. Its two money columns are not commentary on the piles &mdash; they <strong>are</strong> the piles&rsquo; walks. The Without column walks '+walkStr(G.pileWalks.wo)+'; the With column walks '+walkStr(G.pileWalks.w)+'. And the board already agrees: the three free-pile badges sum to '+sumStr(WO_ROW_IDS)+' = '+sfmt(G.pileWalks.wo.change)+', the Without column&rsquo;s change exactly. A whole statement page, and its two bottom walks land on badges the board carries as facts.';
+  } else if(currentStep===2){
+    text='Here is an arrow the shop never needed. Every arrow so far has had an asset or a liability at one end &mdash; something given, something received, somewhere out on the left of the board. The <strong>transfer arrow</strong> has neither: both ends sit inside the Reasons region. You read its row on the activities statement: <em>Net assets released from restrictions</em> &mdash; '+money(REL.amount)+' in the Without column, ('+money(REL.amount)+') in the With column, a dash in the total. When a promise is kept &mdash; the purpose served, the date reached &mdash; the restricted pile gives and the free pile receives. No new money arrived, and none left; total net assets did not move by a dollar. <strong>A promise kept moves the fence, not the money.</strong> On the board the transfer wears its own styling: dotted, pile to pile, crossing the partition line.';
+  } else if(currentStep===3){
+    text='The second transfer of the year is subtler. <em>Appropriation of endowment assets for expenditure</em> &mdash; the board of directors&rsquo; approved draw from the endowment, the row you read just above the releases on the statement. Its Without column shows '+money(APP.woLine)+'; its With column shows ('+money(APP.amount)+'); its total shows '+money(APP.crossesIn)+' &mdash; no dash this time. Only the '+money(APP.amount)+' is a pile-to-pile transfer: the restricted share of the draw crossing the fence, the same kind of arrow as the releases, just smaller. The rest never changes piles at all: the appropriation in total, '+money(APP.crossesIn)+', arrives into operating from the non-operating section further down the same statement &mdash; a move between sections of one pile&rsquo;s column. One line doing two jobs: a fence crossing of '+money(APP.amount)+', and a section move of '+money(APP.crossesIn)+'. Only the fence crossing earns a transfer arrow.';
+  } else if(currentStep===4){
+    text='One more thing the board shows that no statement will ever walk. The SFP splits the free pile into three rows at <em>both</em> dates &mdash; six facts, so all three changes are known: Available for operations fell '+money(gnode('availOps').d)+'; Board-designated endowment rose '+money(gnode('boardEndow').d)+'; Net investment in capital assets fell '+money(gnode('netCapital').d)+'. But no statement walks those rows. Money moves between &ldquo;available&rdquo; and &ldquo;board-designated&rdquo; by a vote of the board of directors; the capital-asset figure shifts as buildings give up working life and new purchases arrive &mdash; internal traffic with no explaining statement of its own. Each row&rsquo;s change is a fact; each row&rsquo;s walk is not stated. That is a drill-down floor, met this early &mdash; and it is not a defect. It is a judgment about how far the walking goes: <strong>the statements walk the piles, not the rows.</strong>';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div>';
+}
+function renderPanel(currentStep){
+  var h='';
+  if(currentStep===1) h=walkCards();
+  else if(currentStep===2) h=releasesCard();
+  else if(currentStep===3) h=appropriationCard();
+  else if(currentStep===4) h=rowsCard();
+  document.getElementById('sidePanel').innerHTML=h;
+}
+function renderTail(currentStep){
+  document.getElementById('tail').innerHTML=(currentStep===TOTAL_STEPS-1)
+    ? '<div class="insight-box">A &Delta;-node can be a fact while its walk stays unwritten. The board keeps both truths visible: the badge states the change, and the absence of arrows says no statement explains it.</div>'
+    : '';
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep===0) h+='<button class="btn-back" onclick="nav(\'64-2-Eighteen-Changes.html\')">&larr; Back</button>';
+  else h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else h+='<button class="btn-continue" onclick="playClick();nav(\'64-4-The-Fact-Arrows.html\')">The Fact Arrows &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function render(){
+  renderBeats(step);
+  applyBoard(step);
+  renderPanel(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function advance(){
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Transfer arrow',def:'An arrow with both ends inside the Reasons region: one pile gives, the other receives, and no asset or liability sits at either end. Zero-sum by construction &mdash; the total column shows a dash &mdash; and drawn dotted on the board to set it apart from the arrows that move things.'},
+  {term:'Pile',def:'A sub-total of net assets. OHS keeps two: without donor restrictions (free to spend) and with donor restrictions (fenced by donors&rsquo; promises). Each pile walks its own column of the Statement of Activities.'},
+  {term:'Appropriation',def:'The board of directors&rsquo; approved draw from the endowment for the year&rsquo;s spending. On the activities statement one line does two jobs: '+money(729652)+' in total arrives into operating from the non-operating section, and '+money(459227)+' of it crosses the fence from the restricted pile &mdash; only that share is a pile-to-pile transfer.'},
+  {term:'Release',def:'The transfer recorded when a donor&rsquo;s restriction is met &mdash; the purpose served or the date reached. The restricted pile gives, the free pile receives, and total net assets do not move by a dollar.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){
+  step=TOTAL_STEPS-1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

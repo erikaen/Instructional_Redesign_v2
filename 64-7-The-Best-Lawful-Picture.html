@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Best Lawful Picture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* 64-7 closing page — the finished OHS board. Board styling comes from
+       graph-lab.js; this block only lays out the stage, the lens bar, the
+       aggregated expense panel (the 64-4 idiom), and the tag-census card. */
+    .m647-stage {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(232px,278px);
+      gap:14px;
+      align-items:start;
+      margin-top:16px;
+    }
+    .m647-stage > * { min-width:0; }
+    .m647-board-wrap {
+      overflow-x:auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#f0f4f8;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+    }
+    .m647-board-wrap #board { display:block; width:100%; min-width:720px; height:auto; }
+    .m647-lens {
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:center;
+      margin:10px 0 0;
+    }
+    .m647-lens-btn {
+      display:inline-flex;
+      align-items:center;
+      border:1px solid #7a91ab;
+      border-radius:999px;
+      padding:7px 14px;
+      background:#fff;
+      color:#16324a;
+      cursor:pointer;
+      font:700 .76rem/1 Inter,sans-serif;
+    }
+    .m647-lens-btn:hover, .m647-lens-btn:focus-visible { border-color:#286dc0; outline:2px solid rgba(40,109,192,.2); }
+    .m647-lens-btn.is-active { border-color:#286dc0; background:#286dc0; color:#fff; }
+    .m647-swatch {
+      display:inline-block;
+      width:24px;
+      height:0;
+      margin-right:7px;
+      border-top:3px solid currentColor;
+    }
+    .m647-swatch.is-dashed { border-top-style:dashed; }
+    .m647-swatch.is-double { border-top-style:double; border-top-width:4px; }
+    .m647-swatch.is-open { opacity:.3; }
+    .m647-progress {
+      margin:8px 0 0;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .m647-panel {
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#fff;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+      padding:13px 14px;
+      transition:opacity .25s ease-out;
+    }
+    .m647-panel.m647-dim { opacity:.35; }
+    .m647-panel-title { margin:0; color:#16324a; font:800 .7rem/1.35 Inter,sans-serif; letter-spacing:.07em; text-transform:uppercase; }
+    .m647-panel-sub { margin:4px 0 8px; color:#64748b; font:italic 600 .66rem/1.45 "Open Sans",sans-serif; }
+    .m647-panel-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; padding:2px 0; color:#16324a; font:600 .68rem/1.4 "Open Sans",sans-serif; }
+    .m647-panel-val { font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; text-align:right; white-space:nowrap; }
+    .m647-panel-total { margin-top:4px; padding-top:5px; border-top:1px solid #708592; font-weight:800; color:#16324a; }
+    .m647-fact-chip {
+      display:inline-block;
+      margin-left:7px;
+      padding:2px 7px;
+      border-radius:4px;
+      background:#ecfdf3;
+      color:#166534;
+      font:800 .58rem/1.2 Inter,sans-serif;
+      letter-spacing:.08em;
+      vertical-align:middle;
+    }
+    .m647-census {
+      max-width:780px;
+      margin:16px auto 0;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#fff;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+      overflow:hidden;
+    }
+    .m647-census-title {
+      margin:0;
+      padding:14px 18px;
+      background:#eaf1f8;
+      color:#16324a;
+      font:800 .96rem/1.35 Inter,sans-serif;
+    }
+    .m647-census-sub { margin:0; padding:8px 18px 2px; color:#64748b; font:italic 600 .74rem/1.45 "Open Sans",sans-serif; }
+    .m647-census-body { padding:6px 12px 12px; }
+    .m647-census-row {
+      display:grid;
+      grid-template-columns:44px minmax(0,1fr) auto;
+      gap:12px;
+      align-items:center;
+      width:100%;
+      margin:4px 0 0;
+      border:1px solid transparent;
+      border-radius:8px;
+      padding:9px 8px;
+      background:transparent;
+      color:#16324a;
+      text-align:left;
+      font:600 .8rem/1.45 "Open Sans",sans-serif;
+    }
+    .m647-census-row b { font-family:Inter,sans-serif; }
+    button.m647-census-row { cursor:pointer; }
+    button.m647-census-row:hover, button.m647-census-row:focus-visible { border-color:#286dc0; background:#f3f8fd; outline:none; }
+    button.m647-census-row.is-active { border-color:#286dc0; background:#eaf3fc; }
+    .m647-census-count { color:#16324a; font:800 1.1rem/1 "JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m647-census-note { margin:8px 6px 2px; color:#64748b; font:italic 600 .7rem/1.5 "Open Sans",sans-serif; }
+    #tail { margin-top:16px; }
+    #controls { margin-top:18px; }
+    @media (max-width:980px) {
+      .m647-stage { grid-template-columns:1fr; }
+    }
+    @media (max-width:760px) { .m647-board-wrap #board { min-width:640px; } }
+    @media (prefers-reduced-motion:reduce) { .m647-panel { transition:none; } }
+    @media (prefers-color-scheme:dark) {
+      .m647-stage { --gl-panel:#26242e; --gl-ink:#e7eef9; --gl-region-line:#8996aa; --gl-accent:#e6ae4f; --gl-pulse:#a96915; }
+      .m647-board-wrap { border-color:#4b5567; background:#211f28; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m647-lens-btn { border-color:#77849a; background:#211f28; color:#e7eef9; }
+      .m647-lens-btn.is-active { border-color:#5b9bd8; background:#2c5a8a; color:#fff; }
+      .m647-progress { color:#aebbd0; }
+      .m647-panel, .m647-census { border-color:#4b5567; background:#26242e; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m647-panel-title, .m647-panel-row, .m647-panel-total, .m647-census-count { color:#e7eef9; }
+      .m647-panel-total { border-top-color:#8797a2; }
+      .m647-panel-sub, .m647-census-sub, .m647-census-note { color:#aebbd0; }
+      .m647-fact-chip { background:#183425; color:#b6f0c8; }
+      .m647-census-title { background:#302e39; color:#e7eef9; }
+      .m647-census-row { color:#e7eef9; }
+      button.m647-census-row:hover, button.m647-census-row:focus-visible { border-color:#5b9bd8; background:#243244; }
+      button.m647-census-row.is-active { border-color:#5b9bd8; background:#243244; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Best Lawful Picture</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~6 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Best Lawful Picture</div>
+
+    <div id="beats"></div>
+    <div class="m647-stage" id="mainGrid">
+      <div>
+        <div class="m647-board-wrap">
+          <svg id="board" viewBox="0 0 1000 660" role="img" aria-label="The finished board: all eighteen change nodes of the OHS year, with every arrow tagged fact, inference, or open"></svg>
+        </div>
+        <div class="m647-lens" id="lensBar" role="group" aria-label="Tag lenses"></div>
+      </div>
+      <div class="m647-panel" id="expPanel" aria-label="The expense arrows, aggregated"></div>
+    </div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c) return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nav(url){ playClick(); window.location.href=url; }
+
+var step=0;
+var TOTAL_STEPS=4;
+var currentLens='all';
+
+function G(){ return window.OHS_GRAPH; }
+function escapeHTML(value){ return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function plain(v){ return Math.abs(v).toLocaleString('en-US'); }
+function sgn(v){ return (v>=0?'+':'&minus;')+plain(v); }
+
+/* ---------- the census, counted from the data ---------- */
+function factArrowList(){ return G().arrows.filter(function(a){ return a.tag==='fact'; }); }
+function inferenceArrowList(){ return G().arrows.filter(function(a){ return a.tag==='inference'; }); }
+function drawnFactCount(){ return factArrowList().length + G().transfers.length; }
+function factTotal(){ return drawnFactCount() + G().expenseRows.length; }
+function inferenceCount(){ return inferenceArrowList().length; }
+function openCount(){ return G().r9 && G().r9.trueOpen ? 1 : 0; }
+function judgmentCount(){ return Object.keys(G().netted).length + 1; } /* two netted lines + the in-kind bundle */
+function expenseTotal(){ return G().expenseRows.reduce(function(t,r){ return t+r.amount; },0); }
+
+/* ---------- the board, assembled from the canon ----------
+   Positions come from OHS_GRAPH.layout; a handful of page-level legibility
+   overrides (short display labels, small position nudges in the crowded
+   liabilities and without-pile areas) keep the finished board readable
+   with every node on screen at once. Figures are never overridden. */
+var LABEL_OVERRIDES={ payroll:'Payroll', deferredRev:'Deferred rev.', availOps:'Available for ops', boardEndow:'Board endowment', netCapital:'Net capital assets' };
+var POSITION_OVERRIDES={ ap:[645,105], deferredRev:[905,102], splitInterest:[710,170], deferredComp:[855,175], availOps:[700,300], boardEndow:[872,300], netCapital:[785,375], reasonERTC:[640,375], valueChange:[670,432], reasonDepreciation:[880,432], reasonBequests:[628,555] };
+var REASON_NODES=[
+  { id:'valueChange', label:'Value change', pile:'wo', kind:'valueChange' },
+  { id:'reasonDepreciation', label:'Depreciation', pile:'wo' },
+  { id:'reasonERTC', label:'ERTC', pile:'wo' },
+  { id:'reasonContribW', label:'Restricted gifts', pile:'w' },
+  { id:'reasonAnnuity', label:'Annuity agreements', pile:'w' },
+  { id:'reasonBequests', label:'Bequests', pile:'w' }
+];
+
+function nodePos(id){ return POSITION_OVERRIDES[id] || G().layout.positions[id]; }
+function boardNodes(){
+  var out=[];
+  G().nodes.forEach(function(n){
+    var p=nodePos(n.id);
+    out.push({ id:n.id, label:LABEL_OVERRIDES[n.id]||n.label, region:n.region, pile:n.pile||'', x:p[0], y:p[1], badge:n.d });
+  });
+  REASON_NODES.forEach(function(n){
+    var p=nodePos(n.id);
+    out.push({ id:n.id, label:n.label, region:'reasons', pile:n.pile, kind:n.kind, x:p[0], y:p[1] });
+  });
+  return out;
+}
+function boardEdges(){
+  var out=[];
+  G().arrows.forEach(function(a){
+    out.push({ id:a.id, from:a.from, to:a.to, amount:a.amount, tag:a.tag, kind:a.kind, caption:a.caption });
+  });
+  G().transfers.forEach(function(t){
+    /* pile-to-pile: both transfers cross from the restricted pile into the free pile */
+    out.push({ id:t.id, from:'withRestrictions', to:'availOps', amount:t.amount, tag:t.tag, kind:'transfer', caption:t.caption });
+  });
+  var open=G().r9.trueOpen;
+  out.push({ id:'openRecognized', from:'reasonBequests', to:'bequestsRec', amount:0, tag:'open', kind:'reason',
+    caption:'New bequests recognized during the year — gross amount OPEN. '+open.equation+'. One equation, two unknowns.' });
+  out.push({ id:'openCollected', from:'bequestsRec', to:'cash', amount:0, tag:'open', kind:'exchange',
+    caption:'Bequests collected during the year — gross amount OPEN. Only the difference between the two gross flows is knowable.' });
+  return out;
+}
+
+var ALL_NODES=boardNodes();
+var ALL_EDGES=boardEdges();
+var board=GraphLab.createStatementBoard(document.getElementById('board'),{
+  nodes:ALL_NODES,
+  edges:ALL_EDGES,
+  regions:G().layout.regions,
+  partition:G().layout.partition
+});
+board.setVisibleNodes(ALL_NODES.map(function(n){ return n.id; }));
+board.setVisibleEdges(ALL_EDGES.map(function(e){ return e.id; }));
+
+/* ---------- the lenses: focus by tag class ---------- */
+function setLens(tag){
+  currentLens=tag;
+  if(tag==='all'){ board.setFocus(null); }
+  else {
+    var pairs=[],nodes={};
+    ALL_EDGES.forEach(function(e){
+      if(e.tag!==tag) return;
+      pairs.push(e.id); nodes[e.from]=true; nodes[e.to]=true;
+    });
+    board.setFocus({ nodes:Object.keys(nodes), pairs:pairs });
+  }
+  var panel=document.getElementById('expPanel');
+  panel.classList.toggle('m647-dim', tag==='inference'||tag==='open');
+  renderLensBar();
+  renderTail(step);
+}
+function lensClick(tag){ playClick(); setLens(tag); }
+function renderLensBar(){
+  var lenses=[
+    { tag:'all', label:'Everything', swatch:'' },
+    { tag:'fact', label:'Facts', swatch:'<span class="m647-swatch"></span>' },
+    { tag:'inference', label:'Inferences', swatch:'<span class="m647-swatch is-dashed"></span>' },
+    { tag:'open', label:'Open', swatch:'<span class="m647-swatch is-open"></span>' }
+  ];
+  document.getElementById('lensBar').innerHTML=lenses.map(function(l){
+    return '<button class="m647-lens-btn'+(currentLens===l.tag?' is-active':'')+'" onclick="lensClick(\''+l.tag+'\')" aria-pressed="'+(currentLens===l.tag)+'">'+l.swatch+l.label+'</button>';
+  }).join('');
+}
+
+/* ---------- the aggregated expense panel (64-4's idiom) ---------- */
+function renderExpensePanel(){
+  var rows=G().expenseRows.map(function(r){
+    return '<div class="m647-panel-row"><div>'+escapeHTML(r.label)+'</div><div class="m647-panel-val">'+plain(r.amount)+'</div></div>';
+  }).join('');
+  document.getElementById('expPanel').innerHTML=
+    '<p class="m647-panel-title">The expense arrows <span class="m647-fact-chip">All facts</span></p>'
+    +'<p class="m647-panel-sub">'+G().expenseRows.length+' Reasons, drawn once as a panel &mdash; every figure stated on the functional-expenses statement. The piles&rsquo; walks run down through these.</p>'
+    +rows
+    +'<div class="m647-panel-row m647-panel-total"><div>Total operating expenses</div><div class="m647-panel-val">'+plain(expenseTotal())+'</div></div>';
+}
+
+/* ---------- narration ---------- */
+function renderBeats(currentStep){
+  var L=G().level0,IK=G().inKind,open=G().r9.trueOpen;
+  var fees=Math.abs(G().netted.investmentReturn.gross.fees);
+  var releases=G().transfers[0].amount;
+  var beats=[
+    { heading:'The year, reconstructed.',
+      text:'Six pages ago this board was three numbers. Now every line of the Statement of Financial Position stands as its own &Delta;-node &mdash; assets '+sgn(L.dAssets)+', liabilities '+sgn(L.dLiabilities)+', Net Assets '+sgn(L.dNetAssets)+', and '+plain(L.dAssets)+' &minus; '+plain(L.dLiabilities)+' = '+plain(L.dNetAssets)+' still ties &mdash; and across them run the arrows you drew: <b>solid</b> where the document states a figure outright, <b>dashed</b> where a walk with one unknown solved it, <b>faded</b> where no statement and no note can answer. The two pile-to-pile transfers cross the donor fence &mdash; '+plain(releases)+' of promises kept, plus the endowment draw&rsquo;s restricted share &mdash; and the Value change Reason gives into each holding the market re-priced, and into the one claim the actuaries did. The '+G().expenseRows.length+' expense arrows are drawn once, as the aggregated panel beside the board: all facts, '+plain(expenseTotal())+' in total. Step through the tags with the lenses under the board. The year, reconstructed &mdash; from four statements and their notes, and from nothing else.' },
+    { heading:'The census.',
+      text:'Count the tags &mdash; the numbers below are counted from the board&rsquo;s own data, not typed in. <b>'+factTotal()+' facts</b>: '+drawnFactCount()+' drawn arrows (the exchanges, the stated Reasons, the two transfers) plus the '+G().expenseRows.length+' expense rows in the panel &mdash; every figure printed verbatim somewhere in the document. <b>'+inferenceCount()+' inferences</b>: the walks closed these &mdash; the ERTC money that arrived in cash, inferred from an absence, and the Value change trio, each solved by a walk with one unknown, each resting on an assumption you can name. A small set needed <b>judgment</b>: the investment return arrives net, with '+plain(fees)+' of fees inside it; special events revenue arrives net of donor benefits; '+plain(IK.total)+' of in-kind gifts runs straight into expenses without touching Cash; and '+plain(IK.volunteers.hours.y2025)+' volunteer hours stay off the board entirely &mdash; real, essential, and unpriceable, so recognition refuses. And <b>one number stays open forever</b>: the gross bequest flows. New bequests recognized minus bequests collected = '+plain(open.netRise)+' &mdash; one equation, two unknowns, and no note splits them. The two faded arrows through Bequests rec. are all any reader can lawfully draw. Click a census row to light its tag on the board.' },
+    { heading:'What reading is.',
+      text:'When you rebuilt the bike shop&rsquo;s season from its released statements, a ledger sat behind them the whole time &mdash; the shop&rsquo;s own entries &mdash; and in the end you saw it, and checked your picture against the truth. There is no such reveal coming here. Behind these four statements sit thousands of entries &mdash; every adoption fee, every invoice for feed, every payroll run &mdash; and <b>no one will ever show them to you</b>. The organization keeps them; the statements carry the summary; the auditors attest that the summary is fairly stated. Many different ledgers could have produced exactly these statements. The graph you built is the summary the statements can support &mdash; every arrow stated, or solved, or resting on a named assumption, or left open. That is what reading financial statements <em>is</em>.' },
+    { heading:'The best lawful picture.',
+      text:'The outsider&rsquo;s condition was real this time. In the shop, a ledger existed and you finally saw it; here, nobody held the ground truth out for checking &mdash; the entries stay inside the organization, and the statements are all any outsider will ever hold. And the picture held anyway: '+factTotal()+' facts, '+inferenceCount()+' defensible inferences, the judgment calls named in ink, and one open number tagged rather than guessed. Module 6 asked you to read these statements; this sequence asked you to rebuild the year from them, and you did. Module 7 is next. Or first, take the optional detour: the same architecture at $59 billion &mdash; Yale&rsquo;s statements, read with every idiom you used here.' }
+  ];
+  var b=beats[currentStep];
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><h2>'+b.heading+'</h2><p>'+b.text+'</p></div><p class="m647-progress">Step '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+/* ---------- the census card (step 1) ---------- */
+function censusRow(lens,swatchClass,label,count){
+  var clickable=lens!==null;
+  var tagAttrs=clickable?' onclick="lensClick(\''+lens+'\')"':'';
+  var cls='m647-census-row'+(clickable&&currentLens===lens?' is-active':'');
+  var open=clickable?'<button class="'+cls+'"'+tagAttrs+'>':'<div class="'+cls+'">';
+  var close=clickable?'</button>':'</div>';
+  return open+'<span class="m647-swatch '+swatchClass+'" aria-hidden="true"></span><span>'+label+'</span><span class="m647-census-count">'+count+'</span>'+close;
+}
+function censusCard(){
+  return '<div class="m647-census"><h2 class="m647-census-title">The tag census</h2>'
+    +'<p class="m647-census-sub">counted live from the board&rsquo;s data &mdash; click a row to light its tag</p>'
+    +'<div class="m647-census-body">'
+    +censusRow('fact','','<b>Facts</b> &mdash; stated verbatim in the document ('+drawnFactCount()+' drawn arrows + '+G().expenseRows.length+' expense rows)',factTotal())
+    +censusRow('inference','is-dashed','<b>Inferences</b> &mdash; closed by walks with one unknown, under assumptions you can name',inferenceCount())
+    +censusRow(null,'is-double','<b>Judgment</b> &mdash; the netted lines taught net-first, and the in-kind gifts; the volunteers stay off the board',judgmentCount())
+    +censusRow('open','is-open','<b>Open</b> &mdash; the gross bequest flows: knowable net, unknowable gross',openCount())
+    +'<p class="m647-census-note">Most of the year is facts; the walks closed nearly everything else; a small set needed judgment; one number is open forever.</p>'
+    +'</div></div>';
+}
+
+function renderTail(currentStep){
+  var h='';
+  if(currentStep===1) h=censusCard();
+  if(currentStep===2) h='<div class="insight-box">Behind every set of statements sits a ledger no reader will see. Reading is not recovering the ledger &mdash; it is building the summary the statements can support, and tagging every piece: fact, inference, or open.</div>';
+  if(currentStep===3) h='<div class="insight-box">Facts drawn solid, inferences dashed under named assumptions, open questions left open &mdash; the best lawful picture. Nobody held the ground truth, and the picture held anyway.</div>';
+  document.getElementById('tail').innerHTML=h;
+}
+
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep===0) h+='<button class="btn-back" onclick="nav(\'64-6-The-Judgment-Calls.html\')">&larr; Back</button>';
+  else h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else {
+    h+='<button class="btn-next" onclick="nav(\'65-1-The-Statement-of-Financial-Position.html\')">Optional: Yale at scale &rarr;</button>';
+    h+='<button class="btn-continue" onclick="playSuccess();nav(\'71-1-Module-7-Introduction.html\')">Continue &rarr;</button>';
+  }
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+
+function render(){
+  renderBeats(step);
+  renderExpensePanel();
+  renderLensBar();
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function enterStep(target){ step=target; render(); window.scrollTo(0,0); }
+function advance(){ playClick(); enterStep(Math.min(step+1,TOTAL_STEPS-1)); }
+function back(){ playClick(); enterStep(Math.max(step-1,0)); }
+
+var glossaryTerms=[
+  {term:'The best lawful picture',def:'The graph any careful reader can defend from the released statements alone: facts drawn solid, inferences drawn dashed under assumptions you can name, and open questions left faded rather than guessed.'},
+  {term:'Tag census',def:'The count of a finished board&rsquo;s tags &mdash; how much of the year the document states outright, how much a walk closed, how much needed judgment, and what stays open.'}
+];
+function openGlossary(){ document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){ return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>'; }).join(''); document.getElementById('glossaryOverlay').classList.add('open'); if(window.lucide) lucide.createIcons(); }
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') closeGlossary(); });
+window.devFill=function(){ setLens('all'); enterStep(TOTAL_STEPS-1); };
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Walks That Close</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* Page-scoped Module-6 OHS palette, matching the 62-1 / 63-x walk-page idiom. */
+    .m6ohs-scope {
+      --m6ohs-paper:#ffffff;
+      --m6ohs-panel:#f8fafc;
+      --m6ohs-ink:#263746;
+      --m6ohs-muted:#657583;
+      --m6ohs-primary:#155b86;
+      --m6ohs-rule:#c8d4dc;
+      --m6ohs-rule-strong:#708592;
+      --m6ohs-warm:#fff8df;
+      --m6ohs-accent:#d5a528;
+      --m6ohs-success:#167447;
+      --m6ohs-soft:#f3f8fb;
+      --m6ohs-error:#b43b3b;
+      --m6ohs-vc:#6750a4;
+      --m6ohs-shadow:rgba(32,55,72,0.09);
+    }
+    .m64w-layout { display:grid; grid-template-columns:minmax(430px,1.45fr) minmax(310px,1fr); gap:14px; align-items:start; }
+    .m64w-layout > * { min-width:0; }
+    .m64w-board-wrap { overflow-x:auto; padding:2px 2px 8px; }
+    .m64w-board-card {
+      box-sizing:border-box; min-width:520px; padding:12px;
+      border:1px solid var(--m6ohs-rule); border-radius:12px;
+      background:var(--m6ohs-paper); box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m64w-board-card svg { display:block; width:100%; height:auto; border-radius:8px; }
+    .m64w-legend { display:flex; flex-wrap:wrap; gap:6px 16px; margin:9px 2px 0; color:var(--m6ohs-muted); font-size:10.5px; font-style:italic; }
+    .m64w-legend span { white-space:nowrap; }
+    .m64w-leg-mark { display:inline-block; width:26px; vertical-align:middle; margin-right:5px; border-top:2.5px solid var(--m6ohs-primary); }
+    .m64w-leg-dash { border-top-style:dashed; }
+    .m64w-leg-vc { display:inline-block; width:13px; height:13px; vertical-align:middle; margin-right:5px; border:2px dotted var(--m6ohs-vc); border-radius:50%; background:transparent; }
+    .m64w-panel { display:grid; gap:12px; }
+    .m64w-card {
+      box-sizing:border-box; padding:16px 18px;
+      border:1px solid var(--m6ohs-rule); border-radius:12px;
+      background:var(--m6ohs-paper); color:var(--m6ohs-ink);
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m64w-kicker { margin:0 0 5px; color:var(--m6ohs-muted); font-size:10.5px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+    .m64w-title { margin:0; color:var(--m6ohs-primary); font-size:16px; }
+    .m64w-subline { margin:3px 0 0; color:var(--m6ohs-muted); font-size:11px; font-style:italic; }
+    .m64w-value { text-align:right; white-space:nowrap; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m64w-rows { margin-top:12px; font-size:12px; }
+    .m64w-row { display:grid; grid-template-columns:minmax(170px,1fr) 7.2rem; column-gap:10px; align-items:baseline; padding:4px 4px; }
+    .m64w-row + .m64w-row { border-top:1px solid var(--m6ohs-rule); }
+    .m64w-row-open { color:var(--m6ohs-primary); font-weight:700; }
+    .m64w-row-close { margin-top:2px; border-top:3px double var(--m6ohs-rule-strong) !important; color:var(--m6ohs-primary); font-weight:800; }
+    .m64w-row-unknown { border-left:3px solid var(--m6ohs-accent); border-radius:3px; background:var(--m6ohs-warm); color:var(--m6ohs-primary); font-weight:800; }
+    .m64w-chip {
+      display:inline-block; margin-left:6px; padding:1px 5px;
+      border:1px dashed var(--m6ohs-vc); border-radius:4px;
+      color:var(--m6ohs-vc); font:700 8.5px/1.4 "JetBrains Mono",monospace; letter-spacing:.08em;
+      vertical-align:middle; white-space:nowrap;
+    }
+    .m64w-chip-fact { border-style:solid; border-color:var(--m6ohs-rule-strong); color:var(--m6ohs-muted); }
+    .m64w-tie { margin:12px 0 0; padding-top:8px; border-top:1px solid var(--m6ohs-rule); color:var(--m6ohs-primary); font:700 11px/1.55 "JetBrains Mono",monospace; overflow-wrap:break-word; }
+    .m64w-tie .m64w-tick { color:var(--m6ohs-success); }
+    .m64w-note { margin:8px 0 0; color:var(--m6ohs-muted); font-size:10.5px; font-style:italic; line-height:1.5; }
+    .m64w-solve { margin-top:12px; padding-top:10px; border-top:1px dashed var(--m6ohs-accent); }
+    .m64w-solve-label { margin:0 0 6px; color:var(--m6ohs-ink); font-size:12px; font-weight:600; }
+    .m64w-solve-row { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .m64w-input {
+      box-sizing:border-box; width:11rem; padding:7px 9px;
+      border:1.5px solid var(--m6ohs-rule-strong); border-radius:7px;
+      background:var(--m6ohs-paper); color:var(--m6ohs-ink);
+      font:600 13px/1.2 "JetBrains Mono",monospace;
+    }
+    .m64w-input:focus-visible { border-color:var(--m6ohs-accent); outline:none; }
+    .m64w-btn {
+      padding:7px 13px; border:1.5px solid var(--m6ohs-rule-strong); border-radius:7px;
+      background:var(--m6ohs-paper); color:var(--m6ohs-ink);
+      font:700 12px/1.2 Inter,"Open Sans",sans-serif; cursor:pointer;
+    }
+    .m64w-btn:hover, .m64w-btn:focus-visible { border-color:var(--m6ohs-accent); outline:none; }
+    .m64w-btn-quiet { border-style:dashed; color:var(--m6ohs-muted); font-weight:600; }
+    .m64w-feedback { margin:8px 0 0; font-size:11.5px; line-height:1.5; }
+    .m64w-feedback.m64w-bad { color:var(--m6ohs-error); }
+    .m64w-feedback.m64w-good { color:var(--m6ohs-success); font-weight:700; }
+    .m64w-contradiction {
+      margin-top:12px; padding:10px 12px;
+      border:2px dashed var(--m6ohs-accent); border-radius:9px;
+      background:var(--m6ohs-warm); color:var(--m6ohs-ink); font-size:12px; line-height:1.55;
+    }
+    .m64w-contradiction strong { color:var(--m6ohs-primary); }
+    .m64w-quote-card { border:2px dashed var(--m6ohs-accent); background:var(--m6ohs-warm); }
+    .m64w-quote { margin:12px 0 0; padding-left:12px; border-left:3px solid var(--m6ohs-accent); color:var(--m6ohs-primary); font-size:13px; font-style:italic; line-height:1.6; }
+    .m64w-def-card { border:1.5px dashed var(--m6ohs-vc); }
+    .m64w-def-card .m64w-title { color:var(--m6ohs-vc); }
+    .m64w-def { margin:11px 0 0; color:var(--m6ohs-ink); font-size:13px; line-height:1.65; }
+    .m64w-wedge-rows { margin-top:12px; font-size:11.5px; }
+    .m64w-wedge-row { display:grid; grid-template-columns:minmax(190px,1.4fr) minmax(90px,1fr); column-gap:10px; align-items:baseline; padding:5px 4px; }
+    .m64w-wedge-row + .m64w-wedge-row { border-top:1px solid var(--m6ohs-rule); }
+    .m64w-wedge-walk { color:var(--m6ohs-primary); font:700 10.5px/1.4 "JetBrains Mono",monospace; text-align:right; white-space:nowrap; }
+    .m64w-wedge-head { padding-bottom:5px; border-bottom:1px solid var(--m6ohs-rule-strong); color:var(--m6ohs-muted); font-size:9.5px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; }
+    .m64w-wedge-head .m64w-wedge-walk { color:var(--m6ohs-muted); font-family:Inter,"Open Sans",sans-serif; font-weight:700; }
+    .m64w-absence { margin-top:12px; display:grid; gap:6px; font-size:12px; }
+    .m64w-absence-row { display:grid; grid-template-columns:auto 1fr; column-gap:9px; align-items:baseline; }
+    .m64w-absence-mark { color:var(--m6ohs-error); font-weight:800; font-family:"JetBrains Mono",monospace; }
+    .m64w-verdict { margin:12px 0 0; padding-top:9px; border-top:1px solid var(--m6ohs-rule); color:var(--m6ohs-primary); font-size:12.5px; font-weight:700; line-height:1.55; }
+    .m64w-nav-hint { align-self:center; color:var(--m6ohs-muted); font-size:12px; font-style:italic; }
+    .m64w-insight-wrap { margin-top:18px; }
+    @media (max-width:900px) {
+      .m64w-layout { grid-template-columns:1fr; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m6ohs-scope {
+        --m6ohs-paper:#26242e;
+        --m6ohs-panel:#211f28;
+        --m6ohs-ink:#e8edf1;
+        --m6ohs-muted:#b4c0c8;
+        --m6ohs-primary:#7dc8f3;
+        --m6ohs-rule:#4b5361;
+        --m6ohs-rule-strong:#8797a2;
+        --m6ohs-warm:#332f20;
+        --m6ohs-accent:#d8ad3e;
+        --m6ohs-success:#70d6a3;
+        --m6ohs-soft:#25313a;
+        --m6ohs-error:#ff8f8f;
+        --m6ohs-vc:#b8a5e8;
+        --m6ohs-shadow:rgba(0,0,0,0.28);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Walks That Close</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~8 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Walks That Close</div>
+
+    <div id="beats"></div>
+    <div class="m6ohs-scope">
+      <div class="m64w-layout">
+        <div class="m64w-board-wrap">
+          <div class="m64w-board-card">
+            <svg id="boardSvg" role="img" aria-label="The reconstruction board: eighteen change nodes in three regions, with walk arrows landing as they close"></svg>
+            <div class="m64w-legend">
+              <span><span class="m64w-leg-mark"></span>solid arrow &mdash; FACT, stated in the document</span>
+              <span><span class="m64w-leg-mark m64w-leg-dash"></span>dashed arrow &mdash; INFERENCE, solved from a walk</span>
+              <span id="legendVC" style="display:none;"><span class="m64w-leg-vc"></span>the Value change Reason</span>
+            </div>
+          </div>
+        </div>
+        <div class="m64w-panel" id="sidePanel"></div>
+      </div>
+    </div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c) return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nav(url){ playClick(); window.location.href=url; }
+
+var step=0;
+var TOTAL_STEPS=6;
+var solved=false;   /* the Property-walk unknown, step 1 */
+
+function escapeHTML(value){ return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function dashes(text){ return escapeHTML(text).replace(/\s--\s/g,' &mdash; '); }
+function plain(v){ return Math.abs(v).toLocaleString('en-US'); }
+function sgn(v){ return (v<0?'&minus;&nbsp;':'+&nbsp;')+plain(v); }
+
+/* ---------- the canon ---------- */
+var G=window.OHS_GRAPH;
+function pieceByLabel(walk,pattern){ for(var i=0;i<walk.pieces.length;i++) if(pattern.test(walk.pieces[i].label)) return walk.pieces[i]; return null; }
+function arrowById(id){ for(var i=0;i<G.arrows.length;i++) if(G.arrows[i].id===id) return G.arrows[i]; return null; }
+function nodeById(id){ for(var i=0;i<G.nodes.length;i++) if(G.nodes[i].id===id) return G.nodes[i]; return null; }
+
+var PPE=G.walks.ppe;
+var PPE_CASH=pieceByLabel(PPE,/cash/i).amount;          /* 874,182 */
+var PPE_AP=pieceByLabel(PPE,/payable/i).amount;         /* 204,045 */
+var PPE_DEP=pieceByLabel(PPE,/Depreciation/i).amount;   /* -2,588,332 */
+var ADDITIONS=PPE_CASH+PPE_AP;                          /* 1,078,227 — the unknown, solved */
+var INV=G.walks.investments;
+var INV_PURCH=pieceByLabel(INV,/Purchases/i).amount;
+var INV_SALES=pieceByLabel(INV,/Sales/i).amount;
+var INV_REAL=pieceByLabel(INV,/Realized/i).amount;
+var INV_UNREAL=pieceByLabel(INV,/Unrealized/i).amount;
+var VC_TOTAL=G.valueChange.investmentsTotal;            /* 4,563,116 */
+var TRUSTS=G.walks.trusts;
+var SPLIT=G.walks.splitInterest;
+var AR=G.walks.ar;
+var AR_CFS=pieceByLabel(AR,/collections/i).amount;      /* -216,333 */
+var AR_ALLOW=pieceByLabel(AR,/Allowance/i).amount;      /* -84,283 */
+var ERTC=arrowById('ertc').amount;                      /* 2,913,362 */
+var VC_TRUSTS=arrowById('vcTrusts').amount;
+var VC_SPLIT=arrowById('vcSplit').amount;
+
+/* ---------- the board ---------- */
+var board=null;
+var SFP_IDS=G.nodes.map(function(n){ return n.id; });
+function buildBoard(){
+  var pos=G.layout.positions;
+  var nodes=G.nodes.map(function(n){
+    return { id:n.id, label:n.label, region:n.region, pile:n.pile, x:pos[n.id][0], y:pos[n.id][1], badge:n.d };
+  });
+  nodes.push({ id:'valueChange', label:G.valueChange.label, region:'reasons', pile:'wo', kind:'valueChange', x:pos.valueChange[0], y:pos.valueChange[1] });
+  nodes.push({ id:'reasonDepreciation', label:'Depreciation', region:'reasons', pile:'wo', x:pos.reasonDepreciation[0], y:pos.reasonDepreciation[1] });
+  nodes.push({ id:'reasonERTC', label:'ERTC', region:'reasons', pile:'wo', x:pos.reasonERTC[0], y:pos.reasonERTC[1] });
+  var edgeIds=['ppeCash','ppeAP','depreciation','salesInv','purchInv','vcInvestments','vcTrusts','vcSplit','ertc'];
+  var edges=edgeIds.map(arrowById);
+  board=GraphLab.createStatementBoard(document.getElementById('boardSvg'),{
+    nodes:nodes, edges:edges,
+    regions:G.layout.regions,
+    partition:G.layout.partition
+  },{ clickToExplode:false });
+}
+function updateBoard(currentStep){
+  var nodes=SFP_IDS.slice(), edges=[], focus=null;
+  if(currentStep>=1){ nodes.push('reasonDepreciation'); edges.push('ppeCash','depreciation'); }
+  if(currentStep>=2){ edges.push('ppeAP'); }
+  if(currentStep>=3){ nodes.push('valueChange'); edges.push('salesInv','purchInv','vcInvestments'); }
+  if(currentStep>=4){ edges.push('vcTrusts','vcSplit'); }
+  if(currentStep>=5){ nodes.push('reasonERTC'); edges.push('ertc'); }
+  if(currentStep===1) focus={ nodes:['ppe','cash','reasonDepreciation'], pairs:['ppeCash','depreciation'] };
+  if(currentStep===2) focus={ nodes:['ppe','cash','ap','reasonDepreciation'], pairs:['ppeCash','ppeAP','depreciation'] };
+  if(currentStep===3) focus={ nodes:['investments','cash','valueChange'], pairs:['salesInv','purchInv','vcInvestments'] };
+  if(currentStep===4) focus={ nodes:['valueChange','trusts','splitInterest'], pairs:['vcTrusts','vcSplit'] };
+  if(currentStep===5) focus={ nodes:['ar','cash','reasonERTC'], pairs:['ertc'] };
+  board.setVisibleNodes(nodes);
+  board.setVisibleEdges(edges);
+  board.setFocus(focus);
+  document.getElementById('legendVC').style.display=currentStep>=3?'':'none';
+}
+
+/* ---------- panel components ---------- */
+function walkRow(label,valueHTML,extraClass,chip){
+  return '<div class="m64w-row'+(extraClass?' '+extraClass:'')+'"><div>'+label+(chip||'')+'</div><div class="m64w-value">'+valueHTML+'</div></div>';
+}
+function chip(tag){
+  if(tag==='inference') return '<span class="m64w-chip">INFERENCE</span>';
+  return '<span class="m64w-chip m64w-chip-fact">FACT</span>';
+}
+function tieLine(walk,suffix){
+  var parts=plain(walk.begin);
+  walk.pieces.forEach(function(p){ parts+=' '+(p.amount<0?'&minus;':'+')+' '+plain(p.amount); });
+  parts+=' = '+plain(walk.end)+' <span class="m64w-tick">&#10003;</span>';
+  return '<p class="m64w-tie">'+parts+(suffix?' &mdash; '+suffix:'')+'</p>';
+}
+function walkCard(walk,kicker,title,sub,noteHTML,suffix){
+  var rows=walkRow('Beginning of year',plain(walk.begin),'m64w-row-open');
+  walk.pieces.forEach(function(p){ rows+=walkRow(escapeHTML(p.label),sgn(p.amount),'',chip(p.tag)); });
+  rows+=walkRow('End of year',plain(walk.end),'m64w-row-close');
+  return '<div class="m64w-card"><p class="m64w-kicker">'+kicker+'</p>'
+    +'<h3 class="m64w-title">'+title+'</h3>'
+    +'<p class="m64w-subline">'+sub+'</p>'
+    +'<div class="m64w-rows">'+rows+'</div>'
+    +tieLine(walk,suffix||'')
+    +(noteHTML?'<p class="m64w-note">'+noteHTML+'</p>':'')
+    +'</div>';
+}
+
+function wedgeInventoryCard(){
+  var rows='<div class="m64w-wedge-row m64w-wedge-head"><div>Adjustment line (the wedge)</div><div class="m64w-wedge-walk">Walk it names</div></div>';
+  G.wedges.forEach(function(w){
+    var target=nodeById(w.walk);
+    var label=w.label.replace(/\s*\(R\d+\)\s*$/,'');  /* the ruling ref is instructor-side */
+    rows+='<div class="m64w-wedge-row"><div>'+dashes(label)+'</div><div class="m64w-wedge-walk">'+escapeHTML(target?target.label:w.walk)+'</div></div>';
+  });
+  return '<div class="m64w-card"><p class="m64w-kicker">Statement of Cash Flows &middot; adjustment section, reread</p>'
+    +'<h3 class="m64w-title">The wedge inventory</h3>'
+    +'<p class="m64w-subline">every adjustment line names a walk that must tie</p>'
+    +'<div class="m64w-wedge-rows">'+rows+'</div>'
+    +'<p class="m64w-note">Six of the seven close on this page. The NPV-discount wedge &mdash; the one line that spans two receivables &mdash; is the next page&rsquo;s story.</p>'
+    +'</div>';
+}
+
+function propertyCard(){
+  var rows=walkRow('Beginning, December 31, 2024',plain(PPE.begin),'m64w-row-open');
+  if(solved){
+    rows+=walkRow('Additions, during the year',sgn(ADDITIONS),'m64w-row-unknown','<span class="m64w-chip">INFERENCE</span>');
+  } else {
+    rows+=walkRow('Additions, during the year','<strong>?</strong>','m64w-row-unknown');
+  }
+  rows+=walkRow('Depreciation (functional-expenses statement)',sgn(PPE_DEP),'',chip('fact'));
+  rows+=walkRow('Ending, December 31, 2025',plain(PPE.end),'m64w-row-close');
+  var h='<div class="m64w-card"><p class="m64w-kicker">Oregon Humane Society &middot; the Property walk</p>'
+    +'<h3 class="m64w-title">Property and equipment, net</h3>'
+    +'<p class="m64w-subline">begin + additions &minus; depreciation = end &middot; exact dollars &middot; one unknown</p>'
+    +'<div class="m64w-rows">'+rows+'</div>';
+  if(!solved){
+    h+='<div class="m64w-solve"><p class="m64w-solve-label">'+plain(PPE.begin)+' + additions &minus; '+plain(PPE_DEP)+' = '+plain(PPE.end)+'. Solve for additions:</p>'
+      +'<div class="m64w-solve-row"><input class="m64w-input" id="addInput" inputmode="numeric" autocomplete="off" placeholder="additions" onkeydown="if(event.key===\'Enter\')checkAdditions()">'
+      +'<button class="m64w-btn" onclick="checkAdditions()">Check</button>'
+      +'<button class="m64w-btn m64w-btn-quiet" onclick="revealAdditions()">Walk it for me</button></div>'
+      +'<div class="m64w-feedback" id="solveFeedback"></div></div>';
+  } else {
+    h+='<p class="m64w-tie">'+plain(PPE.begin)+' + '+plain(ADDITIONS)+' &minus; '+plain(PPE_DEP)+' = '+plain(PPE.end)+' <span class="m64w-tick">&#10003;</span> &mdash; one unknown, solved</p>'
+      +'<div class="m64w-contradiction">But turn back to the cash statement: its investing section lists purchases of property and equipment of only <strong>'+plain(PPE_CASH)+'</strong>. The walk forces '+plain(ADDITIONS)+' of additions &mdash; <strong>'+plain(PPE_AP)+'</strong> of property arrived that cash cannot explain. Hold the contradiction; the next step resolves it.</div>';
+  }
+  return h+'</div>';
+}
+
+function supplementalCard(){
+  return '<div class="m64w-card m64w-quote-card"><p class="m64w-kicker">Statement of Cash Flows &middot; supplemental disclosure</p>'
+    +'<h3 class="m64w-title">The footnote that closes the walk</h3>'
+    +'<p class="m64w-quote">&ldquo;Purchases of property and equipment recorded in accounts payable &mdash; $'+plain(PPE_AP)+'&rdquo;</p>'
+    +'<p class="m64w-tie">'+plain(PPE_CASH)+' + '+plain(PPE_AP)+' = '+plain(ADDITIONS)+' <span class="m64w-tick">&#10003;</span> &mdash; exactly</p>'
+    +'<p class="m64w-note">Property received; payment still owed; no cash moved &mdash; so the purchase appears below the statement, not in it. On the board: a second arrow into Property, from Payables, tagged FACT because the disclosure states it outright.</p>'
+    +'</div>';
+}
+
+function valueChangeDefCard(){
+  return '<div class="m64w-card m64w-def-card"><p class="m64w-kicker">A new kind of Reason</p>'
+    +'<h3 class="m64w-title">'+escapeHTML(G.valueChange.label)+'</h3>'
+    +'<p class="m64w-def">'+dashes(G.valueChange.definition)+'</p>'
+    +'</div>';
+}
+
+function ertcCard(){
+  return '<div class="m64w-card"><p class="m64w-kicker">Statement of Activities &middot; one line, chased</p>'
+    +'<h3 class="m64w-title">Employee Retention Tax Credits income &mdash; '+plain(ERTC)+'</h3>'
+    +'<p class="m64w-subline">one-time government money &middot; $0 in 2024 &middot; received, or still receivable?</p>'
+    +'<div class="m64w-absence">'
+    +'<div class="m64w-absence-row"><span class="m64w-absence-mark">&times;</span><span>An ERTC receivable on the Statement of Financial Position? <strong>None.</strong></span></div>'
+    +'<div class="m64w-absence-row"><span class="m64w-absence-mark">&times;</span><span>A note? <strong>None</strong> &mdash; all twenty-two note headings, checked; the policies note and Commitments and Contingencies included.</span></div>'
+    +'<div class="m64w-absence-row"><span class="m64w-absence-mark">&times;</span><span>A wedge line? <strong>None</strong> &mdash; no adjustment line and no working-capital line in the cash statement names it.</span></div>'
+    +'</div>'
+    +'<p class="m64w-verdict">An income line with no wedge closed in cash the same year. The arrow: ERTC Reason gives, Cash receives, '+plain(ERTC)+' &mdash; dashed, tagged INFERENCE.</p>'
+    +'</div>';
+}
+
+function renderPanel(currentStep){
+  var h='';
+  if(currentStep===0) h=wedgeInventoryCard();
+  else if(currentStep===1) h=propertyCard();
+  else if(currentStep===2) h=supplementalCard()+walkCard(PPE,'The Property walk, closed','Property and equipment, net','all three pieces landed &middot; exact dollars','','the walk, the contradiction, and the footnote');
+  else if(currentStep===3) h=valueChangeDefCard()+walkCard(INV,'The marquee &middot; the Investments walk','Investments','purchases and sales from the cash statement; both gains from the wedge inventory','The two gain pieces are the wedge inventory&rsquo;s realized and unrealized lines &mdash; together '+plain(VC_TOTAL)+', the Value change arrow into Investments.','exactly');
+  else if(currentStep===4) h=walkCard(TRUSTS,'The same Reason, again','Beneficial interest in charitable trusts','the whole &Delta; is one re-pricing','','a one-piece walk')
+    +walkCard(SPLIT,'And a liability, re-priced','Liabilities under split-interest agreements','payouts, new obligations, and the actuaries&rsquo; re-pricing',dashes(SPLIT.note),'');
+  else if(currentStep===5) h=walkCard(AR,'No unknown at all','Accounts receivable, net','both pieces stated &mdash; the walk simply closes','One piece from the working-capital section, one from the wedge inventory: &minus;'+plain(AR_CFS)+' &minus; '+plain(AR_ALLOW)+' = &minus;'+plain(AR.d)+'.','')
+    +ertcCard();
+  document.getElementById('sidePanel').innerHTML=h;
+}
+
+/* ---------- the Property unknown ---------- */
+function checkAdditions(){
+  var el=document.getElementById('addInput');
+  var raw=(el&&el.value||'').replace(/[$,\s]/g,'');
+  var fb=document.getElementById('solveFeedback');
+  if(!/^\d+$/.test(raw)){ fb.className='m64w-feedback m64w-bad'; fb.innerHTML='Enter a number &mdash; commas welcome.'; return; }
+  if(Number(raw)===ADDITIONS){
+    solved=true; playSuccess(); render();
+  } else {
+    playClick();
+    fb.className='m64w-feedback m64w-bad';
+    fb.innerHTML='Not yet. The walk must tie: '+plain(PPE.begin)+' + additions &minus; '+plain(PPE_DEP)+' = '+plain(PPE.end)+'.';
+  }
+}
+function revealAdditions(){ solved=true; playSuccess(); render(); }
+
+/* ---------- narration ---------- */
+function renderBeats(currentStep){
+  var texts=[
+    'The facts are counted, and most &Delta;-nodes still stand unexplained &mdash; facts alone do not close a year. This page runs the method that does, the prework&rsquo;s method, now on real audited statements: <strong>walk every account</strong>. Beginning balance, plus everything that arrived, minus everything that left, equals the ending balance. Where the statements state every piece, the walk simply closes. Where exactly one piece is missing, the walk solves for it &mdash; and the solved number is an <strong>inference</strong>: earned, not guessed, drawn dashed on the board. Where do you find the walks worth running? You already read the answer in 63-2. The operating section reconciles the change in net assets to operating cash by undoing every piece that was never cash &mdash; and reread from the other side, that adjustment section is <strong>the wedge inventory</strong>: every adjustment line is a wedge between the year&rsquo;s Reasons and its cash, and every wedge names an account whose walk must tie. Seven wedges. Beside the board: the inventory.',
+    'Start with Property. Its &Delta; is on the board: down '+plain(PPE.d)+' in a year OHS grew richer &mdash; 64-2&rsquo;s riddle. Two pieces of the walk are already in hand from the fact pages: depreciation of '+plain(PPE_DEP)+', stated on the functional-expenses statement (given, never calculated), and the year&rsquo;s purchases. But set the purchases aside for a moment and let the walk do its work. Beginning '+plain(PPE.begin)+', plus the year&rsquo;s additions &mdash; whatever they were &mdash; minus depreciation, must land on '+plain(PPE.end)+'. Three knowns, one unknown. <strong>Solve it.</strong>',
+    'The walk forces additions of '+plain(ADDITIONS)+'. The cash statement lists purchases of property and equipment of '+plain(PPE_CASH)+'. An apparent contradiction &mdash; '+plain(PPE_AP)+' of property that cash cannot explain &mdash; and the resolution sits in small print below the statement, in the supplemental disclosure 63-2 flagged: <strong>purchases of property and equipment recorded in accounts payable, '+plain(PPE_AP)+'</strong>. Property received; payment still owed; no cash moved. '+plain(PPE_CASH)+' + '+plain(PPE_AP)+' = '+plain(ADDITIONS)+'. <strong>Exactly.</strong> The shop taught this move with a workbench bought on the card &mdash; a purchase with no cash to show for it &mdash; and here it is again, upgraded to a real audit document: a walk, a contradiction, and a footnote that closes it to the dollar.',
+    'Now the marquee. Investments: &Delta; +'+plain(INV.d)+'. The cash statement states purchases of '+plain(INV_PURCH)+' and sales of '+plain(INV_SALES)+' &mdash; and on those alone the walk misses by millions. The missing pieces sit in the wedge inventory: realized gains of '+plain(INV_REAL)+' and unrealized gains of '+plain(INV_UNREAL)+', pieces of the change in net assets that were never cash. Put them in and the walk closes &mdash; <strong>exactly</strong>. But what kind of arrow carries '+plain(VC_TOTAL)+' into Investments? Nothing was exchanged. Nobody paid and nobody collected; the holdings were re-priced, and the information that says so is itself a Reason. The board gets a new node for exactly this &mdash; <strong>Value change</strong> &mdash; and its arrow gives '+plain(VC_TOTAL)+' into Investments: dashed, tagged INFERENCE, because no statement states the arrow itself. The walk forces it.',
+    'The same Reason carries two more re-pricings. The beneficial interest in charitable trusts rose '+plain(VC_TRUSTS)+' &mdash; the whole &Delta; of the Trusts node, a one-piece walk. And the split-interest liability: the actuaries re-priced the annuity promises, adding '+plain(VC_SPLIT)+' to the obligation &mdash; <strong>a liability can be re-priced too</strong>. Both land in the With Donor Restrictions sub-region, where the annuity and trust promises live. The split-interest walk also shows the tag discipline at its most honest: it closes only under an assumption &mdash; that the year&rsquo;s annuity proceeds, '+plain(80737)+', all entered the liability. Inference-under-assumption, tagged accordingly.',
+    'Two ties finish the page. Receivables fell '+plain(AR.d)+', and both pieces are stated: '+plain(AR_CFS)+' of net collections beyond billings (the working-capital line) and '+plain(AR_ALLOW)+' of allowance for credit losses (a wedge line). No unknown at all &mdash; the walk simply closes. Then the strangest number in the statements: <strong>Employee Retention Tax Credits income, '+plain(ERTC)+'</strong> &mdash; one-time government money, appearing exactly once in the whole document. Where is the arrow&rsquo;s other end? No receivable line. No note. And &mdash; decisive &mdash; <strong>no wedge line</strong>: nothing in the adjustment section names it. You just spent a page learning what a wedge is, so read the absence: an income line with no wedge closed in cash the same year. The arrow runs from the ERTC Reason into Cash, '+plain(ERTC)+', dashed and tagged INFERENCE &mdash; proudly. The statements never state it; you inferred it from an absence.'
+  ];
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+texts[currentStep]+'</p></div>';
+}
+function renderTail(currentStep){
+  var h='';
+  if(currentStep===2) h='<div class="m6ohs-scope m64w-insight-wrap"><div class="insight-box">A walk with one unknown is an equation, and equations do not negotiate. When the solved number disagrees with a stated one, the year is telling you a piece is missing &mdash; and in audited statements, the missing piece is usually stated somewhere smaller.</div></div>';
+  if(currentStep===5) h='<div class="m6ohs-scope m64w-insight-wrap"><div class="insight-box">A fact you can point to on the page. An inference you must earn &mdash; one walk, one unknown, solved &mdash; and sometimes the evidence is an absence: no wedge names this walk, so the walk closed in cash. That is why the tag matters: the board shows not just what you know, but how you know it.</div></div>';
+  document.getElementById('tail').innerHTML=h;
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep===0) h+='<button class="btn-back" onclick="nav(\'64-4-The-Fact-Arrows.html\')">&larr; Back</button>';
+  else h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1){
+    if(currentStep===1 && !solved) h+='<button class="btn-next" disabled>Next &rarr;</button><span class="m6ohs-scope m64w-nav-hint">Solve the unknown first</span>';
+    else h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  } else {
+    h+='<button class="btn-continue" onclick="nav(\'64-6-The-Judgment-Calls.html\')">The Judgment Calls &rarr;</button>';
+  }
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+function render(){
+  renderBeats(step);
+  renderPanel(step);
+  updateBoard(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function advance(){ playClick(); step=Math.min(step+1,TOTAL_STEPS-1); render(); window.scrollTo(0,0); }
+function back(){ playClick(); step=Math.max(step-1,0); render(); window.scrollTo(0,0); }
+
+var glossaryTerms=[
+  {term:'Walk',def:'For any account: beginning balance, plus everything that arrived during the year, minus everything that left, equals the ending balance. Every account walks &mdash; and on a real statement set, a walk with exactly one missing piece solves for that piece.'},
+  {term:'Wedge',def:'An adjustment line in the indirect Statement of Cash Flows &mdash; a piece of the change in net assets that was never cash. Read as a list, the adjustment section is the wedge inventory: every wedge names an account whose walk must tie.'},
+  {term:'Inference (tag)',def:'A figure no statement states outright, but that a walk with one unknown forces. Inference arrows are drawn dashed to keep them honest &mdash; earned, not guessed. Sometimes the evidence is an absence: no wedge names a walk, so the walk closed in cash.'},
+  {term:'Value change',def:dashes(G.valueChange.definition)+' On the board it is a Reason node: it gives into an asset whose value rose, and a liability can be re-priced too.'}
+];
+function openGlossary(){ document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){ return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>'; }).join(''); document.getElementById('glossaryOverlay').classList.add('open'); if(window.lucide) lucide.createIcons(); }
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){ solved=true; step=TOTAL_STEPS-1; render(); };
+
+buildBoard();
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

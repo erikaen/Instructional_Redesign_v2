@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eighteen Changes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* Page-scoped Module-6 OHS palette, matching the 63-x walk-page idiom. */
+    .m6ohs-scope {
+      --m6ohs-paper:#ffffff;
+      --m6ohs-panel:#f8fafc;
+      --m6ohs-ink:#263746;
+      --m6ohs-muted:#657583;
+      --m6ohs-primary:#155b86;
+      --m6ohs-rule:#c8d4dc;
+      --m6ohs-rule-strong:#708592;
+      --m6ohs-warm:#fff8df;
+      --m6ohs-accent:#d5a528;
+      --m6ohs-soft:#f3f8fb;
+      --m6ohs-shadow:rgba(32,55,72,0.09);
+    }
+    .m6ohs-kicker { margin:0 0 5px; color:var(--m6ohs-muted); font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
+    .m6ohs-subline { margin:3px 0 0; color:var(--m6ohs-muted); font-size:12px; font-style:italic; }
+    .m64-stage { margin-top:16px; }
+    .m64-board-wrap {
+      overflow-x:auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#f0f4f8;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+    }
+    .m64-board-wrap #board { display:block; width:100%; min-width:650px; height:auto; }
+    .m64-progress {
+      margin:8px 0 0;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .m64-card {
+      box-sizing:border-box;
+      max-width:760px;
+      margin:16px auto 0;
+      padding:22px;
+      border:1px solid var(--m6ohs-rule);
+      border-radius:12px;
+      background:var(--m6ohs-paper);
+      color:var(--m6ohs-ink);
+      box-shadow:0 8px 24px var(--m6ohs-shadow);
+    }
+    .m64-card-title { margin:0; color:var(--m6ohs-primary); font-size:18px; }
+    .m64-table-wrap { overflow-x:auto; }
+    .m64-table { margin-top:14px; min-width:520px; font-size:12.5px; }
+    .m64-row {
+      display:grid;
+      grid-template-columns:minmax(220px,1fr) 7rem 7rem 6.4rem;
+      column-gap:10px;
+      align-items:baseline;
+      padding:3px 4px;
+      border-radius:4px;
+    }
+    .m64-head { border-bottom:1px solid var(--m6ohs-rule); color:var(--m6ohs-primary); font-weight:700; border-radius:0; }
+    .m64-value { text-align:right; white-space:nowrap; font-family:"JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m64-delta { color:var(--m6ohs-primary); font-weight:700; }
+    .m64-section { margin-top:12px; padding:2px 4px 0; color:var(--m6ohs-primary); font-weight:800; }
+    .m64-sublabel { padding:3px 4px 0; color:var(--m6ohs-muted); font-size:12px; font-style:italic; }
+    .m64-total { margin-top:4px; padding-top:6px; border-top:1px solid var(--m6ohs-rule-strong); color:var(--m6ohs-primary); font-weight:800; border-radius:0; }
+    .m64-zero {
+      max-width:760px;
+      margin:16px auto 0;
+      padding:13px 15px;
+      border:1px solid var(--m6ohs-accent);
+      border-radius:9px;
+      background:var(--m6ohs-warm);
+      color:var(--m6ohs-ink);
+      box-sizing:border-box;
+    }
+    .m64-zero-title { margin:0 0 6px; font-weight:800; }
+    .m64-zero-line { margin:3px 0; font-family:"JetBrains Mono",monospace; font-size:12px; }
+    .m64-zero-foot { margin:7px 0 0; color:var(--m6ohs-muted); font-family:"JetBrains Mono",monospace; font-size:11px; font-style:italic; }
+    .m64-insight-wrap { margin-top:18px; }
+    #controls { margin-top:18px; }
+    @media (max-width:720px) { .m64-board-wrap #board { min-width:610px; } }
+    @media (prefers-color-scheme:dark) {
+      .m6ohs-scope {
+        --m6ohs-paper:#26242e;
+        --m6ohs-panel:#211f28;
+        --m6ohs-ink:#e8edf1;
+        --m6ohs-muted:#b4c0c8;
+        --m6ohs-primary:#7dc8f3;
+        --m6ohs-rule:#4b5361;
+        --m6ohs-rule-strong:#8797a2;
+        --m6ohs-warm:#332f20;
+        --m6ohs-accent:#d8ad3e;
+        --m6ohs-soft:#25313a;
+        --m6ohs-shadow:rgba(0,0,0,0.28);
+      }
+      .m64-board-wrap { border-color:#4b5567; background:#211f28; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m64-stage { --gl-panel:#26242e; --gl-ink:#e7eef9; --gl-region-line:#8996aa; --gl-accent:#e6ae4f; --gl-pulse:#a96915; }
+      .m64-progress { color:#aebbd0; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Eighteen Changes</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~6 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Restart this page" aria-label="Restart this page" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Eighteen Changes</div>
+
+    <div id="beats"></div>
+    <div class="m6ohs-scope m64-stage">
+      <div class="m64-board-wrap">
+        <svg id="board" viewBox="0 0 1000 660" role="img" aria-label="The year's changes as a board: three summary nodes that explode into eighteen"></svg>
+      </div>
+      <div class="m64-progress" id="boardStatus"></div>
+      <div id="stepCard"></div>
+    </div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{audioCtx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nav(url){ playClick(); window.location.href=url; }
+
+var step=0;
+var TOTAL_STEPS=4;
+var G=window.OHS_GRAPH;
+var SUMMARY_IDS=['sumAssets','sumLiab','sumNA'];
+var explodeCheered=false;
+
+function escapeHTML(value){ return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function n(v){ return Math.abs(v).toLocaleString('en-US'); }
+function sd(v){ return (v<0?'&minus;':'+')+n(v); }
+
+var assetNodes=G.nodes.filter(function(x){ return x.region==='assets'; });
+var liabNodes=G.nodes.filter(function(x){ return x.region==='liab'; });
+var naNodes=G.nodes.filter(function(x){ return x.region==='reasons'; });
+function sumD(list){ return list.reduce(function(t,x){ return t+x.d; },0); }
+var dA=sumD(assetNodes), dL=sumD(liabNodes), dN=sumD(naNodes);
+
+/* ---------- the board: three summaries that explode into the eighteen ---------- */
+var POS=G.layout.positions;
+var boardNodes=[
+  { id:'sumAssets', label:'Assets',      region:'assets',  x:POS.sumAssets[0], y:POS.sumAssets[1], badge:G.level0.dAssets },
+  { id:'sumLiab',   label:'Liabilities', region:'liab',    x:POS.sumLiab[0],   y:POS.sumLiab[1],   badge:G.level0.dLiabilities },
+  { id:'sumNA',     label:'Net Assets',  region:'reasons', x:POS.sumNA[0],     y:POS.sumNA[1],     badge:G.level0.dNetAssets }
+];
+G.nodes.forEach(function(x){
+  boardNodes.push({ id:x.id, label:x.label, region:x.region, pile:x.pile, x:POS[x.id][0], y:POS[x.id][1], badge:x.d });
+});
+var boardGroups=[
+  { id:'sumAssets', members:assetNodes.map(function(x){ return x.id; }) },
+  { id:'sumLiab',   members:liabNodes.map(function(x){ return x.id; }) },
+  { id:'sumNA',     members:naNodes.map(function(x){ return x.id; }) }
+];
+var boardSvg=document.getElementById('board');
+var board=GraphLab.createStatementBoard(boardSvg,{
+  nodes:boardNodes, edges:[], groups:boardGroups,
+  regions:G.layout.regions, partition:G.layout.partition
+},{ onExplode:onExplode });
+board.setVisibleNodes(SUMMARY_IDS);
+
+function explodedCount(){ var c=0; SUMMARY_IDS.forEach(function(id){ if(board.isExploded(id)) c++; }); return c; }
+function onExplode(){
+  renderStatus();
+  if(step===0 && explodedCount()===SUMMARY_IDS.length && !explodeCheered){ explodeCheered=true; playSuccess(); }
+}
+function renderStatus(){
+  var c=explodedCount(),msg;
+  if(c===SUMMARY_IDS.length) msg='The eighteen &mdash; every Statement of Financial Position line, as a &Delta;-node';
+  else msg=c+' of 3 summaries exploded &middot; eighteen &Delta;-nodes inside';
+  document.getElementById('boardStatus').innerHTML=msg;
+}
+
+/* ---------- narration ---------- */
+function assetListProse(){
+  var head=assetNodes.slice(0,assetNodes.length-1).map(function(x){ return escapeHTML(x.label)+' '+sd(x.d); }).join('. ');
+  var last=assetNodes[assetNodes.length-1];
+  return head+'. And the largest movement on the board: '+escapeHTML(last.label)+' '+sd(last.d)+'.';
+}
+function liabListProse(){
+  return liabNodes.map(function(x){ return escapeHTML(x.label)+' '+sd(x.d); }).join(', ');
+}
+function naListProse(){
+  var wo=naNodes.filter(function(x){ return x.pile==='wo'; }).map(function(x){ return escapeHTML(x.label)+' '+sd(x.d); }).join(', ');
+  var w=naNodes.filter(function(x){ return x.pile==='w'; })[0];
+  return wo+' in the upper sub-region, and '+escapeHTML(w.label)+' '+sd(w.d)+' below the partition line';
+}
+function renderBeats(currentStep){
+  var opCash=null;
+  G.walks.cash.pieces.forEach(function(p){ if(p.label==='Operating activities') opCash=p.amount; });
+  var ppe=assetNodes.filter(function(x){ return x.id==='ppe'; })[0];
+  var cash=assetNodes.filter(function(x){ return x.id==='cash'; })[0];
+  var texts=[
+    'The last page left the whole year on three &Delta;-nodes: recorded assets '+sd(G.level0.dAssets)+', recorded liabilities '+sd(G.level0.dLiabilities)+', Net Assets '+sd(G.level0.dNetAssets)+' &mdash; lawful, tied, and nearly mute. But each of those numbers is a sum. The Statement of Financial Position carries nine asset lines, five liability lines, and four Net Assets rows, each printed at both dates &mdash; December 31, 2024 beside December 31, 2025. Subtract a line&rsquo;s two columns and that line becomes a &Delta;-node of its own: eighteen in all, folded inside the three. That is what the &oplus; on each summary marks &mdash; a node that opens. <strong>Click each &oplus; to explode a summary into its rows</strong>, or press Next and all three open at once.',
+    'Explode the Assets summary and nine &Delta;-nodes land, one per asset line of the statement, each the 2025 column minus the 2024 column. '+assetListProse()+' No new information arrived &mdash; the two snapshot columns already held every figure &mdash; but at this grain the year starts to show a shape: Cash up two million, most of the receivables down, Investments and the trusts up, and the buildings&rsquo; recorded amount down a million and a half.',
+    'The other nine. Five liability &Delta;s: '+liabListProse()+'. And in the Reasons region &mdash; already split into its two sub-regions &mdash; the four Net Assets rows: '+naListProse()+'. Eighteen changes, and one law already binds them: the nine asset &Delta;s sum to '+sd(dA)+', the five liability &Delta;s to '+sd(dL)+', the four Net Assets &Delta;s to '+sd(dN)+' &mdash; and '+n(dA)+' &minus; '+n(dL)+' &minus; '+n(dN)+' = 0. <strong>All eighteen sum to zero against the identity.</strong> Exploding the three added detail; it could not add freedom.',
+    'Now read what the eighteen show &mdash; and notice what they cannot. <strong>Property fell '+n(ppe.d)+'</strong> in a year OHS ended '+n(G.level0.dNetAssets)+' richer: the organization grew while its buildings&rsquo; recorded amount dropped by a million and a half. <strong>Cash rose '+n(cash.d)+'</strong> in the same year the Statement of Cash Flows shows '+n(opCash)+' flowing <em>out</em> through operating activities &mdash; cash up, while the day-to-day work ran cash-negative. Neither is a contradiction. Both are questions. A &Delta;-node records only that an amount changed; it poses the question &mdash; <em>what gave, and what received?</em> &mdash; and nothing on this board answers it yet. Only arrows answer, and these statements hold enough to draw them. The walks begin next: the two piles first.'
+  ];
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+texts[currentStep]+'</p></div>';
+}
+
+/* ---------- per-step cards under the board ---------- */
+function tableRow(label,begin,end,d,cls){
+  return '<div class="m64-row'+(cls?' '+cls:'')+'"><div>'+label+'</div>'
+    +'<div class="m64-value">'+n(begin)+'</div>'
+    +'<div class="m64-value">'+n(end)+'</div>'
+    +'<div class="m64-value m64-delta">'+sd(d)+'</div></div>';
+}
+function tableHead(){
+  return '<div class="m64-row m64-head"><div></div><div class="m64-value">Dec 31, 2024</div><div class="m64-value">Dec 31, 2025</div><div class="m64-value">&Delta;</div></div>';
+}
+function assetCard(){
+  var h='<div class="m64-card"><p class="m6ohs-kicker">Oregon Humane Society &middot; from the Statement of Financial Position</p>'
+    +'<h2 class="m64-card-title">The nine asset rows, subtracted</h2>'
+    +'<p class="m6ohs-subline">each &Delta; is the 2025 column minus the 2024 column &middot; exact dollars</p>'
+    +'<div class="m64-table-wrap"><div class="m64-table">'+tableHead();
+  assetNodes.forEach(function(x){ h+=tableRow(escapeHTML(x.label),x.begin,x.end,x.d); });
+  var b=assetNodes.reduce(function(t,x){return t+x.begin;},0), e=assetNodes.reduce(function(t,x){return t+x.end;},0);
+  h+=tableRow('Total assets',b,e,dA,'m64-total');
+  return h+'</div></div></div>';
+}
+function otherNineCard(){
+  var h='<div class="m64-card"><p class="m6ohs-kicker">Oregon Humane Society &middot; from the Statement of Financial Position</p>'
+    +'<h2 class="m64-card-title">The five liability rows and the four Net Assets rows</h2>'
+    +'<p class="m6ohs-subline">the same subtraction, down the rest of the statement</p>'
+    +'<div class="m64-table-wrap"><div class="m64-table">'+tableHead();
+  h+='<div class="m64-section">Liabilities</div>';
+  liabNodes.forEach(function(x){ h+=tableRow(escapeHTML(x.label),x.begin,x.end,x.d); });
+  var lb=liabNodes.reduce(function(t,x){return t+x.begin;},0), le=liabNodes.reduce(function(t,x){return t+x.end;},0);
+  h+=tableRow('Total liabilities',lb,le,dL,'m64-total');
+  h+='<div class="m64-section">Net assets</div><div class="m64-sublabel">Without donor restrictions:</div>';
+  naNodes.filter(function(x){ return x.pile==='wo'; }).forEach(function(x){ h+=tableRow(escapeHTML(x.label),x.begin,x.end,x.d); });
+  naNodes.filter(function(x){ return x.pile==='w'; }).forEach(function(x){ h+=tableRow(escapeHTML(x.label),x.begin,x.end,x.d); });
+  var nb=naNodes.reduce(function(t,x){return t+x.begin;},0), ne=naNodes.reduce(function(t,x){return t+x.end;},0);
+  h+=tableRow('Total net assets',nb,ne,dN,'m64-total');
+  h+='</div></div>';
+  h+='<div class="m64-zero"><p class="m64-zero-title">The three regional sums meet</p>'
+    +'<p class="m64-zero-line">&Delta; Assets '+sd(dA)+' &middot; &Delta; Liabilities '+sd(dL)+' &middot; &Delta; Net Assets '+sd(dN)+'</p>'
+    +'<p class="m64-zero-line">'+n(dA)+' &minus; '+n(dL)+' &minus; '+n(dN)+' = 0 &#10003;</p>'
+    +'<p class="m64-zero-foot">&Delta;A &minus; &Delta;L = &Delta;Net Assets &middot; all eighteen sum to zero against the identity</p></div>';
+  return h+'</div>';
+}
+function renderCard(currentStep){
+  var h='';
+  if(currentStep===1) h=assetCard();
+  else if(currentStep===2) h=otherNineCard();
+  document.getElementById('stepCard').innerHTML=h;
+}
+function renderTail(currentStep){
+  var h='';
+  if(currentStep===TOTAL_STEPS-1) h='<div class="m6ohs-scope m64-insight-wrap"><div class="insight-box"><strong>Eighteen &Delta;-nodes, zero arrows.</strong> The two snapshot columns fix every node on this board and none of the traffic between them. Everything from here on is arrows &mdash; walked from the statements, inferred, or honestly left open.</div></div>';
+  document.getElementById('tail').innerHTML=h;
+}
+function renderControls(currentStep){
+  var h='<div class="nav-buttons">';
+  if(currentStep===0) h+='<button class="btn-back" onclick="nav(\'64-1-The-Year-as-Three-Numbers.html\')">&larr; Back</button>';
+  else h+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) h+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else h+='<button class="btn-continue" onclick="nav(\'64-3-The-Piles-Walk.html\')">The Piles Walk &rarr;</button>';
+  h+='</div>';
+  document.getElementById('controls').innerHTML=h;
+}
+
+/* ---------- the step machine ---------- */
+function applyBoard(currentStep){
+  var open=currentStep>0;
+  SUMMARY_IDS.forEach(function(id){ if(board.isExploded(id)!==open) board.setExploded(id,open); });
+  if(currentStep===1) board.highlight({ nodes:assetNodes.map(function(x){ return x.id; }), pairs:[] });
+  else if(currentStep===2) board.highlight({ nodes:liabNodes.concat(naNodes).map(function(x){ return x.id; }), pairs:[] });
+  else if(currentStep===3) board.highlight({ nodes:['ppe','cash'], pairs:[] });
+  else board.clearHighlight();
+}
+function render(){
+  renderBeats(step);
+  applyBoard(step);
+  renderStatus();
+  renderCard(step);
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function enterStep(target){ step=target; render(); window.scrollTo(0,0); }
+function advance(){ playClick(); enterStep(Math.min(step+1,TOTAL_STEPS-1)); }
+function back(){ playClick(); enterStep(Math.max(step-1,0)); }
+
+var glossaryTerms=[
+  {term:'&Delta;-node',def:'A node that records what changed in one account between the two statement dates &mdash; the ending amount minus the beginning amount, signed. A &Delta;-node says nothing about who gave or who received; it poses that question for arrows to answer.'},
+  {term:'Explode / fold',def:'The drill-down move: a summary node opens into the rows that sum to it, and folds back into one node. No new information either way &mdash; the same total, at finer or coarser grain.'},
+  {term:'The eighteen',def:'The eighteen &Delta;-nodes of OHS&rsquo;s year: nine asset rows, five liability rows, and four Net Assets rows of the Statement of Financial Position, each subtracted across its two dates. Against the identity, all eighteen sum to zero.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeGlossary(); });
+
+window.devFill=function(){ enterStep(TOTAL_STEPS-1); };
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Fact Arrows</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    /* Page-scoped 64-x board-page styles, matching the 74-x graph idiom. */
+    .m64-stage { margin-top:16px; }
+    .m64-board-wrap {
+      overflow-x:auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#f0f4f8;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+    }
+    .m64-board-wrap #board { display:block; width:100%; min-width:650px; height:auto; }
+    /* the unnamed giver of the expense arrows — deliberately grey: no statement names it */
+    .m64-board-wrap .gl-node[data-id="unknownGiver"] ellipse { fill:#5b6b7c; stroke:#fff; stroke-width:2; stroke-dasharray:4 3; }
+    #tail { margin-top:16px; }
+    #controls { margin-top:18px; }
+    .m64-progress {
+      margin:8px 0 0;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .m64-card {
+      max-width:900px;
+      margin:16px auto 0;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#fff;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+      overflow:hidden;
+    }
+    .m64-card-title {
+      margin:0;
+      padding:15px 18px;
+      background:#eaf1f8;
+      color:#16324a;
+      font:800 1rem/1.35 Inter,sans-serif;
+      letter-spacing:.01em;
+    }
+    .m64-card-body { padding:12px 18px 16px; }
+    .m64-legend-row {
+      display:grid;
+      grid-template-columns:96px minmax(110px,150px) 1fr;
+      gap:12px;
+      align-items:center;
+      padding:9px 2px;
+      border-bottom:1px solid #e2e8f0;
+    }
+    .m64-legend-row:last-child { border-bottom:0; }
+    .m64-legend-stroke { color:#00329d; }
+    .m64-legend-term { color:#16324a; font:800 .9rem/1.3 Inter,sans-serif; letter-spacing:.06em; text-transform:uppercase; }
+    .m64-legend-def { color:#334155; font:600 .85rem/1.45 "Open Sans",sans-serif; }
+    .m64-fe summary {
+      cursor:pointer;
+      padding:15px 18px;
+      background:#eaf1f8;
+      color:#16324a;
+      font:800 1rem/1.35 Inter,sans-serif;
+    }
+    .m64-fe-row {
+      display:grid;
+      grid-template-columns:minmax(180px,1fr) 120px;
+      gap:14px;
+      align-items:baseline;
+      padding:6px 4px;
+      border-bottom:1px solid #e2e8f0;
+      font:600 .88rem/1.35 "Open Sans",sans-serif;
+      color:#334155;
+    }
+    .m64-fe-note { color:#64748b; font-size:.78rem; font-style:italic; }
+    .m64-fe-amount { text-align:right; font:700 .88rem/1.25 "JetBrains Mono",monospace; font-variant-numeric:tabular-nums; }
+    .m64-fe-total { border-top:2px solid #334155; border-bottom:0; font-weight:800; color:#16324a; }
+    @media (max-width:720px) { .m64-board-wrap #board { min-width:610px; } }
+    @media (prefers-color-scheme:dark) {
+      .m64-board-wrap { border-color:#4b5567; background:#211f28; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m64-stage { --gl-panel:#26242e; --gl-ink:#e7eef9; --gl-region-line:#8996aa; --gl-accent:#e6ae4f; --gl-pulse:#a96915; }
+      .m64-progress { color:#aebbd0; }
+      .m64-card { border-color:#4b5567; background:#26242e; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m64-card-title, .m64-fe summary { background:#302e39; color:#e7eef9; }
+      .m64-legend-row, .m64-fe-row { border-color:#4b5567; }
+      .m64-legend-stroke { color:#9db9e8; }
+      .m64-legend-term { color:#e7eef9; }
+      .m64-legend-def, .m64-fe-row { color:#c6d2e2; }
+      .m64-fe-note { color:#93a3b8; }
+      .m64-fe-total { border-top-color:#8996aa; color:#e7eef9; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Fact Arrows</h1>
+        <p class="tut-header-sub">Module 6 &middot; ~7 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><i data-lucide="rotate-ccw"></i></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Fact Arrows</div>
+
+    <div id="beats"></div>
+    <div class="m64-stage">
+      <div class="m64-board-wrap">
+        <svg id="board" viewBox="0 0 1000 660" role="img" aria-label="The OHS year as a board: eighteen change nodes and the arrows the audited document states outright"></svg>
+      </div>
+    </div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) closeGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title"><i data-lucide="book-open" class="licon"></i> Glossary</div>
+      <button class="glossary-close-btn" aria-label="Close" onclick="closeGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="ohs-graph-data.js"></script>
+<script src="graph-lab.js"></script>
+<script src="shared.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+if(window.lucide) lucide.createIcons();
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d,t,v){ var c=ac(); if(!c) return; var o=c.createOscillator(),g=c.createGain(); o.type=t||'sine'; o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(v||0.05,c.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playSuccess(){ tone(523,0.12); setTimeout(function(){tone(659,0.12);},90); setTimeout(function(){tone(784,0.16);},180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function nav(url){ playClick(); window.location.href=url; }
+
+var step=0;
+var TOTAL_STEPS=6;
+var G=window.OHS_GRAPH;
+function plain(v){ return Math.abs(v).toLocaleString('en-US'); }
+function fmt(v){ var a=plain(v); return v<0?'('+a+')':a; }
+
+/* ---------- the canon, assembled into board data ---------- */
+var POS=G.layout.positions;
+var arrowsById={}; G.arrows.forEach(function(a){ arrowsById[a.id]=a; });
+var rowsById={}; G.expenseRows.forEach(function(r){ rowsById[r.id]=r; });
+
+/* Display labels: statement rows keep their sense; three long SFP row names are
+   shortened only enough to sit at their canonical positions without colliding. */
+var display={
+  availOps:'Available for ops',
+  boardEndow:'Board endowment',
+  netCapital:'Net capital assets',
+  contribRec:'Contributions rec.',
+  deferredRev:'Deferred rev.'
+};
+
+var DELTA_IDS=G.nodes.map(function(n){ return n.id; });
+var nodeDefs=G.nodes.map(function(n){
+  return { id:n.id, label:display[n.id]||n.label, region:n.region, pile:n.pile||undefined,
+    x:POS[n.id][0], y:POS[n.id][1], badge:n.d };
+});
+/* The Reason nodes the fact arrows introduce — canonical positions from the layout. */
+nodeDefs.push({ id:'reasonContribW', label:'Restricted gifts', region:'reasons', pile:'w', x:POS.reasonContribW[0], y:POS.reasonContribW[1] });
+nodeDefs.push({ id:'reasonAnnuity', label:'Annuity agreements', region:'reasons', pile:'w', x:POS.reasonAnnuity[0], y:POS.reasonAnnuity[1] });
+nodeDefs.push({ id:'reasonDepreciation', label:'Depreciation', region:'reasons', pile:'wo', x:POS.reasonDepreciation[0], y:POS.reasonDepreciation[1] });
+/* Page-local: the expense Reasons at FE grain arrive as one receiving node plus
+   a grey giver no statement names (the walks name the givers, next page). */
+nodeDefs.push({ id:'reasonExpenses', label:'Operating expenses', region:'reasons', pile:'wo', x:700, y:430 });
+nodeDefs.push({ id:'unknownGiver', label:'?', region:'assets', x:500, y:585 });
+
+/* Expense sums, from the eighteen FE rows. */
+var feTotal=0; G.expenseRows.forEach(function(r){ feTotal+=r.amount; });
+var feSalaries=rowsById.fe_salaries.amount;
+var feBenefits=rowsById.fe_payrollTax.amount;
+var feDep=rowsById.fe_depreciation.amount;
+var feOther=feTotal-feSalaries-feBenefits-feDep;
+
+var FACT_ARROW_IDS=['salesInv','purchInv','ppeCash','ppeAP','giftLT','giftCapex','annuityIn','annuityOut','depreciation'];
+var edgeDefs=FACT_ARROW_IDS.map(function(id){
+  var a=arrowsById[id];
+  return { id:a.id, from:a.from, to:a.to, amount:a.amount, tag:a.tag, kind:a.kind, caption:a.caption };
+});
+/* The two pile-to-pile transfers, carried over from the last page. */
+G.transfers.forEach(function(t){
+  edgeDefs.push({ id:t.id, from:'withRestrictions', to:'availOps', amount:t.amount, tag:t.tag, kind:'transfer', caption:t.caption });
+});
+/* The expense amounts at FE grain, bundled into three arrows. */
+edgeDefs.push({ id:'feSalaries', from:'unknownGiver', to:'reasonExpenses', amount:feSalaries, tag:'fact', kind:'reason',
+  caption:'Salaries -- stated on the functional-expenses statement. Which asset or claim settled it is not stated at this grain.' });
+edgeDefs.push({ id:'feBenefits', from:'unknownGiver', to:'reasonExpenses', amount:feBenefits, tag:'fact', kind:'reason',
+  caption:'Payroll taxes and benefits -- stated. The giving end stays grey until the walks.' });
+edgeDefs.push({ id:'feOther', from:'unknownGiver', to:'reasonExpenses', amount:feOther, tag:'fact', kind:'reason',
+  caption:'The other fifteen rows, bundled for legibility -- feed and shelter down to other. Each row is stated; expand the panel to read them.' });
+
+var boardSvg=document.getElementById('board');
+var board=GraphLab.createStatementBoard(boardSvg,{
+  nodes:nodeDefs, edges:edgeDefs,
+  regions:G.layout.regions, partition:G.layout.partition
+});
+
+function nodesForStep(s){
+  var ids=DELTA_IDS.slice();
+  if(s>=2) ids=ids.concat(['reasonContribW','reasonAnnuity']);
+  if(s>=3) ids.push('reasonDepreciation');
+  if(s>=4) ids=ids.concat(['reasonExpenses','unknownGiver']);
+  return ids;
+}
+function edgesForStep(s){
+  var ids=['releases','appropriation'];
+  if(s>=1) ids=ids.concat(['salesInv','purchInv','ppeCash']);
+  if(s>=2) ids=ids.concat(['giftLT','giftCapex','annuityIn','annuityOut']);
+  if(s>=3) ids=ids.concat(['depreciation','ppeAP']);
+  if(s>=4) ids=ids.concat(['feSalaries','feBenefits','feOther']);
+  return ids;
+}
+function focusForStep(s){
+  if(s===1) return { pairs:['salesInv','purchInv','ppeCash'], nodes:['investments','cash','ppe'] };
+  if(s===2) return { pairs:['giftLT','giftCapex','annuityIn','annuityOut'], nodes:['reasonContribW','reasonAnnuity','cash','splitInterest'] };
+  if(s===3) return { pairs:['depreciation','ppeAP'], nodes:['ppe','reasonDepreciation','ap'] };
+  if(s===4) return { pairs:['feSalaries','feBenefits','feOther'], nodes:['unknownGiver','reasonExpenses'] };
+  if(s===5) return { pairs:[], nodes:DELTA_IDS.filter(function(id){ return id!=='ppe'; }) };
+  return null;
+}
+function boardState(){
+  board.setVisibleNodes(nodesForStep(step));
+  board.setVisibleEdges(edgesForStep(step));
+  board.setFocus(focusForStep(step));
+}
+
+/* ---------- derived narration figures (all from the canon) ---------- */
+var A=arrowsById;
+var cashD=G.walks.cash.d;
+var investingNet=A.salesInv.amount-A.purchInv.amount-A.ppeCash.amount;
+var financingNet=A.giftLT.amount+A.giftCapex.amount+A.annuityIn.amount-A.annuityOut.amount;
+var cashFactNet=investingNet+financingNet;
+var operatingMissing=cashFactNet-cashD;
+var invD=G.walks.investments.d;
+var invArrowNet=A.purchInv.amount-A.salesInv.amount;
+var invUnexplained=invD-invArrowNet;
+
+/* ---------- narration ---------- */
+function renderBeats(currentStep){
+  var texts=[
+    'Three tags, carried over from the shop: <b>fact</b> &mdash; stated outright, in dollars, by a statement, a note, or a disclosure; <b>inference</b> &mdash; recovered by walking an account, under an assumption you can name; <b>open</b> &mdash; not determined by anything released. This page is the facts. Every arrow drawn here is stated gross somewhere in the audited document &mdash; no walking, no assuming, no netting. The board opens as you left it: the eighteen &Delta;-nodes, and the two pile-to-pile transfers from the last page. Nodes say <em>what changed</em>; arrows say <em>who gave and who received</em> &mdash; and today, every arrow comes straight off the page.',
+    'The first facts come from the cash statement&rsquo;s investing section, which states its flows gross &mdash; sales separate from purchases, never merged into one line. Three arrows. Investments give; Cash receives '+plain(A.salesInv.amount)+' of sale proceeds. Cash gives; Investments receive '+plain(A.purchInv.amount)+' of new holdings. Cash gives; Property receives '+plain(A.ppeCash.amount)+' bought with cash this year. A netted section would have shown a single +'+plain(investingNet)+' and hidden all three. Gross statement, three facts.',
+    'The financing section adds four more. Two gifts arrive fenced by donors&rsquo; restrictions &mdash; so the giving Reason sits in the <em>With</em> sub-region: '+plain(A.giftLT.amount)+' restricted for long-term investment and '+plain(A.giftCapex.amount)+' restricted for capital purposes, Cash receiving both. Donors also signed new gift annuities: the annuity Reason gives '+plain(A.annuityIn.amount)+' of proceeds into Cash. And Cash gives '+plain(A.annuityOut.amount)+' of the year&rsquo;s annuity payouts &mdash; the Split-interest claim receives its year. Four arrows, all stated gross, all facts.',
+    'Two more facts, from two corners of the document. The functional-expenses statement states depreciation outright: '+plain(A.depreciation.amount)+' &mdash; given, never calculated, exactly as it has been since the shop. Property gives a year of its working life; the Depreciation Reason receives it. Then, below the cash statement&rsquo;s totals, one line of supplemental disclosure: <em>purchases of property and equipment recorded in accounts payable, '+plain(A.ppeAP.amount)+'</em>. Payables give; Property receives &mdash; bought this year, payment still owed, not a dollar of cash moved. Keep a finger on that footnote: on the next page it closes a walk.',
+    'On the activities statement, the <em>Without</em> pile walked down through operating expenses &mdash; and the functional-expenses statement states every row of them. Eighteen rows, '+plain(feTotal)+' in total: salaries '+plain(feSalaries)+', payroll taxes and benefits '+plain(feBenefits)+', depreciation &mdash; already drawn &mdash; and fifteen more, from feed and shelter supplies down to other, '+plain(rowsById.fe_other.amount)+'. Every amount is a fact. What no statement states at this grain is the other end: <em>which asset or claim settled each row</em>. So the amounts land as three arrows into the <em>Without</em> sub-region &mdash; salaries, payroll taxes and benefits, and the fifteen remaining rows bundled &mdash; while the giving end stays a grey <b>?</b>. Expand the panel below to read all eighteen rows.',
+    'Count the board: fourteen arrows, every one tagged fact &mdash; nine drawn one at a time, two transfers carried over, and the expense amounts bundled into three. Now look at what they leave. Seventeen of the eighteen &Delta;-nodes still lack a full explanation &mdash; highlighted now. Cash carries seven fact arrows and still misses its change: the stated arrows net to +'+plain(cashFactNet)+', the node says +'+plain(cashD)+' &mdash; the entire operating side of the year, '+plain(operatingMissing)+' of it, is nowhere on the board. Investments moved +'+plain(invD)+' while its two arrows net to &minus;'+plain(invArrowNet)+': '+plain(invUnexplained)+' of change with no stated exchange behind it. Only Property closes &mdash; and even that closure leans on a footnote. Facts alone don&rsquo;t close the year. The walks do.'
+  ];
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+texts[currentStep]+'</p></div><p class="m64-progress">Step '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+/* ---------- tail panels ---------- */
+function legendHtml(){
+  function stroke(extra){
+    return '<svg class="m64-legend-stroke" width="90" height="16" viewBox="0 0 90 16" aria-hidden="true"><line x1="2" y1="8" x2="80" y2="8" stroke="currentColor" stroke-width="2.5"'+extra+'></line><path d="M80,3 L89,8 L80,13 z" fill="currentColor"'+(extra.indexOf('opacity')>=0?' opacity=".25"':'')+'></path></svg>';
+  }
+  return '<section class="m64-card" aria-labelledby="legend-title"><h2 class="m64-card-title" id="legend-title">The tag discipline</h2><div class="m64-card-body">'
+    +'<div class="m64-legend-row">'+stroke('')+'<span class="m64-legend-term">Fact</span><span class="m64-legend-def">Stated outright by the document, gross, in dollars. Today&rsquo;s page.</span></div>'
+    +'<div class="m64-legend-row">'+stroke(' stroke-dasharray="8 5"')+'<span class="m64-legend-term">Inference</span><span class="m64-legend-def">Recovered by walking an account, under an assumption you can name. Next page.</span></div>'
+    +'<div class="m64-legend-row">'+stroke(' opacity=".25"')+'<span class="m64-legend-term">Open</span><span class="m64-legend-def">Not determined by anything released. It stays on the board, and it stays honest.</span></div>'
+    +'</div></section>';
+}
+function fePanelHtml(){
+  var rows='';
+  G.expenseRows.forEach(function(r){
+    var note='';
+    if(r.id==='fe_depreciation') note=' <span class="m64-fe-note">&mdash; drawn already: Property gave</span>';
+    else if(r.id==='fe_salaries'||r.id==='fe_payrollTax') note=' <span class="m64-fe-note">&mdash; its own arrow</span>';
+    rows+='<div class="m64-fe-row"><span>'+r.label+note+'</span><span class="m64-fe-amount">'+fmt(r.amount)+'</span></div>';
+  });
+  rows+='<div class="m64-fe-row m64-fe-total"><span>Total operating expenses</span><span class="m64-fe-amount">'+fmt(feTotal)+'</span></div>';
+  return '<section class="m64-card m64-fe-card"><details class="m64-fe"'+(step===4?' open':'')+'><summary>Statement of Functional Expenses &middot; eighteen rows &middot; '+plain(feTotal)+' total</summary><div class="m64-card-body">'+rows+'</div></details></section>';
+}
+function renderTail(currentStep){
+  var html='';
+  if(currentStep===0) html=legendHtml();
+  if(currentStep>=4) html=fePanelHtml();
+  if(currentStep===5) html+='<div class="insight-box">A real audit document states more than most readers expect &mdash; gross investing flows, gross financing flows, a depreciation figure printed in ink, a footnote for property bought on payables &mdash; and still far less than the year. What the document states, tag fact. What it forces, you will infer next. What it cannot force stays open.</div>';
+  document.getElementById('tail').innerHTML=html;
+}
+
+function renderControls(currentStep){
+  var html='<div class="nav-buttons">';
+  if(currentStep===0) html+='<button class="btn-back" onclick="nav(\'64-3-The-Piles-Walk.html\')">&larr; Back</button>';
+  else html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) html+='<button class="btn-next" onclick="advance()">Next &rarr;</button>';
+  else html+='<button class="btn-continue" onclick="playSuccess();nav(\'64-5-The-Walks-That-Close.html\')">The Walks That Close &rarr;</button>';
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+
+function render(){
+  renderBeats(step);
+  boardState();
+  renderTail(step);
+  renderControls(step);
+  if(window.lucide) lucide.createIcons();
+}
+function advance(){ playClick(); step=Math.min(step+1,TOTAL_STEPS-1); render(); window.scrollTo(0,0); }
+function back(){ playClick(); step=Math.max(step-1,0); render(); window.scrollTo(0,0); }
+
+var glossaryTerms=[
+  {term:'Fact (tag)',def:'The tag for an arrow or node stated outright by the released document &mdash; the amount appears in dollars on a statement face, in a note, or in a supplemental disclosure. No walking, no assuming.'},
+  {term:'Gross vs net',def:'A gross figure states a flow whole &mdash; sales separate from purchases, proceeds separate from payouts. A net figure merges opposite flows into one line. Every arrow on this page is stated gross; the document&rsquo;s netted lines get their own page, two pages from now.'},
+  {term:'Supplemental disclosure',def:'A line printed after the cash statement&rsquo;s totals for activity that moved no cash &mdash; here, 204,045 of property purchases recorded in accounts payable. Stated in ink, so a fact &mdash; and the key to the next page&rsquo;s first walk.'}
+];
+function openGlossary(){ document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){ return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>'; }).join(''); document.getElementById('glossaryOverlay').classList.add('open'); if(window.lucide) lucide.createIcons(); }
+function closeGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ playClick(); step=0; render(); window.scrollTo(0,0); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') closeGlossary(); });
+window.devFill=function(){ step=TOTAL_STEPS-1; render(); };
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
