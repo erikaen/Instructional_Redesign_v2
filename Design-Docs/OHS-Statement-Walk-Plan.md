@@ -57,11 +57,13 @@ the sign of ΔCash tells you nothing about the sign of the year.)
 1. **Replace in place — RULED 2026-07-25.** 61-1, 62-1, 63-1…63-6 rebuild on
    OHS under the same page numbers. Chains and the 71-1 back-link survive.
 2. **Yale's new home.** Yale stays student-facing (ruled), so it needs new
-   numbers. **Proposed: 64-1…64-6, an optional branch** titled as "the same
-   architecture at $59 billion," reached from 63-6 alongside the main chain
-   to 71-1 (two forward buttons on 63-6: *Continue* → 71-1, *Optional: Yale at
-   scale* → 64-1; 64-6 chains back → 71-1). Mechanics: git-mv + title/nav
-   edits only; Yale page content otherwise untouched.
+   numbers. ~~Proposed: 64-1…64-6~~ **AMENDED 2026-07-27 (graph plan R6):
+   Yale is 65-1…65-6** — the 64-x slot went to the OHS Graph-Teach sequence
+   (see `OHS-Graph-Teach-Walk-Plan.md`). The chain: 63-6 *Continue* → 64-1
+   (graph-teach) … 64-7 *Continue* → 71-1 / *Optional: Yale at scale* →
+   65-1; 65-6 chains → 71-1; 71-1's Back → 64-7. Mechanics unchanged:
+   git-mv + title/nav edits only; Yale page content otherwise untouched.
+   (Landed: renames + 65-1 scale-contrast intro + 65-6 forward chain.)
 3. **Page cut: six walk pages, same numbers.** Proposed suite below —
    the functional-expenses statement gets its own page (63-5), and the
    liquidity lesson folds into 63-6 with the architecture close. Alternative:
