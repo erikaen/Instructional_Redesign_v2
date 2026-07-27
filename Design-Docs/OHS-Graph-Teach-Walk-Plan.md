@@ -48,6 +48,13 @@ R6. **Placement: the sequence follows the 63-x OHS walk as 64-1…64-7.**
 R7. **"Net Assets" is authorized** in 64-x student-facing text (with "With/
     Without Donor Restrictions"), same carve-out class as the 63-x walk.
 R8. **Six to seven pages approved.** Suite below uses seven.
+R9. **(2026-07-27, post-lock amendment.)** The feasibility doc's "provable
+    indeterminacy" was factually wrong: notes 5 and 6 fully allocate the
+    546,046 NPV-discount line (bequests 546,635 per note 6; contributions
+    −589 per note 5), and the bequests walk closes to the dollar. Ruled:
+    64-6 teaches BOTH the apparent floor broken by the notes AND the
+    genuine open item — the gross bequest flows (recognized vs collected,
+    two unknowns, one equation). 64-6 runs ~6 steps.
 
 Standing rules carry over unchanged: give/receive only (no debit/credit —
 M7 ruling 8), no closing, recognition never "posted" (ruling 12), strict
@@ -148,7 +155,8 @@ one unknown, solved.
 | 1 | **Netted lines (R2):** investment return arrives NET (fees 99,807 inside it); special events net of donor benefits. First pass: the net arrow. Then the drill-down: the notes un-net it, and the node explodes into gross components. The net is the floor the face offers; the notes lower it |
 | 2 | **In-kind (R3):** 1,402,144 of contribution arrows running straight into expenses — recognized because priceable. Gifts that never touch Cash still move the piles |
 | 3 | **The volunteers (R3):** 416,720 hours ≈ 200 FTEs — real, essential, and OFF the board. No reliable price, so recognition refuses (71-2's move, at scale). Not everything gets recognized — the line is drawn in ink |
-| 4 | **The provable indeterminacy:** the NPV-discount adjustment (546,046) spans two receivables, and the statements do not allocate it — the bequests walk misses by exactly the unallocated residue (≈589 against the naive split). No release of statements resolves it. Tag **OPEN** — the aggregation floor is real, reachable, and now demonstrated |
+| 4 | **The apparent floor — broken by the notes (R9, amended 2026-07-27):** the CFS's NPV-discount line (546,046) spans two receivables and LOOKS unallocatable on its face. Then the drill-down: note 6 states the bequests discount outright (546,635, new in 2025) and note 5 gives the contributions discount change (5,970 − 6,559 = −589); they sum to 546,046 to the dollar, and the bequests walk closes exactly (3,293,019 + 1,065,779 − 546,635 = 3,812,163 — note 6's own table). The feasibility doc called this "provably open"; chasing the notes resolved it — the method, vindicated |
+| 5 | **The TRUE open (R9):** the gross bequest flows. New bequests recognized minus bequests collected = 1,065,779 (the CFS working-capital line) — one equation, two unknowns, and no note splits them. You can know the net; the gross traffic is unknowable from any release of these statements. Tag **OPEN** — the aggregation floor is real, and now it is the right one |
 
 ### 64-7 The Best Lawful Picture (closing, ~4 steps)
 
@@ -183,15 +191,17 @@ one unknown, solved.
   670,087 + 3,893,029; trusts 162,785; split-interest −38,125); the walk
   table for every account (begin, arrows, end); the wedge inventory keyed
   to CFS adjustment lines; the ERTC inference record; the NPV-discount
-  open record (546,046, residue ≈589).
+  allocation record (R9: 546,046 = bequests 546,635 − contributions 589,
+  per notes 6 and 5); the gross-bequest-flows OPEN record (R9).
 - **Check harness** (`Accounting Pre-work/M6-graph-build/checks/`,
   Ringer-run, M7-style): all eighteen Δs recomputed from the two SFP dates
   and summing to zero; both pile walks tie; releases zero-sum; the
   Property walk solves to 1,078,227 and splits 874,182 + 204,045; the
   Investments walk ties through both gain figures; receivables
   −300,616 = 216,333 + 84,283; every fact arrow's figure found verbatim in
-  the canon; the bequests-walk miss asserted EXPECTED-open (≈589); the $1
-  note-17 wrinkle asserted EXPECTED. Target ~100+ assertions.
+  the canon; the NPV-discount allocation ties to the dollar and the
+  bequests walk closes (R9); the gross-bequest-flows record asserted OPEN
+  (R9); the $1 note-17 wrinkle asserted EXPECTED. Target ~100+ assertions.
 - Consistency check against the walk's `ohs-fy2025-data.js`: shared
   figures asserted equal (one canon, two views).
 

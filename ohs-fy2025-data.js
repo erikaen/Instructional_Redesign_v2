@@ -923,6 +923,69 @@ window.OHS_FY2025 = {
     "y2024": 19322230
    }
   },
+  "contributionsReceivable": {
+   "rows": [
+    {
+     "id": "under1yr",
+     "label": "Unconditional promises expected to be collected in less than one year",
+     "y2025": 351850,
+     "y2024": 593942
+    },
+    {
+     "id": "oneToFive",
+     "label": "Unconditional promises expected to be collected in one to five years",
+     "y2025": 150000,
+     "y2024": 200263
+    }
+   ],
+   "gross": {
+    "y2025": 501850,
+    "y2024": 794205
+   },
+   "discount": {
+    "y2025": -5970,
+    "y2024": -6559
+   },
+   "net": {
+    "y2025": 495880,
+    "y2024": 787646
+   }
+  },
+  "bequestsReceivable": {
+   "rows": [
+    {
+     "id": "under1yr",
+     "label": "Balances expected to be collected in less than one year",
+     "y2025": 2563082,
+     "y2024": 3293019
+    },
+    {
+     "id": "oneToFive",
+     "label": "Balances expected to be collected in one to five years",
+     "y2025": 382500,
+     "y2024": 0
+    },
+    {
+     "id": "overFive",
+     "label": "Balances expected to be collected in more than five years",
+     "y2025": 1413216,
+     "y2024": 0
+    }
+   ],
+   "gross": {
+    "y2025": 4358798,
+    "y2024": 3293019
+   },
+   "discount": {
+    "y2025": -546635,
+    "y2024": 0
+   },
+   "net": {
+    "y2025": 3812163,
+    "y2024": 3293019
+   },
+   "discountRate2025": "3.55%"
+  },
   "investmentReturn": {
    "endowmentReturn": {
     "y2025": 3837035,
