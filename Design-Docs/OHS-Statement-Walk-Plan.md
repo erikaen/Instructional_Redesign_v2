@@ -192,6 +192,14 @@ teaching beat: the structure of each statement and the element definitions.
 | 3 | "Net investment in capital assets" 61,090,468: not spendable, not restricted — just the buildings' value, fenced for the reader's honesty |
 | 4 | INFER (the 74-x move): from the two balance sheets alone, could you tell a deficit happened? (No — only the piles' walks, given by the activities statement, reveal which pile fell and why) |
 
+63-4 also carries the **"About the name Net Assets" expandable** (ruled IN
+2026-07-26; draft text in `Module-6-Intro-Draft.md`), which delivers the
+**Reasons-tab payoff**: the course named the tab "Reasons" for a reason and
+deliberately held off naming the difference — three names later (Member's
+Capital / shareholders' equity / Net Assets) the student sees why: the name
+fits who the entity answers to; the thing never changed; and a tab named
+Reasons can hold either question's answer (source piles or promise piles).
+
 ### 63-5 What the Money Did — the Statement of Functional Expenses (~5 steps)
 | Step | Beat |
 |---|---|
