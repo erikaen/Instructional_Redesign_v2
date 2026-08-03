@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 9 Complete</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m8-complete { max-width: 980px; margin: 0 auto; }
+    .m8-section + .m8-section { margin-top: 24px; }
+    .m8-kicker { margin: 0 0 7px; color: #64748b; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.11em; text-transform: uppercase; }
+    .m8-section h2 { margin: 0 0 10px; color: #183153; font-family: Inter, sans-serif; font-size: clamp(1.35rem, 3vw, 1.75rem); line-height: 1.2; }
+    .m8-section p { line-height: 1.68; }
+    .m8-table-card { overflow: hidden; padding: 0; }
+    .m8-table-intro { padding: 20px 22px 16px; }
+    .m8-table-intro p { margin: 8px 0 0; }
+    .m8-table-wrap { overflow-x: auto; }
+    .m8-rosetta { width: 100%; border-collapse: collapse; background: #fff; color: #24344d; }
+    .m8-rosetta th { padding: 13px 18px; background: #183153; color: #fff; font: 800 0.78rem/1.35 Inter, sans-serif; letter-spacing: 0.07em; text-align: left; text-transform: uppercase; }
+    .m8-rosetta th:first-child { width: 50%; }
+    .m8-rosetta td { border-bottom: 1px solid #dfe5ec; padding: 13px 18px; vertical-align: top; line-height: 1.5; }
+    .m8-rosetta tbody tr:last-child td { border-bottom: 0; }
+    .m8-rosetta tbody tr:nth-child(even) { background: #f6f8fb; }
+    .m8-rosetta td:last-child { color: #183153; font-weight: 700; }
+    .m8-arrow { display: none; color: #c41230; font-weight: 800; }
+    .m8-close { border-left: 4px solid #c41230; }
+    .m8-finished { margin-top: 24px; border: 1px solid #c8d6e6; border-radius: 12px; padding: 20px; background: #f5f8fc; text-align: center; }
+    .m8-finished-mark { display: inline-grid; width: 48px; height: 48px; margin-bottom: 10px; border-radius: 50%; place-items: center; background: #183153; color: #fff; font: 800 1.45rem/1 Inter, sans-serif; }
+    .m8-finished-title { margin: 0; color: #183153; font-family: Inter, sans-serif; font-size: 1.15rem; font-weight: 800; }
+    .m8-finished p { margin: 7px 0 0; }
+    .m8-nav { margin-top: 18px; }
+    .glossary-dismiss-btn { border: 0; padding: 2px 7px; background: transparent; color: inherit; cursor: pointer; font-size: 1.7rem; line-height: 1; }
+    @media (max-width: 650px) {
+      .m8-rosetta thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); }
+      .m8-rosetta, .m8-rosetta tbody, .m8-rosetta tr, .m8-rosetta td { display: block; width: 100%; }
+      .m8-rosetta tr { border-bottom: 1px solid #cfd8e4; padding: 12px 16px; }
+      .m8-rosetta td { border: 0; padding: 4px 0; }
+      .m8-rosetta td:last-child { display: flex; gap: 8px; }
+      .m8-arrow { display: inline; }
+    }
+    @media print {
+      .tut-header-actions, .m8-nav, .glossary-overlay { display: none !important; }
+      .page, .prework-wrap, .m8-complete { max-width: none; margin: 0; padding: 0; }
+      .m8-table-card { border: 1px solid #9aa7b7; box-shadow: none; break-inside: auto; }
+      .m8-rosetta { color: #000; }
+      .m8-rosetta th { background: #e8edf3 !important; color: #000 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .m8-rosetta tbody tr { break-inside: avoid; }
+      .m8-rosetta tbody tr:nth-child(even) { background: #f3f4f6 !important; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .m8-complete { color: #d7deea; }
+      .m8-kicker { color: #aebbd0; }
+      .m8-section h2, .m8-rosetta td:last-child, .m8-finished-title { color: #e7eef9; }
+      .m8-table-card, .m8-rosetta { background: #252a35; color: #d7deea; }
+      .m8-rosetta th { background: #152844; }
+      .m8-rosetta td, .m8-rosetta tr { border-color: #455064; }
+      .m8-rosetta tbody tr:nth-child(even) { background: #2d3440; }
+      .m8-close { border-left-color: #e43b58; }
+      .m8-finished { border-color: #455b75; background: #222d3b; }
+      .m8-finished-mark { background: #c41230; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Module 9 Complete</h1>
+        <p class="tut-header-sub">Module 9 &middot; ~4 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><span aria-hidden="true">&#128214;</span></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><span aria-hidden="true">&#8635;</span></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Module 9 Complete</div>
+
+    <div class="phase active m8-complete" id="phase-complete">
+      <section class="m8-section" aria-labelledby="translation-title">
+        <p class="m8-kicker">The full translation</p>
+        <div class="section-card m8-table-card">
+          <div class="m8-table-intro">
+            <h2 id="translation-title">The reader&rsquo;s key</h2>
+            <p>You already knew the thing in the left column. Now you can read the profession&rsquo;s name for it on the right, including Retained Earnings when you meet a corporation.</p>
+          </div>
+          <div class="m8-table-wrap">
+            <table class="m8-rosetta">
+              <thead>
+                <tr><th scope="col">The course&rsquo;s words</th><th scope="col">The profession&rsquo;s words</th></tr>
+              </thead>
+              <tbody id="rosettaRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="m8-section" aria-labelledby="read-title">
+        <p class="m8-kicker">What you can do now</p>
+        <div class="section-card m8-close">
+          <h2 id="read-title">Read the notation backward</h2>
+          <p>Across Modules 8 and 9, you learned to read the profession&rsquo;s notation and reason backward through it: journal entries, T-accounts, posted ledgers, closings, special account structures, and the words on real title lines.</p>
+          <p>You were never being trained to keep books in that notation. You were being handed the reader&rsquo;s key. You can meet a familiar pattern under its standard name, trace what it says happened, and ask what an analyst still needs to know.</p>
+        </div>
+      </section>
+
+      <div class="next-phase-msg finished-this-module m8-finished">
+        <div class="m8-finished-mark" aria-hidden="true">&#10003;</div>
+        <div class="m8-finished-title">You&rsquo;ve finished the two-module tool kit: Modules 8 and 9.</div>
+        <p>You can carry the analyst&rsquo;s key into the financial statements you read next.</p>
+      </div>
+
+      <div class="btn-row m8-nav">
+        <button class="btn-back" onclick="nav('95-1-Consolidation.html')">&larr; Back</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel" role="dialog" aria-modal="true" aria-labelledby="glossaryTitle">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title" id="glossaryTitle">Glossary</div>
+      <button class="glossary-dismiss-btn" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="m8-data.js"></script>
+<script src="toolkit-lab.js"></script>
+<script src="shared.js"></script>
+<script>
+function escapeHtml(value){
+  return String(value).replace(/[&<>"']/g, function(character){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character];
+  });
+}
+
+function renderRosetta(){
+  var rows=window.M8_DATA.rosetta;
+  document.getElementById('rosettaRows').innerHTML=rows.map(function(row){
+    return '<tr><td>'+escapeHtml(row.course)+'</td><td><span class="m8-arrow" aria-hidden="true">&rarr;</span><span>'+escapeHtml(row.standard)+'</span></td></tr>';
+  }).join('');
+}
+
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=window.M8_DATA.rosetta.map(function(row){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+escapeHtml(row.standard)+'</div><div class="glossary-entry-def">The profession&rsquo;s name for '+escapeHtml(row.course).toLowerCase()+'.</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(event){ if(event.key==='Escape') dismissGlossary(); });
+window.devFill=function(){};
+renderRosetta();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

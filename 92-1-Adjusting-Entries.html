@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adjusting Entries</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m8-adjusting { max-width: 940px; margin: 0 auto; }
+    .m8-progress {
+      margin: 8px 0 0;
+      color: #64748b;
+      font: 700 .72rem/1.3 Inter, sans-serif;
+      letter-spacing: .08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+    #mainGrid { margin-top: 16px; }
+    .m8-entry-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .m8-entry-card,
+    .m8-practice-card {
+      min-width: 0;
+      border: 1px solid #d7dee8;
+      border-radius: 10px;
+      padding: 14px;
+      background: #fff;
+      box-shadow: 0 6px 18px rgba(32, 55, 72, .07);
+    }
+    .m8-entry-card h2,
+    .m8-practice-card h2 { margin-bottom: 10px; font-size: 1rem; }
+    .m8-entry-wrap { max-width: 680px; margin: 0 auto; }
+    .m8-prompt {
+      max-width: 760px;
+      margin: 18px auto 0;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 16px;
+    }
+    .m8-prompt h2 { margin-bottom: 10px; font-size: 1.05rem; }
+    .m8-choice-list { display: grid; gap: 9px; }
+    .m8-choice {
+      width: 100%;
+      border: 1px solid #b9c5d5;
+      border-radius: 8px;
+      padding: 11px 13px;
+      background: #fff;
+      color: #243247;
+      cursor: pointer;
+      font: 700 .9rem/1.45 Inter, sans-serif;
+      text-align: left;
+    }
+    .m8-choice:hover { border-color: #286dc0; background: #f5f8fc; }
+    .m8-choice:focus-visible { outline: 3px solid rgba(40, 109, 192, .24); outline-offset: 2px; }
+    .m8-choice.is-correct { border-color: #28864f; background: #ecfdf3; color: #166534; }
+    .m8-choice.is-wrong { border-color: #d46a50; background: #fff5f2; color: #8f2e18; animation: m8-bounce 260ms ease; }
+    .m8-feedback { min-height: 1.45em; margin: 9px 0 0; color: #8f2e18; font: 600 .86rem/1.45 "Open Sans", sans-serif; }
+    .m8-feedback.is-correct { color: #166534; }
+    .m8-family-tag {
+      display: inline-block;
+      margin-bottom: 10px;
+      border-radius: 999px;
+      padding: 4px 10px;
+      background: #eaf1f8;
+      color: #174d87;
+      font: 800 .72rem/1.25 Inter, sans-serif;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .m8-practice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .m8-practice-card.is-correct { border-color: #86b89a; background: #f7fff9; }
+    .m8-practice-control { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; margin-top: 11px; }
+    .m8-money-input {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid #94a3b8;
+      border-radius: 6px;
+      padding: 8px 10px;
+      background: #fff;
+      color: #172033;
+      font: 700 .95rem/1.2 "JetBrains Mono", monospace;
+      text-align: right;
+    }
+    .m8-money-input:focus { outline: 3px solid rgba(40, 109, 192, .22); border-color: #286dc0; }
+    .m8-check {
+      min-height: 40px;
+      border: 0;
+      border-radius: 6px;
+      padding: 8px 13px;
+      background: #286dc0;
+      color: #fff;
+      cursor: pointer;
+      font: 800 .84rem/1 Inter, sans-serif;
+    }
+    .m8-check:disabled { background: #28864f; cursor: default; }
+    .m8-practice-feedback { min-height: 2.7em; margin: 7px 0 0; color: #8f2e18; font: 600 .82rem/1.4 "Open Sans", sans-serif; }
+    .m8-practice-card.is-correct .m8-practice-feedback { color: #166534; }
+    .m8-quiet-close { margin-top: 16px; }
+    .m8-glossary-dismiss { border: 0; padding: 2px 7px; background: transparent; color: inherit; cursor: pointer; font-size: 1.7rem; line-height: 1; }
+    @keyframes m8-bounce {
+      0%, 100% { transform: translateX(0); }
+      35% { transform: translateX(-7px); }
+      70% { transform: translateX(5px); }
+    }
+    @media (max-width: 840px) {
+      .m8-entry-grid,
+      .m8-practice-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { .m8-choice.is-wrong { animation: none; } }
+    @media (prefers-color-scheme: dark) {
+      .m8-progress { color: #aebbd0; }
+      .m8-entry-card,
+      .m8-practice-card { border-color: #4b5567; background: #26242e; box-shadow: 0 6px 18px rgba(0, 0, 0, .25); }
+      .m8-prompt { border-color: #4b5567; }
+      .m8-choice { border-color: #66758b; background: #26242e; color: #e7eef9; }
+      .m8-choice:hover { border-color: #6aa3e8; background: #302e39; }
+      .m8-choice.is-correct { border-color: #4e966a; background: #183425; color: #b6f0c8; }
+      .m8-choice.is-wrong { border-color: #b85f49; background: #3b211d; color: #ffb19d; }
+      .m8-feedback,
+      .m8-practice-feedback { color: #ffb19d; }
+      .m8-feedback.is-correct,
+      .m8-practice-card.is-correct .m8-practice-feedback { color: #b6f0c8; }
+      .m8-family-tag { background: #243a54; color: #a9c9ef; }
+      .m8-practice-card.is-correct { border-color: #4e966a; background: #183425; }
+      .m8-money-input { border-color: #77849a; background: #211f28; color: #e7eef9; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap m8-adjusting">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Adjusting Entries</h1>
+        <p class="tut-header-sub">Module 9 &middot; ~6 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()">Glossary</button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()">Restart</button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Adjusting Entries</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title">Glossary</div>
+      <button class="m8-glossary-dismiss" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="m8-data.js"></script>
+<script src="toolkit-lab.js"></script>
+<script src="shared.js"></script>
+<script>
+'use strict';
+
+var step=0;
+var TOTAL_STEPS=5;
+var data=window.M8_DATA;
+var depreciationChoice='';
+var depreciationComplete=false;
+var practiceState={};
+
+function nav(url){ window.location.href=url; }
+
+function findById(list,id){
+  return (list||[]).filter(function(item){ return item.id===id; })[0];
+}
+
+function entryAmount(entry){
+  return entry&&entry.lines&&entry.lines[0]?Number(entry.lines[0].amt):0;
+}
+
+function money(value){
+  return Number(value).toLocaleString('en-US');
+}
+
+function setupPractice(){
+  (data.adjustingEntries||[]).forEach(function(entry){
+    practiceState[entry.id]={answer:entryAmount(entry),tries:0,correct:false,value:''};
+  });
+}
+
+function render(){
+  renderBeats(step);
+  renderMain(step);
+  renderTail(step);
+  renderControls(step);
+}
+
+function renderBeats(currentStep){
+  var html='';
+  if(currentStep===0){
+    html='<div class="narrative-block"><p>Every entry so far began with something that happened: a payment, a bill, or a delivery. An adjusting entry is different. There is <strong>no document</strong> arriving to start it, and it is not prompted by a bank statement.</p><p>You make adjusting entries at the end of a chosen period so that the picture for that period is right. <strong>Periods are chosen; adjusting entries are what the choice costs.</strong></p></div>';
+  } else if(currentStep===1){
+    var dep=data.adjustingEntries||[];
+    html='<div class="narrative-block"><p>You already saw the gear give part of its working life to the season. The profession calls these <strong>depreciation adjusting entries</strong>.</p><p>The season&rsquo;s shares are given: '+money(entryAmount(dep[0]))+' for the tools, '+money(entryAmount(dep[1]))+' for the fixtures, and '+money(entryAmount(dep[2]))+' for the laptop. You are not calculating useful lives here. No cash moves.</p></div>';
+  } else if(currentStep===2){
+    html='<div class="narrative-block"><p><strong>Work done, nothing in hand yet.</strong> The Ridgeline job was finished on Aug 28 and billed net 15. If recognition waited for cash, its revenue would <strong>vanish</strong> from the summer&rsquo;s picture.</p><p>Recognizing the finished work at period end is an <strong>accrual</strong>.</p></div>';
+  } else if(currentStep===3){
+    html='<div class="narrative-block"><p><strong>Money in hand first, earned later.</strong> Smith&rsquo;s deposit sat as a claim from June 1 until the frame was delivered. The delivery made the amount earned.</p><p>Moving that amount out of the claim and into revenue is a <strong>deferral</strong> released.</p></div>';
+  } else {
+    html='<div class="narrative-block"><p>All adjusting entries have the same shape. No document arrives. At the edge of the chosen period, you ask what belongs in that picture. The amount is a judgment, <strong>given</strong> and stated plainly.</p><p>Type the three given depreciation amounts into the blank formatted entries.</p></div>';
+  }
+  document.getElementById('beats').innerHTML=html+'<p class="m8-progress">View '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+function renderMain(currentStep){
+  var main=document.getElementById('mainGrid');
+  main.innerHTML='';
+  if(currentStep===1){
+    renderDepreciation(main);
+  } else if(currentStep===2){
+    renderFamilyEntry(main,'Accrual',findById(data.seasonEntries,'ridge'));
+  } else if(currentStep===3){
+    renderFamilyEntry(main,'Deferral released',findById(data.seasonEntries,'smith'));
+  } else if(currentStep===4){
+    renderPractice(main);
+  }
+}
+
+function renderDepreciation(main){
+  var grid=document.createElement('div');
+  grid.setAttribute('class','m8-entry-grid');
+  (data.adjustingEntries||[]).forEach(function(entry){
+    var card=document.createElement('section');
+    card.setAttribute('class','m8-entry-card');
+    card.setAttribute('aria-label',entry.narration);
+    grid.appendChild(card);
+    ToolkitLab.renderJournalEntry(card,entry,{mode:'formatted',totals:true});
+  });
+  main.appendChild(grid);
+
+  var entries=data.adjustingEntries||[];
+  var choices=[
+    {id:entries[1].id,label:entries[1].lines[1].acct+' is largest because it appears later in the list.'},
+    {id:entries[0].id,label:entries[0].lines[1].acct+' is largest. The method is unchanged: each entry records the given season share, with no cash.'},
+    {id:entries[2].id,label:entries[2].lines[1].acct+' is largest because newer gear always loses more value.'}
+  ];
+  var prompt=document.createElement('section');
+  prompt.setAttribute('class','m8-prompt');
+  prompt.setAttribute('aria-labelledby','depreciation-question');
+  prompt.innerHTML='<h2 id="depreciation-question">Which entry is largest, and why does that not matter to the method?</h2><div class="m8-choice-list">'+choices.map(function(choice){
+    var state=depreciationChoice===choice.id?(depreciationComplete?' is-correct':' is-wrong'):'';
+    return '<button class="m8-choice'+state+'" data-depreciation-choice="'+choice.id+'">'+choice.label+'</button>';
+  }).join('')+'</div><p class="m8-feedback'+(depreciationComplete?' is-correct':'')+'" id="depreciation-feedback" aria-live="polite">'+depreciationFeedback()+'</p>';
+  main.appendChild(prompt);
+  prompt.querySelectorAll('[data-depreciation-choice]').forEach(function(button){
+    button.addEventListener('click',function(){ checkDepreciation(this.getAttribute('data-depreciation-choice')); });
+  });
+}
+
+function depreciationFeedback(){
+  if(depreciationComplete) return 'Right. Size changes the amount, not the method.';
+  if(!depreciationChoice) return '';
+  if(depreciationChoice==='deprF') return 'List order does not determine the amount. Compare the given shares.';
+  return 'The entry does not use an automatic age rule. Use the given season share.';
+}
+
+function checkDepreciation(id){
+  depreciationChoice=id;
+  depreciationComplete=id==='deprT';
+  render();
+  if(!depreciationComplete){
+    var wrong=document.querySelector('[data-depreciation-choice="'+id+'"]');
+    if(wrong) wrong.focus();
+  }
+}
+
+function renderFamilyEntry(main,label,entry){
+  var wrap=document.createElement('section');
+  wrap.setAttribute('class','m8-entry-wrap');
+  wrap.innerHTML='<span class="m8-family-tag">'+label+'</span><div class="m8-family-journal"></div>';
+  main.appendChild(wrap);
+  ToolkitLab.renderJournalEntry(wrap.querySelector('.m8-family-journal'),entry,{mode:'formatted',totals:true});
+}
+
+function renderPractice(main){
+  var grid=document.createElement('div');
+  grid.setAttribute('class','m8-practice-grid');
+  (data.adjustingEntries||[]).forEach(function(entry){
+    var item=practiceState[entry.id];
+    var card=document.createElement('section');
+    card.setAttribute('class','m8-practice-card'+(item.correct?' is-correct':''));
+    card.innerHTML='<h2>'+entry.lines[1].acct+'</h2><div class="m8-practice-journal"></div>';
+    grid.appendChild(card);
+    var journal=card.querySelector('.m8-practice-journal');
+    ToolkitLab.renderJournalEntry(journal,entry,{mode:'formatted',totals:false});
+    if(!item.correct){
+      journal.querySelectorAll('.tk-journal-row .tk-journal-amount').forEach(function(cell){ cell.textContent=''; });
+      journal.querySelectorAll('.tk-journal-narration').forEach(function(note){ note.remove(); });
+    }
+    var feedback=practiceFeedback(entry.id);
+    var control=document.createElement('div');
+    control.innerHTML='<div class="m8-practice-control"><label class="sr-only" for="practice-'+entry.id+'">Season share for '+entry.lines[1].acct+'</label><input class="m8-money-input" id="practice-'+entry.id+'" data-practice-input="'+entry.id+'" inputmode="decimal" autocomplete="off" value="'+escapeAttr(item.value)+'"'+(item.correct?' disabled':'')+'><button class="m8-check" data-practice-check="'+entry.id+'"'+(item.correct?' disabled':'')+'>'+(item.correct?'Locked':'Check')+'</button></div><p class="m8-practice-feedback" id="practice-feedback-'+entry.id+'" aria-live="polite">'+feedback+'</p>';
+    card.appendChild(control);
+  });
+  main.appendChild(grid);
+  main.querySelectorAll('[data-practice-input]').forEach(function(input){
+    input.addEventListener('input',function(){ practiceState[this.getAttribute('data-practice-input')].value=this.value; });
+    input.addEventListener('keydown',function(event){ if(event.key==='Enter'){ event.preventDefault(); checkPractice(this.getAttribute('data-practice-input')); } });
+  });
+  main.querySelectorAll('[data-practice-check]').forEach(function(button){
+    button.addEventListener('click',function(){ checkPractice(this.getAttribute('data-practice-check')); });
+  });
+}
+
+function practiceFeedback(id){
+  var item=practiceState[id];
+  if(item.correct) return 'Correct. Both sides carry the same amount.';
+  if(item.tries===1) return 'Use the season share stated with these entries.';
+  if(item.tries===2) return 'Look back at the depreciation entries on the earlier view.';
+  if(item.tries>=3) return 'The given amount is '+money(item.answer)+'. Type it on your next try.';
+  return '';
+}
+
+function parsedAnswer(value){
+  var clean=String(value).replace(/[$,\s]/g,'');
+  if(!clean||!/^[-+]?\d+(?:\.\d+)?$/.test(clean)) return null;
+  return Number(clean);
+}
+
+function checkPractice(id){
+  var item=practiceState[id];
+  if(!item||item.correct) return;
+  var input=document.getElementById('practice-'+id);
+  if(input) item.value=input.value;
+  if(parsedAnswer(item.value)===item.answer){
+    item.correct=true;
+  } else {
+    item.tries+=1;
+  }
+  render();
+  if(!item.correct){
+    var fresh=document.getElementById('practice-'+id);
+    if(fresh){ fresh.focus(); fresh.select(); }
+  }
+}
+
+function escapeAttr(value){
+  return String(value).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+
+function practiceComplete(){
+  var entries=data.adjustingEntries||[];
+  return entries.length===3&&entries.every(function(entry){ return practiceState[entry.id].correct; });
+}
+
+function renderTail(currentStep){
+  var html='';
+  if(currentStep===0){
+    html='<div class="insight-box"><p>The chosen ending date creates the need to look beyond payments, bills, and deliveries.</p></div>';
+  } else if(currentStep===2){
+    html='<div class="insight-box"><p>An accrual brings finished work into the period before cash arrives.</p></div>';
+  } else if(currentStep===3){
+    html='<div class="insight-box"><p>A deferral release brings an amount into revenue after cash arrived earlier.</p></div>';
+  } else if(currentStep===4){
+    html='<div class="insight-box m8-quiet-close"><p>Next: what these period-scoped bins are for, and how the season gets put away.</p></div>';
+  }
+  document.getElementById('tail').innerHTML=html;
+}
+
+function renderControls(currentStep){
+  var html='<div class="nav-buttons">';
+  if(currentStep===0){
+    html+='<button class="btn-back" onclick="nav(\'91-1-Module-9-Introduction.html\')">&larr; Back</button>';
+  } else {
+    html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  }
+  if(currentStep<TOTAL_STEPS-1){
+    var locked=currentStep===1&&!depreciationComplete;
+    html+='<button class="btn-next" onclick="advance()"'+(locked?' disabled aria-disabled="true"':'')+'>Next &rarr;</button>';
+  } else {
+    html+='<button class="btn-continue" onclick="nav(\'93-1-Temporary-Accounts-and-Closing.html\')"'+(!practiceComplete()?' disabled aria-disabled="true"':'')+'>Temporary Accounts and Closing &rarr;</button>';
+  }
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+
+function advance(){
+  if(step===1&&!depreciationComplete) return;
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+
+function back(){
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var glossaryTerms=[
+  {term:'Adjusting entry',def:'An entry made at the end of a chosen period so that the picture for that period is right.'},
+  {term:'Depreciation',def:'The profession&rsquo;s name for the given share of gear&rsquo;s working life used during the period.'},
+  {term:'Accrual',def:'Recognition in this period before the related cash arrives.'},
+  {term:'Deferral',def:'An amount held for a later period because cash came first; it is released when earned.'},
+  {term:'Period',def:'The span of time you choose to describe.'}
+];
+
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+
+function restart(){
+  step=0;
+  depreciationChoice='';
+  depreciationComplete=false;
+  practiceState={};
+  setupPractice();
+  render();
+  window.scrollTo(0,0);
+}
+
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') dismissGlossary(); });
+
+window.devFill=function(){
+  depreciationChoice='deprT';
+  depreciationComplete=true;
+  (data.adjustingEntries||[]).forEach(function(entry){
+    practiceState[entry.id].correct=true;
+    practiceState[entry.id].value=String(practiceState[entry.id].answer);
+  });
+  step=TOTAL_STEPS-1;
+  render();
+};
+
+setupPractice();
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

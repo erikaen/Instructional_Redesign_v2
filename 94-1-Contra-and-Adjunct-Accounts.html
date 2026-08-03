@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contra and Adjunct Accounts</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m8-progress {
+      margin:8px 0 0;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .m8-stage { margin-top:16px; }
+    .m8-concept-card,
+    .m8-answer-card,
+    .m8-analysis-card {
+      max-width:820px;
+      margin:0 auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#fff;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+      overflow:hidden;
+    }
+    .m8-concept-head,
+    .m8-card-head {
+      margin:0;
+      padding:15px 18px;
+      background:#eaf1f8;
+      color:#16324a;
+      font:800 1rem/1.35 Inter,sans-serif;
+    }
+    .m8-concept-body,
+    .m8-card-body { padding:18px; }
+    .m8-position-demo {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      max-width:540px;
+      margin:0 auto 16px;
+      border:2px solid #16324a;
+      border-top:0;
+      background:#f8fafc;
+    }
+    .m8-position-side {
+      min-height:92px;
+      padding:16px;
+      text-align:center;
+    }
+    .m8-position-side + .m8-position-side { border-left:2px solid #16324a; }
+    .m8-position-label {
+      display:block;
+      margin-bottom:8px;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .m8-position-word { color:#16324a; font:800 1.05rem/1.3 Inter,sans-serif; }
+    .m8-equation {
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+      margin:12px 0 0;
+      color:#16324a;
+      font:800 1rem/1.4 Inter,sans-serif;
+    }
+    .m8-equation-part {
+      border:1px solid #cbd5e1;
+      border-radius:7px;
+      padding:9px 12px;
+      background:#f8fafc;
+    }
+    .m8-equation-part.contra { border-color:#d7a447; background:#fff8e7; }
+    .m8-t-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      max-width:880px;
+      margin:0 auto;
+    }
+    .m8-t-grid > div { min-width:0; }
+    .m8-pair-caption {
+      max-width:880px;
+      margin:12px auto 0;
+      color:#475569;
+      font:600 .9rem/1.5 "Open Sans",sans-serif;
+      text-align:center;
+    }
+    #tail { margin-top:16px; }
+    #controls { margin-top:18px; }
+    .m8-answer-row {
+      display:grid;
+      grid-template-columns:minmax(170px,1fr) minmax(110px,150px) 86px;
+      gap:10px;
+      align-items:center;
+      padding:11px 0;
+      border-bottom:1px solid #e2e8f0;
+    }
+    .m8-answer-row:last-child { border-bottom:0; }
+    .m8-answer-row.is-correct { color:#166534; }
+    .m8-answer-label { font:700 .94rem/1.35 Inter,sans-serif; }
+    .m8-money-input {
+      box-sizing:border-box;
+      width:100%;
+      min-height:40px;
+      border:1px solid #94a3b8;
+      border-radius:6px;
+      padding:8px 10px;
+      background:#fff;
+      color:#172033;
+      font:700 .95rem/1.2 "JetBrains Mono",monospace;
+      text-align:right;
+    }
+    .m8-money-input:focus { outline:3px solid rgba(40,109,192,.22); border-color:#286dc0; }
+    .m8-money-input:disabled { border-color:#86b89a; background:#ecfdf3; color:#166534; opacity:1; }
+    .m8-check {
+      min-height:40px;
+      border:0;
+      border-radius:6px;
+      padding:8px 12px;
+      background:#286dc0;
+      color:#fff;
+      cursor:pointer;
+      font:800 .86rem/1 Inter,sans-serif;
+    }
+    .m8-check:disabled { background:#28864f; cursor:default; }
+    .m8-feedback {
+      grid-column:2 / 4;
+      min-height:0;
+      margin:0;
+      color:#a63b20;
+      font:600 .84rem/1.4 "Open Sans",sans-serif;
+    }
+    .m8-answer-row.is-correct .m8-feedback { color:#166534; }
+    .m8-adjunct-layout {
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+      gap:12px;
+      align-items:stretch;
+      margin-bottom:16px;
+    }
+    .m8-adjunct-box {
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      min-height:100px;
+      border:1px solid #86a9ce;
+      border-radius:8px;
+      padding:16px;
+      background:#f1f7fd;
+      color:#16324a;
+      text-align:center;
+    }
+    .m8-adjunct-box strong { font:800 1rem/1.3 Inter,sans-serif; }
+    .m8-adjunct-box span { margin-top:6px; font:600 .86rem/1.4 "Open Sans",sans-serif; }
+    .m8-plus { align-self:center; color:#286dc0; font:800 1.7rem/1 Inter,sans-serif; }
+    .m8-analysis-list {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin:0;
+      padding:0;
+      list-style:none;
+    }
+    .m8-analysis-list li {
+      border-left:4px solid #286dc0;
+      border-radius:4px;
+      padding:12px;
+      background:#f8fafc;
+      color:#334155;
+      font:600 .91rem/1.45 "Open Sans",sans-serif;
+    }
+    .m8-glossary-dismiss {
+      border:0;
+      padding:2px 7px;
+      background:transparent;
+      color:inherit;
+      cursor:pointer;
+      font-size:1.7rem;
+      line-height:1;
+    }
+    @media (max-width:700px) {
+      .m8-t-grid,
+      .m8-analysis-list { grid-template-columns:1fr; }
+      .m8-answer-row { grid-template-columns:1fr 88px; }
+      .m8-answer-label { grid-column:1 / 3; }
+      .m8-feedback { grid-column:1 / 3; }
+      .m8-adjunct-layout { grid-template-columns:1fr; }
+      .m8-plus { transform:rotate(90deg); }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m8-progress { color:#aebbd0; }
+      .m8-concept-card,
+      .m8-answer-card,
+      .m8-analysis-card { border-color:#4b5567; background:#26242e; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m8-concept-head,
+      .m8-card-head { background:#302e39; color:#e7eef9; }
+      .m8-position-demo { border-color:#aebbd0; background:#211f28; }
+      .m8-position-side + .m8-position-side { border-color:#aebbd0; }
+      .m8-position-label,
+      .m8-pair-caption { color:#aebbd0; }
+      .m8-position-word,
+      .m8-equation { color:#e7eef9; }
+      .m8-equation-part { border-color:#4b5567; background:#211f28; }
+      .m8-equation-part.contra { border-color:#a96915; background:#3b2e18; }
+      .m8-answer-row { border-color:#4b5567; }
+      .m8-money-input { border-color:#77849a; background:#211f28; color:#e7eef9; }
+      .m8-money-input:disabled { border-color:#4e966a; background:#183425; color:#b6f0c8; }
+      .m8-answer-row.is-correct,
+      .m8-answer-row.is-correct .m8-feedback { color:#b6f0c8; }
+      .m8-feedback { color:#ffb19d; }
+      .m8-adjunct-box { border-color:#587fa8; background:#222d3a; color:#e7eef9; }
+      .m8-analysis-list li { background:#211f28; color:#dce6f4; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Contra and Adjunct Accounts</h1>
+        <p class="tut-header-sub">Module 9 &middot; ~5 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><span aria-hidden="true">?</span></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><span aria-hidden="true">&#8635;</span></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Contra and Adjunct Accounts</div>
+
+    <div id="beats"></div>
+    <div class="m8-stage" id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+    <!-- Canon anchor: 1,440. The visible amount is calculated from M8_DATA. -->
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title">Glossary</div>
+      <button class="m8-glossary-dismiss" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="m8-data.js"></script>
+<script src="toolkit-lab.js"></script>
+<script src="shared.js"></script>
+<script>
+var step=0;
+var TOTAL_STEPS=4;
+var data=window.M8_DATA;
+
+function findLine(entry,account,side){
+  return entry.lines.filter(function(line){ return line.acct===account&&(!side||line.side===side); })[0];
+}
+function findEntry(entries,id){
+  return entries.filter(function(entry){ return entry.id===id; })[0];
+}
+function comma(value){
+  return Number(value).toLocaleString('en-US');
+}
+function money(value){
+  return '$'+comma(value);
+}
+
+var formationTools=findLine(data.formationEntry,'Tools & Equipment','dr').amt;
+var toolPurchase=findLine(findEntry(data.seasonEntries,'tool'),'Tools & Equipment','dr').amt;
+var firstDepreciation=findLine(findEntry(data.adjustingEntries,'deprT'),'Depreciation','dr').amt;
+var grossTools=formationTools+toolPurchase;
+var firstNet=grossTools-firstDepreciation;
+var secondAccumulated=firstDepreciation+firstDepreciation;
+var secondNet=grossTools-secondAccumulated;
+
+var answerState={
+  gross:{answer:grossTools,tries:0,correct:false,value:'',hints:[
+    'Gross cost does not change when another season is used.',
+    'Keep the original cost and the later purchase together.',
+    comma(formationTools)+' + '+comma(toolPurchase)+' = '+comma(grossTools)+'.'
+  ]},
+  accumulated:{answer:secondAccumulated,tries:0,correct:false,value:'',hints:[
+    'Add the second season to the amount already accumulated.',
+    'Two equal seasons now sit in the companion account.',
+    comma(firstDepreciation)+' + '+comma(firstDepreciation)+' = '+comma(secondAccumulated)+'.'
+  ]},
+  net:{answer:secondNet,tries:0,correct:false,value:'',hints:[
+    'Net means gross cost less the accumulated amount.',
+    'Use the two answers directly above this one.',
+    comma(grossTools)+' less '+comma(secondAccumulated)+' = '+comma(secondNet)+'.'
+  ]}
+};
+
+function render(){
+  renderBeats(step);
+  renderMain(step);
+  renderTail(step);
+  renderControls(step);
+  wireInputs();
+}
+
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='Debit and credit notation carries direction by position. There is no minus sign to write. So when the profession needs a negative, it opens an opposite-side account and shows the pair. That opposite-side companion is a <strong>contra account</strong>: the system&rsquo;s negative number.';
+  } else if(currentStep===1){
+    text='Your workbook showed Tools &amp; Equipment at '+money(firstNet)+' net. The profession shows the pair: '+money(grossTools)+' gross, less '+money(firstDepreciation)+' in Accumulated Depreciation, equals the same '+money(firstNet)+'. Nothing changed except what you can now see.';
+  } else if(currentStep===2){
+    text='An <strong>adjunct account</strong> is the same-side companion. Where a contra account subtracts, an adjunct account adds on. The shop never needed one.';
+  } else {
+    text='As an analyst, you read more from a pair than from one net figure. The pair keeps the history visible. A single net number hides it.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div><p class="m8-progress">Reading '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+function renderMain(currentStep){
+  var el=document.getElementById('mainGrid');
+  if(currentStep===0){
+    el.innerHTML='<section class="m8-concept-card" aria-labelledby="position-title">'+
+      '<h2 class="m8-concept-head" id="position-title">Direction lives in the side</h2><div class="m8-concept-body">'+
+      '<div class="m8-position-demo" aria-label="Debit on the left and credit on the right"><div class="m8-position-side"><span class="m8-position-label">Left side</span><span class="m8-position-word">Debit</span></div><div class="m8-position-side"><span class="m8-position-label">Right side</span><span class="m8-position-word">Credit</span></div></div>'+
+      '<p>The account&rsquo;s usual side shows its positive amount. Its contra account lives on the opposite side. Read together, the second amount reduces the first without putting a minus sign inside either account.</p></div></section>';
+  } else if(currentStep===1){
+    el.innerHTML='<div class="m8-t-grid"><div id="toolsT"></div><div id="accumT"></div></div>'+
+      '<p class="m8-pair-caption">Accumulated Depreciation has a credit balance but lives among the assets. It preserves both the original cost and how much of that cost has been given up.</p>';
+    ToolkitLab.renderTAccount(document.getElementById('toolsT'),{
+      name:'Tools & Equipment',
+      beg:{side:'debit',amt:formationTools},
+      rows:[{side:'debit',label:'Tool purchased',amt:toolPurchase}]
+    },{showBalance:true});
+    ToolkitLab.renderTAccount(document.getElementById('accumT'),{
+      name:'Accumulated Depreciation — Tools',
+      rows:[{side:'credit',label:'First season',amt:firstDepreciation}]
+    },{showBalance:true});
+  } else if(currentStep===2){
+    el.innerHTML='<section class="m8-concept-card" aria-labelledby="adjunct-title">'+
+      '<h2 class="m8-concept-head" id="adjunct-title">A same-side companion</h2><div class="m8-concept-body">'+
+      '<div class="m8-adjunct-layout" aria-label="Bond face amount plus premium"><div class="m8-adjunct-box"><strong>Bond payable</strong><span>Face amount stays visible</span></div><div class="m8-plus" aria-hidden="true">+</div><div class="m8-adjunct-box"><strong>Premium on the bond</strong><span>Adjunct amount sits next to it, on the same side</span></div></div>'+
+      '<p>A bond issued at a premium is the classic example. The premium rides in its own account next to the bond, so an analyst can still see the bond&rsquo;s face amount. This is the concept only; the bike shop had no bond and no adjunct account.</p></div></section>';
+  } else {
+    el.innerHTML='<section class="m8-analysis-card" aria-labelledby="analysis-title">'+
+      '<h2 class="m8-card-head" id="analysis-title">What the pair tells you</h2><div class="m8-card-body"><ul class="m8-analysis-list">'+
+      '<li>The original cost, before any estimate reduced it.</li><li>How far the asset is through its working life.</li><li>How large the accumulated estimates have become.</li></ul></div></section>';
+  }
+}
+
+function answerLine(key,label){
+  var item=answerState[key];
+  var feedback=item.correct?'Correct.':(item.tries?item.hints[Math.min(item.tries,3)-1]:'');
+  return '<div class="m8-answer-row'+(item.correct?' is-correct':'')+'" data-key="'+key+'">'+
+    '<label class="m8-answer-label" for="answer-'+key+'">'+label+'</label>'+
+    '<input class="m8-money-input" id="answer-'+key+'" data-answer-key="'+key+'" inputmode="decimal" autocomplete="off" aria-describedby="feedback-'+key+'" value="'+escapeAttr(item.value)+'"'+(item.correct?' disabled':'')+'>'+
+    '<button class="m8-check" data-check-key="'+key+'"'+(item.correct?' disabled':'')+'>'+(item.correct?'Locked':'Check')+'</button>'+
+    '<p class="m8-feedback" id="feedback-'+key+'" aria-live="polite">'+feedback+'</p></div>';
+}
+
+function renderTail(currentStep){
+  var html='';
+  if(currentStep===1){
+    html='<section class="m8-answer-card" aria-labelledby="second-season-title"><h2 class="m8-card-head" id="second-season-title">After a second season gives another '+money(firstDepreciation)+', what does the pair show?</h2><div class="m8-card-body">'+
+      answerLine('gross','Gross Tools &amp; Equipment')+answerLine('accumulated','Accumulated Depreciation')+answerLine('net','Net Tools &amp; Equipment')+'</div></section>';
+  } else if(currentStep===3){
+    html='<div class="insight-box">Next, you will read more structure behind single lines: the names behind a control account, then the plug behind a purchase price.</div>';
+  }
+  document.getElementById('tail').innerHTML=html;
+}
+
+function renderControls(currentStep){
+  var html='<div class="nav-buttons">';
+  if(currentStep===0){
+    html+='<button class="btn-back" onclick="playClick();nav(\'93-1-Temporary-Accounts-and-Closing.html\')">&larr; Back</button>';
+  } else {
+    html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  }
+  if(currentStep<TOTAL_STEPS-1){
+    var locked=currentStep===1&&!answersComplete();
+    html+='<button class="btn-next" onclick="advance()"'+(locked?' disabled aria-disabled="true"':'')+'>Next &rarr;</button>';
+  } else {
+    html+='<button class="btn-continue" onclick="playSuccess();nav(\'94-2-Control-and-Subsidiary-Accounts.html\')">Control and Subsidiary Accounts &rarr;</button>';
+  }
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+
+function escapeAttr(value){
+  return String(value).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+function parsedAnswer(value){
+  var clean=String(value).replace(/[$,\s]/g,'');
+  if(!clean||!/^[-+]?\d+(?:\.\d+)?$/.test(clean)) return null;
+  return Number(clean);
+}
+function wireInputs(){
+  document.querySelectorAll('[data-answer-key]').forEach(function(input){
+    input.addEventListener('input',function(){ answerState[this.getAttribute('data-answer-key')].value=this.value; });
+    input.addEventListener('keydown',function(event){
+      if(event.key==='Enter'){
+        event.preventDefault();
+        checkAnswer(this.getAttribute('data-answer-key'));
+      }
+    });
+  });
+  document.querySelectorAll('[data-check-key]').forEach(function(button){
+    button.addEventListener('click',function(){ checkAnswer(this.getAttribute('data-check-key')); });
+  });
+}
+function checkAnswer(key){
+  var item=answerState[key];
+  if(!item||item.correct) return;
+  var input=document.getElementById('answer-'+key);
+  if(input) item.value=input.value;
+  if(parsedAnswer(item.value)===item.answer){
+    item.correct=true;
+    playSuccess();
+  } else {
+    item.tries+=1;
+    playNope();
+  }
+  renderTail(step);
+  renderControls(step);
+  wireInputs();
+  if(!item.correct){
+    var fresh=document.getElementById('answer-'+key);
+    if(fresh){ fresh.focus(); fresh.select(); }
+  }
+}
+function answersComplete(){
+  return answerState.gross.correct&&answerState.accumulated.correct&&answerState.net.correct;
+}
+function advance(){
+  if(step===1&&!answersComplete()) return;
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var audioCtx=null;
+function ac(){
+  if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+  return audioCtx;
+}
+function tone(f,d,t,v){
+  var c=ac();
+  if(!c) return;
+  var o=c.createOscillator(),g=c.createGain();
+  o.type=t||'sine';
+  o.frequency.value=f;
+  o.connect(g);
+  g.connect(c.destination);
+  g.gain.setValueAtTime(v||0.05,c.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d);
+  o.start();
+  o.stop(c.currentTime+d);
+}
+function playSuccess(){ tone(523,0.12); setTimeout(function(){ tone(659,0.12); },90); setTimeout(function(){ tone(784,0.16); },180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playNope(){ tone(220,0.12,'sine',0.035); }
+function nav(url){ window.location.href=url; }
+
+var glossaryTerms=[
+  {term:'Contra account',def:'An account on the opposite side from its partner. It reduces that partner while keeping both amounts visible.'},
+  {term:'Accumulated Depreciation',def:'The contra asset account that gathers the cost an asset has given up over time.'},
+  {term:'Gross',def:'The amount before its contra account is subtracted.'},
+  {term:'Net',def:'The amount left after a contra account is subtracted from its partner.'},
+  {term:'Adjunct account',def:'A same-side companion account that adds to its partner while keeping both amounts visible.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){
+  playClick();
+  step=0;
+  Object.keys(answerState).forEach(function(key){
+    answerState[key].tries=0;
+    answerState[key].correct=false;
+    answerState[key].value='';
+  });
+  render();
+  window.scrollTo(0,0);
+}
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') dismissGlossary(); });
+window.devFill=function(){
+  Object.keys(answerState).forEach(function(key){
+    answerState[key].correct=true;
+    answerState[key].value=String(answerState[key].answer);
+  });
+  step=TOTAL_STEPS-1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

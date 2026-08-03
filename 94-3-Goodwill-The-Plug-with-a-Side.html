@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goodwill: The Plug with a Side</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m8-progress {
+      margin:8px 0 0;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-align:center;
+      text-transform:uppercase;
+    }
+    .m8-stage { margin-top:16px; }
+    #tail { margin-top:16px; }
+    #controls { margin-top:18px; }
+    .m8-card,
+    .m8-answer-card {
+      max-width:820px;
+      margin:0 auto;
+      border:1px solid #cbd5e1;
+      border-radius:10px;
+      background:#fff;
+      box-shadow:0 7px 20px rgba(32,55,72,.08);
+      overflow:hidden;
+    }
+    .m8-card-head {
+      margin:0;
+      padding:15px 18px;
+      background:#eaf1f8;
+      color:#16324a;
+      font:800 1rem/1.35 Inter,sans-serif;
+    }
+    .m8-card-body { padding:18px; }
+    .m8-card-body p { margin:0; }
+    .m8-card-body p + p { margin-top:12px; }
+    .m8-offer {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+      margin-bottom:16px;
+    }
+    .m8-offer-box {
+      border:1px solid #cbd5e1;
+      border-radius:8px;
+      padding:15px;
+      background:#f8fafc;
+      text-align:center;
+    }
+    .m8-offer-label {
+      display:block;
+      margin-bottom:6px;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .m8-offer-value { color:#16324a; font:800 1.35rem/1.2 Inter,sans-serif; }
+    .m8-fair-table {
+      width:100%;
+      border-collapse:collapse;
+      font-variant-numeric:tabular-nums lining-nums;
+    }
+    .m8-fair-table th {
+      border-bottom:1px solid #94a3b8;
+      padding:7px 10px;
+      color:#64748b;
+      font:700 .72rem/1.3 Inter,sans-serif;
+      letter-spacing:.06em;
+      text-align:left;
+      text-transform:uppercase;
+    }
+    .m8-fair-table th:last-child,
+    .m8-fair-table td:last-child { text-align:right; }
+    .m8-fair-table td { border-bottom:1px solid #e2e8f0; padding:8px 10px; }
+    .m8-fair-table tfoot td { border-top:1px solid #64748b; border-bottom:3px double #64748b; font-weight:800; }
+    .m8-note {
+      margin-top:14px;
+      border-left:4px solid #d7a447;
+      border-radius:4px;
+      padding:11px 13px;
+      background:#fff8e7;
+      color:#475569;
+      font:600 .9rem/1.5 "Open Sans",sans-serif;
+    }
+    .m8-entry-wrap { max-width:820px; margin:0 auto; }
+    .m8-entry-note {
+      margin:12px 0 0;
+      color:#475569;
+      font:600 .9rem/1.55 "Open Sans",sans-serif;
+    }
+    .m8-plug-line {
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      margin-top:16px;
+      color:#16324a;
+      font:800 1rem/1.4 Inter,sans-serif;
+    }
+    .m8-plug-piece {
+      border:1px solid #86a9ce;
+      border-radius:7px;
+      padding:9px 12px;
+      background:#f1f7fd;
+    }
+    .m8-answer-row {
+      display:grid;
+      grid-template-columns:minmax(190px,1fr) minmax(110px,150px) 86px;
+      gap:10px;
+      align-items:center;
+    }
+    .m8-answer-row.is-correct { color:#166534; }
+    .m8-answer-label { font:700 .94rem/1.35 Inter,sans-serif; }
+    .m8-money-input {
+      box-sizing:border-box;
+      width:100%;
+      min-height:40px;
+      border:1px solid #94a3b8;
+      border-radius:6px;
+      padding:8px 10px;
+      background:#fff;
+      color:#172033;
+      font:700 .95rem/1.2 "JetBrains Mono",monospace;
+      text-align:right;
+    }
+    .m8-money-input:focus { outline:3px solid rgba(40,109,192,.22); border-color:#286dc0; }
+    .m8-money-input:disabled { border-color:#86b89a; background:#ecfdf3; color:#166534; opacity:1; }
+    .m8-check {
+      min-height:40px;
+      border:0;
+      border-radius:6px;
+      padding:8px 12px;
+      background:#286dc0;
+      color:#fff;
+      cursor:pointer;
+      font:800 .86rem/1 Inter,sans-serif;
+    }
+    .m8-check:disabled { background:#28864f; cursor:default; }
+    .m8-feedback {
+      grid-column:2 / 4;
+      min-height:0;
+      margin:0;
+      color:#a63b20;
+      font:600 .84rem/1.4 "Open Sans",sans-serif;
+    }
+    .m8-answer-row.is-correct .m8-feedback { color:#166534; }
+    .m8-callback {
+      max-width:820px;
+      margin:16px auto 0;
+      border:1px solid #86a9ce;
+      border-left:5px solid #286dc0;
+      border-radius:8px;
+      padding:14px 16px;
+      background:#f1f7fd;
+      color:#334155;
+      font:600 .9rem/1.55 "Open Sans",sans-serif;
+    }
+    .m8-callback p { margin:0; }
+    .m8-glossary-dismiss {
+      border:0;
+      padding:2px 7px;
+      background:transparent;
+      color:inherit;
+      cursor:pointer;
+      font-size:1.7rem;
+      line-height:1;
+    }
+    @media (max-width:650px) {
+      .m8-offer { grid-template-columns:1fr; }
+      .m8-answer-row { grid-template-columns:1fr 88px; }
+      .m8-answer-label,
+      .m8-feedback { grid-column:1 / 3; }
+    }
+    @media (prefers-color-scheme:dark) {
+      .m8-progress { color:#aebbd0; }
+      .m8-card,
+      .m8-answer-card { border-color:#4b5567; background:#26242e; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m8-card-head { background:#302e39; color:#e7eef9; }
+      .m8-offer-box { border-color:#4b5567; background:#211f28; }
+      .m8-offer-label,
+      .m8-entry-note { color:#aebbd0; }
+      .m8-offer-value,
+      .m8-plug-line { color:#e7eef9; }
+      .m8-fair-table th { border-color:#77849a; color:#aebbd0; }
+      .m8-fair-table td { border-color:#4b5567; }
+      .m8-fair-table tfoot td { border-color:#aebbd0; }
+      .m8-note { border-color:#a96915; background:#3b2e18; color:#e7e1d2; }
+      .m8-plug-piece { border-color:#587fa8; background:#222d3a; }
+      .m8-money-input { border-color:#77849a; background:#211f28; color:#e7eef9; }
+      .m8-money-input:disabled { border-color:#4e966a; background:#183425; color:#b6f0c8; }
+      .m8-answer-row.is-correct,
+      .m8-answer-row.is-correct .m8-feedback { color:#b6f0c8; }
+      .m8-feedback { color:#ffb19d; }
+      .m8-callback { border-color:#587fa8; border-left-color:#6ea8e6; background:#222d3a; color:#dce6f3; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Goodwill: The Plug with a Side</h1>
+        <p class="tut-header-sub">Module 9 &middot; ~5 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><span aria-hidden="true">?</span></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><span aria-hidden="true">&#8635;</span></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Goodwill: The Plug with a Side</div>
+
+    <div id="beats"></div>
+    <div class="m8-stage" id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+    <!-- Scenario anchors supplied by M8_DATA: 60,000; 55,000; 66,667; Freddie. -->
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title">Glossary</div>
+      <button class="m8-glossary-dismiss" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="m8-data.js"></script>
+<script src="toolkit-lab.js"></script>
+<script src="shared.js"></script>
+<script>
+var step=0;
+var TOTAL_STEPS=4;
+var data=window.M8_DATA;
+var scenario=data.goodwillScenario;
+var alternateOffer=63000;
+
+var answerState={
+  identifiable:{answer:scenario.fairValueTotal,tries:0,correct:false,value:'',hints:[
+    'Add the fair values in the table, not the shop&rsquo;s book amounts.',
+    'Include all six nameable assets. Do not include the shop&rsquo;s cash.',
+    'The six fair values add to '+comma(scenario.fairValueTotal)+'.'
+  ]},
+  alternateGoodwill:{answer:alternateOffer-scenario.fairValueTotal,tries:0,correct:false,value:'',hints:[
+    'Start with the new offer and subtract the same identifiable total.',
+    'The identifiable pieces still total '+comma(scenario.fairValueTotal)+'.',
+    comma(alternateOffer)+' less '+comma(scenario.fairValueTotal)+' equals '+comma(alternateOffer-scenario.fairValueTotal)+'.'
+  ]}
+};
+
+function comma(value){ return Number(value).toLocaleString('en-US'); }
+function money(value){ return '$'+comma(value); }
+
+function render(){
+  renderBeats(step);
+  renderMain(step);
+  renderTail(step);
+  renderControls(step);
+  wireInputs();
+}
+
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0){
+    text='Suppose a buyer offered '+money(scenario.offer)+' for the whole shop. '+scenario.framing.replace(/^Suppose[^.]+\.\s*/, '').replace(/[()]/g,'')+' Member&rsquo;s Capital on the books is '+money(4500)+'. What exactly would the buyer be paying for?';
+  } else if(currentStep===1){
+    text='First, price everything you can name. The buyer uses <strong>fair value</strong> &mdash; what each piece is worth in this exchange &mdash; not the amount on the shop&rsquo;s books.';
+  } else if(currentStep===2){
+    text='Now build the buyer&rsquo;s entry. The six identifiable debits do not come close to the Cash credit. The difference needs a name and a side: <strong>Goodwill</strong>, debit, '+money(scenario.goodwill)+'. It is the <strong>plug</strong> that makes total debits equal total credits.';
+  } else {
+    text='In signed arithmetic, a plug is whatever makes the sum zero. That is easy to get backwards. In this notation, the plug has a <strong>side</strong>. The two-column check catches it if you put it on the wrong one.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div><p class="m8-progress">Reading '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+function fairValueTable(){
+  var rows=Object.keys(scenario.fairValues).map(function(name){
+    return '<tr><td>'+name+'</td><td>'+money(scenario.fairValues[name])+'</td></tr>';
+  }).join('');
+  return '<table class="m8-fair-table"><thead><tr><th scope="col">Identifiable asset</th><th scope="col">Fair value</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td>Total</td><td>'+money(scenario.fairValueTotal)+'</td></tr></tfoot></table>';
+}
+
+function renderMain(currentStep){
+  var el=document.getElementById('mainGrid');
+  if(currentStep===0){
+    el.innerHTML='<section class="m8-card" aria-labelledby="offer-title"><h2 class="m8-card-head" id="offer-title">The offer and the books</h2><div class="m8-card-body">'+
+      '<div class="m8-offer"><div class="m8-offer-box"><span class="m8-offer-label">Buyer&rsquo;s offer</span><span class="m8-offer-value">'+money(scenario.offer)+'</span></div><div class="m8-offer-box"><span class="m8-offer-label">Member&rsquo;s Capital on the books</span><span class="m8-offer-value">'+money(4500)+'</span></div></div>'+
+      '<p>The offer is not a bid for one account. It is a price for the whole business: the pieces you can name and whatever makes the business worth more than those pieces.</p></div></section>';
+  } else if(currentStep===1){
+    el.innerHTML='<section class="m8-card" aria-labelledby="fair-title"><h2 class="m8-card-head" id="fair-title">Identifiable pieces at fair value</h2><div class="m8-card-body">'+fairValueTable()+'<div class="m8-note">'+scenario.note+'</div></div></section>';
+  } else if(currentStep===2){
+    el.innerHTML='<div class="m8-entry-wrap"><div id="acquisitionEntry"></div><p class="m8-entry-note">Goodwill stands for everything unnameable that helped make the price: the customer list, the reputation, and the skill you left unrecorded at formation because no exchange had priced it. Now an exchange has priced it.</p></div>';
+    ToolkitLab.renderJournalEntry(document.getElementById('acquisitionEntry'),scenario.entry,{mode:'formatted',totals:true});
+  } else {
+    el.innerHTML='<section class="m8-card" aria-labelledby="discipline-title"><h2 class="m8-card-head" id="discipline-title">Keep the side visible</h2><div class="m8-card-body"><p>The identifiable assets are debits. Goodwill is the debit that fills the remaining distance to the Cash credit.</p><div class="m8-plug-line" aria-label="Offer less identifiable assets equals Goodwill"><span class="m8-plug-piece">Offer</span><span>&minus;</span><span class="m8-plug-piece">Identifiable assets</span><span>=</span><span class="m8-plug-piece">Goodwill, debit</span></div></div></section>';
+  }
+}
+
+function answerLine(key,label){
+  var item=answerState[key];
+  var feedback=item.correct?'Correct.':(item.tries?item.hints[Math.min(item.tries,3)-1]:'');
+  return '<div class="m8-answer-row'+(item.correct?' is-correct':'')+'">'+
+    '<label class="m8-answer-label" for="answer-'+key+'">'+label+'</label>'+
+    '<input class="m8-money-input" id="answer-'+key+'" data-answer-key="'+key+'" inputmode="decimal" autocomplete="off" aria-describedby="feedback-'+key+'" value="'+escapeAttr(item.value)+'"'+(item.correct?' disabled':'')+'>'+
+    '<button class="m8-check" data-check-key="'+key+'"'+(item.correct?' disabled':'')+'>'+(item.correct?'Locked':'Check')+'</button>'+
+    '<p class="m8-feedback" id="feedback-'+key+'" aria-live="polite">'+feedback+'</p></div>';
+}
+
+function renderTail(currentStep){
+  var html='';
+  if(currentStep===1){
+    html='<section class="m8-answer-card" aria-labelledby="identifiable-title"><h2 class="m8-card-head" id="identifiable-title">What is the identifiable total?</h2><div class="m8-card-body">'+answerLine('identifiable','Identifiable assets')+'</div></section>';
+  } else if(currentStep===3){
+    html='<section class="m8-answer-card" aria-labelledby="alternate-title"><h2 class="m8-card-head" id="alternate-title">If the offer had been '+money(alternateOffer)+' instead, what is Goodwill?</h2><div class="m8-card-body">'+answerLine('alternateGoodwill','Goodwill, debit')+'</div></section>';
+    html+='<aside class="m8-callback" aria-label="UBS negative goodwill callback"><p>Remember UBS&rsquo;s roughly $27 billion gain from buying Credit Suisse? Its reported negative goodwill was '+money(data.ubsAcquisition.reportedNegativeGoodwill)+' million. When price exceeds identifiable fair value, the plug is a debit asset: Goodwill; when price falls short, the plug is a credit gain: negative goodwill. The side tells you which story the price told.</p></aside>';
+    if(answerState.alternateGoodwill.correct){
+      html+='<div class="insight-box">Buying a business outright is the doorway to the next page&rsquo;s word: what happens when the bought business keeps its own legal shell.</div>';
+    }
+  }
+  document.getElementById('tail').innerHTML=html;
+}
+
+function renderControls(currentStep){
+  var html='<div class="nav-buttons">';
+  if(currentStep===0){
+    html+='<button class="btn-back" onclick="playClick();nav(\'94-2-Control-and-Subsidiary-Accounts.html\')">&larr; Back</button>';
+  } else {
+    html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  }
+  if(currentStep<TOTAL_STEPS-1){
+    var locked=currentStep===1&&!answerState.identifiable.correct;
+    html+='<button class="btn-next" onclick="advance()"'+(locked?' disabled aria-disabled="true"':'')+'>Next &rarr;</button>';
+  } else {
+    html+='<button class="btn-continue" onclick="playSuccess();nav(\'95-1-Consolidation.html\')"'+(!answerState.alternateGoodwill.correct?' disabled aria-disabled="true"':'')+'>Consolidation &rarr;</button>';
+  }
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+
+function escapeAttr(value){
+  return String(value).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+function parsedAnswer(value){
+  var clean=String(value).replace(/[$,\s]/g,'');
+  if(!clean||!/^[-+]?\d+(?:\.\d+)?$/.test(clean)) return null;
+  return Number(clean);
+}
+function wireInputs(){
+  document.querySelectorAll('[data-answer-key]').forEach(function(input){
+    input.addEventListener('input',function(){ answerState[this.getAttribute('data-answer-key')].value=this.value; });
+    input.addEventListener('keydown',function(event){
+      if(event.key==='Enter'){
+        event.preventDefault();
+        checkAnswer(this.getAttribute('data-answer-key'));
+      }
+    });
+  });
+  document.querySelectorAll('[data-check-key]').forEach(function(button){
+    button.addEventListener('click',function(){ checkAnswer(this.getAttribute('data-check-key')); });
+  });
+}
+function checkAnswer(key){
+  var item=answerState[key];
+  if(!item||item.correct) return;
+  var input=document.getElementById('answer-'+key);
+  if(input) item.value=input.value;
+  if(parsedAnswer(item.value)===item.answer){
+    item.correct=true;
+    playSuccess();
+  } else {
+    item.tries+=1;
+    playNope();
+  }
+  renderTail(step);
+  renderControls(step);
+  wireInputs();
+  if(!item.correct){
+    var fresh=document.getElementById('answer-'+key);
+    if(fresh){ fresh.focus(); fresh.select(); }
+  }
+}
+function advance(){
+  if(step===1&&!answerState.identifiable.correct) return;
+  playClick();
+  step=Math.min(step+1,TOTAL_STEPS-1);
+  render();
+  window.scrollTo(0,0);
+}
+function back(){
+  playClick();
+  step=Math.max(step-1,0);
+  render();
+  window.scrollTo(0,0);
+}
+
+var audioCtx=null;
+function ac(){
+  if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+  return audioCtx;
+}
+function tone(f,d,t,v){
+  var c=ac();
+  if(!c) return;
+  var o=c.createOscillator(),g=c.createGain();
+  o.type=t||'sine';
+  o.frequency.value=f;
+  o.connect(g);
+  g.connect(c.destination);
+  g.gain.setValueAtTime(v||0.05,c.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001,c.currentTime+d);
+  o.start();
+  o.stop(c.currentTime+d);
+}
+function playSuccess(){ tone(523,0.12); setTimeout(function(){ tone(659,0.12); },90); setTimeout(function(){ tone(784,0.16); },180); }
+function playClick(){ tone(600,0.08,'sine',0.04); }
+function playNope(){ tone(220,0.12,'sine',0.035); }
+function nav(url){ window.location.href=url; }
+
+var glossaryTerms=[
+  {term:'Fair value',def:'The price an asset would carry in the current exchange, which may differ from its amount on the books.'},
+  {term:'Identifiable asset',def:'A resource the buyer can name and price separately.'},
+  {term:'Goodwill',def:'The part of a business purchase price beyond the fair value of its identifiable net assets.'},
+  {term:'Negative goodwill',def:'A gain when the price paid is less than the fair value of the identifiable net assets acquired.'},
+  {term:'Plug',def:'The amount that makes an entry balance. It must be placed on the side that makes total debits equal total credits.'},
+  {term:'Debit',def:'The left side of an entry.'},
+  {term:'Credit',def:'The right side of an entry.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){
+  playClick();
+  step=0;
+  Object.keys(answerState).forEach(function(key){
+    answerState[key].tries=0;
+    answerState[key].correct=false;
+    answerState[key].value='';
+  });
+  render();
+  window.scrollTo(0,0);
+}
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') dismissGlossary(); });
+window.devFill=function(){
+  Object.keys(answerState).forEach(function(key){
+    answerState[key].correct=true;
+    answerState[key].value=String(answerState[key].answer);
+  });
+  step=TOTAL_STEPS-1;
+  render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>
