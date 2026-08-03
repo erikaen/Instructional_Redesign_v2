@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Module 1 — Sort Your Things</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,19 +18,32 @@
       <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><i data-lucide="book-open"></i></button>
     </div>
 
+    <div id="stepProg"></div>
+
     <div class="narrative-block">
       <p>Your items are in two places: the <strong>rented space</strong> where you do your repair work, and your <strong>home</strong>. You open a spreadsheet and start with a tab called <strong>Things</strong>.</p>
-      <p class="scenario-card-text">Tap or drag into the <strong>Things</strong> tab only the items that belong with <em>the repair work</em>. Leave everything else where it is. Select <i data-lucide="info" class="licon"></i> if you&rsquo;re not sure what an item is.</p>
+      <p class="scenario-card-text">Go item by item. If it belongs with <em>the repair work</em>, tap <strong>Things tab</strong> to move it in. If it doesn&rsquo;t, tap <strong>Leave</strong> to keep it where it is. Tap <i data-lucide="info" class="licon"></i> any time you&rsquo;re not sure what an item is or what it&rsquo;s for.</p>
     </div>
-    <div class="loc-stack">
-      <div class="loc-panel"><div class="loc-panel-label">At the rented space</div><div id="locSpace" class="loc-cols"></div></div>
-      <div class="loc-panel"><div class="loc-panel-label">At home</div><div id="locHome" class="loc-cols"></div></div>
+
+    <div class="syt-duo">
+      <div class="loc-stack">
+        <div class="loc-panel">
+          <div class="loc-panel-label">At the rented space</div>
+          <div id="locSpace"></div>
+          <div class="syt-rest-note" id="restNote"></div>
+        </div>
+        <div class="loc-panel">
+          <div class="loc-panel-label">At home</div>
+          <div id="locHome"></div>
+        </div>
+      </div>
+      <div class="xlsx" id="xlsx">
+        <div class="xlsx-titlebar"><span><i data-lucide="file-spreadsheet" class="licon"></i> Bike-Repair.xlsx</span></div>
+        <div class="xlsx-grid" id="xlsxGrid"></div>
+        <div class="xlsx-tabs"><div class="xlsx-tab">Things</div><div class="xlsx-tab-add"><i data-lucide="plus" class="licon"></i></div></div>
+      </div>
     </div>
-    <div class="xlsx" id="xlsx" ondragover="event.preventDefault(); this.classList.add('drag-over')" ondragleave="this.classList.remove('drag-over')" ondrop="onDropBox(event)">
-      <div class="xlsx-titlebar"><span><i data-lucide="file-spreadsheet" class="licon"></i> Bike-Repair.xlsx</span></div>
-      <div class="xlsx-grid" id="xlsxGrid"></div>
-      <div class="xlsx-tabs"><div class="xlsx-tab">Things</div><div class="xlsx-tab-add"><i data-lucide="plus" class="licon"></i></div></div>
-    </div>
+
     <div id="sortLive">
       <div class="sort-msg" id="sortMsg"></div>
       <div class="btn-row" style="justify-content: space-between;">
@@ -42,9 +55,8 @@
       <div class="btn-row"><button class="btn-reset" onclick="sortBack()"><i data-lucide="arrow-left" class="licon"></i> Back</button></div>
       <div class="insight-box">
         <div class="insight-label"><i data-lucide="lightbulb" class="licon"></i>Look at what you just did</div>
-        <p>You pulled things into that box from <em>both</em> places. The laptop and the desk came from <strong>home</strong> &mdash; and neither one repairs anything &mdash; while your own commuter bike stayed out even though it was in the space. So the box isn&rsquo;t &ldquo;stuff in the space,&rdquo; and it isn&rsquo;t &ldquo;tools.&rdquo; It&rsquo;s something else. The next question names it.</p>
+        <p>You pulled things into that box from <em>both</em> places. The laptop and the desk came from <strong>home</strong> &mdash; and neither one repairs anything &mdash; while your own commuter bike stayed out even though it was in the space. So the box isn&rsquo;t &ldquo;stuff in the space,&rdquo; and it isn&rsquo;t &ldquo;tools.&rdquo; And look how long the list became once the rest of the stock was filed &mdash; a lot of things are tied up in the repair work. The box is something else. The next question names it.</p>
       </div>
-      <div class="next-phase-msg">You&rsquo;ve finished this section &mdash; click <strong>Next -&gt;</strong> to continue.</div>
     </div>
 
   </div>
@@ -76,68 +88,100 @@ function tone(f, d, t, v) { var c = ac(); if(!c) return; var o = c.createOscilla
 function playSuccess(){ tone(523,0.12); setTimeout(function(){ tone(784,0.16); },110); }
 function playPlace(){ tone(440,0.06,'sine',0.04); }
 
-/* ===== data ===== */
+/* ===== data =====
+   The hand-sorted set is deliberately small, and every item is judgeable
+   without knowing bikes: each info line says what the item is FOR — for the
+   repair work or for the student — not just where it sits. The bike-specific
+   inventory lives in restItems and arrives via "Sort the rest". */
 var rentedSpaceItems = [
-  { id:'stand', text:'Park Tool repair stand', zone:'shop', info:'Anchored to the workbench. Every repair starts here.' },
-  { id:'compressor', text:'Air compressor', zone:'shop', info:'In the back corner. Runs the impact tools and seats tires.' },
-  { id:'washer', text:'Parts washer', zone:'shop', info:'By the back door. A solvent bath for greasy parts.' },
-  { id:'truing', text:'Wheel-truing stand', zone:'shop', info:'On a side bench. Holds a wheel so you can tweak the spokes true.' },
-  { id:'grinder', text:'Bench grinder', zone:'shop', info:'On a side bench. For sharpening and small metal work.' },
-  { id:'headset', text:'Headset press', zone:'shop', info:'On the workbench. For pressing in bearing cups.' },
-  { id:'vacuum', text:'Shop vacuum', zone:'shop', info:'Under the bench. For metal shavings and shop dust.' },
-  { id:'conewr', text:'Cone wrench set', zone:'shop', info:'On the pegboard. For hub cones.' },
-  { id:'torque', text:'Torque wrench', zone:'shop', info:'In the tool drawer. For careful bolt tightening.' },
-  { id:'hexset', text:'Hex / Allen key set', zone:'shop', info:'In the tool drawer. For pretty much every bike bolt.' },
-  { id:'cutters', text:'Cable cutters', zone:'shop', info:'On the pegboard. For trimming brake and shift cables.' },
-  { id:'breaker', text:'Chain breaker', zone:'shop', info:'In the tool drawer. For installing and removing chains.' },
-  { id:'levers', text:'Tire levers', zone:'shop', info:'In the tool drawer. For prying tires off rims.' },
-  { id:'shelves', text:'Shelving units', zone:'shop', info:'Along the back wall. Holds the parts stock.' },
-  { id:'display', text:'Display rack', zone:'shop', info:'By the front door. Tubes and small items.' },
-  { id:'pegboard', text:'Pegboard + hooks', zone:'shop', info:'Over the workbench. Keeps the hand tools in reach.' },
-  { id:'chains', text:'Box of chains', zone:'shop', info:'On the supply shelf. Various speeds.' },
-  { id:'pads', text:'Box of brake pads', zone:'shop', info:'On the supply shelf. Rim and disc.' },
-  { id:'cassettes', text:'Cassettes', zone:'shop', info:'On the supply shelf. A few common ratios.' },
-  { id:'bbs', text:'Bottom brackets', zone:'shop', info:'On the supply shelf. Assorted sizes.' },
-  { id:'spokes', text:'Spokes', zone:'shop', info:'In a bin by the truing stand.' },
-  { id:'tubes', text:'Tubes', zone:'shop', info:'On the supply shelf. The thing everyone needs.' },
-  { id:'guitar', text:'Acoustic guitar', zone:'personal', info:'In the corner by the door. You play when things are slow.' },
-  { id:'photos', text:'Family photos', zone:'personal', info:'Taped over the workbench. From the kid’s birthday.' },
-  { id:'commuter', text:'Your commuter bike', zone:'personal', info:'Your own daily ride is up on the stand for a rear-wheel fix.' }
+  { id:'stand',    text:'Repair stand',       zone:'shop',     info:'A clamp on a pole that holds a customer&rsquo;s bike at working height while you work on it. Every repair happens here.' },
+  { id:'tubes',    text:'Box of inner tubes', zone:'shop',     info:'Spare inner tubes for fixing customers&rsquo; flat tires &mdash; the most common repair of all.' },
+  { id:'guitar',   text:'Acoustic guitar',    zone:'personal', info:'In the corner by the door. You play it when things are slow.' },
+  { id:'photos',   text:'Family photos',      zone:'personal', info:'Taped up over the workbench. From the kid&rsquo;s birthday.' },
+  { id:'commuter', text:'Your commuter bike', zone:'personal', info:'Your own daily ride, up on the stand waiting for a rear-wheel fix.' }
 ];
 var homeItems = [
-  { id:'couch', text:'Couch', zone:'personal', info:'In the living room. Where you collapse at night.' },
-  { id:'coffee', text:'Coffee maker', zone:'personal', info:'On the kitchen counter.' },
-  { id:'tv', text:'TV', zone:'personal', info:'In the living room. For unwinding.' },
-  { id:'books', text:'Books on the shelf', zone:'personal', info:'All novels.' },
-  { id:'desk', text:'Desk', zone:'shop', intruder:true, info:'In the corner of the living room where you sit with the laptop to order parts and total up the month.' },
-  { id:'laptop', text:'Laptop', zone:'shop', intruder:true, info:'On the desk. You order parts, look up manuals, and schedule repairs on it.' },
-  { id:'cables', text:'Box of derailleur cables', zone:'shop', intruder:true, info:'In the entryway. UPS dropped them here instead of at the space.' }
+  { id:'couch',  text:'Couch',                    zone:'personal', info:'In the living room. Where you collapse at night.' },
+  { id:'coffee', text:'Coffee maker',             zone:'personal', info:'On the kitchen counter. For your mornings.' },
+  { id:'tv',     text:'TV',                       zone:'personal', info:'In the living room. For unwinding.' },
+  { id:'desk',   text:'Desk',                     zone:'shop',     info:'In the corner of the living room. You sit here to order parts and total up the month for the repair work.' },
+  { id:'laptop', text:'Laptop',                   zone:'shop',     info:'On the desk. You order parts on it, look up repair manuals, and schedule customers&rsquo; repairs.' },
+  { id:'cables', text:'Box of derailleur cables', zone:'shop',     info:'A parts delivery for the repair work &mdash; the driver left it at your door instead of at the space.' }
+];
+/* the rest of the tools and parts stock at the space — filed by "Sort the rest" */
+var restItems = [
+  { id:'truing',     text:'Wheel-truing stand' },
+  { id:'compressor', text:'Air compressor' },
+  { id:'washer',     text:'Parts washer' },
+  { id:'grinder',    text:'Bench grinder' },
+  { id:'headset',    text:'Headset press' },
+  { id:'conewr',     text:'Cone wrench set' },
+  { id:'torque',     text:'Torque wrench' },
+  { id:'hexset',     text:'Hex / Allen key set' },
+  { id:'cutters',    text:'Cable cutters' },
+  { id:'breaker',    text:'Chain breaker' },
+  { id:'levers',     text:'Tire levers' },
+  { id:'vacuum',     text:'Shop vacuum' },
+  { id:'shelves',    text:'Shelving units' },
+  { id:'display',    text:'Display rack' },
+  { id:'pegboard',   text:'Pegboard + hooks' },
+  { id:'chains',     text:'Box of chains' },
+  { id:'pads',       text:'Box of brake pads' },
+  { id:'cassettes',  text:'Cassettes' },
+  { id:'bbs',        text:'Bottom brackets' },
+  { id:'spokes',     text:'Spokes' }
 ];
 var allItems = rentedSpaceItems.map(function(i){ return Object.assign({loc:'space'}, i); })
-  .concat(homeItems.map(function(i){ return Object.assign({loc:'home'}, i); }));
+  .concat(homeItems.map(function(i){ return Object.assign({loc:'home'}, i); }))
+  .concat(restItems.map(function(i){ return Object.assign({loc:'space', zone:'shop', rest:true}, i); }));
 function findItem(id){ return allItems.find(function(i){ return i.id === id; }); }
-var shopIds = allItems.filter(function(i){ return i.zone === 'shop'; }).map(function(i){ return i.id; });
-var homeIntruderIds = homeItems.filter(function(i){ return i.intruder; }).map(function(i){ return i.id; });
+var decideItems = rentedSpaceItems.concat(homeItems);
+var DECIDE_TOTAL = decideItems.length;
+var manualShopIds = decideItems.filter(function(i){ return i.zone === 'shop'; }).map(function(i){ return i.id; });
 
 /* ===== state ===== */
-var placed = {};
+var placed = {};          /* id -> true: moved into the Things tab */
+var leftOut = {};         /* id -> true: decided "stays where it is" */
 var sortDone = false;
 var expandedId = null;
 var placedSnapshot = null;
+var leftSnapshot = null;
+var sortCheckRound = 0;
+/* human-readable bucket labels for mistake tracking (the strings the student saw) */
+var SORT_BOX_LABEL = 'Things tab (repair work)';
+var SORT_LEAVE_LABEL = 'Leave out (personal)';
 
 /* ===== sort ===== */
-function renderItemChip(item) {
-  return '<div class="item-chip hoverinfo">' +
-    '<div class="item-chip-row" draggable="' + (!sortDone) + '" ondragstart="onDragStart(event,\'' + item.id + '\')" ondragend="this.classList.remove(\'dragging\')">' +
-      '<button class="item-chip-name" onclick="placeItem(\'' + item.id + '\')" title="Add to the repair-work box">' + item.text + '</button>' +
-      '<button class="item-chip-info-btn" type="button" title="What is this?" aria-label="More info"><i data-lucide="info" class="licon"></i></button>' +
+function renderItemRow(item) {
+  var left = !!leftOut[item.id];
+  var open = expandedId === item.id;
+  var actions = left
+    ? '<button class="syt-left-tag" onclick="unleaveItem(\'' + item.id + '\')" title="Undo &mdash; decide again">stays here &times;</button>'
+    : '<button class="syt-btn things" onclick="placeItem(\'' + item.id + '\')" title="Move into the Things tab">Things tab</button>' +
+      '<button class="syt-btn leave" onclick="leaveItem(\'' + item.id + '\')" title="Leave it where it is">Leave</button>';
+  return '<div class="syt-item' + (left ? ' left' : '') + '">' +
+    '<div class="syt-row">' +
+      '<button class="syt-info-btn' + (open ? ' open' : '') + '" type="button" onclick="toggleInfo(\'' + item.id + '\')" title="What is this?" aria-label="More info" aria-expanded="' + open + '"><i data-lucide="info" class="licon"></i></button>' +
+      '<div class="syt-name">' + item.text + '</div>' +
+      (sortDone ? '' : actions) +
     '</div>' +
-    '<div class="item-chip-info">' + item.info + '</div></div>';
+    (open ? '<div class="syt-info">' + item.info + '</div>' : '') +
+    '</div>';
 }
 function renderPanel(elId, items) {
   var remaining = items.filter(function(i){ return !placed[i.id]; });
-  var html = remaining.length ? remaining.map(renderItemChip).join('') : '<div class="loc-empty">(nothing left here)</div>';
+  var html = remaining.length ? remaining.map(renderItemRow).join('') : '<div class="loc-empty">(nothing left here)</div>';
   document.getElementById(elId).innerHTML = html;
+}
+function renderRestNote() {
+  var el = document.getElementById('restNote');
+  if (sortDone) {
+    el.className = 'syt-rest-note filed';
+    el.innerHTML = '<i data-lucide="check" class="licon"></i> The rest of the tools and parts stock &mdash; ' + restItems.length + ' more things &mdash; is now filed in the Things tab.';
+  } else {
+    el.className = 'syt-rest-note';
+    el.innerHTML = '&hellip;plus the rest of the tools and parts stock &mdash; wrenches, chains, brake pads, spokes, and more. About ' + restItems.length + ' things. <em>&ldquo;Sort the rest&rdquo; will file these for you.</em>';
+  }
 }
 function renderXlsx() {
   var ids = Object.keys(placed);
@@ -147,7 +191,7 @@ function renderXlsx() {
     var id = ids[r];
     var item = id ? findItem(id) : null;
     var cell = item
-      ? '<span>' + item.text + '</span>' + (!sortDone ? '<button class="xlsx-cell-remove" onclick="removeItem(\'' + id + '\')" aria-label="Remove ' + item.text + '">&times;</button>' : '')
+      ? '<span>' + item.text + '</span>' + (!sortDone && !item.rest ? '<button class="xlsx-cell-remove" onclick="removeItem(\'' + id + '\')" aria-label="Remove ' + item.text + '">&times;</button>' : '')
       : '&nbsp;';
     rows += '<div class="xlsx-row"><div class="xlsx-rownum">' + (r + 1) + '</div><div class="xlsx-cell">' + cell + '</div></div>';
   }
@@ -156,68 +200,103 @@ function renderXlsx() {
 function renderSort() {
   renderPanel('locSpace', rentedSpaceItems);
   renderPanel('locHome', homeItems);
+  renderRestNote();
   renderXlsx();
   updateSortFeedback();
   if (window.lucide) lucide.createIcons();
 }
-function placeItem(id) { if (sortDone) return; playPlace(); placed[id] = true; renderSort(); }
-function removeItem(id) { if (sortDone) return; playPlace(); delete placed[id]; renderSort(); }
-function onDragStart(e, id) { if (sortDone) return; e.dataTransfer.setData('text/plain', id); e.currentTarget.classList.add('dragging'); }
-function onDropBox(e) {
-  e.preventDefault();
-  document.getElementById('xlsx').classList.remove('drag-over');
-  var id = e.dataTransfer.getData('text/plain');
-  if (id) placeItem(id);
+function toggleInfo(id) { expandedId = (expandedId === id) ? null : id; renderSort(); }
+function placeItem(id) {
+  if (sortDone) return;
+  playPlace();
+  delete leftOut[id];
+  placed[id] = true;
+  if (expandedId === id) expandedId = null;
+  /* wrong drop: a personal item placed into the repair-work box */
+  var _it = findItem(id);
+  if (_it && _it.zone === 'personal' && window.CourseTrack) {
+    try { window.CourseTrack('sort_warning', { payload: { item: _it.text, wrongCategory: SORT_BOX_LABEL, correctCategory: SORT_LEAVE_LABEL } }); } catch(e){}
+  }
+  renderSort();
 }
+function leaveItem(id) {
+  if (sortDone) return;
+  playPlace();
+  leftOut[id] = true;
+  if (expandedId === id) expandedId = null;
+  renderSort();
+}
+function unleaveItem(id) { if (sortDone) return; playPlace(); delete leftOut[id]; renderSort(); }
+function removeItem(id) { if (sortDone) return; playPlace(); delete placed[id]; renderSort(); }
 function updateSortFeedback() {
-  var ids = Object.keys(placed);
-  var personalInBox = ids.filter(function(id){ return findItem(id).zone === 'personal'; });
-  var placedShopCount = shopIds.filter(function(id){ return placed[id]; }).length;
-  var intrudersFound = homeIntruderIds.filter(function(id){ return placed[id]; }).length;
-  var ready = personalInBox.length === 0 && intrudersFound >= 2 && placedShopCount >= 5;
+  var manualPlaced = Object.keys(placed).filter(function(id){ var it = findItem(id); return it && !it.rest; });
+  var personalInBox = manualPlaced.filter(function(id){ return findItem(id).zone === 'personal'; });
+  var decidedCount = decideItems.filter(function(i){ return placed[i.id] || leftOut[i.id]; }).length;
+  var shopLeftOut = manualShopIds.filter(function(id){ return leftOut[id]; });
+  var ready = decidedCount === DECIDE_TOTAL && personalInBox.length === 0 && shopLeftOut.length === 0;
 
   var msg = document.getElementById('sortMsg');
   var tone = 'info', text = '';
-  if (personalInBox.length) { tone = 'warn'; text = '<i data-lucide="alert-triangle" class="licon"></i> “' + findItem(personalInBox[0]).text + '” is in the tab, but it’s yours. Not part of the repair work. Take it back out.'; }
-  else if (placedShopCount < 5) { text = 'Keep going. Move the repair-related items into the tab.'; }
-  else if (intrudersFound < 2) { text = 'Some of the repair work is hiding at home, not in the space. (What about the laptop?)'; }
-  else { tone = 'ok'; text = '<i data-lucide="check" class="licon"></i> You’ve got the idea! You found the work-stuff at home and left your own things out. “Sort the rest” will file the remaining repair things for you.'; }
+  if (personalInBox.length) { tone = 'warn'; text = '<i data-lucide="alert-triangle" class="licon"></i> &ldquo;' + findItem(personalInBox[0]).text + '&rdquo; is in the tab, but it&rsquo;s yours &mdash; not part of the repair work. Tap its &times; to take it back out.'; }
+  else if (decidedCount < DECIDE_TOTAL) { text = 'Go item by item &mdash; ' + decidedCount + ' of ' + DECIDE_TOTAL + ' decided.'; }
+  else if (shopLeftOut.length) { text = 'Every item has a decision &mdash; but something used in the repair work is still left out. Check the <i data-lucide="info" class="licon"></i> notes on what you left behind.' + (leftOut['laptop'] ? ' (What about the laptop?)' : ''); }
+  else { tone = 'ok'; text = '<i data-lucide="check" class="licon"></i> You&rsquo;ve got the idea! You found the work-things hiding at home and left your own things out. &ldquo;Sort the rest&rdquo; will file the rest of the stock for you.'; }
   msg.className = 'sort-msg' + (tone === 'warn' ? ' warn' : tone === 'ok' ? ' ok' : '');
   msg.innerHTML = text;
 
-  var btn = document.getElementById('sortAction');
-  btn.disabled = !ready;
-  btn.textContent = shopIds.some(function(id){ return !placed[id]; }) ? 'Sort the rest →' : 'Done →';
-  var rst = document.getElementById('sortReset');
-  if (rst) rst.style.display = ready ? '' : 'none';
+  document.getElementById('sortAction').disabled = !ready;
+  document.getElementById('sortReset').style.display = (Object.keys(placed).length || Object.keys(leftOut).length) ? '' : 'none';
+  if (window.lucide) lucide.createIcons();
 }
 function doTheRest() {
   if (sortDone) return;
   placedSnapshot = Object.assign({}, placed);
-  shopIds.forEach(function(id){ placed[id] = true; });
+  leftSnapshot = Object.assign({}, leftOut);
+  /* commit ("Sort the rest") = the Check press: report the student's own placements */
+  if (window.CourseTrack) {
+    try {
+      var _manual = Object.keys(placedSnapshot);
+      var _wrongItems = _manual.filter(function(id){ var it = findItem(id); return it && it.zone === 'personal'; })
+        .map(function(id){ return { item: findItem(id).text, placedIn: SORT_BOX_LABEL, correctCat: SORT_LEAVE_LABEL }; });
+      var _correctCount = _manual.filter(function(id){ var it = findItem(id); return it && it.zone === 'shop'; }).length;
+      sortCheckRound++;
+      window.CourseTrack('sort_check', { payload: { round: sortCheckRound, correctCount: _correctCount, wrongCount: _wrongItems.length, total: _manual.length, wrongItems: _wrongItems } });
+    } catch(e){}
+  }
+  restItems.forEach(function(i){ placed[i.id] = true; });
   sortDone = true;
+  expandedId = null;
   playSuccess();
   renderSort();
   document.getElementById('sortLive').hidden = true;
   document.getElementById('sortDoneBlock').hidden = false;
+  updSortProg();
+  /* the tab just grew by the whole stock — glide the reflection into view (ADD-style step) */
+  document.getElementById('sortDoneBlock').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 function sortBack() {
   placed = placedSnapshot ? Object.assign({}, placedSnapshot) : {};
+  leftOut = leftSnapshot ? Object.assign({}, leftSnapshot) : {};
   sortDone = false;
   document.getElementById('sortDoneBlock').hidden = true;
   document.getElementById('sortLive').hidden = false;
   renderSort();
+  updSortProg();
   window.scrollTo(0, 0);
 }
 
 /* ===== restart ===== */
 function restart() {
-  placed = {}; sortDone = false; expandedId = null;
+  placed = {}; leftOut = {}; sortDone = false; expandedId = null;
   document.getElementById('sortLive').hidden = false;
   document.getElementById('sortDoneBlock').hidden = true;
   renderSort();
+  updSortProg();
   window.scrollTo(0, 0);
 }
+
+/* ===== segmented progress (two pages: the sort, then the insight) ===== */
+function updSortProg(){ if(window.renderStepProgress) renderStepProgress('stepProg', sortDone ? 1 : 0, 1); }
 
 /* ===== glossary ===== */
 function openGlossary(){ m1GlossaryOpen('11-3'); }
@@ -228,9 +307,17 @@ function renderSegProgress(){
   document.getElementById('phaseTitle').textContent = PHASE_TITLE;
 }
 
+/* ===== dev ===== */
+window.devFill = function(){
+  decideItems.forEach(function(i){ if (i.zone === 'shop') placed[i.id] = true; else leftOut[i.id] = true; });
+  renderSort();
+  doTheRest();
+};
+
 /* ===== init ===== */
 renderSegProgress();
 renderSort();
+updSortProg();
 </script>
   <script src="dev.js"></script>
 </body>
