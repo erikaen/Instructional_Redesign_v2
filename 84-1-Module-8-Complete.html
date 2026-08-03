@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Module 8 Complete</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m8-complete { max-width: 900px; margin: 0 auto; }
+    .m8-section { scroll-margin-top: 1rem; }
+    .m8-section + .m8-section { margin-top: 24px; }
+    .m8-kicker { margin: 0 0 7px; color: #64748b; font-size: 0.75rem; font-weight: 800; letter-spacing: 0.11em; text-transform: uppercase; }
+    .m8-section h2 { margin: 0 0 12px; color: #183153; font-family: Inter, sans-serif; font-size: clamp(1.35rem, 3vw, 1.75rem); line-height: 1.2; }
+    .m8-section p { line-height: 1.68; }
+    .m8-handoff { border: 2px solid #c41230; border-left-width: 8px; background: #fff8f8; }
+    .m8-handoff p:last-child { margin-bottom: 0; }
+    .m8-nav { margin-top: 24px; }
+    .m8-icon { display: inline-grid; place-items: center; font-size: 1.05rem; line-height: 1; }
+    .glossary-dismiss-btn { border: 0; padding: 2px 7px; background: transparent; color: inherit; cursor: pointer; font-size: 1.7rem; line-height: 1; }
+    @media (prefers-color-scheme: dark) {
+      .m8-complete, .m8-section, .m8-nav { color: #d7deea; }
+      .m8-kicker { color: #aebbd0; }
+      .m8-section h2 { color: #e7eef9; }
+      .m8-handoff { border-color: #e43b58; background: #3d2930; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>Module 8 Complete</h1>
+        <p class="tut-header-sub">Module 8 &middot; ~3 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><span class="m8-icon" aria-hidden="true">&#128214;</span></button>
+        <button class="icon-btn" title="Reset this page" aria-label="Reset this page" onclick="restart()"><span class="m8-icon" aria-hidden="true">&#8635;</span></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">Module 8 Complete</div>
+
+    <div class="phase active m8-complete" id="phase-complete">
+      <section class="m8-section" aria-labelledby="m8-sides-title">
+        <p class="m8-kicker">What you earned</p>
+        <div class="section-card">
+          <h2 id="m8-sides-title">Signs became sides</h2>
+          <p>The sign problem makes one symbol do too much: a plus or minus can describe either an amount or a direction of change. The profession trades signs for sides. Debit means left; credit means right. Each account has a home side, and that home side carries the direction.</p>
+        </div>
+      </section>
+
+      <section class="m8-section" aria-labelledby="m8-entry-title">
+        <p class="m8-kicker">The complete event</p>
+        <div class="section-card">
+          <h2 id="m8-entry-title">The journal entry is the profession&rsquo;s sentence</h2>
+          <p>A journal entry holds a complex event whole: every account affected, every side used, and every amount that moves. It brings its own self-check&mdash;debits equal credits&mdash;and its own discipline: a plug is something to explain, not a substitute for reasoning through the event.</p>
+        </div>
+      </section>
+
+      <section class="m8-section" aria-labelledby="m8-account-title">
+        <p class="m8-kicker">The account view</p>
+        <div class="section-card">
+          <h2 id="m8-account-title">The T-account turns the sentence into a picture</h2>
+          <p>A T-account is the picture of one account: left and right, beginning amount, changes, and ending amount. For an analyst, it is also a solve-for-the-missing-number device. When three parts are known, the account&rsquo;s structure lets you reason backward to the fourth.</p>
+        </div>
+      </section>
+
+      <section class="m8-section" aria-labelledby="m8-machinery-title">
+        <p class="m8-kicker">Underneath the statements</p>
+        <div class="section-card">
+          <h2 id="m8-machinery-title">The machinery now has names</h2>
+          <p>Posting moves each part of an entry into the account it changes. The general ledger gathers those accounts into the entity&rsquo;s complete account-level record. The chart of accounts organizes the names the ledger uses. Together, they are the machinery underneath the finished statements.</p>
+        </div>
+      </section>
+
+      <section class="m8-section" aria-labelledby="m8-handoff-title">
+        <p class="m8-kicker">The hand-off</p>
+        <div class="section-card m8-handoff">
+          <h2 id="m8-handoff-title">The Tool Kit continues</h2>
+          <p>Module 8 gave you the notation. Module 9 puts it to work: adjusting, closing, the special account structures, and consolidation.</p>
+        </div>
+      </section>
+
+      <div class="btn-row m8-nav">
+        <button class="btn-back" onclick="nav('83-2-Posting-the-Ledger-and-the-Chart-of-Accounts.html')">&larr; Back</button>
+        <button class="btn-continue" onclick="nav('91-1-Module-9-Introduction.html')">Module 9 &rarr;</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel" role="dialog" aria-modal="true" aria-labelledby="glossaryTitle">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title" id="glossaryTitle"><span aria-hidden="true">&#128214;</span> Glossary</div>
+      <button class="glossary-dismiss-btn" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+var glossaryTerms=[
+  { term:'Debit', def:'The left side of an account or journal entry.' },
+  { term:'Credit', def:'The right side of an account or journal entry.' },
+  { term:'Home side', def:'The side on which increases to an account are recorded.' },
+  { term:'Journal entry', def:'The profession&rsquo;s formatted record of one event and all of its account effects.' },
+  { term:'T-account', def:'A picture of one ledger account, with its left and right sides shown separately.' },
+  { term:'Posting', def:'Moving each amount from a journal entry into the account it changes.' },
+  { term:'General ledger', def:'The complete collection of an entity&rsquo;s accounts and their activity.' },
+  { term:'Chart of accounts', def:'The organized list of account names an entity uses.' }
+];
+
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(g){
+    return '<div class="glossary-entry"><div class="glossary-entry-term">'+g.term+'<\/div><div class="glossary-entry-def">'+g.def+'<\/div><\/div>';
+  }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function nav(url){ window.location.href=url; }
+function restart(){ window.location.reload(); }
+document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ dismissGlossary(); } });
+window.devFill=function(){};
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

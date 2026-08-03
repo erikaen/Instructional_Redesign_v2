@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Journal Entry</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Open+Sans:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m8-progress { margin: 8px 0 0; color: #64748b; font: 700 .72rem/1.3 Inter,sans-serif; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
+    #mainGrid { display: grid; gap: 16px; margin-top: 16px; }
+    #tail { margin-top: 16px; }
+    #controls { margin-top: 18px; }
+    .m8-card { min-width: 0; border: 1px solid #d7dee8; border-radius: 10px; padding: 18px; background: #fff; box-shadow: 0 7px 20px rgba(32,55,72,.07); }
+    .m8-card h2, .m8-card h3 { margin: 0 0 10px; color: #183153; font-family: Inter,sans-serif; line-height: 1.25; }
+    .m8-card h2 { font-size: 1.2rem; }
+    .m8-card h3 { font-size: 1rem; }
+    .m8-card p { margin: 8px 0 0; line-height: 1.58; }
+    .m8-entry-wrap { max-width: 820px; margin: 0 auto; width: 100%; }
+    .m8-grammar { margin: 0; border-left: 4px solid #c41230; padding: 11px 14px; background: #f7f9fc; line-height: 1.55; }
+    .m8-compare { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; align-items: start; }
+    .m8-label { margin: 0 0 8px; color: #64748b; font: 800 .72rem/1.3 Inter,sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+    .m8-choice-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .m8-choice, .m8-check { border: 1px solid #9aa9bd; border-radius: 7px; padding: 9px 12px; background: #fff; color: #183153; cursor: pointer; font: 700 .88rem/1.25 Inter,sans-serif; }
+    .m8-choice:hover { border-color: #286dc0; background: #eef5ff; }
+    .m8-choice:focus-visible, .m8-check:focus-visible, .m8-money-input:focus-visible { outline: 3px solid rgba(40,109,192,.26); outline-offset: 2px; }
+    .m8-choice.is-correct { border-color: #28864f; background: #ecfdf3; color: #166534; cursor: default; }
+    .m8-choice.is-active { border-color: #286dc0; background: #eaf2ff; color: #174f91; }
+    .m8-choice.is-wrong { animation: m8-bounce 260ms ease; border-color: #c41230; }
+    @keyframes m8-bounce { 35% { transform: translateX(-5px); } 70% { transform: translateX(4px); } }
+    .m8-chip { min-height: 1.3em; margin: 8px 0 0; color: #a63b20; font: 700 .82rem/1.4 Inter,sans-serif; }
+    .m8-chip.is-good { color: #166534; }
+    .m8-answer-row { display: grid; grid-template-columns: minmax(120px,210px) 86px; gap: 8px; margin-top: 12px; }
+    .m8-money-input { box-sizing: border-box; width: 100%; min-height: 40px; border: 1px solid #94a3b8; border-radius: 6px; padding: 8px 10px; background: #fff; color: #172033; font: 700 .95rem/1.2 "JetBrains Mono",monospace; text-align: right; }
+    .m8-money-input:disabled { border-color: #86b89a; background: #ecfdf3; color: #166534; opacity: 1; }
+    .m8-check { border: 0; background: #286dc0; color: #fff; }
+    .m8-check:disabled { background: #28864f; cursor: default; }
+    .m8-hidden-result { min-height: 110px; display: grid; place-items: center; border: 1px dashed #aeb9c8; border-radius: 8px; padding: 16px; color: #64748b; text-align: center; }
+    .m8-mismatch { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 9px; margin: 14px 0; }
+    .m8-mismatch div { border: 1px solid #d7dee8; border-radius: 8px; padding: 10px; background: #f7f9fc; text-align: center; }
+    .m8-mismatch strong { display: block; color: #183153; font-size: 1.03rem; }
+    .m8-toggle { justify-content: center; }
+    .m8-side-callout { border-left: 4px solid #c41230; padding: 10px 12px; background: #fff7f5; font-weight: 700; }
+    .m8-signed { width: 100%; border-collapse: collapse; font: .82rem/1.35 "JetBrains Mono",monospace; }
+    .m8-signed th, .m8-signed td { border-bottom: 1px solid #d7dee8; padding: 6px 8px; text-align: left; }
+    .m8-signed th:last-child, .m8-signed td:last-child { text-align: right; white-space: nowrap; }
+    .m8-signed tfoot { font-weight: 800; }
+    .m8-undecided td { background: #fff7ed; color: #9a3412; font-weight: 800; }
+    .m8-scroll { overflow-x: auto; }
+    .m8-small { color: #64748b; font-size: .78rem; line-height: 1.45; }
+    .m8-small + .m8-small { margin-top: 4px; }
+    .m8-final { border-color: #91c5a5; background: #f0fbf4; }
+    .m8-identity { max-width: 620px; margin: 6px auto; text-align: center; }
+    .m8-equation { margin: 14px 0; font: 800 1.2rem/1.4 "JetBrains Mono",monospace; color: #183153; }
+    .m8-question + .m8-question { margin-top: 16px; padding-top: 16px; border-top: 1px solid #d7dee8; }
+    .m8-glossary-dismiss { border: 0; padding: 2px 7px; background: transparent; color: inherit; cursor: pointer; font-size: 1.7rem; line-height: 1; }
+    @media (max-width:760px) { .m8-compare { grid-template-columns: 1fr; } }
+    @media (max-width:560px) { .m8-card { padding: 14px; } .m8-mismatch { grid-template-columns: 1fr; } }
+    @media (prefers-color-scheme:dark) {
+      .m8-progress,.m8-label,.m8-small { color:#aebbd0; }
+      .m8-card { border-color:#4b5567; background:#26242e; box-shadow:0 7px 20px rgba(0,0,0,.28); }
+      .m8-card h2,.m8-card h3,.m8-mismatch strong,.m8-equation { color:#e7eef9; }
+      .m8-grammar,.m8-mismatch div { border-color:#4b5567; background:#302e39; }
+      .m8-choice,.m8-money-input { border-color:#77849a; background:#211f28; color:#e7eef9; }
+      .m8-choice:hover,.m8-choice.is-active { border-color:#8bb4ff; background:#303b4d; color:#dceaff; }
+      .m8-choice.is-correct,.m8-money-input:disabled,.m8-final { border-color:#4e966a; background:#183425; color:#b6f0c8; }
+      .m8-chip { color:#ffb19d; } .m8-chip.is-good { color:#b6f0c8; }
+      .m8-hidden-result,.m8-signed th,.m8-signed td,.m8-question + .m8-question { border-color:#4b5567; color:#aebbd0; }
+      .m8-undecided td { background:#432d1e; color:#fdba74; }
+      .m8-side-callout { background:#3a2928; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Journal Entry</h1>
+        <p class="tut-header-sub">Module 8 &middot; ~10 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()">Glossary</button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()">Restart</button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Journal Entry</div>
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title">Glossary</div>
+      <button class="m8-glossary-dismiss" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="m8-data.js"></script>
+<script src="toolkit-lab.js"></script>
+<script src="shared.js"></script>
+<script>
+var step=0;
+var TOTAL_STEPS=6;
+var data=window.M8_DATA;
+var ladder=data.ladder;
+var ubs=data.ubsAcquisition;
+var state=freshState();
+
+function freshState(){ return {claim:false,claimTries:0,credits:{buyCash:false,buyCard:false},creditMessages:{buyCash:'',buyCard:''},sale:'gain',saleSigns:{gain:false,loss:false},saleMessages:{gain:'',loss:''},receivable:{value:'',tries:0,correct:false},ubs:{amount:'',amountTries:0,amountCorrect:false,sideCorrect:false,meaningCorrect:false,sharesCorrect:false,messages:{side:'',meaning:'',shares:''}}}; }
+function money(value){ return Number(value).toLocaleString('en-US'); }
+function escapeHtml(value){ return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function escapeAttr(value){ return escapeHtml(value).replace(/'/g,'&#39;'); }
+function parsedAmount(value){ var clean=String(value).replace(/[$,\s]/g,''); return /^\d+$/.test(clean)?Number(clean):null; }
+function line(entry,account){ return entry.lines.filter(function(item){ return item.acct===account; })[0]; }
+function debitTotal(entry){ return entry.lines.reduce(function(sum,item){ return sum+(item.side==='dr'?Number(item.amt):0); },0); }
+function creditTotal(entry){ return entry.lines.reduce(function(sum,item){ return sum+(item.side==='cr'?Number(item.amt):0); },0); }
+
+function render(){ renderBeats(step); renderMain(step); renderTail(step); renderControls(step); }
+
+function renderBeats(currentStep){
+  var text='';
+  if(currentStep===0) text='Your earlier work was complex by <strong>volume</strong>: many simple events. Sorting and signs could handle them. <strong>Structural complexity</strong> is one exchange with many assets and claims at once; its pieces must stay together and agree when you write it.';
+  else if(currentStep===1) text='The same grammar handles two more one-for-one exchanges. Read what came in, then identify what was given up or assumed.';
+  else if(currentStep===2) text='When the amounts do not meet, the entry forces the difference into view. First decide its sign.';
+  else if(currentStep===3) text='The accounting identity explains why the same sign can describe three different changes.';
+  else if(currentStep===4) text='One event can produce two debits. No new rule is needed; the container just holds more pieces.';
+  else text='The formation was your first structurally complex event. The course walked it through in eight serialized steps because its earlier tools could not hold it whole; the profession records the event held whole.';
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div><p class="m8-progress">Reading '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+function renderMain(currentStep){
+  var main=document.getElementById('mainGrid');
+  if(currentStep===0){
+    main.innerHTML='<section class="m8-card"><h2>The grammar</h2><p class="m8-grammar"><strong>Debits first</strong>, flush left. Credits are indented. The narration sits beneath the lines and gives the course&rsquo;s reason.</p><p>The entry holds everything received on one side and everything given up or assumed on the other. Equal totals certify that the description is complete before it reaches a ledger.</p></section><section class="m8-entry-wrap" id="borrowEntry"></section><div class="insight-box">Cash grows. The claim grows. Two lines; both amounts are positive on their home sides.</div>';
+    ToolkitLab.renderJournalEntry(document.getElementById('borrowEntry'),ladder.borrow,{mode:'formatted',totals:true});
+  } else if(currentStep===1){
+    main.innerHTML='<div class="m8-compare">'+creditCard(ladder.buyCash,'An asset swap. Total assets do not change; the entry says what traded for what.')+creditCard(ladder.buyCard,'The course&rsquo;s startup story in miniature.')+'</div><div class="m8-side-callout">The same word <strong>CREDIT</strong> did two jobs: on the left it can <strong>reduce an asset</strong> as Cash goes down; on the right it can <strong>increase a liability</strong> as the card&rsquo;s claim goes up. One side, two effects. The effect depends on the account&rsquo;s home side.</div>';
+    ['buyCash','buyCard'].forEach(function(id){ if(state.credits[id]) ToolkitLab.renderJournalEntry(document.getElementById('entry-'+id),ladder[id],{mode:'formatted',totals:true}); });
+  } else if(currentStep===2){
+    var gainCash=line(ladder.landGain,'Cash').amt;
+    var saleCash=state.sale==='gain'?gainCash:line(ladder.landLoss,'Cash').amt;
+    var saleDiff=Math.abs(saleCash-ladder.landBook);
+    var saleEntry=state.sale==='gain'?ladder.landGain:ladder.landLoss;
+    var decided=state.saleSigns[state.sale];
+    main.innerHTML='<section class="m8-card"><h2>The mismatch</h2><p>Cash received and the land&rsquo;s book value do not meet. The entry forces a balancing line into existence.</p><div class="m8-mismatch"><div><span>Cash received</span><strong>$'+money(saleCash)+'</strong></div><div><span>Land book value</span><strong>$'+money(ladder.landBook)+'</strong></div><div><span>Difference</span><strong>$'+money(saleDiff)+'</strong></div></div><p>A gain is not revenue. It is income from selling something that was not the business&rsquo;s product.</p><div class="m8-choice-row m8-toggle" role="group" aria-label="Choose a land sale price"><button class="m8-choice'+(state.sale==='gain'?' is-active':'')+'" onclick="setSale(\'gain\')">Sell at $'+money(gainCash)+'</button><button class="m8-choice'+(state.sale==='loss'?' is-active':'')+'" onclick="setSale(\'loss\')">Sell at $'+money(line(ladder.landLoss,'Cash').amt)+'</button></div></section><div class="m8-compare"><section class="m8-card"><p class="m8-label">In +/&minus; records</p><div id="saleSignedEntry">'+signedDecisionTable(state.sale,decided)+'</div><p><strong>Plus or minus?</strong></p><div class="m8-choice-row" role="group" aria-label="Choose the balancing line sign"><button class="m8-choice'+(decided&&state.sale==='loss'?' is-correct':'')+'" onclick="checkSaleSign(\'plus\',this)"'+(decided?' disabled':'')+'>+</button><button class="m8-choice'+(decided&&state.sale==='gain'?' is-correct':'')+'" onclick="checkSaleSign(\'minus\',this)"'+(decided?' disabled':'')+'>&minus;</button></div><p class="m8-chip'+(decided?' is-good':'')+'" id="saleFeedback" aria-live="polite">'+(decided?'Correct. Now the sign is visible.':escapeHtml(state.saleMessages[state.sale]))+'</p></section><section class="m8-card"><p class="m8-label">The profession&rsquo;s entry</p><div id="saleFormattedEntry"></div></section></div>';
+    ToolkitLab.renderJournalEntry(document.getElementById('saleFormattedEntry'),saleEntry,{mode:'formatted',totals:true});
+  } else if(currentStep===3){
+    main.innerHTML=identityView();
+  } else if(currentStep===4){
+    main.innerHTML='<section class="m8-card"><h2>Cash now, the rest later</h2><p>Suppose the land is sold for $'+money(line(ladder.landReceivable,'Cash').amt)+' in cash now and $'+money(line(ladder.landReceivable,'Receivable').amt)+' to be received later. Type the total the land sold for.</p>'+receivableInput()+'</section>'+(state.receivable.correct?'<div class="m8-compare"><section class="m8-card"><p class="m8-label">In +/&minus; records</p><div id="receivableSignedEntry"></div></section><section class="m8-card"><p class="m8-label">The profession&rsquo;s entry</p><div id="receivableFormattedEntry"></div></section></div>':'<section class="m8-entry-wrap"><div class="m8-hidden-result">Complete the amount to reveal the four-line entry.</div></section>');
+    if(state.receivable.correct){
+      ToolkitLab.renderJournalEntry(document.getElementById('receivableSignedEntry'),ladder.landReceivable,{mode:'signed'});
+      ToolkitLab.renderJournalEntry(document.getElementById('receivableFormattedEntry'),ladder.landReceivable,{mode:'formatted',totals:true});
+    }
+  } else {
+    var incomplete=incompleteUbsEntry();
+    var debitSum=debitTotal(incomplete);
+    var creditSum=creditTotal(incomplete);
+    var missing=Math.abs(debitSum-creditSum);
+    var beatOneDone=state.ubs.amountCorrect&&state.ubs.sideCorrect;
+    var beatTwoDone=state.ubs.meaningCorrect&&state.ubs.sharesCorrect;
+    main.innerHTML='<section class="m8-card"><h2>'+escapeHtml(ubs.title)+'</h2><p>UBS receives Credit Suisse&rsquo;s assets at fair value, assumes its claims, and pays in its own shares.</p><p>This was a real transaction. In March 2023, Switzerland&rsquo;s largest bank agreed &mdash; over a single emergency weekend, at the Swiss authorities&rsquo; urging &mdash; to take over its collapsing rival, and the deal closed that June. Absorbing Credit Suisse meant recording millions of journal-entry lines across the two banks&rsquo; systems. But to the world, the whole event was disclosed like this: one entry&rsquo;s worth of summary, aggregated from all of it.</p></section><section class="m8-card"><p class="m8-label">1 &middot; The columns do not meet &middot; '+escapeHtml(ubs.unit)+'</p><div id="ubsIncompleteEntry"></div><p>The totals row makes the gap visible: debits are $'+money(debitSum)+' million and credits are $'+money(creditSum)+' million. The notation makes it easy to see what is <strong>needed to balance</strong>: a size and a side.</p>'+ubsBalanceQuestion(missing)+'</section>'+(beatOneDone?'<section class="m8-card"><p class="m8-label">2 &middot; Now try it in +/&minus; records &middot; '+escapeHtml(ubs.unit)+'</p><p>The same incomplete entry, now in one unsorted signed column. It is +'+money(missing)+' short of zero, so balance demands a line of &minus;'+money(missing)+'. But what does that minus <strong>MEAN</strong>?</p><div class="m8-scroll">'+signedTable(interleavedUbsEntry(incomplete))+'</div>'+ubsMeaningQuestions()+(beatTwoDone?'<p class="m8-side-callout">Once again, you have to increase equity with a <strong>NEGATIVE</strong> number.</p>':'')+'</section>':'<section class="m8-entry-wrap"><div class="m8-hidden-result">Find the missing size and side to open the +/&minus; records.</div></section>')+(beatOneDone&&beatTwoDone?'<section class="m8-card"><p class="m8-label">3 &middot; Name it and complete &middot; '+escapeHtml(ubs.unit)+'</p><p>The missing credit is a gain: the purchase itself made the owners&rsquo; side bigger. The entry labels it negative goodwill; a later page returns to it.</p><p>'+ubs.entry.lines.length+' lines. The columns meet at $'+money(debitTotal(ubs.entry))+' million.</p><div id="ubsEntry"></div><p class="m8-small">'+escapeHtml(ubs.roundingFootnote)+'</p><p class="m8-small">Source: '+escapeHtml(ubs.source)+'</p></section>':'');
+    ToolkitLab.renderJournalEntry(document.getElementById('ubsIncompleteEntry'),incomplete,{mode:'formatted',totals:true});
+    if(beatOneDone&&beatTwoDone) ToolkitLab.renderJournalEntry(document.getElementById('ubsEntry'),ubs.entry,{mode:'formatted',totals:true});
+  }
+}
+
+function identityView(){
+  var gainCash=Number(line(ladder.landGain,'Cash').amt);
+  var land=Number(ladder.landBook);
+  var gain=Number(line(ladder.landGain,'Gain on Sale of Land').amt);
+  var loss=Number(line(ladder.landLoss,'Loss on Sale of Land').amt);
+  return '<section class="m8-card m8-identity"><h2>The identity explains the signs</h2><p class="m8-equation">Assets &minus; Liabilities &minus; Equity = 0</p><p>This is the accounting identity in change form, using the page&rsquo;s convention: debits are positive.</p><div class="m8-mismatch"><div><span>Cash</span><strong>+'+money(gainCash)+'</strong></div><div><span>Land</span><strong>&minus;'+money(land)+'</strong></div><div><span>Assets, net</span><strong>+'+money(gain)+'</strong></div></div><p>No claim changed. The expression returns to zero only if equity <strong>rises</strong> by '+money(gain)+'. That is what the &minus;'+money(gain)+' says: the gain grew the owners&rsquo; side.</p><p>The loss runs the same walk in reverse. The +'+money(loss)+' means equity shrank by '+money(loss)+'.</p></section><div class="m8-side-callout">In the zero-sum column, a <strong>MINUS</strong> means exactly one of three things: an asset went down, a claim went up, or <strong>EQUITY went up</strong>. The profession&rsquo;s word for all three is <strong>CREDIT</strong>.</div>';
+}
+
+function renderTail(currentStep){
+  var html='';
+  if(currentStep===0){
+    var claim=line(ladder.borrow,'Loan Payable');
+    html='<section class="m8-card"><h2>Read the claim</h2><p>Which side did the growth in '+escapeHtml(claim.acct)+' land on?</p><div class="m8-choice-row"><button class="m8-choice" onclick="checkClaim(\'debit\',this)"'+(state.claim?' disabled':'')+'>Debit</button><button class="m8-choice'+(state.claim?' is-correct':'')+'" onclick="checkClaim(\'credit\',this)"'+(state.claim?' disabled':'')+'>Credit</button></div><p class="m8-chip'+(state.claim?' is-good':'')+'" id="claimFeedback" aria-live="polite">'+(state.claim?'Correct. The claim grew on its home, credit side.':(state.claimTries?'Look at the indented line and its amount column.':''))+'</p></section>';
+  } else if(currentStep===2 && state.saleSigns[state.sale]){
+    var gainAmount=line(ladder.landGain,'Gain on Sale of Land').amt;
+    var lossAmount=line(ladder.landLoss,'Loss on Sale of Land').amt;
+    html='<div class="m8-side-callout">'+(state.sale==='gain'?'Look at the balancing line on the left: the gain arrives as &minus;'+money(gainAmount)+'. Sell at a loss instead and the loss arrives as +'+money(lossAmount)+'. In +/&minus; records the minus sign lands on the good news.':'Look at the balancing line on the left: the loss arrives as +'+money(lossAmount)+'. Sell at a gain instead and the gain arrives as &minus;'+money(gainAmount)+'. In +/&minus; records the plus sign lands on the bad news.')+'</div>';
+  } else if(currentStep===4 && state.receivable.correct){
+    html='<div class="insight-box">Four lines, two debits, no new ideas.</div>';
+  } else if(currentStep===5 && ubsComplete()){
+    html='<div class="insight-box m8-final">Same grammar as the $'+money(line(ladder.borrow,'Cash').amt)+' borrowing. Only the number of lines changed.</div>';
+  }
+  document.getElementById('tail').innerHTML=html;
+}
+
+function creditCard(entry,note){
+  var answer=entry.lines.filter(function(item){ return item.side==='cr'; })[0];
+  var distractor=entry.lines.filter(function(item){ return item.side==='dr'; })[0];
+  var done=state.credits[entry.id];
+  return '<section class="m8-card"><h2>'+escapeHtml(entry.narration)+'</h2><p>'+note+'</p><p><strong>Which account is credited?</strong></p><div class="m8-choice-row"><button class="m8-choice" onclick="checkCredit(\''+entry.id+'\',\''+escapeAttr(distractor.acct)+'\',this)"'+(done?' disabled':'')+'>'+escapeHtml(distractor.acct)+'</button><button class="m8-choice'+(done?' is-correct':'')+'" onclick="checkCredit(\''+entry.id+'\',\''+escapeAttr(answer.acct)+'\',this)"'+(done?' disabled':'')+'>'+escapeHtml(answer.acct)+'</button></div><p class="m8-chip'+(done?' is-good':'')+'" id="chip-'+entry.id+'" aria-live="polite">'+(done?'Correct. Now read the complete entry.':escapeHtml(state.creditMessages[entry.id]))+'</p><div id="entry-'+entry.id+'"'+(done?'':' class="m8-hidden-result"')+'>'+(done?'':'Choose the credited account to reveal the entry.')+'</div></section>';
+}
+
+function receivableInput(){
+  var item=state.receivable;
+  var answer=debitTotal(ladder.landReceivable);
+  var feedback='';
+  if(item.correct) feedback='Correct. The selling price is everything received: cash now plus the right to collect later.';
+  else if(item.tries===1) feedback='Add what arrives now to what will arrive later.';
+  else if(item.tries===2) feedback='Add $'+money(line(ladder.landReceivable,'Cash').amt)+' and $'+money(line(ladder.landReceivable,'Receivable').amt)+'.';
+  else if(item.tries>=3) feedback='Use $'+money(answer)+'.';
+  return '<div class="m8-answer-row"><input class="m8-money-input" id="receivableInput" inputmode="numeric" autocomplete="off" aria-label="Total selling price" value="'+escapeAttr(item.value)+'"'+(item.correct?' disabled':'')+' oninput="state.receivable.value=this.value" onkeydown="if(event.key===\'Enter\'){event.preventDefault();checkReceivable();}"><button class="m8-check" onclick="checkReceivable()"'+(item.correct?' disabled':'')+'>'+(item.correct?'Locked':'Check')+'</button></div><p class="m8-chip'+(item.correct?' is-good':'')+'" aria-live="polite">'+feedback+'</p>';
+}
+
+function balancingLine(entry){ return entry.lines.filter(function(item){ return /Gain on Sale|Loss on Sale/.test(item.acct); })[0]; }
+function signedDecisionTable(kind,decided){
+  var entry=kind==='gain'?ladder.landGain:ladder.landLoss;
+  var cash=Number(line(entry,'Cash').amt);
+  var land=Number(line(entry,'Land').amt);
+  var balance=Number(balancingLine(entry).amt);
+  var balanceAmount=kind==='gain'?'&minus;'+money(balance):'+'+money(balance);
+  return '<table class="m8-signed"><thead><tr><th>Account</th><th>Signed amount</th></tr></thead><tbody><tr><td>Cash received</td><td>+'+money(cash)+'</td></tr><tr><td>Land</td><td>&minus;'+money(land)+'</td></tr><tr'+(decided?'':' class="m8-undecided"')+'><td>Gain (Loss) on Sale of Land</td><td>'+(decided?balanceAmount:'? '+money(balance))+'</td></tr></tbody></table>';
+}
+function signedTable(entry){
+  var sum=0;
+  var rows=entry.lines.map(function(item){ var amount=item.side==='cr'?-Number(item.amt):Number(item.amt); sum+=amount; return '<tr><td>'+escapeHtml(item.acct)+'</td><td>'+(amount<0?'&minus;':'')+money(Math.abs(amount))+'</td></tr>'; }).join('');
+  return '<table class="m8-signed"><thead><tr><th>Account</th><th>Signed amount</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td>Sum</td><td>'+(sum>0?'+':sum<0?'&minus;':'')+money(Math.abs(sum))+'</td></tr></tfoot></table>';
+}
+function incompleteUbsEntry(){
+  return {id:'ubsIncomplete',narration:"UBS receives Credit Suisse's assets at fair value, assumes its claims, and issues its own shares.",lines:ubs.entry.lines.filter(function(item){ return item.acct!=='Gain on acquisition (negative goodwill)'; })};
+}
+function interleavedUbsEntry(entry){
+  var order=['Customer deposits','Cash and balances at central banks','Debt issued','Loans and advances to customers','Consideration — UBS shares issued','Amounts due from banks and counterparties','Financial liabilities at fair value (incl. trading and derivatives)','Financial assets at fair value (incl. trading and derivatives)','Other assets','Amounts due to banks and counterparties','Provisions, non-controlling interests, and other claims'];
+  return {lines:order.map(function(account){ return line(entry,account); })};
+}
+function ubsBalanceQuestion(answer){
+  var item=state.ubs;
+  var feedback='';
+  if(item.amountCorrect) feedback='Correct. The gap supplies the missing amount.';
+  else if(item.amountTries===1) feedback='Subtract one column total from the other.';
+  else if(item.amountTries===2) feedback='Use the difference between the debit and credit totals.';
+  else if(item.amountTries>=3) feedback='Use $'+money(answer)+'.';
+  return '<div class="m8-question"><p><strong>What amount is missing?</strong></p><div class="m8-answer-row"><input class="m8-money-input" id="ubsAmountInput" inputmode="numeric" autocomplete="off" aria-label="Missing amount" value="'+escapeAttr(item.amount)+'"'+(item.amountCorrect?' disabled':'')+' oninput="state.ubs.amount=this.value" onkeydown="if(event.key===\'Enter\'){event.preventDefault();checkUbsAmount();}"><button class="m8-check" onclick="checkUbsAmount()"'+(item.amountCorrect?' disabled':'')+'>'+(item.amountCorrect?'Locked':'Check')+'</button></div><p class="m8-chip'+(item.amountCorrect?' is-good':'')+'" aria-live="polite">'+feedback+'</p></div><div class="m8-question"><p><strong>Which side must it land on?</strong></p><div class="m8-choice-row" role="group" aria-label="Choose the missing side"><button class="m8-choice" onclick="checkUbsSide(\'debit\',this)"'+(item.sideCorrect?' disabled':'')+'>Debit</button><button class="m8-choice'+(item.sideCorrect?' is-correct':'')+'" onclick="checkUbsSide(\'credit\',this)"'+(item.sideCorrect?' disabled':'')+'>Credit</button></div><p class="m8-chip'+(item.sideCorrect?' is-good':'')+'" id="ubs-side" aria-live="polite">'+(item.sideCorrect?'Correct. The notation hands you the side as well as the size.':escapeHtml(item.messages.side))+'</p></div>';
+}
+function ubsMeaningQuestions(){
+  var item=state.ubs;
+  var meaningOptions=[['asset','subtract an asset'],['liability','add a liability'],['equity','add equity']];
+  return '<div class="m8-question"><div class="m8-choice-row">'+meaningOptions.map(function(option){ return '<button class="m8-choice'+(item.meaningCorrect&&option[0]==='equity'?' is-correct':'')+'" onclick="checkUbsMeaning(\''+option[0]+'\',this)"'+(item.meaningCorrect?' disabled':'')+'>'+option[1]+'</button>'; }).join('')+'</div><p class="m8-chip'+(item.meaningCorrect?' is-good':'')+'" id="ubs-meaning" aria-live="polite">'+(item.meaningCorrect?'Correct. Here the minus says to add equity.':escapeHtml(item.messages.meaning))+'</p></div><div class="m8-question"><p>The &minus;'+money(line(ubs.entry,'Consideration — UBS shares issued').amt)+' for <strong>shares issued</strong> is also:</p><div class="m8-choice-row">'+meaningOptions.map(function(option){ return '<button class="m8-choice'+(item.sharesCorrect&&option[0]==='equity'?' is-correct':'')+'" onclick="checkUbsShares(\''+option[0]+'\',this)"'+(item.sharesCorrect?' disabled':'')+'>'+option[1]+'</button>'; }).join('')+'</div><p class="m8-chip'+(item.sharesCorrect?' is-good':'')+'" id="ubs-shares" aria-live="polite">'+(item.sharesCorrect?'Correct. New owners&rsquo; stake in the combined bank increased.':escapeHtml(item.messages.shares))+'</p></div>';
+}
+
+function checkClaim(choice,button){
+  if(state.claim) return;
+  if(choice==='credit'){ state.claim=true; playSuccess(); renderTail(step); renderControls(step); }
+  else { state.claimTries+=1; playNope(); wrongButton(button); document.getElementById('claimFeedback').textContent='Look at the indented line and its amount column.'; }
+}
+function checkCredit(entryId,account,button){
+  if(state.credits[entryId]) return;
+  var answer=ladder[entryId].lines.filter(function(item){ return item.side==='cr'; })[0].acct;
+  if(account===answer){ state.credits[entryId]=true; state.creditMessages[entryId]=''; playSuccess(); render(); }
+  else { state.creditMessages[entryId]='The asset received is the debit. Choose what was given up or assumed.'; playNope(); wrongButton(button); document.getElementById('chip-'+entryId).textContent=state.creditMessages[entryId]; }
+}
+function setSale(kind){ state.sale=kind; playClick(); render(); }
+function checkSaleSign(choice,button){
+  if(state.saleSigns[state.sale]) return;
+  var correct=state.sale==='gain'?'minus':'plus';
+  if(choice===correct){ state.saleSigns[state.sale]=true; state.saleMessages[state.sale]=''; playSuccess(); render(); }
+  else { state.saleMessages[state.sale]=state.sale==='gain'?'The assets rose overall. Which sign offsets that increase?':'The assets fell overall. Which sign offsets that decrease?'; playNope(); wrongButton(button); document.getElementById('saleFeedback').textContent=state.saleMessages[state.sale]; }
+}
+function checkUbsAmount(){
+  var item=state.ubs;
+  var input=document.getElementById('ubsAmountInput');
+  var incomplete=incompleteUbsEntry();
+  var answer=Math.abs(debitTotal(incomplete)-creditTotal(incomplete));
+  item.amount=input?input.value:item.amount;
+  if(parsedAmount(item.amount)===answer){ item.amountCorrect=true; playSuccess(); }
+  else { item.amountTries+=1; playNope(); }
+  render();
+  if(!item.amountCorrect){ var fresh=document.getElementById('ubsAmountInput'); if(fresh){ fresh.focus(); fresh.select(); } }
+}
+function checkUbsSide(choice,button){
+  if(state.ubs.sideCorrect) return;
+  if(choice==='credit'){ state.ubs.sideCorrect=true; state.ubs.messages.side=''; playSuccess(); render(); }
+  else { state.ubs.messages.side='Debits are already larger. The missing amount must go on the other side.'; playNope(); wrongButton(button); document.getElementById('ubs-side').textContent=state.ubs.messages.side; }
+}
+function checkUbsMeaning(choice,button){
+  if(state.ubs.meaningCorrect) return;
+  if(choice==='equity'){ state.ubs.meaningCorrect=true; state.ubs.messages.meaning=''; playSuccess(); render(); }
+  else { state.ubs.messages.meaning='That could produce a minus, but it does not describe this missing gain.'; playNope(); wrongButton(button); document.getElementById('ubs-meaning').textContent=state.ubs.messages.meaning; }
+}
+function checkUbsShares(choice,button){
+  if(state.ubs.sharesCorrect) return;
+  if(choice==='equity'){ state.ubs.sharesCorrect=true; state.ubs.messages.shares=''; playSuccess(); render(); }
+  else { state.ubs.messages.shares='No asset left and no claim grew. Follow the owners&rsquo; side.'; playNope(); wrongButton(button); document.getElementById('ubs-shares').textContent=state.ubs.messages.shares; }
+}
+function checkReceivable(){
+  var item=state.receivable;
+  var input=document.getElementById('receivableInput');
+  item.value=input?input.value:item.value;
+  if(parsedAmount(item.value)===debitTotal(ladder.landReceivable)){ item.correct=true; playSuccess(); }
+  else { item.tries+=1; playNope(); }
+  render();
+  if(!item.correct){ var fresh=document.getElementById('receivableInput'); if(fresh){ fresh.focus(); fresh.select(); } }
+}
+function wrongButton(button){ button.classList.remove('is-wrong'); void button.offsetWidth; button.classList.add('is-wrong'); }
+function ubsComplete(){ return state.ubs.amountCorrect&&state.ubs.sideCorrect&&state.ubs.meaningCorrect&&state.ubs.sharesCorrect; }
+function stepComplete(currentStep){ if(currentStep===0) return state.claim; if(currentStep===1) return state.credits.buyCash&&state.credits.buyCard; if(currentStep===2) return state.saleSigns[state.sale]; if(currentStep===4) return state.receivable.correct; if(currentStep===5) return ubsComplete(); return true; }
+
+function renderControls(currentStep){
+  var html='<div class="nav-buttons">';
+  if(currentStep===0) html+='<button class="btn-back" onclick="playClick();nav(\'82-1-The-Sign-Problem.html\')">&larr; Back</button>';
+  else html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1) html+='<button class="btn-continue" onclick="advance()"'+(stepComplete(currentStep)?'':' disabled aria-disabled="true"')+'>Next &rarr;</button>';
+  else html+='<button class="btn-continue" onclick="playSuccess();nav(\'83-1-The-T-Account-and-the-Bank-Statement.html\')"'+(stepComplete(currentStep)?'':' disabled aria-disabled="true"')+'>The T-Account and the Bank Statement &rarr;</button>';
+  html+='</div>'; document.getElementById('controls').innerHTML=html;
+}
+function advance(){ if(!stepComplete(step)) return; playClick(); step=Math.min(step+1,TOTAL_STEPS-1); render(); window.scrollTo(0,0); }
+function back(){ playClick(); step=Math.max(step-1,0); render(); window.scrollTo(0,0); }
+function nav(url){ window.location.href=url; }
+
+var audioCtx=null;
+function ac(){ if(!audioCtx){ try{ audioCtx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} } return audioCtx; }
+function tone(f,d){ var c=ac(); if(!c)return; var o=c.createOscillator(),g=c.createGain(); o.frequency.value=f; o.connect(g); g.connect(c.destination); g.gain.setValueAtTime(.035,c.currentTime); g.gain.exponentialRampToValueAtTime(.0001,c.currentTime+d); o.start(); o.stop(c.currentTime+d); }
+function playClick(){ tone(600,.08); }
+function playNope(){ tone(220,.12); }
+function playSuccess(){ tone(523,.12); setTimeout(function(){ tone(659,.12); },90); }
+
+var glossaryTerms=[
+  {term:'Journal entry',def:'One event held in a single record, with equal debit and credit totals.'},
+  {term:'Narration',def:'The line beneath an entry that gives the reason for it.'},
+  {term:'Gain',def:'Income from selling something that was not the business&rsquo;s product.'},
+  {term:'Loss',def:'A decrease in income when such an item is sold below its book value.'},
+  {term:'Bargain purchase / negative goodwill',def:'A purchase in which the fair value received exceeds the price paid.'}
+];
+function openGlossary(){ document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){ return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>'; }).join(''); document.getElementById('glossaryOverlay').classList.add('open'); }
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){ playClick(); step=0; state=freshState(); render(); window.scrollTo(0,0); }
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') dismissGlossary(); });
+window.devFill=function(){ var incomplete=incompleteUbsEntry(); state.claim=true; state.credits.buyCash=true; state.credits.buyCard=true; state.saleSigns.gain=true; state.saleSigns.loss=true; state.receivable.correct=true; state.receivable.value=String(debitTotal(ladder.landReceivable)); state.ubs.amount=String(Math.abs(debitTotal(incomplete)-creditTotal(incomplete))); state.ubs.amountCorrect=true; state.ubs.sideCorrect=true; state.ubs.meaningCorrect=true; state.ubs.sharesCorrect=true; step=TOTAL_STEPS-1; render(); };
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

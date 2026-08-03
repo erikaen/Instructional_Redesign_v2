@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="color-scheme" content="light dark">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Sign Problem</title>
+  <link rel="stylesheet" href="shared.css">
+  <style>
+    .m8-sign-page { max-width: 980px; margin: 0 auto; }
+    #mainGrid { margin-top: 18px; }
+    #tail { margin-top: 18px; }
+    #controls { margin-top: 20px; }
+    .m8-progress { margin: 8px 0 0; color: #64748b; font: 700 .72rem/1.3 Inter, sans-serif; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
+    .m8-stage { display: grid; gap: 16px; }
+    .m8-card { border: 1px solid #cbd5e1; border-radius: 10px; padding: 20px; background: #fff; box-shadow: 0 7px 20px rgba(32,55,72,.08); }
+    .m8-card h2, .m8-card h3 { margin: 0 0 10px; color: #16324a; font-family: Inter, sans-serif; }
+    .m8-card h3 { font-size: .98rem; }
+    .m8-card p + p { margin-top: 12px; }
+    .m8-plain-fact { border-left: 4px solid #286dc0; }
+    .m8-fact-label { margin-bottom: 7px; color: #64748b; font: 800 .72rem/1.3 Inter, sans-serif; letter-spacing: .08em; text-transform: uppercase; }
+    .m8-fact-text { font-size: 1.06rem; font-weight: 700; line-height: 1.55; }
+    .m8-ledger { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: .94rem; }
+    .m8-ledger th, .m8-ledger td { border-bottom: 1px solid #e2e8f0; padding: 9px 11px; text-align: left; }
+    .m8-ledger th { background: #f0f4f8; color: #64748b; font: 800 .72rem/1.3 Inter, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+    .m8-ledger td:nth-last-child(-n+2) { font-family: "JetBrains Mono", monospace; text-align: right; white-space: nowrap; }
+    .m8-positive { color: #166534; }
+    .m8-negative { color: #a63b20; }
+    .m8-beats { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+    .m8-diagnosis { border: 2px solid #d97706; border-radius: 10px; padding: 18px; background: #fffbeb; }
+    .m8-diagnosis strong { display: block; margin-bottom: 8px; color: #92400e; font: 900 clamp(1rem,2.5vw,1.22rem)/1.25 Inter, sans-serif; letter-spacing: .035em; }
+    .m8-model-card { max-width: 620px; border: 2px solid #286dc0; border-radius: 10px; padding: 18px; background: #eef5fb; }
+    .m8-model-card p { margin: 0 0 14px; font-size: 1rem; font-weight: 800; line-height: 1.5; }
+    .m8-transition { margin: 16px 0 0; border-left: 4px solid #286dc0; padding: 12px 16px; background: #eef5fb; font-weight: 700; line-height: 1.5; }
+    .m8-quiet-note { margin: 16px 0 0; border-left: 3px solid #94a3b8; padding: 10px 14px; background: #f8fafc; color: #64748b; font-size: .92rem; line-height: 1.5; }
+    .m8-question { border: 2px solid #dbe5f0; border-radius: 10px; padding: 18px; background: #f8fafc; }
+    .m8-question-title { margin-bottom: 12px; font-weight: 800; line-height: 1.45; }
+    .m8-choice-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .m8-choice { min-width: 105px; border: 1.5px solid #94a3b8; border-radius: 7px; padding: 9px 15px; background: #fff; color: #334155; font: 800 .86rem/1.2 Inter, sans-serif; }
+    .m8-choice:hover { border-color: #286dc0; color: #00329d; }
+    .m8-choice.is-correct { border-color: #28864f; background: #ecfdf3; color: #166534; }
+    .m8-choice.is-wrong { border-color: #dc6b55; background: #fef2f2; color: #991b1b; animation: m8-bounce .32s ease; }
+    .m8-chip { display: inline-block; min-height: 30px; margin-top: 11px; border-radius: 999px; padding: 5px 11px; font-size: .82rem; font-weight: 700; line-height: 1.45; }
+    .m8-chip.correct { background: #ecfdf3; color: #166534; }
+    .m8-chip.wrong { background: #fef2f2; color: #991b1b; animation: m8-bounce .32s ease; }
+    @keyframes m8-bounce { 0%,100% { transform: translateX(0); } 35% { transform: translateX(-7px); } 70% { transform: translateX(5px); } }
+    .m8-normal-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-top: 14px; }
+    .m8-normal-card { border-top: 4px solid #286dc0; border-radius: 8px; padding: 15px; background: #f8fafc; }
+    .m8-normal-card strong { display: block; margin-bottom: 8px; color: #16324a; font-family: Inter, sans-serif; }
+    .m8-account-list { color: #475569; font-size: .88rem; line-height: 1.55; }
+    .m8-classify { display: grid; gap: 10px; }
+    .m8-class-row { display: grid; grid-template-columns: minmax(180px,1fr) auto; gap: 14px; align-items: center; border-bottom: 1px solid #e2e8f0; padding: 10px 0; }
+    .m8-class-row:last-child { border-bottom: 0; }
+    .m8-class-name { font-weight: 800; }
+    .m8-two-sentences { display: grid; gap: 10px; }
+    .m8-two-sentences p { margin: 0; border-left: 4px solid #286dc0; padding: 11px 14px; background: #eef5fb; }
+    .m8-compare { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+    .m8-encoding { border: 2px solid #d7dee8; border-radius: 10px; padding: 16px; }
+    .m8-encoding h2 { font-size: 1.05rem; }
+    .m8-card-record { border: 1px solid #d7dee8; border-radius: 8px; overflow: hidden; }
+    .m8-card-record-row { display: grid; grid-template-columns: 1fr auto; gap: 18px; padding: 10px 12px; }
+    .m8-card-record-row + .m8-card-record-row { border-top: 1px solid #e2e8f0; }
+    .m8-card-record-row span:last-child { color: #a63b20; font: 700 .9rem/1.4 "JetBrains Mono", monospace; }
+    .m8-readout { margin-top: 14px; border-left: 4px solid #28864f; padding: 11px 14px; background: #ecfdf3; color: #14532d; line-height: 1.55; }
+    .m8-close { font-size: 1.04rem; font-weight: 700; line-height: 1.55; text-align: center; }
+    .m8-statements-beat { margin-top: 16px; border-left: 4px solid #286dc0; }
+    .m8-statement-fragment { max-width: 360px; margin: 16px auto; border: 1px solid #d7dee8; border-radius: 8px; padding: 14px 16px; background: #f8fafc; }
+    .m8-statement-fragment h3 { margin-bottom: 8px; padding-bottom: 7px; border-bottom: 1px solid #94a3b8; }
+    .m8-statement-line { display: grid; grid-template-columns: 1fr auto; gap: 18px; padding: 4px 0; }
+    .m8-statement-line span:last-child { font-family: "JetBrains Mono", monospace; text-align: right; }
+    .m8-statement-total { margin-top: 5px; border-top: 1px solid #334155; padding-top: 7px; font-weight: 800; }
+    .m8-glossary-dismiss { border: 0; padding: 2px 7px; background: transparent; color: inherit; cursor: pointer; font-size: 1.7rem; line-height: 1; }
+    .m8-icon-glyph { display: inline-grid; width: 20px; height: 20px; place-items: center; font: 800 1rem/1 Inter, sans-serif; }
+    @media (max-width: 720px) {
+      .m8-beats, .m8-normal-grid, .m8-compare { grid-template-columns: 1fr; }
+      .m8-class-row { grid-template-columns: 1fr; gap: 8px; }
+    }
+    @media (prefers-color-scheme: dark) {
+      .m8-progress { color: #aebbd0; }
+      .m8-card { border-color: #4b5567; background: #26242e; box-shadow: 0 7px 20px rgba(0,0,0,.28); }
+      .m8-card h2, .m8-card h3, .m8-normal-card strong { color: #e7eef9; }
+      .m8-ledger th { background: #302e39; color: #aebbd0; }
+      .m8-ledger th, .m8-ledger td, .m8-class-row, .m8-card-record-row + .m8-card-record-row { border-color: #4b5567; }
+      .m8-positive { color: #86efac; }
+      .m8-negative, .m8-card-record-row span:last-child { color: #ffb19d; }
+      .m8-question, .m8-normal-card { border-color: #4b5567; background: #211f28; }
+      .m8-choice { border-color: #77849a; background: #302e39; color: #e7eef9; }
+      .m8-account-list { color: #cbd5e1; }
+      .m8-diagnosis { border-color: #f59e0b; background: #352b19; }
+      .m8-diagnosis strong { color: #fbbf24; }
+      .m8-model-card, .m8-transition { background: #202d3c; }
+      .m8-quiet-note { background: #211f28; color: #aebbd0; }
+      .m8-two-sentences p { background: #202d3c; }
+      .m8-encoding, .m8-card-record { border-color: #4b5567; }
+      .m8-readout { background: #183326; color: #bbf7d0; }
+      .m8-statement-fragment { border-color: #4b5567; background: #211f28; }
+      .m8-statement-fragment h3 { border-color: #77849a; }
+      .m8-statement-total { border-color: #cbd5e1; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+  <div class="prework-wrap m8-sign-page">
+    <div class="tut-header">
+      <div class="tut-header-main">
+        <h1>The Sign Problem</h1>
+        <p class="tut-header-sub">Module 8 &middot; ~6 min</p>
+      </div>
+      <div class="tut-header-actions">
+        <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><span class="m8-icon-glyph" aria-hidden="true">?</span></button>
+        <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><span class="m8-icon-glyph" aria-hidden="true">&#8635;</span></button>
+      </div>
+    </div>
+    <div class="phase-title" id="phaseTitle">The Sign Problem</div>
+
+    <div id="beats"></div>
+    <div id="mainGrid"></div>
+    <div id="tail"></div>
+    <div id="controls"></div>
+  </div>
+</div>
+
+<div class="glossary-overlay" id="glossaryOverlay" onclick="if(event.target===this) dismissGlossary()">
+  <div class="glossary-panel">
+    <div class="glossary-panel-head">
+      <div class="glossary-panel-title">Glossary</div>
+      <button class="m8-glossary-dismiss" aria-label="Dismiss" onclick="dismissGlossary()">&times;</button>
+    </div>
+    <div class="glossary-list" id="glossaryList"></div>
+  </div>
+</div>
+
+<script src="m8-data.js"></script>
+<script src="toolkit-lab.js"></script>
+<script src="shared.js"></script>
+<script>
+var step=0;
+var TOTAL_STEPS=4;
+var data=window.M8_DATA;
+var modelEndorsed=false;
+var debtChoice=null;
+var debtWrong=null;
+var classState=[];
+
+function findEntry(list,id){
+  return list.filter(function(entry){ return entry.id===id; })[0];
+}
+var payoff=findEntry(data.seasonEntries,'ccpay');
+var classifyAccounts=[
+  data.chartOfAccounts.filter(function(account){ return account.name==='Cash'; })[0],
+  data.chartOfAccounts.filter(function(account){ return account.name==='Credit Card Payable'; })[0],
+  data.chartOfAccounts.filter(function(account){ return account.kind==='revenue'; })[0]
+];
+classState=classifyAccounts.map(function(){ return {answer:null,wrong:null}; });
+
+function money(amount){ return Number(amount).toLocaleString('en-US'); }
+function nav(url){ window.location.href=url; }
+function playClick(){}
+function playSuccess(){}
+function playNope(){}
+
+function render(){
+  renderBeats(step);
+  renderMain(step);
+  renderTail(step);
+  renderControls(step);
+}
+
+function renderBeats(currentStep){
+  var copy='';
+  if(currentStep===0){
+    copy='<strong>The question</strong> If signs already show value and direction, why would you need anything else?';
+  } else if(currentStep===1){
+    copy='<strong>Works fine, then breaks</strong> Signs feel natural for cash, but one convention gets awkward when you carry a claim.';
+  } else if(currentStep===2){
+    copy='<strong>Separate the jobs</strong> Give kind and direction to the side, and leave magnitude to the number.';
+  } else {
+    copy='<strong>The payoff, both ways</strong> Read the same event in a signed record and in the profession&rsquo;s notation.';
+  }
+  document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+copy+'</p></div><p class="m8-progress">Reading '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
+}
+
+function renderMain(currentStep){
+  var el=document.getElementById('mainGrid');
+  if(currentStep===0){
+    el.innerHTML='<div class="m8-stage"><section class="m8-card m8-plain-fact"><div class="m8-fact-label">The familiar idea</div><p class="m8-fact-text">Most people keeping records just use + and &minus;: positive and negative numbers.</p><p>An asset should grow with a positive number. A claim, maybe, should grow with a negative one&mdash;after all, a claim is a minus in the difference you have computed all course: assets minus claims.</p><p>One column, one sum, and the total <strong>is</strong> where you stand.</p></section><section class="m8-card"><p>Accounting systems require a little multiplication to assign monetary values to quantities of inventory and the like. But after monetary values are assigned, there is only addition and subtraction.</p><p>So the only design question is how to record direction&mdash;and signs seem like the complete answer.</p></section><section class="m8-card m8-question"><h2>So why not build your mental model only with signs?</h2><p>You have for seven modules, and it worked.</p></section></div>';
+  } else if(currentStep===1){
+    el.innerHTML='<div class="m8-stage"><div class="m8-beats"><section class="m8-card"><h2>Assets with signs</h2><p>This works the way your Module 1 tally did: add an asset when it comes in, and subtract it when it goes out.</p><table class="m8-ledger"><thead><tr><th>Cash record</th><th>Change</th><th>Balance</th></tr></thead><tbody><tr><td>Opening cash</td><td class="m8-positive">+$1,300</td><td>$1,300</td></tr><tr><td>Customer pays</td><td class="m8-positive">+$120</td><td>$1,420</td></tr><tr><td>Parts restock</td><td class="m8-negative">&minus;$1,200</td><td>$220</td></tr></tbody></table></section><section class="m8-card"><h2>The card claim with signs</h2><p>Now fix one convention: carry the claim as a negative number in the records.</p><table class="m8-ledger"><thead><tr><th>Card record</th><th>Change</th><th>Balance</th></tr></thead><tbody><tr><td>No card claim</td><td>&mdash;</td><td>$0</td></tr><tr><td>Claim grows</td><td class="m8-negative">&minus;$'+money(2030)+'</td><td class="m8-negative">&minus;$'+money(2030)+'</td></tr></tbody></table><p>To say the debt got bigger, the record subtracts.</p></section></div><aside class="m8-diagnosis"><strong>THE SIGN IS DOING DOUBLE DUTY</strong><p>One symbol carries two jobs: which kind of thing the account is, and which way it moved. Any symbol doing two jobs will sometimes say opposite things with one face.</p></aside></div>';
+    el.innerHTML=el.innerHTML.replace('<div class="m8-stage">','<div class="m8-stage"><section class="m8-card m8-plain-fact"><div class="m8-fact-label">The test</div><p class="m8-fact-text">The Company pays off the startup card balance in full: $'+money(2030)+' of cash is gone, and the card&rsquo;s claim is gone.</p><p>Now you can see why accountants write this in a way that first looks strange&mdash;and why that strange way is actually simpler.</p></section>');
+  } else if(currentStep===2){
+    el.innerHTML='<div class="m8-stage"><section class="m8-card"><p>Accountants don&rsquo;t fix this with better signs. They use two words you have already heard: <strong>DEBIT</strong> and <strong>CREDIT</strong>. Your bank talks to you in them&mdash;deposit cash into savings and the bank says it credited your account; the card that pays straight from checking is a debit card. You have lived inside this vocabulary for years without being told what it does.</p><p><strong>Here is what it does: it separates the two roles the sign was carrying.</strong> Which kind of account, and which way it moved&mdash;that job goes to the <strong>SIDE</strong>: debit is the left side, credit is the right, and that is all the words mean. How much&mdash;that job stays with the <strong>NUMBER</strong>, which is now always positive.</p><aside class="m8-quiet-note">Notice the bank says credit when your money goes in. Hold that&mdash;when the bank statement returns, you will see why its language looks backwards.</aside></section><section class="m8-card"><h2>Give each job its own channel</h2><p>Every account has a <strong>home side</strong>: it increases with a positive number on its home side and decreases with a positive number on the other side.</p><h3>Normal balance</h3><div class="m8-normal-grid" id="normalSummary"></div></section></div>';
+    renderNormalSummary();
+  } else {
+    el.innerHTML='<div class="m8-stage"><div class="m8-compare"><section class="m8-card m8-encoding"><h2>Double-duty signed record</h2><div class="m8-card-record"><div class="m8-card-record-row"><span>Opening card claim</span><span>&minus;$'+money(2030)+'</span></div><div class="m8-card-record-row"><span>Payoff</span><span>+$'+money(2030)+'</span></div><div class="m8-card-record-row"><strong>Ending card claim</strong><span>$0</span></div></div></section><section class="m8-card m8-encoding"><h2>The profession&rsquo;s version</h2><p>'+payoff.narration+'</p><div id="formattedJournal"></div></section></div><div class="m8-readout"><strong>Read it:</strong> Both numbers are positive; the card&rsquo;s claim shrank, so the entry goes on the side away from its home; cash shrank, so it goes away from its home too.</div></div>';
+    ToolkitLab.renderJournalEntry(document.getElementById('formattedJournal'),payoff,{mode:'formatted',totals:true});
+  }
+}
+
+function renderNormalSummary(){
+  var groups=[
+    {normal:'debit',label:'Left / debit home side',accounts:data.chartOfAccounts.filter(function(account){ return account.kind==='asset'||account.kind==='expense'; })},
+    {normal:'credit',label:'Right / credit home side',accounts:data.chartOfAccounts.filter(function(account){ return account.kind==='liability'||account.kind==='revenue'||account.name.indexOf('Contributed')!==-1; })},
+    {normal:'either',label:'Either side',accounts:data.chartOfAccounts.filter(function(account){ return account.name==='Generated'; })}
+  ];
+  document.getElementById('normalSummary').innerHTML=groups.map(function(group){
+    return '<div class="m8-normal-card"><strong>'+group.label+'</strong><div class="m8-account-list">'+group.accounts.map(function(account){ return account.name; }).join(', ')+'</div></div>';
+  }).join('');
+}
+
+function renderTail(currentStep){
+  var el=document.getElementById('tail');
+  if(currentStep===0){
+    el.innerHTML='<section class="m8-model-card" aria-labelledby="model-title"><div class="m8-fact-label" id="model-title">The model</div><p>Assets grow with +, claims grow with &minus;, everything in one column.</p><button class="m8-choice '+(modelEndorsed?'is-correct':'')+'" onclick="endorseModel()">Seems right &mdash; run with it</button>'+(modelEndorsed?'<div class="m8-chip correct" role="status">Model endorsed. Now test it.</div>':'')+'</section>';
+  } else if(currentStep===1){
+    var feedback='';
+    if(debtChoice==='grew') feedback='<div class="m8-chip correct" role="status">Right. The debt grew while the record moved farther below zero.</div>';
+    else if(debtWrong==='shrank') feedback='<div class="m8-chip wrong" role="status">More negative does not mean less debt here; the claim became larger.</div>';
+    else if(debtWrong==='unchanged') feedback='<div class="m8-chip wrong" role="status">The record moved from zero to &minus;$'+money(2030)+', so the debt changed.</div>';
+    el.innerHTML='<section class="m8-question" aria-labelledby="debt-question"><div class="m8-question-title" id="debt-question">When the card record went from $0 to &minus;$'+money(2030)+', what happened to the debt?</div><div class="m8-choice-row"><button class="m8-choice '+(debtChoice==='grew'?'is-correct':'')+'" onclick="chooseDebt(\'grew\')">It grew</button><button class="m8-choice '+(debtWrong==='shrank'?'is-wrong':'')+'" onclick="chooseDebt(\'shrank\')">It shrank</button><button class="m8-choice '+(debtWrong==='unchanged'?'is-wrong':'')+'" onclick="chooseDebt(\'unchanged\')">It did not change</button></div>'+feedback+'</section>';
+    el.innerHTML+='<p class="m8-transition">Signs state a position well&mdash;the trouble starts when you record <strong>changes</strong>.</p>';
+  } else if(currentStep===2){
+    el.innerHTML='<div class="m8-stage"><section class="m8-question" aria-labelledby="home-question"><div class="m8-question-title" id="home-question">Place each account on its home side.</div><div class="m8-classify">'+classifyAccounts.map(classRowHtml).join('')+'</div></section><div class="m8-two-sentences"><p>This notation was invented before negative numbers existed in European arithmetic, and it is still used today because separating magnitude from direction avoids confusion.</p><p>A correct entry&rsquo;s signed changes sum to zero, and in the profession&rsquo;s language the same check reads: debits equal credits.</p></div></div>';
+  } else if(currentStep===3){
+    var juneClaims=data.balanceSheets.jun1.liabilities;
+    var claimNames=Object.keys(juneClaims);
+    var claimTotal=claimNames.reduce(function(total,name){ return total+Number(juneClaims[name]); },0);
+    var claimLines=claimNames.map(function(name){ return '<div class="m8-statement-line"><span>'+name+'</span><span>'+money(juneClaims[name])+'</span></div>'; }).join('');
+    el.innerHTML='<div class="m8-card m8-close">Spreadsheets were born after negative numbers and happily use signs; ledgers were born before and use sides; the analyst reads both fluently.</div><section class="m8-card m8-statements-beat"><h2>The statements agree</h2><p>One more witness: the &ldquo;statements themselves&rdquo;. Every statement you have read&mdash;the shop&rsquo;s, CVS&rsquo;s, the nonprofit&rsquo;s&mdash;shows liabilities as positive numbers. A balance sheet writes the identity with everything on positive footing&mdash;Assets = Liabilities + Member&rsquo;s Capital&mdash;and lets the sections do what the ledger&rsquo;s sides do.</p><div class="m8-statement-fragment" aria-label="The shop&rsquo;s June 1 liabilities"><h3>Liabilities</h3>'+claimLines+'<div class="m8-statement-line m8-statement-total"><span>Total liabilities</span><span>'+money(claimTotal)+'</span></div></div><p>So when a minus finally does appear on a statement, it is not notation&mdash;&ldquo;it is news&rdquo;: the &ldquo;recorded claims exceed&rdquo; the recorded assets. Read the word recorded carefully, though&mdash;that is not always distress. Books never record some valuable things&mdash;a brand, a loyal customer base&mdash;yet lenders lend against them all the same; a capital section can print negative simply because &ldquo;unrecorded assets&rdquo; have supported a lot of actual borrowing. The sign is a fact about the books; what it means is the analyst&rsquo;s question.</p></section>';
+  } else {
+    el.innerHTML='';
+  }
+}
+
+function classRowHtml(account,index){
+  var state=classState[index];
+  var feedback='';
+  if(state.answer===account.normal) feedback='<div class="m8-chip correct" role="status">Correct. This is its '+(account.normal==='debit'?'left / debit':'right / credit')+' home side.</div>';
+  else if(state.wrong) feedback='<div class="m8-chip wrong" role="status">Try the side where this kind of account increases.</div>';
+  return '<div class="m8-class-row"><div><div class="m8-class-name">'+account.name+'</div>'+feedback+'</div><div class="m8-choice-row"><button class="m8-choice '+(state.answer==='debit'?'is-correct':'')+' '+(state.wrong==='debit'?'is-wrong':'')+'" onclick="classify('+index+',\'debit\')">Left / debit</button><button class="m8-choice '+(state.answer==='credit'?'is-correct':'')+' '+(state.wrong==='credit'?'is-wrong':'')+'" onclick="classify('+index+',\'credit\')">Right / credit</button></div></div>';
+}
+
+function renderControls(currentStep){
+  var html='<div class="nav-buttons">';
+  if(currentStep===0) html+='<button class="btn-back" onclick="nav(\'81-1-Module-8-Introduction.html\')">&larr; Back</button>';
+  else html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
+  if(currentStep<TOTAL_STEPS-1){
+    var locked=(currentStep===0&&!modelEndorsed)||(currentStep===1&&debtChoice!=='grew')||(currentStep===2&&!classComplete());
+    html+='<button class="btn-next" onclick="advance()"'+(locked?' disabled aria-disabled="true"':'')+'>Next &rarr;</button>';
+  } else {
+    html+='<a class="btn-continue" href="82-2-The-Journal-Entry.html">The Journal Entry &rarr;</a>';
+  }
+  html+='</div>';
+  document.getElementById('controls').innerHTML=html;
+}
+
+function endorseModel(){
+  modelEndorsed=true; playSuccess(); renderTail(step); renderControls(step);
+}
+function chooseDebt(choice){
+  if(choice==='grew'){
+    debtChoice='grew'; debtWrong=null; playSuccess();
+  } else {
+    debtChoice=null; debtWrong=choice; playNope();
+  }
+  renderTail(step); renderControls(step);
+}
+function classify(index,side){
+  var account=classifyAccounts[index];
+  if(side===account.normal){ classState[index].answer=side; classState[index].wrong=null; playSuccess(); }
+  else { classState[index].answer=null; classState[index].wrong=side; playNope(); }
+  renderTail(step); renderControls(step);
+}
+function classComplete(){ return classState.every(function(state,index){ return state.answer===classifyAccounts[index].normal; }); }
+function advance(){
+  if((step===0&&!modelEndorsed)||(step===1&&debtChoice!=='grew')||(step===2&&!classComplete())) return;
+  playClick(); step=Math.min(step+1,TOTAL_STEPS-1); render(); window.scrollTo(0,0);
+}
+function back(){ playClick(); step=Math.max(step-1,0); render(); window.scrollTo(0,0); }
+
+var glossaryTerms=[
+  {term:'Debit',def:'The left side of an entry.'},
+  {term:'Credit',def:'The right side of an entry.'},
+  {term:'Normal balance',def:'The home side where an account increases.'},
+  {term:'Home side',def:'The side where an account increases with a positive amount.'},
+  {term:'Journal entry',def:'The profession&rsquo;s name for one recorded event written with equal debit and credit amounts.'}
+];
+function openGlossary(){
+  document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){ return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>'; }).join('');
+  document.getElementById('glossaryOverlay').classList.add('open');
+}
+function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
+function restart(){
+  playClick(); step=0; modelEndorsed=false; debtChoice=null; debtWrong=null; classState=classifyAccounts.map(function(){ return {answer:null,wrong:null}; }); render(); window.scrollTo(0,0);
+}
+document.addEventListener('keydown',function(event){ if(event.key==='Escape') dismissGlossary(); });
+window.devFill=function(){
+  modelEndorsed=true; debtChoice='grew'; debtWrong=null; classState=classifyAccounts.map(function(account){ return {answer:account.normal,wrong:null}; }); step=TOTAL_STEPS-1; render();
+};
+render();
+</script>
+<script src="dev.js"></script>
+</body>
+</html>

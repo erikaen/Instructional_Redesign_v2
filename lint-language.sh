@@ -37,7 +37,12 @@ check () {  # $1 = grep -E pattern, $2 = explanation
 # introduced on 61-1 and used across 62-*/63-* (the Yale FY2025 walk). The
 # equity ban is therefore carved out for Module 6 pages (6[0-9]-*) on the same
 # another-entity's-vocabulary principle. All other checks still scan 6x-x.
-equity_files=$(echo "$FILES" | grep -vE '^[56][0-9]-|^view\.html$')
+# Ruling 2026-08-03 (Tool Kit split): Modules 8-9 are the profession's-
+# vocabulary reveal — "equity" appears as the standard word in the identity
+# beats (A − L − E = 0) and the UBS entry at Rick's direction ("add equity";
+# "you have to increase equity with a negative number") — carved out for
+# 8[0-9]-* and 9[0-9]-* on the same another-vocabulary principle as 5x/6x.
+equity_files=$(echo "$FILES" | grep -vE '^[5689][0-9]-|^view\.html$')
 equity_hits=$(grep -rniE 'equit' $equity_files 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)')
 if [ -n "$equity_hits" ]; then
   echo 'BANNED — "equity/equities" is banned in student-facing pages outside Module 5 (5x-x). The A-L difference stays unnamed in Module 1; from Module 2 on its only name is "Member'"'"'s Capital".'
@@ -71,7 +76,11 @@ check 'accounting equation'      'Say "accounting identity", never "accounting e
 # 2026-07-26 (OHS M6 rebuild): the OHS statement-map prototype (graduating into
 # 62-1 per the OHS walk plan's prototype rulings) carries the same NFP statement
 # vocabulary — carved out by filename like the 5x/6x pages.
-netassets_files=$(echo "$FILES" | grep -vE '^[56][0-9]-|^mockup-ohs-')
+# Ruling 2026-08-01 (M8 build): Module 8 is the vocabulary-reveal module —
+# "net assets without donor restrictions" is the sanctioned nonprofit name for
+# Generated (85-1/88-1 Rosetta row) and "identifiable net assets" is standard
+# Goodwill language (86-3) — carved out for 8[0-9]-* pages.
+netassets_files=$(echo "$FILES" | grep -vE '^[5689][0-9]-|^mockup-ohs-')
 netassets_hits=$(grep -rniE 'net assets' $netassets_files 2>/dev/null | grep -vE ':[0-9]+:[[:space:]]*(//|\*)')
 if [ -n "$netassets_hits" ]; then
   echo 'BANNED — "Net Assets" was removed in the equity purge; do not reintroduce it in M1–M4 student-facing pages (Module 5 pages are carved out).'
