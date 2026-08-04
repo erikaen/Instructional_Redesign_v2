@@ -211,6 +211,19 @@ Rulings 25–27 (2026-08-03, Rick's click-through, round 3 — THE SPLIT):
     round; an earlier truncated lint read was misreported as clean.)
 
 
+31. **Site migration (Rick, 2026-08-04):** Modules 7, 8, and 9 migrated to the live
+    course site (Final_Accounting_Prework → accounting-from-the-ground-up.com), each
+    labeled **"Under Construction"** on the dashboard. **Module 9's displayed name is
+    literally "TBD"** until Rick's naming ruling (ruling 25 still open). M9's per-page
+    Danny/RAG tutor docs are deliberately deferred until Rick's click-through; M7/M8
+    have full tutor docs. Site-side registries live in the deploy repo as
+    course-m7/8/9.js (vocabulary carve-out; course-m8.js provably never says
+    "Retained Earnings" — the term is defined in course-m9.js where 93-1 reveals it).
+    Sequential-locking extension (orchestrator's call, flagged for veto): the M1-4
+    chain is unchanged; every module from 5 on is a free-entry door, including 7-9.
+    Content authority is UNCHANGED: v2 remains the source of truth; site copies are
+    conversions of graph-teach-wip @ 3ea803c and re-migrate after any M9 rework.
+
 ## The Rosetta Stone (the module's spine and its closing artifact)
 
 | The course's word/act | The standard term |
