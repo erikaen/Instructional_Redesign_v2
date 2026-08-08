@@ -22,13 +22,13 @@ window.M8_DATA = {
     { "num": 400, "name": "Repair Revenue", "kind": "revenue", "normal": "credit" },
     { "num": 500, "name": "Parts Used", "kind": "expense", "normal": "debit" },
     { "num": 510, "name": "Rent", "kind": "expense", "normal": "debit" },
-    { "num": 520, "name": "Depreciation", "kind": "expense", "normal": "debit" }
+    { "num": 520, "name": "Depreciation Expense", "kind": "expense", "normal": "debit" }
   ],
 
   "formationEntry": {
     "id": "formation",
     "date": "June 1",
-    "narration": "The member's things and claims move behind the wall; the LLC's books open.",
+    "narration": "The member's things and liabilities move behind the wall; the LLC's books open.",
     "lines": [
       { "acct": "Cash", "side": "dr", "amt": 1300 },
       { "acct": "Parts", "side": "dr", "amt": 200 },
@@ -69,11 +69,11 @@ window.M8_DATA = {
 
   "adjustingEntries": [
     { "id": "deprT", "narration": "The tools give a season of their working lives — amount given, not calculated.",
-      "lines": [ { "acct": "Depreciation", "side": "dr", "amt": 160 }, { "acct": "Tools & Equipment", "side": "cr", "amt": 160 } ] },
+      "lines": [ { "acct": "Depreciation Expense", "side": "dr", "amt": 160 }, { "acct": "Tools & Equipment", "side": "cr", "amt": 160 } ] },
     { "id": "deprF", "narration": "The fixtures give their season's share.",
-      "lines": [ { "acct": "Depreciation", "side": "dr", "amt": 40 }, { "acct": "Fixtures", "side": "cr", "amt": 40 } ] },
+      "lines": [ { "acct": "Depreciation Expense", "side": "dr", "amt": 40 }, { "acct": "Fixtures", "side": "cr", "amt": 40 } ] },
     { "id": "deprL", "narration": "The laptop gives its season's share.",
-      "lines": [ { "acct": "Depreciation", "side": "dr", "amt": 30 }, { "acct": "Laptop", "side": "cr", "amt": 30 } ] }
+      "lines": [ { "acct": "Depreciation Expense", "side": "dr", "amt": 30 }, { "acct": "Laptop", "side": "cr", "amt": 30 } ] }
   ],
 
   "closingEntry": {
@@ -84,7 +84,7 @@ window.M8_DATA = {
       { "acct": "Repair Revenue", "side": "dr", "amt": 6020 },
       { "acct": "Parts Used", "side": "cr", "amt": 1200 },
       { "acct": "Rent", "side": "cr", "amt": 1950 },
-      { "acct": "Depreciation", "side": "cr", "amt": 230 },
+      { "acct": "Depreciation Expense", "side": "cr", "amt": 230 },
       { "acct": "Generated", "side": "cr", "amt": 2640 }
     ]
   },
@@ -133,7 +133,7 @@ window.M8_DATA = {
     "fairValues": { "Receivables": 300, "Parts": 250, "Right of Use": 650, "Tools & Equipment": 2400, "Fixtures": 950, "Laptop": 450 },
     "fairValueTotal": 5000,
     "goodwill": 55000,
-    "note": "The buyer does not acquire the shop's own cash; by Aug 31 there are no claims to assume — both startup claims were settled during the season.",
+    "note": "The buyer does not acquire the shop's own cash; by Aug 31 there are no liabilities to assume — both startup liabilities were settled during the season.",
     "entry": {
       "id": "acquisition",
       "narration": "The buyer records what was bought: every identifiable asset at fair value — and the plug that makes debits equal credits.",
@@ -178,7 +178,7 @@ window.M8_DATA = {
     "entry": {
       "id": "ubs",
       "date": "June 12, 2023",
-      "narration": "One event: UBS receives Credit Suisse's assets at fair value, assumes its claims, issues its own shares — and the columns must still meet. The balancing line is a gain: negative goodwill.",
+      "narration": "One event: UBS receives Credit Suisse's assets at fair value, assumes its liabilities, issues its own shares — and the columns must still meet. The balancing line is a gain: negative goodwill.",
       "lines": [
         { "acct": "Cash and balances at central banks", "side": "dr", "amt": 92923 },
         { "acct": "Amounts due from banks and counterparties", "side": "dr", "amt": 60647 },
@@ -239,7 +239,7 @@ window.M8_DATA = {
     { "id": "toolsdep", "account": "Tools & Equipment",
       "setup": "Began 1,200; bought 400; ended 1,440 — the walk only ties if depreciation took X.",
       "answer": 160 },
-    { "id": "bankT", "account": "The bank's ledger page for you",
+    { "id": "bankT", "account": "The bank's account with your name on it",
       "setup": "Began 2,500; credits (deposits) 4,940; debits (withdrawals) X; ended 4,074.",
       "answer": 3366 }
   ],

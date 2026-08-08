@@ -57,7 +57,7 @@
         <div class="section-card">
           <h2 id="m8-turn-title">You already built the machine</h2>
           <p>You built it three times: first as the workbook, then as the statement map, then as the graph. Each time, you used this course&rsquo;s own words so you could see what the machine does before learning its labels.</p>
-          <p>Now you will learn the profession&rsquo;s words for the same parts and moves. Those words are five hundred years old. They appear everywhere accounting appears.</p>
+          <p>Now you will learn the accountants&rsquo; words for the same parts and moves. Those words are five hundred years old. They appear everywhere accounting appears.</p>
         </div>
       </section>
 
@@ -66,7 +66,7 @@
         <div class="section-card">
           <h2 id="m8-analyst-title">An analyst has to read the notation</h2>
           <p>Real artifacts use it: entries in accounting systems, auditors&rsquo; language, footnotes, and the titles on real statements. You need the words to read those artifacts closely and to reason backward from statements to the entries that produced them.</p>
-          <p>You will never keep books in this notation. That is not the job. Your job is to read what the notation says, connect it to the machine you already understand, and ask what the finished statements imply.</p>
+          <p>Even if you never keep books, it helps to know the accountants&rsquo; words for things. Your job is to read what the notation says, connect it to the machine you already understand, and ask what the finished statements imply.</p>
         </div>
       </section>
 
@@ -79,15 +79,14 @@
       <section class="m8-section" aria-labelledby="m8-covers-title">
         <p class="m8-kicker">What the module covers</p>
         <div class="section-card">
-          <h2 id="m8-covers-title">The professional labels for work you already did</h2>
+          <h2 id="m8-covers-title">The accountants&rsquo; labels for work you already did</h2>
           <ul class="m8-topic-list">
-            <li>Debits and credits</li>
-            <li>Journal entries</li>
-            <li>T-accounts</li>
-            <li>Posting</li>
-            <li>The chart of accounts</li>
+            <li>The sign problem</li>
+            <li>The journal entry</li>
+            <li>The T-account</li>
+            <li>The ledger</li>
           </ul>
-          <p>The Tool Kit continues in Module 9 &mdash; the entries, closings, and structures the profession builds with this notation.</p>
+          <p>The Tool Kit continues in Module 9 &mdash; the entries, closings, and structures accountants build with this notation.</p>
         </div>
       </section>
 
@@ -110,14 +109,15 @@
   </div>
 </div>
 
+<script src="m8-data.js"></script>
+<script src="toolkit-lab.js"></script>
 <script src="shared.js"></script>
 <script>
+var data=window.M8_DATA;
 var glossaryTerms=[
   { term:'Analyst', def:'A reader who uses accounting information to understand an entity and reason from its reports.' },
-  { term:'Journal entry', def:'The profession&rsquo;s formatted record of one event and its paired effects.' },
-  { term:'T-account', def:'A picture of one ledger account, with its two sides shown separately.' },
-  { term:'Posting', def:'Copying an amount from a chronological entry into the affected account.' },
-  { term:'Chart of accounts', def:'The organized list of account names an entity uses.' }
+  { term:'Journal entry', def:'The accountant&rsquo;s formatted record of one event and its paired effects.' },
+  { term:'T-account', def:'A picture of one ledger account, with its two sides shown separately.' }
 ];
 
 function openGlossary(){

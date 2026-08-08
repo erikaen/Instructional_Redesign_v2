@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="color-scheme" content="light dark">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Posting, the Ledger, and the Chart of Accounts</title>
+  <title>The Ledger</title>
   <link rel="stylesheet" href="shared.css">
   <style>
     .m8-progress { margin:9px 0 0; color:#64748b; font:700 .72rem/1.3 Inter,sans-serif; letter-spacing:.08em; text-align:center; text-transform:uppercase; }
@@ -12,26 +12,10 @@
     .m8-card { border:1px solid #d7dee8; border-radius:12px; padding:18px; background:#fff; box-shadow:0 6px 18px rgba(32,55,72,.07); }
     .m8-card h2, .m8-card h3 { margin:0 0 10px; color:#183153; font-family:Inter,sans-serif; }
     .m8-card h2 { font-size:1.12rem; }
-    .m8-card h3 { font-size:.96rem; }
     .m8-card p { margin:8px 0 0; line-height:1.6; }
-    .m8-diagram { display:grid; grid-template-columns:minmax(220px,1fr) 70px minmax(0,1.35fr); gap:14px; align-items:center; }
-    .m8-arrow { color:#286dc0; font:800 1rem/1.4 Inter,sans-serif; text-align:center; }
-    .m8-t-pair, .m8-ledger-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
-    .m8-term-strip { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin-top:14px; }
+    .m8-term-strip { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
     .m8-term { border-top:3px solid #286dc0; padding:10px 8px 0; color:#334155; font:.86rem/1.45 "Open Sans",sans-serif; }
     .m8-term strong { display:block; color:#183153; font-family:Inter,sans-serif; }
-    .m8-post-layout { display:grid; grid-template-columns:minmax(250px,.9fr) minmax(0,1.1fr); gap:16px; align-items:start; }
-    .m8-entry-list { display:grid; gap:10px; }
-    .m8-entry { border:1px solid #d7dee8; border-radius:10px; padding:12px; background:#f8fafc; }
-    .m8-entry.is-current { border-color:#286dc0; box-shadow:0 0 0 3px rgba(40,109,192,.12); }
-    .m8-entry.is-posted { border-color:#79ad8b; background:#f0fdf4; }
-    .m8-entry-status { margin:0 0 8px; color:#64748b; font:800 .7rem/1.3 Inter,sans-serif; letter-spacing:.08em; text-transform:uppercase; }
-    .m8-post-btn, .m8-choice, .m8-check { border:0; border-radius:7px; background:#286dc0; color:#fff; cursor:pointer; font:800 .86rem/1 Inter,sans-serif; }
-    .m8-post-btn { width:100%; margin-top:10px; padding:11px 13px; }
-    .m8-post-btn:disabled { background:#9aa7b8; cursor:default; }
-    .m8-ledger-panel { display:grid; gap:14px; }
-    .m8-live-ledger { display:grid; gap:16px; }
-    .m8-empty { border:1px dashed #aeb9c7; border-radius:9px; padding:24px 14px; color:#64748b; text-align:center; }
     .m8-gallery { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
     .m8-gallery .m8-card { min-width:0; }
     .m8-references { margin-top:14px; border:1px solid #b8c7d9; border-radius:10px; padding:14px 16px; background:#f8fafc; }
@@ -39,57 +23,30 @@
     .m8-reference-list { display:grid; gap:5px; margin:0; padding:0; list-style:none; }
     .m8-reference-list li { color:#475569; font:.84rem/1.45 "Open Sans",sans-serif; }
     .m8-reference-list strong { color:#183153; font-family:"JetBrains Mono",monospace; }
-    .m8-zero-note { margin-top:8px; color:#64748b; font-size:.82rem; text-align:center; }
-    .m8-chart-wrap { overflow-x:auto; border:1px solid #d7dee8; border-radius:10px; }
-    .m8-chart { width:100%; border-collapse:collapse; min-width:560px; background:#fff; }
-    .m8-chart th { padding:9px 12px; background:#eaf1f8; color:#526174; font:800 .72rem/1.3 Inter,sans-serif; letter-spacing:.07em; text-align:left; text-transform:uppercase; }
-    .m8-chart td { padding:8px 12px; border-top:1px solid #e2e8f0; color:#334155; }
-    .m8-chart td:first-child { color:#183153; font:700 .86rem/1.3 "JetBrains Mono",monospace; }
-    .m8-chart td:last-child { text-transform:capitalize; }
-    .m8-question { margin-top:16px; border-left:4px solid #d39b2a; padding:14px 16px; background:#fff8e6; }
-    .m8-question p { margin:0 0 10px; font-weight:700; }
-    .m8-choices { display:flex; flex-wrap:wrap; gap:8px; }
-    .m8-choice { min-width:88px; padding:10px 14px; }
-    .m8-choice:disabled { cursor:default; opacity:.7; }
-    .m8-choice.is-right { background:#28864f; opacity:1; }
-    .m8-feedback { min-height:20px; margin:9px 0 0; color:#9a3412; font:600 .86rem/1.45 "Open Sans",sans-serif; }
-    .m8-feedback.is-right { color:#166534; }
-    .m8-bounce { animation:m8-bounce 240ms ease; }
-    @keyframes m8-bounce { 35% { transform:translateX(-5px); } 70% { transform:translateX(5px); } }
     .m8-solve-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
     .m8-equation { margin:10px 0 14px; border-radius:8px; padding:12px; background:#f4f7fb; color:#183153; font:700 .9rem/1.55 "JetBrains Mono",monospace; }
     .m8-answer-row { display:grid; grid-template-columns:minmax(0,1fr) 86px; gap:8px; }
     .m8-input { box-sizing:border-box; width:100%; min-height:42px; border:1px solid #94a3b8; border-radius:7px; padding:9px 11px; background:#fff; color:#172033; font:700 .95rem/1.2 "JetBrains Mono",monospace; text-align:right; }
     .m8-input:focus { outline:3px solid rgba(40,109,192,.2); border-color:#286dc0; }
     .m8-input:disabled { border-color:#79ad8b; background:#f0fdf4; color:#166534; opacity:1; }
-    .m8-check { min-height:42px; padding:9px 11px; }
+    .m8-check { min-height:42px; border:0; border-radius:7px; padding:9px 11px; background:#286dc0; color:#fff; cursor:pointer; font:800 .86rem/1 Inter,sans-serif; }
     .m8-check:disabled { background:#28864f; cursor:default; }
+    .m8-feedback { min-height:20px; margin:9px 0 0; color:#9a3412; font:600 .86rem/1.45 "Open Sans",sans-serif; }
+    .m8-feedback.is-right { color:#166534; }
     .m8-close { margin-top:16px; }
     .m8-glossary-dismiss { border:0; padding:2px 7px; background:transparent; color:inherit; cursor:pointer; font-size:1.7rem; line-height:1; }
-    @media (max-width:820px) {
-      .m8-diagram, .m8-post-layout { grid-template-columns:1fr; }
-      .m8-arrow { transform:rotate(90deg); }
-      .m8-term-strip { grid-template-columns:repeat(2,minmax(0,1fr)); }
-    }
     @media (max-width:620px) {
-      .m8-t-pair, .m8-ledger-grid, .m8-gallery, .m8-solve-grid { grid-template-columns:1fr; }
+      .m8-gallery, .m8-solve-grid { grid-template-columns:1fr; }
       .m8-card { padding:14px; }
     }
     @media (prefers-color-scheme:dark) {
       .m8-progress { color:#aebbd0; }
-      .m8-card, .m8-entry, .m8-chart { border-color:#4b5567; background:#26242e; }
+      .m8-card { border-color:#4b5567; background:#26242e; }
       .m8-references { border-color:#56657a; background:#211f28; }
       .m8-references h3, .m8-reference-list strong { color:#e7eef9; }
       .m8-reference-list li { color:#d7deea; }
-      .m8-card h2, .m8-card h3, .m8-term strong, .m8-equation { color:#e7eef9; }
-      .m8-card p, .m8-term, .m8-chart td { color:#d7deea; }
-      .m8-entry { background:#211f28; }
-      .m8-entry.is-posted { border-color:#4e966a; background:#183425; }
-      .m8-empty { border-color:#657084; color:#aebbd0; }
-      .m8-chart th { background:#302e39; color:#aebbd0; }
-      .m8-chart td { border-color:#4b5567; }
-      .m8-chart td:first-child { color:#e7eef9; }
-      .m8-question { background:#443a23; }
+      .m8-card h2, .m8-term strong, .m8-equation { color:#e7eef9; }
+      .m8-card p, .m8-term { color:#d7deea; }
       .m8-input { border-color:#77849a; background:#211f28; color:#e7eef9; }
       .m8-input:disabled { background:#183425; color:#b6f0c8; }
       .m8-equation { background:#302e39; }
@@ -103,15 +60,15 @@
   <div class="prework-wrap">
     <div class="tut-header">
       <div class="tut-header-main">
-        <h1>Posting, the Ledger, and the Chart of Accounts</h1>
-        <p class="tut-header-sub">Module 8 &middot; ~8 min</p>
+        <h1>The Ledger</h1>
+        <p class="tut-header-sub">Module 8 &middot; ~5 min</p>
       </div>
       <div class="tut-header-actions">
         <button class="icon-btn" title="Glossary" aria-label="Open glossary" onclick="openGlossary()"><span aria-hidden="true">Aa</span></button>
         <button class="icon-btn" title="Reset this phase" aria-label="Reset this phase" onclick="restart()"><span aria-hidden="true">&#8635;</span></button>
       </div>
     </div>
-    <div class="phase-title" id="phaseTitle">Posting, the Ledger, and the Chart of Accounts</div>
+    <div class="phase-title" id="phaseTitle">The Ledger</div>
 
     <div id="beats"></div>
     <div class="m8-stage" id="mainGrid"></div>
@@ -135,23 +92,17 @@
 <script src="shared.js"></script>
 <script>
 var step=0;
-var TOTAL_STEPS=5;
-var postedCount=0;
-var chartComplete=false;
-var chartFeedback='';
+var TOTAL_STEPS=3;
 var solveState={
   toolsdep:{tries:0,correct:false,value:''},
   collections:{tries:0,correct:false,value:''}
 };
 var data=window.M8_DATA;
-var postIds=['dana','tool','draw'];
 
 function nav(url){ window.location.href=url; }
-function money(value){ return Number(value).toLocaleString('en-US'); }
 function escapeHtml(value){ return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function entryById(id){ return data.seasonEntries.filter(function(entry){ return entry.id===id; })[0]; }
 function solveById(id){ return data.solveForX.filter(function(item){ return item.id===id; })[0]; }
-function allEntries(){ return [data.formationEntry].concat(data.seasonEntries,data.adjustingEntries); }
 function formById(id){ return data.tAccountForms.forms.filter(function(form){ return form.id===id; })[0]; }
 function entryForRef(ref){
   var id=data.tAccountForms.refOrder[Number(ref)-1];
@@ -186,13 +137,9 @@ function render(){
 function renderBeats(){
   var text='';
   if(step===0){
-    text='<p>In Module 3, you kept one chronological list on the Reasons tab. Then you copied each row into the piles it affected. You have posted before.</p><p>The profession calls the list the <strong>general journal</strong>. The copying is <strong>posting</strong>. Each pile is a ledger <strong>account</strong>. The book containing all those accounts is the <strong>general ledger</strong>. Nothing about the work changed. You are learning its notation.</p>';
+    text='<p>The piles you kept are <strong>ledger accounts</strong>; a T-account is one account\'s picture, and the book of all the accounts is the <strong>general ledger</strong>. A ledger was once a physically different book from a journal. In modern systems there is not much need for the distinction, because the journal can just be sorted in different ways &mdash; and that is all a ledger is.</p>';
   } else if(step===1){
-    text='<p>Now post three familiar entries. Read the journal entry, then send its two amounts to the named ledger accounts. Each click makes the ledger grow.</p><p>The <strong>ref</strong> column is the posting trail — each number points back to the journal entry the amount came from.</p>';
-  } else if(step===2){
-    text='<p>After the whole season is posted, the general ledger is a book of account histories. Here are two full pages from that book. Each ending balance comes from the entries in <code>M8_DATA</code>.</p><p>The headers connect to the tab colors and the not-closed test: the permanent account closes the season with a dated balance; the temporary account is shown after closing — emptied to $-, its detail still on display (refs 6, 7, then the closing ref 15).</p>';
-  } else if(step===3){
-    text='<p>The course named a pile when you first needed it. The profession usually names and numbers the piles <strong>before the season</strong> starts. That pre-declared namespace is the <strong>chart of accounts</strong>. Nothing deeper is hiding in it.</p>';
+    text='<p>With the whole season in the accounts, the general ledger is a book of account histories. Cash and Parts Used are two full pages from that book. Each ending balance comes from the entries in <code>M8_DATA</code>, and each reference number points back to the journal entry it came from.</p><p>The headers connect to the tab colors and the not-closed test: the permanent account closes the season with a dated balance; the temporary account is shown after closing &mdash; emptied to $-, with its detail still on display (refs 6, 7, then the closing ref 15).</p>';
   } else {
     text='<p>You already solved these as walks in Module 7. Now read the same inferences in T geometry. Type the missing number that makes each account tie.</p>';
   }
@@ -203,84 +150,12 @@ function renderMain(){
   var el=document.getElementById('mainGrid');
   el.innerHTML='';
   if(step===0) renderRecognition(el);
-  else if(step===1) renderPosting(el);
-  else if(step===2) renderLedgerBook(el);
-  else if(step===3) renderChart(el);
+  else if(step===1) renderLedgerBook(el);
   else renderSolves(el);
 }
 
 function renderRecognition(el){
-  var dana=entryById('dana');
-  el.innerHTML='<section class="m8-card"><div class="m8-diagram"><div id="recognitionJournal"></div><div class="m8-arrow" aria-hidden="true">posting &rarr;</div><div class="m8-t-pair"><div id="recognitionT0"></div><div id="recognitionT1"></div></div></div><div class="m8-term-strip"><div class="m8-term"><strong>General journal</strong>the chronological list</div><div class="m8-term"><strong>Posting</strong>copying into piles</div><div class="m8-term"><strong>Ledger account</strong>one pile, pictured as a T</div><div class="m8-term"><strong>General ledger</strong>the book of all the accounts</div></div></section>';
-  ToolkitLab.renderJournalEntry(document.getElementById('recognitionJournal'),dana,{mode:'formatted',totals:true});
-  dana.lines.forEach(function(line,index){
-    ToolkitLab.renderTAccount(document.getElementById('recognitionT'+index),{name:line.acct,rows:[{side:line.side==='cr'?'credit':'debit',label:dana.id,amt:line.amt}]},{showBalance:false});
-  });
-}
-
-function renderPosting(el){
-  el.innerHTML='<div class="m8-post-layout"><div class="m8-entry-list" id="entryList"></div><section class="m8-card m8-ledger-panel" aria-labelledby="liveLedgerTitle"><h2 id="liveLedgerTitle">Ledger after '+postedCount+' of '+postIds.length+' entries</h2><p>The ref column is the posting trail: each number points back to the journal entry the amount came from.</p><div id="liveLedger"></div></section></div>';
-  var list=document.getElementById('entryList');
-  postIds.forEach(function(id,index){
-    var state=index<postedCount?'is-posted':(index===postedCount?'is-current':'');
-    var item=document.createElement('section');
-    item.setAttribute('class','m8-entry '+state);
-    item.innerHTML='<p class="m8-entry-status">'+(index<postedCount?'Posted':(index===postedCount?'Ready to post':'Waiting'))+'</p><div id="postJournal'+index+'"></div><button class="m8-post-btn" data-post-index="'+index+'"'+(index!==postedCount?' disabled':'')+'>'+(index<postedCount?'Posted':'Post this entry')+'</button>';
-    list.appendChild(item);
-    ToolkitLab.renderJournalEntry(document.getElementById('postJournal'+index),entryById(id),{mode:'formatted',totals:true});
-  });
-  document.querySelectorAll('[data-post-index]').forEach(function(button){
-    button.addEventListener('click',function(){ postEntry(Number(this.getAttribute('data-post-index'))); });
-  });
-  renderLiveLedger();
-}
-
-function postEntry(index){
-  if(index!==postedCount||postedCount>=postIds.length) return;
-  postedCount+=1;
-  render();
-}
-
-function renderLiveLedger(){
-  var target=document.getElementById('liveLedger');
-  if(!postedCount){ target.innerHTML='<div class="m8-empty">No postings yet. The first journal entry is ready.</div>'; return; }
-  var chosen=postIds.slice(0,postedCount).map(entryById);
-  var accountNames=[];
-  chosen.forEach(function(entry){ entry.lines.forEach(function(line){ if(accountNames.indexOf(line.acct)<0) accountNames.push(line.acct); }); });
-  var otherNames=accountNames.filter(function(name){ return name!=='Cash'; });
-  target.innerHTML='<div class="m8-live-ledger"><div id="liveCashForm"></div><div class="m8-ledger-grid">'+otherNames.map(function(name,index){ return '<div id="liveT'+index+'"></div>'; }).join('')+'</div></div><div id="liveReferences"></div>';
-  var source=formById('cashForm');
-  var postedRefs=postIds.slice(0,postedCount).map(function(id){ return data.tAccountForms.refOrder.indexOf(id)+1; });
-  var visibleRows=source.rows.filter(function(row){ return postedRefs.indexOf(row.ref)>=0; });
-  var balance=source.beg.side==='debit'?source.beg.amt:-source.beg.amt;
-  visibleRows.forEach(function(row){ balance+=row.side==='debit'?row.amt:-row.amt; });
-  var liveForm=postedCount===postIds.length?source:{
-    classification:source.classification,
-    accountType:source.accountType,
-    name:source.name,
-    beg:source.beg,
-    rows:visibleRows,
-    end:{date:source.end.date,amt:Math.abs(balance),side:balance<0?'credit':'debit'}
-  };
-  renderLedgerForm(document.getElementById('liveCashForm'),liveForm);
-  renderReferencesPanel(document.getElementById('liveReferences'),visibleRows);
-  otherNames.forEach(function(name,index){
-    var rows=[];
-    chosen.forEach(function(entry){ entry.lines.forEach(function(line){ if(line.acct===name) rows.push({side:line.side==='cr'?'credit':'debit',label:entry.id,amt:line.amt}); }); });
-    ToolkitLab.renderTAccount(document.getElementById('liveT'+index),{name:name,rows:rows},{showBalance:true});
-  });
-}
-
-function tFromAll(name){
-  var beg=null,rows=[];
-  allEntries().forEach(function(entry,index){
-    entry.lines.forEach(function(line){
-      if(line.acct!==name) return;
-      var item={side:line.side==='cr'?'credit':'debit',label:entry.id,amt:line.amt};
-      if(index===0) beg={side:item.side,amt:item.amt}; else rows.push(item);
-    });
-  });
-  return {name:name,beg:beg,rows:rows};
+  el.innerHTML='<section class="m8-card"><div class="m8-term-strip"><div class="m8-term"><strong>Ledger account</strong>one account\'s history, pictured as a T</div><div class="m8-term"><strong>General ledger</strong>the book of all the accounts</div></div></section>';
 }
 
 function renderLedgerBook(el){
@@ -288,34 +163,6 @@ function renderLedgerBook(el){
   el.innerHTML='<div class="m8-gallery">'+forms.map(function(form,index){ return '<section class="m8-card"><div id="galleryForm'+index+'"></div></section>'; }).join('')+'</div><div id="galleryReferences"></div>';
   forms.forEach(function(form,index){ renderLedgerForm(document.getElementById('galleryForm'+index),form); });
   renderReferencesPanel(document.getElementById('galleryReferences'),forms.reduce(function(rows,form){ return rows.concat(form.rows); },[]));
-}
-
-function chartRanges(){
-  var seen={};
-  data.chartOfAccounts.forEach(function(account){ seen[Math.floor(account.num/100)*100]=true; });
-  return Object.keys(seen).map(Number).sort(function(a,b){ return a-b; });
-}
-function expenseRange(){
-  var expense=data.chartOfAccounts.filter(function(account){ return account.kind==='expense'; })[0];
-  return Math.floor(expense.num/100)*100;
-}
-function renderChart(el){
-  el.innerHTML='<section class="m8-card"><h2>The shop\'s chart of accounts</h2><div class="m8-chart-wrap"><table class="m8-chart"><thead><tr><th>Number</th><th>Account</th><th>Group</th><th>Normal side</th></tr></thead><tbody>'+data.chartOfAccounts.map(function(account){ return '<tr><td>'+escapeHtml(account.num)+'</td><td>'+escapeHtml(account.name)+'</td><td>'+escapeHtml(account.kind)+'</td><td>'+escapeHtml(account.normal)+'</td></tr>'; }).join('')+'</tbody></table></div><div class="m8-question"><p>Which number range would a new expense account get?</p><div class="m8-choices">'+chartRanges().map(function(range){ return '<button class="m8-choice'+(chartComplete&&range===expenseRange()?' is-right':'')+'" data-range="'+range+'"'+(chartComplete?' disabled':'')+'>'+range+'s</button>'; }).join('')+'</div><div class="m8-feedback'+(chartComplete?' is-right':'')+'" id="chartFeedback" aria-live="polite">'+chartFeedback+'</div></div></section>';
-  document.querySelectorAll('[data-range]').forEach(function(button){ button.addEventListener('click',function(){ chooseRange(this,Number(this.getAttribute('data-range'))); }); });
-}
-function chooseRange(button,range){
-  if(chartComplete) return;
-  if(range===expenseRange()){
-    chartComplete=true;
-    chartFeedback='Correct. The existing expense accounts establish that range.';
-    render();
-  } else {
-    chartFeedback='That range already belongs to another group. Read the numbered expense rows.';
-    button.classList.remove('m8-bounce');
-    void button.offsetWidth;
-    button.classList.add('m8-bounce');
-    document.getElementById('chartFeedback').textContent=chartFeedback;
-  }
 }
 
 function renderSolves(el){
@@ -380,14 +227,12 @@ function solvesComplete(){ return solveState.toolsdep.correct&&solveState.collec
 
 function renderTail(){
   var html='';
-  if(step===2) html='<div class="insight-box"><p>A balance sheet is the permanent ledger accounts read off at a date.</p></div>';
-  if(step===4&&solvesComplete()) html='<div class="insight-box m8-close"><p>This is what T-accounts are for in analysis: never bookkeeping, always the missing number.</p></div>';
+  if(step===1) html='<div class="insight-box"><p>A balance sheet is the permanent ledger accounts read off at a date.</p></div>';
+  if(step===2&&solvesComplete()) html='<div class="insight-box m8-close"><p>This is what T-accounts are for in analysis: never bookkeeping, always the missing number.</p></div>';
   document.getElementById('tail').innerHTML=html;
 }
 function stepComplete(){
-  if(step===1) return postedCount===postIds.length;
-  if(step===3) return chartComplete;
-  if(step===4) return solvesComplete();
+  if(step===2) return solvesComplete();
   return true;
 }
 function renderControls(){
@@ -403,11 +248,9 @@ function advance(){ if(!stepComplete()) return; step=Math.min(step+1,TOTAL_STEPS
 function back(){ step=Math.max(step-1,0); render(); window.scrollTo(0,0); }
 
 var glossaryTerms=[
-  {term:'General journal',def:'The chronological list of entries. You knew it as the Reasons tab.'},
-  {term:'Posting',def:'Copying each entry amount into the ledger accounts it affects.'},
-  {term:'Ledger account',def:'One account\'s history. A T-account is its picture.'},
+  {term:'Ledger account',def:'One account\'s history.'},
   {term:'General ledger',def:'The collection of all the ledger accounts.'},
-  {term:'Chart of accounts',def:'The numbered list of accounts declared before the season starts.'},
+  {term:'T-account',def:'A picture of one ledger account, with debits on the left and credits on the right.'},
   {term:'Normal side',def:'The debit or credit side on which an account ordinarily carries its balance.'}
 ];
 function openGlossary(){
@@ -417,18 +260,12 @@ function openGlossary(){
 function dismissGlossary(){ document.getElementById('glossaryOverlay').classList.remove('open'); }
 function restart(){
   step=0;
-  postedCount=0;
-  chartComplete=false;
-  chartFeedback='';
   Object.keys(solveState).forEach(function(id){ solveState[id].tries=0; solveState[id].correct=false; solveState[id].value=''; });
   render();
   window.scrollTo(0,0);
 }
 document.addEventListener('keydown',function(event){ if(event.key==='Escape') dismissGlossary(); });
 window.devFill=function(){
-  postedCount=postIds.length;
-  chartComplete=true;
-  chartFeedback='Correct. The existing expense accounts establish that range.';
   Object.keys(solveState).forEach(function(id){ solveState[id].correct=true; solveState[id].value=String(solveById(id).answer); });
   step=TOTAL_STEPS-1;
   render();

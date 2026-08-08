@@ -47,14 +47,14 @@
         <p class="m8-kicker">What you earned</p>
         <div class="section-card">
           <h2 id="m8-sides-title">Signs became sides</h2>
-          <p>The sign problem makes one symbol do too much: a plus or minus can describe either an amount or a direction of change. The profession trades signs for sides. Debit means left; credit means right. Each account has a home side, and that home side carries the direction.</p>
+          <p>The sign problem makes one symbol do too much: a plus or minus can describe either an amount or a direction of change. The accountant trades signs for sides. Debit means left; credit means right. Each account has a home side, and that home side carries the direction.</p>
         </div>
       </section>
 
       <section class="m8-section" aria-labelledby="m8-entry-title">
         <p class="m8-kicker">The complete event</p>
         <div class="section-card">
-          <h2 id="m8-entry-title">The journal entry is the profession&rsquo;s sentence</h2>
+          <h2 id="m8-entry-title">The journal entry is the accountant&rsquo;s sentence</h2>
           <p>A journal entry holds a complex event whole: every account affected, every side used, and every amount that moves. It brings its own self-check&mdash;debits equal credits&mdash;and its own discipline: a plug is something to explain, not a substitute for reasoning through the event.</p>
         </div>
       </section>
@@ -70,8 +70,8 @@
       <section class="m8-section" aria-labelledby="m8-machinery-title">
         <p class="m8-kicker">Underneath the statements</p>
         <div class="section-card">
-          <h2 id="m8-machinery-title">The machinery now has names</h2>
-          <p>Posting moves each part of an entry into the account it changes. The general ledger gathers those accounts into the entity&rsquo;s complete account-level record. The chart of accounts organizes the names the ledger uses. Together, they are the machinery underneath the finished statements.</p>
+          <h2 id="m8-machinery-title">Choose the view that fits the question</h2>
+          <p>The sign problem is why sides beat signs: debit means left, and credit means right. Journal entries give events spanning accounts a clear grammar. A T-account pictures one account and is the go-to tool for analyzing its knowns and unknowns. The general ledger is the book of all the accounts. One account &rarr; the T-account; events spanning accounts &rarr; journal-entry notation.</p>
         </div>
       </section>
 
@@ -102,17 +102,18 @@
   </div>
 </div>
 
+<script src="m8-data.js"></script>
+<script src="toolkit-lab.js"></script>
 <script src="shared.js"></script>
 <script>
+var data=window.M8_DATA;
 var glossaryTerms=[
   { term:'Debit', def:'The left side of an account or journal entry.' },
   { term:'Credit', def:'The right side of an account or journal entry.' },
   { term:'Home side', def:'The side on which increases to an account are recorded.' },
-  { term:'Journal entry', def:'The profession&rsquo;s formatted record of one event and all of its account effects.' },
+  { term:'Journal entry', def:'The accountant&rsquo;s formatted record of one event and all of its account effects.' },
   { term:'T-account', def:'A picture of one ledger account, with its left and right sides shown separately.' },
-  { term:'Posting', def:'Moving each amount from a journal entry into the account it changes.' },
-  { term:'General ledger', def:'The complete collection of an entity&rsquo;s accounts and their activity.' },
-  { term:'Chart of accounts', def:'The organized list of account names an entity uses.' }
+  { term:'General ledger', def:'The complete collection of an entity&rsquo;s accounts and their activity.' }
 ];
 
 function openGlossary(){

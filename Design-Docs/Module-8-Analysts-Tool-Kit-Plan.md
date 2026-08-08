@@ -224,6 +224,110 @@ Rulings 25–27 (2026-08-03, Rick's click-through, round 3 — THE SPLIT):
     Content authority is UNCHANGED: v2 remains the source of truth; site copies are
     conversions of graph-teach-wip @ 3ea803c and re-migrate after any M9 rework.
 
+Rulings 32–37 (2026-08-07, Rick's click-through, round 4 — M8 only):
+
+32. **81-1 wording + module scope trim.** "Why the words matter" must not
+    say "you will never keep books" — say "even if you never keep books,
+    it helps to know the accountants' words for things."
+    **Posting and the Chart of Accounts are OUT of Module 8** (supersedes
+    ruling 4's "chart of accounts is in"; the no-trial-balance half of
+    ruling 4 stands). Recorded notes: there could be a whole tutorial on
+    the chart of accounts in modern systems; Maria's insurance form (12-2)
+    was really just a chart of accounts for her insurance accounting —
+    the natural hook for that future tutorial. Consequence flagged for the
+    M9 click-through: the 96-1 Rosetta rows for Posting / Chart of
+    accounts would be those terms' only appearance — Rick to rule there.
+33. **M8 vocabulary.** Never "claim" — say "liability" (module-wide; a
+    real document's own line wording is exempt where genuinely quoted,
+    e.g. the UBS allocation line label in m8-data.js — same carve-out
+    logic as Anna's plural OA). Never "the profession" / "the
+    profession's" — say "accountant" / "accountant's". The ledger
+    account is named **"Depreciation Expense"** (m8-data.js rename;
+    ripples into M9's adjusting/closing renders — accepted).
+34. **82-1 rework** (amends ruling 20). Reading 2 opens with the identity
+    beat: the course's difference A − L = Member's Capital, moved to one
+    side (A − L − MC = 0), then the signed system's move — each minus is
+    welded into the number it guards, liabilities and capital are STORED
+    negative, and the identity becomes pure addition: everything sums to
+    zero (June 1: 4,710 − 2,250 − 2,460 = 0). The double-duty collision
+    then falls out as a necessity: the sign already has a full-time job
+    marking kind, so direction of change reads backwards for the whole
+    right side. The diagnosis gains the equity twin: customer pays $120
+    for a repair → Cash +120, capital side −120 — the shop got richer,
+    the sign says down (seeds 82-2's UBS punchline). "The test" card is
+    replaced (it narrated the payoff while its table showed the claim's
+    birth). The cut toggle view of ruling 20 stays cut. Reading 3's
+    home-side list shows "Depreciation Expense". Reading 4's two panels
+    record the SAME event — the payoff only: signed card reads card
+    liability +2,030 / Cash −2,030 (sums to zero) beside the journal
+    entry. "The statements agree" heading replaced by the plain fact:
+    financial statements show both liabilities and contributed equities
+    as positive numbers, not negative ones.
+35. **82-2 rework** (amends rulings 26 and 30(a)). The grammar is
+    introduced right off the top — the page formalizes specimens the
+    student has already seen, it does not feign novelty. The formation
+    entry on view 1 renders debits and credits only, no narration line.
+    The "which side did the growth in Loan Payable land on" question is
+    cut (stale after 82-1's home-side drill). The land gain/loss view:
+    NOT one box with a toggle — the gain case and the loss case run in
+    order and BOTH stay visible on the page (supersedes 30(a)'s single
+    flipping row); bottom line stated: in +/− notation a gain carries a
+    − and a loss carries a + — an invitation to confusion. Rick's
+    framing lands here: people complain they don't know what "debit" and
+    "credit" mean — that is a good thing; it keeps the mind open about
+    effects (was an asset reduced, a liability increased, an equity
+    increased?) while the number's only role stays magnitude. The
+    identity-explains-the-signs walk (26(c)) and the two-debit
+    receivable variant are BOTH CUT (the gain/loss entries already show
+    multi-line structure; the identity now lives on 82-1 R2) —
+    TOTAL_STEPS 6 → 4; gain/loss opens straight onto UBS. The UBS beat
+    carries the module's big takeaway: debit/credit notation is useful
+    when we ANALYZE transactions — the notation facilitates analysis.
+36. **83-1 rework.** The bank statement is the BANK'S RECORDS — their
+    view, not yours; the word "ledger" does not appear (it has not been
+    introduced; it arrives on 83-2). The normal-balance reading (was 4
+    of 5) is cut as redundant with 82-1's home-side drill; its
+    replacement teaches the T-account's USE — visualizing knowns and
+    unknowns: anyone who can see the beginning and ending balance sheets
+    knows the beginning and ending balances of the accounts shown; find
+    either the inflows or the outflows and you can calculate the other.
+    The Module 1 bike-parts walk is the worked example (began at zero,
+    purchases known, parts left known → the outflow was CALCULATED).
+    Ruling 12's either-balance beat survives relocated as one sentence
+    (Generated: a winning season leaves it credit, a losing one debit).
+    All posting material removed (module-wide; T-form ref columns get a
+    posting-free gloss — "each number points back to the journal entry
+    it came from"). The page closes on the bottom line: analyzing ONE
+    account, the T-account is the go-to tool; analyzing transactions and
+    events that span accounts, journal-entry notation is your friend.
+37. **83-2 becomes "The Ledger"** (title; filename unchanged for now —
+    rename decision deferred to graduation from Under Construction).
+    Slims to three views: (0) recognition in one breath — the piles were
+    ledger accounts, the book of all of them is the general ledger, with
+    the modern-systems note: a ledger was a physically different book
+    from a journal; modern systems barely need the distinction, because
+    a ledger is just the journal sorted a different way; (1) the two
+    ruling-27 T-account ledger pages; (2) the solve-for-the-missing-
+    number capstone. Posting drill and chart-of-accounts views deleted
+    per ruling 32.
+
+38. **83-1 mirror beat (Rick, 2026-08-08):** since your account is the
+    reverse of the bank's — their liability account is your asset — to get
+    YOUR T-account you reverse the debits and credits. Lands on the copy
+    view (view 2) as the payoff after the bank's T is built: a second,
+    mirror-image T of the same money in your records (beginning 2,500
+    DEBIT, deposits debit, withdrawals credit, ending 4,074 debit), which
+    completes the "looks backwards" reveal and reinforces Cash's debit
+    home side from 82-1.
+
+39. **83-1 Parts T corrections (Rick, 2026-08-08):** on the knowns/unknowns
+    view, the Parts T begins at its opening balance of $200 — no
+    "Purchased at formation" line (the walk is 200 + 1,200 − X = 200);
+    the solved unknown renders as a literal **X** inside the T where
+    Parts Used's amount goes; and the T uses the proper ruling-27 form
+    (classification header, double ref columns, dated opening and ending
+    balance rows), like every other T course-wide.
+
 ## The Rosetta Stone (the module's spine and its closing artifact)
 
 | The course's word/act | The standard term |

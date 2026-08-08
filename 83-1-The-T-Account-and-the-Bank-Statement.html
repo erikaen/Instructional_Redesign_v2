@@ -7,145 +7,46 @@
   <title>The T-Account and the Bank Statement</title>
   <link rel="stylesheet" href="shared.css">
   <style>
-    .m8-stage {
-      margin-top: 16px;
-      min-width: 0;
-    }
-    .m8-paper {
-      max-width: 880px;
-      margin: 0 auto;
-      padding: 18px;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      background: #fff;
-      box-shadow: 0 7px 20px rgba(32,55,72,.08);
-    }
-    .m8-paper h2 {
-      margin: 0 0 12px;
-      color: #16324a;
-      font: 800 1rem/1.35 Inter, sans-serif;
-    }
-    .m8-progress {
-      margin: 8px 0 0;
-      color: #64748b;
-      font: 700 .72rem/1.3 Inter, sans-serif;
-      letter-spacing: .08em;
-      text-align: center;
-      text-transform: uppercase;
-    }
-    .m8-question {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 18px;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      background: #f8fafc;
-    }
-    .m8-question h2 { margin: 0 0 12px; color: #16324a; font: 800 1rem/1.35 Inter,sans-serif; }
-    .m8-choices { display: grid; gap: 10px; }
-    .m8-choice,
-    .m8-side-button {
-      min-height: 44px;
-      border: 1px solid #94a3b8;
-      border-radius: 8px;
-      padding: 10px 13px;
-      background: #fff;
-      color: #172033;
-      cursor: pointer;
-      font: 700 .92rem/1.3 Inter,sans-serif;
-      text-align: left;
-    }
-    .m8-choice:hover,
-    .m8-side-button:hover { border-color: #286dc0; }
-    .m8-choice:focus-visible,
-    .m8-side-button:focus-visible,
-    .m8-money-input:focus-visible,
-    .m8-check:focus-visible { outline: 3px solid rgba(40,109,192,.24); outline-offset: 2px; }
-    .m8-choice.is-correct,
-    .m8-side-button.is-correct { border-color: #28864f; background: #ecfdf3; color: #166534; }
-    .m8-chip {
-      min-height: 22px;
-      margin: 10px 0 0;
-      color: #a63b20;
-      font: 700 .86rem/1.4 "Open Sans",sans-serif;
-    }
-    .m8-chip.is-good { color: #166534; }
-    .m8-chip.bounce { animation: m8-bounce .28s ease; }
-    @keyframes m8-bounce { 0%,100% { transform: translateX(0); } 35% { transform: translateX(-7px); } 70% { transform: translateX(5px); } }
-    .m8-normal-grid { display: grid; gap: 12px; }
-    .m8-account-row {
-      display: grid;
-      grid-template-columns: minmax(160px,1fr) 110px 110px;
-      gap: 8px;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid #e2e8f0;
-    }
-    .m8-account-row:last-child { border-bottom: 0; }
-    .m8-account-name { font: 700 .94rem/1.35 Inter,sans-serif; }
-    .m8-account-kind { display:block; margin-top:2px; color:#64748b; font:600 .78rem/1.3 "Open Sans",sans-serif; text-transform:capitalize; }
-    .m8-side-button { text-align:center; }
-    .m8-solve {
-      display: grid;
-      grid-template-columns: minmax(0,1fr) 150px 90px;
-      gap: 10px;
-      align-items: center;
-      max-width: 720px;
-      margin: 16px auto 0;
-    }
-    .m8-solve label { font: 700 .94rem/1.4 Inter,sans-serif; }
-    .m8-money-input {
-      box-sizing: border-box;
-      width: 100%;
-      min-height: 42px;
-      border: 1px solid #94a3b8;
-      border-radius: 7px;
-      padding: 8px 10px;
-      background: #fff;
-      color: #172033;
-      font: 700 .95rem/1.2 "JetBrains Mono",monospace;
-      text-align: right;
-    }
-    .m8-check {
-      min-height: 42px;
-      border: 0;
-      border-radius: 7px;
-      padding: 8px 12px;
-      background: #286dc0;
-      color: #fff;
-      cursor: pointer;
-      font: 800 .86rem/1 Inter,sans-serif;
-    }
-    .m8-solve-feedback { grid-column: 2 / 4; margin: 0; min-height: 22px; }
-    .m8-callout {
-      max-width: 760px;
-      margin: 14px auto 0;
-      padding: 12px 14px;
-      border-left: 4px solid #286dc0;
-      background: #eef5ff;
-      color: #16324a;
-      font: 600 .9rem/1.5 "Open Sans",sans-serif;
-    }
+    .m8-stage { margin-top:16px; min-width:0; }
+    .m8-paper { max-width:880px; margin:0 auto; padding:18px; border:1px solid #cbd5e1; border-radius:10px; background:#fff; box-shadow:0 7px 20px rgba(32,55,72,.08); }
+    .m8-paper h2 { margin:0 0 12px; color:#16324a; font:800 1rem/1.35 Inter,sans-serif; }
+    .m8-progress { margin:8px 0 0; color:#64748b; font:700 .72rem/1.3 Inter,sans-serif; letter-spacing:.08em; text-align:center; text-transform:uppercase; }
+    .m8-question { max-width:760px; margin:0 auto; padding:18px; border:1px solid #cbd5e1; border-radius:10px; background:#f8fafc; }
+    .m8-question h2 { margin:0 0 12px; color:#16324a; font:800 1rem/1.35 Inter,sans-serif; }
+    .m8-choices { display:grid; gap:10px; }
+    .m8-choice { min-height:44px; border:1px solid #94a3b8; border-radius:8px; padding:10px 13px; background:#fff; color:#172033; cursor:pointer; font:700 .92rem/1.3 Inter,sans-serif; text-align:left; }
+    .m8-choice:hover { border-color:#286dc0; }
+    .m8-choice:focus-visible, .m8-money-input:focus-visible, .m8-check:focus-visible { outline:3px solid rgba(40,109,192,.24); outline-offset:2px; }
+    .m8-choice.is-correct { border-color:#28864f; background:#ecfdf3; color:#166534; }
+    .m8-chip { min-height:22px; margin:10px 0 0; color:#a63b20; font:700 .86rem/1.4 "Open Sans",sans-serif; }
+    .m8-chip.is-good { color:#166534; }
+    .m8-chip.bounce { animation:m8-bounce .28s ease; }
+    @keyframes m8-bounce { 0%,100% { transform:translateX(0); } 35% { transform:translateX(-7px); } 70% { transform:translateX(5px); } }
+    .m8-solve { display:grid; grid-template-columns:minmax(0,1fr) 150px 90px; gap:10px; align-items:center; max-width:720px; margin:16px auto 0; }
+    .m8-solve label { font:700 .94rem/1.4 Inter,sans-serif; }
+    .m8-money-input { box-sizing:border-box; width:100%; min-height:42px; border:1px solid #94a3b8; border-radius:7px; padding:8px 10px; background:#fff; color:#172033; font:700 .95rem/1.2 "JetBrains Mono",monospace; text-align:right; }
+    .m8-check { min-height:42px; border:0; border-radius:7px; padding:8px 12px; background:#286dc0; color:#fff; cursor:pointer; font:800 .86rem/1 Inter,sans-serif; }
+    .m8-solve-feedback { grid-column:2 / 4; margin:0; min-height:22px; }
+    .m8-callout { max-width:760px; margin:14px auto 0; padding:12px 14px; border-left:4px solid #286dc0; background:#eef5ff; color:#16324a; font:600 .9rem/1.5 "Open Sans",sans-serif; }
+    .m8-equation { max-width:720px; margin:14px auto 0; padding:11px 14px; border:1px solid #cbd5e1; border-radius:8px; color:#16324a; font:800 .95rem/1.4 "JetBrains Mono",monospace; text-align:center; }
     .m8-glossary-dismiss { border:0; padding:2px 7px; background:transparent; color:inherit; cursor:pointer; font-size:1.7rem; line-height:1; }
-    @media (max-width: 620px) {
-      .m8-paper { padding: 12px; }
-      .m8-account-row { grid-template-columns: 1fr 1fr; }
-      .m8-account-name { grid-column: 1 / 3; }
-      .m8-solve { grid-template-columns: 1fr 86px; }
-      .m8-solve label { grid-column: 1 / 3; }
-      .m8-solve-feedback { grid-column: 1 / 3; }
+    @media (max-width:620px) {
+      .m8-paper { padding:12px; }
+      .m8-solve { grid-template-columns:1fr 86px; }
+      .m8-solve label { grid-column:1 / 3; }
+      .m8-solve-feedback { grid-column:1 / 3; }
     }
-    @media (prefers-color-scheme: dark) {
+    @media (prefers-color-scheme:dark) {
       .m8-paper { border-color:#4b5567; background:#26242e; box-shadow:0 7px 20px rgba(0,0,0,.28); }
       .m8-paper h2, .m8-question h2 { color:#e7eef9; }
-      .m8-progress, .m8-account-kind { color:#aebbd0; }
+      .m8-progress { color:#aebbd0; }
       .m8-question { border-color:#4b5567; background:#26242e; }
-      .m8-choice, .m8-side-button, .m8-money-input { border-color:#77849a; background:#211f28; color:#e7eef9; }
-      .m8-choice.is-correct, .m8-side-button.is-correct { border-color:#4e966a; background:#183425; color:#b6f0c8; }
-      .m8-account-row { border-color:#4b5567; }
+      .m8-choice, .m8-money-input { border-color:#77849a; background:#211f28; color:#e7eef9; }
+      .m8-choice.is-correct { border-color:#4e966a; background:#183425; color:#b6f0c8; }
       .m8-chip { color:#ffb19d; }
       .m8-chip.is-good { color:#b6f0c8; }
       .m8-callout { background:#202f46; color:#dce9fb; }
+      .m8-equation { border-color:#4b5567; color:#dce9fb; }
     }
   </style>
 </head>
@@ -197,16 +98,33 @@ var bankTForm={
   name:"The bank's liability account — your name",
   beg:{date:'05/01/2026',amt:2500,side:'credit'},
   rows:bank.rows.map(function(row){
-    return {
-      side:row.d?'credit':'debit',
-      amt:row.d||row.w,
-      label:row.desc
-    };
+    return { side:row.d?'credit':'debit', amt:row.d||row.w, label:row.desc };
   }),
   end:{date:'05/31/2026',amt:4074,side:'credit'}
 };
+function reverseSide(side){ return side==='credit'?'debit':'credit'; }
+var yourCashTForm={
+  classification:'Permanent Account',
+  accountType:'Asset',
+  name:'Cash at the bank — your records',
+  beg:{amt:bankTForm.beg.amt,side:reverseSide(bankTForm.beg.side)},
+  rows:bankTForm.rows.map(function(row){
+    return {side:reverseSide(row.side),amt:row.amt};
+  }),
+  end:{amt:bankTForm.end.amt,side:reverseSide(bankTForm.end.side)}
+};
+var partsTForm={
+  classification:'Permanent Account',
+  accountType:'Asset',
+  name:'Parts',
+  beg:{date:'06/01/2026',side:'debit',amt:200},
+  rows:[
+    {side:'debit',amt:1200,label:'Restock purchased'},
+    {side:'credit',amt:0,label:'Parts used — the solved unknown'}
+  ],
+  end:{date:'08/31/2026',side:'debit',amt:200}
+};
 var bankChoiceDone=false;
-var normalAnswers={};
 var solveState={tries:0,correct:false,value:''};
 
 function nav(url){ window.location.href=url; }
@@ -240,10 +158,6 @@ function aggregateBankT(){
   };
 }
 
-function accountByName(name){
-  return data.chartOfAccounts.filter(function(account){ return account.name===name; })[0];
-}
-
 function render(){
   renderBeats(step);
   renderMain(step);
@@ -257,13 +171,13 @@ function renderBeats(currentStep){
   if(currentStep===0){
     text='You have read this document for years. It is the May bank statement from the start of the course: an opening balance, two money columns, and a running balance. On real statements, those two columns often carry the labels Debit and Credit.';
   } else if(currentStep===1){
-    text='This statement is a page from the bank&rsquo;s ledger. It is their liability account with your name on it. Your deposit is money the bank owes you. When money arrives, the bank records a credit because its debt to you grew. The labels only look backwards because you are reading someone else&rsquo;s book.';
+    text='This statement is a page from the BANK&rsquo;S RECORDS. It is the bank&rsquo;s view: their liability account with your name on it. Your deposit is money the bank owes you. When money arrives, the bank records a credit because its debt to you grew. The labels only look backwards because you are reading someone else&rsquo;s records.';
   } else if(currentStep===2){
-    text='Copy each statement row&rsquo;s amount into the correct column of the T: deposits into the credit column and withdrawals into the debit column. The 2,500 beginning balance sits on the credit side, and the 4,074 ending balance is ruled at the bottom on that side. Same rows. Same numbers.';
+    text='First copy each statement row into the bank&rsquo;s T: deposits into the credit column and withdrawals into the debit column. Then read the same money in your T with the sides reversed. Same rows. Same numbers. Two directions.';
   } else if(currentStep===3){
-    text='An account&rsquo;s normal balance tells you which side it usually lives on. Cash is debit. The card&rsquo;s claim is credit. Generated is either: a winning season leaves it credit; a losing season leaves it debit. The T reports the balance wherever the sign puts it.';
+    text='A T-account helps you visualize knowns and unknowns. Anyone who can see the beginning and ending balance sheets knows the beginning and ending balances of the accounts shown. Find either the inflows or the outflows, and you can calculate the other. In the Module 1 bike-parts walk, the pile began with a $200 opening balance, the restock purchased was known, and the parts left were known. The parts used were calculated, not observed.';
   } else {
-    text='An analyst uses a T-account as a solve-for-the-missing-number device: beginning + one side &minus; other side = ending. Know three, get the fourth. Use this statement to find the hidden withdrawals total.';
+    text='Use the same idea on the bank statement: beginning + inflows &minus; outflows = ending. Know three, get the fourth. Find the hidden withdrawals total.';
   }
   document.getElementById('beats').innerHTML='<div class="narrative-block"><p>'+text+'</p></div><p class="m8-progress">Reading '+(currentStep+1)+' of '+TOTAL_STEPS+'</p>';
 }
@@ -277,21 +191,32 @@ function renderMain(currentStep){
   } else if(currentStep===1){
     main.innerHTML='<section class="m8-question" aria-labelledby="viewpoint-title"><h2 id="viewpoint-title">The bank credits your account when your paycheck lands. Whose point of view is that?</h2><div class="m8-choices">'+
       '<button class="m8-choice" data-viewpoint="customer">Yours, because the cash is yours</button>'+
-      '<button class="m8-choice" data-viewpoint="bank">The bank&rsquo;s, because this is the bank&rsquo;s ledger</button>'+
+      '<button class="m8-choice" data-viewpoint="bank">The bank&rsquo;s, because this page belongs to the bank&rsquo;s records</button>'+
       '<button class="m8-choice" data-viewpoint="employer">Your employer&rsquo;s, because it sent the paycheck</button>'+
-      '</div><p class="m8-chip" id="viewpointFeedback" aria-live="polite">'+(bankChoiceDone?'Correct. On a bank statement, you see the bank&rsquo;s account for what it owes you.':'')+'</p></section>';
+      '</div><p class="m8-chip" id="viewpointFeedback" aria-live="polite">'+(bankChoiceDone?'Correct. You see the bank&rsquo;s account for what it owes you.':'')+'</p></section>';
     wireViewpoint();
   } else if(currentStep===2){
-    main.innerHTML='<section class="m8-paper" aria-labelledby="t-title"><h2 id="t-title">Copy the May statement into the bank&rsquo;s T-account</h2><div id="copyStatement"></div><div class="m8-callout">Copy deposits to the credit column and withdrawals to the debit column.</div><div id="bankT"></div></section>';
+    main.innerHTML='<section class="m8-paper" aria-labelledby="t-title"><h2 id="t-title">Copy the May statement into the bank&rsquo;s T-account</h2><div id="copyStatement"></div><div class="m8-callout">Copy deposits to the credit column and withdrawals to the debit column.</div><div id="bankT"></div></section>'+
+      '<section class="m8-paper" style="margin-top:16px" aria-labelledby="your-t-title"><h2 id="your-t-title">The same money in your records</h2><div class="m8-callout">Since your account is the reverse of the bank&rsquo;s &mdash; their liability account is your asset &mdash; to get your T-account, you reverse the debits and credits. This is why the bank&rsquo;s labels only look backwards; in your own records, Cash lives on its debit home side, as placed on the Sign Problem page.</div><div id="yourCashT"></div></section>';
     ToolkitLab.renderStatementTable(document.getElementById('copyStatement'),bank);
     var bankT=document.getElementById('bankT');
     ToolkitLab.renderTAccountForm(bankT,bankTForm,{refMode:'inline',blankRows:0});
     bankT.querySelector('.tk-tform-beginning.tk-tform-debit').textContent='';
     bankT.querySelector('.tk-tform-ending.tk-tform-debit').textContent='';
+    var yourCashT=document.getElementById('yourCashT');
+    ToolkitLab.renderTAccountForm(yourCashT,yourCashTForm,{blankRows:0});
+    yourCashT.querySelector('.tk-tform-beginning.tk-tform-credit').textContent='';
+    yourCashT.querySelector('.tk-tform-ending.tk-tform-credit').textContent='';
   } else if(currentStep===3){
-    renderNormalBalanceActivity(main);
+    main.innerHTML='<section class="m8-paper" aria-labelledby="parts-title"><h2 id="parts-title">Use the T-account to solve for parts used</h2><div id="partsT"></div><div class="m8-equation">200 + 1,200 &minus; X = 200<br>X = 1,200 used</div><div class="m8-callout">The 200 left at the end came from a count. The 1,200 used is the solved unknown. Generated has no fixed home side: a winning season leaves its balance on the credit side, a losing one on the debit side.</div></section>';
+    var partsT=document.getElementById('partsT');
+    ToolkitLab.renderTAccountForm(partsT,partsTForm,{refMode:'inline',blankRows:0});
+    var partsCreditCells=partsT.querySelectorAll('.tk-tform-row.tk-tform-credit');
+    var partsUsedAmount=partsCreditCells[partsCreditCells.length-1];
+    partsUsedAmount.textContent='X';
+    partsUsedAmount.setAttribute('aria-label','Parts used — the solved unknown');
   } else {
-    main.innerHTML='<section class="m8-paper" aria-labelledby="solve-title"><h2 id="solve-title">Solve the bank&rsquo;s ledger page</h2><div id="solveT"></div></section>';
+    main.innerHTML='<section class="m8-paper" aria-labelledby="solve-title"><h2 id="solve-title">Solve the bank&rsquo;s records</h2><div id="solveT"></div></section>';
     ToolkitLab.renderTAccount(document.getElementById('solveT'),aggregateBankT(),{showBalance:true});
     maskWithdrawal();
   }
@@ -308,66 +233,15 @@ function wireViewpoint(){
         bankChoiceDone=true;
         this.classList.add('is-correct');
         feedback.setAttribute('class','m8-chip is-good');
-        feedback.innerHTML='Correct. On a bank statement, you see the bank&rsquo;s account for what it owes you.';
+        feedback.innerHTML='Correct. You see the bank&rsquo;s account for what it owes you.';
         playSuccess();
         renderControls(step);
       } else {
         feedback.setAttribute('class','m8-chip bounce');
-        feedback.innerHTML=choice==='customer'?'The money is yours, but the page belongs to the bank&rsquo;s ledger.':'The employer sent the money; it does not keep this account.';
+        feedback.innerHTML=choice==='customer'?'The money is yours, but the page belongs to the bank&rsquo;s records.':'The employer sent the money; it does not keep this account.';
         playNope();
         setTimeout(function(){ feedback.classList.remove('bounce'); },300);
       }
-    });
-  });
-}
-
-function renderNormalBalanceActivity(main){
-  var names=['Cash','Credit Card Payable','Generated'];
-  var html='<section class="m8-question" aria-labelledby="normal-title"><h2 id="normal-title">Place each account on its normal side</h2><div class="m8-normal-grid">';
-  names.forEach(function(name){
-    var account=accountByName(name);
-    html+='<div class="m8-account-row" data-account="'+account.num+'"><div class="m8-account-name">'+account.name+'<span class="m8-account-kind">'+account.kind+'</span></div>'+
-      '<button class="m8-side-button" data-side="debit">Debit</button><button class="m8-side-button" data-side="credit">Credit</button></div>';
-  });
-  html+='</div><p class="m8-chip" id="normalFeedback" aria-live="polite"></p></section>';
-  main.innerHTML=html;
-  wireNormalBalances();
-}
-
-function expectedSide(account){ return account.normal==='either'?'either':account.normal; }
-function normalComplete(){ return Object.keys(normalAnswers).length===3; }
-
-function wireNormalBalances(){
-  document.querySelectorAll('.m8-account-row').forEach(function(row){
-    var num=row.getAttribute('data-account');
-    var account=data.chartOfAccounts.filter(function(item){ return String(item.num)===num; })[0];
-    var saved=normalAnswers[num];
-    if(saved){
-      row.querySelectorAll('button').forEach(function(button){
-        button.disabled=true;
-        if(saved==='either'||button.getAttribute('data-side')===saved) button.classList.add('is-correct');
-      });
-    }
-    row.querySelectorAll('button').forEach(function(button){
-      button.addEventListener('click',function(){
-        if(normalAnswers[num]) return;
-        var picked=this.getAttribute('data-side');
-        var expected=expectedSide(account);
-        var feedback=document.getElementById('normalFeedback');
-        if(expected==='either'||picked===expected){
-          normalAnswers[num]=expected;
-          row.querySelectorAll('button').forEach(function(item){ item.disabled=true; if(expected==='either'||item.getAttribute('data-side')===expected) item.classList.add('is-correct'); });
-          feedback.setAttribute('class','m8-chip is-good');
-          feedback.textContent=expected==='either'?'Right. Generated can finish on either side.':'Right. '+account.name+' normally carries a '+expected+' balance.';
-          playSuccess();
-          renderControls(step);
-        } else {
-          feedback.setAttribute('class','m8-chip bounce');
-          feedback.textContent=account.kind==='asset'?'An asset normally sits on the debit side.':'A claim against the company normally sits on the credit side.';
-          playNope();
-          setTimeout(function(){ feedback.classList.remove('bounce'); },300);
-        }
-      });
     });
   });
 }
@@ -387,9 +261,9 @@ function maskWithdrawal(){
 function renderTail(currentStep){
   var html='';
   if(currentStep===2){
-    html='<div class="m8-callout">The ending balance is '+formatMoney(bank.end)+' credit. A T-account is just the picture of one ledger account.</div>';
+    html='<div class="m8-callout">The ending balance is '+formatMoney(bank.end)+' credit in the bank&rsquo;s records and the same '+formatMoney(bank.end)+' debit in your records. A T-account is a picture of one account.</div>';
   } else if(currentStep===4){
-    html='<div class="m8-solve"><label for="solveInput">What is the withdrawals total?</label><input class="m8-money-input" id="solveInput" inputmode="numeric" autocomplete="off" value="'+escapeAttr(solveState.value)+'"'+(solveState.correct?' disabled':'')+'><button class="m8-check" id="solveCheck"'+(solveState.correct?' disabled':'')+'>'+(solveState.correct?'Locked':'Check')+'</button><p class="m8-chip m8-solve-feedback'+(solveState.correct?' is-good':'')+'" id="solveFeedback" aria-live="polite">'+solveFeedback()+'</p></div>';
+    html='<div class="m8-solve"><label for="solveInput">What is the withdrawals total?</label><input class="m8-money-input" id="solveInput" inputmode="numeric" autocomplete="off" value="'+escapeAttr(solveState.value)+'"'+(solveState.correct?' disabled':'')+'><button class="m8-check" id="solveCheck"'+(solveState.correct?' disabled':'')+'>'+(solveState.correct?'Locked':'Check')+'</button><p class="m8-chip m8-solve-feedback'+(solveState.correct?' is-good':'')+'" id="solveFeedback" aria-live="polite">'+solveFeedback()+'</p></div><div class="m8-callout">When analyzing ONE account, the T-account is the go-to tool; when analyzing transactions and events that span accounts, journal-entry notation is your friend.</div>';
   }
   document.getElementById('tail').innerHTML=html;
   if(currentStep===4) wireSolve();
@@ -434,17 +308,17 @@ function renderControls(currentStep){
   if(currentStep===0) html+='<button class="btn-back" onclick="nav(\'82-2-The-Journal-Entry.html\')">&larr; Back</button>';
   else html+='<button class="btn-back" onclick="back()">&larr; Back</button>';
   if(currentStep<TOTAL_STEPS-1){
-    var locked=(currentStep===1&&!bankChoiceDone)||(currentStep===3&&!normalComplete());
+    var locked=currentStep===1&&!bankChoiceDone;
     html+='<button class="btn-next" onclick="advance()"'+(locked?' disabled aria-disabled="true"':'')+'>Next &rarr;</button>';
   } else {
-    html+='<button class="btn-continue" onclick="playSuccess();nav(\'83-2-Posting-the-Ledger-and-the-Chart-of-Accounts.html\')"'+(!solveState.correct?' disabled aria-disabled="true"':'')+'>Posting the Ledger and the Chart of Accounts &rarr;</button>';
+    html+='<button class="btn-continue" onclick="playSuccess();nav(\'83-2-Posting-the-Ledger-and-the-Chart-of-Accounts.html\')"'+(!solveState.correct?' disabled aria-disabled="true"':'')+'>Continue &rarr;</button>';
   }
   html+='</div>';
   document.getElementById('controls').innerHTML=html;
 }
 
 function advance(){
-  if((step===1&&!bankChoiceDone)||(step===3&&!normalComplete())) return;
+  if(step===1&&!bankChoiceDone) return;
   playClick();
   step=Math.min(step+1,TOTAL_STEPS-1);
   render();
@@ -458,12 +332,12 @@ function back(){
 }
 
 var glossaryTerms=[
-  {term:'Ledger',def:'The complete set of accounts. Each account has its own page or record.'},
-  {term:'Liability',def:'A claim against the company. Your bank deposit is the bank&rsquo;s liability because the bank owes that money to you.'},
+  {term:'Account',def:'A record of increases, decreases, and the resulting balance for one item.'},
+  {term:'Liability',def:'What the company owes. Your bank deposit is the bank&rsquo;s liability because the bank owes that money to you.'},
   {term:'Debit',def:'The left side of an account.'},
   {term:'Credit',def:'The right side of an account.'},
-  {term:'T-account',def:'A picture of one ledger account, with debits on the left and credits on the right.'},
-  {term:'Normal balance',def:'The side where an account usually carries its balance.'}
+  {term:'T-account',def:'A picture of one account, with debits on the left and credits on the right.'},
+  {term:'Inflows and outflows',def:'Amounts moving into and out of one account. If the other three amounts are known, either one can be solved.'}
 ];
 function openGlossary(){
   document.getElementById('glossaryList').innerHTML=glossaryTerms.map(function(item){ return '<div class="glossary-entry"><div class="glossary-entry-term">'+item.term+'</div><div class="glossary-entry-def">'+item.def+'</div></div>'; }).join('');
@@ -475,7 +349,6 @@ function restart(){
   playClick();
   step=0;
   bankChoiceDone=false;
-  normalAnswers={};
   solveState={tries:0,correct:false,value:''};
   render();
   window.scrollTo(0,0);
@@ -483,7 +356,6 @@ function restart(){
 document.addEventListener('keydown',function(event){ if(event.key==='Escape') dismissGlossary(); });
 window.devFill=function(){
   bankChoiceDone=true;
-  data.chartOfAccounts.filter(function(account){ return account.name==='Cash'||account.name==='Credit Card Payable'||account.name==='Generated'; }).forEach(function(account){ normalAnswers[String(account.num)]=account.normal; });
   solveState.correct=true;
   solveState.value=String(bankSolve().answer);
   step=TOTAL_STEPS-1;
